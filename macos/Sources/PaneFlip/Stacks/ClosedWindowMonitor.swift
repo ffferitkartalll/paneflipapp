@@ -14,7 +14,7 @@ final class ClosedWindowMonitor {
         self.screens = screens
     }
 
-    func start(interval: TimeInterval = 0.1) {
+    func start(interval: TimeInterval = 0.25) {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in self?.check() }
     }

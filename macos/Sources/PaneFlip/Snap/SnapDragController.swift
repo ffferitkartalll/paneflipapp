@@ -14,6 +14,8 @@ final class SnapDragController {
     private var monitor: Any?
     private var candidate: (ref: WindowRef, start: CGRect)?
     private var dragging = false
+    private var pressedAt = Date.distantPast
+    private var lastCheck = Date.distantPast
     private var timer: Timer?
 
     init(windows: WindowSystem, screens: ScreenProviding, coordinator: StackCoordinator,
@@ -36,16 +38,24 @@ final class SnapDragController {
         }
     }
 
-    private var triggerHeld: Bool { settings.snapTrigger.isHeld(using: keys) }
+    private var triggerHeld: Bool { settings.values.snapTrigger.isHeld(using: keys) }
 
     private func pressed() {
-        guard settings.placementEnabled, let hit = windows.windowUnderPointer() else { candidate = nil; return }
+        guard settings.values.placementEnabled, let hit = windows.windowUnderPointer() else { candidate = nil; return }
         candidate = (hit.ref, hit.frame)
+        pressedAt = Date()
+        lastCheck = .distantPast
     }
 
     private func dragged() {
         guard let c = candidate else { return }
         if !dragging {
+            // A window drag starts at once and moves the window. Anything else (selecting text, a slider) is not
+            // worth asking the other app about on every mouse event: give up after a second, ask at most 20×/s.
+            let now = Date()
+            if now.timeIntervalSince(pressedAt) > 1 { candidate = nil; return }
+            guard now.timeIntervalSince(lastCheck) > 0.05 else { return }
+            lastCheck = now
             // A drag only counts once the window itself moved (not resized, not a click inside it).
             guard let f = windows.frame(of: c.ref),
                   hypot(f.minX - c.start.minX, f.minY - c.start.minY) > 4,

@@ -18,7 +18,6 @@ public final class StackMemory {
     // MARK: Queries
 
     public func index(ofWindow id: CGWindowID) -> Int? { records.firstIndex { $0.windowID == id } }
-    public func isBound(window id: CGWindowID) -> Bool { index(ofWindow: id) != nil }
     public var boundWindowIDs: Set<CGWindowID> { Set(records.compactMap(\.windowID)) }
 
     /// Slots waiting for a window, in the order the user arranged them, restricted to `zones`.

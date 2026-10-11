@@ -183,7 +183,7 @@ struct EditorView: View {
         let side = !model.shift
         let extent = side ? z.rect.width : z.rect.height
         let origin = side ? z.rect.minX : z.rect.minY
-        let minSize = settings.minZoneSize
+        let minSize = settings.values.minZoneSize
         let valid = extent >= 2 * minSize
 
         var pos = side ? p.x : p.y
@@ -201,7 +201,7 @@ struct EditorView: View {
         var pos = d.sideBySide ? p.x : p.y
         if abs(pos - (origin + d.extent / 2)) < snapDistance { pos = origin + d.extent / 2 }
         var r = Double((pos - origin) / d.extent)
-        let lo = min(settings.minZoneSize / Double(d.extent), 0.5)
+        let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         model.root = model.root.settingRatio(d.id, r)
     }

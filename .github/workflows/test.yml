@@ -1,0 +1,29 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  macos:
+    # PaneFlip targets the newest macOS. If the hosted runner image is older than the deployment target in
+    # macos/project.yml, build on a self-hosted runner or lower the target for CI.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Core tests (no Xcode project needed)
+        working-directory: macos
+        run: swift test
+
+      - name: App tests
+        working-directory: macos
+        run: |
+          xcodegen generate
+          # CI has no signing certificate: sign ad hoc, the tests never launch the app.
+          xcodebuild test -project PaneFlip.xcodeproj -scheme PaneFlip -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=NO

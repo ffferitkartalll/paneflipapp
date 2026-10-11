@@ -4,19 +4,25 @@ import Foundation
 /// Keeps the zones in step with the world: lays them out on the visible desktops, reacts to desktop and display
 /// changes, and runs the periodic housekeeping. It coordinates; the work lives in its collaborators.
 final class ZoneEngine: ZoneRefreshing {
+    /// Called on every tick while the Accessibility permission is missing (the owner decides what to show).
+    var onPermissionLost: (() -> Void)?
+
     private let planner: ZonePlanner
     private let coordinator: StackCoordinator
     private let restorer: WindowRestorer
     private let screens: ScreenProviding
+    private let windows: WindowSystem
     private var presenters: [ZonePresenting] = []
     private var lastKeys: [String] = []
     private var timer: Timer?
 
-    init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer, screens: ScreenProviding) {
+    init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
+         screens: ScreenProviding, windows: WindowSystem) {
         self.planner = planner
         self.coordinator = coordinator
         self.restorer = restorer
         self.screens = screens
+        self.windows = windows
     }
 
     func add(presenter: ZonePresenting) { presenters.append(presenter) }
@@ -24,10 +30,23 @@ final class ZoneEngine: ZoneRefreshing {
     func start() {
         refreshZones()
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in self?.tick() }
-        NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.refreshZones() }
+
+        let workspace = NSWorkspace.shared.notificationCenter
+        workspace.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.refreshZones()
+            self?.scheduleRestore()
+        }
+        // A remembered app comes back when it starts, is shown again or is brought to the front.
+        for name in [NSWorkspace.didLaunchApplicationNotification, NSWorkspace.didActivateApplicationNotification,
+                     NSWorkspace.didUnhideApplicationNotification] {
+            workspace.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in self?.scheduleRestore() }
+        }
         NotificationCenter.default.addObserver(
-            forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in self?.refreshZones() }
+            forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in
+                self?.refreshZones()
+                self?.scheduleRestore()
+            }
+        scheduleRestore()
     }
 
     // MARK: ZoneRefreshing
@@ -58,10 +77,17 @@ final class ZoneEngine: ZoneRefreshing {
 
     // MARK: Housekeeping
 
+    /// A freshly started app needs a moment to create its windows, so look now and again shortly after.
+    private func scheduleRestore() {
+        for delay in [0.0, 0.7, 2.0] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in self?.restorer.restore() }
+        }
+    }
+
     private func tick() {
+        guard windows.isTrusted else { return onPermissionLost?() ?? () }
         if screens.screens().map(\.key) != lastKeys { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()
-        restorer.restore()
     }
 }

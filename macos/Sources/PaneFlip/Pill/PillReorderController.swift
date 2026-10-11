@@ -12,7 +12,7 @@ final class PillReorderController {
     }
 
     func handle(_ phase: RightMousePhase, windowX: CGFloat, in stack: ZoneStack) {
-        let content = settings.pillContent
+        let content = settings.values.pillContent
         let x = windowX - PillMetrics.padding
         switch phase {
         case .down: pickUp(at: x, in: stack, content: content)

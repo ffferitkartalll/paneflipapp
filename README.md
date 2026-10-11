@@ -30,6 +30,9 @@ creates a self-signed certificate in your login keychain (macOS asks for your pa
 build is then signed with it and the permission is kept. With an Apple developer account, set `DEVELOPMENT_TEAM`
 and your identity in `project.yml` instead.
 
+If you delete and recreate the certificate, quit and reopen Xcode afterwards: a running Xcode remembers the
+old certificate and fails with `no identity found` until it is restarted.
+
 The domain module and its tests build without Xcode: `cd macos && swift test`.
 
 The app is an agent app (menu bar only, no Dock icon). The first launch asks for the Accessibility permission.

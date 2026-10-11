@@ -16,7 +16,13 @@ final class JSONFileStore: DocumentStore {
     }
 
     func load<T: Decodable>(_ type: T.Type, named name: String) -> T? {
-        (try? Data(contentsOf: url(name))).flatMap { try? JSONDecoder().decode(T.self, from: $0) }
+        guard let data = try? Data(contentsOf: url(name)) else { return nil }
+        if let value = try? JSONDecoder().decode(T.self, from: data) { return value }
+        // The file exists but cannot be read (damaged, or a newer format). Keep it: the next save would replace it.
+        let backup = url(name).appendingPathExtension("bak")
+        try? FileManager.default.removeItem(at: backup)
+        try? FileManager.default.copyItem(at: url(name), to: backup)
+        return nil
     }
 
     func save<T: Encodable>(_ value: T, named name: String) {

@@ -8,7 +8,11 @@ private func _AXUIElementGetWindow(_ element: AXUIElement, _ id: UnsafeMutablePo
 final class AXWindowSystem: WindowSystem {
     private let screens: ScreenProviding
 
-    init(screens: ScreenProviding) { self.screens = screens }
+    init(screens: ScreenProviding) {
+        self.screens = screens
+        // Every call here runs on the main thread. Without a limit, a hung app would block it for ~6 seconds.
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 0.25)
+    }
 
     var isTrusted: Bool { AXIsProcessTrusted() }
 

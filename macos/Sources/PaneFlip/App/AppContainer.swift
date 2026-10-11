@@ -38,7 +38,7 @@ final class AppContainer {
         let restorer = WindowRestorer(windows: windows, apps: apps, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
         let engine = ZoneEngine(planner: ZonePlanner(layouts: repository, settings: settings),
-                                coordinator: coordinator, restorer: restorer, screens: screens)
+                                coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
 
@@ -49,10 +49,10 @@ final class AppContainer {
         coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in
-            if let settings { engine?.placementChanged(enabled: settings.placementEnabled) }
+            if let settings { engine?.placementChanged(enabled: settings.values.placementEnabled) }
         }
         settings.onStackingChanged = { [weak engine, weak settings] in
-            if let settings { engine?.stackingChanged(enabled: settings.stackingEnabled) }
+            if let settings { engine?.stackingChanged(enabled: settings.values.stackingEnabled) }
         }
 
         self.settings = settings
@@ -66,14 +66,19 @@ final class AppContainer {
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
-        self.launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
+        let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
             pill.start()
             snap.start()
         }
+        engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }
+        self.launcher = launcher
     }
 
     /// Checks permissions, then starts the services (immediately, or once the user has granted them).
-    func start() { launcher.launch() }
+    func start() {
+        layouts.prune()   // drop remembered apps whose zone no longer exists in any layout
+        launcher.launch()
+    }
 }

@@ -13,7 +13,7 @@ struct StackPillView: View {
     @Namespace private var selection
 
     var body: some View {
-        let content = settings.pillContent
+        let content = settings.values.pillContent
         HStack(spacing: PillMetrics.spacing) {
             ForEach(Array(stack.tabs.enumerated()), id: \.element.id) { index, tab in
                 segment(tab, content: content, index: index)

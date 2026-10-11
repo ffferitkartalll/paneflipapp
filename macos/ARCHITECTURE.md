@@ -1,5 +1,12 @@
 # PaneFlip architecture
 
+## Tests
+
+- `Tests/PaneFlipCoreTests` (`swift test`): the pure domain.
+- `Tests/PaneFlipTests` (`xcodebuild … test`): the app-layer rules (closed-window detection, restore order, zone
+  hit-testing, the JSON store). They compile the services and their ports, not the app, and use fakes.
+- `.github/workflows/test.yml` runs both on every push and pull request.
+
 ## Build layout
 
 - `project.yml` → generates `PaneFlip.xcodeproj` (XcodeGen). It defines the **app target**: a real `.app` bundle

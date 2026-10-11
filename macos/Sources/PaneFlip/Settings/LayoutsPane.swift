@@ -19,15 +19,15 @@ struct LayoutsPane: View {
             Section("Zones") {
                 SliderSettingRow(title: "Gap between zones",
                                  detail: "Applies between zones only, never at screen edges.",
-                                 value: $settings.gap, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
+                                 value: $settings.values.gap, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
                     if !editing { refresh() }
                 }
                 SliderSettingRow(title: "Minimum zone size",
                                  detail: "The layout editor won't split or resize a zone below this.",
-                                 value: $settings.minZoneSize, range: AppSettings.minZoneSizeRange,
+                                 value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange,
                                  step: AppSettings.minZoneSizeStep)
             }
-            .disabled(!settings.placementEnabled)
+            .disabled(!settings.values.placementEnabled)
         }
         .formStyle(.grouped)
     }

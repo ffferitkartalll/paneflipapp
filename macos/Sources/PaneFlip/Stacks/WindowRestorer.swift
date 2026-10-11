@@ -22,7 +22,7 @@ final class WindowRestorer {
     }
 
     func restore() {
-        guard windows.isTrusted, settings.placementEnabled else { return }
+        guard windows.isTrusted, settings.values.placementEnabled else { return }
         let slots = memory.unboundSlots(in: coordinator.visibleZoneIDs)
         guard !slots.isEmpty else { return }
 
@@ -41,7 +41,7 @@ final class WindowRestorer {
             let record = memory.records[slot]
             guard var free = candidates[record.bundleID], !free.isEmpty else { continue }
             // Without stacking a zone holds one window: leave later slots of an already-filled zone waiting.
-            if !settings.stackingEnabled, coordinator.stacks[record.zoneID]?.isEmpty == false { continue }
+            if !settings.values.stackingEnabled, coordinator.stacks[record.zoneID]?.isEmpty == false { continue }
             let pick = free.firstIndex { windows.title(of: $0) == record.title } ?? 0
             coordinator.attach(free[pick], toSlot: slot, raise: false)
             free.remove(at: pick)

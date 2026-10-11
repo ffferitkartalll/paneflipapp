@@ -13,8 +13,8 @@ final class AppSettingsTests: XCTestCase {
         let settings = AppSettings(storage: storage)
         var placementNotified = 0
         settings.onPlacementChanged = { placementNotified += 1 }
-        settings.placementEnabled = false
-        settings.gap = 12
+        settings.values.placementEnabled = false
+        settings.values.gap = 12
         XCTAssertEqual(placementNotified, 1)
         XCTAssertEqual(storage.saved?.gap, 12)
         XCTAssertEqual(storage.saved?.placementEnabled, false)
@@ -27,8 +27,8 @@ final class AppSettingsTests: XCTestCase {
         old.minZoneSize = 100
         storage.saved = old
         let settings = AppSettings(storage: storage)
-        XCTAssertEqual(settings.gap, 80)
-        XCTAssertEqual(settings.minZoneSize, 240)
+        XCTAssertEqual(settings.values.gap, 80)
+        XCTAssertEqual(settings.values.minZoneSize, 240)
     }
 
     func testValuesSnapToTheStepGrid() {

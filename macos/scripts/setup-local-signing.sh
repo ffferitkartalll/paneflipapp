@@ -38,7 +38,8 @@ PASS="$("$OPENSSL" rand -hex 16)"
 "$OPENSSL" pkcs12 -export -inkey "$WORK/key.pem" -in "$WORK/cert.pem" \
     -name "$NAME" -out "$WORK/identity.p12" -passout "pass:$PASS"
 
-security import "$WORK/identity.p12" -k "$KEYCHAIN" -P "$PASS" -T /usr/bin/codesign -T /usr/bin/security
+# -x: the private key cannot be exported. Only codesign may use it without a prompt.
+security import "$WORK/identity.p12" -k "$KEYCHAIN" -P "$PASS" -x -T /usr/bin/codesign
 
 # Trust it for code signing (macOS asks for your password once).
 security add-trusted-cert -r trustRoot -p codeSign -k "$KEYCHAIN" "$WORK/cert.pem"

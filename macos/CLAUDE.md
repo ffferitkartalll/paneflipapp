@@ -11,10 +11,17 @@ Read `ARCHITECTURE.md` before changing anything: it is the map. These rules are 
   `xcodegen generate` in `macos/` (settings live in `project.yml`, never edit the `.xcodeproj` by hand).
 - Signing uses a local certificate (`scripts/setup-local-signing.sh`, once per Mac). Never switch
   `CODE_SIGN_IDENTITY` back to ad-hoc `"-"`: it changes every build and macOS re-asks for the permission.
-- Verify with `xcodebuild -project PaneFlip.xcodeproj -scheme PaneFlip -destination 'platform=macOS' build`
-  and `swift test`. Both must pass before finishing a change.
+- Verify with `swift test` (Core) and `xcodebuild -project PaneFlip.xcodeproj -scheme PaneFlip
+  -destination 'platform=macOS' test` (builds the app, runs the app-layer tests). Both must pass before finishing
+  a change. CI (`.github/workflows/test.yml`) runs the same two.
 - Debug builds only. Do not add packaging/release scripts; the owner runs the app from Xcode on "My Mac".
-- Add or update tests for every change in `PaneFlipCore`.
+- Add or update tests for every change in `PaneFlipCore`, and for every change to the rules in `Stacks/`
+  (closed/hidden/minimized detection, restore order and matching). App-layer tests live in `Tests/PaneFlipTests`
+  and use the fakes in `Tests/PaneFlipTests/Fakes`; a service a test needs must be listed under `PaneFlipTests` in
+  `project.yml` (the tests do not launch the app).
+- Every call into another app's windows must stay cheap and bounded: the Accessibility calls run on the main thread
+  (a time limit is set in `AXWindowSystem.init`), global mouse monitors must not ask another app on every event,
+  and timers must not rebuild system window lists when nothing changed.
 - Keep `ARCHITECTURE.md` in step when a type is added, moved or removed.
 
 ## Architecture (do not bend it)

@@ -55,11 +55,40 @@ targets:
         CODE_SIGN_IDENTITY: "PaneFlip Local Development"
         CODE_SIGNING_ALLOWED: YES
 
+  # Logic tests of the app layer. The app is not launched: the tests compile the services and the ports they use
+  # directly and drive them with fakes (Tests/PaneFlipTests/Fakes).
+  PaneFlipTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/PaneFlipTests
+      - path: Sources/PaneFlip/Stacks
+      - path: Sources/PaneFlip/Platform/WindowSystem.swift
+      - path: Sources/PaneFlip/Platform/WindowRef.swift
+      - path: Sources/PaneFlip/Platform/AppCatalog.swift
+      - path: Sources/PaneFlip/Platform/AppInfo.swift
+      - path: Sources/PaneFlip/Platform/ScreenProviding.swift
+      - path: Sources/PaneFlip/Platform/ScreenInfo.swift
+      - path: Sources/PaneFlip/Platform/JSONFileStore.swift
+    dependencies:
+      - package: PaneFlip
+        product: PaneFlipCore
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: dev.ffferitkartalll.paneflip.tests
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+
 schemes:
   PaneFlip:
     build:
       targets:
         PaneFlip: all
+        PaneFlipTests: [test]
+    test:
+      targets:
+        - PaneFlipTests
     run:
       config: Debug
     profile:

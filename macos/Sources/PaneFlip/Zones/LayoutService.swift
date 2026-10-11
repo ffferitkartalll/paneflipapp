@@ -29,10 +29,12 @@ final class LayoutService: LayoutManaging {
     func updateLayout(key: String, id: UUID, root: LayoutNode) {
         guard let old = repository.layout(id: id, key: key) else { return }
         let isActive = repository.activeLayout(for: key)?.id == id
+        // The layout is saved first: if the app quits between the two writes, memory never names zones that the
+        // saved layout lacks.
+        repository.setRoot(root, ofLayout: id, key: key)
         if isActive, let area = screens.screens().first(where: { $0.key == key })?.axVisible {
             release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: root, in: area)))
         }
-        repository.setRoot(root, ofLayout: id, key: key)
         prune()
         if isActive { refresher?.refreshZones() }
         refresher?.restoreWindows()
@@ -71,7 +73,7 @@ final class LayoutService: LayoutManaging {
         windowIDs.forEach { coordinator.removeFromStack(window: $0) }
     }
 
-    private func prune() {
+    func prune() {
         let alive = repository.allZoneIDs
         coordinator.prune(keeping: alive)
         memory.prune(keepingZones: alive)

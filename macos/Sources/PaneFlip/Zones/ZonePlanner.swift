@@ -8,11 +8,11 @@ struct ZonePlanner {
     let settings: AppSettings
 
     func visibleZones(on screens: [ScreenInfo]) -> [UUID: CGRect] {
-        guard settings.placementEnabled else { return [:] }
+        guard settings.values.placementEnabled else { return [:] }
         var zones: [UUID: CGRect] = [:]
         for screen in screens {
             guard let layout = layouts.activeLayout(for: screen.key) else { continue }
-            for zone in layout.root.zones(in: screen.axVisible, gap: CGFloat(settings.gap)) { zones[zone.id] = zone.rect }
+            for zone in layout.root.zones(in: screen.axVisible, gap: CGFloat(settings.values.gap)) { zones[zone.id] = zone.rect }
         }
         return zones
     }

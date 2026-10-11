@@ -14,6 +14,7 @@ final class PillPresenter: ZonePresenting {
     private var shown: [UUID: Bool] = [:]
     private var hoverAt: [UUID: Date] = [:]
     private var flashUntil: [UUID: Date] = [:]
+    private var widths: [UUID: (key: String, width: CGFloat)] = [:]
     /// Zones whose pill was hidden by a double tap; it stays hidden until the pointer is well clear of it.
     private var suppressed: Set<UUID> = []
     private var timer: Timer?
@@ -48,6 +49,10 @@ final class PillPresenter: ZonePresenting {
             panel.orderOut(nil)
             panels[id] = nil
             shown[id] = nil
+            hoverAt[id] = nil
+            flashUntil[id] = nil
+            widths[id] = nil
+            suppressed.remove(id)
         }
         for stack in visible where panels[stack.id] == nil {
             panels[stack.id] = makePanel(for: stack)
@@ -60,8 +65,18 @@ final class PillPresenter: ZonePresenting {
 
     /// The pill sits one menu-bar height below the top of the zone.
     private func pillRect(_ stack: ZoneStack) -> CGRect {
-        let w = PillMetrics.width(for: stack.tabs, content: settings.pillContent)
+        let w = width(of: stack)
         return CGRect(x: stack.rect.midX - w / 2, y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
+    }
+
+    /// Measuring text is not free and `update()` runs several times a second: measure again only when the labels changed.
+    private func width(of stack: ZoneStack) -> CGFloat {
+        let content = settings.values.pillContent
+        let key = content.rawValue + stack.tabs.map(\.displayName).joined(separator: "\u{1F}")
+        if let cached = widths[stack.id], cached.key == key { return cached.width }
+        let width = PillMetrics.width(for: stack.tabs, content: content)
+        widths[stack.id] = (key, width)
+        return width
     }
 
     private func update() {
@@ -69,7 +84,7 @@ final class PillPresenter: ZonePresenting {
         for (id, panel) in panels {
             guard let stack = coordinator.stacks[id] else { continue }
             var show = false
-            if stack.tabs.count >= 2 && settings.stackingEnabled {
+            if stack.tabs.count >= 2 && settings.values.stackingEnabled {
                 let pill = pillRect(stack)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it
                 // doesn't flash back for a moment after the pointer has left.

@@ -38,7 +38,9 @@ final class StackCoordinator {
     var visibleStacks: [ZoneStack] { visibleZoneIDs.compactMap { stacks[$0] } }
 
     func zoneID(at point: CGPoint) -> UUID? {
-        visibleStacks.first { $0.rect.insetBy(dx: -4, dy: -4).contains(point) }?.id
+        // The widened rectangles of neighbours overlap, so exact containment must win; the Set order is random.
+        let stacks = visibleStacks
+        return (stacks.first { $0.rect.contains(point) } ?? stacks.first { $0.rect.insetBy(dx: -4, dy: -4).contains(point) })?.id
     }
 
     func prune(keeping alive: Set<UUID>) {
@@ -56,10 +58,10 @@ final class StackCoordinator {
 
     /// Snaps a window into a zone and remembers it there.
     func snap(_ ref: WindowRef, into zoneID: UUID) {
-        guard settings.placementEnabled, stacks[zoneID] != nil else { return }
+        guard settings.values.placementEnabled, stacks[zoneID] != nil else { return }
         unsnap(window: ref.id)
         // Without stacking a zone holds one app: the newcomer replaces whatever was there.
-        if !settings.stackingEnabled, let current = stacks[zoneID] {
+        if !settings.values.stackingEnabled, let current = stacks[zoneID] {
             for id in Array(current.refs.keys) { unsnap(window: id) }
         }
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
