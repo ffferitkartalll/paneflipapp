@@ -91,6 +91,14 @@ final class StackCoordinator {
         onActivity?(stack.id)
     }
 
+    /// Makes the pill's selection the window that is really in front in the zone (restored windows are not raised,
+    /// so the first one attached must not count as the active one).
+    func followFrontmost(in stack: ZoneStack) {
+        guard let front = windows.windowIDsFrontToBack().first(where: { stack.refs[$0] != nil }), stack.activeID != front else { return }
+        stack.activeID = front
+        onActivity?(stack.id)
+    }
+
     /// Takes a window out of its zone for good (the window itself stays open).
     func unsnap(window id: CGWindowID) {
         memory.forget(window: id)

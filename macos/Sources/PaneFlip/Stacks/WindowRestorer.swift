@@ -37,6 +37,7 @@ final class WindowRestorer {
             if !free.isEmpty { candidates[app.bundleID, default: []] += free }
         }
 
+        var touched: Set<UUID> = []
         for slot in slots {
             let record = memory.records[slot]
             guard var free = candidates[record.bundleID], !free.isEmpty else { continue }
@@ -44,8 +45,10 @@ final class WindowRestorer {
             if !settings.values.stackingEnabled, coordinator.stacks[record.zoneID]?.isEmpty == false { continue }
             let pick = free.firstIndex { windows.title(of: $0) == record.title } ?? 0
             coordinator.attach(free[pick], toSlot: slot, raise: false)
+            touched.insert(record.zoneID)
             free.remove(at: pick)
             candidates[record.bundleID] = free
         }
+        for id in touched { coordinator.stacks[id].map(coordinator.followFrontmost) }
     }
 }

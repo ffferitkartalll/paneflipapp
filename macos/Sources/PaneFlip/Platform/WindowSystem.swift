@@ -19,4 +19,6 @@ protocol WindowSystem {
     /// Numbers of every window on the system, closed-but-hidden ones included.
     func allWindowIDs() -> Set<CGWindowID>
     func onScreenWindowIDs() -> Set<CGWindowID>
+    /// On-screen windows, frontmost first.
+    func windowIDsFrontToBack() -> [CGWindowID]
 }
