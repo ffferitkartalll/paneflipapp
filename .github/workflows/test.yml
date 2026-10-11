@@ -7,11 +7,17 @@ on:
 
 jobs:
   macos:
-    # PaneFlip targets the newest macOS. If the hosted runner image is older than the deployment target in
-    # macos/project.yml, build on a self-hosted runner or lower the target for CI.
-    runs-on: macos-latest
+    # PaneFlip targets macOS 27, newer than any hosted runner. CI builds against macOS 26 by lowering the
+    # deployment target in the checkout only (first step below); the repository files keep 27.0.
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
+
+      - name: Lower deployment target for CI
+        working-directory: macos
+        run: |
+          sed -i '' 's/macOS("27.0")/macOS("26.0")/' Package.swift
+          sed -i '' 's/macOS: "27.0"/macOS: "26.0"/' project.yml
 
       - name: Install XcodeGen
         run: brew install xcodegen
