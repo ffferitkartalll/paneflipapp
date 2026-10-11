@@ -1,0 +1,17 @@
+import CoreGraphics
+
+/// Everything the app needs to know about displays, desktops and the pointer.
+protocol ScreenProviding {
+    func screens() -> [ScreenInfo]
+    /// The desktop currently shown on each display.
+    func currentSpaceIDs() -> Set<UInt64>
+    /// The desktops a window belongs to; empty once it has been closed.
+    func spaces(ofWindow id: CGWindowID) -> Set<UInt64>
+    /// Pointer in top-left-origin (Accessibility) coordinates.
+    var pointerAX: CGPoint { get }
+    /// Pointer in bottom-left-origin (Cocoa) coordinates.
+    var pointerCocoa: CGPoint { get }
+    var menuBarThickness: CGFloat { get }
+    /// Cocoa ↔ Accessibility rectangle conversion (the transform is its own inverse).
+    func flip(_ rect: CGRect) -> CGRect
+}

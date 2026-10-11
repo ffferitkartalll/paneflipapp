@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Swift / Xcode
+# The Xcode project is generated from macos/project.yml (run `xcodegen generate` in macos/).
+macos/PaneFlip.xcodeproj/
+.build/
+.swiftpm/
+build/
+DerivedData/
+xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Editors
+.idea/
+.vscode/

@@ -1,0 +1,66 @@
+# Source of truth for the Xcode project. Generate PaneFlip.xcodeproj with:  xcodegen generate
+name: PaneFlip
+
+options:
+  bundleIdPrefix: dev.ffferitkartalll
+  deploymentTarget:
+    macOS: "27.0"
+  createIntermediateGroups: true
+
+packages:
+  PaneFlip:
+    path: .
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "27.0"
+
+targets:
+  PaneFlip:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/PaneFlip
+    dependencies:
+      - package: PaneFlip
+        product: PaneFlipCore
+    settings:
+      base:
+        PRODUCT_NAME: PaneFlip
+        PRODUCT_BUNDLE_IDENTIFIER: dev.ffferitkartalll.paneflip
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+
+        # Info.plist is generated from these keys.
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: PaneFlip
+        INFOPLIST_KEY_LSUIElement: YES            # menu bar app: no Dock icon, no menu bar of its own
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+
+        # User-facing strings live in Resources/Localizable.xcstrings.
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        STRING_CATALOG_GENERATE_SYMBOLS: NO
+
+        # Managing other apps' windows through Accessibility is not possible inside the App Sandbox.
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+
+        # Signed with a local self-signed certificate (create it once: scripts/setup-local-signing.sh), so the
+        # identity is the same on every build and the Accessibility permission survives rebuilds. Ad-hoc ("-")
+        # would change it each time. With a developer account, set DEVELOPMENT_TEAM and its identity instead.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "PaneFlip Local Development"
+        CODE_SIGNING_ALLOWED: YES
+
+schemes:
+  PaneFlip:
+    build:
+      targets:
+        PaneFlip: all
+    run:
+      config: Debug
+    profile:
+      config: Release

@@ -1,0 +1,213 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Accessibility": {
+      "extractionState": "manual"
+    },
+    "Activate": {
+      "extractionState": "manual"
+    },
+    "Active": {
+      "extractionState": "manual"
+    },
+    "Activity": {
+      "extractionState": "manual"
+    },
+    "Add layout": {
+      "extractionState": "manual"
+    },
+    "Applies between zones only, never at screen edges.": {
+      "extractionState": "manual"
+    },
+    "Apply": {
+      "extractionState": "manual"
+    },
+    "Cancel": {
+      "extractionState": "manual"
+    },
+    "Click the field, then press any key or combination. Esc cancels.": {
+      "extractionState": "manual"
+    },
+    "Click to split  ·  Hold ⇧ for a horizontal split\nDrag a line to resize  ·  Double-click a handle to remove it\nDrag a zone onto its neighbour to merge them": {
+      "extractionState": "manual"
+    },
+    "Close": {
+      "extractionState": "manual"
+    },
+    "Continue": {
+      "extractionState": "manual"
+    },
+    "Couldn't change this: %@": {
+      "extractionState": "manual"
+    },
+    "Current desktop": {
+      "extractionState": "manual"
+    },
+    "Delete": {
+      "extractionState": "manual"
+    },
+    "Edit": {
+      "extractionState": "manual"
+    },
+    "Enable": {
+      "extractionState": "manual"
+    },
+    "Gap between zones": {
+      "extractionState": "manual"
+    },
+    "General": {
+      "extractionState": "manual"
+    },
+    "Grant Access": {
+      "extractionState": "manual"
+    },
+    "Grant the access below in System Settings. This window updates as soon as you do.": {
+      "extractionState": "manual"
+    },
+    "Granted": {
+      "extractionState": "manual"
+    },
+    "Hold while dragging a window": {
+      "extractionState": "manual"
+    },
+    "Icon": {
+      "extractionState": "manual"
+    },
+    "Icon and name": {
+      "extractionState": "manual"
+    },
+    "Launch at login": {
+      "extractionState": "manual"
+    },
+    "Layout %lld": {
+      "extractionState": "manual"
+    },
+    "Layout name": {
+      "extractionState": "manual"
+    },
+    "Layouts": {
+      "extractionState": "manual"
+    },
+    "Left Command": {
+      "extractionState": "manual"
+    },
+    "Left Control": {
+      "extractionState": "manual"
+    },
+    "Left Option": {
+      "extractionState": "manual"
+    },
+    "Left Shift": {
+      "extractionState": "manual"
+    },
+    "Lets PaneFlip see the windows of other apps and move them into zones.": {
+      "extractionState": "manual"
+    },
+    "Merge": {
+      "extractionState": "manual"
+    },
+    "Minimum zone size": {
+      "extractionState": "manual"
+    },
+    "Name": {
+      "extractionState": "manual"
+    },
+    "Open PaneFlip automatically when you log in to your Mac.": {
+      "extractionState": "manual"
+    },
+    "Open System Settings": {
+      "extractionState": "manual"
+    },
+    "PaneFlip": {
+      "extractionState": "manual"
+    },
+    "PaneFlip needs your permission": {
+      "extractionState": "manual"
+    },
+    "Pill": {
+      "extractionState": "manual"
+    },
+    "Placement": {
+      "extractionState": "manual"
+    },
+    "Press keys": {
+      "extractionState": "manual"
+    },
+    "Quit": {
+      "extractionState": "manual"
+    },
+    "Remove": {
+      "extractionState": "manual"
+    },
+    "Rename": {
+      "extractionState": "manual"
+    },
+    "Rename Layout": {
+      "extractionState": "manual"
+    },
+    "Reset": {
+      "extractionState": "manual"
+    },
+    "Return": {
+      "extractionState": "manual"
+    },
+    "Right Command": {
+      "extractionState": "manual"
+    },
+    "Right Control": {
+      "extractionState": "manual"
+    },
+    "Right Option": {
+      "extractionState": "manual"
+    },
+    "Right Shift": {
+      "extractionState": "manual"
+    },
+    "Settings": {
+      "extractionState": "manual"
+    },
+    "Several apps share a zone and you switch between them with the pill. When off, a zone holds one app and a new one replaces it.": {
+      "extractionState": "manual"
+    },
+    "Show for each window": {
+      "extractionState": "manual"
+    },
+    "Space": {
+      "extractionState": "manual"
+    },
+    "Stack apps in a zone": {
+      "extractionState": "manual"
+    },
+    "Stacking": {
+      "extractionState": "manual"
+    },
+    "Startup": {
+      "extractionState": "manual"
+    },
+    "Tab": {
+      "extractionState": "manual"
+    },
+    "The layout editor won't split or resize a zone below this.": {
+      "extractionState": "manual"
+    },
+    "Turn all features on or off without quitting the app. When off, windows are left alone and no pills are shown.": {
+      "extractionState": "manual"
+    },
+    "Waiting for your approval in System Settings ▸ General ▸ Login Items.": {
+      "extractionState": "manual"
+    },
+    "What each segment of the pill shows. Double-tap Left Shift to hide the pill while the pointer is over it.": {
+      "extractionState": "manual"
+    },
+    "Window snapping": {
+      "extractionState": "manual"
+    },
+    "Zones": {
+      "extractionState": "manual"
+    },
+    "Zones light up while the keys are held; release the mouse over a zone to add the window.": {
+      "extractionState": "manual"
+    }
+  },
+  "version": "1.0"
+}
