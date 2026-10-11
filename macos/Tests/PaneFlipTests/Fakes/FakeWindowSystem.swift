@@ -5,6 +5,7 @@ final class FakeWindowSystem: WindowSystem {
     var isTrusted = true
     var all: Set<CGWindowID> = []
     var onScreen: Set<CGWindowID> = []
+    var frontToBack: [CGWindowID] = []
     var minimized: Set<CGWindowID> = []
     var titles: [CGWindowID: String] = [:]
     var windowsByPID: [pid_t: [WindowRef]] = [:]
@@ -21,4 +22,5 @@ final class FakeWindowSystem: WindowSystem {
     func raise(_ ref: WindowRef) { raised.append(ref.id) }
     func allWindowIDs() -> Set<CGWindowID> { all }
     func onScreenWindowIDs() -> Set<CGWindowID> { onScreen }
+    func windowIDsFrontToBack() -> [CGWindowID] { frontToBack }
 }

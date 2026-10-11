@@ -85,11 +85,15 @@ final class AXWindowSystem: WindowSystem {
     // MARK: System window list
 
     func allWindowIDs() -> Set<CGWindowID> { windowNumbers(.optionAll) }
-    func onScreenWindowIDs() -> Set<CGWindowID> { windowNumbers(.optionOnScreenOnly) }
+    func onScreenWindowIDs() -> Set<CGWindowID> { Set(windowIDsFrontToBack()) }
+    func windowIDsFrontToBack() -> [CGWindowID] { orderedWindowNumbers(.optionOnScreenOnly) }
 
-    private func windowNumbers(_ option: CGWindowListOption) -> Set<CGWindowID> {
+    private func windowNumbers(_ option: CGWindowListOption) -> Set<CGWindowID> { Set(orderedWindowNumbers(option)) }
+
+    /// The system lists windows front to back.
+    private func orderedWindowNumbers(_ option: CGWindowListOption) -> [CGWindowID] {
         guard let list = CGWindowListCopyWindowInfo([option], kCGNullWindowID) as? [[String: Any]] else { return [] }
-        return Set(list.compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value })
+        return list.compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value }
     }
 
     // MARK: Helpers

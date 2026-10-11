@@ -44,6 +44,18 @@ final class WindowRestorerTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10, 20])
     }
 
+    func testThePillSelectsTheWindowThatIsInFront() {
+        memory.remember(zoneID: zone, bundleID: "app.a", title: "")
+        memory.remember(zoneID: zone, bundleID: "app.b", title: "")
+        launch("app.a", pid: 1, window: 10)
+        launch("app.b", pid: 2, window: 20)
+        windows.frontToBack = [20, 10]   // b is on top, a is first in the arrangement
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 20)
+    }
+
     func testAWindowTheAppOnlyHidFromViewIsNotBroughtBack() {
         memory.remember(zoneID: zone, bundleID: "app.a", title: "")
         launch("app.a", pid: 1, window: 10)
