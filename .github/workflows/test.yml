@@ -17,7 +17,7 @@ jobs:
         working-directory: macos
         run: |
           sed -i '' 's/macOS("27.0")/macOS("26.0")/' Package.swift
-          sed -i '' 's/macOS: "27.0"/macOS: "26.0"/' project.yml
+          sed -i '' 's/"27.0"/"26.0"/' project.yml
 
       - name: Install XcodeGen
         run: brew install xcodegen
