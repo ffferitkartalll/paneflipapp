@@ -75,6 +75,8 @@ targets:
       - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
       - path: Sources/PaneFlip/Pill/IconFont.swift
+      - path: Sources/PaneFlip/Pill/PillPanel.swift
+      - path: Sources/PaneFlip/Pill/PillSlide.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
     dependencies:
       - package: PaneFlip
