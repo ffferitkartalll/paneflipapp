@@ -189,7 +189,7 @@ final class IconFont {
 
     // MARK: TrueType writer
 
-    private static func font(named name: String, pngs: [Data]) -> Data {
+    static func font(named name: String, pngs: [Data]) -> Data {
         let numGlyphs = pngs.count + 1
         func u16(_ v: Int) -> Data { Data([UInt8((v >> 8) & 0xFF), UInt8(v & 0xFF)]) }
         func u32(_ v: Int) -> Data { Data([UInt8((v >> 24) & 0xFF), UInt8((v >> 16) & 0xFF), UInt8((v >> 8) & 0xFF), UInt8(v & 0xFF)]) }
@@ -239,7 +239,7 @@ final class IconFont {
 
         var os2 = u16(4) + u16(500) + u16(400) + u16(5) + u16(0)
         os2 += Data(count: 20)                                   // subscript/superscript/strikeout sizes
-        os2 += u16(0) + u16(0) + Data(count: 10) + Data(count: 16)  // family class, panose, unicode ranges
+        os2 += u16(0) + Data(count: 10) + Data(count: 16)       // family class, panose, unicode ranges
         os2 += Data("PFIC".utf8) + u16(0x40) + u16(first) + u16(last)
         os2 += u16(800) + u16(-200 & 0xFFFF) + u16(0) + u16(800) + u16(200)
         os2 += u32(0) + u32(0) + u16(0) + u16(0) + u16(0) + u16(0) + u16(0)
