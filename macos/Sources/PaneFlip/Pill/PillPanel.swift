@@ -2,6 +2,14 @@ import AppKit
 import ObjectiveC
 import PaneFlipCore
 
+// Undocumented CoreGraphics Services call: lets this app set the cursor while another app is the active one.
+@_silgen_name("CGSMainConnectionID")
+private func CGSMainConnectionID() -> Int32
+
+@_silgen_name("CGSSetConnectionProperty")
+@discardableResult
+private func CGSSetConnectionProperty(_ cid: Int32, _ target: Int32, _ key: CFString, _ value: CFTypeRef) -> Int32
+
 /// The pill of one zone, a floating panel: a toolbar item group, so it is the system's own Liquid Glass segmented
 /// control (the one app toolbars use, with its own animations), with the windows of the zone as segments.
 /// Click-through until the presenter shows it.
@@ -55,6 +63,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         self.move = move
         self.hide = hide
         _ = Self.looksActive
+        _ = Self.setsCursorInBackground
         _ = Self.fitsSegments
         super.init(contentRect: NSRect(x: 0, y: 0, width: 100, height: PillMetrics.height),
                    styleMask: [.titled, .fullSizeContentView, .nonactivatingPanel], backing: .buffered, defer: false)
@@ -72,6 +81,26 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         isMovable = false
         isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary]
+    }
+
+    /// The pointing hand while a segment is being carried: the right button is held and the pointer has moved.
+    /// The arrow again once the button is released.
+    private var cursor: NSCursor { carriedID != nil && rightMoved ? .pointingHand : .arrow }
+
+    private var cursorTimer: Timer?
+    private var cursorHeldUntil = Date.distantPast
+    /// The active app sets its own cursor on every pointer move too, so a single set flickers between the two.
+    /// Setting ours again every millisecond for a moment after each move keeps the hand on top.
+    private func holdCursor() {
+        cursor.set()
+        cursorHeldUntil = Date().addingTimeInterval(0.25)
+        guard cursorTimer == nil else { return }
+        let timer = Timer(timeInterval: 0.001, repeats: true) { [weak self] timer in
+            guard let self, Date() < self.cursorHeldUntil else { timer.invalidate(); self?.cursorTimer = nil; return }
+            self.cursor.set()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        cursorTimer = timer
     }
 
     override var canBecomeKey: Bool { false }
@@ -103,6 +132,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         case .rightMouseDragged:
             left = .leftMouseDragged
             if abs(convertPoint(toScreen: event.locationInWindow).x - rightDownX) > 3 { rightMoved = true }
+            holdCursor()
         case .rightMouseUp:
             left = .leftMouseUp
             // The press normally ends with the re-posted left button release; if that never comes back, end it here.
@@ -129,6 +159,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         stack.interacting = false
         carriedID = nil
         carry = nil
+        holdCursor()
     }
 
     /// While the pressed tab is dragged it steps over a neighbour once its leading edge has passed the neighbour's
@@ -212,6 +243,13 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     }
 
     // MARK: Look
+
+    /// The active app keeps its cursor while a segment is carried, unless this app is allowed to set the cursor
+    /// too. If the call is missing nothing changes.
+    private static let setsCursorInBackground: Void = {
+        let connection = CGSMainConnectionID()
+        CGSSetConnectionProperty(connection, connection, "SetsCursorInBackground" as CFString, kCFBooleanTrue)
+    }()
 
     /// The toolbar control dims while its window is not the active one, and this panel never is: it must not take
     /// the focus from the app being used. Answering the window's own "do I look active" question with yes keeps the
