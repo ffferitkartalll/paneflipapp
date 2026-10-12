@@ -202,7 +202,7 @@
     "Waiting for your approval in System Settings ▸ General ▸ Login Items.": {
       "extractionState": "manual"
     },
-    "What each segment of the pill shows. Double-tap Left Shift to hide the pill while the pointer is over it.": {
+    "What each segment of the pill shows. Double-tap Left Shift or right-click the pill to hide it while the pointer is over it.": {
       "extractionState": "manual"
     },
     "Window snapping": {

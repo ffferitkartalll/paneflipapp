@@ -106,9 +106,14 @@ final class PillPresenter: ZonePresenting {
     private func hideUnderPointer() {
         let pointer = screens.pointerAX
         for (id, stack) in coordinator.stacks where shown[id] == true {
-            flashUntil[id] = nil
-            if let panel = panels[id], pillRects(stack, panel).capsule.contains(pointer) { suppressed.insert(id) }
+            if let panel = panels[id], pillRects(stack, panel).capsule.contains(pointer) { hide(zone: id) }
         }
+    }
+
+    /// Hides a zone's pill until the pointer has moved away from it.
+    private func hide(zone id: UUID) {
+        flashUntil[id] = nil
+        suppressed.insert(id)
         update()
     }
 
@@ -120,6 +125,9 @@ final class PillPresenter: ZonePresenting {
             },
             move: { [weak self, weak stack] id, index in
                 if let stack { self?.coordinator.move(window: id, to: index, in: stack) }
+            },
+            hide: { [weak self, weak stack] in
+                if let stack { self?.hide(zone: stack.id) }
             })
     }
 }

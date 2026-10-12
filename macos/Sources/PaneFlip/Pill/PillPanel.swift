@@ -11,6 +11,10 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private let iconFont: IconFont
     private let select: (CGWindowID) -> Void
     private let move: (CGWindowID, Int) -> Void
+    private let hide: () -> Void
+    /// Where the right button went down, and whether it has moved since: a press that did not move is a click.
+    private var rightDownX: CGFloat = 0
+    private var rightMoved = false
     private var carriedID: CGWindowID?
     /// What is known when a tab is picked up, in screen coordinates: the distance from the segment's left edge to the
     /// pointer, where the segments start, their height and each one's width. Segments keep their widths, so the
@@ -43,12 +47,13 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private var fitPending = false
 
     init(stack: ZoneStack, settings: AppSettings, iconFont: IconFont,
-         select: @escaping (CGWindowID) -> Void, move: @escaping (CGWindowID, Int) -> Void) {
+         select: @escaping (CGWindowID) -> Void, move: @escaping (CGWindowID, Int) -> Void, hide: @escaping () -> Void) {
         self.stack = stack
         self.settings = settings
         self.iconFont = iconFont
         self.select = select
         self.move = move
+        self.hide = hide
         _ = Self.looksActive
         _ = Self.fitsSegments
         super.init(contentRect: NSRect(x: 0, y: 0, width: 100, height: PillMetrics.height),
@@ -84,13 +89,17 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
             guard let index = segmentIndex(at: event) else { return }
             stack.interacting = true
             pressCount += 1
+            rightDownX = convertPoint(toScreen: event.locationInWindow).x
+            rightMoved = false
             let frames = frames()
             carriedID = stack.tabs[index].id
             carry = Carry(grab: convertPoint(toScreen: event.locationInWindow).x - frames[index].minX, origin: frames[0].minX,
                           y: frames[0].minY, height: frames[0].height,
                           widths: Dictionary(uniqueKeysWithValues: zip(stack.tabs.map(\.id), frames.map(\.width))))
             left = .leftMouseDown
-        case .rightMouseDragged: left = .leftMouseDragged
+        case .rightMouseDragged:
+            left = .leftMouseDragged
+            if abs(convertPoint(toScreen: event.locationInWindow).x - rightDownX) > 3 { rightMoved = true }
         case .rightMouseUp:
             left = .leftMouseUp
             // The press normally ends with the re-posted left button release; if that never comes back, end it here.
@@ -109,6 +118,8 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         CGEvent(mouseEventSource: nil, mouseType: left, mouseCursorPosition: CGPoint(x: screen.x, y: top - screen.y),
                 mouseButton: .left)?.post(tap: .cghidEventTap)
         if left == .leftMouseDragged { carryTab(toX: screen.x) }
+        // A right click that did not move hides the pill, like a double tap of Left Shift.
+        if left == .leftMouseUp, !rightMoved { hide() }
     }
 
     private func endPress() {
