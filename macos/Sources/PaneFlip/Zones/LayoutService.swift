@@ -56,7 +56,8 @@ final class LayoutService: LayoutManaging {
         let old = repository.activeLayout(for: key)
         repository.activate(layout: id, key: key)
         if let old, old.id != id {
-            release(memory.remap(ZoneRemapper.byOrder(old: old.root, new: new.root)))
+            // A slot goes back to the zone it had in this layout before, if it had one.
+            release(memory.remap(ZoneRemapper.byOrder(old: old.root, new: new.root), preferred: Set(new.root.leafIDs)))
         }
         refresher?.refreshZones()
         refresher?.restoreWindows()

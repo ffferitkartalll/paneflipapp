@@ -54,15 +54,22 @@ public final class StackMemory {
         if let i = index(ofWindow: id), records[i].title != title { records[i].title = title }
     }
 
-    /// Re-points slots at new zones. Returns the live windows that were bound to a moved slot (now unbound),
-    /// which the caller must release so they get re-attached to their new zone.
+    /// Re-points slots at new zones. A slot that has been in one of the `preferred` zones before (the zones of a
+    /// layout that is becoming active again) goes back there instead of to the zone `map` names. Returns the live
+    /// windows that were bound to a moved slot (now unbound), which the caller must release so they get
+    /// re-attached to their new zone.
     @discardableResult
-    public func remap(_ map: [UUID: UUID]) -> [CGWindowID] {
+    public func remap(_ map: [UUID: UUID], preferred: Set<UUID> = []) -> [CGWindowID] {
         guard !map.isEmpty else { return [] }
         var released: [CGWindowID] = []
         var copy = records
         for i in copy.indices {
-            guard let new = map[copy[i].zoneID] else { continue }
+            guard let mapped = map[copy[i].zoneID] else { continue }
+            let old = copy[i].zoneID
+            let new = copy[i].otherZones.first(where: preferred.contains) ?? mapped
+            guard new != old else { continue }
+            copy[i].otherZones.removeAll { $0 == new }
+            if !copy[i].otherZones.contains(old) { copy[i].otherZones.append(old) }
             copy[i].zoneID = new
             if let w = copy[i].windowID { released.append(w); copy[i].windowID = nil }
         }
@@ -72,8 +79,9 @@ public final class StackMemory {
 
     /// Drops slots whose zone no longer exists in any layout.
     public func prune(keepingZones alive: Set<UUID>) {
-        let kept = records.filter { alive.contains($0.zoneID) }
-        if kept.count != records.count { records = kept }
+        var kept = records.filter { alive.contains($0.zoneID) }
+        for i in kept.indices { kept[i].otherZones.removeAll { !alive.contains($0) } }
+        if kept != records { records = kept }
     }
 
     /// Persists a zone's tab order by rearranging its live slots to match `windowOrder`.
