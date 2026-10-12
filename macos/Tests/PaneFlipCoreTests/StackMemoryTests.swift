@@ -68,4 +68,45 @@ final class StackMemoryTests: XCTestCase {
         memory.remember(zoneID: zone, bundleID: "c", title: "")
         XCTAssertEqual(memory.unboundSlots(in: [zone]), [0, 2])
     }
+
+    func testSlotsGoBackToTheZonesOfALayoutThatBecomesActiveAgain() {
+        let memory = StackMemory(store: MemoryStore())
+        let a1 = UUID(), a2 = UUID(), b = UUID()
+        let first = memory.remember(zoneID: a1, bundleID: "a", title: "")
+        let second = memory.remember(zoneID: a2, bundleID: "b", title: "")
+
+        // Layout A (two zones) → layout B (one zone): both slots collapse onto its zone.
+        memory.remap([a1: b, a2: b], preferred: [b])
+        XCTAssertEqual(memory.records.map(\.zoneID), [b, b])
+
+        // Back to A: each slot returns to the zone it had there.
+        memory.remap([b: a1], preferred: [a1, a2])
+        XCTAssertEqual(memory.records[first].zoneID, a1)
+        XCTAssertEqual(memory.records[second].zoneID, a2)
+    }
+
+    func testWithoutAHomeASlotFollowsTheMap() {
+        let memory = StackMemory(store: MemoryStore())
+        let old = UUID(), new = UUID()
+        memory.remember(zoneID: old, bundleID: "a", title: "")
+        memory.remap([old: new], preferred: [UUID()])
+        XCTAssertEqual(memory.records[0].zoneID, new)
+    }
+
+    func testOldFilesWithoutOtherZonesStillLoad() throws {
+        let json = #"[{"id":"\#(UUID())","zoneID":"\#(UUID())","bundleID":"a","title":""}]"#
+        let records = try JSONDecoder().decode([StackRecord].self, from: Data(json.utf8))
+        XCTAssertEqual(records[0].otherZones, [])
+    }
+
+    func testPruneForgetsZonesThatAreGone() {
+        let memory = StackMemory(store: MemoryStore())
+        let kept = UUID(), other = UUID()
+        memory.remember(zoneID: kept, bundleID: "a", title: "")
+        memory.remap([kept: other], preferred: [])
+        memory.remap([other: kept], preferred: [])
+        XCTAssertEqual(memory.records[0].otherZones, [other])
+        memory.prune(keepingZones: [kept])
+        XCTAssertEqual(memory.records[0].otherZones, [])
+    }
 }
