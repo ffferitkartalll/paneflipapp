@@ -68,6 +68,9 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         alphaValue = 0
         ignoresMouseEvents = true
         minSize = NSSize(width: 1, height: 1)
+        // A titled window can be dragged by its title bar and toolbar; the pill sits where the presenter puts it.
+        isMovable = false
+        isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary]
     }
 
