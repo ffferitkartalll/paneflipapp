@@ -13,7 +13,7 @@ final class ZoneEngine: ZoneRefreshing {
     private let screens: ScreenProviding
     private let windows: WindowSystem
     private var presenters: [ZonePresenting] = []
-    private var lastKeys: [String] = []
+    private var lastSignatures: [String] = []
     private var timer: Timer?
 
     init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
@@ -53,7 +53,7 @@ final class ZoneEngine: ZoneRefreshing {
 
     func refreshZones() {
         let current = screens.screens()
-        lastKeys = current.map(\.key)
+        lastSignatures = current.map(\.layoutSignature)
         coordinator.apply(zones: planner.visibleZones(on: current))
         presenters.forEach { $0.zonesDidChange() }
     }
@@ -86,7 +86,7 @@ final class ZoneEngine: ZoneRefreshing {
 
     private func tick() {
         guard windows.isTrusted else { return onPermissionLost?() ?? () }
-        if screens.screens().map(\.key) != lastKeys { refreshZones() }
+        if screens.screens().map(\.layoutSignature) != lastSignatures { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()
     }

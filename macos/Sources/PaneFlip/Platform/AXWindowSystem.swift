@@ -64,6 +64,12 @@ final class AXWindowSystem: WindowSystem {
         if let sv = AXValueCreate(.cgSize, &s) { AXUIElementSetAttributeValue(ref.element, kAXSizeAttribute as CFString, sv) }
         if let pv = AXValueCreate(.cgPoint, &p) { AXUIElementSetAttributeValue(ref.element, kAXPositionAttribute as CFString, pv) }
         if let sv = AXValueCreate(.cgSize, &s) { AXUIElementSetAttributeValue(ref.element, kAXSizeAttribute as CFString, sv) }
+        // Some apps ignore a shrink of a window that already reaches below the usable area (seen after the Dock moved
+        // between displays). Asking for a smaller size first makes them take the wanted one. One retry, no more.
+        guard let now = frame(ref.element), now.width - s.width > 1 || now.height - s.height > 1 else { return }
+        var smaller = CGSize(width: max(s.width - 40, 1), height: max(s.height - 40, 1))
+        if let sv = AXValueCreate(.cgSize, &smaller) { AXUIElementSetAttributeValue(ref.element, kAXSizeAttribute as CFString, sv) }
+        if let sv = AXValueCreate(.cgSize, &s) { AXUIElementSetAttributeValue(ref.element, kAXSizeAttribute as CFString, sv) }
     }
 
     func title(of ref: WindowRef) -> String? {

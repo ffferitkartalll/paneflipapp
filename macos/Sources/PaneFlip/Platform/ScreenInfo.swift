@@ -12,4 +12,8 @@ struct ScreenInfo: Identifiable, Equatable {
     let axVisible: CGRect
 
     var id: String { key }
+
+    /// Changes when the display, its desktop or the area zones are laid out in changes (the Dock moved, the menu
+    /// bar was hidden). The zones are worked out again whenever it changes.
+    var layoutSignature: String { "\(key)|\(axVisible)" }
 }
