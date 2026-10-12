@@ -51,7 +51,7 @@ final class CDNBrandGlyphs: BrandGlyphSource {
         let file = folder.appendingPathComponent("\(slug).svg")
         if let data = try? Data(contentsOf: file) {
             // An empty file records that the set has no such icon.
-            guard !data.isEmpty, let image = NSImage(data: data) else { absent.insert(slug); return nil }
+            guard !data.isEmpty, let image = Self.image(from: data) else { absent.insert(slug); return nil }
             images[slug] = image
             return image
         }
@@ -65,12 +65,17 @@ final class CDNBrandGlyphs: BrandGlyphSource {
         return nil
     }
 
+    /// The picture of an SVG, with its arc flags spelled out so the system's SVG reader does not warn about them.
+    private static func image(from data: Data) -> NSImage? {
+        String(data: data, encoding: .utf8).flatMap { NSImage(data: Data(SVGArcFlags.normalized($0).utf8)) }
+    }
+
     private func received(slug: String, data: Data?, status: Int?, file: URL) {
         pending.remove(slug)
         if status == 404 {
             try? Data().write(to: file)
             absent.insert(slug)
-        } else if status == 200, let data, data.starts(with: Data("<svg".utf8)), let image = NSImage(data: data) {
+        } else if status == 200, let data, data.starts(with: Data("<svg".utf8)), let image = Self.image(from: data) {
             try? data.write(to: file)
             images[slug] = image
             attempts[slug] = nil
