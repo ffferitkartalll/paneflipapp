@@ -19,7 +19,7 @@ final class WindowRestorerTests: XCTestCase {
         memory = StackMemory(store: MemoryDocumentStore())
         settings = AppSettings(storage: StubSettingsStorage())
         coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
-        restorer = WindowRestorer(windows: windows, apps: apps, memory: memory, coordinator: coordinator,
+        restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                   availability: WindowAvailability(windows: windows, screens: screens), settings: settings)
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 800, height: 600)])
     }
@@ -87,5 +87,54 @@ final class WindowRestorerTests: XCTestCase {
         restorer.restore()
 
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 0)
+    }
+
+    // MARK: Which window of an app goes to a zone
+
+    private let left = CGRect(x: 0, y: 0, width: 1000, height: 600)
+    private let right = CGRect(x: 1000, y: 0, width: 1000, height: 600)
+
+    private func display(_ name: String, _ area: CGRect) -> ScreenInfo {
+        ScreenInfo(key: name, name: name, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area)
+    }
+
+    /// An app with two windows; the zone is the left display's left half.
+    private func appWithTwoWindows(first: CGRect, second: CGRect) {
+        screens.infos = [display("left", left), display("right", right)]
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 500, height: 600)])
+        memory.remember(zoneID: zone, bundleID: "app.a", title: "remembered")
+        apps.apps.append(AppInfo(pid: 1, bundleID: "app.a", name: "app.a"))
+        windows.windowsByPID[1] = [.fake(10, pid: 1), .fake(11, pid: 1)]
+        for id: CGWindowID in [10, 11] {
+            windows.all.insert(id)
+            windows.onScreen.insert(id)
+            screens.spacesByWindow[id] = [1]
+        }
+        windows.setFrame(first, of: .fake(10, pid: 1))
+        windows.setFrame(second, of: .fake(11, pid: 1))
+    }
+
+    func testAWindowOnAnotherDisplayIsNotPulledIntoTheZone() {
+        appWithTwoWindows(first: right.insetBy(dx: 10, dy: 10), second: CGRect(x: 600, y: 50, width: 300, height: 300))
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [11])
+    }
+
+    func testAWindowOnlyOnAnotherDisplayStaysWhereItIs() {
+        appWithTwoWindows(first: right.insetBy(dx: 10, dy: 10), second: right.insetBy(dx: 20, dy: 20))
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 0)
+    }
+
+    func testTheWindowInsideTheZoneComesBeforeAnotherOneOnTheSameDisplay() {
+        appWithTwoWindows(first: CGRect(x: 600, y: 50, width: 300, height: 300), second: CGRect(x: 20, y: 20, width: 400, height: 300))
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [11])
     }
 }

@@ -35,7 +35,7 @@ final class AppContainer {
 
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         let availability = WindowAvailability(windows: windows, screens: screens)
-        let restorer = WindowRestorer(windows: windows, apps: apps, memory: memory, coordinator: coordinator,
+        let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
         let engine = ZoneEngine(planner: ZonePlanner(layouts: repository, settings: settings),
                                 coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)

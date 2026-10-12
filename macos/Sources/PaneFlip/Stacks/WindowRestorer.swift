@@ -6,15 +6,17 @@ import PaneFlipCore
 final class WindowRestorer {
     private let windows: WindowSystem
     private let apps: AppCatalog
+    private let screens: ScreenProviding
     private let memory: StackMemory
     private let coordinator: StackCoordinator
     private let availability: WindowAvailability
     private let settings: AppSettings
 
-    init(windows: WindowSystem, apps: AppCatalog, memory: StackMemory, coordinator: StackCoordinator,
+    init(windows: WindowSystem, apps: AppCatalog, screens: ScreenProviding, memory: StackMemory, coordinator: StackCoordinator,
          availability: WindowAvailability, settings: AppSettings) {
         self.windows = windows
         self.apps = apps
+        self.screens = screens
         self.memory = memory
         self.coordinator = coordinator
         self.availability = availability
@@ -37,13 +39,29 @@ final class WindowRestorer {
             if !free.isEmpty { candidates[app.bundleID, default: []] += free }
         }
 
+        let displays = screens.screens().map(\.axVisible)
+        func display(of rect: CGRect) -> Int? { displays.firstIndex { $0.contains(CGPoint(x: rect.midX, y: rect.midY)) } }
+
         var touched: Set<UUID> = []
         for slot in slots {
             let record = memory.records[slot]
             guard var free = candidates[record.bundleID], !free.isEmpty else { continue }
             // Without stacking a zone holds one window: leave later slots of an already-filled zone waiting.
             if !settings.values.stackingEnabled, coordinator.stacks[record.zoneID]?.isEmpty == false { continue }
-            let pick = free.firstIndex { windows.title(of: $0) == record.title } ?? 0
+            // A window stays on the display it is on: one on another display than the zone is left alone. Among the
+            // others, the one already inside the zone comes first, then the one with the remembered title.
+            let zone = coordinator.stacks[record.zoneID]?.rect
+            let zoneDisplay = zone.flatMap(display(of:))
+            var best: (index: Int, score: Int)?
+            for (i, window) in free.enumerated() {
+                let frame = windows.frame(of: window)
+                if let zoneDisplay, let frame, let there = display(of: frame), there != zoneDisplay { continue }
+                var score = 0
+                if let zone, let frame, zone.contains(CGPoint(x: frame.midX, y: frame.midY)) { score += 2 }
+                if windows.title(of: window) == record.title { score += 1 }
+                if best == nil || score > best!.score { best = (i, score) }
+            }
+            guard let pick = best?.index else { continue }
             coordinator.attach(free[pick], toSlot: slot, raise: false)
             touched.insert(record.zoneID)
             free.remove(at: pick)
