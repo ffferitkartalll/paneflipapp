@@ -32,6 +32,7 @@ Sources/
     │                        WindowSystem ← AXWindowSystem (+ WindowRef),
     │                        ScreenProviding (+ ScreenInfo) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
+    │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
     │                        ActivationPolicyControlling ← AppKitActivationPolicyController,
@@ -39,8 +40,7 @@ Sources/
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor,
     │                        WindowAvailability, WindowSnapshot
     ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, ZonePresenting, ZoneRefreshing
-    ├── Pill/                PillPresenter, PillReorderController, PillMetrics, StackOverlayPanel,
-    │                        StackPillView, RightMousePhase, DoubleTapDetector
+    ├── Pill/                PillPresenter, PillPanel, PillSlide, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
@@ -73,7 +73,9 @@ Sources/
 | `ZoneEngine` | Re-layout on desktop/display changes and run housekeeping. |
 | `LayoutService` | Apply layout edits and carry their consequences to windows and memory. |
 | `PillPresenter` | Own pill panels and decide when each is visible. |
-| `PillReorderController` | Right-drag reordering. |
+| `PillPanel` | The pill: the system's segmented control, one segment per window; right-drag reorders. |
+| `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
+| `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
 | `SnapDragController` | Window drag + trigger key → snap. |
 | `AppContainer` | Build everything once and wire it. No globals anywhere else. |
 
@@ -81,7 +83,7 @@ Sources/
 
 - **Single responsibility:** the old 500-line `WindowManager` is split as above.
 - **Dependency inversion:** services depend on `WindowSystem`, `ScreenProviding`, `AppCatalog`, `DocumentStore`,
-  `SettingsStorage`, `KeyStateProviding` protocols; only `AppContainer` names the concrete adapters.
+  `SettingsStorage`, `KeyStateProviding`, `BrandGlyphSource` protocols; only `AppContainer` names the concrete adapters.
 - **Interface segregation:** UI sees `LayoutManaging` and `LayoutEditing`, not the services behind them;
   collaborators that only need a re-layout see `ZoneRefreshing`.
 - **Open/closed:** a new presenter conforms to `ZonePresenting` and is added to the engine; a different window
