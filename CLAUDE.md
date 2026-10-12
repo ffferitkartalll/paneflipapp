@@ -29,5 +29,8 @@ Every change to the repository goes through this flow.
    one `Closes #<number>` line per issue and says why they travel together.
 3. **Pull request** from the branch to `main`. Its description contains `Closes #<number>`, which links it under
    the issue's Development section and closes the issue on merge. The Tests workflow must be green.
+   Before merging, check that the branch is not behind `main` (`gh pr view <number> --json mergeStateStatus`;
+   `BEHIND` means: update the branch and wait for the Tests workflow again). Branch protection is not available
+   for this private repository on the current plan, so this check is done by hand.
 4. Commit and push only when the owner asks, and show the commit message first.
 5. Explore the code with Graphify (the repository is indexed) and keep the change small with Ponytail.
