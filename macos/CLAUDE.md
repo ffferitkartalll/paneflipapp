@@ -67,6 +67,7 @@ Read `ARCHITECTURE.md` before changing anything: it is the map. These rules are 
 | Behaviour that keeps windows and memory in step | `Stacks/` (`StackCoordinator` or a new focused collaborator) |
 | Reacting to desktop/display changes, periodic work | `Zones/` (`ZoneEngine` or a new collaborator it owns) |
 | Anything drawn on the pill | `Pill/` (geometry in `PillMetrics`, state in `ZoneStack`, visibility in `PillPresenter`) |
+| A glyph for an app in the pill | `Resources/AppGlyphs.json` (bundle identifier → system glyph); other sources go behind `BrandGlyphSource` |
 | Window-drag behaviour | `Snap/` |
 | Layout editor behaviour | `Editor/` (state in `EditorModel`, drawing in `EditorView`) |
 | A new required system permission | a case in `Permissions/Permission`; the screen, polling and launch gate pick it up |
