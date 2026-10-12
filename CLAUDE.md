@@ -23,6 +23,9 @@ Every change to the repository goes through this flow.
    `enhancement` for a feature, `documentation` for docs and rules. Use neutral wording (see Commits).
 2. **Branch `issue-<number>`**, created from `main` (`git switch -c issue-<number> main`). One issue, one branch,
    one pull request; a change to these rules gets its own issue.
+   Exception: one pull request may close several issues when their changes cannot be separated without a state
+   that does not build or does not pass the tests. The branch is named after the first issue, the description has
+   one `Closes #<number>` line per issue and says why they travel together.
 3. **Pull request** from the branch to `main`. Its description contains `Closes #<number>`, which links it under
    the issue's Development section and closes the issue on merge. The Tests workflow must be green.
 4. Commit and push only when the owner asks, and show the commit message first.
