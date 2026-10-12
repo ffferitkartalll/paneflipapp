@@ -10,6 +10,7 @@ final class ZoneStack {
         let id: CGWindowID
         var title: String
         let appName: String
+        let bundleID: String
         let icon: NSImage?
         /// What the pill shows: the app name, plus the window title when the zone holds several windows of that app.
         var displayName = ""
@@ -20,12 +21,9 @@ final class ZoneStack {
     var activeID: CGWindowID? {
         didSet { if let id = activeID { mru.removeAll { $0 == id }; mru.insert(id, at: 0) } }
     }
-    /// True while the pill is being scrubbed or reordered, so it stays visible.
-    var interacting = false
-    /// Right-button reordering: the segment being carried and where the pointer is (pill-content coordinates).
-    var reorderingID: CGWindowID?
-    var pointerX: CGFloat = 0
-    var grabOffset: CGFloat = 0
+
+    /// True while the pill is being pressed or scrubbed, so it stays visible.
+    @ObservationIgnored var interacting = false
 
     /// Windows of this zone, most recently active first.
     @ObservationIgnored var mru: [CGWindowID] = []

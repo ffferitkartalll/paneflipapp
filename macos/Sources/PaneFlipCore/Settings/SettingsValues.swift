@@ -12,6 +12,8 @@ public struct SettingsValues: Equatable {
     public var minZoneSize = 240.0
     /// What the stack pill shows for each window.
     public var pillContent = PillContent.icon
+    /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).
+    public var fetchBrandIcons = true
     /// Held while dragging a window to highlight zones and snap into one.
     public var snapTrigger = SnapTrigger.leftShift
 

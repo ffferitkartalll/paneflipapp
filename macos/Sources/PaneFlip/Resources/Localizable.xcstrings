@@ -169,6 +169,12 @@
     "Several apps share a zone and you switch between them with the pill. When off, a zone holds one app and a new one replaces it.": {
       "extractionState": "manual"
     },
+    "Fetch brand icons": {
+      "extractionState": "manual"
+    },
+    "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.": {
+      "extractionState": "manual"
+    },
     "Show for each window": {
       "extractionState": "manual"
     },

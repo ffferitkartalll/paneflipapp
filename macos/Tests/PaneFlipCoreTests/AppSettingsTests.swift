@@ -20,6 +20,10 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(storage.saved?.placementEnabled, false)
     }
 
+    func testBrandIconsAreFetchedUnlessSwitchedOff() {
+        XCTAssertTrue(AppSettings(storage: Storage()).values.fetchBrandIcons)
+    }
+
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
         let storage = Storage()
         var old = SettingsValues()

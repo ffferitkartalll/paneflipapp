@@ -70,6 +70,10 @@ targets:
       - path: Sources/PaneFlip/Platform/ScreenProviding.swift
       - path: Sources/PaneFlip/Platform/ScreenInfo.swift
       - path: Sources/PaneFlip/Platform/JSONFileStore.swift
+      - path: Sources/PaneFlip/Pill/PillMetrics.swift
+      - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
+      - path: Sources/PaneFlip/Pill/IconFont.swift
+      - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
     dependencies:
       - package: PaneFlip
         product: PaneFlipCore
