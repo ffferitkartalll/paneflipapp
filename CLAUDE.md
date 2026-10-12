@@ -14,6 +14,7 @@ One repository, one folder per platform. All current work is in `macos/`.
 - Commit or push only when the owner asks for it.
 - Do not put the names of other applications (the owner's other apps, apps studied for reference, apps used
   as examples) in code, comments, tests, docs or commit messages. Use neutral names.
+  The one exception is data: `macos/Sources/PaneFlip/Resources/AppGlyphs.json` maps bundle identifiers to glyphs.
 
 ## Changes: issue, branch, pull request
 

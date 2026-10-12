@@ -32,6 +32,18 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator.zoneID(at: CGPoint(x: 120, y: 50)))
     }
 
+    func testMovingATabReordersTheStack() {
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        for id in [CGWindowID(1), 2, 3] { coordinator.snap(.fake(id), into: zone) }
+        let stack = coordinator.stacks[zone]!
+
+        coordinator.move(window: 1, to: 2, in: stack)
+
+        XCTAssertEqual(stack.tabs.map(\.id), [2, 3, 1])
+        XCTAssertEqual(memory.records.compactMap(\.windowID), [2, 3, 1])
+    }
+
     func testSnapRemembersTheWindowAndUnsnapForgetsIt() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])

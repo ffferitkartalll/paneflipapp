@@ -8,13 +8,12 @@ final class PillPresenter: ZonePresenting {
     private let coordinator: StackCoordinator
     private let settings: AppSettings
     private let screens: ScreenProviding
-    private let reorder: PillReorderController
+    private let iconFont: IconFont
 
-    private var panels: [UUID: StackOverlayPanel] = [:]
+    private var panels: [UUID: PillPanel] = [:]
     private var shown: [UUID: Bool] = [:]
     private var hoverAt: [UUID: Date] = [:]
     private var flashUntil: [UUID: Date] = [:]
-    private var widths: [UUID: (key: String, width: CGFloat)] = [:]
     /// Zones whose pill was hidden by a double tap; it stays hidden until the pointer is well clear of it.
     private var suppressed: Set<UUID> = []
     private var timer: Timer?
@@ -25,11 +24,11 @@ final class PillPresenter: ZonePresenting {
     private let hideDelay: TimeInterval = 0.4
     private let flashDuration: TimeInterval = 1.5
 
-    init(coordinator: StackCoordinator, settings: AppSettings, screens: ScreenProviding, reorder: PillReorderController) {
+    init(coordinator: StackCoordinator, settings: AppSettings, screens: ScreenProviding, iconFont: IconFont) {
         self.coordinator = coordinator
         self.settings = settings
         self.screens = screens
-        self.reorder = reorder
+        self.iconFont = iconFont
     }
 
     func start() {
@@ -51,7 +50,6 @@ final class PillPresenter: ZonePresenting {
             shown[id] = nil
             hoverAt[id] = nil
             flashUntil[id] = nil
-            widths[id] = nil
             suppressed.remove(id)
         }
         for stack in visible where panels[stack.id] == nil {
@@ -63,29 +61,23 @@ final class PillPresenter: ZonePresenting {
 
     // MARK: Visibility
 
-    /// The pill sits one menu-bar height below the top of the zone.
-    private func pillRect(_ stack: ZoneStack) -> CGRect {
-        let w = width(of: stack)
-        return CGRect(x: stack.rect.midX - w / 2, y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
-    }
-
-    /// Measuring text is not free and `update()` runs several times a second: measure again only when the labels changed.
-    private func width(of stack: ZoneStack) -> CGFloat {
-        let content = settings.values.pillContent
-        let key = content.rawValue + stack.tabs.map(\.displayName).joined(separator: "\u{1F}")
-        if let cached = widths[stack.id], cached.key == key { return cached.width }
-        let width = PillMetrics.width(for: stack.tabs, content: content)
-        widths[stack.id] = (key, width)
-        return width
+    /// The pill sits one menu-bar height below the top of the zone, centred, as wide as its segments. The panel
+    /// has transparent room around them (the system control collapses into a pop-up without it): only the capsule
+    /// inside counts for hovering and clicking. Not limited to the zone: a narrow zone must not squeeze the control.
+    private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect) {
+        let w = panel.barWidth
+        let frame = CGRect(x: stack.rect.midX - w / 2, y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
+        return (frame, frame.insetBy(dx: PillPanel.margin, dy: 0))
     }
 
     private func update() {
         let now = Date(), pointer = screens.pointerAX
         for (id, panel) in panels {
             guard let stack = coordinator.stacks[id] else { continue }
-            var show = false
+            var show = false, clickable = false
             if stack.tabs.count >= 2 && settings.values.stackingEnabled {
-                let pill = pillRect(stack)
+                panel.refresh()
+                let (frame, pill) = pillRects(stack, panel)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it
                 // doesn't flash back for a moment after the pointer has left.
                 if suppressed.contains(id) && !pill.insetBy(dx: -releaseMargin, dy: -releaseMargin).contains(pointer) {
@@ -97,16 +89,15 @@ final class PillPresenter: ZonePresenting {
                 let hovering = hoverAt[id].map { now.timeIntervalSince($0) < hideDelay } ?? false
                 let flashing = flashUntil[id].map { $0 > now } ?? false
                 show = ((hovering || flashing) && !suppressed.contains(id)) || stack.interacting
-                let frame = screens.flip(pill)
-                if panel.frame != frame { panel.setFrame(frame, display: true) }
+                // Clicks in the transparent margins go to the windows below.
+                clickable = show && (stack.interacting || pill.contains(pointer))
+                let screenFrame = screens.flip(frame)
+                if panel.frame != screenFrame { panel.setFrame(screenFrame, display: true) }
             }
-            panel.ignoresMouseEvents = !show
+            panel.ignoresMouseEvents = !clickable
             if shown[id] != show {
                 shown[id] = show
-                NSAnimationContext.runAnimationGroup { ctx in
-                    ctx.duration = 0.15
-                    panel.animator().alphaValue = show ? 1 : 0
-                }
+                panel.fade(to: show)
             }
         }
     }
@@ -116,19 +107,19 @@ final class PillPresenter: ZonePresenting {
         let pointer = screens.pointerAX
         for (id, stack) in coordinator.stacks where shown[id] == true {
             flashUntil[id] = nil
-            if pillRect(stack).contains(pointer) { suppressed.insert(id) }
+            if let panel = panels[id], pillRects(stack, panel).capsule.contains(pointer) { suppressed.insert(id) }
         }
         update()
     }
 
-    private func makePanel(for stack: ZoneStack) -> StackOverlayPanel {
-        StackOverlayPanel(
-            stack: stack, settings: settings,
+    private func makePanel(for stack: ZoneStack) -> PillPanel {
+        PillPanel(
+            stack: stack, settings: settings, iconFont: iconFont,
             select: { [weak self, weak stack] id in
                 if let stack { self?.coordinator.select(id, in: stack) }
             },
-            rightMouse: { [weak self, weak stack] phase, x in
-                if let stack { self?.reorder.handle(phase, windowX: x, in: stack) }
+            move: { [weak self, weak stack] id, index in
+                if let stack { self?.coordinator.move(window: id, to: index, in: stack) }
             })
     }
 }

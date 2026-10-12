@@ -31,7 +31,7 @@ final class StackCoordinator {
             let stack = stacks[id] ?? ZoneStack(id: id)
             stacks[id] = stack
             stack.rect = rect
-            for tab in stack.tabs { if let ref = stack.refs[tab.id] { windows.setFrame(rect, of: ref) } }
+            for tab in stack.tabs { if let ref = stack.refs[tab.id] { windows.setFrame(stack.rect, of: ref) } }
         }
     }
 
@@ -72,11 +72,12 @@ final class StackCoordinator {
     func attach(_ ref: WindowRef, toSlot slot: Int, raise: Bool) {
         guard memory.records.indices.contains(slot), let stack = stacks[memory.records[slot].zoneID] else { return }
         let appName = apps.app(pid: ref.pid)?.name ?? "?"
+        let bundleID = apps.app(pid: ref.pid)?.bundleID ?? ""
         let title = windows.title(of: ref) ?? appName
         memory.bind(slot: slot, toWindow: ref.id, title: title)
         stack.refs[ref.id] = ref
         let position = stack.tabs.filter { (memory.index(ofWindow: $0.id) ?? Int.max) < slot }.count
-        stack.tabs.insert(.init(id: ref.id, title: title, appName: appName, icon: apps.icon(pid: ref.pid)), at: position)
+        stack.tabs.insert(.init(id: ref.id, title: title, appName: appName, bundleID: bundleID, icon: apps.icon(pid: ref.pid)), at: position)
         stack.refreshNames()
         if stack.activeID == nil { stack.activeID = ref.id }
         windows.setFrame(stack.rect, of: ref)
@@ -97,6 +98,15 @@ final class StackCoordinator {
         guard let front = windows.windowIDsFrontToBack().first(where: { stack.refs[$0] != nil }), stack.activeID != front else { return }
         stack.activeID = front
         onActivity?(stack.id)
+    }
+
+    /// The user dragged a tab to another position: reorder the live stack and remember the order.
+    func move(window id: CGWindowID, to index: Int, in stack: ZoneStack) {
+        guard let from = stack.tabs.firstIndex(where: { $0.id == id }) else { return }
+        let to = min(max(index, 0), stack.tabs.count - 1)
+        guard from != to else { return }
+        stack.tabs.insert(stack.tabs.remove(at: from), at: to)
+        memory.applyOrder(zoneID: stack.id, windowOrder: stack.tabs.map(\.id))
     }
 
     /// Takes a window out of its zone for good (the window itself stays open).
@@ -139,10 +149,6 @@ final class StackCoordinator {
     }
 
     // MARK: Keeping in step with the system
-
-    func persistOrder(of stack: ZoneStack) {
-        memory.applyOrder(zoneID: stack.id, windowOrder: stack.tabs.map(\.id))
-    }
 
     /// Picks up window title changes.
     func syncTitles() {

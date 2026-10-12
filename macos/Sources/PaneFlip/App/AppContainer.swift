@@ -43,8 +43,7 @@ final class AppContainer {
         layouts.refresher = engine
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
-        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens,
-                                 reorder: PillReorderController(coordinator: coordinator, settings: settings))
+        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false })))
         engine.add(presenter: pill)
         coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
 
