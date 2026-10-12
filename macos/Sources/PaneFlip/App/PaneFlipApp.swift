@@ -14,7 +14,7 @@ struct PaneFlipApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra("PaneFlip", systemImage: "rectangle.split.2x2") {
+        MenuBarExtra("PaneFlip", image: "MenuBarIcon") {
             MenuContent()
         }
 
