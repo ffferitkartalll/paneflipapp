@@ -32,6 +32,10 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(storage.saved?.hidePillKey.keys.first?.code, 61)
     }
 
+    func testTheLanguageFollowsTheSystemUnlessChosen() {
+        XCTAssertEqual(AppSettings(storage: Storage()).values.language, SettingsValues.systemLanguage)
+    }
+
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
         let storage = Storage()
         var old = SettingsValues()

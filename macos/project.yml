@@ -78,6 +78,7 @@ targets:
       - path: Sources/PaneFlip/Pill/PillPanel.swift
       - path: Sources/PaneFlip/Pill/PillSlide.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
+      - path: Sources/PaneFlip/Settings/AppLanguages.swift
     dependencies:
       - package: PaneFlip
         product: PaneFlipCore

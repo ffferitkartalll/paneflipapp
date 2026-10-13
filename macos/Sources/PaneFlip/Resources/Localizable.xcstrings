@@ -85,6 +85,9 @@
     "Icon and name": {
       "extractionState": "manual"
     },
+    "Language": {
+      "extractionState": "manual"
+    },
     "Launch at login": {
       "extractionState": "manual"
     },
@@ -196,7 +199,13 @@
     "Startup": {
       "extractionState": "manual"
     },
+    "System language": {
+      "extractionState": "manual"
+    },
     "Tab": {
+      "extractionState": "manual"
+    },
+    "The language of the app. The change applies the next time PaneFlip starts.": {
       "extractionState": "manual"
     },
     "The layout editor won't split or resize a zone below this.": {
@@ -212,6 +221,9 @@
       "extractionState": "manual"
     },
     "Window snapping": {
+      "extractionState": "manual"
+    },
+    "Your system language (%@) is not available yet, so PaneFlip is shown in English.": {
       "extractionState": "manual"
     },
     "Zones": {

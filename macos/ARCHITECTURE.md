@@ -48,7 +48,7 @@ Sources/
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
-                             PillContent+Title, SnapTrigger+Title
+                             PillContent+Title, SnapTrigger+Title, AppLanguages
 ```
 
 ## File conventions
