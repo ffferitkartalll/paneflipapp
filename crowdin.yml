@@ -1,0 +1,4 @@
+files:
+  - source: /macos/Sources/PaneFlip/Resources/Localizable.xcstrings
+    translation: /macos/Sources/PaneFlip/Resources/Localizable.xcstrings
+    multilingual: 1
