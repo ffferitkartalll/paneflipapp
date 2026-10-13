@@ -3,7 +3,7 @@ import Foundation
 import PaneFlipCore
 
 /// Owns the pill panels and decides when each one is visible: while the pointer is over it, briefly after the
-/// stack changed, and while it is being used. A Left Shift double tap hides it until the pointer moves away.
+/// stack changed, and while it is being used. A double tap of the hide key hides it until the pointer moves away.
 final class PillPresenter: ZonePresenting {
     private let coordinator: StackCoordinator
     private let settings: AppSettings
@@ -17,7 +17,7 @@ final class PillPresenter: ZonePresenting {
     /// Zones whose pill was hidden by a double tap; it stays hidden until the pointer is well clear of it.
     private var suppressed: Set<UUID> = []
     private var timer: Timer?
-    private lazy var doubleShift = DoubleTapDetector(keyCode: 56, deviceMask: 0x2) { [weak self] in self?.hideUnderPointer() }
+    private lazy var doubleShift = DoubleTapDetector(keyCode: { [settings] in settings.values.hidePillKey.keys.first?.code ?? -1 }) { [weak self] in self?.hideUnderPointer() }
 
     /// How far the pointer must move away before a hidden pill may come back.
     private let releaseMargin: CGFloat = 48

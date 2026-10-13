@@ -151,7 +151,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         CGEvent(mouseEventSource: nil, mouseType: left, mouseCursorPosition: CGPoint(x: screen.x, y: top - screen.y),
                 mouseButton: .left)?.post(tap: .cghidEventTap)
         if left == .leftMouseDragged { carryTab(toX: screen.x) }
-        // A right click that did not move hides the pill, like a double tap of Left Shift.
+        // A right click that did not move hides the pill, like a double tap of the hide key.
         if left == .leftMouseUp, !rightMoved { hide() }
     }
 

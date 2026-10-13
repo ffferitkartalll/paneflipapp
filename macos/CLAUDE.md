@@ -62,7 +62,7 @@ Read `ARCHITECTURE.md` before changing anything: it is the map. These rules are 
 | You are adding… | It goes in… |
 |---|---|
 | Layout or zone math, anything testable without windows | `PaneFlipCore/Layout` or `PaneFlipCore/Stacks` |
-| A user setting | `PaneFlipCore/Settings` (`SettingsValues` + `AppSettings`) + storage key in `UserDefaultsSettingsStorage` + a `SettingRow` in the fitting tab pane (`GeneralPane`, `LayoutsPane`, `PlacementPane`, `StackingPane`) |
+| A user setting | `PaneFlipCore/Settings` (`SettingsValues` + `AppSettings`) + storage key in `UserDefaultsSettingsStorage` + a `SettingRow` in the fitting tab pane (`GeneralPane`, `LayoutsPane`, `StackingPane`, `ShortcutsPane`) |
 | A new way to read or move windows/screens/apps/keys | a protocol in `Platform/` + adapter file next to it |
 | Behaviour that keeps windows and memory in step | `Stacks/` (`StackCoordinator` or a new focused collaborator) |
 | Reacting to desktop/display changes, periodic work | `Zones/` (`ZoneEngine` or a new collaborator it owns) |
