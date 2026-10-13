@@ -19,5 +19,10 @@ public struct SettingsValues: Equatable {
     /// The modifier key that, tapped twice, hides the pill under the pointer.
     public var hidePillKey = SnapTrigger.leftShift
 
+    /// The language of the app: `systemLanguage` or a language code the string catalog has been translated into.
+    public var language = SettingsValues.systemLanguage
+
+    public static let systemLanguage = "system"
+
     public init() {}
 }

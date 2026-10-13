@@ -5,6 +5,7 @@ import SwiftUI
 struct GeneralPane: View {
     @Bindable var settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
+    private let languages = AppLanguages()
 
     var body: some View {
         Form {
@@ -20,6 +21,24 @@ struct GeneralPane: View {
                 SettingRow(title: "Enable",
                            detail: "Turn all features on or off without quitting the app. When off, windows are left alone and no pills are shown.") {
                     Toggle("Enable", isOn: $settings.values.placementEnabled).labelsHidden()
+                }
+            }
+
+            Section("Language") {
+                SettingRow(title: "Language",
+                           detail: "The language of the app. The change applies the next time PaneFlip starts.") {
+                    Picker("Language", selection: $settings.values.language) {
+                        Text(verbatim: languages.title(of: SettingsValues.systemLanguage)).tag(SettingsValues.systemLanguage)
+                        Divider()
+                        ForEach(languages.available, id: \.self) { Text(verbatim: languages.title(of: $0)).tag($0) }
+                    }
+                    .labelsHidden()
+                }
+                if settings.values.language == SettingsValues.systemLanguage,
+                   let missing = languages.unavailableSystemLanguage {
+                    Text("Your system language (\(missing)) is not available yet, so PaneFlip is shown in English.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
         }

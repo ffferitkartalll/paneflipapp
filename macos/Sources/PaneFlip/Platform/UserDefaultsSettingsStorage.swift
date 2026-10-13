@@ -17,6 +17,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
+        v.language = defaults.string(forKey: "appLanguage") ?? v.language
         return v
     }
 
@@ -29,5 +30,9 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
+        defaults.set(v.language, forKey: "appLanguage")
+        // The system reads the app's language from this key when the app starts; without it the system's order is used.
+        if v.language == SettingsValues.systemLanguage { defaults.removeObject(forKey: "AppleLanguages") }
+        else { defaults.set([v.language], forKey: "AppleLanguages") }
     }
 }

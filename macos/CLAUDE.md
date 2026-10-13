@@ -56,6 +56,10 @@ Read `ARCHITECTURE.md` before changing anything: it is the map. These rules are 
 - **No user-facing text in `PaneFlipCore`.** Core holds stable identifiers; the app maps them to text
   (`PillContent+Title`, `SnapTrigger+Title`). Default names are made in the app (`LayoutService.addLayout`).
 - Use one English word per concept (Layout, Zone, Stack, Pill).
+- **Languages are data.** The catalog's languages are the app's languages: the General tab's picker lists
+  `Bundle.main.localizations` (`AppLanguages`), and the chosen one is applied through `AppleLanguages` at the next
+  start. Adding a translation (by hand or with a translation service such as Crowdin) is a change to the
+  catalog only; never hard-code a language list. Without a translation for the system language the app is English.
 
 ## Where new code goes
 
