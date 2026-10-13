@@ -12,6 +12,8 @@ protocol ScreenProviding {
     /// Pointer in bottom-left-origin (Cocoa) coordinates.
     var pointerCocoa: CGPoint { get }
     var menuBarThickness: CGFloat { get }
+    /// Mission Control or App Exposé is showing: windows are rearranged or hidden and should be left alone.
+    var isMissionControlActive: Bool { get }
     /// Cocoa ↔ Accessibility rectangle conversion (the transform is its own inverse).
     func flip(_ rect: CGRect) -> CGRect
 }
