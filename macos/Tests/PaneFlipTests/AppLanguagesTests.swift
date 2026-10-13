@@ -1,5 +1,4 @@
 import XCTest
-@testable import PaneFlip
 
 final class AppLanguagesTests: XCTestCase {
     func testTheLanguagesAreEveryTranslationSorted() {
