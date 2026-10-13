@@ -40,7 +40,7 @@ Sources/
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor,
     │                        WindowAvailability, WindowSnapshot
     ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, ZonePresenting, ZoneRefreshing
-    ├── Pill/                PillPresenter, PillPanel, PillSlide, PillMetrics, IconFont, DoubleTapDetector
+    ├── Pill/                PillPresenter, PillPanel, PillHideButton, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
@@ -73,7 +73,8 @@ Sources/
 | `ZoneEngine` | Re-layout on desktop/display changes and run housekeeping. |
 | `LayoutService` | Apply layout edits and carry their consequences to windows and memory. |
 | `PillPresenter` | Own pill panels and decide when each is visible. |
-| `PillPanel` | The pill: the system's segmented control, one segment per window; right-drag reorders. |
+| `PillPanel` | The pill: the system's segmented control, one segment per window. |
+| `PillHideButton` | The round glass button beside the pill that hides it. |
 | `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
 | `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
 | `SnapDragController` | Window drag + trigger key → snap. |

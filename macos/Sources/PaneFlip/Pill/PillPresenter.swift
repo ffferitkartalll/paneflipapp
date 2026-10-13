@@ -64,10 +64,12 @@ final class PillPresenter: ZonePresenting {
     /// The pill sits one menu-bar height below the top of the zone, centred, as wide as its segments. The panel
     /// has transparent room around them (the system control collapses into a pop-up without it): only the capsule
     /// inside counts for hovering and clicking. Not limited to the zone: a narrow zone must not squeeze the control.
-    private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect) {
+    private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect, hover: CGRect) {
         let w = panel.barWidth
         let frame = CGRect(x: stack.rect.midX - w / 2, y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
-        return (frame, frame.insetBy(dx: PillPanel.margin, dy: 0))
+        let capsule = frame.insetBy(dx: PillPanel.margin, dy: 0)
+        // The hide button beside the capsule counts as part of the pill for showing it.
+        return (frame, capsule, capsule.union(PillHideButton.rect(besideCapsule: capsule)))
     }
 
     private func update() {
@@ -79,15 +81,15 @@ final class PillPresenter: ZonePresenting {
             var show = false, clickable = false
             if stack.tabs.count >= 2 && settings.values.stackingEnabled {
                 panel.refresh()
-                let (frame, pill) = pillRects(stack, panel)
+                let (frame, pill, hover) = pillRects(stack, panel)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it
                 // doesn't flash back for a moment after the pointer has left.
-                if suppressed.contains(id) && !pill.insetBy(dx: -releaseMargin, dy: -releaseMargin).contains(pointer) {
+                if suppressed.contains(id) && !hover.insetBy(dx: -releaseMargin, dy: -releaseMargin).contains(pointer) {
                     suppressed.remove(id)
                     hoverAt[id] = nil
                     flashUntil[id] = nil
                 }
-                if pill.contains(pointer) && !suppressed.contains(id) && !covered { hoverAt[id] = now }
+                if hover.contains(pointer) && !suppressed.contains(id) && !covered { hoverAt[id] = now }
                 let hovering = hoverAt[id].map { now.timeIntervalSince($0) < hideDelay } ?? false
                 let flashing = flashUntil[id].map { $0 > now } ?? false
                 show = (((hovering || flashing) && !suppressed.contains(id)) || stack.interacting) && !covered
@@ -97,6 +99,7 @@ final class PillPresenter: ZonePresenting {
                 if panel.frame != screenFrame { panel.setFrame(screenFrame, display: true) }
             }
             panel.ignoresMouseEvents = !clickable
+            panel.hideButtonClickable = show
             if shown[id] != show {
                 shown[id] = show
                 panel.fade(to: show)
@@ -108,7 +111,7 @@ final class PillPresenter: ZonePresenting {
     private func hideUnderPointer() {
         let pointer = screens.pointerAX
         for (id, stack) in coordinator.stacks where shown[id] == true {
-            if let panel = panels[id], pillRects(stack, panel).capsule.contains(pointer) { hide(zone: id) }
+            if let panel = panels[id], pillRects(stack, panel).hover.contains(pointer) { hide(zone: id) }
         }
     }
 
@@ -124,9 +127,6 @@ final class PillPresenter: ZonePresenting {
             stack: stack, settings: settings, iconFont: iconFont,
             select: { [weak self, weak stack] id in
                 if let stack { self?.coordinator.select(id, in: stack) }
-            },
-            move: { [weak self, weak stack] id, index in
-                if let stack { self?.coordinator.move(window: id, to: index, in: stack) }
             },
             hide: { [weak self, weak stack] in
                 if let stack { self?.hide(zone: stack.id) }

@@ -265,6 +265,9 @@
         }
       }
     },
+    "Hide the pill" : {
+      "extractionState" : "manual"
+    },
     "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -793,16 +796,8 @@
         }
       }
     },
-    "What each segment of the pill shows. Double-tap the hide key (see Shortcuts) or right-click the pill to hide it while the pointer is over it." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haptaki her bölütün ne gösterdiği. Hapı gizlemek için imleç hap üzerindeyken gizleme tuşuna (Kısayollar'a bakınız) çift basın ya da sağ tıklayın."
-          }
-        }
-      }
+    "What each segment of the pill shows. Use the button beside the pill or double-tap the hide key (see Shortcuts) to hide it while the pointer is over it." : {
+      "extractionState" : "manual"
     },
     "Window snapping" : {
       "extractionState" : "manual",
