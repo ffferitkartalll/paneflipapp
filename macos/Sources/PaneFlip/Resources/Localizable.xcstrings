@@ -1,237 +1,853 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "Accessibility": {
-      "extractionState": "manual"
-    },
-    "Activate": {
-      "extractionState": "manual"
-    },
-    "Active": {
-      "extractionState": "manual"
-    },
-    "Activity": {
-      "extractionState": "manual"
-    },
-    "Add layout": {
-      "extractionState": "manual"
-    },
-    "Applies between zones only, never at screen edges.": {
-      "extractionState": "manual"
-    },
-    "Apply": {
-      "extractionState": "manual"
-    },
-    "Cancel": {
-      "extractionState": "manual"
-    },
-    "Click the field, then press any key or combination. Esc cancels.": {
-      "extractionState": "manual"
-    },
-    "Click to split  ·  Hold ⇧ for a horizontal split\nDrag a line to resize  ·  Double-click a handle to remove it\nDrag a zone onto its neighbour to merge them": {
-      "extractionState": "manual"
-    },
-    "Close": {
-      "extractionState": "manual"
-    },
-    "Continue": {
-      "extractionState": "manual"
-    },
-    "Couldn't change this: %@": {
-      "extractionState": "manual"
-    },
-    "Current desktop": {
-      "extractionState": "manual"
-    },
-    "Delete": {
-      "extractionState": "manual"
-    },
-    "Double-tap to hide the pill": {
-      "extractionState": "manual"
-    },
-    "Edit": {
-      "extractionState": "manual"
-    },
-    "Enable": {
-      "extractionState": "manual"
-    },
-    "Fetch brand icons": {
-      "extractionState": "manual"
-    },
-    "Gap between zones": {
-      "extractionState": "manual"
-    },
-    "General": {
-      "extractionState": "manual"
-    },
-    "Grant Access": {
-      "extractionState": "manual"
-    },
-    "Grant the access below in System Settings. This window updates as soon as you do.": {
-      "extractionState": "manual"
-    },
-    "Granted": {
-      "extractionState": "manual"
-    },
-    "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command.": {
-      "extractionState": "manual"
-    },
-    "Hold while dragging a window": {
-      "extractionState": "manual"
-    },
-    "Icon": {
-      "extractionState": "manual"
-    },
-    "Icon and name": {
-      "extractionState": "manual"
-    },
-    "Language": {
-      "extractionState": "manual"
-    },
-    "Launch at login": {
-      "extractionState": "manual"
-    },
-    "Layout %lld": {
-      "extractionState": "manual"
-    },
-    "Layout name": {
-      "extractionState": "manual"
-    },
-    "Layouts": {
-      "extractionState": "manual"
-    },
-    "Left Command": {
-      "extractionState": "manual"
-    },
-    "Left Control": {
-      "extractionState": "manual"
-    },
-    "Left Option": {
-      "extractionState": "manual"
-    },
-    "Left Shift": {
-      "extractionState": "manual"
-    },
-    "Lets PaneFlip see the windows of other apps and move them into zones.": {
-      "extractionState": "manual"
-    },
-    "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.": {
-      "extractionState": "manual"
-    },
-    "Merge": {
-      "extractionState": "manual"
-    },
-    "Minimum zone size": {
-      "extractionState": "manual"
-    },
-    "Name": {
-      "extractionState": "manual"
-    },
-    "Open PaneFlip automatically when you log in to your Mac.": {
-      "extractionState": "manual"
-    },
-    "Open System Settings": {
-      "extractionState": "manual"
-    },
-    "PaneFlip": {
-      "extractionState": "manual"
-    },
-    "PaneFlip needs your permission": {
-      "extractionState": "manual"
-    },
-    "Pill": {
-      "extractionState": "manual"
-    },
-    "Press keys": {
-      "extractionState": "manual"
-    },
-    "Quit": {
-      "extractionState": "manual"
-    },
-    "Remove": {
-      "extractionState": "manual"
-    },
-    "Rename": {
-      "extractionState": "manual"
-    },
-    "Rename Layout": {
-      "extractionState": "manual"
-    },
-    "Reset": {
-      "extractionState": "manual"
-    },
-    "Return": {
-      "extractionState": "manual"
-    },
-    "Right Command": {
-      "extractionState": "manual"
-    },
-    "Right Control": {
-      "extractionState": "manual"
-    },
-    "Right Option": {
-      "extractionState": "manual"
-    },
-    "Right Shift": {
-      "extractionState": "manual"
-    },
-    "Settings": {
-      "extractionState": "manual"
-    },
-    "Several apps share a zone and you switch between them with the pill. When off, a zone holds one app and a new one replaces it.": {
-      "extractionState": "manual"
-    },
-    "Shortcuts": {
-      "extractionState": "manual"
-    },
-    "Show for each window": {
-      "extractionState": "manual"
-    },
-    "Space": {
-      "extractionState": "manual"
-    },
-    "Stack apps in a zone": {
-      "extractionState": "manual"
-    },
-    "Stacking": {
-      "extractionState": "manual"
-    },
-    "Startup": {
-      "extractionState": "manual"
-    },
-    "System language": {
-      "extractionState": "manual"
-    },
-    "Tab": {
-      "extractionState": "manual"
-    },
-    "The language of the app. The change applies the next time PaneFlip starts.": {
-      "extractionState": "manual"
-    },
-    "The layout editor won't split or resize a zone below this.": {
-      "extractionState": "manual"
-    },
-    "Turn all features on or off without quitting the app. When off, windows are left alone and no pills are shown.": {
-      "extractionState": "manual"
-    },
-    "Waiting for your approval in System Settings ▸ General ▸ Login Items.": {
-      "extractionState": "manual"
-    },
-    "What each segment of the pill shows. Double-tap the hide key (see Shortcuts) or right-click the pill to hide it while the pointer is over it.": {
-      "extractionState": "manual"
-    },
-    "Window snapping": {
-      "extractionState": "manual"
-    },
-    "Your system language (%@) is not available yet, so PaneFlip is shown in English.": {
-      "extractionState": "manual"
-    },
-    "Zones": {
-      "extractionState": "manual"
-    },
-    "Zones light up while the keys are held; release the mouse over a zone to add the window.": {
-      "extractionState": "manual"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erişilebilirlik"
+          }
+        }
+      }
+    },
+    "Activate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktifleştir"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktif"
+          }
+        }
+      }
+    },
+    "Activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivite"
+          }
+        }
+      }
+    },
+    "Add layout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen ekle"
+          }
+        }
+      }
+    },
+    "Applies between zones only, never at screen edges." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sadece bölgelerin arasına uygulanır, ekran kenarlarına asla uygulanmaz."
+          }
+        }
+      }
+    },
+    "Apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygula"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İptal et"
+          }
+        }
+      }
+    },
+    "Click the field, then press any key or combination. Esc cancels." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alana tıkla, sonrasında bir ya da birden fazla tuşa bas. Esc iptal eder."
+          }
+        }
+      }
+    },
+    "Click to split  ·  Hold ⇧ for a horizontal split\nDrag a line to resize  ·  Double-click a handle to remove it\nDrag a zone onto its neighbour to merge them" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayırmak için tıkla  ·  Yatay ayırma için ⇧ basılı tut\nYeniden boyutlandırmak için çizgiyi sürükle  ·  Kaldırmak için çizgideki tutacağa çift tıkla\nBölgeleri birleştirmek için komşusuna sürükle"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapat"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Devam et"
+          }
+        }
+      }
+    },
+    "Couldn't change this: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Değiştirilemiyor: %@"
+          }
+        }
+      }
+    },
+    "Current desktop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şu anki masaüstü"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sil"
+          }
+        }
+      }
+    },
+    "Double-tap to hide the pill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapı gizlemek için çift tıkla"
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzenle"
+          }
+        }
+      }
+    },
+    "Enable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etkinleştir"
+          }
+        }
+      }
+    },
+    "Fetch brand icons" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marka simgelerini çek"
+          }
+        }
+      }
+    },
+    "Gap between zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgeler arası boşluk"
+          }
+        }
+      }
+    },
+    "General" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genel"
+          }
+        }
+      }
+    },
+    "Grant Access" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erişim izni ver"
+          }
+        }
+      }
+    },
+    "Grant the access below in System Settings. This window updates as soon as you do." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları'nda aşağıdakilere erişim izni verin. Bu pencere siz yaptıkça güncellenecektir."
+          }
+        }
+      }
+    },
+    "Granted" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erişim izni verildi"
+          }
+        }
+      }
+    },
+    "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmleç uzaklaştırılana kadar imlecin altındaki hapı gizler. Sadece bir niteleme tuşu ile çalışır: Shift, Control, Option ve Command."
+          }
+        }
+      }
+    },
+    "Hold while dragging a window" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereyi sürüklerken basılı tut"
+          }
+        }
+      }
+    },
+    "Icon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simge"
+          }
+        }
+      }
+    },
+    "Icon and name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simge ve ad"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil"
+          }
+        }
+      }
+    },
+    "Launch at login" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlangıçta çalıştır"
+          }
+        }
+      }
+    },
+    "Layout %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen %lld"
+          }
+        }
+      }
+    },
+    "Layout name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen adı"
+          }
+        }
+      }
+    },
+    "Layouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzenler"
+          }
+        }
+      }
+    },
+    "Left Command" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sol Command"
+          }
+        }
+      }
+    },
+    "Left Control" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sol Control"
+          }
+        }
+      }
+    },
+    "Left Option" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sol Option"
+          }
+        }
+      }
+    },
+    "Left Shift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sol Shift"
+          }
+        }
+      }
+    },
+    "Lets PaneFlip see the windows of other apps and move them into zones." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip'in diğer uygulamaların pencerelerini görmesine ve bölgelere ekleyebilmesine olanak sağlar."
+          }
+        }
+      }
+    },
+    "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistemde simgeleri bulunmayan uygulamalar için araştırma yapar. Bölgelere eklenen uygulamaların isimlerini halka açık bir sunucuya (jsDelivr) gönderir. Kapalıyken, önceden indirilmiş simgeler kalır ve diğer uygulamalar kendi simgelerinden bir şekil kullanır."
+          }
+        }
+      }
+    },
+    "Merge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birleştir"
+          }
+        }
+      }
+    },
+    "Minimum zone size" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum bölge boyutu"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ad"
+          }
+        }
+      }
+    },
+    "Open PaneFlip automatically when you log in to your Mac." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac'inizde oturum açtığınızda PaneFlip'i otomatik başlatır."
+          }
+        }
+      }
+    },
+    "Open System Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları'nı aç"
+          }
+        }
+      }
+    },
+    "PaneFlip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip"
+          }
+        }
+      }
+    },
+    "PaneFlip needs your permission" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip'in izninize ihtiyacı var"
+          }
+        }
+      }
+    },
+    "Pill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hap"
+          }
+        }
+      }
+    },
+    "Press keys" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuşlara bas"
+          }
+        }
+      }
+    },
+    "Quit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çık"
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaldır"
+          }
+        }
+      }
+    },
+    "Rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniden adlandır"
+          }
+        }
+      }
+    },
+    "Rename Layout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzeni yeniden adlandır"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıfırla"
+          }
+        }
+      }
+    },
+    "Return" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dön"
+          }
+        }
+      }
+    },
+    "Right Command" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağ Command"
+          }
+        }
+      }
+    },
+    "Right Control" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağ Control"
+          }
+        }
+      }
+    },
+    "Right Option" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağ Option"
+          }
+        }
+      }
+    },
+    "Right Shift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağ Shift"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayarlar"
+          }
+        }
+      }
+    },
+    "Several apps share a zone and you switch between them with the pill. When off, a zone holds one app and a new one replaces it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgeyi birkaç uygulama paylaşır ve aralarında hap ile geçiş yaparsın. Kapalıyken, bir bölge tek bir uygulama tutar ve yeni uygulama onun yerine geçer."
+          }
+        }
+      }
+    },
+    "Shortcuts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kısayollar"
+          }
+        }
+      }
+    },
+    "Show for each window" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her bir pencere için göster"
+          }
+        }
+      }
+    },
+    "Space" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boşluk"
+          }
+        }
+      }
+    },
+    "Stack apps in a zone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamaları bölgeye yığınla"
+          }
+        }
+      }
+    },
+    "Stacking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yığınlama"
+          }
+        }
+      }
+    },
+    "Startup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlangıç"
+          }
+        }
+      }
+    },
+    "System language" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem dili"
+          }
+        }
+      }
+    },
+    "Tab" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sekme"
+          }
+        }
+      }
+    },
+    "The language of the app. The change applies the next time PaneFlip starts." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamanın dili. Değişiklikler PaneFlip yeniden başlatıldığında geçerli olur."
+          }
+        }
+      }
+    },
+    "The layout editor won't split or resize a zone below this." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen düzenleyicisi bir bölgeyi bu değerin altında bölemeyecek ya da yeniden boyutlandıramayacak."
+          }
+        }
+      }
+    },
+    "Turn all features on or off without quitting the app. When off, windows are left alone and no pills are shown." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamadan çıkış yapmadan tüm özellikleri kapat. Kapalıyken, pencereler yalnız kalır ve haplar gözükmez."
+          }
+        }
+      }
+    },
+    "Waiting for your approval in System Settings ▸ General ▸ Login Items." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları ▸ Genel ▸ Oturum Açma Öğeleri'nde onayınız bekleniyor."
+          }
+        }
+      }
+    },
+    "What each segment of the pill shows. Double-tap the hide key (see Shortcuts) or right-click the pill to hide it while the pointer is over it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptaki her bölütün ne gösterdiği. Hapı gizlemek için imleç hap üzerindeyken gizleme tuşuna (Kısayollar'a bakınız) çift basın ya da sağ tıklayın."
+          }
+        }
+      }
+    },
+    "Window snapping" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencere hizalama"
+          }
+        }
+      }
+    },
+    "Your system language (%@) is not available yet, so PaneFlip is shown in English." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem diliniz (%@) henüz mevcut değil. o yüzden PaneFlip İngilizce gözükecek."
+          }
+        }
+      }
+    },
+    "Zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgeler"
+          }
+        }
+      }
+    },
+    "Zones light up while the keys are held; release the mouse over a zone to add the window." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuşlar basılıyken bölgeler aydınlanır; Bölgeye pencere eklemek için fareyi bırakın."
+          }
+        }
+      }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
