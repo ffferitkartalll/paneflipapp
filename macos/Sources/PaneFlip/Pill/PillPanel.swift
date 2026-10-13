@@ -202,13 +202,15 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         slide.finish()
         let before = stack.tabs
         move(id, index)
-        guard let carry, let frameView = contentView?.superview, let group else { return retitleSegments() }
+        // The sliding labels go into the control itself: AppKit warns about views added to the window's own frame view.
+        guard let carry, let frameView = contentView?.superview, let host = Self.segmentedControl(in: frameView),
+              let group else { return retitleSegments() }
         let old = layout(of: before, carry), new = layout(of: stack.tabs, carry)
         let items = stack.tabs.compactMap { tab -> PillSlide.Item? in
             guard let from = old[tab.id], let to = new[tab.id] else { return nil }
             return .init(name: shownName(tab), icon: iconFont.image(bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 18),
-                         from: frameView.convert(convertFromScreen(from), from: nil),
-                         to: frameView.convert(convertFromScreen(to), from: nil))
+                         from: host.convert(convertFromScreen(from), from: nil),
+                         to: host.convert(convertFromScreen(to), from: nil))
         }
         shownKey = currentKey()
         let space = NSString("\u{2007}").size(withAttributes: [.font: NSFont.systemFont(ofSize: 13)]).width
@@ -217,7 +219,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
             subitem.title = String(repeating: "\u{2007}", count: max(1, Int(((width - Self.segmentPadding) / space).rounded())))
         }
         let content = settings.values.pillContent
-        slide.run(items, showsIcon: content != .name, showsName: content != .icon, in: frameView,
+        slide.run(items, showsIcon: content != .name, showsName: content != .icon, in: host,
                   duration: Self.slideDuration) { [weak self] in self?.retitleSegments() }
     }
 
