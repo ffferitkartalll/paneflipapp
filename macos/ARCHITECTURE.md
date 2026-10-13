@@ -44,7 +44,7 @@ Sources/
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
-    └── Settings/            SettingsView (tabs), LayoutsPane, PlacementPane, StackingPane, SettingRow,
+    └── Settings/            SettingsView (tabs), LayoutsPane, StackingPane, ShortcutsPane, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,

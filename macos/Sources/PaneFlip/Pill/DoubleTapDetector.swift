@@ -1,17 +1,17 @@
 import AppKit
+import PaneFlipCore
 
-/// Detects a quick double tap of one modifier key anywhere in the system.
+/// Detects a quick double tap of one modifier key anywhere in the system. The key is asked for on every event, so
+/// a change in the settings applies at once.
 final class DoubleTapDetector {
-    private let keyCode: UInt16
-    private let deviceMask: UInt
+    private let keyCode: () -> Int
     private let interval: TimeInterval
     private let onDoubleTap: () -> Void
     private var lastDown: Date?
     private var monitor: Any?
 
-    init(keyCode: UInt16, deviceMask: UInt, interval: TimeInterval = 0.4, onDoubleTap: @escaping () -> Void) {
+    init(keyCode: @escaping () -> Int, interval: TimeInterval = 0.4, onDoubleTap: @escaping () -> Void) {
         self.keyCode = keyCode
-        self.deviceMask = deviceMask
         self.interval = interval
         self.onDoubleTap = onDoubleTap
     }
@@ -21,7 +21,9 @@ final class DoubleTapDetector {
     }
 
     private func handle(_ e: NSEvent) {
-        guard e.keyCode == keyCode, e.modifierFlags.rawValue & deviceMask != 0 else { return }   // the key went down
+        let code = keyCode()
+        guard Int(e.keyCode) == code, let mask = SnapTrigger.modifierMasks[code],
+              e.modifierFlags.rawValue & mask != 0 else { return }   // the key went down
         let now = Date()
         if let last = lastDown, now.timeIntervalSince(last) < interval {
             lastDown = nil

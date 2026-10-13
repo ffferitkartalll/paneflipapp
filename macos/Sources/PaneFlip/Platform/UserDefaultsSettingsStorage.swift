@@ -16,6 +16,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
+        v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
         return v
     }
 
@@ -27,5 +28,6 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
+        defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
     }
 }

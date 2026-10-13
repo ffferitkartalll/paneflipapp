@@ -16,6 +16,8 @@ public struct SettingsValues: Equatable {
     public var fetchBrandIcons = true
     /// Held while dragging a window to highlight zones and snap into one.
     public var snapTrigger = SnapTrigger.leftShift
+    /// The modifier key that, tapped twice, hides the pill under the pointer.
+    public var hidePillKey = SnapTrigger.leftShift
 
     public init() {}
 }

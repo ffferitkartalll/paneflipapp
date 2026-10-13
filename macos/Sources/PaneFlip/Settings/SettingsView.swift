@@ -24,13 +24,13 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
 
-            PlacementPane(settings: settings)
-                .fixedSize(horizontal: false, vertical: true)
-                .tabItem { Label("Placement", systemImage: "square.and.arrow.down") }
-
             StackingPane(settings: settings)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Stacking", systemImage: "square.stack.3d.up") }
+
+            ShortcutsPane(settings: settings)
+                .fixedSize(horizontal: false, vertical: true)
+                .tabItem { Label("Shortcuts", systemImage: "command") }
         }
         .scenePadding()
         .frame(width: 640)

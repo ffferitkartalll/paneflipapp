@@ -17,7 +17,7 @@ struct StackingPane: View {
 
             Section("Pill") {
                 SettingRow(title: "Show for each window",
-                           detail: "What each segment of the pill shows. Double-tap Left Shift or right-click the pill to hide it while the pointer is over it.") {
+                           detail: "What each segment of the pill shows. Double-tap the hide key (see Shortcuts) or right-click the pill to hide it while the pointer is over it.") {
                     Picker("Show for each window", selection: $settings.values.pillContent) {
                         ForEach(PillContent.allCases) { Text($0.title).tag($0) }
                     }

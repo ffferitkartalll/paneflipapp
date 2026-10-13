@@ -46,10 +46,16 @@
     "Delete": {
       "extractionState": "manual"
     },
+    "Double-tap to hide the pill": {
+      "extractionState": "manual"
+    },
     "Edit": {
       "extractionState": "manual"
     },
     "Enable": {
+      "extractionState": "manual"
+    },
+    "Fetch brand icons": {
       "extractionState": "manual"
     },
     "Gap between zones": {
@@ -65,6 +71,9 @@
       "extractionState": "manual"
     },
     "Granted": {
+      "extractionState": "manual"
+    },
+    "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command.": {
       "extractionState": "manual"
     },
     "Hold while dragging a window": {
@@ -103,6 +112,9 @@
     "Lets PaneFlip see the windows of other apps and move them into zones.": {
       "extractionState": "manual"
     },
+    "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.": {
+      "extractionState": "manual"
+    },
     "Merge": {
       "extractionState": "manual"
     },
@@ -125,9 +137,6 @@
       "extractionState": "manual"
     },
     "Pill": {
-      "extractionState": "manual"
-    },
-    "Placement": {
       "extractionState": "manual"
     },
     "Press keys": {
@@ -169,10 +178,7 @@
     "Several apps share a zone and you switch between them with the pill. When off, a zone holds one app and a new one replaces it.": {
       "extractionState": "manual"
     },
-    "Fetch brand icons": {
-      "extractionState": "manual"
-    },
-    "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.": {
+    "Shortcuts": {
       "extractionState": "manual"
     },
     "Show for each window": {
@@ -202,7 +208,7 @@
     "Waiting for your approval in System Settings ▸ General ▸ Login Items.": {
       "extractionState": "manual"
     },
-    "What each segment of the pill shows. Double-tap Left Shift or right-click the pill to hide it while the pointer is over it.": {
+    "What each segment of the pill shows. Double-tap the hide key (see Shortcuts) or right-click the pill to hide it while the pointer is over it.": {
       "extractionState": "manual"
     },
     "Window snapping": {
