@@ -22,6 +22,9 @@ final class ClosedWindowMonitor {
     func check() {
         let held = coordinator.heldWindows
         guard !held.isEmpty else { return }
+        // Windows are hidden or rearranged while Mission Control or App Exposé is open: they are not closed.
+        // Forget the desktops so the first look after it is the one that waits.
+        if screens.isMissionControlActive { lastSpaces = []; return }
         // While the desktop is switching, windows are in flux and would look closed; wait it out.
         let spaces = screens.currentSpaceIDs()
         if spaces != lastSpaces { lastSpaces = spaces; return }

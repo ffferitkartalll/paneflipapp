@@ -26,6 +26,15 @@ final class CGSScreenProvider: ScreenProviding {
 
     var menuBarThickness: CGFloat { NSStatusBar.system.thickness }
 
+    /// While either is open the window manager keeps a full-screen shield window at layer 19. Its name is not
+    /// used: other apps' window names are only readable with the Screen Recording permission.
+    var isMissionControlActive: Bool {
+        guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] else { return false }
+        return list.contains {
+            ($0[kCGWindowOwnerName as String] as? String) == "WindowManager" && ($0[kCGWindowLayer as String] as? Int) == 19
+        }
+    }
+
     func screens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
         return NSScreen.screens.map { s in
