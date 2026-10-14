@@ -1,3 +1,4 @@
+import AppKit
 import PaneFlipCore
 import SwiftUI
 
@@ -10,8 +11,11 @@ struct LayoutsPane: View {
     let screens: ScreenProviding
     let refresh: () -> Void
     @Bindable var settings: AppSettings
+    /// Bumped when displays are plugged in or out, so the list of screens is read again.
+    @State private var displaysChanged = 0
 
     var body: some View {
+        let _ = displaysChanged
         Form {
             ForEach(screens.screens()) { screen in
                 ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps)
@@ -31,5 +35,8 @@ struct LayoutsPane: View {
             .disabled(!settings.values.placementEnabled)
         }
         .formStyle(.grouped)
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)) { _ in
+            displaysChanged += 1
+        }
     }
 }

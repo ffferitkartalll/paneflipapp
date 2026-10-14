@@ -7,6 +7,9 @@ private func CGSMainConnectionID() -> Int32
 @_silgen_name("CGSManagedDisplayGetCurrentSpace")
 private func CGSManagedDisplayGetCurrentSpace(_ cid: Int32, _ displayUUID: CFString) -> UInt64
 
+@_silgen_name("CGSCopyManagedDisplaySpaces")
+private func CGSCopyManagedDisplaySpaces(_ cid: Int32) -> CFArray?
+
 @_silgen_name("CGSCopySpacesForWindows")
 private func CGSCopySpacesForWindows(_ cid: Int32, _ mask: Int32, _ wids: CFArray) -> CFArray?
 
@@ -43,12 +46,51 @@ final class CGSScreenProvider: ScreenProviding {
 
     func screens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
+        let dock = dockRect()
         return NSScreen.screens.map { s in
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
-            return ScreenInfo(key: "\(uuid)|\(space)", name: s.localizedName, size: s.frame.size,
-                              cocoaFrame: s.frame, cocoaVisibleFrame: s.visibleFrame, axVisible: flip(s.visibleFrame))
+            let legacy = "\(uuid)|\(space)"
+            let position = desktopPosition(of: space, onDisplay: uuid)
+            let usable = DockArea.excluding(dock, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
+            return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
+                              cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
+                              legacyKey: legacy)
         }
+    }
+
+    /// The Dock's tray in top-left-origin coordinates while the Dock is showing. After a display was unplugged the
+    /// Dock lands on the remaining one before the system's usable area of that display has made room for it (it
+    /// stayed unchanged for as long as the Dock was there), so the Dock is asked for itself.
+    private func dockRect() -> CGRect? {
+        let hides = CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false
+        guard !hides, let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else { return nil }
+        var children: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(AXUIElementCreateApplication(dock.processIdentifier), kAXChildrenAttribute as CFString,
+                                            &children) == .success,
+              let list = (children as? [AXUIElement])?.first(where: { element in
+                  var role: CFTypeRef?
+                  return AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role) == .success
+                      && (role as? String) == kAXListRole
+              }) else { return nil }
+        var position: CFTypeRef?, size: CFTypeRef?
+        var origin = CGPoint.zero, extent = CGSize.zero
+        guard AXUIElementCopyAttributeValue(list, kAXPositionAttribute as CFString, &position) == .success,
+              AXUIElementCopyAttributeValue(list, kAXSizeAttribute as CFString, &size) == .success,
+              let position, let size,
+              AXValueGetValue(position as! AXValue, .cgPoint, &origin),
+              AXValueGetValue(size as! AXValue, .cgSize, &extent), extent.width > 0, extent.height > 0 else { return nil }
+        return CGRect(origin: origin, size: extent)
+    }
+
+    /// The 1-based place of a desktop among the display's ordinary desktops (full-screen spaces are not counted),
+    /// or nil for a space that is not one of them.
+    private func desktopPosition(of space: UInt64, onDisplay uuid: String) -> Int? {
+        guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: Any]],
+              let display = displays.first(where: { ($0["Display Identifier"] as? String)?.caseInsensitiveCompare(uuid) == .orderedSame }),
+              let spaces = display["Spaces"] as? [[String: Any]] else { return nil }
+        let ordinary = spaces.filter { ($0["type"] as? Int ?? 0) == 0 }.compactMap { ($0["ManagedSpaceID"] as? NSNumber)?.uint64Value }
+        return ordinary.firstIndex(of: space).map { $0 + 1 }
     }
 
     func currentSpaceIDs() -> Set<UInt64> {

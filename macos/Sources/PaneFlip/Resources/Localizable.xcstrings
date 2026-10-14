@@ -111,6 +111,9 @@
         }
       }
     },
+    "Apps of a screen that is unplugged are placed here." : {
+      "extractionState" : "manual"
+    },
     "Apps…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -209,6 +212,9 @@
           }
         }
       }
+    },
+    "Default zone" : {
+      "extractionState" : "manual"
     },
     "Delete" : {
       "extractionState" : "manual",

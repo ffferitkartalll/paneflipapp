@@ -4,12 +4,14 @@ import PaneFlipCore
 
 /// Changes layouts and carries the consequences through: the apps of vanished zones move to the zones that cover
 /// them, memory is pruned, and the zones are laid out again.
-final class LayoutService: LayoutManaging {
+final class LayoutService: LayoutManaging, DisplayChangeHandling {
     private let repository: LayoutRepository
     private let memory: StackMemory
     private let coordinator: StackCoordinator
     private let screens: ScreenProviding
     weak var refresher: ZoneRefreshing?
+    /// The displays seen at the last look; empty before the first one.
+    private var knownDisplays: Set<String> = []
 
     init(repository: LayoutRepository, memory: StackMemory, coordinator: StackCoordinator, screens: ScreenProviding) {
         self.repository = repository
@@ -65,6 +67,47 @@ final class LayoutService: LayoutManaging {
 
     func rename(key: String, id: UUID, to name: String) {
         repository.rename(layout: id, key: key, to: name)
+    }
+
+    func setDefaultZone(key: String, id: UUID, to zone: UUID?) {
+        repository.setDefaultZone(zone, ofLayout: id, key: key)
+    }
+
+    // MARK: Displays
+
+    /// Layouts stored under a display's old key (its desktop's system identifier, which changes whenever a display
+    /// is plugged in or out) are kept under the key that tells the desktop by its position.
+    func migrateKeys() {
+        for screen in screens.screens() where repository.layouts(for: screen.key).isEmpty {
+            let old = repository.legacyKeys(ofDisplay: screen.displayID)
+            let pick = old.first { $0 == screen.legacyKey }
+                ?? old.max { (Int($0.split(separator: "|").last ?? "") ?? 0) < (Int($1.split(separator: "|").last ?? "") ?? 0) }
+            if let pick { repository.moveScreen(from: pick, to: screen.key) }
+        }
+    }
+
+    /// A display that is gone leaves its apps in the default zone of the main screen's layout; one that came
+    /// back gets them again (a slot remembers the zone it had).
+    func displaysDidChange() {
+        let current = screens.screens()
+        let connected = Set(current.map(\.displayID))
+        let before = knownDisplays
+        knownDisplays = connected
+        // The first look also adopts what a display left behind while the app was not running.
+        guard before.isEmpty || before != connected else { return }
+
+        if let main = current.first, let target = repository.activeLayout(for: main.key)?.fallbackZoneID {
+            let orphans = repository.zoneIDs(ofDisplaysNotIn: connected)
+            release(memory.remap(Dictionary(uniqueKeysWithValues: orphans.map { ($0, target) })))
+        }
+        let back = connected.subtracting(before)
+        if !before.isEmpty, !back.isEmpty {
+            let home = Set(current.filter { back.contains($0.displayID) }
+                .compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.root.leafIDs })
+            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.root.leafIDs }
+            release(memory.remap(Dictionary(uniqueKeysWithValues: everywhere.map { ($0, $0) }), preferred: home))
+        }
+        refresher?.restoreWindows()
     }
 
     // MARK: Helpers

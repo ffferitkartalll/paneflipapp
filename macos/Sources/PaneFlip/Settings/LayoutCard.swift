@@ -26,7 +26,10 @@ struct LayoutCard: View {
                 .controlSize(.small)
         }
         .frame(width: Self.width)
-        .sheet(isPresented: $showsApps) { LayoutAppsView(layout: layout, editor: apps) }
+        .sheet(isPresented: $showsApps) {
+            LayoutAppsView(layout: layout, editor: apps, defaultZone: layout.fallbackZoneID,
+                           setDefaultZone: { layouts.setDefaultZone(key: screen.key, id: layout.id, to: $0) })
+        }
         .alert("Rename Layout", isPresented: $isRenaming) {
             TextField("Layout name", text: $draftName)
             Button("Rename", action: commitRename)
