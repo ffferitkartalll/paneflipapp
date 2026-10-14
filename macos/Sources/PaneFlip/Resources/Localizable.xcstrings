@@ -843,7 +843,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bölgede tek bir pencere olsa bile hapı göster. Kapalıyken, bölgede ikiden fazla pencere varsa hap gösterilir."
+            "value" : "Bölgede tek bir pencere olsa bile hapı göster. Kapalıyken, bölgede iki veya daha fazla pencere varsa hap gösterilir."
           }
         }
       }
