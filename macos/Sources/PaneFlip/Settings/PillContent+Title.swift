@@ -1,12 +1,12 @@
+import Foundation
 import PaneFlipCore
-import SwiftUI
 
 extension PillContent {
-    var title: LocalizedStringKey {
+    var title: String {
         switch self {
-        case .icon: "Icon"
-        case .name: "Name"
-        case .both: "Icon and name"
+        case .icon: String(localized: "Icon")
+        case .name: String(localized: "Name")
+        case .both: String(localized: "Icon and name")
         }
     }
 }
