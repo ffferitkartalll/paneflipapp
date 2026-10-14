@@ -10,7 +10,9 @@ struct LayoutCard: View {
     let isActive: Bool
     let layouts: LayoutManaging
     let editor: LayoutEditing
+    let apps: LayoutAppsEditing
 
+    @State private var showsApps = false
     @State private var isRenaming = false
     @State private var draftName = ""
 
@@ -19,8 +21,12 @@ struct LayoutCard: View {
             miniature
             nameRow
             actionRow
+            Button { showsApps = true } label: { stretched("Apps…") }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
         }
         .frame(width: Self.width)
+        .sheet(isPresented: $showsApps) { LayoutAppsView(layout: layout, editor: apps) }
         .alert("Rename Layout", isPresented: $isRenaming) {
             TextField("Layout name", text: $draftName)
             Button("Rename", action: commitRename)

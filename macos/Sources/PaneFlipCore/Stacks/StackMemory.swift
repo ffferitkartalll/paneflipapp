@@ -25,7 +25,68 @@ public final class StackMemory {
         records.indices.filter { records[$0].windowID == nil && zones.contains(records[$0].zoneID) && !records[$0].bundleID.isEmpty }
     }
 
+    /// The zone of `zones` (the zones of one layout) a slot belongs to, if it belongs to that layout at all.
+    private func zone(of record: StackRecord, in zones: Set<UUID>) -> UUID? {
+        zones.contains(record.zoneID) ? record.zoneID : record.otherZones.first(where: zones.contains)
+    }
+
+    /// The slots of one layout, in memory order (the order of the pills).
+    public func slots(inZones zones: [UUID]) -> [LayoutSlot] {
+        let set = Set(zones)
+        return records.indices.compactMap { i in
+            guard !records[i].bundleID.isEmpty, let zone = zone(of: records[i], in: set) else { return nil }
+            return LayoutSlot(index: i, zoneID: zone, bundleID: records[i].bundleID, title: records[i].title,
+                              windowID: records[i].windowID)
+        }
+    }
+
     // MARK: Commands
+
+    /// Puts a slot into another zone of the same layout. Returns the live window that was bound to it (now
+    /// unbound), which the caller must release so it is attached to its new zone.
+    @discardableResult
+    public func assign(slot i: Int, toZone zone: UUID, among zones: Set<UUID>) -> CGWindowID? {
+        guard records.indices.contains(i), zones.contains(zone),
+              let current = self.zone(of: records[i], in: zones), current != zone else { return nil }
+        var copy = records
+        var released: CGWindowID?
+        if zones.contains(copy[i].zoneID) {
+            copy[i].zoneID = zone
+            released = copy[i].windowID
+            copy[i].windowID = nil
+        } else if let k = copy[i].otherZones.firstIndex(where: zones.contains) {
+            copy[i].otherZones[k] = zone
+        }
+        records = copy
+        return released
+    }
+
+    /// Moves a slot `offset` places among the slots of its zone in that layout (-1 earlier, 1 later). Returns the
+    /// live windows of the two slots (now unbound), which the caller must release so they are attached again in
+    /// the new order.
+    @discardableResult
+    public func moveSlot(_ i: Int, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
+        guard records.indices.contains(i), let zone = self.zone(of: records[i], in: zones) else { return [] }
+        let same = records.indices.filter { !records[$0].bundleID.isEmpty && self.zone(of: records[$0], in: zones) == zone }
+        guard let position = same.firstIndex(of: i), same.indices.contains(position + offset) else { return [] }
+        let j = same[position + offset]
+        var copy = records
+        var released: [CGWindowID] = []
+        for k in [i, j] {
+            if let window = copy[k].windowID { released.append(window) }
+            copy[k].windowID = nil
+        }
+        copy.swapAt(i, j)
+        records = copy
+        return released
+    }
+
+    /// Forgets a slot. Returns the live window that was bound to it, which the caller must release.
+    @discardableResult
+    public func removeSlot(_ i: Int) -> CGWindowID? {
+        guard records.indices.contains(i) else { return nil }
+        return records.remove(at: i).windowID
+    }
 
     /// Adds a new slot at the end and returns its index.
     @discardableResult

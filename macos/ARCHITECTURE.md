@@ -21,7 +21,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, ScreenLayouts, LayoutRepository, ZoneRemapper
-│   ├── Stacks/              StackRecord, StackMemory (what belongs where, in what order), TabNaming
+│   ├── Stacks/              StackRecord, LayoutSlot, StackMemory (what belongs where, in what order), TabNaming
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
@@ -37,10 +37,10 @@ Sources/
     │                        LoginItemControlling ← SMAppServiceLoginItem,
     │                        ActivationPolicyControlling ← AppKitActivationPolicyController,
     │                        JSONFileStore, UserDefaultsSettingsStorage
-    ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor,
+    ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot
-    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, ZonePresenting, ZoneRefreshing
-    ├── Pill/                PillPresenter, PillPanel, PillSlide, PillMetrics, IconFont, DoubleTapDetector
+    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, LayoutAppsEditing (+ LayoutAppEntry), ZonePresenting, ZoneRefreshing
+    ├── Pill/                PillPresenter, PillPanel, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
@@ -73,9 +73,10 @@ Sources/
 | `ZoneEngine` | Re-layout on desktop/display changes and run housekeeping. |
 | `LayoutService` | Apply layout edits and carry their consequences to windows and memory. |
 | `PillPresenter` | Own pill panels and decide when each is visible. |
-| `PillPanel` | The pill: the system's segmented control, one segment per window; right-drag reorders. |
+| `PillPanel` | The pill: the system's segmented control, one segment per window, and the toolbar button that hides it. |
 | `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
 | `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
+| `LayoutAppsService` | Edits which app belongs in which zone of a layout, and in what pill order; lets the restorer place the windows. |
 | `SnapDragController` | Window drag + trigger key → snap. |
 | `AppContainer` | Build everything once and wire it. No globals anywhere else. |
 
@@ -84,7 +85,7 @@ Sources/
 - **Single responsibility:** the old 500-line `WindowManager` is split as above.
 - **Dependency inversion:** services depend on `WindowSystem`, `ScreenProviding`, `AppCatalog`, `DocumentStore`,
   `SettingsStorage`, `KeyStateProviding`, `BrandGlyphSource` protocols; only `AppContainer` names the concrete adapters.
-- **Interface segregation:** UI sees `LayoutManaging` and `LayoutEditing`, not the services behind them;
+- **Interface segregation:** UI sees `LayoutManaging`, `LayoutEditing` and `LayoutAppsEditing`, not the services behind them;
   collaborators that only need a re-layout see `ZoneRefreshing`.
 - **Open/closed:** a new presenter conforms to `ZonePresenting` and is added to the engine; a different window
   backend is another `WindowSystem`.

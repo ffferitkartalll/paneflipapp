@@ -20,7 +20,7 @@ struct PaneFlipApp: App {
 
         // Opened from the menu bar menu (Settings).
         Settings {
-            SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor,
+            SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor, apps: container.layoutApps,
                          screens: container.screens, refresh: { container.engine.refreshZones() },
                          settings: container.settings, launchAtLogin: container.launchAtLogin,
                          activation: container.activation)
