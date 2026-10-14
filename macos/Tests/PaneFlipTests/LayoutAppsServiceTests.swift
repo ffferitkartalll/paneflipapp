@@ -32,12 +32,39 @@ final class LayoutAppsServiceTests: XCTestCase {
         XCTAssertEqual(refresher.restores, 1)
     }
 
-    func testMovingAndRemovingChangeTheLayoutsList() {
+    func testAnAppIsListedOnceInAZone() {
         service.addApp(bundleID: "com.example.one", to: zone)
-        let slot = service.entries(inZones: [zone, other])[0].slot
-        service.move(slot: slot, to: other, inZones: [zone, other])
-        XCTAssertEqual(service.entries(inZones: [zone, other]).first?.zoneID, other)
-        service.remove(slot: slot)
+        service.addApp(bundleID: "com.example.one", to: zone)
+        XCTAssertEqual(service.entries(inZones: [zone]).count, 1)
+    }
+
+    func testSeveralWindowsOfAnAppAreOneEntryThatMovesAndGoesTogether() {
+        let memory = self.memory!
+        let first = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "1")
+        memory.bind(slot: first, toWindow: 1, title: "1")
+        let second = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "2")
+        memory.bind(slot: second, toWindow: 2, title: "2")
+        var entries = service.entries(inZones: [zone, other])
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(entries[0].windows.map(\.title), ["1", "2"])
+
+        service.move(app: "com.example.one", from: zone, to: other, inZones: [zone, other])
+        entries = service.entries(inZones: [zone, other])
+        XCTAssertEqual(entries.map(\.zoneID), [other])
+
+        service.remove(app: "com.example.one", in: other, inZones: [zone, other])
         XCTAssertTrue(service.entries(inZones: [zone, other]).isEmpty)
+    }
+
+    func testWindowsOfAnAppCanBeOrdered() {
+        let a = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "1")
+        memory.bind(slot: a, toWindow: 1, title: "1")
+        let b = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "2")
+        memory.bind(slot: b, toWindow: 2, title: "2")
+        let second = service.entries(inZones: [zone])[0].windows[1].slot
+        service.reorder(window: second, by: -1, inZones: [zone])
+        // The windows are let go and put back by the restorer, which the fake refresher does not do.
+        XCTAssertEqual(memory.records.map(\.title), ["2", "1"])
+        XCTAssertEqual(refresher.restores, 1)
     }
 }

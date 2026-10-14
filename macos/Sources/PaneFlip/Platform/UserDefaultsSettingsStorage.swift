@@ -30,8 +30,11 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
+        // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order
+        // is used. System Settings writes that key too (a language chosen for this app there), so it is touched only
+        // when the choice here changed.
+        guard (defaults.string(forKey: "appLanguage") ?? SettingsValues.systemLanguage) != v.language else { return }
         defaults.set(v.language, forKey: "appLanguage")
-        // The system reads the app's language from this key when the app starts; without it the system's order is used.
         if v.language == SettingsValues.systemLanguage { defaults.removeObject(forKey: "AppleLanguages") }
         else { defaults.set([v.language], forKey: "AppleLanguages") }
     }

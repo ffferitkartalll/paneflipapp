@@ -23,10 +23,12 @@ final class LayoutAppsService: LayoutAppsEditing {
 
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {
         _ = revision
-        return memory.slots(inZones: zones).map {
-            LayoutAppEntry(slot: $0.index, zoneID: $0.zoneID, bundleID: $0.bundleID,
-                           name: apps.name(bundleID: $0.bundleID) ?? $0.bundleID, title: $0.title,
-                           icon: apps.icon(bundleID: $0.bundleID))
+        return memory.apps(inZones: zones).map { app in
+            LayoutAppEntry(zoneID: app.zoneID, bundleID: app.bundleID,
+                           name: apps.name(bundleID: app.bundleID) ?? app.bundleID,
+                           icon: apps.icon(bundleID: app.bundleID),
+                           // Only the open windows: a closed one is not worth ordering.
+                           windows: app.slots.filter { $0.windowID != nil }.map { .init(slot: $0.index, title: $0.title) })
         }
     }
 
@@ -36,20 +38,26 @@ final class LayoutAppsService: LayoutAppsEditing {
     }
 
     func addApp(bundleID: String, to zone: UUID) {
+        // An app is listed once per zone.
+        guard !memory.slots(inZones: [zone]).contains(where: { $0.bundleID == bundleID }) else { return }
         memory.remember(zoneID: zone, bundleID: bundleID, title: "")
         changed([])
     }
 
-    func move(slot: Int, to zone: UUID, inZones zones: [UUID]) {
-        changed([memory.assign(slot: slot, toZone: zone, among: Set(zones))].compactMap { $0 })
+    func move(app bundleID: String, from zone: UUID, to target: UUID, inZones zones: [UUID]) {
+        changed(memory.assignApp(bundleID, inZone: zone, toZone: target, among: Set(zones)))
     }
 
-    func reorder(slot: Int, by offset: Int, inZones zones: [UUID]) {
-        changed(memory.moveSlot(slot, by: offset, among: Set(zones)))
+    func reorder(app bundleID: String, in zone: UUID, by offset: Int, inZones zones: [UUID]) {
+        changed(memory.moveApp(bundleID, inZone: zone, by: offset, among: Set(zones)))
     }
 
-    func remove(slot: Int) {
-        changed([memory.removeSlot(slot)].compactMap { $0 })
+    func reorder(window slot: Int, by offset: Int, inZones zones: [UUID]) {
+        changed(memory.moveWindow(slot, by: offset, among: Set(zones)))
+    }
+
+    func remove(app bundleID: String, in zone: UUID, inZones zones: [UUID]) {
+        changed(memory.removeApp(bundleID, inZone: zone, among: Set(zones)))
     }
 
     private func changed(_ released: [CGWindowID]) {

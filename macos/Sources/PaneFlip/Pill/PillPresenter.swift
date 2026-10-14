@@ -74,8 +74,15 @@ final class PillPresenter: ZonePresenting {
 
     private func update() {
         let now = Date(), pointer = screens.pointerAX
-        // Nothing of ours belongs on top of Mission Control or App Exposé.
-        let covered = screens.isMissionControlActive
+        // Nothing of ours belongs on top of Mission Control or App Exposé. Asked at most once per look, and only
+        // when a pill would show: it costs a window list.
+        var coveredNow: Bool?
+        func covered() -> Bool {
+            if let known = coveredNow { return known }
+            let value = screens.isMissionControlActive
+            coveredNow = value
+            return value
+        }
         for (id, panel) in panels {
             guard let stack = coordinator.stacks[id] else { continue }
             var show = false, clickable = false
@@ -89,10 +96,10 @@ final class PillPresenter: ZonePresenting {
                     hoverAt[id] = nil
                     flashUntil[id] = nil
                 }
-                if pill.contains(pointer) && !suppressed.contains(id) && !covered { hoverAt[id] = now }
+                if pill.contains(pointer) && !suppressed.contains(id) && !covered() { hoverAt[id] = now }
                 let hovering = hoverAt[id].map { now.timeIntervalSince($0) < hideDelay } ?? false
                 let flashing = flashUntil[id].map { $0 > now } ?? false
-                show = (((hovering || flashing) && !suppressed.contains(id)) || stack.interacting) && !covered
+                show = (((hovering || flashing) && !suppressed.contains(id)) || stack.interacting) && !covered()
                 // Clicks in the transparent margins go to the windows below.
                 clickable = show && (stack.interacting || pill.contains(pointer))
                 let screenFrame = screens.flip(frame)

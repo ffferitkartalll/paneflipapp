@@ -22,6 +22,7 @@ final class ClosedWindowMonitorTests: XCTestCase {
     private var held: Int { coordinator.stacks[zone]?.tabs.count ?? 0 }
 
     func testNothingIsReleasedWhileMissionControlIsOpen() {
+        monitor.check()   // the first look records the desktops
         screens.isMissionControlActive = true
         monitor.check()
         monitor.check()
@@ -29,6 +30,7 @@ final class ClosedWindowMonitorTests: XCTestCase {
     }
 
     func testTheFirstLookAfterMissionControlOnlyWaits() {
+        monitor.check()
         screens.isMissionControlActive = true
         monitor.check()
         screens.isMissionControlActive = false

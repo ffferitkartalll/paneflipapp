@@ -22,16 +22,17 @@ final class ClosedWindowMonitor {
     func check() {
         let held = coordinator.heldWindows
         guard !held.isEmpty else { return }
-        // Windows are hidden or rearranged while Mission Control or App Exposé is open: they are not closed.
-        // Forget the desktops so the first look after it is the one that waits.
-        if screens.isMissionControlActive { lastSpaces = []; return }
         // While the desktop is switching, windows are in flux and would look closed; wait it out.
         let spaces = screens.currentSpaceIDs()
         if spaces != lastSpaces { lastSpaces = spaces; return }
 
         let snapshot = availability.snapshot()
-        for ref in held where availability.isGone(ref, in: snapshot) {
-            coordinator.release(window: ref.id)
-        }
+        let gone = held.filter { availability.isGone($0, in: snapshot) }
+        guard !gone.isEmpty else { return }
+        // Windows are hidden or rearranged while Mission Control or App Exposé is open: they are not closed.
+        // Forget the desktops so the first look after it is the one that waits. (Asked only here: it costs a
+        // window list, and nearly every look finds nothing gone.)
+        if screens.isMissionControlActive { lastSpaces = []; return }
+        gone.forEach { coordinator.release(window: $0.id) }
     }
 }

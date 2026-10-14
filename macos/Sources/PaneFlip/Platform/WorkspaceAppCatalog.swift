@@ -9,6 +9,8 @@ final class WorkspaceAppCatalog: AppCatalog {
         NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }.map(info)
     }
 
+    var frontmostPID: pid_t? { NSWorkspace.shared.frontmostApplication?.processIdentifier }
+
     func icon(pid: pid_t) -> NSImage? {
         NSRunningApplication(processIdentifier: pid)?.icon
     }

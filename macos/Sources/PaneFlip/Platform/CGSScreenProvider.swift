@@ -26,12 +26,18 @@ final class CGSScreenProvider: ScreenProviding {
 
     var menuBarThickness: CGFloat { NSStatusBar.system.thickness }
 
-    /// While either is open the window manager keeps a full-screen shield window at layer 19. Its name is not
-    /// used: other apps' window names are only readable with the Screen Recording permission.
+    /// While either is open the window manager keeps a shield window over a whole display, at layer 19. Its name is
+    /// not used: other apps' window names are only readable with the Screen Recording permission. The size check
+    /// keeps the window manager's smaller windows (Stage Manager's strip, for one) from counting.
     var isMissionControlActive: Bool {
         guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] else { return false }
+        let displays = NSScreen.screens.map(\.frame.size)
         return list.contains {
-            ($0[kCGWindowOwnerName as String] as? String) == "WindowManager" && ($0[kCGWindowLayer as String] as? Int) == 19
+            guard ($0[kCGWindowOwnerName as String] as? String) == "WindowManager",
+                  ($0[kCGWindowLayer as String] as? Int) == 19,
+                  let bounds = $0[kCGWindowBounds as String] as? [String: CGFloat],
+                  let w = bounds["Width"], let h = bounds["Height"] else { return false }
+            return displays.contains { $0.width == w && $0.height == h }
         }
     }
 

@@ -22,7 +22,8 @@ struct LayoutAppsView: View {
                     let inZone = entries.filter { $0.zoneID == zone }
                     Section {
                         ForEach(Array(inZone.enumerated()), id: \.element.id) { position, entry in
-                            row(entry, isFirst: position == 0, isLast: position == inZone.count - 1)
+                            LayoutAppRow(entry: entry, zones: zones, editor: editor,
+                                         isFirst: position == 0, isLast: position == inZone.count - 1)
                         }
                         addMenu(to: zone)
                     } header: {
@@ -38,37 +39,6 @@ struct LayoutAppsView: View {
         }
         .padding(20)
         .frame(width: 520, height: 520)
-    }
-
-    private func row(_ entry: LayoutAppEntry, isFirst: Bool, isLast: Bool) -> some View {
-        HStack(spacing: 8) {
-            if let icon = entry.icon { Image(nsImage: icon).resizable().frame(width: 20, height: 20) }
-            VStack(alignment: .leading, spacing: 1) {
-                Text(verbatim: entry.name)
-                if !entry.title.isEmpty {
-                    Text(verbatim: entry.title).font(.caption).foregroundStyle(.secondary).lineLimit(1)
-                }
-            }
-            Spacer()
-            Button { editor.reorder(slot: entry.slot, by: -1, inZones: zones) } label: { Image(systemName: "chevron.up") }
-                .disabled(isFirst)
-                .help("Show earlier in the pill")
-            Button { editor.reorder(slot: entry.slot, by: 1, inZones: zones) } label: { Image(systemName: "chevron.down") }
-                .disabled(isLast)
-                .help("Show later in the pill")
-            Menu {
-                ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
-                    Button("Zone \(index + 1)") { editor.move(slot: entry.slot, to: zone, inZones: zones) }
-                        .disabled(zone == entry.zoneID)
-                }
-            } label: { Image(systemName: "rectangle.split.2x2") }
-                .menuIndicator(.hidden)
-                .fixedSize()
-                .help("Move to another zone")
-            Button(role: .destructive) { editor.remove(slot: entry.slot) } label: { Image(systemName: "minus.circle") }
-                .help("Remove")
-        }
-        .buttonStyle(.borderless)
     }
 
     private func addMenu(to zone: UUID) -> some View {
@@ -90,5 +60,77 @@ struct LayoutAppsView: View {
         panel.directoryURL = URL(fileURLWithPath: "/Applications")
         guard panel.runModal() == .OK, let url = panel.url, let id = Bundle(url: url)?.bundleIdentifier else { return }
         editor.addApp(bundleID: id, to: zone)
+    }
+}
+
+/// One app of a zone: order, zone, removal, and (with several windows) the order of its windows.
+private struct LayoutAppRow: View {
+    let entry: LayoutAppEntry
+    let zones: [UUID]
+    let editor: LayoutAppsEditing
+    let isFirst: Bool
+    let isLast: Bool
+    @State private var showsWindows = false
+
+    var body: some View {
+        HStack(spacing: 8) {
+            if let icon = entry.icon { Image(nsImage: icon).resizable().frame(width: 20, height: 20) }
+            VStack(alignment: .leading, spacing: 1) {
+                Text(verbatim: entry.name)
+                if entry.windows.count > 1 {
+                    Text("\(entry.windows.count) windows").font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            Spacer()
+            if entry.windows.count > 1 {
+                Button { showsWindows = true } label: { Image(systemName: "list.number") }
+                    .help("Order of the windows")
+                    .popover(isPresented: $showsWindows) { windowOrder }
+            }
+            Button { editor.reorder(app: entry.bundleID, in: entry.zoneID, by: -1, inZones: zones) } label: { Image(systemName: "chevron.up") }
+                .disabled(isFirst)
+                .help("Show earlier in the pill")
+            Button { editor.reorder(app: entry.bundleID, in: entry.zoneID, by: 1, inZones: zones) } label: { Image(systemName: "chevron.down") }
+                .disabled(isLast)
+                .help("Show later in the pill")
+            Menu {
+                ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
+                    Button("Zone \(index + 1)") {
+                        editor.move(app: entry.bundleID, from: entry.zoneID, to: zone, inZones: zones)
+                    }
+                    .disabled(zone == entry.zoneID)
+                }
+            } label: { Image(systemName: "rectangle.split.2x2") }
+                .menuIndicator(.hidden)
+                .fixedSize()
+                .help("Move to another zone")
+            Button(role: .destructive) { editor.remove(app: entry.bundleID, in: entry.zoneID, inZones: zones) } label: {
+                Image(systemName: "minus.circle")
+            }
+            .help("Remove")
+        }
+        .buttonStyle(.borderless)
+    }
+
+    /// The windows of the app, in the order the pill shows them.
+    private var windowOrder: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Order of the windows").font(.headline)
+            ForEach(Array(entry.windows.enumerated()), id: \.element.id) { position, window in
+                HStack(spacing: 8) {
+                    Text(verbatim: window.title.isEmpty ? entry.name : window.title)
+                        .lineLimit(1)
+                        .frame(width: 260, alignment: .leading)
+                    Spacer()
+                    Button { editor.reorder(window: window.slot, by: -1, inZones: zones) } label: { Image(systemName: "chevron.up") }
+                        .disabled(position == 0)
+                    Button { editor.reorder(window: window.slot, by: 1, inZones: zones) } label: { Image(systemName: "chevron.down") }
+                        .disabled(position == entry.windows.count - 1)
+                }
+            }
+        }
+        .buttonStyle(.borderless)
+        .padding(14)
+        .frame(width: 380)
     }
 }

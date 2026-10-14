@@ -40,6 +40,19 @@ public final class StackMemory {
         }
     }
 
+    /// The apps of one layout: the slots grouped by app and zone, in the order the apps first appear in memory.
+    public func apps(inZones zones: [UUID]) -> [LayoutApp] {
+        var result: [LayoutApp] = []
+        for slot in slots(inZones: zones) {
+            if let i = result.firstIndex(where: { $0.zoneID == slot.zoneID && $0.bundleID == slot.bundleID }) {
+                result[i] = LayoutApp(zoneID: slot.zoneID, bundleID: slot.bundleID, slots: result[i].slots + [slot])
+            } else {
+                result.append(LayoutApp(zoneID: slot.zoneID, bundleID: slot.bundleID, slots: [slot]))
+            }
+        }
+        return result
+    }
+
     // MARK: Commands
 
     /// Puts a slot into another zone of the same layout. Returns the live window that was bound to it (now
@@ -61,13 +74,15 @@ public final class StackMemory {
         return released
     }
 
-    /// Moves a slot `offset` places among the slots of its zone in that layout (-1 earlier, 1 later). Returns the
-    /// live windows of the two slots (now unbound), which the caller must release so they are attached again in
-    /// the new order.
+    /// Moves a window of an app `offset` places among the windows of that app in its zone (-1 earlier, 1 later).
+    /// Returns the live windows of the two slots (now unbound), which the caller must release so they are attached
+    /// again in the new order.
     @discardableResult
-    public func moveSlot(_ i: Int, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
+    public func moveWindow(_ i: Int, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
         guard records.indices.contains(i), let zone = self.zone(of: records[i], in: zones) else { return [] }
-        let same = records.indices.filter { !records[$0].bundleID.isEmpty && self.zone(of: records[$0], in: zones) == zone }
+        let same = records.indices.filter {
+            records[$0].bundleID == records[i].bundleID && self.zone(of: records[$0], in: zones) == zone
+        }
         guard let position = same.firstIndex(of: i), same.indices.contains(position + offset) else { return [] }
         let j = same[position + offset]
         var copy = records
@@ -81,18 +96,59 @@ public final class StackMemory {
         return released
     }
 
-    /// Forgets a slot. Returns the live window that was bound to it, which the caller must release.
+    /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together. Windows
+    /// of other apps that stand in between are kept together too. Returns the live windows whose slot moved (now
+    /// unbound), which the caller must release so they are attached again in the new order.
     @discardableResult
-    public func removeSlot(_ i: Int) -> CGWindowID? {
-        guard records.indices.contains(i) else { return nil }
-        return records.remove(at: i).windowID
+    public func moveApp(_ bundleID: String, inZone zone: UUID, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
+        let positions = records.indices.filter {
+            !records[$0].bundleID.isEmpty && self.zone(of: records[$0], in: zones) == zone
+        }
+        var order: [String] = []
+        for p in positions where !order.contains(records[p].bundleID) { order.append(records[p].bundleID) }
+        guard let g = order.firstIndex(of: bundleID), order.indices.contains(g + offset) else { return [] }
+        order.swapAt(g, g + offset)
+        let sequence = order.flatMap { b in positions.filter { records[$0].bundleID == b } }
+        var copy = records
+        var released: [CGWindowID] = []
+        for (position, source) in zip(positions, sequence) {
+            copy[position] = records[source]
+            if position != source {
+                if let window = records[source].windowID { released.append(window) }
+                copy[position].windowID = nil
+            }
+        }
+        records = copy
+        return released
     }
 
-    /// Adds a new slot at the end and returns its index.
+    /// Puts all windows of an app in one zone into another zone of the same layout. Returns the live windows that
+    /// were bound (now unbound), which the caller must release.
+    @discardableResult
+    public func assignApp(_ bundleID: String, inZone zone: UUID, toZone target: UUID, among zones: Set<UUID>) -> [CGWindowID] {
+        records.indices
+            .filter { records[$0].bundleID == bundleID && self.zone(of: records[$0], in: zones) == zone }
+            .compactMap { assign(slot: $0, toZone: target, among: zones) }
+    }
+
+    /// Forgets an app of one zone with all its windows. Returns the live windows, which the caller must release.
+    @discardableResult
+    public func removeApp(_ bundleID: String, inZone zone: UUID, among zones: Set<UUID>) -> [CGWindowID] {
+        let gone = records.filter { $0.bundleID == bundleID && self.zone(of: $0, in: zones) == zone }
+        records.removeAll { record in gone.contains { $0.id == record.id } }
+        return gone.compactMap(\.windowID)
+    }
+
+
+    /// Adds a new slot and returns its index: right after the last slot of the same app in that zone when there is
+    /// one (an app's windows stay together), else at the end.
     @discardableResult
     public func remember(zoneID: UUID, bundleID: String, title: String) -> Int {
-        records.append(StackRecord(zoneID: zoneID, bundleID: bundleID, title: title))
-        return records.count - 1
+        let record = StackRecord(zoneID: zoneID, bundleID: bundleID, title: title)
+        let after = bundleID.isEmpty ? nil : records.lastIndex { $0.zoneID == zoneID && $0.bundleID == bundleID }
+        let index = after.map { $0 + 1 } ?? records.count
+        records.insert(record, at: index)
+        return index
     }
 
     public func bind(slot i: Int, toWindow id: CGWindowID, title: String) {
@@ -101,9 +157,15 @@ public final class StackMemory {
         records[i].title = title
     }
 
-    /// The window went away; its slot stays so the app returns to the zone when it reappears.
+    /// The window went away; its slot stays so the app returns to the zone when it reappears. One waiting slot
+    /// per app and zone is enough: older ones are forgotten, so closed windows do not pile up.
     public func unbind(window id: CGWindowID) {
-        if let i = index(ofWindow: id) { records[i].windowID = nil }
+        guard let i = index(ofWindow: id) else { return }
+        var copy = records
+        copy[i].windowID = nil
+        let waiting = copy[i]
+        copy.removeAll { $0.id != waiting.id && $0.windowID == nil && $0.bundleID == waiting.bundleID && $0.zoneID == waiting.zoneID }
+        records = copy
     }
 
     /// The window was deliberately taken out of its zone; forget it.
@@ -143,15 +205,5 @@ public final class StackMemory {
         var kept = records.filter { alive.contains($0.zoneID) }
         for i in kept.indices { kept[i].otherZones.removeAll { !alive.contains($0) } }
         if kept != records { records = kept }
-    }
-
-    /// Persists a zone's tab order by rearranging its live slots to match `windowOrder`.
-    public func applyOrder(zoneID: UUID, windowOrder: [CGWindowID]) {
-        let positions = records.indices.filter { records[$0].zoneID == zoneID && records[$0].windowID != nil }
-        let ordered = windowOrder.compactMap { w in records.first { $0.windowID == w } }
-        guard positions.count == ordered.count else { return }
-        var copy = records
-        for (pos, rec) in zip(positions, ordered) { copy[pos] = rec }
-        records = copy
     }
 }

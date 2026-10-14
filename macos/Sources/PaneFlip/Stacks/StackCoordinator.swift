@@ -7,6 +7,9 @@ import PaneFlipCore
 final class StackCoordinator {
     private(set) var stacks: [UUID: ZoneStack] = [:]
     private(set) var visibleZoneIDs: Set<UUID> = []
+    /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
+    /// Kept for the session only.
+    private(set) var pulledOut: Set<CGWindowID> = []
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
 
@@ -60,6 +63,7 @@ final class StackCoordinator {
     func snap(_ ref: WindowRef, into zoneID: UUID) {
         guard settings.values.placementEnabled, stacks[zoneID] != nil else { return }
         unsnap(window: ref.id)
+        pulledOut.remove(ref.id)
         // Without stacking a zone holds one app: the newcomer replaces whatever was there.
         if !settings.values.stackingEnabled, let current = stacks[zoneID] {
             for id in Array(current.refs.keys) { unsnap(window: id) }
@@ -100,17 +104,9 @@ final class StackCoordinator {
         onActivity?(stack.id)
     }
 
-    /// The user dragged a tab to another position: reorder the live stack and remember the order.
-    func move(window id: CGWindowID, to index: Int, in stack: ZoneStack) {
-        guard let from = stack.tabs.firstIndex(where: { $0.id == id }) else { return }
-        let to = min(max(index, 0), stack.tabs.count - 1)
-        guard from != to else { return }
-        stack.tabs.insert(stack.tabs.remove(at: from), at: to)
-        memory.applyOrder(zoneID: stack.id, windowOrder: stack.tabs.map(\.id))
-    }
-
     /// Takes a window out of its zone for good (the window itself stays open).
     func unsnap(window id: CGWindowID) {
+        pulledOut.insert(id)
         memory.forget(window: id)
         removeFromStack(window: id)
     }
