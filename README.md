@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/app-icon.png" width="128" alt="PaneFlip app icon">
+</p>
+
 # PaneFlip
 
 [![Crowdin](https://badges.crowdin.net/paneflipapp/localized.svg)](https://crowdin.com/project/paneflipapp)
