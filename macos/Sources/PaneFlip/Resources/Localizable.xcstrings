@@ -138,8 +138,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click the field, then press a modifier key. Esc cancels."
+            "state" : "translated",
+            "value" : "Alana tıkla, sonrasında bir niteleme tuşuna bas. Esc iptal eder."
           }
         }
       }
@@ -699,8 +699,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart now"
+            "state" : "translated",
+            "value" : "Şimdi yeniden başlat"
           }
         }
       }
@@ -952,8 +952,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You changed the app language, so you need to restart PaneFlip for the change to take effect."
+            "state" : "translated",
+            "value" : "Uygulama dilini değiştirdiniz, değişikliğin etkili olması için PaneFlip'i yeniden başlatmanız gerekir."
           }
         }
       }
