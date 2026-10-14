@@ -2,12 +2,16 @@
   <img src="docs/app-icon.png" width="128" alt="PaneFlip app icon">
 </p>
 
-# PaneFlip
+<h1 align="center">PaneFlip</h1>
 
-[![Crowdin](https://badges.crowdin.net/paneflipapp/localized.svg)](https://crowdin.com/project/paneflipapp)
+<p align="center">
+  Split your displays and desktops into zones, drop apps into them, and switch between the apps of a zone with a
+  small glass pill. It is a native macOS menu-bar app.
+</p>
 
-Split your displays and desktops into zones, drop apps into them, and switch between the apps of a zone with a
-small glass pill. It is a native macOS menu-bar app.
+<p align="center">
+  <a href="https://crowdin.com/project/paneflipapp"><img src="https://badges.crowdin.net/paneflipapp/localized.svg" alt="Crowdin"></a>
+</p>
 
 ## macOS
 
