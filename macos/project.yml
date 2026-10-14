@@ -67,6 +67,12 @@ targets:
       - path: Sources/PaneFlip/Platform/WindowSystem.swift
       - path: Sources/PaneFlip/Platform/WindowRef.swift
       - path: Sources/PaneFlip/Platform/AppCatalog.swift
+      - path: Sources/PaneFlip/Zones/LayoutService.swift
+      - path: Sources/PaneFlip/Zones/LayoutManaging.swift
+      - path: Sources/PaneFlip/Zones/ZonePresenting.swift
+      - path: Sources/PaneFlip/Pill/PillPresenter.swift
+      - path: Sources/PaneFlip/Pill/DoubleTapDetector.swift
+      - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
       - path: Sources/PaneFlip/Zones/LayoutAppEntry.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift

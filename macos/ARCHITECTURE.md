@@ -21,7 +21,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, ScreenLayouts, LayoutRepository, ZoneRemapper
-│   ├── Stacks/              StackRecord, LayoutSlot, StackMemory (what belongs where, in what order), TabNaming
+│   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
@@ -39,7 +39,7 @@ Sources/
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot
-    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, LayoutAppsEditing (+ LayoutAppEntry), ZonePresenting, ZoneRefreshing
+    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
@@ -66,8 +66,8 @@ Sources/
 |---|---|
 | `LayoutRepository` | Store layouts per screen. Knows nothing about windows. |
 | `StackMemory` | Remember which app belongs to which zone, in the user's order. Knows nothing about windows. |
-| `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release, reorder). |
-| `WindowRestorer` | Re-attach running windows to their remembered zones. |
+| `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release). |
+| `WindowRestorer` | Put running windows in the zone their app belongs in: remembered ones in their slots, every other window of the app next to them. |
 | `ClosedWindowMonitor` / `WindowAvailability` | Notice closed, hidden or minimized windows. |
 | `ZonePlanner` | Compute which zones are visible and where. |
 | `ZoneEngine` | Re-layout on desktop/display changes and run housekeeping. |
@@ -89,5 +89,5 @@ Sources/
   collaborators that only need a re-layout see `ZoneRefreshing`.
 - **Open/closed:** a new presenter conforms to `ZonePresenting` and is added to the engine; a different window
   backend is another `WindowSystem`.
-- **Encapsulation:** domain types expose intent (`remap`, `unbind`, `forget`, `applyOrder`), not their arrays.
+- **Encapsulation:** domain types expose intent (`remap`, `unbind`, `forget`, `assign`, `moveSlot`), not their arrays.
 - **Composition over inheritance:** no class hierarchies; behaviour is assembled from small collaborators.

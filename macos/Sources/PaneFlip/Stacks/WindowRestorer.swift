@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 import PaneFlipCore
 
@@ -23,19 +24,45 @@ final class WindowRestorer {
         self.settings = settings
     }
 
-    func restore() {
+    /// Free windows last seen of the frontmost app, so an unchanged situation is not worked out again.
+    private var lastFree: Set<CGWindowID> = []
+
+    /// Cheap check for the app in front, run on every tick: a new window of an app that has a zone goes there.
+    func restoreFrontmost() {
+        guard windows.isTrusted, settings.values.placementEnabled, let pid = apps.frontmostPID,
+              let app = apps.app(pid: pid),
+              memory.records.contains(where: { $0.bundleID == app.bundleID && coordinator.visibleZoneIDs.contains($0.zoneID) })
+        else { return }
+        let claimed = memory.boundWindowIDs
+        let free = Set(windows.windows(ofApp: pid).map(\.id)).subtracting(claimed).subtracting(coordinator.pulledOut)
+        guard free != lastFree else { return }
+        lastFree = free
+        if !free.isEmpty { restore(onlyApp: pid) }
+    }
+
+    /// Puts running windows into the zones their apps belong in: a window of an app with a waiting slot takes that
+    /// slot (in the order of the memory), and any other window of such an app joins the zone of the app's first
+    /// remembered window. `onlyApp` limits it to one app.
+    func restore(onlyApp onlyPID: pid_t? = nil) {
         guard windows.isTrusted, settings.values.placementEnabled else { return }
-        let slots = memory.unboundSlots(in: coordinator.visibleZoneIDs)
-        guard !slots.isEmpty else { return }
+        let visible = coordinator.visibleZoneIDs
+        // The zone an app belongs in: where its first remembered window is.
+        var ruleZone: [String: UUID] = [:]
+        for record in memory.records where visible.contains(record.zoneID) && !record.bundleID.isEmpty {
+            if ruleZone[record.bundleID] == nil { ruleZone[record.bundleID] = record.zoneID }
+        }
+        guard !ruleZone.isEmpty else { return }
+        let slots = memory.unboundSlots(in: visible)
 
         // Windows available per app. A window its app merely hid on close still shows up in the accessibility
         // list; it isn't back until it is visible again.
-        let bundles = Set(slots.map { memory.records[$0].bundleID })
         let claimed = memory.boundWindowIDs
         let snapshot = availability.snapshot()
         var candidates: [String: [WindowRef]] = [:]
-        for app in apps.regularApps() where bundles.contains(app.bundleID) {
-            let free = windows.windows(ofApp: app.pid).filter { !claimed.contains($0.id) && !availability.isGone($0, in: snapshot) }
+        for app in apps.regularApps() where ruleZone[app.bundleID] != nil && (onlyPID == nil || app.pid == onlyPID) {
+            let free = windows.windows(ofApp: app.pid).filter {
+                !claimed.contains($0.id) && !coordinator.pulledOut.contains($0.id) && !availability.isGone($0, in: snapshot)
+            }
             if !free.isEmpty { candidates[app.bundleID, default: []] += free }
         }
 
@@ -66,6 +93,19 @@ final class WindowRestorer {
             touched.insert(record.zoneID)
             free.remove(at: pick)
             candidates[record.bundleID] = free
+        }
+
+        // The app's other windows, however many: they join its zone, next to the app's other windows.
+        for (bundleID, free) in candidates {
+            guard let zoneID = ruleZone[bundleID], let stack = coordinator.stacks[zoneID] else { continue }
+            let zoneDisplay = display(of: stack.rect)
+            for window in free {
+                if !settings.values.stackingEnabled, !stack.isEmpty { break }
+                if let zoneDisplay, let frame = windows.frame(of: window), let there = display(of: frame), there != zoneDisplay { continue }
+                let slot = memory.remember(zoneID: zoneID, bundleID: bundleID, title: "")
+                coordinator.attach(window, toSlot: slot, raise: false)
+                touched.insert(zoneID)
+            }
         }
         for id in touched { coordinator.stacks[id].map(coordinator.followFrontmost) }
     }

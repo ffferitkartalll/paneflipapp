@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld windows" : {
+      "extractionState" : "manual"
+    },
     "Accessibility" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -550,6 +553,9 @@
           }
         }
       }
+    },
+    "Order of the windows" : {
+      "extractionState" : "manual"
     },
     "Other…" : {
       "extractionState" : "manual",

@@ -130,11 +130,61 @@ final class WindowRestorerTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 0)
     }
 
-    func testTheWindowInsideTheZoneComesBeforeAnotherOneOnTheSameDisplay() {
+    func testTheWindowInsideTheZoneTakesTheSlotAndTheOtherOneJoinsAfterIt() {
         appWithTwoWindows(first: CGRect(x: 600, y: 50, width: 300, height: 300), second: CGRect(x: 20, y: 20, width: 400, height: 300))
 
         restorer.restore()
 
-        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [11])
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [11, 10])
+    }
+
+    /// An app with several windows open.
+    private func launch(_ bundle: String, pid: pid_t, windows ids: [CGWindowID]) {
+        apps.apps.append(AppInfo(pid: pid, bundleID: bundle, name: bundle))
+        windowsByPIDFill(pid, ids)
+    }
+
+    private func windowsByPIDFill(_ pid: pid_t, _ ids: [CGWindowID]) {
+        windows.windowsByPID[pid] = ids.map { .fake($0, pid: pid) }
+        for id in ids {
+            windows.all.insert(id)
+            windows.onScreen.insert(id)
+            screens.spacesByWindow[id] = [1]
+        }
+    }
+
+    func testEveryWindowOfAnAppWithAZoneJoinsItNextToTheOthers() {
+        memory.remember(zoneID: zone, bundleID: "app.a", title: "")
+        memory.remember(zoneID: zone, bundleID: "app.b", title: "")
+        launch("app.a", pid: 1, windows: [10, 11, 12])
+        launch("app.b", pid: 2, windows: [20])
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10, 11, 12, 20])
+    }
+
+    func testAWindowTheUserPulledOutIsNotPulledBack() {
+        memory.remember(zoneID: zone, bundleID: "app.a", title: "")
+        launch("app.a", pid: 1, windows: [10, 11])
+        restorer.restore()
+        coordinator.unsnap(window: 11)
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10])
+    }
+
+    func testANewWindowOfTheFrontAppIsPickedUpOnTheNextLook() {
+        memory.remember(zoneID: zone, bundleID: "app.a", title: "")
+        launch("app.a", pid: 1, windows: [10])
+        apps.frontmostPID = 1
+        restorer.restoreFrontmost()
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10])
+
+        windowsByPIDFill(1, [10, 11])
+        restorer.restoreFrontmost()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10, 11])
     }
 }

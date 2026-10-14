@@ -89,5 +89,6 @@ final class ZoneEngine: ZoneRefreshing {
         if screens.screens().map(\.layoutSignature) != lastSignatures { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()
+        restorer.restoreFrontmost()
     }
 }
