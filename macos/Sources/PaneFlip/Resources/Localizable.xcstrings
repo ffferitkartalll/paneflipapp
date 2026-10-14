@@ -70,16 +70,8 @@
         }
       }
     },
-    "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uygulama belirlediğiniz bölgede açılır. Bölgede bulunan uygulamaların haptaki sırasını burası belirler."
-          }
-        }
-      }
+    "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it." : {
+      "extractionState" : "manual"
     },
     "Applies between zones only, never at screen edges." : {
       "extractionState" : "manual",
@@ -223,6 +215,9 @@
           }
         }
       }
+    },
+    "Drag to change the order" : {
+      "extractionState" : "manual"
     },
     "Edit" : {
       "extractionState" : "manual",
@@ -554,9 +549,6 @@
         }
       }
     },
-    "Order of the windows" : {
-      "extractionState" : "manual"
-    },
     "Other…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -755,17 +747,6 @@
         }
       }
     },
-    "Show earlier in the pill" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hapta daha önce göster"
-          }
-        }
-      }
-    },
     "Show for each window" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -777,16 +758,8 @@
         }
       }
     },
-    "Show later in the pill" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hapta daha sonra göster"
-          }
-        }
-      }
+    "Show the windows" : {
+      "extractionState" : "manual"
     },
     "Space" : {
       "extractionState" : "manual",
