@@ -134,7 +134,15 @@
       }
     },
     "Click the field, then press a modifier key. Esc cancels." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Click the field, then press a modifier key. Esc cancels."
+          }
+        }
+      }
     },
     "Click the field, then press any key or combination. Esc cancels." : {
       "extractionState" : "manual",
@@ -687,7 +695,15 @@
       }
     },
     "Restart now" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restart now"
+          }
+        }
+      }
     },
     "Return" : {
       "extractionState" : "manual",
@@ -932,7 +948,15 @@
       }
     },
     "You changed the app language, so you need to restart PaneFlip for the change to take effect." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You changed the app language, so you need to restart PaneFlip for the change to take effect."
+          }
+        }
+      }
     },
     "Your system language (%@) is not available yet, so PaneFlip is shown in English." : {
       "extractionState" : "manual",
