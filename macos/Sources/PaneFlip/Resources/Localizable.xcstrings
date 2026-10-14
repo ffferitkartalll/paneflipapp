@@ -50,8 +50,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add app"
+            "state" : "translated",
+            "value" : "Uygulama ekle"
           }
         }
       }
@@ -72,8 +72,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here."
+            "state" : "translated",
+            "value" : "Uygulama belirlediğiniz bölgede açılır. Bölgede bulunan uygulamaların haptaki sırasını burası belirler."
           }
         }
       }
@@ -105,8 +105,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps…"
+            "state" : "translated",
+            "value" : "Uygulamalar..."
           }
         }
       }
@@ -204,8 +204,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "Bitti"
           }
         }
       }
@@ -314,8 +314,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide the pill"
+            "state" : "translated",
+            "value" : "Hapı gizle"
           }
         }
       }
@@ -512,8 +512,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Move to another zone"
+            "state" : "translated",
+            "value" : "Başka bir bölgeye taşı"
           }
         }
       }
@@ -556,8 +556,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Other…"
+            "state" : "translated",
+            "value" : "Diğer..."
           }
         }
       }
@@ -754,8 +754,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show earlier in the pill"
+            "state" : "translated",
+            "value" : "Hapta daha önce göster"
           }
         }
       }
@@ -776,8 +776,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show later in the pill"
+            "state" : "translated",
+            "value" : "Hapta daha sonra göster"
           }
         }
       }
@@ -897,8 +897,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What each segment of the pill shows. Use the button beside the pill or double-tap the hide key (see Shortcuts) to hide it while the pointer is over it."
+            "state" : "translated",
+            "value" : "Haptaki bölütte ne gözükeceği. İmleç hapın üzerine geldiğinde hapı gizlemek için yandaki gizleme düğmesine ya da gizlemek için çift tıkla tuşuna (Kısayollar'a bak) bas."
           }
         }
       }
@@ -930,8 +930,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Zone %lld"
+            "state" : "translated",
+            "value" : "Bölge %lld"
           }
         }
       }
