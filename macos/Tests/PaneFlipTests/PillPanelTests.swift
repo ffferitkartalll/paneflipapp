@@ -10,7 +10,7 @@ final class PillPanelTests: XCTestCase {
 
     func testThePillCannotBeDraggedAway() {
         let panel = PillPanel(stack: ZoneStack(id: UUID()), settings: AppSettings(storage: StubSettingsStorage()),
-                              iconFont: IconFont(brands: NoBrands()), select: { _ in }, move: { _, _ in }, hide: {})
+                              iconFont: IconFont(brands: NoBrands()), select: { _ in }, hide: {})
         XCTAssertFalse(panel.isMovable)
         XCTAssertFalse(panel.isMovableByWindowBackground)
     }

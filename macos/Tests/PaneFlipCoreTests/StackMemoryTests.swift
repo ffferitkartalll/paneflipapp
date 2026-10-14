@@ -109,4 +109,52 @@ final class StackMemoryTests: XCTestCase {
         memory.prune(keepingZones: [kept])
         XCTAssertEqual(memory.records[0].otherZones, [])
     }
+
+    func testALayoutSeesItsOwnZonesInMemoryOrder() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID(), b = UUID(), other = UUID()
+        memory.remember(zoneID: a, bundleID: "one", title: "")
+        memory.remember(zoneID: other, bundleID: "two", title: "")
+        memory.remember(zoneID: b, bundleID: "three", title: "")
+        XCTAssertEqual(memory.slots(inZones: [a, b]).map(\.bundleID), ["one", "three"])
+        XCTAssertEqual(memory.slots(inZones: [other]).map(\.bundleID), ["two"])
+    }
+
+    func testAssigningMovesASlotAndReleasesItsWindow() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID(), b = UUID()
+        let slot = memory.remember(zoneID: a, bundleID: "one", title: "")
+        memory.bind(slot: slot, toWindow: 7, title: "x")
+        XCTAssertEqual(memory.assign(slot: slot, toZone: b, among: [a, b]), 7)
+        XCTAssertEqual(memory.records[slot].zoneID, b)
+        XCTAssertNil(memory.records[slot].windowID)
+    }
+
+    func testAssigningInAnotherLayoutChangesOnlyThatLayoutsZone() {
+        let memory = StackMemory(store: MemoryStore())
+        let x = UUID(), x2 = UUID(), y = UUID()
+        let slot = memory.remember(zoneID: x, bundleID: "one", title: "")
+        memory.remap([x: y])   // the slot now lives in layout B's zone y and remembers x
+        memory.assign(slot: slot, toZone: x2, among: [x, x2])
+        XCTAssertEqual(memory.records[slot].zoneID, y)
+        XCTAssertEqual(memory.records[slot].otherZones, [x2])
+    }
+
+    func testMovingASlotSwapsItWithItsNeighbourInTheSameZone() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID(), b = UUID()
+        memory.remember(zoneID: a, bundleID: "one", title: "")
+        memory.remember(zoneID: b, bundleID: "between", title: "")
+        memory.remember(zoneID: a, bundleID: "two", title: "")
+        memory.moveSlot(2, by: -1, among: [a, b])
+        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "between", "one"])
+        XCTAssertTrue(memory.moveSlot(0, by: -1, among: [a, b]).isEmpty)
+    }
+
+    func testRemovingASlotForgetsIt() {
+        let memory = StackMemory(store: MemoryStore())
+        let slot = memory.remember(zoneID: UUID(), bundleID: "one", title: "")
+        memory.removeSlot(slot)
+        XCTAssertTrue(memory.records.isEmpty)
+    }
 }

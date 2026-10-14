@@ -16,6 +16,7 @@ final class AppContainer {
     let layouts: LayoutService
     let engine: ZoneEngine
     let editor: EditorController
+    let layoutApps: LayoutAppsService
     let launchAtLogin: LaunchAtLoginModel
     let activation: ActivationPolicyControlling
 
@@ -60,6 +61,7 @@ final class AppContainer {
         self.windows = windows
         self.layouts = layouts
         self.engine = engine
+        self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine)
         self.activation = activation
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)

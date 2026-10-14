@@ -6,6 +6,7 @@ struct LayoutsPane: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
+    let apps: LayoutAppsEditing
     let screens: ScreenProviding
     let refresh: () -> Void
     @Bindable var settings: AppSettings
@@ -13,7 +14,7 @@ struct LayoutsPane: View {
     var body: some View {
         Form {
             ForEach(screens.screens()) { screen in
-                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor)
+                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps)
             }
 
             Section("Zones") {

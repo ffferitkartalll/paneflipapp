@@ -61,12 +61,14 @@ final class PillPresenter: ZonePresenting {
 
     // MARK: Visibility
 
-    /// The pill sits one menu-bar height below the top of the zone, centred, as wide as its segments. The panel
+    /// The pill sits one menu-bar height below the top of the zone, its segments centred, as wide as they are with the hide button. The panel
     /// has transparent room around them (the system control collapses into a pop-up without it): only the capsule
     /// inside counts for hovering and clicking. Not limited to the zone: a narrow zone must not squeeze the control.
     private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect) {
         let w = panel.barWidth
-        let frame = CGRect(x: stack.rect.midX - w / 2, y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
+        // The segments are centred on the zone; the hide button sits beside them, inside the capsule's rectangle.
+        let frame = CGRect(x: stack.rect.midX - w / 2 + PillPanel.hideButtonWidth / 2,
+                           y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
         return (frame, frame.insetBy(dx: PillPanel.margin, dy: 0))
     }
 
@@ -124,9 +126,6 @@ final class PillPresenter: ZonePresenting {
             stack: stack, settings: settings, iconFont: iconFont,
             select: { [weak self, weak stack] id in
                 if let stack { self?.coordinator.select(id, in: stack) }
-            },
-            move: { [weak self, weak stack] id, index in
-                if let stack { self?.coordinator.move(window: id, to: index, in: stack) }
             },
             hide: { [weak self, weak stack] in
                 if let stack { self?.hide(zone: stack.id) }

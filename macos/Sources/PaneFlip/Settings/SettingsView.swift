@@ -7,6 +7,7 @@ struct SettingsView: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
+    let apps: LayoutAppsEditing
     let screens: ScreenProviding
     let refresh: () -> Void
     let settings: AppSettings
@@ -19,7 +20,7 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("General", systemImage: "gearshape") }
 
-            LayoutsPane(repository: repository, layouts: layouts, editor: editor, screens: screens,
+            LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
                         refresh: refresh, settings: settings)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }

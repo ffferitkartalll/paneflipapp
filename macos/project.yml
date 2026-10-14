@@ -67,6 +67,9 @@ targets:
       - path: Sources/PaneFlip/Platform/WindowSystem.swift
       - path: Sources/PaneFlip/Platform/WindowRef.swift
       - path: Sources/PaneFlip/Platform/AppCatalog.swift
+      - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
+      - path: Sources/PaneFlip/Zones/LayoutAppEntry.swift
+      - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift
       - path: Sources/PaneFlip/Platform/AppInfo.swift
       - path: Sources/PaneFlip/Platform/ScreenProviding.swift
       - path: Sources/PaneFlip/Platform/ScreenInfo.swift
@@ -76,7 +79,6 @@ targets:
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
       - path: Sources/PaneFlip/Pill/IconFont.swift
       - path: Sources/PaneFlip/Pill/PillPanel.swift
-      - path: Sources/PaneFlip/Pill/PillSlide.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
       - path: Sources/PaneFlip/Settings/AppLanguages.swift
     dependencies:

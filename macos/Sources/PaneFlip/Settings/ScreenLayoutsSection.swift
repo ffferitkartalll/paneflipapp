@@ -7,6 +7,7 @@ struct ScreenLayoutsSection: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
+    let apps: LayoutAppsEditing
 
     var body: some View {
         Section {
@@ -15,7 +16,7 @@ struct ScreenLayoutsSection: View {
                     let activeID = repository.activeLayout(for: screen.key)?.id
                     ForEach(repository.layouts(for: screen.key)) { layout in
                         LayoutCard(screen: screen, layout: layout, isActive: layout.id == activeID,
-                                   layouts: layouts, editor: editor)
+                                   layouts: layouts, editor: editor, apps: apps)
                     }
                     addCard
                 }
@@ -38,7 +39,7 @@ struct ScreenLayoutsSection: View {
     private var addCard: some View {
         ZStack {
             LayoutCard(screen: screen, layout: NamedLayout(name: "Layout", root: .leaf(UUID())), isActive: false,
-                       layouts: layouts, editor: editor)
+                       layouts: layouts, editor: editor, apps: apps)
                 .hidden()
 
             Button { layouts.addLayout(for: screen.key) } label: {
