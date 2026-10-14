@@ -2,7 +2,15 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%lld windows" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%lld windows"
+          }
+        }
+      }
     },
     "Accessibility" : {
       "extractionState" : "manual",
@@ -71,7 +79,15 @@
       }
     },
     "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it."
+          }
+        }
+      }
     },
     "Applies between zones only, never at screen edges." : {
       "extractionState" : "manual",
@@ -217,7 +233,15 @@
       }
     },
     "Drag to change the order" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Drag to change the order"
+          }
+        }
+      }
     },
     "Edit" : {
       "extractionState" : "manual",
@@ -759,7 +783,15 @@
       }
     },
     "Show the windows" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show the windows"
+          }
+        }
+      }
     },
     "Space" : {
       "extractionState" : "manual",
