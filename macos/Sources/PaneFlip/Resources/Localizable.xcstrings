@@ -6,8 +6,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld windows"
+            "state" : "translated",
+            "value" : "%lld pencere"
           }
         }
       }
@@ -83,8 +83,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it."
+            "state" : "translated",
+            "value" : "Uygulama seçtiğiniz bölgede açılır. Uygulamalar hap üzerinde buradaki sıralamaya göre gözükür, değiştirmek için tutamaç ile sürükleyin."
           }
         }
       }
@@ -237,8 +237,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Drag to change the order"
+            "state" : "translated",
+            "value" : "Sıralamayı değiştirmek için sürükle"
           }
         }
       }
@@ -787,8 +787,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the windows"
+            "state" : "translated",
+            "value" : "Pencereleri göster"
           }
         }
       }
