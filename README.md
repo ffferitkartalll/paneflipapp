@@ -3,16 +3,7 @@
 [![Crowdin](https://badges.crowdin.net/paneflipapp/localized.svg)](https://crowdin.com/project/paneflipapp)
 
 Split your displays and desktops into zones, drop apps into them, and switch between the apps of a zone with a
-small glass pill. One repository, one folder per platform.
-
-| Platform | Folder | Status |
-|---|---|---|
-| macOS | [`macos/`](macos/) | Working |
-| Windows | `windows/` | Not started |
-| Linux | `linux/` | Not started |
-
-Each platform is a self-contained project with its own build, tests and architecture notes, and uses the
-platform's native UI and window APIs. Start from the platform's own README or `ARCHITECTURE.md`.
+small glass pill. It is a native macOS menu-bar app.
 
 ## macOS
 
@@ -72,6 +63,19 @@ pull request. A language appears in `Settings ▸ General ▸ Language` as soon 
 
 Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Report a security problem as
 described in [SECURITY.md](SECURITY.md), not in a public issue.
+
+## Platforms
+
+One repository, one folder per platform.
+
+| Platform | Folder | Status |
+|---|---|---|
+| macOS | [`macos/`](macos/) | Working |
+| Windows | `windows/` | Not started |
+| Linux | `linux/` | Not started |
+
+Each platform is a self-contained project with its own build, tests and architecture notes, and uses the
+platform's native UI and window APIs. Start from the platform's own README or `ARCHITECTURE.md`.
 
 ## Adding a platform
 
