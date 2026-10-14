@@ -5,6 +5,7 @@ import SwiftUI
 struct GeneralPane: View {
     @Bindable var settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
+    let relauncher: AppRelaunching
     private let languages = AppLanguages()
 
     var body: some View {
@@ -33,6 +34,18 @@ struct GeneralPane: View {
                         ForEach(languages.available, id: \.self) { Text(verbatim: languages.title(of: $0)).tag($0) }
                     }
                     .labelsHidden()
+                }
+                if settings.values.language != settings.launchLanguage {
+                    HStack(spacing: 20) {
+                        // An explanation, like the descriptions under the titles of the other rows.
+                        Text("You changed the app language, so you need to restart PaneFlip for the change to take effect.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Button("Restart now") { relauncher.relaunch() }
+                    }
+                    .padding(.vertical, 4)
                 }
                 if settings.values.language == SettingsValues.systemLanguage,
                    let missing = languages.unavailableSystemLanguage {

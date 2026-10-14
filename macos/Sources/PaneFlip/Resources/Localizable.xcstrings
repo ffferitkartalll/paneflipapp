@@ -133,6 +133,9 @@
         }
       }
     },
+    "Click the field, then press a modifier key. Esc cancels." : {
+      "extractionState" : "manual"
+    },
     "Click the field, then press any key or combination. Esc cancels." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -683,6 +686,9 @@
         }
       }
     },
+    "Restart now" : {
+      "extractionState" : "manual"
+    },
     "Return" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -924,6 +930,9 @@
           }
         }
       }
+    },
+    "You changed the app language, so you need to restart PaneFlip for the change to take effect." : {
+      "extractionState" : "manual"
     },
     "Your system language (%@) is not available yet, so PaneFlip is shown in English." : {
       "extractionState" : "manual",

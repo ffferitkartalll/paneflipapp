@@ -18,6 +18,7 @@ final class AppContainer {
     let editor: EditorController
     let layoutApps: LayoutAppsService
     let launchAtLogin: LaunchAtLoginModel
+    let relauncher: AppRelaunching = WorkspaceAppRelauncher()
     let activation: ActivationPolicyControlling
 
     private let launcher: AppLauncher

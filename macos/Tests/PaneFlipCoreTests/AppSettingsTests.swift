@@ -36,6 +36,18 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(AppSettings(storage: Storage()).values.language, SettingsValues.systemLanguage)
     }
 
+    func testALanguageChangeIsKnownAgainstTheOneTheAppStartedWith() {
+        let storage = Storage()
+        var stored = SettingsValues()
+        stored.language = "en"
+        storage.saved = stored
+        let settings = AppSettings(storage: storage)
+        XCTAssertEqual(settings.launchLanguage, "en")
+        settings.values.language = SettingsValues.systemLanguage
+        XCTAssertEqual(settings.launchLanguage, "en")
+        XCTAssertNotEqual(settings.values.language, settings.launchLanguage)
+    }
+
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
         let storage = Storage()
         var old = SettingsValues()

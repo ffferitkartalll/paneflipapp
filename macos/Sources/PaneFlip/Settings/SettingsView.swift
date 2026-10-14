@@ -12,11 +12,12 @@ struct SettingsView: View {
     let refresh: () -> Void
     let settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
+    let relauncher: AppRelaunching
     let activation: ActivationPolicyControlling
 
     var body: some View {
         TabView {
-            GeneralPane(settings: settings, launchAtLogin: launchAtLogin)
+            GeneralPane(settings: settings, launchAtLogin: launchAtLogin, relauncher: relauncher)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("General", systemImage: "gearshape") }
 
