@@ -101,10 +101,13 @@ final class IconFont {
                          hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
     }
 
-    /// The same picture as an image, for the labels that slide while the order changes.
+    /// The picture the pill draws for an app, as an image `size` points wide: the very bitmap of the font's glyph,
+    /// so the settings and the pill cannot differ. Made (and added to the font) when it does not exist yet.
     func image(bundleID: String, appName: String, icon: NSImage, size: CGFloat) -> NSImage {
-        let image = NSImage(size: NSSize(width: size, height: size))
-        image.addRepresentation(rendered(bundleID: bundleID, appName: appName, icon: icon, size: Int(size) * 4))
+        let key = bundleID.isEmpty ? appName : bundleID
+        _ = character(for: key, bundleID: bundleID, appName: appName, icon: icon)
+        let image = images[key].flatMap(NSImage.init(data:)) ?? NSImage()
+        image.size = NSSize(width: size, height: size)
         return image
     }
 

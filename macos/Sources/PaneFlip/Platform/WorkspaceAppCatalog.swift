@@ -15,13 +15,21 @@ final class WorkspaceAppCatalog: AppCatalog {
         NSRunningApplication(processIdentifier: pid)?.icon
     }
 
+    /// A running app is asked first, so a name or an icon is the very one the pill uses for it.
     func name(bundleID: String) -> String? {
-        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)
-            .map { FileManager.default.displayName(atPath: $0.path).replacingOccurrences(of: ".app", with: "") }
+        if let running = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first?.localizedName {
+            return running
+        }
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else { return nil }
+        let bundle = Bundle(url: url)
+        return (bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
+            ?? (bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String)
+            ?? url.deletingPathExtension().lastPathComponent
     }
 
     func icon(bundleID: String) -> NSImage? {
-        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID).map { NSWorkspace.shared.icon(forFile: $0.path) }
+        if let running = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first?.icon { return running }
+        return NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID).map { NSWorkspace.shared.icon(forFile: $0.path) }
     }
 
     private func info(_ a: NSRunningApplication) -> AppInfo {

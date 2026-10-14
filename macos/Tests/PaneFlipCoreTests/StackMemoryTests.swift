@@ -162,6 +162,14 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertTrue(memory.moveApp("one", inZone: a, by: 1, among: [a]).isEmpty)
     }
 
+    func testMovingAnAppSeveralPlacesShiftsTheOnesInBetween() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID()
+        for app in ["one", "two", "three"] { memory.remember(zoneID: a, bundleID: app, title: "") }
+        memory.moveApp("one", inZone: a, by: 2, among: [a])
+        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"])
+    }
+
     func testMovingAWindowStaysAmongTheWindowsOfItsApp() {
         let memory = StackMemory(store: MemoryStore())
         let a = UUID()
@@ -171,6 +179,14 @@ final class StackMemoryTests: XCTestCase {
         memory.moveWindow(1, by: -1, among: [a])
         XCTAssertEqual(memory.records.map(\.title), ["2", "1", ""])
         XCTAssertTrue(memory.moveWindow(1, by: 1, among: [a]).isEmpty)   // the last window of its app
+    }
+
+    func testMovingAWindowSeveralPlacesShiftsTheOnesInBetween() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID()
+        for title in ["1", "2", "3"] { memory.remember(zoneID: a, bundleID: "one", title: title) }
+        memory.moveWindow(0, by: 2, among: [a])
+        XCTAssertEqual(memory.records.map(\.title), ["2", "3", "1"])
     }
 
     func testRemovingAnAppForgetsAllItsWindowsInThatZoneOnly() {

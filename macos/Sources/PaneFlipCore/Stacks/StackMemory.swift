@@ -74,30 +74,34 @@ public final class StackMemory {
         return released
     }
 
-    /// Moves a window of an app `offset` places among the windows of that app in its zone (-1 earlier, 1 later).
-    /// Returns the live windows of the two slots (now unbound), which the caller must release so they are attached
-    /// again in the new order.
+    /// Moves a window of an app `offset` places among the windows of that app in its zone (negative earlier,
+    /// positive later); the windows in between each move one place the other way. Returns the live windows whose
+    /// slot changed (now unbound), which the caller must release so they are attached again in the new order.
     @discardableResult
     public func moveWindow(_ i: Int, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
         guard records.indices.contains(i), let zone = self.zone(of: records[i], in: zones) else { return [] }
         let same = records.indices.filter {
             records[$0].bundleID == records[i].bundleID && self.zone(of: records[$0], in: zones) == zone
         }
-        guard let position = same.firstIndex(of: i), same.indices.contains(position + offset) else { return [] }
-        let j = same[position + offset]
+        guard let position = same.firstIndex(of: i), same.indices.contains(position + offset), offset != 0 else { return [] }
+        var order = same.map { records[$0] }
+        order.insert(order.remove(at: position), at: position + offset)
         var copy = records
         var released: [CGWindowID] = []
-        for k in [i, j] {
-            if let window = copy[k].windowID { released.append(window) }
-            copy[k].windowID = nil
+        for (place, record) in zip(same, order) {
+            let old = records[place]
+            copy[place] = record
+            if old.id != record.id {
+                if let window = record.windowID { released.append(window) }
+                copy[place].windowID = nil
+            }
         }
-        copy.swapAt(i, j)
         records = copy
         return released
     }
 
-    /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together. Windows
-    /// of other apps that stand in between are kept together too. Returns the live windows whose slot moved (now
+    /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together; the apps
+    /// in between each move one place the other way. Returns the live windows whose slot moved (now
     /// unbound), which the caller must release so they are attached again in the new order.
     @discardableResult
     public func moveApp(_ bundleID: String, inZone zone: UUID, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
@@ -107,7 +111,7 @@ public final class StackMemory {
         var order: [String] = []
         for p in positions where !order.contains(records[p].bundleID) { order.append(records[p].bundleID) }
         guard let g = order.firstIndex(of: bundleID), order.indices.contains(g + offset) else { return [] }
-        order.swapAt(g, g + offset)
+        order.insert(order.remove(at: g), at: g + offset)
         let sequence = order.flatMap { b in positions.filter { records[$0].bundleID == b } }
         var copy = records
         var released: [CGWindowID] = []

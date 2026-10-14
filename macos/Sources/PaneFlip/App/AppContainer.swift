@@ -44,7 +44,8 @@ final class AppContainer {
         layouts.refresher = engine
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
-        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false })))
+        let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
+        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont)
         engine.add(presenter: pill)
         coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
 
@@ -61,7 +62,8 @@ final class AppContainer {
         self.windows = windows
         self.layouts = layouts
         self.engine = engine
-        self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine)
+        self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine,
+                                              iconFont: iconFont)
         self.activation = activation
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)

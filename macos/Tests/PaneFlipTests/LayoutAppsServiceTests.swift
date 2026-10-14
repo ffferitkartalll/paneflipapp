@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 import CoreGraphics
 import PaneFlipCore
@@ -6,6 +7,11 @@ final class LayoutAppsServiceTests: XCTestCase {
     private var memory: StackMemory!
     private var service: LayoutAppsService!
     private let zone = UUID(), other = UUID()
+
+    private final class NoBrands: BrandGlyphSource {
+        var version = 0
+        func glyph(forApp name: String) -> NSImage? { nil }
+    }
 
     private final class Refresher: ZoneRefreshing {
         var restores = 0
@@ -21,7 +27,8 @@ final class LayoutAppsServiceTests: XCTestCase {
         apps.apps = [AppInfo(pid: 1, bundleID: "com.example.one", name: "One")]
         let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
                                            settings: AppSettings(storage: StubSettingsStorage()), apps: apps)
-        service = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: refresher)
+        service = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: refresher,
+                                    iconFont: IconFont(brands: NoBrands()))
     }
 
     func testAnAddedAppIsListedInItsZoneAndTriggersAPlacement() {

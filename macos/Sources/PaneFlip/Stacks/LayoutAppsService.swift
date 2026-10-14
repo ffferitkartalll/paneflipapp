@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import Foundation
 import Observation
@@ -13,23 +14,32 @@ final class LayoutAppsService: LayoutAppsEditing {
     @ObservationIgnored private let coordinator: StackCoordinator
     @ObservationIgnored private let apps: AppCatalog
     @ObservationIgnored private let refresher: ZoneRefreshing
+    @ObservationIgnored private let iconFont: IconFont
 
-    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing) {
+    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont) {
         self.memory = memory
         self.coordinator = coordinator
         self.apps = apps
         self.refresher = refresher
+        self.iconFont = iconFont
     }
 
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {
         _ = revision
         return memory.apps(inZones: zones).map { app in
-            LayoutAppEntry(zoneID: app.zoneID, bundleID: app.bundleID,
-                           name: apps.name(bundleID: app.bundleID) ?? app.bundleID,
-                           icon: apps.icon(bundleID: app.bundleID),
+            let name = apps.name(bundleID: app.bundleID) ?? app.bundleID
+            return LayoutAppEntry(zoneID: app.zoneID, bundleID: app.bundleID, name: name, icon: glyph(bundleID: app.bundleID, name: name),
                            // Only the open windows: a closed one is not worth ordering.
                            windows: app.slots.filter { $0.windowID != nil }.map { .init(slot: $0.index, title: $0.title) })
         }
+    }
+
+    /// The icon as the pill draws it: a one-colour glyph, which follows the text colour.
+    private func glyph(bundleID: String, name: String) -> NSImage {
+        let icon = apps.icon(bundleID: bundleID) ?? NSWorkspace.shared.icon(for: .applicationBundle)
+        let image = iconFont.image(bundleID: bundleID, appName: name, icon: icon, size: 18)
+        image.isTemplate = true
+        return image
     }
 
     func runningApps() -> [(bundleID: String, name: String)] {
