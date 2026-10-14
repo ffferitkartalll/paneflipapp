@@ -48,6 +48,38 @@ public final class LayoutRepository {
         screens[key] = s
     }
 
+    public func setDefaultZone(_ zone: UUID?, ofLayout id: UUID, key: String) {
+        guard var s = screens[key], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        s.layouts[i].defaultZoneID = zone
+        screens[key] = s
+    }
+
+    /// Every zone of every layout kept for a display that is not among `displays` (display identifiers).
+    public func zoneIDs(ofDisplaysNotIn displays: Set<String>) -> Set<UUID> {
+        var zones: Set<UUID> = []
+        for (key, layouts) in screens where !displays.contains(Self.display(of: key)) {
+            layouts.layouts.forEach { zones.formUnion($0.root.leafIDs) }
+        }
+        return zones
+    }
+
+    /// The keys a display had before desktops were told apart by their position ("display|<space id>").
+    public func legacyKeys(ofDisplay display: String) -> [String] {
+        screens.filter { Self.display(of: $0.key) == display && !$0.value.layouts.isEmpty }.keys
+            .filter { $0.split(separator: "|").last.map { Int($0) != nil } ?? false }
+    }
+
+    /// Keeps a screen's layouts under a new key.
+    public func moveScreen(from old: String, to new: String) {
+        guard old != new, let layouts = screens[old], screens[new]?.layouts.isEmpty ?? true else { return }
+        screens[new] = layouts
+        screens[old] = nil
+    }
+
+    private static func display(of key: String) -> String {
+        key.split(separator: "|").first.map(String.init) ?? key
+    }
+
     public func activate(layout id: UUID, key: String) {
         guard var s = screens[key], s.layouts.contains(where: { $0.id == id }) else { return }
         s.activeID = id

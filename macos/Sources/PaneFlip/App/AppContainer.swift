@@ -43,6 +43,7 @@ final class AppContainer {
                                 coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
+        engine.displayHandler = layouts
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
@@ -82,6 +83,8 @@ final class AppContainer {
 
     /// Checks permissions, then starts the services (immediately, or once the user has granted them).
     func start() {
+        layouts.migrateKeys()
+        layouts.displaysDidChange()   // remember the displays that are connected
         layouts.prune()   // drop remembered apps whose zone no longer exists in any layout
         launcher.launch()
     }

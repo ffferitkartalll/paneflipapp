@@ -6,6 +6,8 @@ import Foundation
 final class ZoneEngine: ZoneRefreshing {
     /// Called on every tick while the Accessibility permission is missing (the owner decides what to show).
     var onPermissionLost: (() -> Void)?
+    /// Told first when displays were plugged in or out.
+    weak var displayHandler: DisplayChangeHandling?
 
     private let planner: ZonePlanner
     private let coordinator: StackCoordinator
@@ -43,6 +45,7 @@ final class ZoneEngine: ZoneRefreshing {
         }
         NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in
+                self?.displayHandler?.displaysDidChange()
                 self?.refreshZones()
                 self?.scheduleRestore()
             }

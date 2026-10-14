@@ -30,7 +30,7 @@ Sources/
     │                        PermissionsView, PermissionRow, PermissionsWindowController
     ├── Platform/            Ports, their value types and adapters:
     │                        WindowSystem ← AXWindowSystem (+ WindowRef),
-    │                        ScreenProviding (+ ScreenInfo) ← CGSScreenProvider,
+    │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
     │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
@@ -40,7 +40,7 @@ Sources/
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot
-    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
+    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,

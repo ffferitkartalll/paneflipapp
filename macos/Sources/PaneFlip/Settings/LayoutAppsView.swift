@@ -6,6 +6,9 @@ import SwiftUI
 struct LayoutAppsView: View {
     let layout: NamedLayout
     let editor: LayoutAppsEditing
+    /// Chosen by the layout card, which knows the screen: the default zone and how to change it.
+    let defaultZone: UUID?
+    let setDefaultZone: (UUID) -> Void
     @Environment(\.dismiss) private var dismiss
 
     private var zones: [UUID] { layout.root.leafIDs }
@@ -17,6 +20,18 @@ struct LayoutAppsView: View {
             Text("An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            HStack {
+                Picker("Default zone", selection: Binding(get: { defaultZone ?? zones.first ?? UUID() },
+                                                          set: { setDefaultZone($0) })) {
+                    ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
+                        Text("Zone \(index + 1)").tag(zone)
+                    }
+                }
+                .fixedSize()
+                Text("Apps of a screen that is unplugged are placed here.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Form {
                 ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
                     Section {
