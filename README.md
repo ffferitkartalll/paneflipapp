@@ -13,6 +13,10 @@
   <a href="https://crowdin.com/project/paneflipapp"><img src="https://badges.crowdin.net/paneflipapp/localized.svg" alt="Crowdin"></a>
 </p>
 
+<p align="center">
+  <img src="docs/promo.gif" width="800" alt="PaneFlip: zones, stacked apps and the pill">
+</p>
+
 ## macOS
 
 Requires macOS 27, Xcode 27 (Swift 6.4) and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
