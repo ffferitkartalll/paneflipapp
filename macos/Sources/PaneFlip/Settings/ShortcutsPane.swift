@@ -30,6 +30,9 @@ struct ShortcutsPane: View {
                         settings.values.hidePillKey = trigger
                     }
                 }
+                Text("Click the field, then press a modifier key. Esc cancels.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
         }

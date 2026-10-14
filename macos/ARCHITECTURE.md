@@ -36,6 +36,7 @@ Sources/
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
     │                        ActivationPolicyControlling ← AppKitActivationPolicyController,
+    │                        AppRelaunching ← WorkspaceAppRelauncher,
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot

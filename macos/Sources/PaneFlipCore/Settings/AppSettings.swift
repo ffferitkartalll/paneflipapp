@@ -21,6 +21,8 @@ public final class AppSettings {
         }
     }
 
+    /// The language the app started with: a different choice only takes effect after a restart.
+    @ObservationIgnored public let launchLanguage: String
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
     @ObservationIgnored public var onStackingChanged: (() -> Void)?
     @ObservationIgnored private let storage: SettingsStorage
@@ -30,6 +32,7 @@ public final class AppSettings {
         var loaded = storage.load()
         loaded.gap = Self.snapped(loaded.gap, to: Self.gapRange, step: Self.gapStep)
         loaded.minZoneSize = Self.snapped(loaded.minZoneSize, to: Self.minZoneSizeRange, step: Self.minZoneSizeStep)
+        launchLanguage = loaded.language
         values = loaded
     }
 
