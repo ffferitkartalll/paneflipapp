@@ -116,8 +116,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps of a screen that is unplugged are placed here."
+            "state" : "translated",
+            "value" : "Bağlantısı kesilen ekrandaki uygulamalar buraya yerleşir."
           }
         }
       }
@@ -226,8 +226,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default zone"
+            "state" : "translated",
+            "value" : "Varsayılan bölge"
           }
         }
       }
@@ -820,8 +820,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show for a single window"
+            "state" : "translated",
+            "value" : "Tek pencere için göster"
           }
         }
       }
@@ -842,8 +842,8 @@
       "localizations" : {
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the pill also in a zone that holds only one window. When off, the pill appears once a zone holds two or more."
+            "state" : "translated",
+            "value" : "Bölgede tek bir pencere olsa bile hapı göster. Kapalıyken, bölgede ikiden fazla pencere varsa hap gösterilir."
           }
         }
       }
