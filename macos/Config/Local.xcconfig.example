@@ -1,0 +1,3 @@
+// Copy this file to Local.xcconfig (ignored by git) and set your own bundle identifier.
+// macOS ties the permissions the app is given to it, so use one that belongs to you (reverse-DNS, unique).
+PANEFLIP_BUNDLE_ID = com.example.paneflip

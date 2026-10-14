@@ -12,6 +12,13 @@ xcuserdata/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
 
+# Your own bundle identifier (copy Config/Local.xcconfig.example)
+macos/Config/Local.xcconfig
+
+# Working rules and notes kept on the owner's machine only
+CLAUDE.md
+.claude/
+
 # Editors
 .idea/
 .vscode/
