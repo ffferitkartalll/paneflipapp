@@ -134,7 +134,15 @@
       }
     },
     "Click the field, then press a modifier key. Esc cancels." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alana tıkla, sonrasında bir niteleme tuşuna bas. Esc iptal eder."
+          }
+        }
+      }
     },
     "Click the field, then press any key or combination. Esc cancels." : {
       "extractionState" : "manual",
@@ -687,7 +695,15 @@
       }
     },
     "Restart now" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şimdi yeniden başlat"
+          }
+        }
+      }
     },
     "Return" : {
       "extractionState" : "manual",
@@ -932,7 +948,15 @@
       }
     },
     "You changed the app language, so you need to restart PaneFlip for the change to take effect." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulama dilini değiştirdiniz, değişikliğin etkili olması için PaneFlip'i yeniden başlatmanız gerekir."
+          }
+        }
+      }
     },
     "Your system language (%@) is not available yet, so PaneFlip is shown in English." : {
       "extractionState" : "manual",
