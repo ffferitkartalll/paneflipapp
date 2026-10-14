@@ -15,6 +15,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
+        v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
         v.language = defaults.string(forKey: "appLanguage") ?? v.language
@@ -28,6 +29,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
+        defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
         // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order

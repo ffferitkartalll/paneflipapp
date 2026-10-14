@@ -10,6 +10,8 @@ final class PillPresenterTests: XCTestCase {
 
     private var screens: FakeScreens!
     private var presenter: PillPresenter!
+    private var coordinator: StackCoordinator!
+    private var settings: AppSettings!
     private let zone = UUID()
     /// Windows of earlier tests stay in the app's list; only the ones this test made are looked at.
     private var earlier: Set<NSWindow> = []
@@ -17,8 +19,8 @@ final class PillPresenterTests: XCTestCase {
     override func setUp() {
         earlier = Set(NSApp.windows)
         screens = FakeScreens()
-        let settings = AppSettings(storage: StubSettingsStorage())
-        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: StackMemory(store: MemoryDocumentStore()),
+        settings = AppSettings(storage: StubSettingsStorage())
+        coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: StackMemory(store: MemoryDocumentStore()),
                                            settings: settings, apps: FakeApps())
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 1000, height: 600)])
         coordinator.snap(.fake(1), into: zone)
@@ -40,6 +42,15 @@ final class PillPresenterTests: XCTestCase {
         screens.pointerAX = CGPoint(x: 500, y: 400)
         presenter.zonesDidChange()
         XCTAssertEqual(panels.first?.ignoresMouseEvents, true)
+    }
+
+    func testASingleWindowGetsNoPillUnlessTheSettingAsksForOne() {
+        coordinator.unsnap(window: 2)
+        presenter.zonesDidChange()
+        XCTAssertEqual(panels.first?.ignoresMouseEvents, true)
+        settings.values.pillForSingleWindow = true
+        presenter.zonesDidChange()
+        XCTAssertEqual(panels.first?.ignoresMouseEvents, false)
     }
 
     func testThePillStaysAwayWhileMissionControlIsOpen() {

@@ -48,6 +48,10 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertNotEqual(settings.values.language, settings.launchLanguage)
     }
 
+    func testThePillIsNotShownForASingleWindowUnlessAsked() {
+        XCTAssertFalse(AppSettings(storage: Storage()).values.pillForSingleWindow)
+    }
+
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
         let storage = Storage()
         var old = SettingsValues()
