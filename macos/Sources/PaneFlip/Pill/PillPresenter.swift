@@ -86,7 +86,7 @@ final class PillPresenter: ZonePresenting {
         for (id, panel) in panels {
             guard let stack = coordinator.stacks[id] else { continue }
             var show = false, clickable = false
-            if stack.tabs.count >= 2 && settings.values.stackingEnabled {
+            if stack.tabs.count >= (settings.values.pillForSingleWindow ? 1 : 2) && settings.values.stackingEnabled {
                 panel.refresh()
                 let (frame, pill) = pillRects(stack, panel)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it

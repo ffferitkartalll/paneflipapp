@@ -799,6 +799,9 @@
         }
       }
     },
+    "Show for a single window" : {
+      "extractionState" : "manual"
+    },
     "Show for each window" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -809,6 +812,9 @@
           }
         }
       }
+    },
+    "Show the pill also in a zone that holds only one window. When off, the pill appears once a zone holds two or more." : {
+      "extractionState" : "manual"
     },
     "Show the windows" : {
       "extractionState" : "manual",

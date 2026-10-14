@@ -16,6 +16,10 @@ struct StackingPane: View {
             .disabled(!settings.values.placementEnabled)
 
             Section("Pill") {
+                SettingRow(title: "Show for a single window",
+                           detail: "Show the pill also in a zone that holds only one window. When off, the pill appears once a zone holds two or more.") {
+                    Toggle("Show for a single window", isOn: $settings.values.pillForSingleWindow).labelsHidden()
+                }
                 SettingRow(title: "Show for each window",
                            detail: "What each segment of the pill shows. Use the button beside the pill or double-tap the hide key (see Shortcuts) to hide it while the pointer is over it.",
                            controlBelow: true) {
