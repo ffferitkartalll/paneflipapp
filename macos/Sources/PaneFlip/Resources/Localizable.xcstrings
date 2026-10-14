@@ -46,7 +46,15 @@
       }
     },
     "Add app" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add app"
+          }
+        }
+      }
     },
     "Add layout" : {
       "extractionState" : "manual",
@@ -60,7 +68,15 @@
       }
     },
     "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here."
+          }
+        }
+      }
     },
     "Applies between zones only, never at screen edges." : {
       "extractionState" : "manual",
@@ -85,7 +101,15 @@
       }
     },
     "Apps…" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Apps…"
+          }
+        }
+      }
     },
     "Cancel" : {
       "extractionState" : "manual",
@@ -176,7 +200,15 @@
       }
     },
     "Done" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Done"
+          }
+        }
+      }
     },
     "Double-tap to hide the pill" : {
       "extractionState" : "manual",
@@ -278,7 +310,15 @@
       }
     },
     "Hide the pill" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide the pill"
+          }
+        }
+      }
     },
     "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command." : {
       "extractionState" : "manual",
@@ -468,7 +508,15 @@
       }
     },
     "Move to another zone" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move to another zone"
+          }
+        }
+      }
     },
     "Name" : {
       "extractionState" : "manual",
@@ -504,7 +552,15 @@
       }
     },
     "Other…" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Other…"
+          }
+        }
+      }
     },
     "PaneFlip" : {
       "extractionState" : "manual",
@@ -694,7 +750,15 @@
       }
     },
     "Show earlier in the pill" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show earlier in the pill"
+          }
+        }
+      }
     },
     "Show for each window" : {
       "extractionState" : "manual",
@@ -708,7 +772,15 @@
       }
     },
     "Show later in the pill" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show later in the pill"
+          }
+        }
+      }
     },
     "Space" : {
       "extractionState" : "manual",
@@ -821,7 +893,15 @@
       }
     },
     "What each segment of the pill shows. Use the button beside the pill or double-tap the hide key (see Shortcuts) to hide it while the pointer is over it." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "What each segment of the pill shows. Use the button beside the pill or double-tap the hide key (see Shortcuts) to hide it while the pointer is over it."
+          }
+        }
+      }
     },
     "Window snapping" : {
       "extractionState" : "manual",
@@ -846,7 +926,15 @@
       }
     },
     "Zone %lld" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Zone %lld"
+          }
+        }
+      }
     },
     "Zones" : {
       "extractionState" : "manual",
