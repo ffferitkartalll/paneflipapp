@@ -1,0 +1,11 @@
+name: Enhancement
+description: A feature or a change to how something behaves
+labels: [enhancement]
+body:
+  - type: textarea
+    id: want
+    attributes:
+      label: What you want
+      description: The need first, then how it could work.
+    validations:
+      required: true

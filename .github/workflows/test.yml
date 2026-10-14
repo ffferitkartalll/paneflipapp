@@ -17,6 +17,10 @@ jobs:
           sed -i '' 's/macOS("27.0")/macOS("26.0")/' Package.swift
           sed -i '' 's/"27.0"/"26.0"/' project.yml
 
+      - name: Bundle identifier
+        working-directory: macos
+        run: cp Config/Local.xcconfig.example Config/Local.xcconfig
+
       - name: Install XcodeGen
         run: brew install xcodegen
 

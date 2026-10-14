@@ -10,7 +10,7 @@
 ## Build layout
 
 - `project.yml` → generates `PaneFlip.xcodeproj` (XcodeGen). It defines the **app target**: a real `.app` bundle
-  (bundle id `dev.ffferitkartalll.paneflip`, `LSUIElement`, no sandbox, signed with the local certificate made by
+  (bundle id from `Config/Local.xcconfig`, `LSUIElement`, no sandbox, signed with the local certificate made by
   `scripts/setup-local-signing.sh` so the identity, and with it the Accessibility permission, is the same on every build).
 - `Package.swift` holds only `PaneFlipCore` and its tests, so `swift test` needs no Xcode project.
 - The app target depends on `PaneFlipCore` as a local package.

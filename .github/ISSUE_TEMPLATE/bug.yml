@@ -1,0 +1,21 @@
+name: Bug
+description: Something does not work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What you did, what you expected and what you saw instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: macOS version and commit
+      placeholder: macOS 27.0, commit 1234abc
+  - type: textarea
+    id: setup
+    attributes:
+      label: Setup
+      description: Displays, desktops, the layout, and the apps in the zone, when it matters.

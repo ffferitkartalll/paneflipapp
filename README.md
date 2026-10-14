@@ -1,5 +1,7 @@
 # PaneFlip
 
+[![Crowdin](https://badges.crowdin.net/paneflipapp/localized.svg)](https://crowdin.com/project/paneflipapp)
+
 Split your displays and desktops into zones, drop apps into them, and switch between the apps of a zone with a
 small glass pill. One repository, one folder per platform.
 
@@ -19,10 +21,16 @@ Requires macOS 27, Xcode 27 (Swift 6.4) and [XcodeGen](https://github.com/yonask
 
 ```bash
 cd macos
+cp Config/Local.xcconfig.example Config/Local.xcconfig   # then set your own bundle identifier in it
 ./scripts/setup-local-signing.sh   # once per Mac: a local signing certificate (see below)
 xcodegen generate                  # creates PaneFlip.xcodeproj from project.yml
 open PaneFlip.xcodeproj            # run the PaneFlip scheme on "My Mac"
 ```
+
+**Use your own bundle identifier.** `Config/Local.xcconfig` (ignored by git) holds `PANEFLIP_BUNDLE_ID`; the
+example file has a placeholder. macOS ties the permissions the app is given, and its saved settings, to the
+bundle identifier, so choose one that belongs to you (reverse-DNS, for example `com.yourname.paneflip`) and keep
+using it.
 
 **Why the signing step:** macOS ties the Accessibility permission to the app's code signature. Ad-hoc signed
 debug builds get a new signature on every build, so the permission would be asked for again each time. The script
@@ -38,7 +46,32 @@ The domain module and its tests build without Xcode: `cd macos && swift test`.
 The app is an agent app (menu bar only, no Dock icon). The first launch asks for the Accessibility permission.
 
 - [`macos/ARCHITECTURE.md`](macos/ARCHITECTURE.md): layers, folders, responsibilities.
-- [`macos/CLAUDE.md`](macos/CLAUDE.md): the working rules every change follows.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md): how changes are made.
+
+## Good to know
+
+- **Not for the Mac App Store.** To move other apps' windows PaneFlip needs the Accessibility permission and runs
+  without the App Sandbox, and it uses some undocumented system interfaces (private CoreGraphics Services calls
+  for desktops and the cursor, private AppKit selectors for the pill's look). A system update can change them; the
+  app then falls back to a plainer look instead of failing.
+- **Brand icons.** When an app has no system symbol, PaneFlip can fetch a one-colour brand icon from the
+  [Simple Icons](https://simpleicons.org) set through the jsDelivr CDN (`Settings ▸ Stacking ▸ Fetch brand
+  icons`, on by default; the names of the apps in your zones are sent to the host, nothing else). Trademarks and
+  logos belong to their owners. Turn it off and nothing is looked up.
+- **No data leaves your Mac** otherwise: layouts, memory and settings are local files and preferences.
+
+## Translations
+
+The app's texts are in `macos/Sources/PaneFlip/Resources/Localizable.xcstrings`, and a language is added by
+translating that catalog: no code changes. Translations are made in the public Crowdin project
+**[PaneFlip on Crowdin](https://crowdin.com/project/paneflipapp)**: pick your language (or ask for a new one),
+translate there, and Crowdin sends a pull request with the result. You can also edit the catalog directly in a
+pull request. A language appears in `Settings ▸ General ▸ Language` as soon as the catalog has it.
+
+## Contributing and security
+
+Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Report a security problem as
+described in [SECURITY.md](SECURITY.md), not in a public issue.
 
 ## Adding a platform
 
