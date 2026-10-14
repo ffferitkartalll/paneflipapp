@@ -112,7 +112,15 @@
       }
     },
     "Apps of a screen that is unplugged are placed here." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bağlantısı kesilen ekrandaki uygulamalar buraya yerleşir."
+          }
+        }
+      }
     },
     "Apps…" : {
       "extractionState" : "manual",
@@ -214,7 +222,15 @@
       }
     },
     "Default zone" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsayılan bölge"
+          }
+        }
+      }
     },
     "Delete" : {
       "extractionState" : "manual",
@@ -800,7 +816,15 @@
       }
     },
     "Show for a single window" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tek pencere için göster"
+          }
+        }
+      }
     },
     "Show for each window" : {
       "extractionState" : "manual",
@@ -814,7 +838,15 @@
       }
     },
     "Show the pill also in a zone that holds only one window. When off, the pill appears once a zone holds two or more." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgede tek bir pencere olsa bile hapı göster. Kapalıyken, bölgede ikiden fazla pencere varsa hap gösterilir."
+          }
+        }
+      }
     },
     "Show the windows" : {
       "extractionState" : "manual",
