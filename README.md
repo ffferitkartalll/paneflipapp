@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/promo.gif" width="800" alt="PaneFlip: zones, stacked apps and the pill">
+  <img src="docs/promo.gif" width="100%" alt="PaneFlip: layouts, zones, stacked apps and the pill">
 </p>
 
 ## macOS
