@@ -17,4 +17,14 @@ final class AppLanguagesTests: XCTestCase {
         XCTAssertEqual(languages.title(of: "en"), "English")
         XCTAssertEqual(languages.title(of: "tr"), "Türkçe")
     }
+
+    func testTwoTranslationsOfOneLanguageAreToldApartByRegion() {
+        let languages = AppLanguages(available: ["pt", "pt-BR", "de", "nb-NO", "zh-Hans", "zh-Hant"], preferred: [])
+        XCTAssertNotEqual(languages.title(of: "pt"), languages.title(of: "pt-BR"))
+        XCTAssertTrue(languages.title(of: "pt").contains("Portugal"))
+        XCTAssertTrue(languages.title(of: "pt-BR").contains("Brasil"))
+        XCTAssertNotEqual(languages.title(of: "zh-Hans"), languages.title(of: "zh-Hant"))
+        XCTAssertEqual(languages.title(of: "de"), "Deutsch")
+        XCTAssertFalse(languages.title(of: "nb-NO").contains("("))
+    }
 }

@@ -19,11 +19,29 @@ struct AppLanguages {
         return Locale.current.localizedString(forLanguageCode: code) ?? first
     }
 
-    /// A language as shown in the picker: in its own language.
+    /// A language as shown in the picker: in its own language. The region is added only where two translations share
+    /// a language (Portuguese of Portugal and of Brazil), so a language that is alone is not named with its region.
     func title(of code: String) -> String {
         if code == SettingsValues.systemLanguage { return String(localized: "System language") }
-        return Locale(identifier: code).localizedString(forLanguageCode: code)?.localizedCapitalized ?? code
+        let shared = available.filter { Self.languageCode($0) == Self.languageCode(code) }.count > 1
+        let identifier = shared ? distinguished(code) : (Self.languageCode(code) ?? code)
+        return Locale(identifier: identifier).localizedString(forIdentifier: identifier)?.localizedCapitalized ?? code
     }
+
+    /// The code with the region it stands for, so the bare `pt` next to `pt-BR` is named as `pt-PT`. The translation
+    /// service exports Portugal's Portuguese as the bare code, while the likely region of `pt` is Brazil.
+    /// shortcut: one known pair, add the language here when another exports the same way.
+    private func distinguished(_ code: String) -> String {
+        guard !code.contains("-"), !code.contains("_") else { return code }
+        let language = Locale.Language(identifier: code)
+        guard let base = language.languageCode?.identifier else { return code }
+        if let region = Self.exportedRegions[base] { return "\(base)-\(region)" }
+        let maximal = Locale.Language(identifier: language.maximalIdentifier)
+        guard let region = maximal.region?.identifier else { return code }
+        return "\(base)-\(region)"
+    }
+
+    private static let exportedRegions = ["pt": "PT"]
 
     private static func languageCode(_ identifier: String) -> String? {
         Locale.Language(identifier: identifier).languageCode?.identifier
