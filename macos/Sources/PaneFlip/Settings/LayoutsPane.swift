@@ -11,6 +11,7 @@ struct LayoutsPane: View {
     let screens: ScreenProviding
     let refresh: () -> Void
     @Bindable var settings: AppSettings
+    let navigation: SettingsNavigation
     /// Bumped when displays are plugged in or out, so the list of screens is read again.
     @State private var displaysChanged = 0
 
@@ -18,7 +19,8 @@ struct LayoutsPane: View {
         let _ = displaysChanged
         Form {
             ForEach(screens.screens()) { screen in
-                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps)
+                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps,
+                                     navigation: navigation)
             }
 
             Section("Zones") {

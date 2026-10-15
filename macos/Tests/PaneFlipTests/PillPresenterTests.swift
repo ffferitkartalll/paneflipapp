@@ -26,7 +26,7 @@ final class PillPresenterTests: XCTestCase {
         coordinator.snap(.fake(1), into: zone)
         coordinator.snap(.fake(2), into: zone)
         presenter = PillPresenter(coordinator: coordinator, settings: settings, screens: screens,
-                                  iconFont: IconFont(brands: NoBrands()))
+                                  iconFont: IconFont(brands: NoBrands()), openOrdering: { _ in })
         screens.pointerAX = CGPoint(x: 500, y: 24 + PillMetrics.height / 2)   // on the pill: one menu bar below the top
     }
 

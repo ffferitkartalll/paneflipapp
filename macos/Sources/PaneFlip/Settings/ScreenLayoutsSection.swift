@@ -8,15 +8,18 @@ struct ScreenLayoutsSection: View {
     let layouts: LayoutManaging
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
+    let navigation: SettingsNavigation
 
     var body: some View {
         Section {
+            ScrollViewReader { proxy in
             ScrollView(.horizontal) {
                 HStack(alignment: .top, spacing: 14) {
                     let activeID = repository.activeLayout(for: screen.key)?.id
                     ForEach(repository.layouts(for: screen.key)) { layout in
                         LayoutCard(screen: screen, layout: layout, isActive: layout.id == activeID,
-                                   layouts: layouts, editor: editor, apps: apps)
+                                   layouts: layouts, editor: editor, apps: apps, navigation: navigation)
+                            .id(layout.id)
                     }
                     addCard
                 }
@@ -24,6 +27,10 @@ struct ScreenLayoutsSection: View {
                 .padding(.vertical, 6)
             }
             .scrollIndicators(.hidden)
+            .task(id: navigation.ordering) {
+                if let id = navigation.ordering?.layoutID { proxy.scrollTo(id, anchor: .center) }
+            }
+            }
         } header: {
             HStack {
                 Label(screen.name, systemImage: "display")
@@ -39,7 +46,7 @@ struct ScreenLayoutsSection: View {
     private var addCard: some View {
         ZStack {
             LayoutCard(screen: screen, layout: NamedLayout(name: "Layout", root: .leaf(UUID())), isActive: false,
-                       layouts: layouts, editor: editor, apps: apps)
+                       layouts: layouts, editor: editor, apps: apps, navigation: navigation)
                 .hidden()
 
             Button { layouts.addLayout(for: screen.key) } label: {

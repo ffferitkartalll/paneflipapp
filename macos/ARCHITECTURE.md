@@ -25,7 +25,7 @@ Sources/
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
-    ├── App/                 PaneFlipApp, AppContainer (composition root), AppLauncher (permission gate), MenuContent
+    ├── App/                 PaneFlipApp, AppContainer (composition root), AppLauncher (permission gate), MenuContent, MenuBarLabel
     ├── Permissions/         Permission, PermissionChecking (port) ← SystemPermissions, PermissionsModel,
     │                        PermissionsView, PermissionRow, PermissionsWindowController
     ├── Platform/            Ports, their value types and adapters:
@@ -45,7 +45,7 @@ Sources/
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
-    └── Settings/            SettingsView (tabs), LayoutsPane, StackingPane, ShortcutsPane, SettingRow,
+    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, StackingPane, ShortcutsPane, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
@@ -74,7 +74,7 @@ Sources/
 | `ZoneEngine` | Re-layout on desktop/display changes and run housekeeping. |
 | `LayoutService` | Apply layout edits and carry their consequences to windows and memory. |
 | `PillPresenter` | Own pill panels and decide when each is visible. |
-| `PillPanel` | The pill: the system's segmented control, one segment per window, and the toolbar button that hides it. |
+| `PillPanel` | The pill: the system's segmented control, one segment per window, and the toolbar buttons that open the apps' order in Settings and hide it. |
 | `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
 | `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
 | `LayoutAppsService` | Edits which app belongs in which zone of a layout, and in what pill order; lets the restorer place the windows. |

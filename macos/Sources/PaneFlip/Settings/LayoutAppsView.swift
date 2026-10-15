@@ -6,10 +6,15 @@ import SwiftUI
 struct LayoutAppsView: View {
     let layout: NamedLayout
     let editor: LayoutAppsEditing
+    /// The zone to scroll to and frame; a new request shows it again, also while the sheet is open.
+    let focus: OrderingTarget?
     /// Chosen by the layout card, which knows the screen: the default zone and how to change it.
     let defaultZone: UUID?
     let setDefaultZone: (UUID) -> Void
     @Environment(\.dismiss) private var dismiss
+    /// The zone whose apps are framed for a moment after the sheet opened on it.
+    @State private var highlighted: UUID?
+    @State private var highlightRequest: UUID?
 
     private var zones: [UUID] { layout.root.leafIDs }
 
@@ -32,17 +37,28 @@ struct LayoutAppsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            ScrollViewReader { proxy in
             Form {
                 ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
                     Section {
                         ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, editor: editor)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .strokeBorder(Color.accentColor, lineWidth: 2)
+                                    .padding(-6)
+                                    .opacity(highlighted == zone ? 1 : 0)
+                            }
                         addMenu(to: zone)
                     } header: {
                         Text("Zone \(index + 1)")
                     }
+                    .id(zone)
                 }
             }
             .formStyle(.grouped)
+            .onAppear { reveal(focus, proxy) }
+            .onChange(of: focus) { _, new in reveal(new, proxy) }
+            }
             HStack {
                 Spacer()
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
@@ -50,6 +66,16 @@ struct LayoutAppsView: View {
         }
         .padding(20)
         .frame(width: 520, height: 520)
+    }
+
+    private func reveal(_ target: OrderingTarget?, _ proxy: ScrollViewProxy) {
+        guard let target, let zone = target.zoneID else { return }
+        highlighted = zone
+        highlightRequest = target.request
+        DispatchQueue.main.async { withAnimation { proxy.scrollTo(zone, anchor: .top) } }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if highlightRequest == target.request { withAnimation { highlighted = nil } }
+        }
     }
 
     private func addMenu(to zone: UUID) -> some View {

@@ -10,13 +10,15 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private let settings: AppSettings
     private let iconFont: IconFont
     private let select: (CGWindowID) -> Void
+    private let reorder: () -> Void
     private let hide: () -> Void
     /// What the system control adds around a segment's text, in points.
     private static let segmentPadding: CGFloat = 22
     private let groupID = NSToolbarItem.Identifier("tabs")
+    private let reorderID = NSToolbarItem.Identifier("reorder")
     private let hideID = NSToolbarItem.Identifier("hide")
-    /// What the hide button and the space before it take next to the segments.
-    static let hideButtonWidth: CGFloat = 52
+    /// What the two buttons and the space before them take next to the segments.
+    static let buttonsWidth: CGFloat = 104
     private var group: NSToolbarItemGroup?
     private var shownKey = ""
     private weak var styledControl: NSSegmentedControl?
@@ -29,11 +31,12 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private var fitPending = false
 
     init(stack: ZoneStack, settings: AppSettings, iconFont: IconFont,
-         select: @escaping (CGWindowID) -> Void, hide: @escaping () -> Void) {
+         select: @escaping (CGWindowID) -> Void, reorder: @escaping () -> Void, hide: @escaping () -> Void) {
         self.stack = stack
         self.settings = settings
         self.iconFont = iconFont
         self.select = select
+        self.reorder = reorder
         self.hide = hide
         _ = Self.looksActive
         _ = Self.fitsSegments
@@ -128,7 +131,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         let key = currentKey() + String(describing: widthCorrection)
         if let measured, measured.key == key { return measured.width }
         let font = NSFont.systemFont(ofSize: 13)
-        let width = titles().map { IconFont.width(of: $0, font: font) + Self.segmentPadding }.reduce(0, +) + widthCorrection + Self.hideButtonWidth + 2 * Self.margin
+        let width = titles().map { IconFont.width(of: $0, font: font) + Self.segmentPadding }.reduce(0, +) + widthCorrection + Self.buttonsWidth + 2 * Self.margin
         measured = (key, width)
         return width
     }
@@ -254,25 +257,28 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     // MARK: NSToolbarDelegate
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        [.flexibleSpace, groupID, .space, hideID, .flexibleSpace]
+        [.flexibleSpace, groupID, .space, reorderID, hideID, .flexibleSpace]
     }
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        [.flexibleSpace, .space, groupID, hideID]
+        [.flexibleSpace, .space, groupID, reorderID, hideID]
     }
 
+    @objc private func reorderPressed() { reorder() }
     @objc private func hidePressed() { hide() }
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier identifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
-        if identifier == hideID {
-            // A button of the window toolbar, drawn by the system like the buttons of an app toolbar.
+        if identifier == hideID || identifier == reorderID {
+            // Buttons of the window toolbar, drawn by the system like the buttons of an app toolbar.
+            let hides = identifier == hideID
+            let title = hides ? String(localized: "Hide the pill") : String(localized: "Order the apps of the pill")
             let item = NSToolbarItem(itemIdentifier: identifier)
-            item.image = NSImage(systemSymbolName: "eye.slash", accessibilityDescription: String(localized: "Hide the pill"))
-            item.label = String(localized: "Hide the pill")
-            item.toolTip = String(localized: "Hide the pill")
+            item.image = NSImage(systemSymbolName: hides ? "eye.slash" : "arrow.left.arrow.right", accessibilityDescription: title)
+            item.label = title
+            item.toolTip = title
             item.isBordered = true
             item.target = self
-            item.action = #selector(hidePressed)
+            item.action = hides ? #selector(hidePressed) : #selector(reorderPressed)
             return item
         }
         guard identifier == groupID, !stack.tabs.isEmpty else { return nil }
