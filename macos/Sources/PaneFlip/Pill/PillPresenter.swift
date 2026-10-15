@@ -9,6 +9,7 @@ final class PillPresenter: ZonePresenting {
     private let settings: AppSettings
     private let screens: ScreenProviding
     private let iconFont: IconFont
+    private let openOrdering: (UUID) -> Void
 
     private var panels: [UUID: PillPanel] = [:]
     private var shown: [UUID: Bool] = [:]
@@ -24,11 +25,13 @@ final class PillPresenter: ZonePresenting {
     private let hideDelay: TimeInterval = 0.4
     private let flashDuration: TimeInterval = 1.5
 
-    init(coordinator: StackCoordinator, settings: AppSettings, screens: ScreenProviding, iconFont: IconFont) {
+    init(coordinator: StackCoordinator, settings: AppSettings, screens: ScreenProviding, iconFont: IconFont,
+         openOrdering: @escaping (UUID) -> Void) {
         self.coordinator = coordinator
         self.settings = settings
         self.screens = screens
         self.iconFont = iconFont
+        self.openOrdering = openOrdering
     }
 
     func start() {
@@ -61,13 +64,13 @@ final class PillPresenter: ZonePresenting {
 
     // MARK: Visibility
 
-    /// The pill sits one menu-bar height below the top of the zone, its segments centred, as wide as they are with the hide button. The panel
+    /// The pill sits one menu-bar height below the top of the zone, its segments centred, as wide as they are with the buttons. The panel
     /// has transparent room around them (the system control collapses into a pop-up without it): only the capsule
     /// inside counts for hovering and clicking. Not limited to the zone: a narrow zone must not squeeze the control.
     private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect) {
         let w = panel.barWidth
-        // The segments are centred on the zone; the hide button sits beside them, inside the capsule's rectangle.
-        let frame = CGRect(x: stack.rect.midX - w / 2 + PillPanel.hideButtonWidth / 2,
+        // The segments are centred on the zone; the buttons sit beside them, inside the capsule's rectangle.
+        let frame = CGRect(x: stack.rect.midX - w / 2 + PillPanel.buttonsWidth / 2,
                            y: stack.rect.minY + screens.menuBarThickness, width: w, height: PillMetrics.height)
         return (frame, frame.insetBy(dx: PillPanel.margin, dy: 0))
     }
@@ -133,6 +136,9 @@ final class PillPresenter: ZonePresenting {
             stack: stack, settings: settings, iconFont: iconFont,
             select: { [weak self, weak stack] id in
                 if let stack { self?.coordinator.select(id, in: stack) }
+            },
+            reorder: { [weak self, weak stack] in
+                if let stack { self?.openOrdering(stack.id) }
             },
             hide: { [weak self, weak stack] in
                 if let stack { self?.hide(zone: stack.id) }

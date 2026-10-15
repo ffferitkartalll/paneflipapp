@@ -14,8 +14,10 @@ struct PaneFlipApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra("PaneFlip", image: "MenuBarIcon") {
+        MenuBarExtra {
             MenuContent()
+        } label: {
+            MenuBarLabel(navigation: container.settingsNavigation)
         }
 
         // Opened from the menu bar menu (Settings).
@@ -23,7 +25,7 @@ struct PaneFlipApp: App {
             SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor, apps: container.layoutApps,
                          screens: container.screens, refresh: { container.engine.refreshZones() },
                          settings: container.settings, launchAtLogin: container.launchAtLogin, relauncher: container.relauncher,
-                         activation: container.activation)
+                         activation: container.activation, navigation: container.settingsNavigation)
         }
     }
 }

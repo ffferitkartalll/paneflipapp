@@ -14,25 +14,30 @@ struct SettingsView: View {
     let launchAtLogin: LaunchAtLoginModel
     let relauncher: AppRelaunching
     let activation: ActivationPolicyControlling
+    @Bindable var navigation: SettingsNavigation
 
     var body: some View {
-        TabView {
+        TabView(selection: $navigation.tab) {
             GeneralPane(settings: settings, launchAtLogin: launchAtLogin, relauncher: relauncher)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("General", systemImage: "gearshape") }
+                .tag(SettingsTab.general)
 
             LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
-                        refresh: refresh, settings: settings)
+                        refresh: refresh, settings: settings, navigation: navigation)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
+                .tag(SettingsTab.layouts)
 
             StackingPane(settings: settings)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Stacking", systemImage: "square.stack.3d.up") }
+                .tag(SettingsTab.stacking)
 
             ShortcutsPane(settings: settings)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Shortcuts", systemImage: "command") }
+                .tag(SettingsTab.shortcuts)
         }
         .scenePadding()
         .frame(width: 640)

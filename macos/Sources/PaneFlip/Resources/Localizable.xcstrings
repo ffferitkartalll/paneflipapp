@@ -9274,6 +9274,9 @@
         }
       }
     },
+    "Order the apps of the pill" : {
+      "extractionState" : "manual"
+    },
     "Hide the pill" : {
       "extractionState" : "manual",
       "localizations" : {

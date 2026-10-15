@@ -11,8 +11,8 @@ struct LayoutCard: View {
     let layouts: LayoutManaging
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
+    let navigation: SettingsNavigation
 
-    @State private var showsApps = false
     @State private var isRenaming = false
     @State private var draftName = ""
 
@@ -21,13 +21,15 @@ struct LayoutCard: View {
             miniature
             nameRow
             actionRow
-            Button { showsApps = true } label: { stretched("Apps…") }
+            Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
         }
         .frame(width: Self.width)
-        .sheet(isPresented: $showsApps) {
-            LayoutAppsView(layout: layout, editor: apps, defaultZone: layout.fallbackZoneID,
+        .sheet(isPresented: Binding(
+            get: { navigation.ordering?.layoutID == layout.id },
+            set: { if !$0 && navigation.ordering?.layoutID == layout.id { navigation.ordering = nil } })) {
+            LayoutAppsView(layout: layout, editor: apps, focus: navigation.ordering, defaultZone: layout.fallbackZoneID,
                            setDefaultZone: { layouts.setDefaultZone(key: screen.key, id: layout.id, to: $0) })
         }
         .alert("Rename Layout", isPresented: $isRenaming) {

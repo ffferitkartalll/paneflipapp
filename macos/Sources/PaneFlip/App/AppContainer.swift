@@ -20,6 +20,7 @@ final class AppContainer {
     let launchAtLogin: LaunchAtLoginModel
     let relauncher: AppRelaunching = WorkspaceAppRelauncher()
     let activation: ActivationPolicyControlling
+    let settingsNavigation: SettingsNavigation
 
     private let launcher: AppLauncher
 
@@ -47,7 +48,13 @@ final class AppContainer {
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
-        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont)
+        let navigation = SettingsNavigation()
+        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont) { zone in
+            navigation.tab = .layouts
+            let layout = repository.screens.values.flatMap(\.layouts).first { $0.root.leafIDs.contains(zone) }
+            navigation.ordering = layout.map { OrderingTarget(layoutID: $0.id, zoneID: zone) }
+            navigation.openSettings()
+        }
         engine.add(presenter: pill)
         coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
 
@@ -67,6 +74,7 @@ final class AppContainer {
         self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine,
                                               iconFont: iconFont)
         self.activation = activation
+        self.settingsNavigation = navigation
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
