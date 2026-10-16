@@ -90,16 +90,23 @@ final class AXWindowSystem: WindowSystem {
 
     // MARK: System window list
 
-    func allWindowIDs() -> Set<CGWindowID> { windowNumbers(.optionAll) }
-    func onScreenWindowIDs() -> Set<CGWindowID> { Set(windowIDsFrontToBack()) }
-    func windowIDsFrontToBack() -> [CGWindowID] { orderedWindowNumbers(.optionOnScreenOnly) }
-
-    private func windowNumbers(_ option: CGWindowListOption) -> Set<CGWindowID> { Set(orderedWindowNumbers(option)) }
+    func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>) {
+        var all = Set<CGWindowID>(), onScreen = Set<CGWindowID>()
+        for info in windowList(.optionAll) {
+            guard let id = (info[kCGWindowNumber as String] as? NSNumber)?.uint32Value else { continue }
+            all.insert(id)
+            if (info[kCGWindowIsOnscreen as String] as? Bool) == true { onScreen.insert(id) }
+        }
+        return (all, onScreen)
+    }
 
     /// The system lists windows front to back.
-    private func orderedWindowNumbers(_ option: CGWindowListOption) -> [CGWindowID] {
-        guard let list = CGWindowListCopyWindowInfo([option], kCGNullWindowID) as? [[String: Any]] else { return [] }
-        return list.compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value }
+    func windowIDsFrontToBack() -> [CGWindowID] {
+        windowList(.optionOnScreenOnly).compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value }
+    }
+
+    private func windowList(_ option: CGWindowListOption) -> [[String: Any]] {
+        CGWindowListCopyWindowInfo([option], kCGNullWindowID) as? [[String: Any]] ?? []
     }
 
     // MARK: Helpers

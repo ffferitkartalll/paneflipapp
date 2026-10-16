@@ -15,6 +15,20 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(reloaded.records[0].zoneID, zone)
     }
 
+    func testATitleChangeIsWrittenWithTheNextRealChange() {
+        let store = MemoryStore()
+        let memory = StackMemory(store: store)
+        let slot = memory.remember(zoneID: UUID(), bundleID: "com.example.editor", title: "Notes")
+        memory.bind(slot: slot, toWindow: 42, title: "Notes")
+
+        memory.updateTitle(ofWindow: 42, to: "Inbox")
+        XCTAssertEqual(memory.records[0].title, "Inbox")
+        XCTAssertEqual(StackMemory(store: store).records[0].title, "Notes", "a title alone is not written")
+
+        memory.unbind(window: 42)
+        XCTAssertEqual(StackMemory(store: store).records[0].title, "Inbox")
+    }
+
     func testUnbindKeepsTheSlotForgetRemovesIt() {
         let memory = StackMemory(store: MemoryStore())
         let zone = UUID()

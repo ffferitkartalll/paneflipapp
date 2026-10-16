@@ -20,7 +20,6 @@ final class FakeWindowSystem: WindowSystem {
     func title(of ref: WindowRef) -> String? { titles[ref.id] }
     func isMinimized(_ ref: WindowRef) -> Bool { minimized.contains(ref.id) }
     func raise(_ ref: WindowRef) { raised.append(ref.id) }
-    func allWindowIDs() -> Set<CGWindowID> { all }
-    func onScreenWindowIDs() -> Set<CGWindowID> { onScreen }
+    func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>) { (all, onScreen) }
     func windowIDsFrontToBack() -> [CGWindowID] { frontToBack }
 }
