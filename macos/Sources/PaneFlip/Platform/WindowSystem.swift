@@ -16,9 +16,8 @@ protocol WindowSystem {
     func isMinimized(_ ref: WindowRef) -> Bool
     func raise(_ ref: WindowRef)
 
-    /// Numbers of every window on the system, closed-but-hidden ones included.
-    func allWindowIDs() -> Set<CGWindowID>
-    func onScreenWindowIDs() -> Set<CGWindowID>
+    /// Numbers of every window on the system (closed-but-hidden ones included) and of those on screen, from one system call.
+    func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>)
     /// On-screen windows, frontmost first.
     func windowIDsFrontToBack() -> [CGWindowID]
 }

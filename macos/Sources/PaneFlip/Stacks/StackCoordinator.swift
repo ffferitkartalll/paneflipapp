@@ -146,10 +146,11 @@ final class StackCoordinator {
 
     // MARK: Keeping in step with the system
 
-    /// Picks up window title changes.
+    /// Picks up title changes of the front tab of each zone: one Accessibility call per zone, not per window, so
+    /// a hung app cannot stall the main thread for long. Other tabs catch up when they come to the front.
     func syncTitles() {
         for stack in stacks.values {
-            for (i, tab) in stack.tabs.enumerated() {
+            for (i, tab) in stack.tabs.enumerated() where tab.id == stack.activeID {
                 guard let ref = stack.refs[tab.id] else { continue }
                 let title = windows.title(of: ref) ?? tab.appName
                 guard title != tab.title else { continue }

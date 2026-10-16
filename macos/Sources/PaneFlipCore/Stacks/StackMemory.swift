@@ -5,8 +5,10 @@ import Foundation
 /// Pure bookkeeping: it never touches a window.
 public final class StackMemory {
     public private(set) var records: [StackRecord] {
-        didSet { store.save(records, named: Self.documentName) }
+        didSet { if !deferSave { store.save(records, named: Self.documentName) } }
     }
+    /// Set while a title changes: titles change constantly, so they are written with the next real change.
+    private var deferSave = false
     private let store: DocumentStore
     private static let documentName = "stacks"
 
@@ -178,7 +180,10 @@ public final class StackMemory {
     }
 
     public func updateTitle(ofWindow id: CGWindowID, to title: String) {
-        if let i = index(ofWindow: id), records[i].title != title { records[i].title = title }
+        guard let i = index(ofWindow: id), records[i].title != title else { return }
+        deferSave = true
+        records[i].title = title
+        deferSave = false
     }
 
     /// Re-points slots at new zones. A slot that has been in one of the `preferred` zones before (the zones of a

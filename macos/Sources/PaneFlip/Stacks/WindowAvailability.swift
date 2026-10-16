@@ -11,7 +11,8 @@ final class WindowAvailability {
     }
 
     func snapshot() -> WindowSnapshot {
-        WindowSnapshot(all: windows.allWindowIDs(), onScreen: windows.onScreenWindowIDs(), currentSpaces: screens.currentSpaceIDs())
+        let sets = windows.windowSets()
+        return WindowSnapshot(all: sets.all, onScreen: sets.onScreen, currentSpaces: screens.currentSpaceIDs())
     }
 
     /// Closed windows either vanish from the system list or, for apps that merely hide a window on close

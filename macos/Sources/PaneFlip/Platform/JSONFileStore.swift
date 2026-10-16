@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 import PaneFlipCore
 
 /// Stores each document as `<name>.json` in a directory (Application Support/PaneFlip by default).
@@ -26,8 +27,11 @@ final class JSONFileStore: DocumentStore {
     }
 
     func save<T: Encodable>(_ value: T, named name: String) {
-        if let data = try? JSONEncoder().encode(value) { try? data.write(to: url(name), options: .atomic) }
+        do { try JSONEncoder().encode(value).write(to: url(name), options: .atomic) }
+        catch { Self.log.error("Could not save \(name, privacy: .public): \(error.localizedDescription, privacy: .public)") }
     }
+
+    private static let log = Logger(subsystem: "PaneFlip", category: "store")
 
     private func url(_ name: String) -> URL { directory.appendingPathComponent("\(name).json") }
 }
