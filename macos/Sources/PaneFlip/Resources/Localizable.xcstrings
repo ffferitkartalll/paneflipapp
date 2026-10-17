@@ -26978,10 +26978,566 @@
       }
     },
     "Screen Recording" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الشاشة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис на екрана"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "স্ক্রিন রেকর্ডিং"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravació de pantalla"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nahrávání obrazovky"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærmoptagelse"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirmaufnahme"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εγγραφή οθόνης"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grabación de pantalla"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanisalvestus"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ضبط صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytön tallennus"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pag-record ng Screen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement de l’écran"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקלטת מסך"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन रिकॉर्डिंग"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snimanje zaslona"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Képernyőfelvétel"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perekaman Layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrazione schermo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面収録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 기록"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrano įrašymas"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrāna ierakstīšana"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन रेकॉर्डिंग"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rakaman Skrin"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermopptak"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermopname"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagrywanie ekranu"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravação de ecrã"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravação de tela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Înregistrare ecran"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись экрана"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nahrávanie obrazovky"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snemanje zaslona"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снимање екрана"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärminspelning"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "திரைப் பதிவு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "స్క్రీన్ రికార్డింగ్"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การบันทึกหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran Kaydı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис екрана"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسکرین ریکارڈنگ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ghi màn hình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕录制"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕錄製"
+          }
+        }
+      }
     },
     "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتيح لـ PaneFlip التقاط صورة لنافذة، ليتمكن من تمريرها بجانب نافذة أخرى داخل منطقتها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволява на PaneFlip да прави снимка на прозорец, за да може той да се плъзне до друг прозорец в рамките на своята зона."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip-কে একটি উইন্ডোর ছবি তুলতে দেয়, যাতে সেটি তার জোনের ভেতরে অন্য একটি উইন্ডোর পাশে স্লাইড করে আসতে পারে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permet que PaneFlip faci una captura d’una finestra, perquè pugui lliscar al costat d’una altra dins de la seva zona."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umožňuje PaneFlip pořídit snímek okna, aby se mohlo vsunout vedle jiného okna uvnitř své zóny."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lader PaneFlip tage et billede af et vindue, så det kan glide ind ved siden af et andet inden for sin zone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaubt PaneFlip, ein Bild eines Fensters aufzunehmen, damit es innerhalb seiner Zone neben ein anderes gleiten kann."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιτρέπει στο PaneFlip να τραβά μια εικόνα ενός παραθύρου, ώστε να γλιστρά δίπλα σε ένα άλλο μέσα στη ζώνη του."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite a PaneFlip hacer una captura de una ventana para que pueda deslizarse junto a otra dentro de su zona."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Võimaldab PaneFlipil teha aknast pildi, et see saaks oma tsoonis teise akna kõrvale libiseda."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به PaneFlip اجازه می‌دهد از یک پنجره تصویر بگیرد تا بتواند در ناحیه‌ی خود کنار پنجره‌ای دیگر بلغزد."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antaa PaneFlipin ottaa kuvan ikkunasta, jotta se voi liukua toisen ikkunan viereen omalla alueellaan."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinapayagan ang PaneFlip na kumuha ng larawan ng isang window, para makapag-slide ito sa tabi ng isa pa sa loob ng zone nito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permet à PaneFlip de prendre une image d’une fenêtre pour qu’elle puisse glisser à côté d’une autre dans sa zone."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מאפשר ל-PaneFlip לצלם תמונה של חלון, כדי שיוכל לגלוש לצד חלון אחר בתוך האזור שלו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip को किसी विंडो की तस्वीर लेने देता है, ताकि वह अपने ज़ोन के भीतर किसी दूसरी विंडो के बगल में स्लाइड होकर आ सके।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omogućuje PaneFlipu da snimi sliku prozora kako bi mogao kliznuti pokraj drugog prozora unutar svoje zone."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lehetővé teszi, hogy a PaneFlip képet készítsen egy ablakról, így az a zónáján belül egy másik ablak mellé csúszhat."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mengizinkan PaneFlip mengambil gambar jendela agar dapat bergeser ke samping jendela lain di dalam zonanya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consente a PaneFlip di acquisire un’immagine di una finestra, così può scorrere accanto a un’altra all’interno della sua zona."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlipがウインドウの画像を取得し、ゾーン内で別のウインドウの隣へスライドできるようにします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip이 윈도우의 이미지를 가져와 영역 안에서 다른 윈도우 옆으로 밀려 들어올 수 있도록 합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leidžia PaneFlip nufotografuoti langą, kad jis galėtų slysti šalia kito lango savo zonoje."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ļauj PaneFlip uzņemt loga attēlu, lai tas varētu ieslīdēt blakus citam logam savā zonā."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip ला विंडोचे चित्र घेऊ देते, जेणेकरून ती तिच्या झोनमध्ये दुसऱ्या विंडोच्या शेजारी सरकून येऊ शकेल."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Membenarkan PaneFlip mengambil gambar tetingkap supaya ia boleh meluncur di sebelah tetingkap lain dalam zonnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lar PaneFlip ta et bilde av et vindu, slik at det kan gli inn ved siden av et annet innenfor sin sone."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat PaneFlip een beeld van een venster maken, zodat het binnen zijn zone naast een ander venster kan schuiven."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozwala PaneFlip zrobić obraz okna, aby mogło wsunąć się obok innego okna w swojej strefie."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite que o PaneFlip tire uma imagem de uma janela para que ela possa deslizar para junto de outra dentro da sua zona."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite que o PaneFlip tire uma imagem de uma janela para que ela possa deslizar para o lado de outra dentro da sua zona."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite PaneFlip să facă o imagine a unei ferestre, astfel încât aceasta să poată aluneca lângă o altă fereastră în zona ei."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволяет PaneFlip делать снимок окна, чтобы оно могло плавно выехать рядом с другим окном внутри своей зоны."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umožňuje PaneFlip urobiť snímku okna, aby sa mohlo vsunúť vedľa iného okna vo svojej zóne."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omogoča PaneFlipu, da posname sliko okna, da lahko zdrsi ob drugo okno znotraj svojega območja."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Омогућава PaneFlip-у да направи слику прозора како би могао да клизне поред другог прозора унутар своје зоне."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låter PaneFlip ta en bild av ett fönster så att det kan glida in bredvid ett annat inom sin zon."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip-ஐ ஒரு சாளரத்தின் படத்தை எடுக்க அனுமதிக்கிறது, அதனால் அது தனது மண்டலத்திற்குள் மற்றொரு சாளரத்தின் அருகே நகர்ந்து வர முடியும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip‌ను ఒక విండో చిత్రాన్ని తీసుకోవడానికి అనుమతిస్తుంది, తద్వారా అది తన జోన్‌లో మరో విండో పక్కకు జారి రాగలదు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ให้ PaneFlip ถ่ายภาพหน้าต่าง เพื่อให้เลื่อนมาอยู่ข้างหน้าต่างอื่นภายในโซนของตัวเองได้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip'in bir pencerenin görüntüsünü almasına izin verir; böylece pencere, bölgesi içinde başka bir pencerenin yanına kayarak gelebilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дозволяє PaneFlip робити знімок вікна, щоб воно могло плавно виїхати поруч з іншим вікном у межах своєї зони."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip کو کسی ونڈو کی تصویر لینے دیتا ہے تاکہ وہ اپنے زون کے اندر دوسری ونڈو کے ساتھ سرک کر آ سکے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cho phép PaneFlip chụp ảnh một cửa sổ để nó có thể trượt vào cạnh một cửa sổ khác trong vùng của mình."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许 PaneFlip 获取窗口的图像，以便该窗口在其区域内滑入另一个窗口旁边。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許 PaneFlip 取得視窗的影像，以便該視窗在其區域內滑入另一個視窗旁邊。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
