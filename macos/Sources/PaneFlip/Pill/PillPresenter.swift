@@ -40,7 +40,10 @@ final class PillPresenter: ZonePresenting {
     }
 
     /// Announce a stack change: show its pill for a moment.
-    func flash(zone id: UUID) { flashUntil[id] = Date().addingTimeInterval(flashDuration) }
+    func flash(zone id: UUID) {
+        flashUntil[id] = Date().addingTimeInterval(flashDuration)
+        update()   // at once: the pill must be on its way in while its selection moves
+    }
 
     // MARK: ZonePresenting
 

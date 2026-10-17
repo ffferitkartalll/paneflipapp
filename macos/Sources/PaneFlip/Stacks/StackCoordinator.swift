@@ -14,6 +14,7 @@ final class StackCoordinator {
     var onActivity: ((UUID) -> Void)?
     /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel?
+    var glide: WindowGlide?
     var isSliding: Bool { carousel?.isSliding ?? false }
 
     private let windows: WindowSystem
@@ -37,7 +38,11 @@ final class StackCoordinator {
             let stack = stacks[id] ?? ZoneStack(id: id)
             stacks[id] = stack
             stack.rect = rect
-            for tab in stack.tabs { if let ref = stack.refs[tab.id] { windows.setFrame(stack.rect, of: ref) } }
+            for tab in stack.tabs {
+                guard let ref = stack.refs[tab.id] else { continue }
+                glide?.cancel(ref.id)
+                windows.setFrame(stack.rect, of: ref)
+            }
         }
     }
 
@@ -72,11 +77,12 @@ final class StackCoordinator {
             for id in Array(current.refs.keys) { unsnap(window: id) }
         }
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
-        attach(ref, toSlot: slot, raise: true)
+        attach(ref, toSlot: slot, raise: true, glide: true)
     }
 
     /// Puts a live window into the zone its memory slot names, at the position the user arranged.
-    func attach(_ ref: WindowRef, toSlot slot: Int, raise: Bool) {
+    /// With `glide` the window travels to the zone instead of jumping there (a window the user just dropped).
+    func attach(_ ref: WindowRef, toSlot slot: Int, raise: Bool, glide: Bool = false) {
         guard memory.records.indices.contains(slot), let stack = stacks[memory.records[slot].zoneID] else { return }
         let appName = apps.app(pid: ref.pid)?.name ?? "?"
         let bundleID = apps.app(pid: ref.pid)?.bundleID ?? ""
@@ -87,6 +93,13 @@ final class StackCoordinator {
         stack.tabs.insert(.init(id: ref.id, title: title, appName: appName, bundleID: bundleID, icon: apps.icon(pid: ref.pid)), at: position)
         stack.refreshNames()
         if stack.activeID == nil { stack.activeID = ref.id }
+        if glide, raise, let mover = self.glide {
+            stack.activeID = ref.id
+            windows.raise(ref)
+            mover.glide(ref, to: stack.rect)
+            onActivity?(stack.id)
+            return
+        }
         windows.setFrame(stack.rect, of: ref)
         if raise { select(ref.id, in: stack) } else { onActivity?(stack.id) }
     }
@@ -96,7 +109,9 @@ final class StackCoordinator {
 
     /// A click on the pill: the chosen window slides in beside the one in front. Without a carousel, or when there
     /// is nothing to slide past, it simply comes to the front.
-    func slideSelect(_ id: CGWindowID, in stack: ZoneStack) {
+    /// `forward` (the new window comes in from the right) is the pill's order unless the caller knows better: a cycle
+    /// that wraps around keeps going the same way.
+    func slideSelect(_ id: CGWindowID, in stack: ZoneStack, forward: Bool? = nil) {
         if isSliding { return }   // a click during a slide is ignored
         guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
               let leaving = stack.refs[frontID],
@@ -106,10 +121,19 @@ final class StackCoordinator {
         stack.activeID = id
         onActivity?(stack.id)
         let rect = stack.rect
-        carousel.slide(leaving: leaving, entering: entering, in: rect, forward: to > from) { [windows] in
+        carousel.slide(leaving: leaving, entering: entering, in: rect, forward: forward ?? (to > from)) { [windows] in
             windows.setFrame(rect, of: entering)
             windows.raise(entering)
         }
+    }
+
+    /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when
+    /// `reverse`), around the end. A window outside any zone, or a zone with one window, does nothing.
+    func cycleFocusedZone(reverse: Bool) {
+        guard let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1,
+              let from = stack.tabs.firstIndex(where: { $0.id == focused.id }) else { return }
+        let count = stack.tabs.count
+        slideSelect(stack.tabs[(from + (reverse ? count - 1 : 1)) % count].id, in: stack, forward: !reverse)
     }
 
     func select(_ id: CGWindowID, in stack: ZoneStack) {
@@ -144,6 +168,7 @@ final class StackCoordinator {
     /// Removes a window from the live stack only; the memory is the caller's business. Nothing is brought to the
     /// front: the system decides what is revealed, and the pill's selection follows the focus.
     func removeFromStack(window id: CGWindowID) {
+        glide?.cancel(id)
         for stack in stacks.values where stack.refs[id] != nil {
             stack.refs[id] = nil
             stack.tabs.removeAll { $0.id == id }

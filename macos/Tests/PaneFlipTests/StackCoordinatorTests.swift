@@ -32,6 +32,21 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator.zoneID(at: CGPoint(x: 120, y: 50)))
     }
 
+    func testADroppedWindowGlidesToItsZoneButARestoredOneJumps() {
+        let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100)
+        coordinator.glide = WindowGlide(windows: windows, reduceMotion: { false }, background: { _ in })
+        coordinator.apply(zones: [zone: rect])
+        windows.setFrame(CGRect(x: 300, y: 300, width: 50, height: 50), of: .fake(1))
+        coordinator.snap(.fake(1), into: zone)
+        XCTAssertNotEqual(windows.frames[1], rect, "left to the glide, which has not run yet")
+        XCTAssertEqual(windows.raised, [1])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1)
+
+        let slot = memory.remember(zoneID: zone, bundleID: "", title: "")
+        coordinator.attach(.fake(2), toSlot: slot, raise: false)
+        XCTAssertEqual(windows.frames[2], rect)
+    }
+
     func testSnapRemembersTheWindowAndUnsnapForgetsIt() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
@@ -80,6 +95,32 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(stack.activeID, 1, "a click during the slide is ignored")
         stage.end()
         XCTAssertFalse(coordinator.isSliding)
+    }
+
+    func testTheShortcutCyclesTheFocusedWindowsZoneAroundTheEnd() {
+        let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
+        snapshots.images = [1: FakeWindowSnapshots.picture(), 2: FakeWindowSnapshots.picture(), 3: FakeWindowSnapshots.picture()]
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
+        let stack = coordinator.stacks[zone]!
+
+        windows.focused = .fake(3)
+        coordinator.cycleFocusedZone(reverse: false)
+        XCTAssertEqual(stack.activeID, 1, "after the last comes the first")
+        XCTAssertEqual(stage.slides.last?.forward, true, "and it still slides the same way")
+        stage.end()
+
+        windows.focused = .fake(1)
+        coordinator.cycleFocusedZone(reverse: true)
+        XCTAssertEqual(stack.activeID, 3)
+        XCTAssertEqual(stage.slides.last?.forward, false)
+        stage.end()
+
+        windows.focused = .fake(9)   // not in any zone
+        coordinator.cycleFocusedZone(reverse: false)
+        XCTAssertEqual(stack.activeID, 3)
     }
 
     func testWithoutACarouselThePillClickJustSelects() {

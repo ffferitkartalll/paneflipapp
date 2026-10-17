@@ -41,6 +41,8 @@ final class AppContainer {
         coordinator.carousel = ZoneCarousel(snapshots: ScreenCaptureWindowSnapshots(), stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                             background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
+        coordinator.glide = WindowGlide(windows: windows, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
+                                        background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let availability = WindowAvailability(windows: windows, screens: screens)
         let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
@@ -83,11 +85,13 @@ final class AppContainer {
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
+        let shortcut: KeyShortcutListening = EventTapKeyShortcut()
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
             pill.start()
             snap.start()
+            shortcut.start { [weak coordinator] reverse in coordinator?.cycleFocusedZone(reverse: reverse) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }

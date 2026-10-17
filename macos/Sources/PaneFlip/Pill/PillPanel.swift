@@ -20,6 +20,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     /// What the two buttons and the space before them take next to the segments.
     static let buttonsWidth: CGFloat = 104
     private var group: NSToolbarItemGroup?
+    private var movePending = false
     private var shownKey = ""
     private weak var styledControl: NSSegmentedControl?
     /// Set by the width swizzle: the width it estimated for the control, and the correction measured since.
@@ -183,11 +184,31 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         }
         if let id = stack.activeID, let index = stack.tabs.firstIndex(where: { $0.id == id }),
            group?.selectedIndex != index {
-            group?.selectedIndex = index
+            moveSelection(to: index)
         }
         applyIconFont()
         if fitPending { fitWidth() }
         healCollapse()
+    }
+
+    /// The thumb glides to the new segment. A press on the control animates itself; a change from elsewhere (the
+    /// keyboard) does so only while the pill is on screen, so a pill that is still fading in shows the old
+    /// selection first and moves it once it is there. Moved unseen it would look like a jump.
+    private func moveSelection(to index: Int) {
+        guard alphaValue > 0.9 else {
+            guard !movePending else { return }
+            movePending = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.17) { [weak self] in
+                self?.movePending = false
+                self?.refresh()
+            }
+            return
+        }
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.25
+            context.allowsImplicitAnimation = true
+            group?.selectedIndex = index
+        }
     }
 
     /// The other sign of a broken pill: the group folded into a pop-up, so the segments are gone from the tree. A
