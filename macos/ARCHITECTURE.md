@@ -35,13 +35,14 @@ Sources/
     │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
     │                        BrandGlyphSource ← CDNBrandGlyphs,
+    │                        KeyShortcutListening ← EventTapKeyShortcut (Control+Option+Right/Left),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
     │                        ActivationPolicyControlling ← AppKitActivationPolicyController,
     │                        AppRelaunching ← WorkspaceAppRelauncher,
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
-    │                        WindowAvailability, WindowSnapshot, ZoneCarousel
+    │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide
     ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
@@ -71,6 +72,7 @@ Sources/
 | `StackMemory` | Remember which app belongs to which zone, in the user's order. Knows nothing about windows. |
 | `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release). |
 | `ZoneCarousel` | Slide the chosen window of a zone in beside the one in front: both are photographed (Screen Recording), the pictures slide inside the zone while the real windows swap underneath, so nothing shows outside the zone. |
+| `WindowGlide` | Move a window the user just dropped from where it is to its zone in a short ease-out glide (steps follow the clock, off the main thread, the last one exact; no glide with Reduce Motion). |
 | `WindowRestorer` | Put running windows in the zone their app belongs in: remembered ones in their slots, every other window of the app next to them. |
 | `ClosedWindowMonitor` / `WindowAvailability` | Notice closed, hidden or minimized windows. |
 | `ZonePlanner` | Compute which zones are visible and where. |
