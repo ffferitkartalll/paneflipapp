@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="docs/app-icon.png" width="128" alt="PaneFlip app icon">
+  <img src="docs/banner.png" width="100%" alt="PaneFlip: zones for your displays, stacked apps, one glass pill">
 </p>
-
-<h1 align="center">PaneFlip</h1>
 
 <p align="center">
   Split your displays and desktops into zones, drop apps into them, and switch between the apps of a zone with a
