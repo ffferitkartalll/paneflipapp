@@ -12,6 +12,9 @@ final class StackCoordinator {
     private(set) var pulledOut: Set<CGWindowID> = []
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
+    /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
+    var carousel: ZoneCarousel?
+    var isSliding: Bool { carousel?.isSliding ?? false }
 
     private let windows: WindowSystem
     private let memory: StackMemory
@@ -86,6 +89,27 @@ final class StackCoordinator {
         if stack.activeID == nil { stack.activeID = ref.id }
         windows.setFrame(stack.rect, of: ref)
         if raise { select(ref.id, in: stack) } else { onActivity?(stack.id) }
+    }
+
+    /// A pill appeared: the next click will slide.
+    func prepareSlides() { carousel?.prepare() }
+
+    /// A click on the pill: the chosen window slides in beside the one in front. Without a carousel, or when there
+    /// is nothing to slide past, it simply comes to the front.
+    func slideSelect(_ id: CGWindowID, in stack: ZoneStack) {
+        if isSliding { return }   // a click during a slide is ignored
+        guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
+              let leaving = stack.refs[frontID],
+              let from = stack.tabs.firstIndex(where: { $0.id == frontID }), let to = stack.tabs.firstIndex(where: { $0.id == id })
+        else { return select(id, in: stack) }
+        // The pill moves to the new window now, together with the slide, not once the slide is over.
+        stack.activeID = id
+        onActivity?(stack.id)
+        let rect = stack.rect
+        carousel.slide(leaving: leaving, entering: entering, in: rect, forward: to > from) { [windows] in
+            windows.setFrame(rect, of: entering)
+            windows.raise(entering)
+        }
     }
 
     func select(_ id: CGWindowID, in stack: ZoneStack) {
@@ -163,7 +187,7 @@ final class StackCoordinator {
 
     /// If the user switched to a stacked window some other way (Cmd-Tab, Dock), follow it.
     func followFocus() {
-        guard let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.activeID != focused.id else { return }
+        guard !isSliding, let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.activeID != focused.id else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)
     }

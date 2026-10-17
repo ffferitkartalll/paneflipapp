@@ -111,6 +111,7 @@ final class PillPresenter: ZonePresenting {
             panel.ignoresMouseEvents = !clickable
             if shown[id] != show {
                 shown[id] = show
+                if show { coordinator.prepareSlides() }
                 panel.fade(to: show)
             }
         }
@@ -135,7 +136,7 @@ final class PillPresenter: ZonePresenting {
         PillPanel(
             stack: stack, settings: settings, iconFont: iconFont,
             select: { [weak self, weak stack] id in
-                if let stack { self?.coordinator.select(id, in: stack) }
+                if let stack { self?.coordinator.slideSelect(id, in: stack) }
             },
             reorder: { [weak self, weak stack] in
                 if let stack { self?.openOrdering(stack.id) }

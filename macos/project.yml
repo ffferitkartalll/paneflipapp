@@ -71,6 +71,10 @@ targets:
       - path: Sources/PaneFlip/Stacks
       - path: Sources/PaneFlip/Platform/WindowSystem.swift
       - path: Sources/PaneFlip/Platform/WindowRef.swift
+      - path: Sources/PaneFlip/Platform/WindowSnapshotting.swift
+      - path: Sources/PaneFlip/Platform/SlideStaging.swift
+      - path: Sources/PaneFlip/Platform/WindowPicture.swift
+      - path: Sources/PaneFlip/Platform/WindowCorners.swift
       - path: Sources/PaneFlip/Platform/AppCatalog.swift
       - path: Sources/PaneFlip/Platform/DockArea.swift
       - path: Sources/PaneFlip/Zones/LayoutService.swift

@@ -26976,6 +26976,12 @@
           }
         }
       }
+    },
+    "Screen Recording" : {
+      "extractionState" : "manual"
+    },
+    "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone." : {
+      "extractionState" : "manual"
     }
   },
   "version" : "1.0"
