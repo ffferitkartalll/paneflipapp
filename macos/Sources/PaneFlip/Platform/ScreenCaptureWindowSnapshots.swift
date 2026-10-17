@@ -28,10 +28,11 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
     func snapshots(of refs: [WindowRef], completion: @escaping ([CGWindowID: WindowPicture]) -> Void) {
         Task {
             let found = await windows.windows(refs.map(\.id), maxAge: 5)
-            var pictures: [CGWindowID: WindowPicture] = [:]
-            await withTaskGroup(of: (CGWindowID, WindowPicture?).self) { group in
+            let pictures = await withTaskGroup(of: (CGWindowID, WindowPicture?).self) { group -> [CGWindowID: WindowPicture] in
                 for (id, window) in found { group.addTask { (id, await Self.picture(of: window)) } }
-                for await (id, picture) in group { if let picture { pictures[id] = picture } }
+                var result: [CGWindowID: WindowPicture] = [:]
+                for await (id, picture) in group { if let picture { result[id] = picture } }
+                return result
             }
             await MainActor.run { completion(pictures) }
         }
