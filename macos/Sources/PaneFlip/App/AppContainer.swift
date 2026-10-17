@@ -91,7 +91,7 @@ final class AppContainer {
             closedMonitor.start()
             pill.start()
             snap.start()
-            shortcut.start { [weak coordinator] reverse in coordinator?.cycleFocusedZone(reverse: reverse) }
+            shortcut.start { reverse in coordinator.cycleFocusedZone(reverse: reverse) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }
