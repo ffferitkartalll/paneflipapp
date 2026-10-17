@@ -45,7 +45,7 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         level = .floating
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
-        for button in [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton] { standardWindowButton(button)?.isHidden = true }
+        hideWindowButtons()
         hasShadow = false
         isOpaque = false
         backgroundColor = .clear
@@ -136,6 +136,18 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         return width
     }
 
+    /// Hides the window's own buttons; returns whether any of them had been shown.
+    @discardableResult
+    private func hideWindowButtons() -> Bool {
+        var wereShown = false
+        for type in [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton] {
+            guard let button = standardWindowButton(type), !button.isHidden else { continue }
+            button.isHidden = true
+            wereShown = true
+        }
+        return wereShown
+    }
+
     func fade(to shown: Bool) {
         NSAnimationContext.runAnimationGroup { ctx in
             ctx.duration = 0.15
@@ -147,6 +159,9 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
 
     /// Rebuilds the segments when the windows, their names or the chosen look changed and follows the active window.
     func refresh() {
+        // A broken pill is recognised by its window's own buttons being shown again: the toolbar keeps room for them
+        // and folds its group into a pop-up. They are hidden again and the toolbar is built anew.
+        if hideWindowButtons() { shownKey = "" }
         iconFont.syncBrands()
         let content = settings.values.pillContent
         let key = currentKey()
@@ -172,7 +187,22 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
         }
         applyIconFont()
         if fitPending { fitWidth() }
+        healCollapse()
     }
+
+    /// The other sign of a broken pill: the group folded into a pop-up, so the segments are gone from the tree. A
+    /// toolbar that was just built has none for a moment, so it is seen over a few looks in a row; then the toolbar
+    /// is built anew.
+    private func healCollapse() {
+        guard group != nil, !stack.tabs.isEmpty, !stack.interacting, let frameView = contentView?.superview,
+              Self.segmentedControl(in: frameView) == nil else { collapsedLooks = 0; return }
+        collapsedLooks += 1
+        if collapsedLooks >= 4 {
+            collapsedLooks = 0
+            shownKey = ""
+        }
+    }
+    private var collapsedLooks = 0
 
     private func iconCharacter(for tab: ZoneStack.Tab) -> Character {
         iconFont.character(for: tab.bundleID.isEmpty ? tab.appName : tab.bundleID, bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon ?? NSWorkspace.shared.icon(for: .applicationBundle))

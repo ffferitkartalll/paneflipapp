@@ -5,6 +5,7 @@ final class SystemPermissions: PermissionChecking {
     func isGranted(_ permission: Permission) -> Bool {
         switch permission {
         case .accessibility: AXIsProcessTrusted()
+        case .screenRecording: CGPreflightScreenCaptureAccess()
         }
     }
 
@@ -12,6 +13,8 @@ final class SystemPermissions: PermissionChecking {
         switch permission {
         case .accessibility:
             _ = AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
+        case .screenRecording:
+            _ = CGRequestScreenCaptureAccess()
         }
     }
 
@@ -19,6 +22,7 @@ final class SystemPermissions: PermissionChecking {
         let pane: String
         switch permission {
         case .accessibility: pane = "Privacy_Accessibility"
+        case .screenRecording: pane = "Privacy_ScreenCapture"
         }
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?\(pane)") {
             NSWorkspace.shared.open(url)

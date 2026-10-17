@@ -37,6 +37,10 @@ final class AppContainer {
         let activation = AppKitActivationPolicyController()
 
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
+        let slideStage = PanelSlideStage(screens: screens)
+        coordinator.carousel = ZoneCarousel(snapshots: ScreenCaptureWindowSnapshots(), stage: slideStage,
+                                            reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
+                                            background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let availability = WindowAvailability(windows: windows, screens: screens)
         let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
@@ -84,6 +88,7 @@ final class AppContainer {
             closedMonitor.start()
             pill.start()
             snap.start()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }
         self.launcher = launcher
