@@ -26978,10 +26978,566 @@
       }
     },
     "Screen Recording" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording"
+          }
+        }
+      }
     },
     "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lets PaneFlip take a picture of a window, so it can slide in beside another one inside its zone."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
