@@ -3659,278 +3659,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "التحقق من التحديثات"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Проверка за актуализации"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "আপডেট খুঁজুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Cerca actualitzacions"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Zkontrolovat aktualizace"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Søg efter opdateringer"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Nach Updates suchen"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Έλεγχος για ενημερώσεις"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Buscar actualizaciones"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Otsi uuendusi"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "بررسی به‌روزرسانی‌ها"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Hae päivityksiä"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Tingnan kung may update"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Rechercher des mises à jour"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "חיפוש עדכונים"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "अपडेट खोजें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Provjeri ažuriranja"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Frissítések keresése"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Periksa pembaruan"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Cerca aggiornamenti"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "アップデートを確認"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "업데이트 확인"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Tikrinti, ar yra naujinimų"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Meklēt atjauninājumus"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "अपडेट शोधा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Semak kemas kini"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Se etter oppdateringer"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Controleren op updates"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Szukaj aktualizacji"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Procurar atualizações"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Buscar atualizações"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Caută actualizări"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Проверить обновления"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Skontrolovať aktualizácie"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Preveri posodobitve"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Провери ажурирања"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Sök efter uppdateringar"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "புதுப்பிப்புகளைத் தேடு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "అప్‌డేట్‌ల కోసం తనిఖీ చేయండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "ตรวจหาอัปเดต"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Güncellemeleri denetle"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Перевірити оновлення"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "اپ ڈیٹس تلاش کریں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "Kiểm tra bản cập nhật"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "检查更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for updates"
+            "state" : "translated",
+            "value" : "檢查更新"
           }
         }
       }
@@ -3940,278 +3940,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "تحقق الآن"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Провери сега"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "এখনই খুঁজুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Cerca ara"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Zkontrolovat"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Søg nu"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Jetzt suchen"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Έλεγχος τώρα"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Buscar ahora"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Otsi kohe"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "همین حالا بررسی کن"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Hae nyt"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Tingnan ngayon"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Rechercher maintenant"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "חפש עכשיו"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "अभी खोजें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Provjeri sada"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Keresés most"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Periksa sekarang"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Cerca ora"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "今すぐ確認"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "지금 확인"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Tikrinti dabar"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Meklēt tūlīt"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "आत्ता शोधा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Semak sekarang"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Se etter nå"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Nu controleren"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Szukaj teraz"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Procurar agora"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Buscar agora"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Caută acum"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Проверить сейчас"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Skontrolovať teraz"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Preveri zdaj"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Провери сада"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Sök nu"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "இப்போது தேடு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "ఇప్పుడే తనిఖీ చేయండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "ตรวจสอบตอนนี้"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Şimdi denetle"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Перевірити зараз"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "ابھی تلاش کریں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "Kiểm tra ngay"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "立即检查"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check now"
+            "state" : "translated",
+            "value" : "立即檢查"
           }
         }
       }
@@ -4221,278 +4221,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "جارٍ التحقق…"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Проверяване…"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "খোঁজা হচ্ছে…"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "S'està cercant…"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Kontrola…"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Søger…"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Suche läuft …"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Έλεγχος…"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Buscando…"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Otsin…"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "در حال بررسی…"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Haetaan…"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Tinitingnan…"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Recherche…"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "מחפש…"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "खोज रहा है…"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Provjera…"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Keresés…"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Memeriksa…"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Ricerca in corso…"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "確認中…"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "확인 중…"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Tikrinama…"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Meklē…"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "शोधत आहे…"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Menyemak…"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Ser etter…"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Controleren…"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Wyszukiwanie…"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "A procurar…"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Buscando…"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Se caută…"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Проверка…"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Kontrola…"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Preverjanje …"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Провера…"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Söker…"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "தேடுகிறது…"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "తనిఖీ చేస్తోంది…"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "กำลังตรวจสอบ…"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Denetleniyor…"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Перевірка…"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "تلاش کی جا رہی ہے…"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "Đang kiểm tra…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "正在检查…"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Checking…"
+            "state" : "translated",
+            "value" : "檢查中…"
           }
         }
       }
@@ -5907,278 +5907,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "نسخ الأمر"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Копиране на командата"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "কমান্ড কপি করুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copia l'ordre"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopírovat příkaz"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopiér kommando"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Befehl kopieren"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Αντιγραφή εντολής"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copiar comando"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopeeri käsk"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "کپی دستور"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopioi komento"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopyahin ang command"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copier la commande"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "העתקת הפקודה"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "कमांड कॉपी करें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopiraj naredbu"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Parancs másolása"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Salin perintah"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copia comando"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "コマンドをコピー"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "명령 복사"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopijuoti komandą"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopēt komandu"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "कमांड कॉपी करा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Salin arahan"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopier kommando"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Opdracht kopiëren"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopiuj polecenie"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copiar comando"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copiar comando"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Copiază comanda"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Скопировать команду"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopírovať príkaz"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopiraj ukaz"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Копирај команду"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Kopiera kommando"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "கட்டளையை நகலெடு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "కమాండ్‌ను కాపీ చేయండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "คัดลอกคำสั่ง"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Komutu kopyala"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Скопіювати команду"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "کمانڈ کاپی کریں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "Sao chép lệnh"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "拷贝命令"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy command"
+            "state" : "translated",
+            "value" : "拷貝指令"
           }
         }
       }
@@ -6188,278 +6188,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "تعذّر الاتصال بـ GitHub. حاول مرة أخرى لاحقًا."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Няма връзка с GitHub. Опитайте отново по-късно."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub-এ পৌঁছানো যায়নি। পরে আবার চেষ্টা করুন।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "No s'ha pogut connectar amb GitHub. Torna-ho a provar més tard."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub není dostupný. Zkuste to později."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Kunne ikke få forbindelse til GitHub. Prøv igen senere."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub ist nicht erreichbar. Später erneut versuchen."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Αδυναμία σύνδεσης με το GitHub. Δοκιμάστε ξανά αργότερα."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "No se pudo conectar con GitHub. Inténtalo de nuevo más tarde."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHubiga ei saanud ühendust. Proovi hiljem uuesti."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "اتصال به GitHub برقرار نشد. بعداً دوباره امتحان کنید."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHubiin ei saatu yhteyttä. Yritä myöhemmin uudelleen."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Hindi makaugnay sa GitHub. Subukan muli mamaya."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Impossible de joindre GitHub. Réessayez plus tard."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "לא ניתן להתחבר ל-GitHub. נסו שוב מאוחר יותר."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub से कनेक्ट नहीं हो सका। बाद में फिर कोशिश करें।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Nije moguće povezati se s GitHubom. Pokušajte ponovno kasnije."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "A GitHub nem érhető el. Próbálja újra később."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Tidak dapat terhubung ke GitHub. Coba lagi nanti."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Impossibile raggiungere GitHub. Riprova più tardi."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHubに接続できませんでした。しばらくしてからもう一度お試しください。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub에 연결할 수 없습니다. 나중에 다시 시도하세요."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Nepavyko prisijungti prie GitHub. Bandykite vėliau."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Neizdevās izveidot savienojumu ar GitHub. Mēģiniet vēlāk vēlreiz."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub शी कनेक्ट होऊ शकले नाही. नंतर पुन्हा प्रयत्न करा."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Tidak dapat menyambung ke GitHub. Cuba lagi nanti."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Kunne ikke koble til GitHub. Prøv igjen senere."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Kan geen verbinding maken met GitHub. Probeer het later opnieuw."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Nie można połączyć się z GitHubem. Spróbuj ponownie później."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Não foi possível ligar ao GitHub. Tente novamente mais tarde."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Não foi possível conectar ao GitHub. Tente novamente mais tarde."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Nu s-a putut stabili conexiunea cu GitHub. Încearcă din nou mai târziu."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Не удалось подключиться к GitHub. Повторите попытку позже."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Nepodarilo sa pripojiť ku GitHubu. Skúste to neskôr."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Povezava z GitHubom ni uspela. Poskusite znova pozneje."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Није могуће повезати се са GitHub-ом. Покушајте поново касније."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Det gick inte att ansluta till GitHub. Försök igen senare."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub உடன் இணைக்க முடியவில்லை. பின்னர் மீண்டும் முயலவும்."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHubకి కనెక్ట్ కాలేకపోయింది. తర్వాత మళ్లీ ప్రయత్నించండి."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "เชื่อมต่อ GitHub ไม่ได้ โปรดลองอีกครั้งในภายหลัง"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub'a ulaşılamadı. Daha sonra tekrar deneyin."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Не вдалося підключитися до GitHub. Спробуйте пізніше."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "GitHub سے رابطہ نہیں ہو سکا۔ بعد میں دوبارہ کوشش کریں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "Không thể kết nối với GitHub. Hãy thử lại sau."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "无法连接到 GitHub。请稍后再试。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not reach GitHub. Try again later."
+            "state" : "translated",
+            "value" : "無法連線至 GitHub。請稍後再試。"
           }
         }
       }
@@ -8155,278 +8155,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "تنزيل التحديث"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Изтегляне на актуализацията"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "আপডেট ডাউনলোড করুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Baixa l'actualització"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Stáhnout aktualizaci"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Hent opdateringen"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Update laden"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Λήψη της ενημέρωσης"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Descargar la actualización"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Laadi uuendus alla"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "دریافت به‌روزرسانی"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Lataa päivitys"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "I-download ang update"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Télécharger la mise à jour"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "הורדת העדכון"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "अपडेट डाउनलोड करें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Preuzmi ažuriranje"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Frissítés letöltése"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Unduh pembaruan"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Scarica l’aggiornamento"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "アップデートをダウンロード"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "업데이트 다운로드"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Atsisiųsti naujinimą"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Lejupielādēt atjauninājumu"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "अपडेट डाउनलोड करा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Muat turun kemas kini"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Last ned oppdateringen"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Update downloaden"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Pobierz aktualizację"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Transferir a atualização"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Baixar a atualização"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Descarcă actualizarea"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Загрузить обновление"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Stiahnuť aktualizáciu"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Prenesi posodobitev"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Преузми ажурирање"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Hämta uppdateringen"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "புதுப்பிப்பைப் பதிவிறக்கு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "అప్‌డేట్‌ను డౌన్‌లోడ్ చేయండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "ดาวน์โหลดอัปเดต"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Güncellemeyi indir"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Завантажити оновлення"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "اپ ڈیٹ ڈاؤن لوڈ کریں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "Tải bản cập nhật"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "下载更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Download the update"
+            "state" : "translated",
+            "value" : "下載更新"
           }
         }
       }
@@ -10965,278 +10965,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "الإصدار المثبّت"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Инсталирана версия"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "ইনস্টল করা সংস্করণ"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versió instal·lada"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Nainstalovaná verze"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Installeret version"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Installierte Version"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Εγκατεστημένη έκδοση"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versión instalada"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Installitud versioon"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "نسخهٔ نصب‌شده"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Asennettu versio"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Naka-install na bersyon"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Version installée"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "גרסה מותקנת"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "इंस्टॉल किया गया संस्करण"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Instalirana verzija"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Telepített verzió"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versi terpasang"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versione installata"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "インストール済みのバージョン"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "설치된 버전"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Įdiegta versija"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Instalētā versija"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "इंस्टॉल केलेली आवृत्ती"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versi dipasang"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Installert versjon"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Geïnstalleerde versie"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Zainstalowana wersja"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versão instalada"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versão instalada"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Versiune instalată"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Установленная версия"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Nainštalovaná verzia"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Nameščena različica"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Инсталирана верзија"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Installerad version"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "நிறுவப்பட்ட பதிப்பு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "ఇన్‌స్టాల్ చేసిన వెర్షన్"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "เวอร์ชันที่ติดตั้ง"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Yüklü sürüm"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Установлена версія"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "انسٹال شدہ ورژن"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "Phiên bản đã cài đặt"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "已安装的版本"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Installed version"
+            "state" : "translated",
+            "value" : "已安裝的版本"
           }
         }
       }
@@ -11246,278 +11246,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "يبحث عن إصدار أحدث على GitHub. لا يُرسل شيء سوى الطلب نفسه."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Търси по-нова версия в GitHub. Не се изпраща нищо освен самата заявка."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub-এ নতুন রিলিজ খোঁজে। অনুরোধ ছাড়া আর কিছুই পাঠানো হয় না।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Busca una versió més nova a GitHub. No s'envia res més que la sol·licitud mateixa."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Hledá novější verzi na GitHubu. Neodesílá se nic kromě samotného požadavku."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Leder efter en nyere udgave på GitHub. Der sendes intet andet end selve anmodningen."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Sucht auf GitHub nach einer neueren Version. Es wird nichts gesendet außer der Anfrage selbst."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Αναζητά νεότερη έκδοση στο GitHub. Δεν στέλνεται τίποτα εκτός από το ίδιο το αίτημα."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Busca una versión más reciente en GitHub. No se envía nada aparte de la propia solicitud."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Otsib GitHubist uuemat versiooni. Peale päringu enda ei saadeta midagi."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "در GitHub دنبال نسخهٔ جدیدتر می‌گردد. جز خود درخواست چیزی ارسال نمی‌شود."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Etsii uudempaa versiota GitHubista. Mitään muuta kuin itse pyyntö ei lähetetä."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Naghahanap ng mas bagong release sa GitHub. Walang ipinapadala maliban sa mismong request."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Recherche une version plus récente sur GitHub. Rien n’est envoyé à part la requête elle-même."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "מחפש גרסה חדשה יותר ב-GitHub. לא נשלח דבר מלבד הבקשה עצמה."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub पर नया रिलीज़ खोजता है। अनुरोध के अलावा कुछ भी नहीं भेजा जाता।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Traži noviju verziju na GitHubu. Ne šalje se ništa osim samog zahtjeva."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Újabb kiadást keres a GitHubon. A kérésen kívül semmi nem kerül elküldésre."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Mencari rilis yang lebih baru di GitHub. Tidak ada yang dikirim selain permintaan itu sendiri."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Cerca una versione più recente su GitHub. Non viene inviato nulla oltre alla richiesta stessa."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHubで新しいリリースを探します。リクエスト自体以外は何も送信されません。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub에서 최신 릴리스를 찾습니다. 요청 자체 외에는 아무것도 전송되지 않습니다."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub ieško naujesnės versijos. Išskyrus pačią užklausą, nesiunčiama nieko."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Meklē jaunāku versiju vietnē GitHub. Netiek sūtīts nekas, izņemot pašu pieprasījumu."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub वर नवीन रिलीझ शोधते. विनंतीशिवाय दुसरे काहीही पाठवले जात नाही."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Mencari keluaran yang lebih baharu di GitHub. Tiada apa-apa dihantar selain permintaan itu sendiri."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Ser etter en nyere utgave på GitHub. Ingenting sendes bortsett fra selve forespørselen."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Zoekt op GitHub naar een nieuwere versie. Er wordt niets verzonden behalve het verzoek zelf."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Szuka nowszej wersji na GitHubie. Nie jest wysyłane nic poza samym żądaniem."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Procura uma versão mais recente no GitHub. Nada é enviado além do próprio pedido."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Procura uma versão mais recente no GitHub. Nada é enviado além da própria solicitação."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Caută o versiune mai nouă pe GitHub. Nu se trimite nimic în afară de cererea în sine."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Ищет более новую версию на GitHub. Ничего не отправляется, кроме самого запроса."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Hľadá novšiu verziu na GitHube. Okrem samotnej požiadavky sa nič neodosiela."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Na GitHubu išče novejšo različico. Poleg same zahteve se ne pošlje nič."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Тражи новију верзију на GitHub-у. Не шаље се ништа осим самог захтева."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Letar efter en nyare version på GitHub. Inget skickas förutom själva begäran."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub-இல் புதிய வெளியீட்டைத் தேடுகிறது. கோரிக்கையைத் தவிர வேறு எதுவும் அனுப்பப்படாது."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHubలో కొత్త విడుదల కోసం వెతుకుతుంది. అభ్యర్థన తప్ప మరేదీ పంపబడదు."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "ค้นหารุ่นที่ใหม่กว่าบน GitHub ไม่มีการส่งข้อมูลใด ๆ นอกจากคำขอนั้นเอง"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub'da daha yeni bir sürüm arar. İsteğin kendisi dışında hiçbir şey gönderilmez."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Шукає новішу версію на GitHub. Нічого не надсилається, окрім самого запиту."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "GitHub پر نیا ریلیز تلاش کرتا ہے۔ درخواست کے علاوہ کچھ نہیں بھیجا جاتا۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "Tìm bản phát hành mới hơn trên GitHub. Không có gì được gửi đi ngoài chính yêu cầu."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "在 GitHub 上查找较新的版本。除请求本身外，不会发送任何内容。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Looks for a newer release on GitHub. Nothing is sent but the request itself."
+            "state" : "translated",
+            "value" : "在 GitHub 上尋找較新的版本。除了請求本身之外，不會傳送任何內容。"
           }
         }
       }
@@ -11527,278 +11527,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "فتح صفحة الإصدار"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Отваряне на страницата на версията"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "রিলিজ পৃষ্ঠা খুলুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Obre la pàgina de la versió"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Otevřít stránku verze"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Åbn udgivelsessiden"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Release-Seite öffnen"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Άνοιγμα σελίδας έκδοσης"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Abrir la página de la versión"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Ava väljalaske leht"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "باز کردن صفحهٔ انتشار"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Avaa julkaisusivu"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Buksan ang pahina ng release"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Ouvrir la page de la version"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "פתיחת דף הגרסה"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "रिलीज़ पेज खोलें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Otvori stranicu izdanja"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Kiadási oldal megnyitása"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Buka halaman rilis"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Apri la pagina della versione"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "リリースページを開く"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "릴리스 페이지 열기"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Atverti laidos puslapį"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Atvērt izlaiduma lapu"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "रिलीझ पेज उघडा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Buka halaman keluaran"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Åpne utgivelsessiden"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Releasepagina openen"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Otwórz stronę wydania"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Abrir a página da versão"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Abrir a página da versão"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Deschide pagina versiunii"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Открыть страницу релиза"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Otvoriť stránku vydania"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Odpri stran izdaje"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Отвори страницу издања"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Öppna utgåvesidan"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "வெளியீட்டுப் பக்கத்தைத் திற"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "విడుదల పేజీని తెరవండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "เปิดหน้ารุ่น"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Sürüm sayfasını aç"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Відкрити сторінку випуску"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "ریلیز صفحہ کھولیں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "Mở trang bản phát hành"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "打开发布页面"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open release page"
+            "state" : "translated",
+            "value" : "打開發行頁面"
           }
         }
       }
@@ -11808,278 +11808,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "افتح صفحة الإصدار، ونزّل صورة القرص، واستبدل PaneFlip في التطبيقات."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Отворете страницата на версията, изтеглете образа на диска и заменете PaneFlip в Програми."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "রিলিজ পৃষ্ঠা খুলুন, ডিস্ক ইমেজ ডাউনলোড করুন এবং অ্যাপ্লিকেশনে PaneFlip প্রতিস্থাপন করুন।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Obre la pàgina de la versió, baixa la imatge de disc i substitueix PaneFlip a Aplicacions."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Otevřete stránku verze, stáhněte obraz disku a nahraďte PaneFlip v Aplikacích."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Åbn udgivelsessiden, hent diskbilledet, og udskift PaneFlip i Programmer."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Die Release-Seite öffnen, das Disk-Image laden und PaneFlip im Ordner „Programme“ ersetzen."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Ανοίξτε τη σελίδα της έκδοσης, κατεβάστε την εικόνα δίσκου και αντικαταστήστε το PaneFlip στις Εφαρμογές."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Abre la página de la versión, descarga la imagen de disco y sustituye PaneFlip en Aplicaciones."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Ava väljalaske leht, laadi alla kettatõmmis ja asenda PaneFlip kaustas Rakendused."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "صفحهٔ انتشار را باز کنید، تصویر دیسک را دریافت کنید و PaneFlip را در Applications جایگزین کنید."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Avaa julkaisusivu, lataa levykuva ja korvaa PaneFlip Ohjelmat-kansiossa."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Buksan ang pahina ng release, i-download ang disk image, at palitan ang PaneFlip sa Applications."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Ouvrez la page de la version, téléchargez l’image disque et remplacez PaneFlip dans Applications."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "פתחו את דף הגרסה, הורידו את תמונת הדיסק והחליפו את PaneFlip בתיקיית יישומים."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "रिलीज़ पेज खोलें, डिस्क इमेज डाउनलोड करें और Applications में PaneFlip को बदलें।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Otvorite stranicu izdanja, preuzmite sliku diska i zamijenite PaneFlip u mapi Aplikacije."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Nyissa meg a kiadási oldalt, töltse le a lemezképet, és cserélje le a PaneFlipet az Alkalmazások mappában."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Buka halaman rilis, unduh image disk, lalu ganti PaneFlip di Aplikasi."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Apri la pagina della versione, scarica l’immagine disco e sostituisci PaneFlip in Applicazioni."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "リリースページを開き、ディスクイメージをダウンロードして、アプリケーションフォルダ内のPaneFlipを置き換えてください。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "릴리스 페이지를 열고 디스크 이미지를 다운로드한 다음 응용 프로그램에서 PaneFlip을 교체하세요."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Atverkite laidos puslapį, atsisiųskite disko vaizdą ir pakeiskite PaneFlip aplanke „Programos“."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Atveriet izlaiduma lapu, lejupielādējiet diska attēlu un nomainiet PaneFlip mapē Programmas."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "रिलीझ पेज उघडा, डिस्क इमेज डाउनलोड करा आणि Applications मधील PaneFlip बदला."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Buka halaman keluaran, muat turun imej cakera dan gantikan PaneFlip dalam Aplikasi."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Åpne utgivelsessiden, last ned diskbildet og erstatt PaneFlip i Programmer."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Open de releasepagina, download de schijfkopie en vervang PaneFlip in Programma’s."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Otwórz stronę wydania, pobierz obraz dysku i zastąp PaneFlip w folderze Aplikacje."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Abra a página da versão, transfira a imagem de disco e substitua o PaneFlip em Aplicações."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Abra a página da versão, baixe a imagem de disco e substitua o PaneFlip em Aplicativos."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Deschide pagina versiunii, descarcă imaginea de disc și înlocuiește PaneFlip în Aplicații."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Откройте страницу релиза, загрузите образ диска и замените PaneFlip в папке «Программы»."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Otvorte stránku vydania, stiahnite obraz disku a nahraďte PaneFlip v priečinku Aplikácie."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Odprite stran izdaje, prenesite sliko diska in zamenjajte PaneFlip v mapi Aplikacije."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Отворите страницу издања, преузмите слику диска и замените PaneFlip у фолдеру Апликације."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Öppna utgåvesidan, hämta diskavbildningen och ersätt PaneFlip i Program."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "வெளியீட்டுப் பக்கத்தைத் திறந்து, வட்டுப் படத்தைப் பதிவிறக்கி, Applications-இல் PaneFlip-ஐ மாற்றவும்."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "విడుదల పేజీని తెరిచి, డిస్క్ ఇమేజ్‌ను డౌన్‌లోడ్ చేసి, Applicationsలో PaneFlipను భర్తీ చేయండి."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "เปิดหน้ารุ่น ดาวน์โหลดดิสก์อิมเมจ แล้วแทนที่ PaneFlip ในโฟลเดอร์แอปพลิเคชัน"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Sürüm sayfasını açın, disk görüntüsünü indirin ve Uygulamalar'daki PaneFlip'i değiştirin."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Відкрийте сторінку випуску, завантажте образ диска й замініть PaneFlip у папці «Програми»."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "ریلیز صفحہ کھولیں، ڈسک امیج ڈاؤن لوڈ کریں اور Applications میں PaneFlip کو تبدیل کریں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "Mở trang bản phát hành, tải ảnh đĩa về và thay thế PaneFlip trong Ứng dụng."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "打开发布页面，下载磁盘映像，并替换“应用程序”中的 PaneFlip。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open the release page, download the disk image and replace PaneFlip in Applications."
+            "state" : "translated",
+            "value" : "打開發行頁面，下載磁碟映像檔，並取代「應用程式」中的 PaneFlip。"
           }
         }
       }
@@ -19114,278 +19114,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip محدَّث."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip е актуален."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip আপ টু ডেট আছে।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip està al dia."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip je aktuální."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip er opdateret."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip ist auf dem neuesten Stand."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "Το PaneFlip είναι ενημερωμένο."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip está actualizado."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip on ajakohane."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip به‌روز است."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip on ajan tasalla."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "Napapanahon ang PaneFlip."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip est à jour."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip מעודכן."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip अप टू डेट है।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip je ažuran."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "A PaneFlip naprakész."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip sudah yang terbaru."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip è aggiornato."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlipは最新です。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip이 최신 버전입니다."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip yra naujausias."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip ir atjaunināts."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip अद्ययावत आहे."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip adalah terkini."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip er oppdatert."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip is up-to-date."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip jest aktualny."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "O PaneFlip está atualizado."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "O PaneFlip está atualizado."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip este actualizat."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip обновлён."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip je aktuálny."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip je posodobljen."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip је ажуран."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip är uppdaterat."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip புதுப்பித்த நிலையில் உள்ளது."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip తాజాగా ఉంది."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip เป็นเวอร์ชันล่าสุดแล้ว"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip güncel."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip оновлено."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip تازہ ترین ہے۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip đã được cập nhật."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip 已是最新版本。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip is up to date."
+            "state" : "translated",
+            "value" : "PaneFlip 已是最新版本。"
           }
         }
       }
@@ -19676,278 +19676,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "تم تثبيت PaneFlip عبر Homebrew. شغّل هذا الأمر في الطرفية، ثم افتح PaneFlip مرة أخرى."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip е инсталиран с Homebrew. Изпълнете тази команда в Терминал, след това отворете PaneFlip отново."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip Homebrew দিয়ে ইনস্টল করা হয়েছিল। টার্মিনালে এই কমান্ডটি চালান, তারপর PaneFlip আবার খুলুন।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip es va instal·lar amb Homebrew. Executa aquesta ordre al Terminal i torna a obrir PaneFlip."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip byl nainstalován přes Homebrew. Spusťte tento příkaz v Terminálu a pak PaneFlip znovu otevřete."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip blev installeret med Homebrew. Kør denne kommando i Terminal, og åbn derefter PaneFlip igen."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip wurde mit Homebrew installiert. Diesen Befehl im Terminal ausführen und PaneFlip danach erneut öffnen."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "Το PaneFlip εγκαταστάθηκε με το Homebrew. Εκτελέστε αυτή την εντολή στο Τερματικό και ανοίξτε ξανά το PaneFlip."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip se instaló con Homebrew. Ejecuta este comando en Terminal y vuelve a abrir PaneFlip."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip paigaldati Homebrewiga. Käivita see käsk Terminalis ja ava PaneFlip uuesti."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip با Homebrew نصب شده بود. این دستور را در ترمینال اجرا کنید و سپس PaneFlip را دوباره باز کنید."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip asennettiin Homebrew'lla. Suorita tämä komento Terminaalissa ja avaa sitten PaneFlip uudelleen."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "Na-install ang PaneFlip gamit ang Homebrew. Patakbuhin ang command na ito sa Terminal, pagkatapos ay buksan muli ang PaneFlip."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip a été installé avec Homebrew. Exécutez cette commande dans le Terminal, puis rouvrez PaneFlip."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip הותקן באמצעות Homebrew. הריצו את הפקודה הזו ב-Terminal ואז פתחו שוב את PaneFlip."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip को Homebrew से इंस्टॉल किया गया था। इस कमांड को Terminal में चलाएँ, फिर PaneFlip को दोबारा खोलें।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip je instaliran putem Homebrewa. Pokrenite ovu naredbu u Terminalu, a zatim ponovno otvorite PaneFlip."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "A PaneFlip Homebrew-val lett telepítve. Futtassa ezt a parancsot a Terminálban, majd nyissa meg újra a PaneFlipet."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip dipasang dengan Homebrew. Jalankan perintah ini di Terminal, lalu buka PaneFlip lagi."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip è stato installato con Homebrew. Esegui questo comando nel Terminale, poi riapri PaneFlip."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlipはHomebrewでインストールされました。このコマンドを「ターミナル」で実行してから、PaneFlipをもう一度開いてください。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip이 Homebrew로 설치되었습니다. 터미널에서 이 명령을 실행한 다음 PaneFlip을 다시 열어 주세요."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip įdiegta naudojant Homebrew. Paleiskite šią komandą programoje Terminal ir vėl atverkite PaneFlip."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip tika instalēts ar Homebrew. Palaidiet šo komandu lietotnē Terminal un pēc tam atkal atveriet PaneFlip."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip Homebrew वापरून इंस्टॉल केले होते. ही कमांड Terminal मध्ये चालवा, मग PaneFlip पुन्हा उघडा."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip dipasang dengan Homebrew. Jalankan arahan ini dalam Terminal, kemudian buka PaneFlip semula."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip ble installert med Homebrew. Kjør denne kommandoen i Terminal, og åpne deretter PaneFlip på nytt."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip is geïnstalleerd met Homebrew. Voer deze opdracht uit in Terminal en open PaneFlip daarna opnieuw."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip został zainstalowany przez Homebrew. Uruchom to polecenie w Terminalu, a następnie otwórz PaneFlip ponownie."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "O PaneFlip foi instalado com o Homebrew. Execute este comando no Terminal e volte a abrir o PaneFlip."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "O PaneFlip foi instalado com o Homebrew. Execute este comando no Terminal e abra o PaneFlip novamente."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip a fost instalat cu Homebrew. Rulează această comandă în Terminal, apoi deschide din nou PaneFlip."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip был установлен через Homebrew. Выполните эту команду в Терминале и снова откройте PaneFlip."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip bol nainštalovaný cez Homebrew. Spustite tento príkaz v Termináli a potom PaneFlip znova otvorte."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip je bil nameščen s Homebrew. Zaženite ta ukaz v Terminalu in nato znova odprite PaneFlip."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip је инсталиран помоћу Homebrew-а. Покрените ову команду у Терминалу, а затим поново отворите PaneFlip."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip installerades med Homebrew. Kör det här kommandot i Terminal och öppna sedan PaneFlip igen."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip Homebrew மூலம் நிறுவப்பட்டது. இந்தக் கட்டளையை Terminal-இல் இயக்கி, பின்னர் PaneFlip-ஐ மீண்டும் திறக்கவும்."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip Homebrewతో ఇన్‌స్టాల్ చేయబడింది. ఈ కమాండ్‌ను Terminalలో అమలు చేసి, ఆపై PaneFlipను మళ్లీ తెరవండి."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip ถูกติดตั้งด้วย Homebrew เรียกใช้คำสั่งนี้ในเทอร์มินัล แล้วเปิด PaneFlip อีกครั้ง"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip Homebrew ile yüklendi. Bu komutu Terminal'de çalıştırın, ardından PaneFlip'i yeniden açın."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip установлено через Homebrew. Виконайте цю команду в Терміналі й знову відкрийте PaneFlip."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip کو Homebrew کے ذریعے انسٹال کیا گیا تھا۔ یہ کمانڈ Terminal میں چلائیں، پھر PaneFlip کو دوبارہ کھولیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip đã được cài đặt bằng Homebrew. Hãy chạy lệnh này trong Terminal, rồi mở lại PaneFlip."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip 是通过 Homebrew 安装的。请在“终端”中运行此命令，然后重新打开 PaneFlip。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again."
+            "state" : "translated",
+            "value" : "PaneFlip 是透過 Homebrew 安裝的。請在「終端機」中執行此指令，然後重新打開 PaneFlip。"
           }
         }
       }
@@ -28106,278 +28106,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "تحديث"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Актуализация"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "আপডেট"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Actualització"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Aktualizace"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Opdatering"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Ενημέρωση"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Actualización"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Uuendus"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "به‌روزرسانی"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Päivitys"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Mise à jour"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "עדכון"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "अपडेट"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Ažuriranje"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Frissítés"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Pembaruan"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Aggiornamento"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "アップデート"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "업데이트"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Naujinimas"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Atjauninājums"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "अपडेट"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Kemas kini"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Oppdatering"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Aktualizacja"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Atualização"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Atualização"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Actualizare"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Обновление"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Aktualizácia"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Posodobitev"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Ажурирање"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Uppdatering"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "புதுப்பிப்பு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "అప్‌డేట్"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "อัปเดต"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Güncelleme"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Оновлення"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "اپ ڈیٹ"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "Cập nhật"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update"
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
@@ -28387,278 +28387,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "التحديث عبر Homebrew"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Актуализиране с Homebrew"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew দিয়ে আপডেট করুন"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Actualitza amb Homebrew"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Aktualizovat pomocí Homebrew"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Opdater med Homebrew"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Mit Homebrew aktualisieren"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Ενημέρωση με το Homebrew"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Actualizar con Homebrew"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Uuenda Homebrewiga"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "به‌روزرسانی با Homebrew"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Päivitä Homebrew'lla"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "I-update gamit ang Homebrew"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Mettre à jour avec Homebrew"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "עדכון באמצעות Homebrew"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew से अपडेट करें"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Ažuriraj putem Homebrewa"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Frissítés Homebrew-val"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Perbarui dengan Homebrew"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Aggiorna con Homebrew"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrewでアップデート"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew로 업데이트"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Naujinti naudojant Homebrew"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Atjaunināt ar Homebrew"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew वापरून अपडेट करा"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Kemas kini dengan Homebrew"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Oppdater med Homebrew"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Updaten met Homebrew"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Aktualizuj przez Homebrew"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Atualizar com o Homebrew"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Atualizar com o Homebrew"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Actualizează cu Homebrew"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Обновить через Homebrew"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Aktualizovať cez Homebrew"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Posodobi s Homebrew"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Ажурирај помоћу Homebrew-а"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Uppdatera med Homebrew"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew மூலம் புதுப்பி"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrewతో అప్‌డేట్ చేయండి"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "อัปเดตด้วย Homebrew"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew ile güncelle"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Оновити через Homebrew"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Homebrew کے ذریعے اپ ڈیٹ کریں"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "Cập nhật bằng Homebrew"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "使用 Homebrew 更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update with Homebrew"
+            "state" : "translated",
+            "value" : "使用 Homebrew 更新"
           }
         }
       }
@@ -28668,278 +28668,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "التحديثات"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Актуализации"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "আপডেট"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Actualitzacions"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Aktualizace"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Opdateringer"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Updates"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Ενημερώσεις"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Actualizaciones"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Uuendused"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "به‌روزرسانی‌ها"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Päivitykset"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Mga update"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Mises à jour"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "עדכונים"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "अपडेट"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Ažuriranja"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Frissítések"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Pembaruan"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Aggiornamenti"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "アップデート"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "업데이트"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Naujinimai"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Atjauninājumi"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "अपडेट"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Kemas kini"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Oppdateringer"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Updates"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Aktualizacje"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Atualizações"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Atualizações"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Actualizări"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Обновления"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Aktualizácie"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Posodobitve"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Ажурирања"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Uppdateringar"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "புதுப்பிப்புகள்"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "అప్‌డేట్‌లు"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "อัปเดต"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Güncellemeler"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Оновлення"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "اپ ڈیٹس"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Bản cập nhật"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
@@ -28949,278 +28949,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "الإصدار"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Версия"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "সংস্করণ"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versió"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Verze"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Έκδοση"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versión"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versioon"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "نسخه"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versio"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Bersyon"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "גרסה"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "संस्करण"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Verzija"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Verzió"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versi"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versione"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "バージョン"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "버전"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versija"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versija"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "आवृत्ती"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versi"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versjon"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versie"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Wersja"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versão"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versão"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Versiune"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Версия"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Verzia"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Različica"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Верзија"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "பதிப்பு"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "వెర్షన్"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "เวอร์ชัน"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Sürüm"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Версія"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "ورژن"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "Phiên bản"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "版本"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version"
+            "state" : "translated",
+            "value" : "版本"
           }
         }
       }
@@ -29230,278 +29230,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "الإصدار %@ متاح."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Версия %@ е налична."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "সংস্করণ %@ উপলব্ধ।"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "La versió %@ està disponible."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Je k dispozici verze %@."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Version %@ er tilgængelig."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Version %@ ist verfügbar."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Η έκδοση %@ είναι διαθέσιμη."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "La versión %@ está disponible."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versioon %@ on saadaval."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "نسخهٔ %@ موجود است."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versio %@ on saatavilla."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Available ang bersyon %@."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "La version %@ est disponible."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "גרסה %@ זמינה."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "संस्करण %@ उपलब्ध है।"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Dostupna je verzija %@."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "A(z) %@ verzió elérhető."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versi %@ tersedia."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "La versione %@ è disponibile."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "バージョン%@が利用できます。"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "버전 %@을(를) 사용할 수 있습니다."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Yra versija %@."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Ir pieejama versija %@."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "आवृत्ती %@ उपलब्ध आहे."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versi %@ tersedia."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versjon %@ er tilgjengelig."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versie %@ is beschikbaar."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Dostępna jest wersja %@."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "A versão %@ está disponível."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "A versão %@ está disponível."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Versiunea %@ este disponibilă."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Доступна версия %@."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Je dostupná verzia %@."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Na voljo je različica %@."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Доступна је верзија %@."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Version %@ är tillgänglig."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "பதிப்பு %@ கிடைக்கிறது."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "వెర్షన్ %@ అందుబాటులో ఉంది."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "มีเวอร์ชัน %@ ให้ใช้งาน"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "%@ sürümü kullanılabilir."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Доступна версія %@."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "ورژن %@ دستیاب ہے۔"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "Đã có phiên bản %@."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "版本 %@ 可用。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@ is available."
+            "state" : "translated",
+            "value" : "版本 %@ 可用。"
           }
         }
       }
