@@ -1,0 +1,85 @@
+name: Release
+
+# A release is published when a pull request with the `release` label is merged into main, never for any other merge.
+# That pull request also ran the tests (test.yml). Its version comes from MARKETING_VERSION in macos/project.yml: the
+# pull request raises it, the release is tagged `v<version>`, and a version that already has a release stops the job.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: xcode-27
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Version
+        id: version
+        working-directory: macos
+        run: |
+          version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml | head -1)"
+          [ -n "$version" ] || { echo "No MARKETING_VERSION in project.yml"; exit 1; }
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "Release v$version exists already: raise MARKETING_VERSION in the pull request."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Bundle identifier
+        working-directory: macos
+        run: |
+          echo "PANEFLIP_BUNDLE_ID = ${{ vars.PANEFLIP_BUNDLE_ID }}" > Config/Local.xcconfig
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Build
+        working-directory: macos
+        run: |
+          xcodegen generate
+          # Signed afterwards with the release certificate (next steps): the build itself does not sign.
+          xcodebuild build -project PaneFlip.xcodeproj -scheme PaneFlip -configuration Release \
+            -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/build" \
+            CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION=${{ github.run_number }}
+
+      - name: Import the signing certificate
+        env:
+          RELEASE_CERT_P12: ${{ secrets.RELEASE_CERT_P12 }}
+          RELEASE_CERT_PASSWORD: ${{ secrets.RELEASE_CERT_PASSWORD }}
+        run: |
+          keychain="$RUNNER_TEMP/release.keychain-db"
+          password="$(uuidgen)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 3600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          echo "$RELEASE_CERT_P12" | base64 --decode > "$RUNNER_TEMP/release.p12"
+          security import "$RUNNER_TEMP/release.p12" -k "$keychain" -P "$RELEASE_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$keychain" >/dev/null
+          rm "$RUNNER_TEMP/release.p12"
+          echo "KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+      - name: Sign and pack
+        run: |
+          app="$RUNNER_TEMP/build/Build/Products/Release/PaneFlip.app"
+          # The same certificate for every release keeps the app's identity, so the permissions macOS gave it stay.
+          codesign --force --sign "PaneFlip Release" --keychain "$KEYCHAIN" "$app"
+          codesign --verify --strict "$app"
+          mkdir "$RUNNER_TEMP/dmg"
+          cp -R "$app" "$RUNNER_TEMP/dmg/"
+          ln -s /Applications "$RUNNER_TEMP/dmg/Applications"
+          hdiutil create -volname PaneFlip -srcfolder "$RUNNER_TEMP/dmg" -ov -format UDZO \
+            "PaneFlip-${{ steps.version.outputs.version }}.dmg"
+
+      - name: Publish
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" "PaneFlip-${{ steps.version.outputs.version }}.dmg" \
+            --target "${{ github.event.pull_request.merge_commit_sha }}" \
+            --title "PaneFlip ${{ steps.version.outputs.version }}" --generate-notes

@@ -15,7 +15,14 @@
   <img src="docs/promo.gif" width="100%" alt="PaneFlip: layouts, zones, stacked apps and the pill">
 </p>
 
-## macOS
+## Install a release
+
+Download the `.dmg` of the latest [release](../../releases), open it and drag PaneFlip into Applications. The app is
+signed with a certificate of its own, not an Apple developer one, so macOS does not recognise it: the first time, open
+it, then choose `System Settings ▸ Privacy & Security ▸ Open Anyway` (or run `xattr -dr com.apple.quarantine
+/Applications/PaneFlip.app` in Terminal). The first launch asks for the Accessibility and Screen Recording permissions.
+
+## macOS (build it yourself)
 
 Requires macOS 27, Xcode 27 (Swift 6.4) and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 (`brew install xcodegen`).
