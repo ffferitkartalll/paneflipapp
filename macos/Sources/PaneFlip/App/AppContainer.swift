@@ -37,6 +37,8 @@ final class AppContainer {
         let activation = AppKitActivationPolicyController()
 
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
+        let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
+        coordinator.placementOnly = { windowManagerDefaults?.bool(forKey: "GloballyEnabled") ?? false }
         let slideStage = PanelSlideStage(screens: screens)
         coordinator.carousel = ZoneCarousel(snapshots: ScreenCaptureWindowSnapshots(), stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },

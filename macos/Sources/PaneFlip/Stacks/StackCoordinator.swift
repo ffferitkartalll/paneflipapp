@@ -15,6 +15,10 @@ final class StackCoordinator {
     /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel?
     var glide: WindowGlide?
+    /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
+    /// window is sized and placed by its zone. Nothing is held, remembered, stacked or followed, and nothing that was
+    /// remembered before is changed.
+    var placementOnly: () -> Bool = { false }
     var isSliding: Bool { carousel?.isSliding ?? false }
 
     private let windows: WindowSystem
@@ -38,6 +42,7 @@ final class StackCoordinator {
             let stack = stacks[id] ?? ZoneStack(id: id)
             stacks[id] = stack
             stack.rect = rect
+            guard !placementOnly() else { continue }
             for tab in stack.tabs {
                 guard let ref = stack.refs[tab.id] else { continue }
                 glide?.cancel(ref.id)
@@ -69,7 +74,11 @@ final class StackCoordinator {
 
     /// Snaps a window into a zone and remembers it there.
     func snap(_ ref: WindowRef, into zoneID: UUID) {
-        guard settings.values.placementEnabled, stacks[zoneID] != nil else { return }
+        guard settings.values.placementEnabled, let zone = stacks[zoneID] else { return }
+        guard !placementOnly() else {
+            if let glide { glide.glide(ref, to: zone.rect) } else { windows.setFrame(zone.rect, of: ref) }
+            return
+        }
         unsnap(window: ref.id)
         pulledOut.remove(ref.id)
         // Without stacking a zone holds one app: the newcomer replaces whatever was there.
@@ -130,7 +139,7 @@ final class StackCoordinator {
     /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when
     /// `reverse`), around the end. A window outside any zone, or a zone with one window, does nothing.
     func cycleFocusedZone(reverse: Bool) {
-        guard let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1,
+        guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1,
               let from = stack.tabs.firstIndex(where: { $0.id == focused.id }) else { return }
         let count = stack.tabs.count
         slideSelect(stack.tabs[(from + (reverse ? count - 1 : 1)) % count].id, in: stack, forward: !reverse)
@@ -154,6 +163,7 @@ final class StackCoordinator {
 
     /// Takes a window out of its zone for good (the window itself stays open).
     func unsnap(window id: CGWindowID) {
+        guard !placementOnly() else { return }
         pulledOut.insert(id)
         memory.forget(window: id)
         removeFromStack(window: id)
@@ -198,6 +208,7 @@ final class StackCoordinator {
     /// Picks up title changes of the front tab of each zone: one Accessibility call per zone, not per window, so
     /// a hung app cannot stall the main thread for long. Other tabs catch up when they come to the front.
     func syncTitles() {
+        guard !placementOnly() else { return }
         for stack in stacks.values {
             for (i, tab) in stack.tabs.enumerated() where tab.id == stack.activeID {
                 guard let ref = stack.refs[tab.id] else { continue }
@@ -212,6 +223,7 @@ final class StackCoordinator {
 
     /// If the user switched to a stacked window some other way (Cmd-Tab, Dock), follow it.
     func followFocus() {
+        guard !placementOnly() else { return }
         guard !isSliding, let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.activeID != focused.id else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)

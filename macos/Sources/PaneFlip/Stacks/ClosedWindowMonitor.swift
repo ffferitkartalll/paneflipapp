@@ -21,7 +21,7 @@ final class ClosedWindowMonitor {
 
     func check() {
         let held = coordinator.heldWindows
-        guard !held.isEmpty else { return }
+        guard !held.isEmpty, !coordinator.placementOnly() else { return }
         // While the desktop is switching, windows are in flux and would look closed; wait it out.
         let spaces = screens.currentSpaceIDs()
         if spaces != lastSpaces { lastSpaces = spaces; return }

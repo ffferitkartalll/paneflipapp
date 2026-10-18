@@ -123,6 +123,29 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(stack.activeID, 3)
     }
 
+    func testWithStageManagerADroppedWindowIsOnlyPlacedAndNothingElseHappens() {
+        let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100)
+        coordinator.apply(zones: [zone: rect])
+        coordinator.snap(.fake(1), into: zone)   // held and remembered before Stage Manager was switched on
+        let before = memory.records
+
+        coordinator.placementOnly = { true }
+        windows.setFrame(CGRect(x: 300, y: 300, width: 50, height: 50), of: .fake(2))
+        coordinator.snap(.fake(2), into: zone)
+        XCTAssertEqual(windows.frames[2], rect, "sized and placed by the zone")
+        XCTAssertEqual(memory.records, before, "nothing is remembered")
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [1], "nothing is held")
+
+        coordinator.unsnap(window: 1)
+        XCTAssertEqual(memory.records, before, "and nothing remembered is changed")
+        windows.focused = .fake(1)
+        coordinator.cycleFocusedZone(reverse: false)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1)
+        windows.setFrame(.zero, of: .fake(1))
+        coordinator.apply(zones: [zone: rect])
+        XCTAssertEqual(windows.frames[1], .zero, "held windows are not moved either")
+    }
+
     func testWithoutACarouselThePillClickJustSelects() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
