@@ -39,6 +39,8 @@ open PaneFlip.xcodeproj            # run the PaneFlip scheme on "My Mac"
 example file has a placeholder. macOS ties the permissions the app is given, and its saved settings, to the
 bundle identifier, so choose one that belongs to you (reverse-DNS, for example `com.yourname.paneflip`) and keep
 using it.
+A debug build is a separate app, **PaneFlip Debug**, with the identifier plus `.debug`, so its permissions and
+settings never mix with those of a release (`PaneFlip`); grant the permissions to it once.
 
 **Why the signing step:** macOS ties the Accessibility permission to the app's code signature. Ad-hoc signed
 debug builds get a new signature on every build, so the permission would be asked for again each time. The script

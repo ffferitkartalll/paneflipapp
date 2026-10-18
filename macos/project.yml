@@ -60,6 +60,13 @@ targets:
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: "PaneFlip Local Development"
         CODE_SIGNING_ALLOWED: YES
+      configs:
+        # A debug build is an app of its own (name and bundle identifier): macOS ties the permissions it gives an app
+        # to both, and they must never mix with those of a release.
+        Debug:
+          PRODUCT_NAME: PaneFlip Debug
+          PRODUCT_BUNDLE_IDENTIFIER: $(PANEFLIP_BUNDLE_ID).debug
+          INFOPLIST_KEY_CFBundleDisplayName: PaneFlip Debug
 
   # Logic tests of the app layer. The app is not launched: the tests compile the services and the ports they use
   # directly and drive them with fakes (Tests/PaneFlipTests/Fakes).
