@@ -21,11 +21,16 @@ jobs:
         with:
           fetch-depth: 2
       # A release pull request must raise the version: the release is tagged with it (release.yml).
-      - name: Version has no release yet
+      - name: Version is new and the cask has it
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' macos/project.yml | head -1)"
+          cask="$(sed -n 's/^ *version "\(.*\)"/\1/p' casks/paneflipapp.rb | head -1)"
+          if [ "$cask" != "$version" ]; then
+            echo "casks/paneflipapp.rb says $cask, macos/project.yml says $version: raise both."
+            exit 1
+          fi
           if gh release view "v$version" >/dev/null 2>&1; then
             echo "Release v$version exists already: raise MARKETING_VERSION in macos/project.yml."
             exit 1

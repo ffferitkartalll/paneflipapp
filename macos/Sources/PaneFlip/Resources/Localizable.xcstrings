@@ -3654,6 +3654,15 @@
         }
       }
     },
+    "Check for updates" : {
+      "extractionState" : "manual"
+    },
+    "Check now" : {
+      "extractionState" : "manual"
+    },
+    "Checking…" : {
+      "extractionState" : "manual"
+    },
     "Click the field, then press a modifier key. Esc cancels." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5058,6 +5067,12 @@
           }
         }
       }
+    },
+    "Copy command" : {
+      "extractionState" : "manual"
+    },
+    "Could not reach GitHub. Try again later." : {
+      "extractionState" : "manual"
     },
     "Couldn't change this: %@" : {
       "extractionState" : "manual",
@@ -6744,6 +6759,9 @@
           }
         }
       }
+    },
+    "Download the update" : {
+      "extractionState" : "manual"
     },
     "Drag to change the order" : {
       "extractionState" : "manual",
@@ -9273,6 +9291,18 @@
           }
         }
       }
+    },
+    "Installed version" : {
+      "extractionState" : "manual"
+    },
+    "Looks for a newer release on GitHub. Nothing is sent but the request itself." : {
+      "extractionState" : "manual"
+    },
+    "Open release page" : {
+      "extractionState" : "manual"
+    },
+    "Open the release page, download the disk image and replace PaneFlip in Applications." : {
+      "extractionState" : "manual"
     },
     "Order the apps of the pill" : {
       "extractionState" : "manual",
@@ -16299,6 +16329,9 @@
         }
       }
     },
+    "PaneFlip is up to date." : {
+      "extractionState" : "manual"
+    },
     "PaneFlip needs your permission" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -16579,6 +16612,9 @@
           }
         }
       }
+    },
+    "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again." : {
+      "extractionState" : "manual"
     },
     "Pill" : {
       "extractionState" : "manual",
@@ -24728,6 +24764,21 @@
           }
         }
       }
+    },
+    "Update" : {
+      "extractionState" : "manual"
+    },
+    "Update with Homebrew" : {
+      "extractionState" : "manual"
+    },
+    "Updates" : {
+      "extractionState" : "manual"
+    },
+    "Version" : {
+      "extractionState" : "manual"
+    },
+    "Version %@ is available." : {
+      "extractionState" : "manual"
     },
     "Waiting for your approval in System Settings ▸ General ▸ Login Items." : {
       "extractionState" : "manual",

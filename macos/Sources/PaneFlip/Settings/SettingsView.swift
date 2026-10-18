@@ -13,6 +13,7 @@ struct SettingsView: View {
     let settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
     let relauncher: AppRelaunching
+    let updates: UpdatesModel
     let activation: ActivationPolicyControlling
     @Bindable var navigation: SettingsNavigation
 
@@ -38,6 +39,11 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Shortcuts", systemImage: "command") }
                 .tag(SettingsTab.shortcuts)
+
+            UpdatesPane(model: updates)
+                .fixedSize(horizontal: false, vertical: true)
+                .tabItem { Label("Updates", systemImage: "arrow.triangle.2.circlepath") }
+                .tag(SettingsTab.updates)
         }
         .scenePadding()
         .frame(width: 640)

@@ -22,6 +22,17 @@ signed with a certificate of its own, not an Apple developer one, so macOS does 
 it, then choose `System Settings ▸ Privacy & Security ▸ Open Anyway` (or run `xattr -dr com.apple.quarantine
 /Applications/PaneFlip.app` in Terminal). The first launch asks for the Accessibility and Screen Recording permissions.
 
+With [Homebrew](https://brew.sh), this repository is the tap (the cask is in `casks/`):
+
+```bash
+brew tap ffferitkartalll/paneflipapp https://github.com/ffferitkartalll/paneflipapp
+brew install --cask paneflipapp
+brew upgrade --cask paneflipapp   # later
+```
+
+Homebrew removes the quarantine mark, so the first-open step above is not needed. `Settings ▸ Updates` tells you when a
+newer release exists and how to get it.
+
 ## macOS (build it yourself)
 
 Requires macOS 27, Xcode 27 (Swift 6.4) and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
@@ -68,7 +79,7 @@ The app is an agent app (menu bar only, no Dock icon). The first launch asks for
   [Simple Icons](https://simpleicons.org) set through the jsDelivr CDN (`Settings ▸ Stacking ▸ Fetch brand
   icons`, on by default; the names of the apps in your zones are sent to the host, nothing else). Trademarks and
   logos belong to their owners. Turn it off and nothing is looked up.
-- **No data leaves your Mac** otherwise: layouts, memory and settings are local files and preferences.
+- **No data leaves your Mac** otherwise (the one request that is not about your zones: `Settings ▸ Updates ▸ Check now` asks GitHub for the newest release): layouts, memory and settings are local files and preferences.
 
 ## Translations
 
