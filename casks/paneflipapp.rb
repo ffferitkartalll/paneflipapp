@@ -18,7 +18,7 @@ cask "paneflipapp" do
 
   # The app is signed with a certificate of its own, not an Apple developer one: without this macOS refuses the first open.
   postflight_steps do
-    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "PaneFlip.app"], base: :appdir
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/PaneFlip.app"]
   end
 
   zap trash: [
