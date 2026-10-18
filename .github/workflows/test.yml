@@ -1,13 +1,18 @@
 name: Tests
 
+# The tests run only for a pull request that carries the `release` label (the one that also publishes a release once
+# it is merged, see release.yml). Every other pull request gets these jobs as skipped, and a skipped job counts as passed
+# for the required checks. Adding the label starts the tests.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
 
 jobs:
   # A pull request that changes only documentation (markdown, the license, the docs folder, the issue templates,
   # the Crowdin configuration) needs no build. `macos` is a required check: when this job finds nothing but documentation,
   # `macos` is skipped, and a skipped job counts as passed.
   changes:
+    if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
     outputs:
       code: ${{ steps.diff.outputs.code }}
@@ -15,6 +20,16 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 2
+      # A release pull request must raise the version: the release is tagged with it (release.yml).
+      - name: Version has no release yet
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' macos/project.yml | head -1)"
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "Release v$version exists already: raise MARKETING_VERSION in macos/project.yml."
+            exit 1
+          fi
       - id: diff
         run: |
           # On a pull request the checkout is the merge commit: its first parent is the base.
@@ -27,17 +42,9 @@ jobs:
   macos:
     needs: changes
     if: needs.changes.outputs.code == 'true'
-    # PaneFlip targets macOS 27, newer than any hosted runner. CI builds against macOS 26 by lowering the
-    # deployment target in the checkout only (first step below); the repository files keep 27.0.
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v7
-
-      - name: Lower deployment target for CI
-        working-directory: macos
-        run: |
-          sed -i '' 's/macOS("27.0")/macOS("26.0")/' Package.swift
-          sed -i '' 's/"27.0"/"26.0"/' project.yml
 
       - name: Bundle identifier
         working-directory: macos

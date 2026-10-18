@@ -10,8 +10,9 @@ record and has been tried before it lands.
 2. **Branch** from `main` and name it after the issue (`issue-<number>`; several issues in one pull request:
    `issue-<number>-<number>`).
 3. **Make the change small** and keep to the rules below. Add or update tests with it.
-4. **Open a pull request** to `main` that says `Closes #<number>` for each issue. The Tests workflow must pass
-   (`swift test` for the domain module, `xcodebuild … test` for the app layer).
+4. **Open a pull request** to `main` that says `Closes #<number>` for each issue. Run `swift test` (domain
+   module) and `xcodebuild … test` (app layer) yourself; the Tests workflow runs only for a pull request that
+   carries the `release` label (see Releases below).
 5. The maintainer tries the change on their Mac, then merges it.
 
 Pull requests from forks run the tests only after the maintainer approves the run.
@@ -39,3 +40,14 @@ See the macOS section of the [README](README.md): your own bundle identifier in 
 local signing certificate, `xcodegen generate`.
 
 The Xcode project is generated from `macos/project.yml`; never edit `PaneFlip.xcodeproj` by hand.
+
+## Releases
+
+A release is published only when the maintainer says so: the pull request gets the `release` label and raises
+`MARKETING_VERSION` in `macos/project.yml`. With the label, the Tests workflow runs on the pull request, and once it is
+merged the Release workflow builds the app, signs it with the release certificate, and publishes the `.dmg` as release
+`v<version>` with notes made from the merged pull requests. No other pull request or merge publishes anything, and a
+version that has a release already stops the workflow. The workflow needs the repository secrets `RELEASE_CERT_P12`
+(base64 of a `.p12` with a code-signing identity named `PaneFlip Release`) and `RELEASE_CERT_PASSWORD`, and the variable
+`PANEFLIP_BUNDLE_ID`. Keep the same certificate for every release: it is the app's identity, and macOS ties the
+permissions it gave the app to it.
