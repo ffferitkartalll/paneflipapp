@@ -13,7 +13,10 @@ record and has been tried before it lands.
 4. **Open a pull request** to `main` that says `Closes #<number>` for each issue. Run `swift test` (domain
    module) and `xcodebuild … test` (app layer) yourself; the Tests workflow runs only for a pull request that
    carries the `release` label (see Releases below).
-5. The maintainer tries the change on their Mac, then merges it.
+5. The maintainer tries the change on their Mac, then turns on auto-merge for the pull request: it is squashed into
+   `main` as soon as the required checks (`changes`, `macos`) have passed. They are skipped, and so count as passed,
+   unless the pull request carries the `release` label; a release pull request is merged only if the Tests workflow
+   passes, and never if it fails.
 
 Pull requests from forks run the tests only after the maintainer approves the run.
 
