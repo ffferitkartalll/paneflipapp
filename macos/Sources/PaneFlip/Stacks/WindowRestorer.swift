@@ -29,7 +29,7 @@ final class WindowRestorer {
 
     /// Cheap check for the app in front, run on every tick: a new window of an app that has a zone goes there.
     func restoreFrontmost() {
-        guard windows.isTrusted, settings.values.placementEnabled, let pid = apps.frontmostPID,
+        guard windows.isTrusted, settings.values.placementEnabled, !coordinator.placementOnly(), let pid = apps.frontmostPID,
               let app = apps.app(pid: pid),
               memory.records.contains(where: { $0.bundleID == app.bundleID && coordinator.visibleZoneIDs.contains($0.zoneID) })
         else { return }
@@ -44,7 +44,7 @@ final class WindowRestorer {
     /// slot (in the order of the memory), and any other window of such an app joins the zone of the app's first
     /// remembered window. `onlyApp` limits it to one app.
     func restore(onlyApp onlyPID: pid_t? = nil) {
-        guard windows.isTrusted, settings.values.placementEnabled else { return }
+        guard windows.isTrusted, settings.values.placementEnabled, !coordinator.placementOnly() else { return }
         let visible = coordinator.visibleZoneIDs
         // The zone an app belongs in: where its first remembered window is.
         var ruleZone: [String: UUID] = [:]

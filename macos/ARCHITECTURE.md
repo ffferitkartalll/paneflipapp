@@ -97,3 +97,11 @@ Sources/
   backend is another `WindowSystem`.
 - **Encapsulation:** domain types expose intent (`remap`, `unbind`, `forget`, `assign`, `moveSlot`), not their arrays.
 - **Composition over inheritance:** no class hierarchies; behaviour is assembled from small collaborators.
+
+## Stage Manager
+
+With Stage Manager on, the window server decides which windows are shown, so the app does one thing: a window dropped into a
+zone is sized and placed by it (with the glide). Everything else is off: `StackCoordinator.placementOnly` makes `snap` return
+after the placement and stops `unsnap`, the shortcut, title and focus following and re-framing of held windows; the pill is
+hidden, and `ClosedWindowMonitor` and `WindowRestorer` do nothing. The settings, layouts and remembered apps are the same in
+both modes, and nothing remembered is read or changed while it is on.
