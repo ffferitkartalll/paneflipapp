@@ -23,6 +23,7 @@ Sources/
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, ScreenLayouts, LayoutRepository, ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
+│   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
     ├── App/                 PaneFlipApp, AppContainer (composition root), AppLauncher (permission gate), MenuContent, MenuBarLabel
@@ -35,6 +36,8 @@ Sources/
     │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
     │                        BrandGlyphSource ← CDNBrandGlyphs,
+    │                        ReleaseChecking (+ ReleaseInfo) ← GitHubReleaseChecker,
+    │                        InstallSourceDetecting ← CaskroomInstallSource,
     │                        KeyShortcutListening ← EventTapKeyShortcut (Control+Option+Right/Left),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
@@ -48,7 +51,7 @@ Sources/
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
-    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, StackingPane, ShortcutsPane, SettingRow,
+    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
@@ -73,6 +76,7 @@ Sources/
 | `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release). |
 | `ZoneCarousel` | Slide the chosen window of a zone in beside the one in front: both are photographed (Screen Recording), the pictures slide inside the zone while the real windows swap underneath, so nothing shows outside the zone. |
 | `WindowGlide` | Move a window the user just dropped from where it is to its zone in a short ease-out glide (steps follow the clock, off the main thread, the last one exact; no glide with Reduce Motion). |
+| `UpdatesModel` | Ask, when the user presses the button, whether a newer release exists (and whether the app came from Homebrew). Nothing is checked on its own. |
 | `WindowRestorer` | Put running windows in the zone their app belongs in: remembered ones in their slots, every other window of the app next to them. |
 | `ClosedWindowMonitor` / `WindowAvailability` | Notice closed, hidden or minimized windows. |
 | `ZonePlanner` | Compute which zones are visible and where. |

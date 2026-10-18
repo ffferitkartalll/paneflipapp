@@ -18,6 +18,7 @@ final class AppContainer {
     let editor: EditorController
     let layoutApps: LayoutAppsService
     let launchAtLogin: LaunchAtLoginModel
+    let updates: UpdatesModel
     let relauncher: AppRelaunching = WorkspaceAppRelauncher()
     let activation: ActivationPolicyControlling
     let settingsNavigation: SettingsNavigation
@@ -84,6 +85,9 @@ final class AppContainer {
         self.activation = activation
         self.settingsNavigation = navigation
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())
+        self.updates = UpdatesModel(
+            currentVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
+            checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installSource: CaskroomInstallSource(cask: "paneflipapp"))
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))

@@ -80,6 +80,10 @@ targets:
       - path: Sources/PaneFlip/Platform/WindowRef.swift
       - path: Sources/PaneFlip/Platform/WindowSnapshotting.swift
       - path: Sources/PaneFlip/Platform/SlideStaging.swift
+      - path: Sources/PaneFlip/Platform/ReleaseInfo.swift
+      - path: Sources/PaneFlip/Platform/ReleaseChecking.swift
+      - path: Sources/PaneFlip/Platform/InstallSourceDetecting.swift
+      - path: Sources/PaneFlip/Settings/UpdatesModel.swift
       - path: Sources/PaneFlip/Platform/WindowPicture.swift
       - path: Sources/PaneFlip/Platform/WindowCorners.swift
       - path: Sources/PaneFlip/Platform/AppCatalog.swift
