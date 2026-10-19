@@ -86,6 +86,20 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         refresher?.restoreWindows()
     }
 
+    /// The zones beyond the screens' edges are switched on again: apps that left them when they were switched off go back
+    /// (a slot remembers the zones it was in).
+    func returnOverflowAppsToTheirZones() {
+        var released: [CGWindowID] = []
+        for layout in repository.screens.values.flatMap(\.layouts) {
+            guard let home = layout.fallbackZoneID else { continue }
+            let beyond = Set(layout.strip.zoneIDs).subtracting(layout.root.leafIDs)
+            released += memory.remap([home: home], preferred: beyond)
+        }
+        release(released)
+        refresher?.refreshZones()
+        refresher?.restoreWindows()
+    }
+
     // MARK: Displays
 
     /// Layouts stored under a display's old key (its desktop's system identifier, which changes whenever a display

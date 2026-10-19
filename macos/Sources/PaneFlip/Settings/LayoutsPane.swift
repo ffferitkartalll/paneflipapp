@@ -9,7 +9,6 @@ struct LayoutsPane: View {
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
     let screens: ScreenProviding
-    let refresh: () -> Void
     @Bindable var settings: AppSettings
     let navigation: SettingsNavigation
     /// Bumped when displays are plugged in or out, so the list of screens is read again.
@@ -22,19 +21,6 @@ struct LayoutsPane: View {
                 ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps,
                                      navigation: navigation, showsOverflow: settings.values.overflowZonesEnabled)
             }
-
-            Section("Zones") {
-                SliderSettingRow(title: "Gap between zones",
-                                 detail: "Applies between zones only, never at screen edges.",
-                                 value: $settings.values.gap, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
-                    if !editing { refresh() }
-                }
-                SliderSettingRow(title: "Minimum zone size",
-                                 detail: "The layout editor won't split or resize a zone below this.",
-                                 value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange,
-                                 step: AppSettings.minZoneSizeStep)
-            }
-            .disabled(!settings.values.placementEnabled)
         }
         .formStyle(.grouped)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)) { _ in

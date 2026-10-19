@@ -35,6 +35,10 @@ final class LayoutServiceTests: XCTestCase {
         service.moveOverflowAppsToDefaultZones()
 
         XCTAssertEqual(memory.records[0].zoneID, layout.root.leafIDs[0])
+
+        service.returnOverflowAppsToTheirZones()
+
+        XCTAssertEqual(memory.records[0].zoneID, beyond)
     }
 
     private func screen(_ key: String) -> ScreenInfo {

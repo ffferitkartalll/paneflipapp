@@ -1,11 +1,9 @@
-import AppKit
 import SwiftUI
 
 /// Tab: whether a newer release exists, and how to get it.
 struct UpdatesPane: View {
     let model: UpdatesModel
     @Environment(\.openURL) private var openURL
-    private static let upgradeCommand = "brew upgrade --cask paneflipapp"
 
     var body: some View {
         Form {
@@ -16,23 +14,25 @@ struct UpdatesPane: View {
                         .disabled(model.state == .checking)
                 }
             }
-            if case .available(let release) = model.state {
+            switch model.state {
+            case .available:
                 Section("Update") {
-                    if model.installedWithHomebrew {
-                        SettingRow(title: "Update with Homebrew",
-                                   detail: "PaneFlip was installed with Homebrew. Run this command in Terminal, then open PaneFlip again.") {
-                            Button("Copy command") {
-                                NSPasteboard.general.clearContents()
-                                NSPasteboard.general.setString(Self.upgradeCommand, forType: .string)
-                            }
-                        }
-                        Text(verbatim: Self.upgradeCommand).font(.system(.body, design: .monospaced)).textSelection(.enabled)
-                    } else {
-                        SettingRow(title: "Download the update", detail: "Open the release page, download the disk image and replace PaneFlip in Applications.") {
-                            Button("Open release page") { openURL(release.page) }
-                        }
+                    SettingRow(title: "Install the update", detail: "PaneFlip downloads the new version, replaces itself with it and starts again.") {
+                        Button("Install") { Task { await model.install() } }
                     }
                 }
+            case .installing:
+                Section("Update") {
+                    SettingRow(title: "Install the update", detail: "Installing…") { ProgressView().controlSize(.small) }
+                }
+            case .installFailed(let release):
+                Section("Update") {
+                    SettingRow(title: "Install the update", detail: "The update could not be installed. Download it from the release page instead.") {
+                        Button("Open release page") { openURL(release.page) }
+                    }
+                }
+            default:
+                EmptyView()
             }
         }
         .formStyle(.grouped)
@@ -43,7 +43,8 @@ struct UpdatesPane: View {
         case .idle: "Looks for a newer release on GitHub. Nothing is sent but the request itself."
         case .checking: "Checking…"
         case .upToDate: "PaneFlip is up to date."
-        case .available(let release): "Version \(release.version.description) is available."
+        case .available(let release), .installing(let release), .installFailed(let release):
+            "Version \(release.version.description) is available."
         case .failed: "Could not reach GitHub. Try again later."
         }
     }

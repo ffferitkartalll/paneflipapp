@@ -19,8 +19,6 @@ public final class AppSettings {
             if values.placementEnabled != oldValue.placementEnabled { onPlacementChanged?() }
             if values.stackingEnabled != oldValue.stackingEnabled { onStackingChanged?() }
             if values.overflowZonesEnabled != oldValue.overflowZonesEnabled { onOverflowZonesChanged?() }
-            if values.scrollGestureEnabled != oldValue.scrollGestureEnabled { onScrollGestureChanged?() }
-            if values.edgeScrollEnabled != oldValue.edgeScrollEnabled { onEdgeScrollChanged?() }
         }
     }
 
@@ -29,8 +27,6 @@ public final class AppSettings {
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
     @ObservationIgnored public var onStackingChanged: (() -> Void)?
     @ObservationIgnored public var onOverflowZonesChanged: (() -> Void)?
-    @ObservationIgnored public var onScrollGestureChanged: (() -> Void)?
-    @ObservationIgnored public var onEdgeScrollChanged: (() -> Void)?
     @ObservationIgnored private let storage: SettingsStorage
 
     public init(storage: SettingsStorage) {

@@ -24,10 +24,10 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertTrue(AppSettings(storage: Storage()).values.fetchBrandIcons)
     }
 
-    func testTheHideKeyDefaultsToLeftShiftAndPersists() {
+    func testTheHideKeyDefaultsToLeftCommandAndPersists() {
         let storage = Storage()
         let settings = AppSettings(storage: storage)
-        XCTAssertEqual(settings.values.hidePillKey, .leftShift)
+        XCTAssertEqual(settings.values.hidePillKey, .leftCommand)
         settings.values.hidePillKey = SnapTrigger(keys: [.init(code: 61, name: "Right Option")])
         XCTAssertEqual(storage.saved?.hidePillKey.keys.first?.code, 61)
     }
