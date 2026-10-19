@@ -52,6 +52,7 @@ merged the Release workflow builds the app, signs it with the release certificat
 `v<version>` with notes made from the merged pull requests. No other pull request or merge publishes anything, and a
 version that has a release already stops the workflow. The workflow needs the repository secrets `RELEASE_CERT_P12`
 (base64 of a `.p12` with a code-signing identity named `PaneFlip Release`) and `RELEASE_CERT_PASSWORD`, and the variable
-`PANEFLIP_BUNDLE_ID`. The same pull request raises `version` in `casks/paneflipapp.rb` (the Homebrew cask, whose tap is this
-repository) to the new `MARKETING_VERSION`; the Tests workflow fails when the two differ. Keep the same certificate for every release: it is the app's identity, and macOS ties the
+`PANEFLIP_BUNDLE_ID`. Last, the workflow sets `version` in `casks/paneflipapp.rb` of
+[`homebrew-tap`](https://github.com/ffferitkartalll/homebrew-tap) (the Homebrew cask) to the new version; for that it needs the
+secret `TAP_TOKEN` (a fine-grained token with contents write on that repository only). Keep the same certificate for every release: it is the app's identity, and macOS ties the
 permissions it gave the app to it.

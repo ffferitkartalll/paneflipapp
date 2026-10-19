@@ -3,6 +3,7 @@ name: Release
 # A release is published when a pull request with the `release` label is merged into main, never for any other merge.
 # That pull request also ran the tests (test.yml). Its version comes from MARKETING_VERSION in macos/project.yml: the
 # pull request raises it, the release is tagged `v<version>`, and a version that already has a release stops the job.
+# Last, the cask in ffferitkartalll/homebrew-tap gets the new version (secret TAP_TOKEN: contents write on that repository).
 on:
   pull_request:
     types: [closed]
@@ -83,3 +84,17 @@ jobs:
           gh release create "v${{ steps.version.outputs.version }}" "PaneFlip-${{ steps.version.outputs.version }}.dmg" \
             --target "${{ github.event.pull_request.merge_commit_sha }}" \
             --title "PaneFlip ${{ steps.version.outputs.version }}" --generate-notes
+
+      - name: Update the cask
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+        run: |
+          git clone "https://x-access-token:$TAP_TOKEN@github.com/ffferitkartalll/homebrew-tap.git" "$RUNNER_TEMP/tap"
+          cd "$RUNNER_TEMP/tap"
+          sed -i.bak 's/^\( *version \)".*"/\1"${{ steps.version.outputs.version }}"/' casks/paneflipapp.rb
+          rm casks/paneflipapp.rb.bak
+          git diff --quiet && { echo "The cask has this version already."; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update paneflipapp to ${{ steps.version.outputs.version }}"
+          git push

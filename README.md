@@ -22,13 +22,15 @@ signed with a certificate of its own, not an Apple developer one, so macOS does 
 it, then choose `System Settings ▸ Privacy & Security ▸ Open Anyway` (or run `xattr -dr com.apple.quarantine
 /Applications/PaneFlip.app` in Terminal). The first launch asks for the Accessibility and Screen Recording permissions.
 
-With [Homebrew](https://brew.sh), this repository is the tap (the cask is in `casks/`):
+With [Homebrew](https://brew.sh):
 
 ```bash
-brew tap ffferitkartalll/paneflipapp https://github.com/ffferitkartalll/paneflipapp
-brew install --cask paneflipapp
+brew install --cask ffferitkartalll/tap/paneflipapp
 brew upgrade --cask paneflipapp   # later
 ```
+
+Installed from the old tap (`ffferitkartalll/paneflipapp`)? Run `brew uninstall --cask paneflipapp`, then `brew untap
+ffferitkartalll/paneflipapp`, then the install command above.
 
 Homebrew removes the quarantine mark, so the first-open step above is not needed. `Settings ▸ Updates` tells you when a
 newer release exists and how to get it.
