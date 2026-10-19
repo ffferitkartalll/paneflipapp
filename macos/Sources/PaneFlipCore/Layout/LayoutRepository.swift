@@ -23,7 +23,7 @@ public final class LayoutRepository {
 
     /// Every zone identifier of every layout (active or not).
     public var allZoneIDs: Set<UUID> {
-        Set(screens.values.flatMap { $0.layouts.flatMap { $0.root.leafIDs } })
+        Set(screens.values.flatMap { $0.layouts.flatMap { $0.strip.zoneIDs } })
     }
 
     @discardableResult
@@ -36,9 +36,9 @@ public final class LayoutRepository {
         return layout
     }
 
-    public func setRoot(_ root: LayoutNode, ofLayout id: UUID, key: String) {
+    public func setStrip(_ strip: StripLayout, ofLayout id: UUID, key: String) {
         guard var s = screens[key], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
-        s.layouts[i].root = root
+        s.layouts[i].strip = strip
         screens[key] = s
     }
 
@@ -58,7 +58,7 @@ public final class LayoutRepository {
     public func zoneIDs(ofDisplaysNotIn displays: Set<String>) -> Set<UUID> {
         var zones: Set<UUID> = []
         for (key, layouts) in screens where !displays.contains(Self.display(of: key)) {
-            layouts.layouts.forEach { zones.formUnion($0.root.leafIDs) }
+            layouts.layouts.forEach { zones.formUnion($0.strip.zoneIDs) }
         }
         return zones
     }

@@ -19,6 +19,24 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(repository.activeLayout(for: "screen")?.id, first.id)
     }
 
+    func testSwitchingOffTheZonesBeyondTheScreenMovesTheirAppsToTheDefaultZone() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let layout = repository.addLayout(for: "screen")
+        var strip = layout.strip
+        let beyond = UUID()
+        strip.trailing = Overflow(width: 0.25, root: .leaf(beyond))
+        repository.setStrip(strip, ofLayout: layout.id, key: "screen")
+        memory.remember(zoneID: beyond, bundleID: "app", title: "")
+
+        service.moveOverflowAppsToDefaultZones()
+
+        XCTAssertEqual(memory.records[0].zoneID, layout.root.leafIDs[0])
+    }
+
     private func screen(_ key: String) -> ScreenInfo {
         let area = CGRect(x: 0, y: 0, width: 1000, height: 600)
         return ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area)

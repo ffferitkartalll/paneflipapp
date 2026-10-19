@@ -40,8 +40,10 @@ final class AppContainer {
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
         coordinator.placementOnly = { windowManagerDefaults?.bool(forKey: "GloballyEnabled") ?? false }
-        let slideStage = PanelSlideStage(screens: screens)
-        coordinator.carousel = ZoneCarousel(snapshots: ScreenCaptureWindowSnapshots(), stage: slideStage,
+        let stagePanels = StagePanels()
+        let snapshots = ScreenCaptureWindowSnapshots()
+        let slideStage = PanelSlideStage(screens: screens, panels: stagePanels)
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                             background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         coordinator.glide = WindowGlide(windows: windows, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
@@ -49,7 +51,9 @@ final class AppContainer {
         let availability = WindowAvailability(windows: windows, screens: screens)
         let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
-        let engine = ZoneEngine(planner: ZonePlanner(layouts: repository, settings: settings),
+        let viewport = StripViewport()
+        let planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
+        let engine = ZoneEngine(planner: planner,
                                 coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
@@ -60,7 +64,7 @@ final class AppContainer {
         let navigation = SettingsNavigation()
         let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont) { zone in
             navigation.tab = .layouts
-            let layout = repository.screens.values.flatMap(\.layouts).first { $0.root.leafIDs.contains(zone) }
+            let layout = repository.screens.values.flatMap(\.layouts).first { $0.strip.zoneIDs.contains(zone) }
             navigation.ordering = layout.map { OrderingTarget(layoutID: $0.id, zoneID: zone) }
             navigation.openSettings()
         }
@@ -92,11 +96,35 @@ final class AppContainer {
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
         let shortcut: KeyShortcutListening = EventTapKeyShortcut()
+        let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
+        let scroller = StripScroller(listener: MultitouchSwipeListener(), screens: screens, planner: planner, viewport: viewport,
+                                     settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
+                                     stage: PanelScrollStage(screens: screens, panels: stagePanels), pointer: EventTapPointerHold(),
+                                     metronome: DisplayLinkMetronome.start, refresher: engine,
+                                     reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
+                                     isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
+        settings.onScrollGestureChanged = { [weak scroller] in scroller?.settingDidChange() }
+        let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller) { delay, work in
+            let item = DispatchWorkItem(block: work)
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
+            return item.cancel
+        }
+        settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
+            scroller?.settingDidChange()
+            edgeScroller?.settingDidChange()
+            guard !settings.values.overflowZonesEnabled else { return }
+            viewport.reset()
+            layouts?.moveOverflowAppsToDefaultZones()
+            engine?.refreshZones()
+        }
+        settings.onEdgeScrollChanged = { [weak edgeScroller] in edgeScroller?.settingDidChange() }
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
             pill.start()
             snap.start()
+            scroller.start()
+            edgeScroller.start()
             shortcut.start { reverse in coordinator.cycleFocusedZone(reverse: reverse) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
         }

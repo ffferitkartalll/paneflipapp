@@ -21,6 +21,18 @@ public struct SettingsValues: Equatable {
     /// The modifier key that, tapped twice, hides the pill under the pointer.
     public var hidePillKey = SnapTrigger.leftShift
 
+    /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
+    /// off and the apps in them are moved to the screen's default zone.
+    public var overflowZonesEnabled = true
+
+    /// Scroll the zones beyond the screen's edges with a sideways swipe of three fingers (reads the trackpad through a
+    /// private system framework, and the system's own three-finger gestures must be off).
+    public var scrollGestureEnabled = false
+
+    /// Rest the pointer at the left or right edge of the screen for a second to scroll the zones beyond that edge into view. Needs
+    /// no trackpad.
+    public var edgeScrollEnabled = true
+
     /// The language of the app: `systemLanguage` or a language code the string catalog has been translated into.
     public var language = SettingsValues.systemLanguage
 

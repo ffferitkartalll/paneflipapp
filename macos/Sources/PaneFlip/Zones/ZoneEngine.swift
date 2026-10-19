@@ -57,7 +57,7 @@ final class ZoneEngine: ZoneRefreshing {
     func refreshZones() {
         let current = screens.screens()
         lastSignatures = current.map(\.layoutSignature)
-        coordinator.apply(zones: planner.visibleZones(on: current))
+        coordinator.apply(plan: planner.plan(on: current))
         presenters.forEach { $0.zonesDidChange() }
     }
 
@@ -89,6 +89,7 @@ final class ZoneEngine: ZoneRefreshing {
 
     private func tick() {
         guard windows.isTrusted else { return onPermissionLost?() ?? () }
+        guard !coordinator.isScrolling else { return }   // the windows are being moved; asking them now only slows the scroll
         if screens.screens().map(\.layoutSignature) != lastSignatures { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()

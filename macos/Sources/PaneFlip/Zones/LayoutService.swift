@@ -28,14 +28,14 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         return layout
     }
 
-    func updateLayout(key: String, id: UUID, root: LayoutNode) {
+    func updateLayout(key: String, id: UUID, strip: StripLayout) {
         guard let old = repository.layout(id: id, key: key) else { return }
         let isActive = repository.activeLayout(for: key)?.id == id
         // The layout is saved first: if the app quits between the two writes, memory never names zones that the
         // saved layout lacks.
-        repository.setRoot(root, ofLayout: id, key: key)
+        repository.setStrip(strip, ofLayout: id, key: key)
         if isActive, let area = screens.screens().first(where: { $0.key == key })?.axVisible {
-            release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: root, in: area)))
+            release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: area)))
         }
         prune()
         if isActive { refresher?.refreshZones() }
@@ -73,6 +73,19 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.setDefaultZone(zone, ofLayout: id, key: key)
     }
 
+    /// The zones beyond the screens' edges are switched off: their apps go to the default zone of their layout.
+    func moveOverflowAppsToDefaultZones() {
+        var map: [UUID: UUID] = [:]
+        for layout in repository.screens.values.flatMap(\.layouts) {
+            guard let target = layout.fallbackZoneID else { continue }
+            let beyond = layout.strip.zoneIDs.filter { !layout.root.leafIDs.contains($0) }
+            beyond.forEach { map[$0] = target }
+        }
+        release(memory.remap(map))
+        refresher?.refreshZones()
+        refresher?.restoreWindows()
+    }
+
     // MARK: Displays
 
     /// Layouts stored under a display's old key (its desktop's system identifier, which changes whenever a display
@@ -103,8 +116,8 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         let back = connected.subtracting(before)
         if !before.isEmpty, !back.isEmpty {
             let home = Set(current.filter { back.contains($0.displayID) }
-                .compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.root.leafIDs })
-            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.root.leafIDs }
+                .compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.strip.zoneIDs })
+            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.strip.zoneIDs }
             release(memory.remap(Dictionary(uniqueKeysWithValues: everywhere.map { ($0, $0) }), preferred: home))
         }
         refresher?.restoreWindows()

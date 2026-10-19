@@ -92,7 +92,9 @@ final class PillPresenter: ZonePresenting {
         for (id, panel) in panels {
             guard let stack = coordinator.stacks[id] else { continue }
             var show = false, clickable = false
-            if stack.tabs.count >= (settings.values.pillForSingleWindow ? 1 : 2) && settings.values.stackingEnabled && !coordinator.placementOnly() {
+            // Hidden while a scroll moves the zones; the panels are kept, making them again is slow.
+            if stack.tabs.count >= (settings.values.pillForSingleWindow ? 1 : 2) && settings.values.stackingEnabled && !coordinator.placementOnly()
+                && !coordinator.isScrolling {
                 panel.refresh()
                 let (frame, pill) = pillRects(stack, panel)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it

@@ -98,6 +98,18 @@ targets:
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
       - path: Sources/PaneFlip/Zones/LayoutAppEntry.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift
+      - path: Sources/PaneFlip/Zones/ZonePlanner.swift
+      - path: Sources/PaneFlip/Zones/PlannedZone.swift
+      - path: Sources/PaneFlip/Zones/StripViewport.swift
+      - path: Sources/PaneFlip/Zones/ZoneLabel.swift
+      - path: Sources/PaneFlip/Zones/ScreenEdge.swift
+      - path: Sources/PaneFlip/Zones/EdgeScroller.swift
+      - path: Sources/PaneFlip/Platform/PointerMoveListening.swift
+      - path: Sources/PaneFlip/Zones/StripScroller.swift
+      - path: Sources/PaneFlip/Platform/TrackpadSwipeListening.swift
+      - path: Sources/PaneFlip/Platform/PointerHolding.swift
+      - path: Sources/PaneFlip/Platform/ScrollStaging.swift
+      - path: Sources/PaneFlip/Platform/ScrollPicture.swift
       - path: Sources/PaneFlip/Platform/AppInfo.swift
       - path: Sources/PaneFlip/Platform/ScreenProviding.swift
       - path: Sources/PaneFlip/Platform/ScreenInfo.swift

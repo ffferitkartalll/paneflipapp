@@ -21,7 +21,8 @@ final class ClosedWindowMonitor {
 
     func check() {
         let held = coordinator.heldWindows
-        guard !held.isEmpty, !coordinator.placementOnly() else { return }
+        // Not while a scroll is moving the windows: asking them is slow then, and they are in flux anyway.
+        guard !held.isEmpty, !coordinator.placementOnly(), !coordinator.isScrolling else { return }
         // While the desktop is switching, windows are in flux and would look closed; wait it out.
         let spaces = screens.currentSpaceIDs()
         if spaces != lastSpaces { lastSpaces = spaces; return }

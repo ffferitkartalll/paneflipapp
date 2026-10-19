@@ -18,6 +18,9 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
+        v.overflowZonesEnabled = defaults.object(forKey: "overflowZonesEnabled") as? Bool ?? v.overflowZonesEnabled
+        v.scrollGestureEnabled = defaults.object(forKey: "scrollGestureEnabled") as? Bool ?? v.scrollGestureEnabled
+        v.edgeScrollEnabled = defaults.object(forKey: "edgeScrollEnabled") as? Bool ?? v.edgeScrollEnabled
         v.language = defaults.string(forKey: "appLanguage") ?? v.language
         return v
     }
@@ -32,6 +35,9 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
+        defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")
+        defaults.set(v.scrollGestureEnabled, forKey: "scrollGestureEnabled")
+        defaults.set(v.edgeScrollEnabled, forKey: "edgeScrollEnabled")
         // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order
         // is used. System Settings writes that key too (a language chosen for this app there), so it is touched only
         // when the choice here changed.

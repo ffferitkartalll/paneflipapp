@@ -9,6 +9,8 @@ struct LayoutAppsView: View {
     /// The zone to scroll to and frame; a new request shows it again, also while the sheet is open.
     let focus: OrderingTarget?
     /// Chosen by the layout card, which knows the screen: the default zone and how to change it.
+    /// Whether the zones beyond the screen's edges are in use.
+    let showsOverflow: Bool
     let defaultZone: UUID?
     let setDefaultZone: (UUID) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -16,7 +18,11 @@ struct LayoutAppsView: View {
     @State private var highlighted: UUID?
     @State private var highlightRequest: UUID?
 
-    private var zones: [UUID] { layout.root.leafIDs }
+    /// Every zone, in the order across the strip: beyond the left edge, the screen, beyond the right edge.
+    private var zones: [UUID] { showsOverflow ? layout.strip.zoneIDs : layout.root.leafIDs }
+    /// The zones a default can be: those of the screen (the others are out of sight).
+    private var screenZones: [UUID] { layout.root.leafIDs }
+    private func name(_ zone: UUID) -> String { ZoneLabel.text(of: zone, in: layout.strip) }
 
     var body: some View {
         let entries = editor.entries(inZones: zones)
@@ -26,10 +32,10 @@ struct LayoutAppsView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             HStack {
-                Picker("Default zone", selection: Binding(get: { defaultZone ?? zones.first ?? UUID() },
+                Picker("Default zone", selection: Binding(get: { defaultZone ?? screenZones.first ?? UUID() },
                                                           set: { setDefaultZone($0) })) {
-                    ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
-                        Text("Zone \(index + 1)").tag(zone)
+                    ForEach(screenZones, id: \.self) { zone in
+                        Text("Zone \(name(zone))").tag(zone)
                     }
                 }
                 .fixedSize()
@@ -39,9 +45,9 @@ struct LayoutAppsView: View {
             }
             ScrollViewReader { proxy in
             Form {
-                ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
+                ForEach(zones, id: \.self) { zone in
                     Section {
-                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, editor: editor)
+                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, name: name, editor: editor)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 8)
                                     .strokeBorder(Color.accentColor, lineWidth: 2)
@@ -50,7 +56,7 @@ struct LayoutAppsView: View {
                             }
                         addMenu(to: zone)
                     } header: {
-                        Text("Zone \(index + 1)")
+                        Text("Zone \(name(zone))")
                     }
                     .id(zone)
                 }
@@ -104,6 +110,7 @@ struct LayoutAppsView: View {
 private struct ZoneAppsList: View {
     let entries: [LayoutAppEntry]
     let zones: [UUID]
+    let name: (UUID) -> String
     let editor: LayoutAppsEditing
 
     static let appHeight: CGFloat = 44
@@ -114,7 +121,7 @@ private struct ZoneAppsList: View {
         ReorderableStack(items: entries, height: height, space: "zoneApps") { from, to in
             editor.reorder(app: entries[from].bundleID, in: entries[from].zoneID, by: to - from, inZones: zones)
         } row: { entry, isCarried, drag, drop in
-            LayoutAppRow(entry: entry, zones: zones, editor: editor, isCarried: isCarried, isOpen: opened.contains(entry.id),
+            LayoutAppRow(entry: entry, zones: zones, name: name, editor: editor, isCarried: isCarried, isOpen: opened.contains(entry.id),
                          toggle: { toggle(entry.id) }, drag: drag, drop: drop)
                 .frame(height: height(entry), alignment: .top)
                 .overlay(alignment: .bottom) { if entry.id != entries.last?.id { Divider() } }
@@ -217,6 +224,7 @@ private struct ReorderableStack<Item: Identifiable, Row: View>: View {
 private struct LayoutAppRow: View {
     let entry: LayoutAppEntry
     let zones: [UUID]
+    let name: (UUID) -> String
     let editor: LayoutAppsEditing
     let isCarried: Bool
     let isOpen: Bool
@@ -246,8 +254,8 @@ private struct LayoutAppRow: View {
                         .help("Show the windows")
                 }
                 Menu {
-                    ForEach(Array(zones.enumerated()), id: \.element) { index, zone in
-                        Button("Zone \(index + 1)") {
+                    ForEach(zones, id: \.self) { zone in
+                        Button("Zone \(name(zone))") {
                             editor.move(app: entry.bundleID, from: entry.zoneID, to: zone, inZones: zones)
                         }
                         .disabled(zone == entry.zoneID)

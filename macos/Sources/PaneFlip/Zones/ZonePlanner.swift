@@ -2,18 +2,38 @@ import CoreGraphics
 import Foundation
 import PaneFlipCore
 
-/// Works out which zones are on screen right now and where. Pure calculation over the layouts and settings.
+/// Works out which zones exist right now and where, for the scroll each screen is at. Pure calculation over the layouts,
+/// the settings and the scroll.
 struct ZonePlanner {
     let layouts: LayoutRepository
     let settings: AppSettings
+    let viewport: StripViewport
 
-    func visibleZones(on screens: [ScreenInfo]) -> [UUID: CGRect] {
+    /// Zones in view stand where they are; zones scrolled out of sight wait at a display's edge (see `Parking`). A screen
+    /// with a display on each side has no such place, so the zones beyond its edges do not exist there.
+    func plan(on screens: [ScreenInfo]) -> [UUID: PlannedZone] {
         guard settings.values.placementEnabled else { return [:] }
-        var zones: [UUID: CGRect] = [:]
+        var zones: [UUID: PlannedZone] = [:]
         for screen in screens {
-            guard let layout = layouts.activeLayout(for: screen.key) else { continue }
-            for zone in layout.root.zones(in: screen.axVisible, gap: CGFloat(settings.values.gap)) { zones[zone.id] = zone.rect }
+            guard let (geometry, side) = strip(of: screen, among: screens) else { continue }
+            let offset = geometry.clamped(viewport.offset(for: screen.key))
+            for zone in geometry.zones(offset: offset, gap: CGFloat(settings.values.gap)) {
+                if zone.isOnScreen {
+                    zones[zone.id] = PlannedZone(rect: zone.rect)
+                } else if let side {
+                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true)
+                }
+            }
         }
         return zones
+    }
+
+    /// The strip of a screen's active layout and the side its out-of-sight windows wait at (nil: nowhere, so the areas
+    /// beyond its edges are left out).
+    func strip(of screen: ScreenInfo, among screens: [ScreenInfo]) -> (StripGeometry, Parking.Side?)? {
+        guard let layout = layouts.activeLayout(for: screen.key) else { return nil }
+        let others = screens.filter { $0.displayID != screen.displayID }.map(\.cocoaFrame)
+        let side = Parking.side(of: screen.cocoaFrame, others: others)
+        return (StripGeometry(strip: side == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip, screen: screen.axVisible), side)
     }
 }

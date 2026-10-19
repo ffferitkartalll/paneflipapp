@@ -20,7 +20,7 @@ struct LayoutsPane: View {
         Form {
             ForEach(screens.screens()) { screen in
                 ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps,
-                                     navigation: navigation)
+                                     navigation: navigation, showsOverflow: settings.values.overflowZonesEnabled)
             }
 
             Section("Zones") {
