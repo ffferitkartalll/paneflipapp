@@ -32,15 +32,15 @@ Sources/
     ├── Platform/            Ports, their value types and adapters:
     │                        WindowSystem ← AXWindowSystem (+ WindowRef),
     │                        WindowSnapshotting ← ScreenCaptureWindowSnapshots,
-    │                        SlideStaging ← PanelSlideStage, ScrollStaging ← PanelScrollStage (both draw on StagePanels), PointerHolding ← EventTapPointerHold,
+    │                        SlideStaging ← PanelSlideStage, ScrollStaging ← PanelScrollStage (both draw on StagePanels),
     │                        DisplayLinkMetronome (a function called at every refresh of a screen),
-    │                        TrackpadSwipeListening ← MultitouchSwipeListener, PointerMoveListening ← GlobalPointerMoves,
+    │                        PointerMoveListening ← GlobalPointerMoves,
     │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
     │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        ReleaseChecking (+ ReleaseInfo) ← GitHubReleaseChecker,
-    │                        InstallSourceDetecting ← CaskroomInstallSource,
-    │                        KeyShortcutListening ← EventTapKeyShortcut (Control+Option+Right/Left),
+    │                        UpdateInstalling ← DiskImageUpdateInstaller (downloads the release disk image, checks its signature against the running app, swaps the app after it quits),
+    │                        KeyShortcutListening ← EventTapKeyShortcut (four changeable shortcuts, `KeyChord` in Core: next/previous window of a zone, scroll toward the zones beyond the right/left edge; `KeyShortcut` is what a press asks for),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
     │                        ActivationPolicyControlling ← AppKitActivationPolicyController,
@@ -53,7 +53,7 @@ Sources/
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
-    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
+    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
@@ -75,15 +75,14 @@ Sources/
 |---|---|
 | `LayoutRepository` | Store layouts per screen. Knows nothing about windows. |
 | `StripLayout` / `StripGeometry` | A screen's layout with the zones (`Overflow`) beyond its left and right edges as one strip; where each zone stands for a scroll offset, how far the screen may scroll and where a scroll comes to rest. Pure arithmetic. `Parking` tells where a window waits when its zone is out of sight (one pixel on the display, at a side with no display beside it). |
-| `SwipeTracker` | Follow a three-finger sideways swipe from touch frames (Core, pure). `MultitouchSwipeListener` feeds it from the system's private multitouch framework, only while the setting is on. |
-| `StripScroller` / `StripViewport` | A swipe moves the screen along its strip: pictures of the windows in front follow the fingers (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. Pictures taken in earlier swipes stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
-| `EdgeScroller` | Rest the pointer at the left or right edge of a screen for a second and the zones beyond that edge scroll into view (as a swipe of the right length would); the pointer must leave the edge to scroll again. Needs no trackpad. |
+| `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
+| `EdgeScroller` | Rest the pointer at the left or right edge of a screen for a second and the zones beyond that edge scroll into view; the pointer must leave the edge to scroll again. |
 | `WindowMover` | Writes the positions of many windows off the main thread, one app at a time, latest wanted place only. |
 | `StackMemory` | Remember which app belongs to which zone, in the user's order. Knows nothing about windows. |
 | `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release). |
 | `ZoneCarousel` | Slide the chosen window of a zone in beside the one in front: both are photographed (Screen Recording), the pictures slide inside the zone while the real windows swap underneath, so nothing shows outside the zone. |
 | `WindowGlide` | Move a window the user just dropped from where it is to its zone in a short ease-out glide (steps follow the clock, off the main thread, the last one exact; no glide with Reduce Motion). |
-| `UpdatesModel` | Ask, when the user presses the button, whether a newer release exists (and whether the app came from Homebrew). Nothing is checked on its own. |
+| `UpdatesModel` | Ask, when the user presses the button, whether a newer release exists and install it when the user asks. Nothing is checked on its own. |
 | `WindowRestorer` | Put running windows in the zone their app belongs in: remembered ones in their slots, every other window of the app next to them. |
 | `ClosedWindowMonitor` / `WindowAvailability` | Notice closed, hidden or minimized windows. |
 | `ZonePlanner` | Compute which zones exist and where, for each screen's scroll: in view, or waiting beyond a display's edge. |

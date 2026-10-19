@@ -122,7 +122,7 @@ final class PillPresenter: ZonePresenting {
         }
     }
 
-    /// Double Left Shift: hide the pill under the pointer so what is behind it can be clicked.
+    /// Double Left Command: hide the pill under the pointer so what is behind it can be clicked.
     private func hideUnderPointer() {
         let pointer = screens.pointerAX
         for (id, stack) in coordinator.stacks where shown[id] == true {

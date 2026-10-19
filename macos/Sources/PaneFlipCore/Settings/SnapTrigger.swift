@@ -16,7 +16,17 @@ public struct SnapTrigger: Codable, Equatable {
 
     public init(keys: [Key]) { self.keys = keys }
 
-    public static let leftShift = SnapTrigger(keys: [Key(code: 56, name: "Left Shift")])
+    public static let leftCommand = SnapTrigger(keys: [Key(code: 55, name: "Left Command")])
+
+    // The shortcuts that bring the next or previous window of a zone forward, and scroll toward the zones beyond a screen's edge
+    // (keys in key-code order, as the recorder makes them).
+    private static let leftOption = Key(code: 58, name: "Left Option"), leftControl = Key(code: 59, name: "Left Control")
+    private static let commandKey = Key(code: 55, name: "Left Command")
+    private static let leftArrow = Key(code: 123, name: "←"), rightArrow = Key(code: 124, name: "→")
+    public static let nextWindow = SnapTrigger(keys: [leftOption, leftControl, rightArrow])
+    public static let previousWindow = SnapTrigger(keys: [leftOption, leftControl, leftArrow])
+    public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
+    public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
 
     /// Device-dependent flag bits (NX_DEVICE*KEYMASK) for each modifier key code.
     public static let modifierMasks: [Int: UInt] = [56: 0x2, 60: 0x4, 59: 0x1, 62: 0x2000, 58: 0x20, 61: 0x40, 55: 0x8, 54: 0x10]

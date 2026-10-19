@@ -82,7 +82,7 @@ targets:
       - path: Sources/PaneFlip/Platform/SlideStaging.swift
       - path: Sources/PaneFlip/Platform/ReleaseInfo.swift
       - path: Sources/PaneFlip/Platform/ReleaseChecking.swift
-      - path: Sources/PaneFlip/Platform/InstallSourceDetecting.swift
+      - path: Sources/PaneFlip/Platform/UpdateInstalling.swift
       - path: Sources/PaneFlip/Settings/UpdatesModel.swift
       - path: Sources/PaneFlip/Platform/WindowPicture.swift
       - path: Sources/PaneFlip/Platform/WindowCorners.swift
@@ -106,8 +106,6 @@ targets:
       - path: Sources/PaneFlip/Zones/EdgeScroller.swift
       - path: Sources/PaneFlip/Platform/PointerMoveListening.swift
       - path: Sources/PaneFlip/Zones/StripScroller.swift
-      - path: Sources/PaneFlip/Platform/TrackpadSwipeListening.swift
-      - path: Sources/PaneFlip/Platform/PointerHolding.swift
       - path: Sources/PaneFlip/Platform/ScrollStaging.swift
       - path: Sources/PaneFlip/Platform/ScrollPicture.swift
       - path: Sources/PaneFlip/Platform/AppInfo.swift

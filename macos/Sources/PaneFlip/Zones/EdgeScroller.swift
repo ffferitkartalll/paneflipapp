@@ -42,7 +42,7 @@ final class EdgeScroller {
         waiting?.cancel()
         waiting = nil
         armed = true
-        if isRunning && settings.values.overflowZonesEnabled && settings.values.edgeScrollEnabled { listener.start { [weak self] in self?.moved(to: $0) } }
+        if isRunning && settings.values.overflowZonesEnabled { listener.start { [weak self] in self?.moved(to: $0) } }
         else { listener.stop() }
     }
 
@@ -70,7 +70,7 @@ final class EdgeScroller {
     /// The pointer has been at the edge for the time: scroll, if it still is.
     private func rested(on edge: ScreenEdge, of key: String) {
         waiting = nil
-        guard settings.values.edgeScrollEnabled, let (screen, now) = self.edge(at: screens.pointerCocoa), now == edge, screen.key == key
+        guard settings.values.overflowZonesEnabled, let (screen, now) = self.edge(at: screens.pointerCocoa), now == edge, screen.key == key
         else { return }
         if scroller.scroll(toward: edge, on: screen) { armed = false }
     }

@@ -17,21 +17,20 @@ public struct SettingsValues: Equatable {
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).
     public var fetchBrandIcons = true
     /// Held while dragging a window to highlight zones and snap into one.
-    public var snapTrigger = SnapTrigger.leftShift
+    public var snapTrigger = SnapTrigger.leftCommand
     /// The modifier key that, tapped twice, hides the pill under the pointer.
-    public var hidePillKey = SnapTrigger.leftShift
+    public var hidePillKey = SnapTrigger.leftCommand
+
+    /// Bring the next or the previous window of the focused window's zone forward.
+    public var nextWindowShortcut = SnapTrigger.nextWindow
+    public var previousWindowShortcut = SnapTrigger.previousWindow
+    /// Scroll toward the zones beyond the right or left edge of the screen under the pointer.
+    public var scrollRightShortcut = SnapTrigger.scrollRight
+    public var scrollLeftShortcut = SnapTrigger.scrollLeft
 
     /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
     /// off and the apps in them are moved to the screen's default zone.
     public var overflowZonesEnabled = true
-
-    /// Scroll the zones beyond the screen's edges with a sideways swipe of three fingers (reads the trackpad through a
-    /// private system framework, and the system's own three-finger gestures must be off).
-    public var scrollGestureEnabled = false
-
-    /// Rest the pointer at the left or right edge of the screen for a second to scroll the zones beyond that edge into view. Needs
-    /// no trackpad.
-    public var edgeScrollEnabled = true
 
     /// The language of the app: `systemLanguage` or a language code the string catalog has been translated into.
     public var language = SettingsValues.systemLanguage

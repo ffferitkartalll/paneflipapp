@@ -25,10 +25,15 @@ struct SettingsView: View {
                 .tag(SettingsTab.general)
 
             LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
-                        refresh: refresh, settings: settings, navigation: navigation)
+                        settings: settings, navigation: navigation)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
                 .tag(SettingsTab.layouts)
+
+            ZonesPane(settings: settings, refresh: refresh)
+                .fixedSize(horizontal: false, vertical: true)
+                .tabItem { Label("Zones", systemImage: "rectangle.split.3x1") }
+                .tag(SettingsTab.zones)
 
             StackingPane(settings: settings)
                 .fixedSize(horizontal: false, vertical: true)

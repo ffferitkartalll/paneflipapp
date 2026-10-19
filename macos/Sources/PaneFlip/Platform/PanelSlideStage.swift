@@ -34,8 +34,13 @@ final class PanelSlideStage: SlideStaging {
     func slide(leaving: WindowPicture, entering: WindowPicture, in zone: CGRect, forward: Bool,
                covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
         let cocoaZone = screens.flip(zone)
-        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: cocoaZone.midX, y: cocoaZone.midY)) }),
-              let root = panels.panel(for: screen).contentView?.layer else { return completion() }
+        // The screen that shows most of the zone: a scrolled layout can leave the middle of a zone beyond the screen's edge.
+        guard let screen = NSScreen.screens.max(by: { overlap($0.frame, cocoaZone) < overlap($1.frame, cocoaZone) }),
+              overlap(screen.frame, cocoaZone) > 0, let root = panels.panel(for: screen).contentView?.layer else {
+            // Nothing of the zone is in view: no slide, but the real window still changes.
+            covered { }
+            return completion()
+        }
 
         // Everything of the slide lives in one layer: the zone, cut off at its edge.
         let clip = CALayer()
@@ -68,13 +73,20 @@ final class PanelSlideStage: SlideStaging {
         }
     }
 
-    /// The picture's own place in the zone: a window that is not exactly the zone's size keeps its size and position.
+    private func overlap(_ a: CGRect, _ b: CGRect) -> CGFloat {
+        let r = a.intersection(b)
+        return r.isNull ? 0 : r.width * r.height
+    }
+
+    /// The picture's own place in the zone: at the zone's corner, where windows are put, keeping its own size. Where the photograph
+    /// says the window was is not used: the list it comes from is kept for a few seconds and does not know that the window has
+    /// been moved since (by a scroll, say).
     private func layer(_ picture: WindowPicture, in zone: CGRect, shiftedBy dx: CGFloat) -> CALayer {
         let layer = CALayer()
         layer.contents = picture.image
         layer.contentsGravity = .resize
-        let x = picture.frame.minX - zone.minX + dx
-        let y = zone.height - (picture.frame.minY - zone.minY) - picture.frame.height   // the layer's origin is bottom-left
+        let x = dx
+        let y = zone.height - picture.frame.height   // the layer's origin is bottom-left
         layer.frame = CGRect(x: x, y: y, width: picture.frame.width, height: picture.frame.height)
         return layer
     }

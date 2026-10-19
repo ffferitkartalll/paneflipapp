@@ -91,19 +91,23 @@ final class AppContainer {
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())
         self.updates = UpdatesModel(
             currentVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
-            checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installSource: CaskroomInstallSource(cask: "paneflipapp"))
+            checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
         self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
-        let shortcut: KeyShortcutListening = EventTapKeyShortcut()
+        let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
+            let v = settings.values
+            return [(KeyShortcut.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
+                    (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
+                .compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
+        }
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
-        let scroller = StripScroller(listener: MultitouchSwipeListener(), screens: screens, planner: planner, viewport: viewport,
+        let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
                                      settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
-                                     stage: PanelScrollStage(screens: screens, panels: stagePanels), pointer: EventTapPointerHold(),
+                                     stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
-        settings.onScrollGestureChanged = { [weak scroller] in scroller?.settingDidChange() }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller) { delay, work in
             let item = DispatchWorkItem(block: work)
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
@@ -112,12 +116,14 @@ final class AppContainer {
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
             scroller?.settingDidChange()
             edgeScroller?.settingDidChange()
-            guard !settings.values.overflowZonesEnabled else { return }
+            guard !settings.values.overflowZonesEnabled else {
+                layouts?.returnOverflowAppsToTheirZones()
+                return
+            }
             viewport.reset()
             layouts?.moveOverflowAppsToDefaultZones()
             engine?.refreshZones()
         }
-        settings.onEdgeScrollChanged = { [weak edgeScroller] in edgeScroller?.settingDidChange() }
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
@@ -125,7 +131,12 @@ final class AppContainer {
             snap.start()
             scroller.start()
             edgeScroller.start()
-            shortcut.start { reverse in coordinator.cycleFocusedZone(reverse: reverse) }
+            shortcut.start { press in
+                switch press {
+                case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)
+                case .scroll(let edge): scroller.scroll(toward: edge)
+                }
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }

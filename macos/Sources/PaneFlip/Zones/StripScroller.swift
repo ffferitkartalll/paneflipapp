@@ -2,15 +2,14 @@ import CoreGraphics
 import Foundation
 import PaneFlipCore
 
-/// Turns a three-finger swipe into scrolling of the layout on the screen under the pointer. Pictures of the windows follow
-/// the fingers, moved by the render server (so they glide whatever the apps or the machine are doing); the real windows wait at
-/// the display's edge meanwhile. When the fingers lift, the pictures glide on to the nearest rest position, the real windows
+/// Scrolls the layout of the screen under the pointer, from the shortcut or the pointer resting at the screen's edge. Pictures of the
+/// windows glide, moved by the render server (so they glide whatever the apps or the machine are doing); the real windows wait at
+/// the display's edge meanwhile. Then the pictures glide on to the nearest rest position, the real windows
 /// are put where they belong, and the pictures give way to them.
 final class StripScroller {
-    /// A swipe across the whole trackpad moves the layout this many screen widths.
+    /// A distance of 1 moves the layout this many screen widths.
     private static let swipeToScreens = 1.0
-    /// The fingers must have moved this far (a fraction of the trackpad) before anything is shown or moved: three fingers
-    /// resting on the pad do nothing.
+    /// The scroll must be this long (a fraction of the screen) before anything is shown or moved.
     private static let threshold = 0.02
     /// How fast the pictures catch up with the fingers: they close all but a third of the gap in this long.
     private static let followTime: TimeInterval = 0.04
@@ -59,7 +58,6 @@ final class StripScroller {
     /// Calls `tick` on every frame until it returns false.
     typealias Metronome = (_ tick: @escaping () -> Bool) -> Void
 
-    private let listener: TrackpadSwipeListening
     private let screens: ScreenProviding
     private let planner: ZonePlanner
     private let viewport: StripViewport
@@ -68,7 +66,6 @@ final class StripScroller {
     private let mover: WindowMover
     private let snapshots: WindowSnapshotting
     private let stage: ScrollStaging
-    private let pointer: PointerHolding
     private let metronome: Metronome
     private let now: () -> TimeInterval
     private weak var refresher: ZoneRefreshing?
@@ -77,19 +74,17 @@ final class StripScroller {
     private var swipe: Swipe?
     private var lastTick: TimeInterval = 0
     private var ticking = false
-    private var ignoring = false
     private var count = 0
     private var isRunning = false
     /// The latest photograph of each window, with when it was taken.
     private var kept: [CGWindowID: (picture: WindowPicture, at: TimeInterval)] = [:]
 
     /// `isBusy`: something else holds the windows (Stage Manager, Mission Control): no scrolling then.
-    init(listener: TrackpadSwipeListening, screens: ScreenProviding, planner: ZonePlanner, viewport: StripViewport,
+    init(screens: ScreenProviding, planner: ZonePlanner, viewport: StripViewport,
          settings: AppSettings, coordinator: StackCoordinator, mover: WindowMover, snapshots: WindowSnapshotting,
-         stage: ScrollStaging, pointer: PointerHolding, metronome: @escaping Metronome, refresher: ZoneRefreshing,
+         stage: ScrollStaging, metronome: @escaping Metronome, refresher: ZoneRefreshing,
          reduceMotion: @escaping () -> Bool, isBusy: @escaping () -> Bool,
          now: @escaping () -> TimeInterval = { CFAbsoluteTimeGetCurrent() }) {
-        self.listener = listener
         self.screens = screens
         self.planner = planner
         self.viewport = viewport
@@ -98,7 +93,6 @@ final class StripScroller {
         self.mover = mover
         self.snapshots = snapshots
         self.stage = stage
-        self.pointer = pointer
         self.metronome = metronome
         self.refresher = refresher
         self.reduceMotion = reduceMotion
@@ -106,33 +100,20 @@ final class StripScroller {
         self.now = now
     }
 
-    /// The app is up: listen if the setting is on.
+    /// The app is up.
     func start() {
         isRunning = true
-        settingDidChange()
         // After the windows have settled in their zones.
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in self?.warm() }
     }
 
-    /// Listens only while the setting is on: the trackpad is not read otherwise.
-    func settingDidChange() {
-        if isRunning && settings.values.overflowZonesEnabled && settings.values.scrollGestureEnabled {
-            listener.start { [weak self] in self?.handle($0) }
-            warm()
-        } else {
-            listener.stop()
-            // The end of a swipe that was still going will not come: let go of the pointer and the windows.
-            if let current = swipe, [.touching, .waiting, .direct].contains(current.phase) {
-                swipe = nil
-                pointer.hold(false)
-            }
-        }
-    }
+    /// The zones beyond the screens' edges were switched on or off.
+    func settingDidChange() { warm() }
 
     /// Photographs the windows in front in every zone of the screens that can scroll, so the first swipe already has
     /// pictures to show.
     func warm() {
-        guard isRunning, settings.values.scrollGestureEnabled, settings.values.placementEnabled, !isBusy(), !reduceMotion() else { return }
+        guard isRunning, settings.values.overflowZonesEnabled, settings.values.placementEnabled, !isBusy(), !reduceMotion() else { return }
         let all = screens.screens()
         for screen in all {
             guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
@@ -147,10 +128,17 @@ final class StripScroller {
         }
     }
 
-    func handle(_ event: SwipeTracker.Event) {
+    /// A scroll as the fingers of a swipe would make it: begun, moved by a distance (a fraction of the screen, right is positive),
+    /// ended with a velocity.
+    enum Event {
+        case began
+        case moved(Double)
+        case ended(velocity: Double)
+    }
+
+    func handle(_ event: Event) {
         switch event {
-        case .began:
-            if settings.values.overflowZonesEnabled && settings.values.scrollGestureEnabled { begin() } else { ignoring = true }
+        case .began: begin()
         case .moved(let distance): moved(distance)
         case .ended(let velocity): ended(velocity)
         }
@@ -158,24 +146,29 @@ final class StripScroller {
 
     // MARK: Swipe
 
-    private func begin(on forced: ScreenInfo? = nil, holdingPointer: Bool = true) {
-        guard swipe == nil else { ignoring = true; return }   // the last scroll is still settling
-        ignoring = false
-        guard settings.values.placementEnabled, !isBusy() else { ignoring = true; return }
+    private func begin(on forced: ScreenInfo? = nil) {
+        guard swipe == nil, settings.values.placementEnabled, settings.values.overflowZonesEnabled, !isBusy() else { return }   // else the last scroll is still settling
         let all = screens.screens()
         guard let screen = forced ?? all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }),
               let (geometry, found) = planner.strip(of: screen, among: all), let side = found,
               geometry.range.lowerBound < geometry.range.upperBound
-        else { ignoring = true; return }
+        else { return }
         count += 1
         let start = geometry.clamped(viewport.offset(for: screen.key))
         var current = Swipe(id: count, screen: screen, geometry: geometry, side: side, start: start,
                             held: held(of: geometry, at: start), shown: start)
-        if holdingPointer { pointer.hold(true) }   // three fingers on the pad would move the pointer
         let fronts = current.held.filter(\.isFront)
         guard !reduceMotion(), !fronts.isEmpty else { swipe = current; return }
-        // Fingers are down: the photographs start now, so they are ready by the time the fingers have moved.
+        // The photographs start now, so they are ready by the time the pictures are needed.
         for front in fronts { current.pictures[front.ref.id] = keptPicture(of: front) }
+        // Photographing seven windows while the pictures glide takes the machine's time and makes the glide stutter, and the new
+        // photographs have to be put on the layers in the middle of it. With a picture for every window already, the glide
+        // runs on them alone; fresh ones are taken afterwards (`warm`), for the next scroll.
+        if fronts.allSatisfy({ current.pictures[$0.ref.id] != nil }) {
+            current.photographed = true
+            swipe = current
+            return
+        }
         swipe = current
         let id = current.id
         snapshots.snapshots(of: fronts.map(\.ref)) { [weak self] images in self?.captured(images, id: id) }
@@ -189,6 +182,13 @@ final class StripScroller {
         return edge == .left ? offset > 0.5 : offset < -0.5
     }
 
+    /// The shortcut: scrolls the screen under the pointer.
+    func scroll(toward edge: ScreenEdge) {
+        let all = screens.screens()
+        guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first else { return }
+        scroll(toward: edge, on: screen)
+    }
+
     /// Brings the next rest position beyond `edge` of `screen` into view (a scroll as a swipe of the right length would make: the
     /// pictures glide, the windows land). False when there is nothing more that way, or the windows are not free to be moved.
     @discardableResult
@@ -199,7 +199,7 @@ final class StripScroller {
         let offset = geometry.clamped(viewport.offset(for: screen.key))
         let rests = geometry.rests
         guard let target = edge == .right ? rests.first(where: { $0 > offset + 0.5 }) : rests.last(where: { $0 < offset - 0.5 }) else { return false }
-        begin(on: screen, holdingPointer: false)
+        begin(on: screen)
         guard swipe != nil else { return false }
         handle(.moved(Double((offset - target) / (screen.axVisible.width * Self.swipeToScreens))))
         handle(.ended(velocity: 0))
@@ -207,19 +207,17 @@ final class StripScroller {
     }
 
     private func moved(_ distance: Double) {
-        guard !ignoring, var current = swipe else { return }
+        guard var current = swipe else { return }
         current.distance = distance
         swipe = current
         if current.phase == .touching, abs(distance) > Self.threshold { startCover() }
     }
 
     private func ended(_ velocity: Double) {
-        if ignoring { ignoring = false; return }
         guard var current = swipe else { return }
         switch current.phase {
         case .touching:
             swipe = nil
-            pointer.hold(false)
         case .waiting, .covering:
             current.endVelocity = velocity   // the pictures are not up yet: the end waits for them
             swipe = current
@@ -410,7 +408,6 @@ final class StripScroller {
         // that did not answer) is put back exactly, with its size. The pictures hide this.
         coordinator.isScrolling = false
         refresher?.refreshZones()
-        pointer.hold(false)
         let covered = current.phase == .gliding || current.phase == .following
         guard covered else {
             swipe = nil
@@ -421,6 +418,8 @@ final class StripScroller {
                 self?.swipe = nil
                 // Apps that settle late (a window that fits itself to its new place) are looked at once more.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self?.refresher?.refreshZones() }
+                // Fresh photographs for the next scroll, once the machine is quiet again.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { self?.warm() }
             }
         }
     }

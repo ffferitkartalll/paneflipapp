@@ -12,10 +12,9 @@ final class StripScrollingTests: XCTestCase {
     private var viewport: StripViewport!
     private var planner: ZonePlanner!
     private var screens: FakeScreens!
-    private var listener: FakeSwipeListener!
+    private var listener: SwipeDriver!
     private var windows: FakeWindowSystem!
     private var coordinator: StackCoordinator!
-    private var pointer: FakePointerHold!
     private var snapshots: FakeWindowSnapshots!
     private var stage: FakeScrollStage!
     private var reduceMotion = false
@@ -46,7 +45,6 @@ final class StripScrollingTests: XCTestCase {
         strip.trailing = Overflow(width: 0.25, root: .leaf(areaZone))
         repository.setStrip(strip, ofLayout: layout.id, key: key)
         var values = SettingsValues()
-        values.scrollGestureEnabled = true
         values.gap = 0
         let storage = StubSettingsStorage()
         storage.saved = values
@@ -56,9 +54,8 @@ final class StripScrollingTests: XCTestCase {
         screens = FakeScreens()
         screens.infos = [screen(key)]
         screens.pointerCocoa = CGPoint(x: 500, y: 250)
-        listener = FakeSwipeListener()
+        listener = SwipeDriver()
         windows = FakeWindowSystem()
-        pointer = FakePointerHold()
         coordinator = StackCoordinator(windows: windows, memory: StackMemory(store: MemoryDocumentStore()), settings: settings, apps: FakeApps())
         refresher = Refresher()
         refresher.onRefresh = { [unowned self] in coordinator.apply(plan: planner.plan(on: screens.infos)) }
@@ -73,10 +70,12 @@ final class StripScrollingTests: XCTestCase {
     }
 
     private func scroller(busy: Bool = false) -> StripScroller {
-        StripScroller(listener: listener, screens: screens, planner: planner, viewport: viewport, settings: settings,
+        let made = StripScroller(screens: screens, planner: planner, viewport: viewport, settings: settings,
                       coordinator: coordinator, mover: WindowMover(windows: windows, background: { $0() }), snapshots: snapshots,
-                      stage: stage, pointer: pointer, metronome: { [unowned self] tick in frames.append(tick) }, refresher: refresher,
+                      stage: stage, metronome: { [unowned self] tick in frames.append(tick) }, refresher: refresher,
                       reduceMotion: { [unowned self] in reduceMotion }, isBusy: { busy }, now: { [unowned self] in clock })
+        listener.target = made
+        return made
     }
 
     /// `count` frames of the display, `step` seconds apart.
@@ -142,7 +141,6 @@ final class StripScrollingTests: XCTestCase {
         let scroller = scroller()
         scroller.start()
         listener.send(.began)
-        XCTAssertTrue(pointer.isHeld)
         listener.send(.moved(-0.01))
         XCTAssertTrue(stage.begun.isEmpty, "resting fingers show nothing")
 
@@ -175,7 +173,6 @@ final class StripScrollingTests: XCTestCase {
         settle()
         XCTAssertEqual(viewport.offset(for: key), 250)
         XCTAssertFalse(coordinator.isScrolling)
-        XCTAssertFalse(pointer.isHeld)
         XCTAssertEqual(windows.frames[3]?.minX, -250, "the front window stands in its zone")
         XCTAssertEqual(windows.frames[1]?.minX, -250, "so does the one behind")
         XCTAssertEqual(windows.frames[2]?.minX, 750, "and the one that was waiting beyond the edge")
@@ -195,7 +192,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(windows.frames[3], CGRect(x: -250, y: 0, width: 1000, height: 500), "back at its size and place")
     }
 
-    func testPicturesFromAnEarlierSwipeStandInAtOnceAndNewerOnesReplaceThemInPassing() {
+    func testPicturesFromAnEarlierSwipeAreUsedAndNoneAreTakenWhileTheLayoutGlides() {
         let scroller = scroller()
         scroller.start()
         swipe(-0.3)
@@ -206,7 +203,7 @@ final class StripScrollingTests: XCTestCase {
         listener.send(.moved(-0.3))
         XCTAssertEqual(stage.begun.count, 3, "the layout follows the fingers without waiting for new photographs")
         snapshots.answer()
-        XCTAssertEqual(stage.updates.count, 1, "newer photographs replace them in passing")
+        XCTAssertEqual(stage.updates.count, 0, "no photographs are taken in the middle of the glide")
         listener.send(.ended(velocity: 0))
         run(60)
         settle()
@@ -285,7 +282,6 @@ final class StripScrollingTests: XCTestCase {
     func testFingersMovingRightMoveTheScreenBackAndAFlickGoesToTheEnd() {
         let scroller = scroller()
         scroller.start()
-        XCTAssertTrue(listener.isListening)
         swipe(-0.3)   // fingers to the left: the screen moves right along the strip
         XCTAssertEqual(viewport.offset(for: key), 250)
         swipe(0.05)   // a short nudge back stays where it is (250 is the nearest rest)
@@ -301,44 +297,21 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 250)
     }
 
-    func testThePointerStaysStillFromTheFingersLandingToTheWindowsSettling() {
+    func testTheShortcutScrollsTheScreenUnderThePointerAndBackAgain() {
         let scroller = scroller()
         scroller.start()
-        listener.send(.began)
-        XCTAssertTrue(pointer.isHeld)
-        listener.send(.ended(velocity: 0))
-        XCTAssertFalse(pointer.isHeld, "a touch that never moved lets the pointer go")
-        listener.send(.began)
-        listener.send(.moved(-0.3))
-        XCTAssertTrue(pointer.isHeld)
-        listener.send(.ended(velocity: 0))
-        run(60)
-        settle()
-        XCTAssertFalse(pointer.isHeld)
-        screens.pointerCocoa = CGPoint(x: -500, y: 250)   // outside every screen: the pointer is left alone
-        listener.send(.began)
-        XCTAssertFalse(pointer.isHeld)
+        scroller.scroll(toward: .left)   // nothing beyond the left edge
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 0)
+        scroller.scroll(toward: .right)
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
+        scroller.scroll(toward: .left)
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 0)
     }
 
-    func testSwitchingTheGestureOffMidSwipeLetsThePointerGo() {
-        let scroller = scroller()
-        scroller.start()
-        listener.send(.began)
-        XCTAssertTrue(pointer.isHeld)
-        settings.values.scrollGestureEnabled = false
-        scroller.settingDidChange()
-        XCTAssertFalse(pointer.isHeld)
-    }
-
-    func testNothingScrollsWhileTheSettingIsOffOrStageManagerHoldsTheWindows() {
-        settings.values.scrollGestureEnabled = false
-        let scroller = scroller()
-        scroller.start()
-        XCTAssertFalse(listener.isListening, "the trackpad is not read while the setting is off")
-        settings.values.scrollGestureEnabled = true
-        scroller.settingDidChange()
-        XCTAssertTrue(listener.isListening)
-
+    func testNothingScrollsWhileStageManagerHoldsTheWindows() {
         let busy = self.scroller(busy: true)
         busy.handle(.began)
         busy.handle(.moved(-0.5))
@@ -430,7 +403,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 0)
     }
 
-    func testNothingScrollsWhereThereIsNothingMoreAndNotWhileTheSettingIsOff() {
+    func testNothingScrollsWhereThereIsNothingMoreAndNotWhileTheZonesAreSwitchedOff() {
         let edge = edgeScroller()
         pointer_(at: 0.5)   // the left edge: no area that way
         screens.pointerCocoa = CGPoint(x: 0.5, y: 250)
@@ -439,7 +412,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 0)
         XCTAssertTrue(stage.begun.isEmpty)
 
-        settings.values.edgeScrollEnabled = false
+        settings.values.overflowZonesEnabled = false
         edge.settingDidChange()
         XCTAssertFalse(pointerMoves.isListening, "the pointer is not watched while the setting is off")
     }
