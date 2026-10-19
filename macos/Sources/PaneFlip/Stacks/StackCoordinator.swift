@@ -20,6 +20,9 @@ final class StackCoordinator {
     /// remembered before is changed.
     var placementOnly: () -> Bool = { false }
     var isSliding: Bool { carousel?.isSliding ?? false }
+    /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
+    /// anything, and the pills are hidden.
+    var isScrolling = false
 
     private let windows: WindowSystem
     private let memory: StackMemory
@@ -37,21 +40,39 @@ final class StackCoordinator {
 
     /// Makes `zones` (id → rectangle) the visible set, keeping stacks of zones that remain and re-framing their windows.
     func apply(zones: [UUID: CGRect]) {
-        visibleZoneIDs = Set(zones.keys)
-        for (id, rect) in zones {
+        apply(plan: zones.mapValues { PlannedZone(rect: $0) })
+    }
+
+    /// The same for a plan that may hold zones scrolled out of sight: their windows wait at the display's edge.
+    func apply(plan: [UUID: PlannedZone]) {
+        visibleZoneIDs = Set(plan.keys)
+        for (id, zone) in plan {
             let stack = stacks[id] ?? ZoneStack(id: id)
             stacks[id] = stack
-            stack.rect = rect
-            guard !placementOnly() else { continue }
+            stack.rect = zone.rect
+            stack.frame = zone.frame
+            stack.isParked = zone.isParked
+            guard !placementOnly(), !isScrolling else { continue }   // a scroll is moving the windows
             for tab in stack.tabs {
                 guard let ref = stack.refs[tab.id] else { continue }
                 glide?.cancel(ref.id)
-                windows.setFrame(stack.rect, of: ref)
+                place(ref, at: stack.frame)
             }
         }
     }
 
-    var visibleStacks: [ZoneStack] { visibleZoneIDs.compactMap { stacks[$0] } }
+    /// Puts a window at a frame, writing only what differs: a window already there is left alone (an app redraws, and
+    /// flashes, when it is written to), one of the right size is only moved.
+    private func place(_ ref: WindowRef, at frame: CGRect) {
+        guard let now = windows.frame(of: ref) else { return windows.setFrame(frame, of: ref) }
+        func near(_ a: CGFloat, _ b: CGFloat) -> Bool { abs(a - b) < 1.5 }
+        let sameSize = near(now.width, frame.width) && near(now.height, frame.height)
+        if sameSize && near(now.minX, frame.minX) && near(now.minY, frame.minY) { return }
+        if sameSize { windows.setPosition(frame.origin, of: ref) } else { windows.setFrame(frame, of: ref) }
+    }
+
+    /// The zones in view (not the ones scrolled away).
+    var visibleStacks: [ZoneStack] { visibleZoneIDs.compactMap { stacks[$0] }.filter { !$0.isParked } }
 
     func zoneID(at point: CGPoint) -> UUID? {
         // The widened rectangles of neighbours overlap, so exact containment must win; the Set order is random.
@@ -102,14 +123,14 @@ final class StackCoordinator {
         stack.tabs.insert(.init(id: ref.id, title: title, appName: appName, bundleID: bundleID, icon: apps.icon(pid: ref.pid)), at: position)
         stack.refreshNames()
         if stack.activeID == nil { stack.activeID = ref.id }
-        if glide, raise, let mover = self.glide {
+        if glide, raise, !stack.isParked, let mover = self.glide {
             stack.activeID = ref.id
             windows.raise(ref)
             mover.glide(ref, to: stack.rect)
             onActivity?(stack.id)
             return
         }
-        windows.setFrame(stack.rect, of: ref)
+        windows.setFrame(stack.frame, of: ref)
         if raise { select(ref.id, in: stack) } else { onActivity?(stack.id) }
     }
 
@@ -148,8 +169,8 @@ final class StackCoordinator {
     func select(_ id: CGWindowID, in stack: ZoneStack) {
         guard let ref = stack.refs[id] else { return }
         stack.activeID = id
-        windows.setFrame(stack.rect, of: ref)
-        windows.raise(ref)
+        windows.setFrame(stack.frame, of: ref)
+        if !stack.isParked { windows.raise(ref) }
         onActivity?(stack.id)
     }
 

@@ -32,9 +32,15 @@ final class EditorController: LayoutEditing {
     func edit(on screen: ScreenInfo, layoutID: UUID) {
         hide()
         guard let layout = repository.layout(id: layoutID, key: screen.key) else { return }
+        let showsOverflow = settings.values.overflowZonesEnabled
         let model = EditorModel(
-            root: layout.root,
-            onApply: { [layouts] root in layouts.updateLayout(key: screen.key, id: layoutID, root: root) },
+            strip: showsOverflow ? layout.strip : StripLayout(root: layout.root),
+            allowsOverflow: showsOverflow,
+            onApply: { [layouts, repository] strip in
+                // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
+                let result = showsOverflow ? strip : repository.layout(id: layoutID, key: screen.key).map { strip.keepingAreas(of: $0.strip) } ?? strip
+                layouts.updateLayout(key: screen.key, id: layoutID, strip: result)
+            },
             onClose: { [weak self] in self?.hide() })
 
         let frame = screen.cocoaVisibleFrame

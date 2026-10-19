@@ -12,6 +12,8 @@ protocol WindowSystem {
 
     func frame(of ref: WindowRef) -> CGRect?
     func setFrame(_ rect: CGRect, of ref: WindowRef)
+    /// Moves the window without touching its size: one write, for movement that follows the fingers.
+    func setPosition(_ point: CGPoint, of ref: WindowRef)
     func title(of ref: WindowRef) -> String?
     func isMinimized(_ ref: WindowRef) -> Bool
     func raise(_ ref: WindowRef)

@@ -10,7 +10,10 @@ struct EditorView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let rect = CGRect(origin: .zero, size: geo.size)
+            // With areas beyond the screen's edges the whole strip is drawn smaller, in the middle of the panel.
+            let total = CGFloat(model.strip.totalWidth)
+            let height = geo.size.height / total
+            let rect = CGRect(x: 0, y: (geo.size.height - height) / 2, width: geo.size.width, height: height)
             let zones = model.root.zones(in: rect).enumerated().map { ZoneRect(id: $1.id, index: $0, rect: $1.rect) }
             let dividers = model.root.dividers(in: rect)
             let target = splitTarget(zones: zones, dividers: dividers, size: geo.size)
@@ -20,14 +23,16 @@ struct EditorView: View {
 
                 ForEach(zones) { z in
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(.white.opacity(0.05))
+                        .fill(model.strip.part(of: z.id) == .screen ? Color.white.opacity(0.05) : Color.orange.opacity(0.18))
                         .frame(width: max(z.rect.width - 6, 0), height: max(z.rect.height - 6, 0))
                         .overlay(alignment: .topLeading) {
-                            Text(verbatim: "\(z.index + 1)").font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
+                            Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
                         }
                         .offset(x: z.rect.minX + 3, y: z.rect.minY + 3)
                         .allowsHitTesting(false)
                 }
+
+                if total > 1 { screenFrame(rect, total: total) }
 
                 // Empty space: hovering previews a split, clicking performs it.
                 Color.clear.contentShape(Rectangle())
@@ -40,7 +45,7 @@ struct EditorView: View {
                     .gesture(SpatialTapGesture().onEnded { value in
                         model.shift = NSEvent.modifierFlags.contains(.shift)
                         if let t = splitTarget(at: value.location, zones: zones, dividers: dividers, size: geo.size), t.valid {
-                            model.root = model.root.splitting(t.zone.id, sideBySide: t.sideBySide, ratio: t.ratio)
+                            model.split(t.zone.id, sideBySide: t.sideBySide, ratio: t.ratio)
                         }
                     })
                     .simultaneousGesture(mergeDrag(zones: zones, area: rect))
@@ -59,9 +64,45 @@ struct EditorView: View {
                 ForEach(dividers) { d in dividerView(d) }
 
                 controls
+                overflowButtons(size: geo.size)
             }
             .coordinateSpace(name: "editor")
         }
+    }
+
+    /// The drawing is scaled down by this much when areas beyond the screen are shown (zone sizes are in screen points).
+    private var scale: CGFloat { 1 / CGFloat(model.strip.totalWidth) }
+
+    // MARK: Areas beyond the screen
+
+    /// Zones are named as everywhere else: 1, 2, 3 on the screen, -1, -2 beyond the left edge, +1, +2 beyond the right one.
+    private func label(of zone: UUID) -> String { ZoneLabel.text(of: zone, in: model.strip) }
+
+    /// Where the screen itself lies within the strip.
+    private func screenFrame(_ rect: CGRect, total: CGFloat) -> some View {
+        let before = CGFloat(model.strip.leading?.width ?? 0) / total * rect.width
+        return RoundedRectangle(cornerRadius: 12)
+            .strokeBorder(.white.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
+            .frame(width: rect.width / total, height: rect.height)
+            .offset(x: rect.minX + before, y: rect.minY)
+            .allowsHitTesting(false)
+    }
+
+    private func overflowButtons(size: CGSize) -> some View {
+        ZStack {
+            if model.allowsOverflow, model.strip.leading == nil {
+                Button { model.addLeading() } label: { Image(systemName: "plus") }
+                    .help("Add zones beyond the left edge")
+                    .position(x: 32, y: size.height / 2)
+            }
+            if model.allowsOverflow, model.strip.trailing == nil {
+                Button { model.addTrailing() } label: { Image(systemName: "plus") }
+                    .help("Add zones beyond the right edge")
+                    .position(x: size.width - 32, y: size.height / 2)
+            }
+        }
+        .buttonStyle(.glass)
+        .controlSize(.large)
     }
 
     // MARK: Controls
@@ -81,6 +122,7 @@ struct EditorView: View {
             }
             .controlSize(.large)
             hint
+            if model.strip.leading != nil || model.strip.trailing != nil { overflowHint }
             Spacer()
         }
         .padding(.top, 28)
@@ -96,8 +138,17 @@ struct EditorView: View {
             .allowsHitTesting(false)
     }
 
+    private var overflowHint: some View {
+        Text("Zones beyond the screen's edge are reached by scrolling.\nDouble-click the handle on the dashed line to remove them")
+            .multilineTextAlignment(.center)
+            .font(.callout).foregroundStyle(.secondary)
+            .padding(.horizontal, 14).padding(.vertical, 8)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+            .allowsHitTesting(false)
+    }
+
     private func controlsRect(_ size: CGSize) -> CGRect {
-        CGRect(x: size.width / 2 - 260, y: 0, width: 520, height: 190)   // buttons + hint
+        CGRect(x: size.width / 2 - 260, y: 0, width: 520, height: model.strip.totalWidth > 1 ? 250 : 190)   // buttons + hints
     }
 
     // MARK: Merge
@@ -105,7 +156,7 @@ struct EditorView: View {
     private struct MergePreview {
         let source: ZoneRect
         let target: ZoneRect?
-        let result: LayoutNode?
+        let result: StripLayout?
         var valid: Bool { result != nil }
     }
 
@@ -114,7 +165,7 @@ struct EditorView: View {
         guard let p = model.dragPoint, let tgt = zones.first(where: { $0.rect.contains(p) && $0.id != sid }) else {
             return MergePreview(source: src, target: nil, result: nil)
         }
-        return MergePreview(source: src, target: tgt, result: model.root.merging(sid, tgt.id, in: area))
+        return MergePreview(source: src, target: tgt, result: model.merged(sid, tgt.id))
     }
 
     private func mergeDrag(zones: [ZoneRect], area: CGRect) -> some Gesture {
@@ -131,7 +182,7 @@ struct EditorView: View {
             .onEnded { v in
                 defer { model.mergeSource = nil; model.dragPoint = nil }
                 model.dragPoint = v.location
-                if let result = mergePreview(zones: zones, area: area)?.result { model.root = result }
+                if let m = mergePreview(zones: zones, area: area), m.valid, let target = m.target { model.merge(m.source.id, target.id) }
             }
     }
 
@@ -183,7 +234,7 @@ struct EditorView: View {
         let side = !model.shift
         let extent = side ? z.rect.width : z.rect.height
         let origin = side ? z.rect.minX : z.rect.minY
-        let minSize = settings.values.minZoneSize
+        let minSize = settings.values.minZoneSize * scale
         let valid = extent >= 2 * minSize
 
         var pos = side ? p.x : p.y
@@ -201,9 +252,9 @@ struct EditorView: View {
         var pos = d.sideBySide ? p.x : p.y
         if abs(pos - (origin + d.extent / 2)) < snapDistance { pos = origin + d.extent / 2 }
         var r = Double((pos - origin) / d.extent)
-        let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
+        let lo = min(settings.values.minZoneSize * scale / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
-        model.root = model.root.settingRatio(d.id, r)
+        model.setRatio(d.id, r)
     }
 
     private func drag(_ d: SplitDivider) -> some Gesture {
@@ -233,7 +284,7 @@ struct EditorView: View {
                 .background(Circle().fill(centered ? Color.white : Color.accentColor))
                 .contentShape(Circle())
                 .gesture(drag(d))
-                .onTapGesture(count: 2) { model.root = model.root.collapsing(d.id) }
+                .onTapGesture(count: 2) { model.collapse(d.id) }
         }
         .position(mid)
     }

@@ -12,6 +12,7 @@ struct LayoutCard: View {
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
     let navigation: SettingsNavigation
+    let showsOverflow: Bool
 
     @State private var isRenaming = false
     @State private var draftName = ""
@@ -29,7 +30,7 @@ struct LayoutCard: View {
         .sheet(isPresented: Binding(
             get: { navigation.ordering?.layoutID == layout.id },
             set: { if !$0 && navigation.ordering?.layoutID == layout.id { navigation.ordering = nil } })) {
-            LayoutAppsView(layout: layout, editor: apps, focus: navigation.ordering, defaultZone: layout.fallbackZoneID,
+            LayoutAppsView(layout: layout, editor: apps, focus: navigation.ordering, showsOverflow: showsOverflow, defaultZone: layout.fallbackZoneID,
                            setDefaultZone: { layouts.setDefaultZone(key: screen.key, id: layout.id, to: $0) })
         }
         .alert("Rename Layout", isPresented: $isRenaming) {

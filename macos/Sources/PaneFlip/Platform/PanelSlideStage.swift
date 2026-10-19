@@ -8,11 +8,11 @@ import QuartzCore
 final class PanelSlideStage: SlideStaging {
     /// A spring, like the pill's own thumb: it starts quickly and lands softly, without the long standstill at the end
     /// of an ease-in-out curve. Critically damped: no overshoot.
-    private static let stiffness: CGFloat = 320
-    private static let damping: CGFloat = 36
+    static let stiffness: CGFloat = 320
+    static let damping: CGFloat = 36
     /// The hand-over to the real window starts this far into the slide (of its settling time), while the picture is
     /// all but at rest: the last part of a spring only creeps.
-    private static let handOver = 0.7
+    static let handOver = 0.7
     /// The pictures give way to the real windows with a short fade: the real window is active and has its own
     /// shadow, the picture does not.
     static let fade: CFTimeInterval = 0.22
@@ -20,19 +20,22 @@ final class PanelSlideStage: SlideStaging {
     static let settle: TimeInterval = 0.033
 
     private let screens: ScreenProviding
-    private var panels: [CGDirectDisplayID: NSPanel] = [:]
+    private let panels: StagePanels
 
-    init(screens: ScreenProviding) { self.screens = screens }
+    init(screens: ScreenProviding, panels: StagePanels) {
+        self.screens = screens
+        self.panels = panels
+    }
 
     /// Puts the panels on screen: done once, a moment after the app has started and while nothing else is being set up,
     /// not when a pill appears (a window made at that moment can upset the pill's toolbar while it lays itself out).
-    func prepare() { NSScreen.screens.forEach { _ = panel(for: $0) } }
+    func prepare() { NSScreen.screens.forEach { _ = panels.panel(for: $0) } }
 
     func slide(leaving: WindowPicture, entering: WindowPicture, in zone: CGRect, forward: Bool,
                covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
         let cocoaZone = screens.flip(zone)
         guard let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: cocoaZone.midX, y: cocoaZone.midY)) }),
-              let root = panel(for: screen).contentView?.layer else { return completion() }
+              let root = panels.panel(for: screen).contentView?.layer else { return completion() }
 
         // Everything of the slide lives in one layer: the zone, cut off at its edge.
         let clip = CALayer()
@@ -63,32 +66,6 @@ final class PanelSlideStage: SlideStaging {
             _ = move(into, byX: -side * zone.width)
             DispatchQueue.main.asyncAfter(deadline: .now() + duration * Self.handOver) { slideAtRest = true; handOverWhenBoth() }
         }
-    }
-
-    /// One panel per screen, made once.
-    private func panel(for screen: NSScreen) -> NSPanel {
-        let id = (screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0
-        if let panel = panels[id] {
-            // A screen that was moved or changed its size: the panel goes with it.
-            if panel.frame != screen.frame { panel.setFrame(screen.frame, display: false) }
-            return panel
-        }
-        let panel = NSPanel(contentRect: screen.frame, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        // Above the windows, below the pills (which are floating).
-        panel.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue - 1)
-        panel.isOpaque = false
-        panel.backgroundColor = .clear
-        panel.hasShadow = false
-        panel.ignoresMouseEvents = true
-        // AppKit scales a window up (and fades it) when it is ordered in: the picture would shrink and grow back.
-        panel.animationBehavior = .none
-        panel.collectionBehavior = [.canJoinAllSpaces, .stationary]
-        let view = NSView(frame: CGRect(origin: .zero, size: screen.frame.size))
-        view.wantsLayer = true
-        panel.contentView = view
-        panel.orderFrontRegardless()
-        panels[id] = panel
-        return panel
     }
 
     /// The picture's own place in the zone: a window that is not exactly the zone's size keeps its size and position.

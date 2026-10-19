@@ -6,15 +6,21 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var root: LayoutNode
     /// Where apps go whose own zone is gone (a display was unplugged): one of this layout's zones, or the first.
     public var defaultZoneID: UUID?
+    /// Zones beyond the left and right edges of the screen, reached by scrolling.
+    public var leading: Overflow?
+    public var trailing: Overflow?
 
-    public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil) {
+    public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,
+                leading: Overflow? = nil, trailing: Overflow? = nil) {
         self.id = id
         self.name = name
         self.root = root
         self.defaultZoneID = defaultZoneID
+        self.leading = leading
+        self.trailing = trailing
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -23,6 +29,14 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         root = try c.decode(LayoutNode.self, forKey: .root)
         // Files written before layouts had a default zone have no such key.
         defaultZoneID = try c.decodeIfPresent(UUID.self, forKey: .defaultZoneID)
+        leading = try c.decodeIfPresent(Overflow.self, forKey: .leading)
+        trailing = try c.decodeIfPresent(Overflow.self, forKey: .trailing)
+    }
+
+    /// The screen's layout with the areas beyond its edges.
+    public var strip: StripLayout {
+        get { StripLayout(leading: leading, root: root, trailing: trailing) }
+        set { leading = newValue.leading; root = newValue.root; trailing = newValue.trailing }
     }
 
     /// The zone that receives apps whose zone is gone: the chosen one while it still exists, else the first.

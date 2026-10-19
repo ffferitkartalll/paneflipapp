@@ -72,6 +72,11 @@ final class AXWindowSystem: WindowSystem {
         if let sv = AXValueCreate(.cgSize, &s) { AXUIElementSetAttributeValue(ref.element, kAXSizeAttribute as CFString, sv) }
     }
 
+    func setPosition(_ point: CGPoint, of ref: WindowRef) {
+        var p = point
+        if let pv = AXValueCreate(.cgPoint, &p) { AXUIElementSetAttributeValue(ref.element, kAXPositionAttribute as CFString, pv) }
+    }
+
     func title(of ref: WindowRef) -> String? {
         var v: CFTypeRef?
         guard AXUIElementCopyAttributeValue(ref.element, kAXTitleAttribute as CFString, &v) == .success,

@@ -30,6 +30,10 @@ final class ZoneStack {
     @ObservationIgnored var refs: [CGWindowID: WindowRef] = [:]
     /// Zone rectangle in top-left-origin (Accessibility) coordinates.
     @ObservationIgnored var rect: CGRect = .zero
+    /// Where the windows of this zone stand: `rect`, or a waiting place at a display's edge while the zone is scrolled
+    /// out of sight.
+    @ObservationIgnored var frame: CGRect = .zero
+    @ObservationIgnored var isParked = false
 
     init(id: UUID) { self.id = id }
 

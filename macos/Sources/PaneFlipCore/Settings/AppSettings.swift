@@ -2,7 +2,7 @@ import Foundation
 import Observation
 
 /// User settings. Observable for the UI. All of them live in one `SettingsValues`; changing it saves it, and the
-/// two feature switches notify their listeners.
+/// feature switches notify their listeners.
 @Observable
 public final class AppSettings {
     /// Gap between zones: 0–80 pt in steps of 4.
@@ -18,6 +18,9 @@ public final class AppSettings {
             storage.save(values)
             if values.placementEnabled != oldValue.placementEnabled { onPlacementChanged?() }
             if values.stackingEnabled != oldValue.stackingEnabled { onStackingChanged?() }
+            if values.overflowZonesEnabled != oldValue.overflowZonesEnabled { onOverflowZonesChanged?() }
+            if values.scrollGestureEnabled != oldValue.scrollGestureEnabled { onScrollGestureChanged?() }
+            if values.edgeScrollEnabled != oldValue.edgeScrollEnabled { onEdgeScrollChanged?() }
         }
     }
 
@@ -25,6 +28,9 @@ public final class AppSettings {
     @ObservationIgnored public let launchLanguage: String
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
     @ObservationIgnored public var onStackingChanged: (() -> Void)?
+    @ObservationIgnored public var onOverflowZonesChanged: (() -> Void)?
+    @ObservationIgnored public var onScrollGestureChanged: (() -> Void)?
+    @ObservationIgnored public var onEdgeScrollChanged: (() -> Void)?
     @ObservationIgnored private let storage: SettingsStorage
 
     public init(storage: SettingsStorage) {
