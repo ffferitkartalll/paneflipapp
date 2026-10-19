@@ -88,7 +88,8 @@ jobs:
           # The pull requests merged since the previous release: each squash commit's first line ends with (#number).
           numbers="$(gh api "repos/$repo/compare/$previous...${{ github.event.pull_request.merge_commit_sha }}" --paginate \
             --jq '.commits[].commit.message | split("\n")[0] | capture("\\(#(?<n>[0-9]+)\\)$").n')"
-          # The issues those pull requests closed, except those of a release pull request and the documentation-only ones.
+          # The issues those pull requests closed, except those of a release pull request, the documentation-only ones and the ones
+          # labelled internal.
           for number in $numbers; do
             gh api graphql -f owner="${repo%/*}" -f name="${repo#*/}" -F number="$number" -f query='
               query($owner: String!, $name: String!, $number: Int!) {
@@ -101,7 +102,7 @@ jobs:
               }' --jq '.data.repository.pullRequest
                 | select(([.labels.nodes[].name] | index("release")) == null)
                 | .closingIssuesReferences.nodes[]
-                | select([.labels.nodes[].name] != ["documentation"])
+                | select([.labels.nodes[].name] != ["documentation"] and (.labels.nodes | map(.name) | index("internal")) == null)
                 | "\(.number)\t\(.title)"'
           done | sort -n -u > "$RUNNER_TEMP/issues.tsv"
           {
