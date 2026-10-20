@@ -8,6 +8,8 @@ public struct SettingsValues: Equatable {
     public var stackingEnabled = true
     /// Space between zones in points; not applied to screen edges.
     public var gap = 4.0
+    /// Space between the zones and the edges of the screen, in points.
+    public var edgeMargin = 0.0
     /// Smallest width/height a zone may have, in points.
     public var minZoneSize = 240.0
     /// What the stack pill shows for each window.

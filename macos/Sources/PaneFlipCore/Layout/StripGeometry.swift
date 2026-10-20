@@ -33,16 +33,22 @@ public struct StripGeometry: Equatable {
 
     public func clamped(_ offset: CGFloat) -> CGFloat { min(max(offset, range.lowerBound), range.upperBound) }
 
-    /// Every zone of the strip as it stands when the screen has moved by `offset`.
-    public func zones(offset: CGFloat, gap: CGFloat = 0) -> [Placed] {
+    /// Every zone of the strip as it stands when the screen has moved by `offset`. The strip is one band: the gap lies between
+    /// its zones, also between the screen's layout and an overflow, and the margin runs round the whole band, so it lies at
+    /// the far ends of the overflows, not between them and the screen's layout.
+    public func zones(offset: CGFloat, gap: CGFloat = 0, margin: CGFloat = 0) -> [Placed] {
+        let half = gap / 2
+        let top = screen.minY + margin, height = max(screen.height - 2 * margin, 0)
         var placed: [(UUID, CGRect)] = []
         if let l = strip.leading {
-            let rect = CGRect(x: screen.minX - leadingWidth, y: screen.minY, width: leadingWidth, height: screen.height)
+            let rect = CGRect(x: screen.minX - leadingWidth + margin, y: top, width: max(leadingWidth - margin - half, 0), height: height)
             placed += l.root.zones(in: rect, gap: gap).map { ($0.id, $0.rect) }
         }
-        placed += strip.root.zones(in: screen, gap: gap).map { ($0.id, $0.rect) }
+        let left = strip.leading == nil ? screen.minX + margin : screen.minX + half
+        let right = strip.trailing == nil ? screen.maxX - margin : screen.maxX - half
+        placed += strip.root.zones(in: CGRect(x: left, y: top, width: max(right - left, 0), height: height), gap: gap).map { ($0.id, $0.rect) }
         if let t = strip.trailing {
-            let rect = CGRect(x: screen.maxX, y: screen.minY, width: trailingWidth, height: screen.height)
+            let rect = CGRect(x: screen.maxX + half, y: top, width: max(trailingWidth - margin - half, 0), height: height)
             placed += t.root.zones(in: rect, gap: gap).map { ($0.id, $0.rect) }
         }
         return placed.map { id, rect in
