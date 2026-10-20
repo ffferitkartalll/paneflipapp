@@ -95,26 +95,6 @@ Install it with [Homebrew](https://brew.sh):
 brew install --cask ffferitkartalll/tap/paneflipapp
 ```
 
-Upgrade it later:
-
-```bash
-brew upgrade --cask paneflipapp
-```
-
-Installed from the old tap (`ffferitkartalll/paneflipapp`)? Remove that install first:
-
-```bash
-brew uninstall --cask paneflipapp
-```
-
-Then remove the old tap:
-
-```bash
-brew untap ffferitkartalll/paneflipapp
-```
-
-Then run the install command above.
-
 Homebrew removes the quarantine mark, so the first-open step above is not needed. `Settings ▸ Updates` tells you when a
 newer release exists and how to get it.
 
