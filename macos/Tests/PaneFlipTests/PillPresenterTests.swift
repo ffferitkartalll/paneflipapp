@@ -53,6 +53,18 @@ final class PillPresenterTests: XCTestCase {
         XCTAssertEqual(panels.first?.ignoresMouseEvents, false)
     }
 
+    func testThePillStaysInViewWhenTheSettingAsksForIt() {
+        screens.pointerAX = CGPoint(x: 500, y: 400)
+        presenter.zonesDidChange()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.4))   // the fade takes 0.15 s
+        XCTAssertEqual(panels.first?.alphaValue, 0)
+        settings.values.pillAlwaysVisible = true
+        presenter.zonesDidChange()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+        XCTAssertEqual(panels.first?.alphaValue, 1)
+        XCTAssertEqual(panels.first?.ignoresMouseEvents, true, "it does not take the mouse until the pointer is on it")
+    }
+
     func testThePillStaysAwayWhileMissionControlIsOpen() {
         screens.isMissionControlActive = true
         presenter.zonesDidChange()

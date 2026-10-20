@@ -3,7 +3,7 @@ import Foundation
 import PaneFlipCore
 
 /// Owns the pill panels and decides when each one is visible: while the pointer is over it, briefly after the
-/// stack changed, and while it is being used. A double tap of the hide key hides it until the pointer moves away.
+/// stack changed, and while it is being used (always, when the setting asks for it). A double tap of the hide key hides it until the pointer moves away.
 final class PillPresenter: ZonePresenting {
     private let coordinator: StackCoordinator
     private let settings: AppSettings
@@ -106,7 +106,7 @@ final class PillPresenter: ZonePresenting {
                 if pill.contains(pointer) && !suppressed.contains(id) && !covered() { hoverAt[id] = now }
                 let hovering = hoverAt[id].map { now.timeIntervalSince($0) < hideDelay } ?? false
                 let flashing = flashUntil[id].map { $0 > now } ?? false
-                show = (((hovering || flashing) && !suppressed.contains(id)) || stack.interacting) && !covered()
+                show = (((hovering || flashing || settings.values.pillAlwaysVisible) && !suppressed.contains(id)) || stack.interacting) && !covered()
                 // Clicks in the transparent margins go to the windows below.
                 clickable = show && (stack.interacting || pill.contains(pointer))
                 let screenFrame = screens.flip(frame)

@@ -27,6 +27,10 @@ struct StackingPane: View {
                                       options: PillContent.allCases.map { ($0, $0.title) })
                         .accessibilityLabel("Show for each window")
                 }
+                SettingRow(title: "Always show",
+                           detail: "Keep the pill in view instead of showing it only while the pointer is over it or the stack changes. The hide key still hides it until the pointer moves away.") {
+                    Toggle("Always show", isOn: $settings.values.pillAlwaysVisible).labelsHidden()
+                }
                 SettingRow(title: "Pill position",
                            detail: "Show the pill along the top or the bottom of its zone.") {
                     Picker("Pill position", selection: $settings.values.pillPosition) {

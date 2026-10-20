@@ -26,6 +26,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.pillPosition = defaults.string(forKey: "pillPosition").flatMap(PillPosition.init(rawValue:)) ?? v.pillPosition
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
+        v.pillAlwaysVisible = defaults.object(forKey: "pillAlwaysVisible") as? Bool ?? v.pillAlwaysVisible
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
         for (key, path) in Self.shortcuts {
@@ -45,6 +46,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.pillPosition.rawValue, forKey: "pillPosition")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
+        defaults.set(v.pillAlwaysVisible, forKey: "pillAlwaysVisible")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
