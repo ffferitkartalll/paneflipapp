@@ -15,7 +15,8 @@ struct PaneFlipApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MenuContent(repository: container.layoutRepository, layouts: container.layouts, screens: container.screens)
+            MenuContent(repository: container.layoutRepository, layouts: container.layouts, screens: container.screens,
+                        settings: container.settings)
         } label: {
             MenuBarLabel(navigation: container.settingsNavigation)
         }
