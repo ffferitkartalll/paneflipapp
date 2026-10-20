@@ -62,9 +62,25 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 
+    private var scrollStepper = PillScrollStepper()
+
+    /// Scrolling over the pill moves through the zone's windows, one step per swipe.
+    private func scrolled(_ event: NSEvent) {
+        if event.phase == .began { scrollStepper.reset() }
+        guard event.momentumPhase.isEmpty else { return }   // the glide after the fingers lifted is not a new swipe
+        let delta = abs(event.scrollingDeltaY) >= abs(event.scrollingDeltaX) ? event.scrollingDeltaY : event.scrollingDeltaX
+        let step = scrollStepper.step(delta: delta, precise: event.hasPreciseScrollingDeltas, at: event.timestamp)
+        guard step != 0, let current = stack.tabs.firstIndex(where: { $0.id == stack.activeID }),
+              stack.tabs.indices.contains(current + step) else { return }
+        select(stack.tabs[current + step].id)
+    }
+
     /// Only the left button is used. The right button does nothing (not even the toolbar's own context menu).
     override func sendEvent(_ event: NSEvent) {
         switch event.type {
+        case .scrollWheel:
+            scrolled(event)
+            return
         case .rightMouseDown, .rightMouseDragged, .rightMouseUp:
             return
         case .leftMouseDown:
