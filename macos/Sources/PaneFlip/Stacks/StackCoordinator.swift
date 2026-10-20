@@ -25,6 +25,8 @@ final class StackCoordinator {
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the pills are hidden.
     var isScrolling = false
+    /// Called when the focus is on a window of a zone beyond the screen's edge, which is out of sight: the layout should scroll to it.
+    var onFocusBeyondTheEdge: ((UUID) -> Void)?
 
     private let windows: WindowSystem
     private let memory: StackMemory
@@ -294,7 +296,9 @@ final class StackCoordinator {
     /// If the user switched to a stacked window some other way (Cmd-Tab, Dock), follow it.
     func followFocus() {
         guard !placementOnly() else { return }
-        guard !isSliding, let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.activeID != focused.id else { return }
+        guard !isSliding, let focused = windows.focusedWindow(), let stack = stack(containing: focused.id) else { return }
+        if stack.isParked, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
+        guard stack.activeID != focused.id else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)
     }

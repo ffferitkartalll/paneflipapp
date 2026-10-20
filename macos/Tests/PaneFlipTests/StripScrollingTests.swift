@@ -128,6 +128,30 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertNil(planner.plan(on: screens.infos)[areaZone], "no place to wait: the area does not exist on this screen")
     }
 
+    func testTheFocusGoingToAWindowBeyondTheEdgeScrollsToIt() {
+        let scroller = scroller()
+        scroller.start()
+        XCTAssertFalse(scroller.reveal(zone: screenZone), "a zone in view needs no scroll")
+        XCTAssertFalse(scroller.reveal(zone: UUID()), "nor one that is not there")
+
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        XCTAssertTrue(coordinator.isScrolling)
+        XCTAssertFalse(scroller.reveal(zone: areaZone), "not again while it scrolls")
+    }
+
+    func testTheCoordinatorAsksForTheScrollWhenTheFocusIsOnAParkedWindow() {
+        var asked: [UUID] = []
+        coordinator.onFocusBeyondTheEdge = { asked.append($0) }
+
+        windows.focused = .fake(3)
+        coordinator.followFocus()
+        XCTAssertEqual(asked, [], "a window in view")
+
+        windows.focused = .fake(2)
+        coordinator.followFocus()
+        XCTAssertEqual(asked, [areaZone])
+    }
+
     func testAParkedZoneHasNoPillAndTakesNoDrops() {
         XCTAssertEqual(coordinator.visibleStacks.map(\.id), [screenZone], "the parked zone has no pill and takes no drops")
         XCTAssertNotNil(coordinator.zoneID(at: CGPoint(x: 500, y: 250)))
