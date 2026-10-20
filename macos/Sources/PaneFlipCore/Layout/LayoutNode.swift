@@ -14,6 +14,19 @@ public indirect enum LayoutNode: Codable, Equatable {
         }
     }
 
+    /// The same tree with identities of its own; `ids` collects which new zone stands for which old one.
+    func renewed(_ ids: inout [UUID: UUID]) -> LayoutNode {
+        switch self {
+        case .leaf(let id):
+            let new = UUID()
+            ids[id] = new
+            return .leaf(new)
+        case .split(_, let side, let ratio, let a, let b):
+            let first = a.renewed(&ids)
+            return .split(id: UUID(), sideBySide: side, ratio: ratio, first: first, second: b.renewed(&ids))
+        }
+    }
+
     static func childRects(_ rect: CGRect, sideBySide: Bool, ratio: Double) -> (CGRect, CGRect) {
         if sideBySide {
             let w = rect.width * ratio

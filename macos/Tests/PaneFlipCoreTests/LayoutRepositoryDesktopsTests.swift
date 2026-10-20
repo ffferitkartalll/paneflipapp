@@ -67,4 +67,25 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, first.id)
         XCTAssertFalse(repository.isTaken(layout: second.id, key: "A|d1"))
     }
+
+    func testACopyHasZonesOfItsOwnAndNoDesktop() {
+        let repository = LayoutRepository(store: MemoryStore())
+        let original = repository.addLayout(for: "A|d1")
+        var strip = original.strip
+        strip.root = strip.root.splitting(strip.root.leafIDs[0], sideBySide: true, ratio: 0.4)
+        strip.trailing = Overflow(width: 0.25, root: .leaf(UUID()))
+        repository.setStrip(strip, ofLayout: original.id, key: "A|d1")
+        repository.setDefaultZone(strip.root.leafIDs[1], ofLayout: original.id, key: "A|d1")
+        let source = repository.layout(id: original.id, key: "A|d1")!
+
+        let copy = repository.duplicateLayout(id: original.id, key: "A|d1", named: "Copy")!
+
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [original.id, copy.id])
+        XCTAssertTrue(Set(copy.strip.zoneIDs).isDisjoint(with: source.strip.zoneIDs))
+        XCTAssertEqual(copy.strip.zoneIDs.count, source.strip.zoneIDs.count)
+        XCTAssertEqual(copy.defaultZoneID, copy.root.leafIDs[1])
+        XCTAssertEqual(copy.trailing?.width, 0.25)
+        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, original.id)
+        XCTAssertFalse(repository.isTaken(layout: copy.id, key: "A|d1"))
+    }
 }

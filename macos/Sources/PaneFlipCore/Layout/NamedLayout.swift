@@ -20,6 +20,15 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         self.trailing = trailing
     }
 
+    /// A copy whose zones and dividers have identities of their own, so the apps and edits of the two stay apart.
+    public func copy(named name: String) -> NamedLayout {
+        var ids: [UUID: UUID] = [:]
+        var copy = NamedLayout(name: name, root: root.renewed(&ids), defaultZoneID: defaultZoneID.flatMap { ids[$0] })
+        copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
+        copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
+        return copy
+    }
+
     enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing }
 
     public init(from decoder: Decoder) throws {

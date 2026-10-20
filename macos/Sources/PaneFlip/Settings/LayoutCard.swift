@@ -24,9 +24,12 @@ struct LayoutCard: View {
             miniature
             nameRow
             actionRow
-            Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
+            HStack(spacing: 6) {
+                Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
+                Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
         }
         .frame(width: Self.width)
         .sheet(isPresented: Binding(
