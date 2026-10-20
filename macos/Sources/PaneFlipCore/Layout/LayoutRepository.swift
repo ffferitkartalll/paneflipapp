@@ -64,6 +64,17 @@ public final class LayoutRepository {
         return layout
     }
 
+    /// Adds a copy of a layout to the display's layouts; no desktop uses it yet.
+    @discardableResult
+    public func duplicateLayout(id: UUID, key: String, named name: String) -> NamedLayout? {
+        let display = Self.split(key).display
+        guard var s = screens[display], let original = s.layouts.first(where: { $0.id == id }) else { return nil }
+        let copy = original.copy(named: name)
+        s.layouts.append(copy)
+        screens[display] = s
+        return copy
+    }
+
     public func setStrip(_ strip: StripLayout, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].strip = strip
