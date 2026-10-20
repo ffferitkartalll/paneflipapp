@@ -41,7 +41,7 @@ final class PanelSlideStage: SlideStaging {
         let clip: CALayer
         let zone: CGRect
         let forward: Bool
-        let completion: () -> Void
+        var completion: () -> Void
         var items: [Item] = []
         /// Counts the starts and the extensions: a timer of an earlier one must not act on a later one.
         var generation = 0
@@ -58,6 +58,67 @@ final class PanelSlideStage: SlideStaging {
     }
 
     private var running: Running?
+
+    /// The slide the fingers lead: the pictures of the zone's windows side by side, and which of them is in front.
+    private struct Scrubbing {
+        let slide: Running
+        let layers: [CALayer]
+        let current: Int
+        let width: CGFloat
+    }
+    private var scrubbing: Scrubbing?
+
+    /// How much of a pull past the first or the last window the pictures follow, and the most they give way.
+    private static let giveWay: CGFloat = 0.28
+    private static let giveWayLimit: CGFloat = 70
+
+    func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool {
+        let cocoaZone = screens.flip(zone)
+        guard scrubbing == nil, running == nil, pictures.indices.contains(current),
+              let screen = NSScreen.screens.max(by: { overlap($0.frame, cocoaZone) < overlap($1.frame, cocoaZone) }),
+              overlap(screen.frame, cocoaZone) > 0, let root = panels.panel(for: screen).contentView?.layer else { return false }
+        let clip = CALayer()
+        clip.frame = cocoaZone.offsetBy(dx: -screen.frame.minX, dy: -screen.frame.minY)
+        clip.masksToBounds = true
+        clip.cornerRadius = pictures[current].cornerRadius
+        clip.cornerCurve = .continuous
+        let layers = pictures.enumerated().map { index, picture in layer(picture, in: zone, shiftedBy: CGFloat(index - current) * zone.width) }
+        layers.forEach { clip.addSublayer($0) }
+        root.addSublayer(clip)
+        let slide = Running(clip: clip, zone: zone, forward: true, completion: {})
+        slide.started = true
+        running = slide
+        scrubbing = Scrubbing(slide: slide, layers: layers, current: current, width: zone.width)
+        return true
+    }
+
+    func scrub(to offset: CGFloat) {
+        guard let s = scrubbing else { return }
+        // The pictures stop being led past the first and the last window: they follow a little, with less and less of the pull.
+        let most = CGFloat(s.current) * s.width, least = -CGFloat(s.layers.count - 1 - s.current) * s.width
+        var shown = offset
+        if shown > most { shown = most + min((shown - most) * Self.giveWay, Self.giveWayLimit) }
+        if shown < least { shown = least - min((least - shown) * Self.giveWay, Self.giveWayLimit) }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for (index, layer) in s.layers.enumerated() {
+            layer.position.x = CGFloat(index - s.current) * s.width + layer.bounds.width / 2 + shown
+        }
+        CATransaction.commit()
+    }
+
+    func endScrub(shift: Int, covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
+        guard let s = scrubbing else {
+            covered { }
+            return completion()
+        }
+        scrubbing = nil
+        s.slide.completion = completion
+        s.slide.items = s.layers.enumerated().map { index, layer in
+            .init(layer: layer, restLeft: CGFloat(index - s.current - shift) * s.width)
+        }
+        go(s.slide, covered: covered)
+    }
 
     func slide(leaving: WindowPicture, entering: WindowPicture, in zone: CGRect, forward: Bool,
                covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {

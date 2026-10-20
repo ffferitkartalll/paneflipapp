@@ -11,6 +11,9 @@ public final class AppSettings {
     /// Smallest zone: 240–320 pt in steps of 4.
     public static let minZoneSizeRange = 240.0...320.0
     public static let minZoneSizeStep = 4.0
+    /// The trackpad speed for scrolling with keys held: 1 to 8 times, in steps of 1.
+    public static let trackpadSpeedRange = 1.0...8.0
+    public static let trackpadSpeedStep = 1.0
 
     public var values: SettingsValues {
         didSet {
@@ -37,6 +40,7 @@ public final class AppSettings {
         loaded.gap = Self.snapped(loaded.gap, to: Self.gapRange, step: Self.gapStep)
         loaded.edgeMargin = Self.snapped(loaded.edgeMargin, to: Self.gapRange, step: Self.gapStep)
         loaded.minZoneSize = Self.snapped(loaded.minZoneSize, to: Self.minZoneSizeRange, step: Self.minZoneSizeStep)
+        loaded.trackpadSpeed = Self.snapped(loaded.trackpadSpeed, to: Self.trackpadSpeedRange, step: Self.trackpadSpeedStep)
         launchLanguage = loaded.language
         values = loaded
     }

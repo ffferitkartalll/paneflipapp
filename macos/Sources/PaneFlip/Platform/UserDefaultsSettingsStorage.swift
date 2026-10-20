@@ -30,6 +30,9 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
         v.pillAlwaysVisible = defaults.object(forKey: "pillAlwaysVisible") as? Bool ?? v.pillAlwaysVisible
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
+        v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
+        v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
+        v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
         for (key, path) in Self.shortcuts {
             if let trigger = defaults.data(forKey: key).flatMap({ try? JSONDecoder().decode(SnapTrigger.self, from: $0) }) { v[keyPath: path] = trigger }
@@ -53,7 +56,10 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
         defaults.set(v.pillAlwaysVisible, forKey: "pillAlwaysVisible")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
+        defaults.set(v.trackpadSpeed, forKey: "trackpadSpeed")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
+        defaults.set(try? JSONEncoder().encode(v.windowScrollKeys), forKey: "windowScrollKeys")
+        defaults.set(try? JSONEncoder().encode(v.stripScrollKeys), forKey: "stripScrollKeys")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
         defaults.set(v.ignoredApps, forKey: "ignoredApps")
         defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")

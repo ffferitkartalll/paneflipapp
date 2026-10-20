@@ -217,6 +217,25 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator.stack(containing: 1), "it still leaves the zone")
     }
 
+    func testScrollingWithTheKeysHeldStepsThroughTheZoneUnderThePointerWithoutGoingRound() {
+        let zone = UUID(), other = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100), other: CGRect(x: 100, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1), into: zone)
+        coordinator.snap(.fake(2), into: zone)
+        coordinator.snap(.fake(3), into: other)
+        coordinator.stacks[zone]?.activeID = 1
+
+        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: 1)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "one step on, in the zone under the pointer")
+
+        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: 1)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "the end: no going round")
+        XCTAssertEqual(coordinator.stacks[other]?.activeID, 3, "the other zone is left alone")
+
+        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: -1)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1, "a step back")
+    }
+
     func testWithoutACarouselThePillClickJustSelects() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
@@ -243,5 +262,103 @@ final class StackCoordinatorTests: XCTestCase {
 
         stage.cover()
         XCTAssertEqual(windows.raised.last, 1)
+    }
+
+    // MARK: A swipe the fingers lead
+
+    private func scrubSetUp(reduceMotion: Bool = false, windowCount: Int = 3) -> (stage: FakeSlideStage, snapshots: FakeWindowSnapshots, zone: UUID) {
+        let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
+        snapshots.images = Dictionary(uniqueKeysWithValues: (1...windowCount).map { (CGWindowID($0), FakeWindowSnapshots.picture()) })
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { reduceMotion }, background: { $0() })
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 400, height: 300)])
+        for id in 1...windowCount { coordinator.snap(.fake(CGWindowID(id)), into: zone) }
+        coordinator.stacks[zone]?.activeID = 2
+        stage.end()   // the slides of the snaps
+        return (stage, snapshots, zone)
+    }
+
+    func testTheFingersLeadTheSlideAndTheWideSwipeLetsGoOnTheNextWindow() {
+        let (stage, _, zone) = scrubSetUp()
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        XCTAssertEqual(stage.scrubBegun.count, 1)
+        XCTAssertTrue(stage.scrubBegun.first?.count == 3 && stage.scrubBegun.first?.current == 1, "every window of the zone, the one in front marked")
+        XCTAssertTrue(coordinator.isSliding, "nothing else slides while the fingers lead")
+
+        coordinator.moveWindowScrub(by: -80, at: 0)
+        coordinator.moveWindowScrub(by: -80, at: 0.3)
+        XCTAssertEqual(stage.scrubOffsets.last, -160, "the pictures follow the fingers")
+
+        coordinator.endWindowScrub()
+        XCTAssertEqual(stage.scrubEnded, [1])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3, "the pill moves to the chosen window")
+        XCTAssertEqual(windows.raised.last, 3, "and the real window comes forward under the pictures")
+        XCTAssertFalse(coordinator.isSliding)
+    }
+
+    func testAShortSlowSwipeGoesBackToTheWindowItCameFrom() {
+        let (stage, _, zone) = scrubSetUp()
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: 30, at: 0)
+        coordinator.moveWindowScrub(by: 10, at: 0.5)
+        coordinator.endWindowScrub()
+
+        XCTAssertEqual(stage.scrubEnded, [0])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2)
+    }
+
+    func testOneSwipeCanPassSeveralWindows() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)
+        coordinator.stacks[zone]?.activeID = 1
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        for t in 0 ..< 4 { coordinator.moveWindowScrub(by: -300, at: Double(t) * 0.5) }   // 1200 pt of a 400 pt zone
+        XCTAssertEqual(stage.scrubOffsets.last, -1200, "the fingers are not held to the next window")
+        coordinator.endWindowScrub()
+
+        XCTAssertEqual(stage.scrubEnded, [3])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 4)
+    }
+
+    func testTheEndMayComeBeforeThePicturesAndIsActedOnWhenTheyArrive() {
+        let (stage, snapshots, zone) = scrubSetUp()
+        snapshots.answersAtOnce = false
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: 150, at: 0)
+        coordinator.endWindowScrub()
+        XCTAssertTrue(stage.scrubEnded.isEmpty, "the pictures are not there yet")
+
+        snapshots.answer()
+        XCTAssertEqual(stage.scrubOffsets.last, 150, "they start where the fingers already are")
+        XCTAssertEqual(stage.scrubEnded, [-1])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1)
+    }
+
+    func testAWindowWithoutAPictureIsLeftOutOfTheSwipe() {
+        let (stage, snapshots, zone) = scrubSetUp(windowCount: 4)
+        snapshots.images[3] = nil   // could not be photographed
+        coordinator.stacks[zone]?.activeID = 2
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        XCTAssertEqual(stage.scrubBegun.first?.count, 3)
+        coordinator.moveWindowScrub(by: -200, at: 0)
+        coordinator.endWindowScrub()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 4, "the next one the swipe could show")
+    }
+
+    func testWithoutPicturesTheSwipeJustBringsTheWindowForward() {
+        let (stage, _, zone) = scrubSetUp(reduceMotion: true)
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: -200, at: 0)
+        coordinator.endWindowScrub()
+
+        XCTAssertTrue(stage.scrubBegun.isEmpty)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+        XCTAssertEqual(windows.raised.last, 3)
     }
 }

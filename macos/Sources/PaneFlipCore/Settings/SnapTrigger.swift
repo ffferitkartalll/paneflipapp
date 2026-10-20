@@ -23,6 +23,11 @@ public struct SnapTrigger: Codable, Equatable {
     private static let leftOption = Key(code: 58, name: "Left Option"), leftControl = Key(code: 59, name: "Left Control")
     private static let commandKey = Key(code: 55, name: "Left Command")
     private static let leftArrow = Key(code: 123, name: "←"), rightArrow = Key(code: 124, name: "→")
+    /// Held while scrolling over a zone (two fingers or the wheel), to move through its windows.
+    public static let windowScroll = SnapTrigger(keys: [leftOption, leftControl])
+    /// Held while scrolling, with two fingers or the wheel, to slide to the zones beyond the screen's edges: the modifier keys of the
+    /// shortcuts that do the same from the keyboard.
+    public static let stripScroll = SnapTrigger(keys: [commandKey, leftOption, leftControl])
     public static let nextWindow = SnapTrigger(keys: [leftOption, leftControl, rightArrow])
     public static let previousWindow = SnapTrigger(keys: [leftOption, leftControl, leftArrow])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])

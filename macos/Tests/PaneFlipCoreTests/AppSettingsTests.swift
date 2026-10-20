@@ -52,6 +52,28 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertFalse(AppSettings(storage: Storage()).values.pillForSingleWindow)
     }
 
+    func testScrollingThroughTheWindowsNeedsLeftOptionAndLeftControlUnlessChanged() {
+        let storage = Storage()
+        let settings = AppSettings(storage: storage)
+        XCTAssertEqual(settings.values.windowScrollKeys.keys.map(\.code), [58, 59])
+        settings.values.windowScrollKeys = .leftCommand
+        XCTAssertEqual(storage.saved?.windowScrollKeys, .leftCommand)
+    }
+
+    func testSlidingToTheZonesBeyondTheEdgesNeedsTheModifiersOfTheKeyboardShortcutUnlessChanged() {
+        let keys = AppSettings(storage: Storage()).values.stripScrollKeys.keys.map(\.code)
+        XCTAssertEqual(keys, [55, 58, 59], "Command, Option and Control")
+    }
+
+    func testTheTrackpadSpeedIsTwoByDefaultAndKeptInItsRange() {
+        XCTAssertEqual(AppSettings(storage: Storage()).values.trackpadSpeed, 2)
+        let storage = Storage()
+        var old = SettingsValues()
+        old.trackpadSpeed = 40
+        storage.saved = old
+        XCTAssertEqual(AppSettings(storage: storage).values.trackpadSpeed, 8)
+    }
+
     func testThePillSitsAlongTheTopUnlessAsked() {
         let storage = Storage()
         let settings = AppSettings(storage: storage)

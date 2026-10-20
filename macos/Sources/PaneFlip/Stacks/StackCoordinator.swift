@@ -206,6 +206,98 @@ final class StackCoordinator {
         slideSelect(stack.tabs[(from + (reverse ? count - 1 : 1)) % count].id, in: stack, forward: !reverse)
     }
 
+    // MARK: A swipe the fingers lead
+
+    /// One swipe through a zone's windows with two fingers: the pictures of the windows follow the fingers, over as many windows as
+    /// they go, and the swipe lets go on one of them when the fingers lift.
+    private final class WindowScrub {
+        let stack: ZoneStack
+        let rect: CGRect
+        /// The windows the swipe passes, in order: those that have a picture (all of them until the pictures are there).
+        var windows: [CGWindowID]
+        let start: CGWindowID
+        var gesture = ScrubGesture()
+        /// The pictures are on the stage and follow the fingers.
+        var ready = false
+        /// There are no pictures (motion is reduced, or the capture failed): the window just comes forward at the end.
+        var failed = false
+        var ended = false
+
+        init(stack: ZoneStack, start: CGWindowID, rect: CGRect) {
+            self.stack = stack
+            self.start = start
+            self.rect = rect
+            windows = stack.tabs.map(\.id)
+        }
+    }
+    private var windowScrub: WindowScrub?
+
+    /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through.
+    func beginWindowScrub(at point: CGPoint) {
+        guard windowScrub == nil, !placementOnly(), !isSliding,
+              let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }),
+              stack.tabs.count > 1, let start = stack.activeID else { return }
+        let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
+        windowScrub = scrub
+        // A swipe whose end never comes (a lost event) must not hold the windows for good.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
+            if self?.windowScrub === scrub { self?.endWindowScrub() }
+        }
+        guard let carousel else { scrub.failed = true; return }
+        carousel.beginScrub(windows: stack.tabs.compactMap { stack.refs[$0.id] }, current: start, in: scrub.rect) { [weak self] shown in
+            guard let self, windowScrub === scrub else { return }
+            if let shown {
+                scrub.windows = shown
+                scrub.ready = true
+                carousel.scrub(to: scrub.gesture.offset)
+            } else {
+                scrub.failed = true
+            }
+            if scrub.ended { finishWindowScrub(scrub) }
+        }
+    }
+
+    /// The fingers moved by `delta` points (to the right is positive: the content follows them).
+    func moveWindowScrub(by delta: CGFloat, at time: TimeInterval) {
+        guard let scrub = windowScrub, !scrub.ended else { return }
+        scrub.gesture.add(delta, at: time)
+        if scrub.ready { carousel?.scrub(to: scrub.gesture.offset) }
+    }
+
+    /// The fingers lifted.
+    func endWindowScrub() {
+        guard let scrub = windowScrub, !scrub.ended else { return }
+        scrub.ended = true
+        if scrub.ready || scrub.failed { finishWindowScrub(scrub) }   // else it waits for the pictures
+    }
+
+    private func finishWindowScrub(_ scrub: WindowScrub) {
+        windowScrub = nil
+        let stack = scrub.stack
+        guard let index = scrub.windows.firstIndex(of: scrub.start) else { return carousel?.endScrub(shift: 0) { } ?? () }
+        let shift = scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
+        guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else { return carousel?.endScrub(shift: 0) { } ?? () }
+        // The pill moves to the chosen window as the pictures settle.
+        stack.activeID = entering.id
+        onActivity?(stack.id)
+        guard !scrub.failed else { return select(entering.id, in: stack) }
+        let rect = scrub.rect
+        carousel?.endScrub(shift: shift) { [windows] in
+            windows.setFrame(rect, of: entering)
+            windows.raise(entering)
+        }
+    }
+
+    /// Scrolling with the keys held: the zone under `point` (else the zone of the window in focus) moves `step` windows on or back,
+    /// without going round the end. A zone with one window does nothing.
+    func stepWindows(at point: CGPoint, by step: Int) {
+        guard !placementOnly() else { return }
+        let stack = zoneID(at: point).flatMap { stacks[$0] } ?? windows.focusedWindow().flatMap { stack(containing: $0.id) }
+        guard let stack, stack.tabs.count > 1, let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }),
+              stack.tabs.indices.contains(from + step) else { return }
+        slideSelect(stack.tabs[from + step].id, in: stack, forward: step > 0)
+    }
+
     func select(_ id: CGWindowID, in stack: ZoneStack) {
         guard let ref = stack.refs[id] else { return }
         stack.activeID = id

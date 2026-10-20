@@ -107,6 +107,15 @@ final class AppContainer {
                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
                 .compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
+        let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) }) { [settings, keys, coordinator] in
+            let v = settings.values
+            guard v.placementEnabled, !coordinator.placementOnly() else { return nil }
+            let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
+            let windows = v.stackingEnabled && v.windowScrollKeys.isHeld(using: keys)
+            // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
+            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return .strip }
+            return windows ? .windows : nil
+        }
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
                                      settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
@@ -114,6 +123,7 @@ final class AppContainer {
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens)
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
@@ -134,6 +144,7 @@ final class AppContainer {
             snap.start()
             scroller.start()
             edgeScroller.start()
+            scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

@@ -28,4 +28,24 @@ final class FakeSlideStage: SlideStaging {
     func cover() { covers.forEach { $0() }; covers = [] }
 
     func end() { ends.forEach { $0() }; ends = [] }
+
+    // The slide the fingers lead.
+    var canScrub = true
+    private(set) var scrubBegun: [(count: Int, current: Int)] = []
+    private(set) var scrubOffsets: [CGFloat] = []
+    private(set) var scrubEnded: [Int] = []
+
+    func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool {
+        guard canScrub else { return false }
+        scrubBegun.append((pictures.count, current))
+        return true
+    }
+
+    func scrub(to offset: CGFloat) { scrubOffsets.append(offset) }
+
+    func endScrub(shift: Int, covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
+        scrubEnded.append(shift)
+        covered {}
+        completion()
+    }
 }

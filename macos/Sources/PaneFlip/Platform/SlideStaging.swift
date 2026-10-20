@@ -15,4 +15,16 @@ protocol SlideStaging {
     /// and `entering` comes in. `covered` is as in `slide`. False when no such slide is running, or it is already giving way
     /// to the real windows; nothing has happened then.
     func extend(entering: WindowPicture, forward: Bool, covered: @escaping (_ done: @escaping () -> Void) -> Void) -> Bool
+
+    /// A slide the fingers lead. The pictures of the zone's windows, `pictures[current]` the one in front, stand side by side in the
+    /// zone and follow `scrub`; `endScrub` lets go. False when there is nothing to show (no screen shows the zone).
+    func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool
+
+    /// Takes the pictures `offset` points from where they began (to the right is positive: the windows before come in). Past the
+    /// first or the last the pictures give way a little and pull back.
+    func scrub(to offset: CGFloat)
+
+    /// The fingers lifted: the pictures glide on, `shift` windows from the one in front (0: back to it). `covered` and `completion`
+    /// are as in `slide`; `covered` runs for a shift of 0 too, and then changes nothing.
+    func endScrub(shift: Int, covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void)
 }
