@@ -114,6 +114,7 @@ final class AppContainer {
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
+        coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller) { delay, work in
             let item = DispatchWorkItem(block: work)
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)

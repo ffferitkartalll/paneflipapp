@@ -178,6 +178,21 @@ final class StripScroller {
         return true
     }
 
+    /// The focus went to a window in a zone beyond the screen's edge: scrolls one rest position toward it (the next look scrolls
+    /// on, if it is still out of sight). False when no screen has the zone out of sight, or the windows are not free to be moved.
+    @discardableResult
+    func reveal(zone id: UUID) -> Bool {
+        guard scrolling == nil else { return false }
+        let all = screens.screens()
+        for screen in all {
+            guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
+                  let placed = geometry.zones(offset: geometry.clamped(viewport.offset(for: screen.key))).first(where: { $0.id == id }),
+                  !placed.isOnScreen else { continue }
+            return scroll(toward: placed.rect.minX >= screen.axVisible.midX ? .right : .left, on: screen)
+        }
+        return false
+    }
+
     /// The rest position after `offset` toward `edge`, if there is one.
     private func nextRest(from offset: CGFloat, toward edge: ScreenEdge, in geometry: StripGeometry) -> CGFloat? {
         edge == .right ? geometry.rests.first(where: { $0 > offset + 0.5 }) : geometry.rests.last(where: { $0 < offset - 0.5 })
