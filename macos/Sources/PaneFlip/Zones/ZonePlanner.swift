@@ -17,7 +17,7 @@ struct ZonePlanner {
         for screen in screens {
             guard let (geometry, side) = strip(of: screen, among: screens) else { continue }
             let offset = geometry.clamped(viewport.offset(for: screen.key))
-            for zone in geometry.zones(offset: offset, gap: CGFloat(settings.values.gap)) {
+            for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap)) {
                 if zone.isOnScreen {
                     zones[zone.id] = PlannedZone(rect: zone.rect)
                 } else if let side {

@@ -10,6 +10,8 @@ protocol LayoutManaging: AnyObject {
     func activate(key: String, id: UUID)
     /// The key's desktop gets no layout, so no zones.
     func deactivate(key: String)
+    /// The gap between the zones of the layout; nil takes the one of the settings.
+    func setGap(key: String, id: UUID, to gap: Double?)
     func rename(key: String, id: UUID, to name: String)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.
     func setDefaultZone(key: String, id: UUID, to zone: UUID?)

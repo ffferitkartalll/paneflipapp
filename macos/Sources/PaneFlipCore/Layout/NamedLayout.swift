@@ -9,15 +9,18 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     /// Zones beyond the left and right edges of the screen, reached by scrolling.
     public var leading: Overflow?
     public var trailing: Overflow?
+    /// The gap between its zones; nil takes the one of the settings.
+    public var gap: Double?
 
     public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,
-                leading: Overflow? = nil, trailing: Overflow? = nil) {
+                leading: Overflow? = nil, trailing: Overflow? = nil, gap: Double? = nil) {
         self.id = id
         self.name = name
         self.root = root
         self.defaultZoneID = defaultZoneID
         self.leading = leading
         self.trailing = trailing
+        self.gap = gap
     }
 
     /// A copy whose zones and dividers have identities of their own, so the apps and edits of the two stay apart.
@@ -26,10 +29,11 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         var copy = NamedLayout(name: name, root: root.renewed(&ids), defaultZoneID: defaultZoneID.flatMap { ids[$0] })
         copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
+        copy.gap = gap
         return copy
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -40,6 +44,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         defaultZoneID = try c.decodeIfPresent(UUID.self, forKey: .defaultZoneID)
         leading = try c.decodeIfPresent(Overflow.self, forKey: .leading)
         trailing = try c.decodeIfPresent(Overflow.self, forKey: .trailing)
+        gap = try c.decodeIfPresent(Double.self, forKey: .gap)
     }
 
     /// The screen's layout with the areas beyond its edges.

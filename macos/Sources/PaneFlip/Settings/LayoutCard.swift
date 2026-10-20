@@ -15,6 +15,8 @@ struct LayoutCard: View {
     let apps: LayoutAppsEditing
     let navigation: SettingsNavigation
     let showsOverflow: Bool
+    /// The gap of the settings, for a layout that has none of its own.
+    let defaultGap: Double
 
     @State private var isRenaming = false
     @State private var draftName = ""
@@ -24,6 +26,7 @@ struct LayoutCard: View {
             miniature
             nameRow
             actionRow
+            LayoutGapRow(layout: layout, defaultGap: defaultGap) { layouts.setGap(key: screen.key, id: layout.id, to: $0) }
             HStack(spacing: 6) {
                 Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
                 Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }
