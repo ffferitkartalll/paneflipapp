@@ -95,7 +95,7 @@ final class StackCoordinator {
 
     /// Snaps a window into a zone and remembers it there.
     func snap(_ ref: WindowRef, into zoneID: UUID) {
-        guard settings.values.placementEnabled, let zone = stacks[zoneID] else { return }
+        guard settings.values.placementEnabled, let zone = stacks[zoneID], !isIgnored(ref) else { return }
         guard !placementOnly() else {
             if let glide { glide.glide(ref, to: zone.rect) } else { windows.setFrame(zone.rect, of: ref) }
             return
@@ -108,6 +108,20 @@ final class StackCoordinator {
         }
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
         attach(ref, toSlot: slot, raise: true, glide: true)
+    }
+
+    /// Whether the window belongs to an app the user asked PaneFlip to leave alone.
+    func isIgnored(_ ref: WindowRef) -> Bool {
+        apps.app(pid: ref.pid).map { settings.values.ignoredApps.contains($0.bundleID) } ?? false
+    }
+
+    /// An app was added to the ignored apps: its windows leave their zones where they stand. The slots stay, so the apps
+    /// return to their zones if they are taken off the list.
+    func releaseIgnoredApps() {
+        let ignored = Set(settings.values.ignoredApps)
+        for stack in stacks.values {
+            for tab in stack.tabs where ignored.contains(tab.bundleID) { release(window: tab.id) }
+        }
     }
 
     /// Puts a live window into the zone its memory slot names, at the position the user arranged.

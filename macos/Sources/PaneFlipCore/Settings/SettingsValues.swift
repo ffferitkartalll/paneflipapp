@@ -35,6 +35,8 @@ public struct SettingsValues: Equatable {
     /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
     /// off and the apps in them are moved to the screen's default zone.
     public var overflowZonesEnabled = true
+    /// Bundle identifiers of apps whose windows PaneFlip leaves alone.
+    public var ignoredApps: [String] = []
 
     /// The language of the app: `systemLanguage` or a language code the string catalog has been translated into.
     public var language = SettingsValues.systemLanguage

@@ -19,6 +19,7 @@ public final class AppSettings {
             if values.placementEnabled != oldValue.placementEnabled { onPlacementChanged?() }
             if values.stackingEnabled != oldValue.stackingEnabled { onStackingChanged?() }
             if values.overflowZonesEnabled != oldValue.overflowZonesEnabled { onOverflowZonesChanged?() }
+            if values.ignoredApps != oldValue.ignoredApps { onIgnoredAppsChanged?() }
         }
     }
 
@@ -27,6 +28,7 @@ public final class AppSettings {
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
     @ObservationIgnored public var onStackingChanged: (() -> Void)?
     @ObservationIgnored public var onOverflowZonesChanged: (() -> Void)?
+    @ObservationIgnored public var onIgnoredAppsChanged: (() -> Void)?
     @ObservationIgnored private let storage: SettingsStorage
 
     public init(storage: SettingsStorage) {

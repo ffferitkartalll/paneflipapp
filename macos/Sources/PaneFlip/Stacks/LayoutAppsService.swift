@@ -15,13 +15,16 @@ final class LayoutAppsService: LayoutAppsEditing {
     @ObservationIgnored private let apps: AppCatalog
     @ObservationIgnored private let refresher: ZoneRefreshing
     @ObservationIgnored private let iconFont: IconFont
+    @ObservationIgnored private let settings: AppSettings
 
-    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont) {
+    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont,
+         settings: AppSettings) {
         self.memory = memory
         self.coordinator = coordinator
         self.apps = apps
         self.refresher = refresher
         self.iconFont = iconFont
+        self.settings = settings
     }
 
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {
@@ -34,6 +37,10 @@ final class LayoutAppsService: LayoutAppsEditing {
         }
     }
 
+    func glyph(ofApp bundleID: String) -> NSImage {
+        glyph(bundleID: bundleID, name: apps.name(bundleID: bundleID) ?? bundleID)
+    }
+
     /// The icon as the pill draws it: a one-colour glyph, which follows the text colour.
     private func glyph(bundleID: String, name: String) -> NSImage {
         let icon = apps.icon(bundleID: bundleID) ?? NSWorkspace.shared.icon(for: .applicationBundle)
@@ -43,13 +50,14 @@ final class LayoutAppsService: LayoutAppsEditing {
     }
 
     func runningApps() -> [(bundleID: String, name: String)] {
-        apps.regularApps().filter { !$0.bundleID.isEmpty }.map { ($0.bundleID, $0.name) }
+        apps.regularApps().filter { !$0.bundleID.isEmpty && !settings.values.ignoredApps.contains($0.bundleID) }.map { ($0.bundleID, $0.name) }
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
     func addApp(bundleID: String, to zone: UUID) {
         // An app is listed once per zone.
-        guard !memory.slots(inZones: [zone]).contains(where: { $0.bundleID == bundleID }) else { return }
+        guard !memory.slots(inZones: [zone]).contains(where: { $0.bundleID == bundleID }),
+              !settings.values.ignoredApps.contains(bundleID) else { return }
         memory.remember(zoneID: zone, bundleID: bundleID, title: "")
         changed([])
     }

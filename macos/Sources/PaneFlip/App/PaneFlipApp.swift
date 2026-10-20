@@ -25,7 +25,7 @@ struct PaneFlipApp: App {
         Settings {
             SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor, apps: container.layoutApps,
                          screens: container.screens, refresh: { container.engine.refreshZones() },
-                         settings: container.settings, launchAtLogin: container.launchAtLogin, relauncher: container.relauncher, updates: container.updates,
+                         settings: container.settings, launchAtLogin: container.launchAtLogin, relauncher: container.relauncher, catalog: container.appCatalog, updates: container.updates,
                          activation: container.activation, navigation: container.settingsNavigation)
         }
     }

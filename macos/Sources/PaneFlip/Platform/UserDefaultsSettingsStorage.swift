@@ -32,6 +32,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         for (key, path) in Self.shortcuts {
             if let trigger = defaults.data(forKey: key).flatMap({ try? JSONDecoder().decode(SnapTrigger.self, from: $0) }) { v[keyPath: path] = trigger }
         }
+        v.ignoredApps = defaults.stringArray(forKey: "ignoredApps") ?? v.ignoredApps
         v.overflowZonesEnabled = defaults.object(forKey: "overflowZonesEnabled") as? Bool ?? v.overflowZonesEnabled
         v.language = defaults.string(forKey: "appLanguage") ?? v.language
         return v
@@ -50,6 +51,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(try? JSONEncoder().encode(v.hidePillKey), forKey: "hidePillKey")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
+        defaults.set(v.ignoredApps, forKey: "ignoredApps")
         defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")
         // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order
         // is used. System Settings writes that key too (a language chosen for this app there), so it is touched only
