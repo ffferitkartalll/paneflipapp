@@ -37,17 +37,18 @@ final class EditorModel {
 
     func reset() { strip = StripLayout(root: .leaf(strip.root.leafIDs[0])) }
 
-    func addLeading() { if strip.leading == nil { strip.leading = Overflow() } }
-    func addTrailing() { if strip.trailing == nil { strip.trailing = Overflow() } }
+    /// Another area beyond the left (right) edge, outside the ones there are.
+    func addLeading() { strip.leading.append(Overflow()) }
+    func addTrailing() { strip.trailing.append(Overflow()) }
 
     func split(_ zone: UUID, sideBySide: Bool, ratio: Double) { edit { $0.splitting(zone, sideBySide: sideBySide, ratio: ratio) } }
 
     func setRatio(_ line: UUID, _ ratio: Double) { edit { $0.settingRatio(line, ratio) } }
 
-    /// Removing the line between the screen and an overflow removes the overflow; any other line joins its two sides.
+    /// Removing the line in front of an area removes the area (the ones beyond it move in); any other line joins its two sides.
     func collapse(_ line: UUID) {
-        if line == strip.leading?.id { strip.leading = nil }
-        else if line == strip.trailing?.id { strip.trailing = nil }
+        if let i = strip.leading.firstIndex(where: { $0.id == line }) { strip.leading.remove(at: i) }
+        else if let i = strip.trailing.firstIndex(where: { $0.id == line }) { strip.trailing.remove(at: i) }
         else { edit { $0.collapsing(line) } }
     }
 
@@ -57,6 +58,6 @@ final class EditorModel {
     func merge(_ a: UUID, _ b: UUID) { if let result = merged(a, b) { strip = result } }
 
     private func edit(_ change: (LayoutNode) -> LayoutNode) {
-        strip = StripLayout(composite: change(strip.composite), leadingID: strip.leading?.id, trailingID: strip.trailing?.id)
+        strip = StripLayout(composite: change(strip.composite), leadingIDs: strip.leading.map(\.id), trailingIDs: strip.trailing.map(\.id))
     }
 }

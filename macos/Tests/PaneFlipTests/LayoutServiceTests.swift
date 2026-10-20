@@ -28,7 +28,7 @@ final class LayoutServiceTests: XCTestCase {
         let layout = repository.addLayout(for: "screen")
         var strip = layout.strip
         let beyond = UUID()
-        strip.trailing = Overflow(width: 0.25, root: .leaf(beyond))
+        strip.trailing = [Overflow(width: 0.25, root: .leaf(beyond))]
         repository.setStrip(strip, ofLayout: layout.id, key: "screen")
         memory.remember(zoneID: beyond, bundleID: "app", title: "")
 
@@ -50,7 +50,7 @@ final class LayoutServiceTests: XCTestCase {
         let first = repository.addLayout(for: "screen")
         var strip = first.strip
         let beyond = UUID(), second = UUID()
-        strip.trailing = Overflow(width: 0.25, root: .leaf(beyond))
+        strip.trailing = [Overflow(width: 0.25, root: .leaf(beyond))]
         repository.setStrip(strip, ofLayout: first.id, key: "screen")
         let other = repository.addLayout(for: "screen")
         var otherStrip = other.strip

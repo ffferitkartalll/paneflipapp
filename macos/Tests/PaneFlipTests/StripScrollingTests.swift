@@ -41,7 +41,7 @@ final class StripScrollingTests: XCTestCase {
         let layout = repository.addLayout(for: key)
         var strip = layout.strip
         strip.root = .leaf(screenZone)
-        strip.trailing = Overflow(width: 0.25, root: .leaf(areaZone))
+        strip.trailing = [Overflow(width: 0.25, root: .leaf(areaZone))]
         repository.setStrip(strip, ofLayout: layout.id, key: key)
         var values = SettingsValues()
         values.gap = 0
@@ -139,6 +139,38 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertFalse(scroller.reveal(zone: areaZone), "not again while it scrolls")
     }
 
+    func testRevealingAFarAreaScrollsStraightToIt() {
+        let far = UUID()
+        var strip = repository.activeLayout(for: key)!.strip
+        strip.trailing.append(Overflow(width: 0.5, root: .leaf(far)))
+        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
+        refresher.onRefresh()
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.reveal(zone: far))
+        run(60); settle()
+
+        XCTAssertEqual(viewport.offset(for: key), 750, "straight to the area that holds the zone, in one scroll")
+        XCTAssertFalse(scroller.reveal(zone: far), "it shows now: nothing more")
+    }
+
+    func testAScrollOfTheUsersOwnEndsWhatAFocusChangeAskedFor() {
+        let far = UUID()
+        var strip = repository.activeLayout(for: key)!.strip
+        strip.trailing.append(Overflow(width: 0.5, root: .leaf(far)))
+        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
+        refresher.onRefresh()
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.reveal(zone: far))
+        scroller.scroll(toward: .left)   // the user turns it round while it runs
+        for _ in 0 ..< 4 { run(60); settle() }
+
+        XCTAssertLessThan(viewport.offset(for: key), 750, "it did not go on to the zone")
+    }
+
     func testTheCoordinatorAsksForTheScrollWhenTheFocusIsOnAParkedWindow() {
         var asked: [UUID] = []
         coordinator.onFocusBeyondTheEdge = { asked.append($0) }
@@ -150,6 +182,16 @@ final class StripScrollingTests: XCTestCase {
         windows.focused = .fake(2)
         coordinator.followFocus()
         XCTAssertEqual(asked, [areaZone])
+
+        coordinator.followFocus()
+        coordinator.followFocus()
+        XCTAssertEqual(asked, [areaZone], "the focus staying there does not ask again: a scroll away from it is not undone")
+
+        windows.focused = .fake(3)
+        coordinator.followFocus()
+        windows.focused = .fake(2)
+        coordinator.followFocus()
+        XCTAssertEqual(asked, [areaZone, areaZone], "going back to it asks again")
     }
 
     func testAParkedZoneHasNoPillAndTakesNoDrops() {
@@ -299,7 +341,7 @@ final class StripScrollingTests: XCTestCase {
 
     private func addAreaOnTheLeft() {
         var strip = repository.activeLayout(for: key)!.strip
-        strip.leading = Overflow(width: 0.25, root: .leaf(UUID()))
+        strip.leading = [Overflow(width: 0.25, root: .leaf(UUID()))]
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         refresher.onRefresh()
     }
@@ -353,7 +395,7 @@ final class StripScrollingTests: XCTestCase {
     func testZonesAreNamedOneTwoThreeOnTheScreenAndMinusAndPlusBeyondTheEdges() {
         var strip = repository.layout(id: repository.layouts(for: key)[0].id, key: key)!.strip
         let left = UUID()
-        strip.leading = Overflow(root: .leaf(left))
+        strip.leading = [Overflow(root: .leaf(left))]
         XCTAssertEqual(ZoneLabel.text(of: screenZone, in: strip), "1")
         XCTAssertEqual(ZoneLabel.text(of: areaZone, in: strip), "+1")
         XCTAssertEqual(ZoneLabel.text(of: left, in: strip), "-1")
@@ -401,7 +443,7 @@ final class StripScrollingTests: XCTestCase {
 
     func testStayingAtTheEdgeGoesOnScrollingToTheEnd() {
         var strip = repository.activeLayout(for: key)!.strip
-        strip.leading = Overflow(width: 0.25, root: .leaf(UUID()))
+        strip.leading = [Overflow(width: 0.25, root: .leaf(UUID()))]
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         viewport.set(-250, for: key)   // the area beyond the left edge is in view
         _ = edgeScroller()
@@ -416,6 +458,24 @@ final class StripScrollingTests: XCTestCase {
         let begun = stage.begun.count
         for _ in 0 ..< 2 { run(60); settle() }
         XCTAssertEqual(stage.begun.count, begun)
+    }
+
+    func testScrollingGoesOnAreaByAreaThroughAsManyAreasAsThereAre() {
+        var strip = repository.activeLayout(for: key)!.strip
+        strip.trailing.append(Overflow(width: 0.5, root: .leaf(UUID())))
+        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
+        let scroller = scroller()
+        scroller.start()
+
+        for expected in [250.0, 750.0] {
+            XCTAssertTrue(scroller.scroll(toward: .right))
+            run(60); settle()
+            XCTAssertEqual(viewport.offset(for: key), CGFloat(expected), "the far edge of the next area")
+        }
+        XCTAssertFalse(scroller.scroll(toward: .right), "nothing more that way")
+        XCTAssertTrue(scroller.scroll(toward: .left))
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
     }
 
     func testMovingThePointerAroundTheMiddleOfTheScreenAsksNothingOfTheDockOrTheDesktops() {

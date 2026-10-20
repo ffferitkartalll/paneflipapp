@@ -7,8 +7,8 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     /// Where apps go whose own zone is gone (a display was unplugged): one of this layout's zones, or the first.
     public var defaultZoneID: UUID?
     /// Zones beyond the left and right edges of the screen, reached by scrolling.
-    public var leading: Overflow?
-    public var trailing: Overflow?
+    public var leading: [Overflow]
+    public var trailing: [Overflow]
     /// The gap between its zones; nil takes the one of the settings.
     public var gap: Double?
     /// The names the user gave to zones, by zone; a zone without one is told by its number.
@@ -17,7 +17,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var startApps: Set<String> = []
 
     public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,
-                leading: Overflow? = nil, trailing: Overflow? = nil, gap: Double? = nil) {
+                leading: [Overflow] = [], trailing: [Overflow] = [], gap: Double? = nil) {
         self.id = id
         self.name = name
         self.root = root
@@ -38,6 +38,11 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return copy
     }
 
+    private static func areas(_ c: KeyedDecodingContainer<CodingKeys>, _ key: CodingKeys) throws -> [Overflow] {
+        if let list = try? c.decodeIfPresent([Overflow].self, forKey: key) { return list }
+        return try c.decodeIfPresent(Overflow.self, forKey: key).map { [$0] } ?? []
+    }
+
     enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps, zoneNames }
 
     public init(from decoder: Decoder) throws {
@@ -47,8 +52,9 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         root = try c.decode(LayoutNode.self, forKey: .root)
         // Files written before layouts had a default zone have no such key.
         defaultZoneID = try c.decodeIfPresent(UUID.self, forKey: .defaultZoneID)
-        leading = try c.decodeIfPresent(Overflow.self, forKey: .leading)
-        trailing = try c.decodeIfPresent(Overflow.self, forKey: .trailing)
+        // Files from before a side could hold several areas have one area, not a list.
+        leading = try Self.areas(c, .leading)
+        trailing = try Self.areas(c, .trailing)
         gap = try c.decodeIfPresent(Double.self, forKey: .gap)
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
         zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]

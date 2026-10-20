@@ -68,6 +68,8 @@ final class StripScroller {
     private var scrolling: Scrolling?
     /// Called when a scroll is over and the windows are in their places.
     var onRest: (() -> Void)?
+    /// The zone a focus change asked the scroll to bring into view; each scroll that comes to rest goes on until it shows.
+    private var revealing: UUID?
     private var ticking = false
     private var count = 0
     private var isRunning = false
@@ -141,12 +143,18 @@ final class StripScroller {
     /// way, or the windows are not free to be moved.
     @discardableResult
     func scroll(toward edge: ScreenEdge, on screen: ScreenInfo) -> Bool {
+        revealing = nil   // the user's own scroll wins over one a focus change asked for
+        return scroll(toward: edge, on: screen, to: nil)
+    }
+
+    /// The scroll itself; `wanted` is the rest position to go to (the next one toward `edge` when there is none).
+    private func scroll(toward edge: ScreenEdge, on screen: ScreenInfo, to wanted: CGFloat?) -> Bool {
         guard settings.values.placementEnabled, !isBusy() else { return false }
         if scrolling != nil { return carryOn(toward: edge, on: screen) }
         let all = screens.screens()
         guard let (geometry, found) = planner.strip(of: screen, among: all), let side = found else { return false }
         let offset = geometry.clamped(viewport.offset(for: screen.key))
-        guard let target = nextRest(from: offset, toward: edge, in: geometry) else { return false }
+        guard let target = wanted ?? nextRest(from: offset, toward: edge, in: geometry) else { return false }
         count += 1
         var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
@@ -172,19 +180,36 @@ final class StripScroller {
         return true
     }
 
-    /// The focus went to a window in a zone beyond the screen's edge: scrolls one rest position toward it (the next look scrolls
-    /// on, if it is still out of sight). False when no screen has the zone out of sight, or the windows are not free to be moved.
+    /// The focus went to a window in a zone beyond the screen's edge: scrolls straight to the nearest rest position that shows
+    /// it, however many areas lie between. A scroll that runs when this is asked is followed by this one. False when no screen has
+    /// the zone out of sight, or the windows are not free to be moved.
     @discardableResult
     func reveal(zone id: UUID) -> Bool {
-        guard scrolling == nil else { return false }
+        guard scrolling == nil else {
+            revealing = id
+            return false
+        }
         let all = screens.screens()
         for screen in all {
             guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
                   let placed = geometry.zones(offset: geometry.clamped(viewport.offset(for: screen.key))).first(where: { $0.id == id }),
                   !placed.isOnScreen else { continue }
-            return scroll(toward: placed.rect.minX >= screen.axVisible.midX ? .right : .left, on: screen)
+            let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
+            let offset = geometry.clamped(viewport.offset(for: screen.key))
+            let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
+            guard let target = beyond.first(where: { rest in geometry.zones(offset: rest).first { $0.id == id }?.isOnScreen == true }) else { return false }
+            return scroll(toward: edge, on: screen, to: target)
         }
         return false
+    }
+
+    /// A scroll has come to rest: the zone a focus change asked for is brought on, if it is not in view yet.
+    private func rested() {
+        if let id = revealing {
+            revealing = nil
+            reveal(zone: id)
+        }
+        onRest?()
     }
 
     /// The rest position after `offset` toward `edge`, if there is one.
@@ -340,13 +365,13 @@ final class StripScroller {
         refresher?.refreshZones()
         guard current.phase == .gliding else {
             scrolling = nil
-            onRest?()
+            rested()
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.drawTime) { [weak self] in
             self?.stage.finish {
                 self?.scrolling = nil
-                self?.onRest?()
+                self?.rested()
                 // Apps that settle late (a window that fits itself to its new place) are looked at once more.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self?.refresher?.refreshZones() }
                 // Fresh photographs for the next scroll, once the machine is quiet again.

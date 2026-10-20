@@ -30,8 +30,8 @@ struct LayoutAppsView: View {
     private func name(_ zone: UUID) -> String { ZoneLabel.text(of: zone, in: layout.strip) }
     /// "Zone 1", with the name the user gave it after a dot.
     private func title(_ zone: UUID) -> Text {
-        let number = Text("Zone \(name(zone))")
-        return layout.zoneNames[zone].map { number + Text(verbatim: " · \($0)") } ?? number
+        let number = String(localized: "Zone \(name(zone))")
+        return Text(verbatim: layout.zoneNames[zone].map { "\(number) · \($0)" } ?? number)
     }
 
     var body: some View {
