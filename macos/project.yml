@@ -114,6 +114,7 @@ targets:
       - path: Sources/PaneFlip/Platform/ScreenInfo.swift
       - path: Sources/PaneFlip/Platform/JSONFileStore.swift
       - path: Sources/PaneFlip/Pill/PillMetrics.swift
+      - path: Sources/PaneFlip/Pill/PillScrollStepper.swift
       - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
       - path: Sources/PaneFlip/Pill/IconFont.swift

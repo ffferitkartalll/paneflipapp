@@ -49,7 +49,7 @@ Sources/
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide, WindowMover
     ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
-    ├── Pill/                PillPresenter, PillPanel, PillMetrics, IconFont, DoubleTapDetector
+    ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrollStepper (scroll over the pill steps through the windows), IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
