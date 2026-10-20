@@ -11,6 +11,8 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var trailing: Overflow?
     /// The gap between its zones; nil takes the one of the settings.
     public var gap: Double?
+    /// The names the user gave to zones, by zone; a zone without one is told by its number.
+    public var zoneNames: [UUID: String] = [:]
     /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
     public var startApps: Set<String> = []
 
@@ -32,10 +34,11 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.gap = gap
+        copy.zoneNames = Dictionary(uniqueKeysWithValues: zoneNames.compactMap { zone, name in ids[zone].map { ($0, name) } })
         return copy
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps, zoneNames }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -48,6 +51,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         trailing = try c.decodeIfPresent(Overflow.self, forKey: .trailing)
         gap = try c.decodeIfPresent(Double.self, forKey: .gap)
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
+        zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]
     }
 
     /// The screen's layout with the areas beyond its edges.

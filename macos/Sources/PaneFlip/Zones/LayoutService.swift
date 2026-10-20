@@ -86,6 +86,10 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.setStartApp(bundleID, chosen: chosen, ofLayout: id, key: key)
     }
 
+    func setZoneName(key: String, id: UUID, zone: UUID, to name: String) {
+        repository.setZoneName(name, ofZone: zone, inLayout: id, key: key)
+    }
+
     func rename(key: String, id: UUID, to name: String) {
         repository.rename(layout: id, key: key, to: name)
     }

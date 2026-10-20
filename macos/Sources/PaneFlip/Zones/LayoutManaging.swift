@@ -13,6 +13,7 @@ protocol LayoutManaging: AnyObject {
     /// The gap between the zones of the layout; nil takes the one of the settings.
     func setGap(key: String, id: UUID, to gap: Double?)
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool)
+    func setZoneName(key: String, id: UUID, zone: UUID, to name: String)
     func rename(key: String, id: UUID, to name: String)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.
     func setDefaultZone(key: String, id: UUID, to zone: UUID?)

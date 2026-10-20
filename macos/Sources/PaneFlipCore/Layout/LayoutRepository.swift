@@ -78,6 +78,7 @@ public final class LayoutRepository {
     public func setStrip(_ strip: StripLayout, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].strip = strip
+        s.layouts[i].zoneNames = s.layouts[i].zoneNames.filter { strip.zoneIDs.contains($0.key) }
         screens[Self.split(key).display] = s
     }
 
@@ -90,6 +91,15 @@ public final class LayoutRepository {
     public func setGap(_ gap: Double?, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].gap = gap
+        screens[Self.split(key).display] = s
+    }
+
+    /// Names a zone; an empty name takes the name away, and the zone is told by its number again.
+    public func setZoneName(_ name: String, ofZone zone: UUID, inLayout id: UUID, key: String) {
+        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }),
+              s.layouts[i].strip.zoneIDs.contains(zone) else { return }
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        s.layouts[i].zoneNames[zone] = trimmed.isEmpty ? nil : trimmed
         screens[Self.split(key).display] = s
     }
 
