@@ -13,6 +13,7 @@ struct SettingsView: View {
     let settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
     let relauncher: AppRelaunching
+    let catalog: AppCatalog
     let updates: UpdatesModel
     let activation: ActivationPolicyControlling
     @Bindable var navigation: SettingsNavigation
@@ -23,6 +24,11 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("General", systemImage: "gearshape") }
                 .tag(SettingsTab.general)
+
+            AppsPane(settings: settings, catalog: catalog, editor: apps)
+                .fixedSize(horizontal: false, vertical: true)
+                .tabItem { Label("Apps", systemImage: "app.dashed") }
+                .tag(SettingsTab.apps)
 
             LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
                         settings: settings, navigation: navigation)

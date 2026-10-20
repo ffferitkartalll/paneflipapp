@@ -168,6 +168,24 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(windows.frames[1], .zero, "held windows are not moved either")
     }
 
+    func testAnIgnoredAppIsNeverSnappedAndLetGoWhenItJoinsTheList() {
+        let apps = FakeApps()
+        apps.apps = [AppInfo(pid: 100, bundleID: "free", name: "Free"), AppInfo(pid: 200, bundleID: "other", name: "Other")]
+        let settings = AppSettings(storage: StubSettingsStorage())
+        let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1, pid: 100), into: zone)
+        coordinator.snap(.fake(2, pid: 200), into: zone)
+
+        settings.values.ignoredApps = ["free"]
+        coordinator.releaseIgnoredApps()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [2], "its window leaves the zone")
+        coordinator.snap(.fake(3, pid: 100), into: zone)
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [2], "and a new one is not taken in")
+    }
+
     func testWithoutACarouselThePillClickJustSelects() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])

@@ -30,7 +30,7 @@ final class WindowRestorer {
     /// Cheap check for the app in front, run on every tick: a new window of an app that has a zone goes there.
     func restoreFrontmost() {
         guard windows.isTrusted, settings.values.placementEnabled, !coordinator.placementOnly(), let pid = apps.frontmostPID,
-              let app = apps.app(pid: pid),
+              let app = apps.app(pid: pid), !settings.values.ignoredApps.contains(app.bundleID),
               memory.records.contains(where: { $0.bundleID == app.bundleID && coordinator.visibleZoneIDs.contains($0.zoneID) })
         else { return }
         let claimed = memory.boundWindowIDs
@@ -48,7 +48,8 @@ final class WindowRestorer {
         let visible = coordinator.visibleZoneIDs
         // The zone an app belongs in: where its first remembered window is.
         var ruleZone: [String: UUID] = [:]
-        for record in memory.records where visible.contains(record.zoneID) && !record.bundleID.isEmpty {
+        let ignored = Set(settings.values.ignoredApps)
+        for record in memory.records where visible.contains(record.zoneID) && !record.bundleID.isEmpty && !ignored.contains(record.bundleID) {
             if ruleZone[record.bundleID] == nil { ruleZone[record.bundleID] = record.zoneID }
         }
         guard !ruleZone.isEmpty else { return }

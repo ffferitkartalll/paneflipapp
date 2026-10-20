@@ -20,6 +20,7 @@ final class AppContainer {
     let launchAtLogin: LaunchAtLoginModel
     let updates: UpdatesModel
     let relauncher: AppRelaunching = WorkspaceAppRelauncher()
+    let appCatalog: AppCatalog
     let activation: ActivationPolicyControlling
     let settingsNavigation: SettingsNavigation
 
@@ -74,6 +75,10 @@ final class AppContainer {
         settings.onPlacementChanged = { [weak engine, weak settings] in
             if let settings { engine?.placementChanged(enabled: settings.values.placementEnabled) }
         }
+        settings.onIgnoredAppsChanged = { [weak coordinator, weak engine] in
+            coordinator?.releaseIgnoredApps()
+            engine?.refreshZones()
+        }
         settings.onStackingChanged = { [weak engine, weak settings] in
             if let settings { engine?.stackingChanged(enabled: settings.values.stackingEnabled) }
         }
@@ -85,7 +90,8 @@ final class AppContainer {
         self.layouts = layouts
         self.engine = engine
         self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine,
-                                              iconFont: iconFont)
+                                              iconFont: iconFont, settings: settings)
+        self.appCatalog = apps
         self.activation = activation
         self.settingsNavigation = navigation
         self.launchAtLogin = LaunchAtLoginModel(loginItem: SMAppServiceLoginItem())

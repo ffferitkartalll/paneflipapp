@@ -19,16 +19,26 @@ final class LayoutAppsServiceTests: XCTestCase {
         func restoreWindows() { restores += 1 }
     }
     private var refresher: Refresher!
+    private var settings: AppSettings!
 
     override func setUp() {
         memory = StackMemory(store: MemoryDocumentStore())
         refresher = Refresher()
         let apps = FakeApps()
         apps.apps = [AppInfo(pid: 1, bundleID: "com.example.one", name: "One")]
-        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
-                                           settings: AppSettings(storage: StubSettingsStorage()), apps: apps)
+        settings = AppSettings(storage: StubSettingsStorage())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory, settings: settings, apps: apps)
         service = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: refresher,
-                                    iconFont: IconFont(brands: NoBrands()))
+                                    iconFont: IconFont(brands: NoBrands()), settings: settings)
+    }
+
+    func testAnIgnoredAppCanNeitherBeAddedToAZoneNorOfferedForIt() {
+        settings.values.ignoredApps = ["com.example.one"]
+
+        service.addApp(bundleID: "com.example.one", to: zone)
+
+        XCTAssertTrue(service.entries(inZones: [zone]).isEmpty)
+        XCTAssertTrue(service.runningApps().isEmpty)
     }
 
     func testAnAddedAppIsListedInItsZoneAndTriggersAPlacement() {

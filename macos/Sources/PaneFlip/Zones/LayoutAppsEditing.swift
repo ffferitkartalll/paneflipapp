@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 
 /// What the settings need to decide, per layout, which app opens in which zone and in what order the pill shows
@@ -7,6 +8,8 @@ protocol LayoutAppsEditing: AnyObject {
     var revision: Int { get }
     /// The layout's apps in pill order, one entry per app and zone.
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry]
+    /// The app's icon as the pill draws it: a one-colour glyph that follows the text colour.
+    func glyph(ofApp bundleID: String) -> NSImage
     /// Running apps that can be added.
     func runningApps() -> [(bundleID: String, name: String)]
     func addApp(bundleID: String, to zone: UUID)
