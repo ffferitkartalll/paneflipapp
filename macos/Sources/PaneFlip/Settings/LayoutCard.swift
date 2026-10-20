@@ -48,17 +48,8 @@ struct LayoutCard: View {
     // MARK: Parts
 
     private var miniature: some View {
-        Canvas { gc, size in
-            for (i, z) in layout.root.zones(in: CGRect(origin: .zero, size: size)).enumerated() {
-                gc.stroke(Path(roundedRect: z.rect.insetBy(dx: 1, dy: 1), cornerRadius: 4), with: .color(.secondary))
-                gc.draw(Text(verbatim: "\(i + 1)").font(.caption2).foregroundStyle(.secondary),
-                        at: CGPoint(x: z.rect.minX + 9, y: z.rect.minY + 9))
-            }
-        }
-        .aspectRatio(screen.size.width / screen.size.height, contentMode: .fit)
-        .frame(width: Self.width)
-        .background(.quaternary, in: .rect(cornerRadius: 8))
-        .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? Color.accentColor : .clear, lineWidth: 2) }
+        LayoutMiniature(root: layout.root, screenSize: screen.size, width: Self.width)
+            .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? Color.accentColor : .clear, lineWidth: 2) }
     }
 
     private var nameRow: some View {

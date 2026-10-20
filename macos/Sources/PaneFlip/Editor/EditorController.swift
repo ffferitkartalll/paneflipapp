@@ -25,7 +25,7 @@ final class EditorController: LayoutEditing {
         let all = screens.screens()
         let pointer = screens.pointerCocoa
         guard let screen = all.first(where: { $0.cocoaFrame.contains(pointer) }) ?? all.first else { return }
-        let layout = repository.activeLayout(for: screen.key) ?? layouts.addLayout(for: screen.key)
+        let layout = repository.activeLayout(for: screen.key) ?? layouts.addLayout(for: screen.key, preset: .single)
         edit(on: screen, layoutID: layout.id)
     }
 

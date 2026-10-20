@@ -10,6 +10,7 @@ struct ScreenLayoutsSection: View {
     let apps: LayoutAppsEditing
     let navigation: SettingsNavigation
     let showsOverflow: Bool
+    @State private var choosesShape = false
 
     var body: some View {
         Section {
@@ -71,7 +72,7 @@ struct ScreenLayoutsSection: View {
                        layouts: layouts, editor: editor, apps: apps, navigation: navigation, showsOverflow: showsOverflow)
                 .hidden()
 
-            Button { layouts.addLayout(for: screen.key) } label: {
+            Button { choosesShape = true } label: {
                 VStack(spacing: 8) {
                     Image(systemName: "plus").font(.system(size: 22, weight: .regular))
                     Text("Add layout").font(.headline)
@@ -82,6 +83,12 @@ struct ScreenLayoutsSection: View {
                 .contentShape(.rect(cornerRadius: 8))
             }
             .buttonStyle(.plain)
+            .sheet(isPresented: $choosesShape) {
+                LayoutPresetSheet(screen: screen) { preset, edit in
+                    let layout = layouts.addLayout(for: screen.key, preset: preset)
+                    if edit { editor.edit(on: screen, layoutID: layout.id) }
+                }
+            }
         }
         .frame(width: LayoutCard.width)
     }

@@ -21,9 +21,9 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
     }
 
     @discardableResult
-    func addLayout(for key: String) -> NamedLayout {
+    func addLayout(for key: String, preset: LayoutPreset) -> NamedLayout {
         let number = repository.layouts(for: key).count + 1
-        let layout = repository.addLayout(for: key, named: String(localized: "Layout \(number)"))
+        let layout = repository.addLayout(for: key, named: String(localized: "Layout \(number)"), preset: preset)
         if repository.activeLayout(for: key)?.id == layout.id { refresher?.refreshZones() }
         return layout
     }
