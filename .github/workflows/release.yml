@@ -1,18 +1,54 @@
 name: Release
 
-# A release is published when a pull request with the `release` label is merged into main, never for any other merge.
-# That pull request also ran the tests (test.yml). Its version comes from MARKETING_VERSION in macos/project.yml: the
-# pull request raises it, the release is tagged `v<version>`, and a version that already has a release stops the job.
+# A release is published by hand, from main: `gh workflow run release.yml` (or Actions > Release > Run workflow) once the
+# version was raised in macos/project.yml. Nothing runs for a pull request. The tests run first on that commit, then the
+# release is built, signed and published. Its version comes from MARKETING_VERSION in macos/project.yml and the release is
+# tagged `v<version>`; a version that already has a release stops the job.
 # Its notes list the issues the merged pull requests closed (not the pull requests), made in the step before Publish.
 # Last, the cask in ffferitkartalll/homebrew-tap gets the new version (secret TAP_TOKEN: contents write on that repository).
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
+  test:
+    if: github.ref == 'refs/heads/main'
+    runs-on: xcode-27
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      # Stop before the tests when the version was not raised: the release is tagged with it.
+      - name: Version is new
+        working-directory: macos
+        run: |
+          version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml | head -1)"
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "Release v$version exists already: raise MARKETING_VERSION in macos/project.yml."
+            exit 1
+          fi
+
+      - name: Bundle identifier
+        working-directory: macos
+        run: cp Config/Local.xcconfig.example Config/Local.xcconfig
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Core tests (no Xcode project needed)
+        working-directory: macos
+        run: swift test
+
+      - name: App tests
+        working-directory: macos
+        run: |
+          xcodegen generate
+          # CI has no signing certificate: sign ad hoc, the tests never launch the app.
+          xcodebuild test -project PaneFlip.xcodeproj -scheme PaneFlip -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=NO
+
   release:
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release')
+    needs: test
     runs-on: xcode-27
     permissions:
       contents: write
@@ -20,8 +56,6 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Version
         id: version
@@ -30,7 +64,7 @@ jobs:
           version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml | head -1)"
           [ -n "$version" ] || { echo "No MARKETING_VERSION in project.yml"; exit 1; }
           if gh release view "v$version" >/dev/null 2>&1; then
-            echo "Release v$version exists already: raise MARKETING_VERSION in the pull request."
+            echo "Release v$version exists already: raise MARKETING_VERSION in macos/project.yml."
             exit 1
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
@@ -86,7 +120,7 @@ jobs:
           repo="${{ github.repository }}"
           version="${{ steps.version.outputs.version }}"
           # The pull requests merged since the previous release: each squash commit's first line ends with (#number).
-          numbers="$(gh api "repos/$repo/compare/$previous...${{ github.event.pull_request.merge_commit_sha }}" --paginate \
+          numbers="$(gh api "repos/$repo/compare/$previous...${{ github.sha }}" --paginate \
             --jq '.commits[].commit.message | split("\n")[0] | capture("\\(#(?<n>[0-9]+)\\)$").n')"
           # The issues those pull requests closed, except those of a release pull request, the documentation-only ones and the ones
           # labelled internal.
@@ -120,7 +154,7 @@ jobs:
       - name: Publish
         run: |
           gh release create "v${{ steps.version.outputs.version }}" "PaneFlip-${{ steps.version.outputs.version }}.dmg" \
-            --target "${{ github.event.pull_request.merge_commit_sha }}" \
+            --target "${{ github.sha }}" \
             --title "PaneFlip ${{ steps.version.outputs.version }}" --notes-file "$RUNNER_TEMP/notes.md"
 
       - name: Update the cask
