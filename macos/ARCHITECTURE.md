@@ -73,7 +73,7 @@ Sources/
 
 | Type | Single job |
 |---|---|
-| `LayoutRepository` | Store layouts per screen. Knows nothing about windows. |
+| `LayoutRepository` | Store layouts per display (shared by its desktops) and which one each desktop uses. Knows nothing about windows. |
 | `StripLayout` / `StripGeometry` | A screen's layout with the zones (`Overflow`) beyond its left and right edges as one strip; where each zone stands for a scroll offset, how far the screen may scroll and where a scroll comes to rest. Pure arithmetic. `Parking` tells where a window waits when its zone is out of sight (one pixel on the display, at a side with no display beside it). |
 | `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. A press while a scroll runs gives it a new aim (the next rest position, or back). Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
 | `EdgeScroller` | Rest the pointer at the left or right edge of a screen for a second and the zones beyond that edge scroll into view; the pointer must leave the edge to scroll again. |

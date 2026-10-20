@@ -12,22 +12,26 @@ final class LayoutRepositoryDisplaysTests: XCTestCase {
         XCTAssertFalse(repository.zoneIDs(ofDisplaysNotIn: ["A"]).contains(kept.root.leafIDs[0]))
     }
 
+    /// A document from before desktops were told apart by their position: one entry per "display|<space id>".
+    private func oldRepository(_ keys: [String]) -> (LayoutRepository, [NamedLayout]) {
+        let store = MemoryStore()
+        let layouts = keys.map { _ in NamedLayout(name: "x", root: .leaf(UUID())) }
+        store.save(Dictionary(uniqueKeysWithValues: zip(keys, layouts).map { ($0, ScreenLayouts(layouts: [$1], activeID: $1.id)) }),
+                   named: "layouts-v2")
+        return (LayoutRepository(store: store), layouts)
+    }
+
     func testLayoutsMoveToANewKeyOnlyWhenItIsEmpty() {
-        let repository = repository()
-        let layout = repository.addLayout(for: "A|757")
+        let (repository, layouts) = oldRepository(["A|757", "A|9"])
         repository.moveScreen(from: "A|757", to: "A|d1")
-        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [layout.id])
-        XCTAssertTrue(repository.layouts(for: "A|757").isEmpty)
-        repository.addLayout(for: "A|9")
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [layouts[0].id])
+        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, layouts[0].id)
         repository.moveScreen(from: "A|9", to: "A|d1")
         XCTAssertEqual(repository.layouts(for: "A|d1").count, 1)   // not overwritten
     }
 
     func testLegacyKeysAreTheNumericOnesOfADisplay() {
-        let repository = repository()
-        repository.addLayout(for: "A|757")
-        repository.addLayout(for: "A|d1")
-        repository.addLayout(for: "B|3")
+        let (repository, _) = oldRepository(["A|757", "A|d1", "B|3"])
         XCTAssertEqual(repository.legacyKeys(ofDisplay: "A"), ["A|757"])
     }
 

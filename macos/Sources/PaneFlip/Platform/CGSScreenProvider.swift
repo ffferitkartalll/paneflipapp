@@ -53,11 +53,12 @@ final class CGSScreenProvider: ScreenProviding {
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
             let legacy = "\(uuid)|\(space)"
-            let position = desktopPosition(of: space, onDisplay: uuid)
+            let desktops = ordinaryDesktops(onDisplay: uuid)
+            let position = desktops.firstIndex(of: space).map { $0 + 1 }
             let usable = DockArea.excluding(dock, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
-                              legacyKey: legacy)
+                              legacyKey: legacy, desktopCount: desktops.count)
         }
     }
 
@@ -85,14 +86,13 @@ final class CGSScreenProvider: ScreenProviding {
         return CGRect(origin: origin, size: extent)
     }
 
-    /// The 1-based place of a desktop among the display's ordinary desktops (full-screen spaces are not counted),
-    /// or nil for a space that is not one of them.
-    private func desktopPosition(of space: UInt64, onDisplay uuid: String) -> Int? {
+    /// The display's ordinary desktops in order (full-screen spaces are not counted); a desktop's 1-based place among
+    /// them is what tells it apart.
+    private func ordinaryDesktops(onDisplay uuid: String) -> [UInt64] {
         guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: Any]],
               let display = displays.first(where: { ($0["Display Identifier"] as? String)?.caseInsensitiveCompare(uuid) == .orderedSame }),
-              let spaces = display["Spaces"] as? [[String: Any]] else { return nil }
-        let ordinary = spaces.filter { ($0["type"] as? Int ?? 0) == 0 }.compactMap { ($0["ManagedSpaceID"] as? NSNumber)?.uint64Value }
-        return ordinary.firstIndex(of: space).map { $0 + 1 }
+              let spaces = display["Spaces"] as? [[String: Any]] else { return [] }
+        return spaces.filter { ($0["type"] as? Int ?? 0) == 0 }.compactMap { ($0["ManagedSpaceID"] as? NSNumber)?.uint64Value }
     }
 
     func currentSpaceIDs() -> Set<UInt64> {
