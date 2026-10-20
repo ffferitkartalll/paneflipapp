@@ -10,6 +10,8 @@ final class StackCoordinator {
     /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
+    /// The window that had the focus at the last look (see `followFocus`).
+    private var lastFocusedID: CGWindowID?
     /// The size a window had before a zone took it in, for giving it back when the user pulls it out.
     private var originalSizes: [CGWindowID: CGSize] = [:]
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
@@ -296,8 +298,14 @@ final class StackCoordinator {
     /// If the user switched to a stacked window some other way (Cmd-Tab, Dock), follow it.
     func followFocus() {
         guard !placementOnly() else { return }
-        guard !isSliding, let focused = windows.focusedWindow(), let stack = stack(containing: focused.id) else { return }
-        if stack.isParked, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
+        guard !isSliding else { return }
+        let focused = windows.focusedWindow()
+        // Only a focus that has just moved there asks for the scroll: a window the user scrolled away from keeps the focus without
+        // the layout scrolling back to it.
+        let moved = focused?.id != lastFocusedID
+        lastFocusedID = focused?.id
+        guard let focused, let stack = stack(containing: focused.id) else { return }
+        if moved, stack.isParked, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
         guard stack.activeID != focused.id else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)

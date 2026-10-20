@@ -80,7 +80,7 @@ struct EditorView: View {
 
     /// Where the screen itself lies within the strip.
     private func screenFrame(_ rect: CGRect, total: CGFloat) -> some View {
-        let before = CGFloat(model.strip.leading?.width ?? 0) / total * rect.width
+        let before = CGFloat(model.strip.leadingWidth) / total * rect.width
         return RoundedRectangle(cornerRadius: 12)
             .strokeBorder(.white.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
             .frame(width: rect.width / total, height: rect.height)
@@ -90,12 +90,12 @@ struct EditorView: View {
 
     private func overflowButtons(size: CGSize) -> some View {
         ZStack {
-            if model.allowsOverflow, model.strip.leading == nil {
+            if model.allowsOverflow {
                 Button { model.addLeading() } label: { Image(systemName: "plus") }
                     .help("Add zones beyond the left edge")
                     .position(x: 32, y: size.height / 2)
             }
-            if model.allowsOverflow, model.strip.trailing == nil {
+            if model.allowsOverflow {
                 Button { model.addTrailing() } label: { Image(systemName: "plus") }
                     .help("Add zones beyond the right edge")
                     .position(x: size.width - 32, y: size.height / 2)
@@ -122,7 +122,7 @@ struct EditorView: View {
             }
             .controlSize(.large)
             hint
-            if model.strip.leading != nil || model.strip.trailing != nil { overflowHint }
+            if !model.strip.leading.isEmpty || !model.strip.trailing.isEmpty { overflowHint }
             Spacer()
         }
         .padding(.top, 28)
