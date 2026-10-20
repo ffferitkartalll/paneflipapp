@@ -6,11 +6,14 @@ final class FakeWindowSnapshots: WindowSnapshotting {
     var images: [CGWindowID: WindowPicture] = [:]
     var answersAtOnce = true
     private(set) var prepared = 0
+    /// How many times pictures were asked for.
+    private(set) var requests = 0
 
     func prepare() { prepared += 1 }
     private var waiting: [() -> Void] = []
 
     func snapshots(of refs: [WindowRef], completion: @escaping ([CGWindowID: WindowPicture]) -> Void) {
+        requests += 1
         let result = images.filter { id, _ in refs.contains { $0.id == id } }
         if answersAtOnce { completion(result) } else { waiting.append { completion(result) } }
     }

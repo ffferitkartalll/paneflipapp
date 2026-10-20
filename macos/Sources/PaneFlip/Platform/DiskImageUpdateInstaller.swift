@@ -41,7 +41,7 @@ final class DiskImageUpdateInstaller: UpdateInstalling {
             try? files.removeItem(at: staged)
             throw Failure.notSignedByUs
         }
-        try Self.swapAfterQuit(app: app, staged: staged)
+        try UpdateSwapScript.start(app: app, staged: staged)
         await MainActor.run { NSApp.terminate(nil) }
     }
 
@@ -53,25 +53,6 @@ final class DiskImageUpdateInstaller: UpdateInstalling {
               SecCodeCopyDesignatedRequirement(runningStatic, [], &requirement) == errSecSuccess, let requirement,
               SecStaticCodeCreateWithPath(url as CFURL, [], &candidate) == errSecSuccess, let candidate else { return false }
         return SecStaticCodeCheckValidity(candidate, SecCSFlags(rawValue: kSecCSCheckAllArchitectures | kSecCSStrictValidate), requirement) == errSecSuccess
-    }
-
-    /// A shell that outlives this app: waits for it to quit, puts the new app in its place (the old one comes back if that fails)
-    /// and opens it.
-    private static func swapAfterQuit(app: URL, staged: URL) throws {
-        let script = """
-        while kill -0 \(ProcessInfo.processInfo.processIdentifier) 2>/dev/null; do sleep 0.2; done
-        if mv "$1" "$1.old"; then
-          if mv "$2" "$1"; then rm -rf "$1.old"; else mv "$1.old" "$1"; fi
-        fi
-        open "$1"
-        """
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/sh")
-        process.arguments = ["-c", script, "sh", app.path, staged.path]
-        process.standardInput = FileHandle.nullDevice
-        process.standardOutput = FileHandle.nullDevice
-        process.standardError = FileHandle.nullDevice
-        try process.run()
     }
 
     /// Runs a tool and says whether it succeeded.

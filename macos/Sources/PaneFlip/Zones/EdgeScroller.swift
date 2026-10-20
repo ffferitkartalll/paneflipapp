@@ -16,7 +16,7 @@ final class EdgeScroller {
     private let dwell: TimeInterval
     /// Calls `work` after `delay`; returns what cancels it.
     private let after: (_ delay: TimeInterval, _ work: @escaping () -> Void) -> () -> Void
-    private var waiting: (edge: ScreenEdge, key: String, cancel: () -> Void)?
+    private var waiting: (edge: ScreenEdge, frame: CGRect, cancel: () -> Void)?
     /// False after a scroll, until the pointer has left the edge.
     private var armed = true
     private var isRunning = false
@@ -47,41 +47,46 @@ final class EdgeScroller {
     }
 
     private func moved(to point: CGPoint) {
-        guard let (screen, edge) = edge(at: point) else {
+        guard let (frame, edge) = edge(at: point) else {
             waiting?.cancel()
             waiting = nil
             armed = true
             return
         }
-        if let waiting, waiting.edge == edge, waiting.key == screen.key { return }   // still resting there
+        if let waiting, waiting.edge == edge, waiting.frame == frame { return }   // still resting there
         waiting?.cancel()
         waiting = nil
         guard armed else { return }
+        // A display that just changed has no screen to match yet: not looked for again until the pointer has left the edge.
+        guard let screen = screen(with: frame) else { armed = false; return }
         // Going back to where the layout began needs no wait: only going further out does.
         if scroller.isReturning(toward: edge, on: screen) {
-            if scroller.scroll(toward: edge, on: screen) { armed = false }
+            armed = false
+            scroller.scroll(toward: edge, on: screen)
             return
         }
-        let key = screen.key
-        let cancel = after(dwell) { [weak self] in self?.rested(on: edge, of: key) }
-        waiting = (edge, key, cancel)
+        let cancel = after(dwell) { [weak self] in self?.rested(on: edge, at: frame) }
+        waiting = (edge, frame, cancel)
     }
 
     /// The pointer has been at the edge for the time: scroll, if it still is.
-    private func rested(on edge: ScreenEdge, of key: String) {
+    private func rested(on edge: ScreenEdge, at frame: CGRect) {
         waiting = nil
-        guard settings.values.overflowZonesEnabled, let (screen, now) = self.edge(at: screens.pointerCocoa), now == edge, screen.key == key
-        else { return }
+        guard settings.values.overflowZonesEnabled, let (nowFrame, now) = self.edge(at: screens.pointerCocoa), now == edge, nowFrame == frame,
+              let screen = screen(with: frame) else { return }
         if scroller.scroll(toward: edge, on: screen) { armed = false }
     }
 
-    private func edge(at point: CGPoint) -> (ScreenInfo, ScreenEdge)? {
-        for screen in screens.screens() {
-            let frame = screen.cocoaFrame
+    /// The edge of a display the point lies at, with that display's frame. This runs on every mouse move of the system, so it
+    /// asks for plain frames only.
+    private func edge(at point: CGPoint) -> (frame: CGRect, edge: ScreenEdge)? {
+        for frame in screens.frames {
             guard point.y >= frame.minY, point.y <= frame.maxY else { continue }
-            if point.x >= frame.minX - 1, point.x <= frame.minX + Self.reach { return (screen, .left) }
-            if point.x <= frame.maxX + 1, point.x >= frame.maxX - Self.reach { return (screen, .right) }
+            if point.x >= frame.minX - 1, point.x <= frame.minX + Self.reach { return (frame, .left) }
+            if point.x <= frame.maxX + 1, point.x >= frame.maxX - Self.reach { return (frame, .right) }
         }
         return nil
     }
+
+    private func screen(with frame: CGRect) -> ScreenInfo? { screens.screens().first { $0.cocoaFrame == frame } }
 }

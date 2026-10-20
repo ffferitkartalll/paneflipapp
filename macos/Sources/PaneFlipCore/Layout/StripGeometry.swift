@@ -33,12 +33,6 @@ public struct StripGeometry: Equatable {
 
     public func clamped(_ offset: CGFloat) -> CGFloat { min(max(offset, range.lowerBound), range.upperBound) }
 
-    /// Where a scroll that is let go of at `offset`, still moving at `velocity` (points per second), comes to rest.
-    public func rest(from offset: CGFloat, velocity: CGFloat = 0, lookAhead: CGFloat = 0.15) -> CGFloat {
-        let target = offset + velocity * lookAhead
-        return rests.min { abs($0 - target) < abs($1 - target) } ?? 0
-    }
-
     /// Every zone of the strip as it stands when the screen has moved by `offset`.
     public func zones(offset: CGFloat, gap: CGFloat = 0) -> [Placed] {
         var placed: [(UUID, CGRect)] = []

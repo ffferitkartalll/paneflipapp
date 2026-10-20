@@ -44,6 +44,8 @@ final class CGSScreenProvider: ScreenProviding {
         }
     }
 
+    var frames: [CGRect] { NSScreen.screens.map(\.frame) }
+
     func screens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
         let dock = dockRect()

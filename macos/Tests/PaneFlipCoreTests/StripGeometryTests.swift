@@ -30,13 +30,10 @@ final class StripGeometryTests: XCTestCase {
         XCTAssertEqual(geometry().clamped(40), 0, "no overflow, no scrolling")
     }
 
-    func testScrollingComesToRestAtTheNearestPositionOrWhereItIsThrown() {
-        let g = geometry(trailing: 0.25)
-        XCTAssertEqual(g.rests, [0, 250])
-        XCTAssertEqual(g.rest(from: 100), 0)
-        XCTAssertEqual(g.rest(from: 140), 250)
-        XCTAssertEqual(g.rest(from: 60, velocity: 1500), 250, "a flick carries it to the end")
-        XCTAssertEqual(g.rest(from: 200, velocity: -1500), 0)
+    func testScrollingComesToRestAtTheEndsAndTheScreensOwnLayout() {
+        let g = geometry(leading: 0.25, trailing: 0.25)
+        XCTAssertEqual(g.rests, [-250, 0, 250])
+        XCTAssertEqual(geometry(leading: nil, trailing: 0.25).rests, [0, 250])
     }
 
     func testAZoneShowingOnlyAFewPixelsIsOutOfSight() {

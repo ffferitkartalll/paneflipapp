@@ -46,6 +46,8 @@ final class PanelSlideStage: SlideStaging {
         /// Counts the starts and the extensions: a timer of an earlier one must not act on a later one.
         var generation = 0
         var fading = false
+        /// The first start has happened (the pictures had their few frames on screen): an extension before it would start it twice.
+        var started = false
 
         init(clip: CALayer, zone: CGRect, forward: Bool, completion: @escaping () -> Void) {
             self.clip = clip
@@ -87,12 +89,18 @@ final class PanelSlideStage: SlideStaging {
         // A few frames for the window server to put the pictures on screen, then the real windows may change and
         // the slide begins.
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.settle) { [weak self] in
+            slide.started = true
             self?.go(slide, covered: covered)
         }
     }
 
     func extend(entering: WindowPicture, forward: Bool, covered: @escaping (_ done: @escaping () -> Void) -> Void) -> Bool {
-        guard let slide = running, slide.forward == forward, !slide.fading, let last = slide.items.last else { return false }
+        guard let slide = running, slide.started, slide.forward == forward, let last = slide.items.last else { return false }
+        if slide.fading {
+            // The pictures are giving way to the real windows: they come back, and the slide goes on.
+            slide.fading = false
+            slide.clip.removeAnimation(forKey: "fade")
+        }
         let side: CGFloat = forward ? 1 : -1
         // Everything moves on by one more zone, from where it is now; the new picture waits beside the last one.
         let lastLeft = (last.layer.presentation()?.position.x ?? last.layer.position.x) - last.layer.bounds.width / 2
@@ -127,6 +135,9 @@ final class PanelSlideStage: SlideStaging {
             guard atRest, windowReady, slide.generation == generation, !slide.fading else { return }
             slide.fading = true
             fadeOut(slide.clip) { [weak self] in
+                // Carried on meanwhile: the slide is not over.
+                guard slide.generation == generation, slide.fading else { return }
+                slide.clip.removeFromSuperlayer()
                 if self?.running === slide { self?.running = nil }
                 slide.completion()
             }
@@ -176,10 +187,7 @@ final class PanelSlideStage: SlideStaging {
 
     private func fadeOut(_ clip: CALayer, _ completion: @escaping () -> Void) {
         CATransaction.begin()
-        CATransaction.setCompletionBlock {
-            clip.removeFromSuperlayer()
-            completion()
-        }
+        CATransaction.setCompletionBlock(completion)
         let fade = CABasicAnimation(keyPath: "opacity")
         fade.fromValue = 1
         fade.toValue = 0

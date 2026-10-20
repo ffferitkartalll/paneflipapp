@@ -17,14 +17,21 @@ final class DoubleTapDetector {
     }
 
     func start() {
-        monitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { [weak self] e in self?.handle(e) }
+        monitor = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged, .keyDown]) { [weak self] e in self?.handle(e) }
     }
 
     private func handle(_ e: NSEvent) {
+        if e.type == .keyDown { return otherKeyWentDown() }
         let code = keyCode()
         guard Int(e.keyCode) == code, let mask = SnapTrigger.modifierMasks[code],
               e.modifierFlags.rawValue & mask != 0 else { return }   // the key went down
-        let now = Date()
+        modifierWentDown(at: Date())
+    }
+
+    /// Another key was pressed: the modifier was part of a shortcut (Command+C), not a tap.
+    func otherKeyWentDown() { lastDown = nil }
+
+    func modifierWentDown(at now: Date) {
         if let last = lastDown, now.timeIntervalSince(last) < interval {
             lastDown = nil
             onDoubleTap()
