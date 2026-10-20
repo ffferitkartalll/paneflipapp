@@ -311,6 +311,41 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 0)
     }
 
+    private func addAreaOnTheLeft() {
+        var strip = repository.activeLayout(for: key)!.strip
+        strip.leading = Overflow(width: 0.25, root: .leaf(UUID()))
+        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
+        refresher.onRefresh()
+    }
+
+    func testAShortcutPressedWhileTheScrollGlidesCarriesItOnToTheNextRestPosition() {
+        addAreaOnTheLeft()
+        let scroller = scroller()
+        scroller.start()
+        XCTAssertTrue(scroller.scroll(toward: .left))
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), -250)
+
+        XCTAssertTrue(scroller.scroll(toward: .right))
+        run(8)   // the pictures are gliding
+        XCTAssertTrue(scroller.scroll(toward: .right), "carried on to the next rest position")
+        XCTAssertFalse(scroller.scroll(toward: .right), "and there is none beyond it")
+        run(80); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
+        XCTAssertEqual(stage.begun.count, 2, "the pictures were put up once for the two presses")
+    }
+
+    func testAShortcutThePassingWayTurnsAGlidingScrollBack() {
+        addAreaOnTheLeft()
+        let scroller = scroller()
+        scroller.start()
+        XCTAssertTrue(scroller.scroll(toward: .right))
+        run(8)
+        XCTAssertTrue(scroller.scroll(toward: .left), "back toward where it came from")
+        run(80); settle()
+        XCTAssertEqual(viewport.offset(for: key), 0)
+    }
+
     func testNothingScrollsWhileStageManagerHoldsTheWindows() {
         let busy = self.scroller(busy: true)
         busy.handle(.began)

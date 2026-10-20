@@ -142,7 +142,7 @@ final class StackCoordinator {
     /// `forward` (the new window comes in from the right) is the pill's order unless the caller knows better: a cycle
     /// that wraps around keeps going the same way.
     func slideSelect(_ id: CGWindowID, in stack: ZoneStack, forward: Bool? = nil) {
-        if isSliding { return }   // a click during a slide is ignored
+        if isSliding { return extendSlide(to: id, in: stack, forward: forward) }
         guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
               let leaving = stack.refs[frontID],
               let from = stack.tabs.firstIndex(where: { $0.id == frontID }), let to = stack.tabs.firstIndex(where: { $0.id == id })
@@ -157,11 +157,30 @@ final class StackCoordinator {
         }
     }
 
+    /// A choice while a slide runs: if it goes the same way in the same zone, the slide is carried on to the new window (the
+    /// pictures of the windows it passed are there already); otherwise the choice is ignored.
+    private func extendSlide(to id: CGWindowID, in stack: ZoneStack, forward: Bool?) {
+        guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
+              let from = stack.tabs.firstIndex(where: { $0.id == frontID }), let to = stack.tabs.firstIndex(where: { $0.id == id })
+        else { return }
+        let forward = forward ?? (to > from)
+        let rect = stack.rect
+        guard carousel.canExtend(forward: forward, in: rect) else { return }
+        stack.activeID = id
+        onActivity?(stack.id)
+        carousel.extend(entering: entering, forward: forward) { [windows] in
+            windows.setFrame(rect, of: entering)
+            windows.raise(entering)
+        }
+    }
+
     /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when
     /// `reverse`), around the end. A window outside any zone, or a zone with one window, does nothing.
     func cycleFocusedZone(reverse: Bool) {
-        guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1,
-              let from = stack.tabs.firstIndex(where: { $0.id == focused.id }) else { return }
+        guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1 else { return }
+        // While a slide runs the window in front is the one it goes to, not the one that is still in focus.
+        let current = isSliding ? (stack.activeID ?? focused.id) : focused.id
+        guard let from = stack.tabs.firstIndex(where: { $0.id == current }) else { return }
         let count = stack.tabs.count
         slideSelect(stack.tabs[(from + (reverse ? count - 1 : 1)) % count].id, in: stack, forward: !reverse)
     }
