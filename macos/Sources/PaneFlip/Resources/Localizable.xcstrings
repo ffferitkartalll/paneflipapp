@@ -282,6 +282,287 @@
         }
       }
     },
+    "A window you drag out of its zone returns to the size it had before the zone took it in." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعود النافذة التي تسحبها خارج منطقتها إلى الحجم الذي كانت عليه قبل أن تضمّها المنطقة."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прозорец, който издърпате извън зоната му, се връща към размера, който е имал, преди зоната да го поеме."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোন থেকে টেনে বের করা উইন্ডো জোনে ঢোকার আগের আকারে ফিরে যায়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una finestra que arrossegues fora de la seva zona torna a la mida que tenia abans que la zona l'agafés."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno, které vytáhnete ze zóny, se vrátí na velikost, jakou mělo, než ho zóna přijala."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et vindue, du trækker ud af dets zone, får den størrelse tilbage, det havde, før zonen tog det ind."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Fenster, das du aus seiner Zone ziehst, kehrt zu der Größe zurück, die es hatte, bevor die Zone es aufnahm."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένα παράθυρο που σύρετε έξω από τη ζώνη του επιστρέφει στο μέγεθος που είχε πριν το δεχτεί η ζώνη."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una ventana que arrastras fuera de su zona vuelve al tamaño que tenía antes de que la zona la acogiera."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aken, mille tsoonist välja lohistad, naaseb suuruse juurde, mis tal oli enne tsooni võtmist."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنجره‌ای که از ناحیه‌اش بیرون می‌کشید به اندازه‌ای برمی‌گردد که پیش از ورود به ناحیه داشت."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alueeltaan ulos vedetty ikkuna palaa kokoon, joka sillä oli ennen kuin alue otti sen."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang window na hinila mo palabas ng zone nito ay bumabalik sa laking mayroon ito bago ito kunin ng zone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une fenêtre que vous faites sortir de sa zone retrouve la taille qu'elle avait avant que la zone ne l'accueille."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חלון שגוררים אל מחוץ לאזור שלו חוזר לגודל שהיה לו לפני שהאזור קלט אותו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "जिस विंडो को आप ज़ोन से बाहर खींचते हैं वह उस आकार में लौट आती है जो ज़ोन में आने से पहले था।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prozor koji izvučete iz njegove zone vraća se na veličinu koju je imao prije nego što ga je zona preuzela."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A zónájából kihúzott ablak visszatér a mérethez, amelyet a zónába kerülés előtt viselt."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jendela yang Anda seret keluar dari zonanya kembali ke ukuran sebelum zona mengambilnya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una finestra che trascini fuori dalla sua zona torna alle dimensioni che aveva prima che la zona la accogliesse."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンの外へドラッグしたウインドウは、ゾーンに入る前のサイズに戻ります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역 밖으로 끌어낸 윈도우는 영역에 들어가기 전의 크기로 돌아갑니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iš zonos išvilktas langas grįžta į dydį, kurį turėjo, kol jo nepriėmė zona."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logs, ko izvelkat no zonas, atgūst izmēru, kāds tam bija pirms zonas."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोनमधून बाहेर ओढलेली विंडो झोनमध्ये येण्यापूर्वीच्या आकारात परत येते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tetingkap yang anda seret keluar dari zonnya kembali kepada saiz sebelum zon mengambilnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et vindu du drar ut av sonen sin, får tilbake størrelsen det hadde før sonen tok det inn."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een venster dat je uit zijn zone sleept, krijgt de grootte terug die het had voordat de zone het opnam."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno wyciągnięte ze strefy wraca do rozmiaru, jaki miało, zanim strefa je przyjęła."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma janela que arrasta para fora da sua zona volta ao tamanho que tinha antes de a zona a receber."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma janela que você arrasta para fora da zona volta ao tamanho que tinha antes de a zona recebê-la."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O fereastră pe care o tragi în afara zonei revine la dimensiunea pe care o avea înainte ca zona să o preia."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Окно, которое вы вытащили из зоны, возвращается к размеру, который было до помещения в зону."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno, ktoré vytiahnete zo zóny, sa vráti na veľkosť, akú malo predtým, než ho zóna prijala."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno, ki ga povlečete iz območja, se vrne na velikost, ki jo je imelo, preden ga je območje sprejelo."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прозор који извучете из његове зоне враћа се на величину коју је имао пре него што га је зона преузела."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ett fönster du drar ut ur sin zon får tillbaka den storlek det hade innan zonen tog det."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலத்திலிருந்து வெளியே இழுக்கும் சாளரம் மண்டலம் எடுத்துக்கொள்வதற்கு முன் இருந்த அளவுக்குத் திரும்பும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్ నుండి బయటకు లాగిన విండో, జోన్ దానిని తీసుకోవడానికి ముందు ఉన్న పరిమాణానికి తిరిగి వస్తుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หน้าต่างที่คุณลากออกจากโซนจะกลับไปมีขนาดเดิมก่อนที่โซนจะรับเข้าไป"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgesinin dışına sürüklediğin pencere, bölge onu almadan önceki boyutuna döner."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вікно, яке ви витягли із зони, повертається до розміру, який воно мало до того, як зона його прийняла."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جس ونڈو کو آپ اس کے زون سے باہر کھینچتے ہیں وہ اس سائز پر لوٹ جاتی ہے جو زون کے لینے سے پہلے تھا۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cửa sổ bạn kéo ra khỏi vùng sẽ trở về kích thước nó có trước khi vùng nhận nó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将窗口从其区域拖出时，窗口会恢复为进入区域前的大小。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將視窗從其區域拖出時，視窗會還原為進入區域前的大小。"
+          }
+        }
+      }
+    },
     "Accessibility" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27816,6 +28097,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "立即重新啟動"
+          }
+        }
+      }
+    },
+    "Restore window size" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استعادة حجم النافذة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Връщане на размера на прозореца"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডোর আকার ফিরিয়ে আনুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaura la mida de la finestra"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnovit velikost okna"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gendan vinduets størrelse"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenstergröße wiederherstellen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επαναφορά μεγέθους παραθύρου"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar el tamaño de la ventana"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taasta akna suurus"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازگرداندن اندازهٔ پنجره"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palauta ikkunan koko"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ibalik ang laki ng window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rétablir la taille de la fenêtre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שחזור גודל החלון"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो का आकार वापस लाएँ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vrati veličinu prozora"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablakméret visszaállítása"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulihkan ukuran jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina le dimensioni della finestra"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウのサイズを元に戻す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 크기 복원"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atkurti lango dydį"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atjaunot loga izmēru"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडोचा आकार पुनर्संचयित करा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulihkan saiz tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjenopprett vindusstørrelsen"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venstergrootte herstellen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć rozmiar okna"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repor o tamanho da janela"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar o tamanho da janela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restabilește dimensiunea ferestrei"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Восстанавливать размер окна"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnoviť veľkosť okna"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnovi velikost okna"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Врати величину прозора"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställ fönsterstorleken"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளர அளவை மீட்டமை"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండో పరిమాణాన్ని పునరుద్ధరించు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คืนขนาดหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencere boyutunu geri yükle"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відновлювати розмір вікна"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈو کا سائز بحال کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khôi phục kích thước cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复窗口大小"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "還原視窗大小"
           }
         }
       }

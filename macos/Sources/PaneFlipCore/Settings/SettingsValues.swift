@@ -8,6 +8,8 @@ public struct SettingsValues: Equatable {
     public var stackingEnabled = true
     /// Space between zones in points; not applied to screen edges.
     public var gap = 4.0
+    /// A window dragged out of its zone goes back to the size it had before the zone took it in.
+    public var restoreSizeOnLeave = true
     /// Space between the zones and the edges of the screen, in points.
     public var edgeMargin = 0.0
     /// Smallest width/height a zone may have, in points.
