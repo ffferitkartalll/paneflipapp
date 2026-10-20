@@ -1,20 +1,22 @@
 import PaneFlipCore
 import SwiftUI
 
-/// The menu's layout switcher: one picker per screen listing its layouts, the active one ticked. Screens with a single
-/// layout have nothing to switch and are left out.
+/// The menu's layout switcher: one picker per screen listing the layouts its current desktop may use (those no other
+/// desktop uses), the one in use ticked. A desktop with nothing to choose from is left out.
 struct MenuLayouts: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let screens: ScreenProviding
 
     var body: some View {
-        let switchable = screens.screens().filter { repository.layouts(for: $0.key).count > 1 }
-        ForEach(switchable) { screen in
+        let choices = screens.screens().map { screen in
+            (screen, repository.layouts(for: screen.key).filter { !repository.isTaken(layout: $0.id, key: screen.key) })
+        }.filter { screen, free in free.count > 1 || (!free.isEmpty && repository.activeLayout(for: screen.key) == nil) }
+        ForEach(choices, id: \.0.id) { screen, free in
             Picker(selection: Binding(
                 get: { repository.activeLayout(for: screen.key)?.id },
                 set: { if let id = $0 { layouts.activate(key: screen.key, id: id) } })) {
-                ForEach(repository.layouts(for: screen.key)) { layout in
+                ForEach(free) { layout in
                     Text(verbatim: layout.name).tag(Optional(layout.id))
                 }
             } label: {
@@ -22,6 +24,6 @@ struct MenuLayouts: View {
             }
             .pickerStyle(.inline)
         }
-        if !switchable.isEmpty { Divider() }
+        if !choices.isEmpty { Divider() }
     }
 }

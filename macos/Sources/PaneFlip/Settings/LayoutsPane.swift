@@ -11,7 +11,7 @@ struct LayoutsPane: View {
     let screens: ScreenProviding
     @Bindable var settings: AppSettings
     let navigation: SettingsNavigation
-    /// Bumped when displays are plugged in or out, so the list of screens is read again.
+    /// Bumped when displays are plugged in or out or desktops change, so the list of screens is read again.
     @State private var displaysChanged = 0
 
     var body: some View {
@@ -24,6 +24,13 @@ struct LayoutsPane: View {
         }
         .formStyle(.grouped)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)) { _ in
+            displaysChanged += 1
+        }
+        // A desktop added or removed in Mission Control changes neither the displays nor the screen parameters.
+        .onReceive(NSWorkspace.shared.notificationCenter.publisher(for: NSWorkspace.activeSpaceDidChangeNotification)) { _ in
+            displaysChanged += 1
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             displaysChanged += 1
         }
     }

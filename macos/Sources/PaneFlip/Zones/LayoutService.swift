@@ -44,7 +44,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func removeLayout(key: String, id: UUID) {
         if repository.activeLayout(for: key)?.id == id,
-           let other = repository.layouts(for: key).first(where: { $0.id != id }) {
+           let other = repository.layouts(for: key).first(where: { $0.id != id && !repository.isTaken(layout: $0.id, key: key) }) {
             activate(key: key, id: other.id)
         }
         repository.removeLayout(id: id, key: key)
@@ -62,6 +62,12 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
             let map = Dictionary(uniqueKeysWithValues: old.strip.zoneIDs.map { ($0, home) })
             release(memory.remap(map, preferred: Set(new.strip.zoneIDs)))
         }
+        refresher?.refreshZones()
+        refresher?.restoreWindows()
+    }
+
+    func deactivate(key: String) {
+        repository.deactivate(key: key)
         refresher?.refreshZones()
         refresher?.restoreWindows()
     }
@@ -136,6 +142,12 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
             release(memory.remap(Dictionary(uniqueKeysWithValues: everywhere.map { ($0, $0) }), preferred: home))
         }
         refresher?.restoreWindows()
+    }
+
+    func desktopsDidChange(on screens: [ScreenInfo]) {
+        for screen in screens where screen.desktopCount > 0 {
+            repository.forgetDesktops(ofDisplay: screen.displayID, after: screen.desktopCount)
+        }
     }
 
     // MARK: Helpers

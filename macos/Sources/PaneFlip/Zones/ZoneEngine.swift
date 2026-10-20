@@ -57,6 +57,7 @@ final class ZoneEngine: ZoneRefreshing {
     func refreshZones() {
         let current = screens.screens()
         lastSignatures = current.map(\.layoutSignature)
+        displayHandler?.desktopsDidChange(on: current)
         coordinator.apply(plan: planner.plan(on: current))
         presenters.forEach { $0.zonesDidChange() }
     }

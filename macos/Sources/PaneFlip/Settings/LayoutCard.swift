@@ -8,6 +8,8 @@ struct LayoutCard: View {
     let screen: ScreenInfo
     let layout: NamedLayout
     let isActive: Bool
+    /// Another desktop of the display uses this layout.
+    var isTaken = false
     let layouts: LayoutManaging
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
@@ -82,6 +84,7 @@ struct LayoutCard: View {
             } else {
                 Button { layouts.activate(key: screen.key, id: layout.id) } label: { stretched("Activate") }
                     .buttonStyle(.bordered)
+                    .disabled(isTaken)
             }
             Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }
                 .buttonStyle(.bordered)
