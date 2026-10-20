@@ -3970,13 +3970,13 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
@@ -3988,7 +3988,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
@@ -4018,7 +4018,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
@@ -4102,7 +4102,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
@@ -4114,13 +4114,13 @@
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apps"
           }
         },
@@ -37397,13 +37397,13 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37415,19 +37415,19 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37451,13 +37451,13 @@
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37475,25 +37475,25 @@
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37541,7 +37541,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37553,19 +37553,19 @@
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
@@ -37577,7 +37577,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Trackpad"
           }
         },
