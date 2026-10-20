@@ -13,6 +13,14 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
         storage = UserDefaultsSettingsStorage(defaults: defaults)
     }
 
+    func testSettingsOfRemovedFeaturesAreForgottenWhenLoading() {
+        defaults.set(true, forKey: "scrollGestureEnabled")
+        defaults.set(false, forKey: "edgeScrollEnabled")
+        _ = storage.load()
+        XCTAssertNil(defaults.object(forKey: "scrollGestureEnabled"))
+        XCTAssertNil(defaults.object(forKey: "edgeScrollEnabled"))
+    }
+
     func testSavingOtherSettingsKeepsTheLanguageTheSystemHolds() {
         defaults.set(["tr"], forKey: "AppleLanguages")   // chosen in System Settings
         var values = SettingsValues()

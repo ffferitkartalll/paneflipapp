@@ -12,7 +12,11 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     init(defaults: UserDefaults = .standard) { self.defaults = defaults }
 
+    /// Settings that earlier versions had and this one does not: loading forgets them.
+    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled"]
+
     func load() -> SettingsValues {
+        Self.removedKeys.forEach(defaults.removeObject(forKey:))
         var v = SettingsValues()
         v.placementEnabled = defaults.object(forKey: "placementEnabled") as? Bool ?? v.placementEnabled
         v.stackingEnabled = defaults.object(forKey: "stackingEnabled") as? Bool ?? v.stackingEnabled

@@ -7,8 +7,8 @@ final class UpdatesModelTests: XCTestCase {
 
     private let installer = FakeUpdateInstaller()
 
-    private func model(version: String = "1.0") -> UpdatesModel {
-        UpdatesModel(currentVersion: version, checker: checker, installer: installer)
+    private func model(version: String = "1.0", quitGrace: TimeInterval = 35) -> UpdatesModel {
+        UpdatesModel(currentVersion: version, checker: checker, installer: installer, quitGrace: quitGrace)
     }
 
     func testANewerReleaseIsOffered() async {
@@ -45,6 +45,15 @@ final class UpdatesModelTests: XCTestCase {
         await model.install()
         XCTAssertEqual(installer.installed, [checker.release!])
         XCTAssertEqual(model.state, .installing(checker.release!), "the app quits by itself when it worked")
+    }
+
+    func testAnAppThatDoesNotQuitAfterTheInstallIsTakenToHaveFailed() async throws {
+        let model = model(quitGrace: 0.05)
+        await model.check()
+        await model.install()
+        XCTAssertEqual(model.state, .installing(checker.release!))
+        try await Task.sleep(for: .seconds(0.3))
+        XCTAssertEqual(model.state, .installFailed(checker.release!), "the page is offered instead of a spinner that never ends")
     }
 
     func testAFailedInstallOffersTheReleasePage() async {

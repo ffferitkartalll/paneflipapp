@@ -39,7 +39,7 @@ Sources/
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,
     │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        ReleaseChecking (+ ReleaseInfo) ← GitHubReleaseChecker,
-    │                        UpdateInstalling ← DiskImageUpdateInstaller (downloads the release disk image, checks its signature against the running app, swaps the app after it quits),
+    │                        UpdateInstalling ← DiskImageUpdateInstaller (downloads the release disk image, checks its signature against the running app, swaps the app after it quits with `UpdateSwapScript`, which gives up if the app does not quit),
     │                        KeyShortcutListening ← EventTapKeyShortcut (four changeable shortcuts, `KeyChord` in Core: next/previous window of a zone, scroll toward the zones beyond the right/left edge; `KeyShortcut` is what a press asks for),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
