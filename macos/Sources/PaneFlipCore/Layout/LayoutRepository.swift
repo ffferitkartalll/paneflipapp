@@ -87,6 +87,12 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
+    public func setGap(_ gap: Double?, ofLayout id: UUID, key: String) {
+        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        s.layouts[i].gap = gap
+        screens[Self.split(key).display] = s
+    }
+
     public func setDefaultZone(_ zone: UUID?, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].defaultZoneID = zone

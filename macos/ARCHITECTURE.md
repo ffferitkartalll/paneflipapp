@@ -54,7 +54,7 @@ Sources/
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
     └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
-                             SliderSettingRow, ScreenLayoutsSection, LayoutCard, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
+                             SliderSettingRow, ScreenLayoutsSection, LayoutCard, LayoutGapRow, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
                              PillContent+Title, PillPosition+Title, SnapTrigger+Title, AppLanguages
