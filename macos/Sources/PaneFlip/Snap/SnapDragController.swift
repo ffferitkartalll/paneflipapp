@@ -83,7 +83,7 @@ final class SnapDragController {
         } else {
             // Dragged out of its zone without snapping elsewhere: it just leaves the stack. Nothing else is brought
             // to the front; the zone keeps whatever is already there.
-            coordinator.unsnap(window: c.ref.id)
+            coordinator.takeOut(c.ref, grabbedAt: screens.pointerAX)
         }
     }
 

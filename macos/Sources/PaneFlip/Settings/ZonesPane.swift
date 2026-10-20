@@ -19,6 +19,10 @@ struct ZonesPane: View {
                                  value: $settings.values.edgeMargin, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
                     if !editing { refresh() }
                 }
+                SettingRow(title: "Restore window size",
+                           detail: "A window you drag out of its zone returns to the size it had before the zone took it in.") {
+                    Toggle("Restore window size", isOn: $settings.values.restoreSizeOnLeave).labelsHidden()
+                }
                 SliderSettingRow(title: "Minimum zone size",
                                  detail: "The layout editor won't split or resize a zone below this.",
                                  value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange,

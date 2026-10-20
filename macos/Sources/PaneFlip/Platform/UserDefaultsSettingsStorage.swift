@@ -21,6 +21,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.placementEnabled = defaults.object(forKey: "placementEnabled") as? Bool ?? v.placementEnabled
         v.stackingEnabled = defaults.object(forKey: "stackingEnabled") as? Bool ?? v.stackingEnabled
         v.gap = defaults.object(forKey: "gap") as? Double ?? v.gap
+        v.restoreSizeOnLeave = defaults.object(forKey: "restoreSizeOnLeave") as? Bool ?? v.restoreSizeOnLeave
         v.edgeMargin = defaults.object(forKey: "edgeMargin") as? Double ?? v.edgeMargin
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
@@ -43,6 +44,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.placementEnabled, forKey: "placementEnabled")
         defaults.set(v.stackingEnabled, forKey: "stackingEnabled")
         defaults.set(v.gap, forKey: "gap")
+        defaults.set(v.restoreSizeOnLeave, forKey: "restoreSizeOnLeave")
         defaults.set(v.edgeMargin, forKey: "edgeMargin")
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")

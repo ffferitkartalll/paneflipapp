@@ -186,6 +186,37 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [2], "and a new one is not taken in")
     }
 
+    func testAWindowPulledOutOfItsZoneGetsItsOwnSizeBack() {
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        windows.setFrame(CGRect(x: 300, y: 300, width: 600, height: 400), of: .fake(1))
+
+        coordinator.snap(.fake(1), into: zone)
+        XCTAssertEqual(windows.frames[1]?.size, CGSize(width: 100, height: 100), "the zone sized it")
+
+        // Dragged away: the window now stands at 500, 200 and the pointer holds it a quarter of the way along.
+        windows.setFrameDirectly(CGRect(x: 500, y: 200, width: 100, height: 100), of: 1)
+        coordinator.takeOut(.fake(1), grabbedAt: CGPoint(x: 525, y: 210))
+
+        XCTAssertEqual(windows.frames[1], CGRect(x: 375, y: 200, width: 600, height: 400), "its own size, still held a quarter along")
+        XCTAssertNil(coordinator.stack(containing: 1))
+    }
+
+    func testTheSizeStaysTheZonesWhenTheSettingIsOff() {
+        let settings = AppSettings(storage: StubSettingsStorage())
+        settings.values.restoreSizeOnLeave = false
+        let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: FakeApps())
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        windows.setFrame(CGRect(x: 300, y: 300, width: 600, height: 400), of: .fake(1))
+        coordinator.snap(.fake(1), into: zone)
+
+        coordinator.takeOut(.fake(1), grabbedAt: CGPoint(x: 525, y: 210))
+
+        XCTAssertEqual(windows.frames[1]?.size, CGSize(width: 100, height: 100))
+        XCTAssertNil(coordinator.stack(containing: 1), "it still leaves the zone")
+    }
+
     func testWithoutACarouselThePillClickJustSelects() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])

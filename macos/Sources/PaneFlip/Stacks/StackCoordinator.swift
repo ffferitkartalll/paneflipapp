@@ -10,6 +10,8 @@ final class StackCoordinator {
     /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
+    /// The size a window had before a zone took it in, for giving it back when the user pulls it out.
+    private var originalSizes: [CGWindowID: CGSize] = [:]
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
     /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
@@ -128,6 +130,7 @@ final class StackCoordinator {
     /// With `glide` the window travels to the zone instead of jumping there (a window the user just dropped).
     func attach(_ ref: WindowRef, toSlot slot: Int, raise: Bool, glide: Bool = false) {
         guard memory.records.indices.contains(slot), let stack = stacks[memory.records[slot].zoneID] else { return }
+        if originalSizes[ref.id] == nil, let size = windows.frame(of: ref)?.size { originalSizes[ref.id] = size }
         let appName = apps.app(pid: ref.pid)?.name ?? "?"
         let bundleID = apps.app(pid: ref.pid)?.bundleID ?? ""
         let title = windows.title(of: ref) ?? appName
@@ -213,6 +216,19 @@ final class StackCoordinator {
         guard let front = windows.windowIDsFrontToBack().first(where: { stack.refs[$0] != nil }), stack.activeID != front else { return }
         stack.activeID = front
         onActivity?(stack.id)
+    }
+
+    /// The user dragged a window out of its zone: it leaves the stack and, when the setting asks for it, glides back to the size it
+    /// had before the zone took it in, kept under the pointer the way it was held (the title bar stays where it is).
+    func takeOut(_ ref: WindowRef, grabbedAt pointer: CGPoint) {
+        let size = originalSizes.removeValue(forKey: ref.id)
+        let wasHeld = stack(containing: ref.id) != nil
+        let frame = windows.frame(of: ref)
+        unsnap(window: ref.id)   // lets go of the glide that brought the window in, so this comes after it
+        guard settings.values.restoreSizeOnLeave, wasHeld, let size, let frame else { return }
+        let share = frame.width > 0 ? min(max((pointer.x - frame.minX) / frame.width, 0), 1) : 0
+        let target = CGRect(x: pointer.x - share * size.width, y: frame.minY, width: size.width, height: size.height)
+        if let glide { glide.glide(ref, to: target) } else { windows.setFrame(target, of: ref) }
     }
 
     /// Takes a window out of its zone for good (the window itself stays open).
