@@ -27,6 +27,15 @@ struct StackingPane: View {
                                       options: PillContent.allCases.map { ($0, $0.title) })
                         .accessibilityLabel("Show for each window")
                 }
+                SettingRow(title: "Pill position",
+                           detail: "Show the pill along the top or the bottom of its zone.") {
+                    Picker("Pill position", selection: $settings.values.pillPosition) {
+                        ForEach(PillPosition.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
+                }
                 SettingRow(title: "Fetch brand icons",
                            detail: "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.") {
                     Toggle("Fetch brand icons", isOn: $settings.values.fetchBrandIcons).labelsHidden()

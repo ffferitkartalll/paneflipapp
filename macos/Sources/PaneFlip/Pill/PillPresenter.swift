@@ -72,7 +72,8 @@ final class PillPresenter: ZonePresenting {
     /// inside counts for hovering and clicking. Not limited to the zone: a narrow zone must not squeeze the control.
     private func pillRects(_ stack: ZoneStack, _ panel: PillPanel) -> (frame: CGRect, capsule: CGRect) {
         let w = panel.barWidth
-        let frame = PillMetrics.panelFrame(inZone: stack.rect, width: w, menuBarThickness: screens.menuBarThickness)
+        let frame = PillMetrics.panelFrame(inZone: stack.rect, width: w, menuBarThickness: screens.menuBarThickness,
+                                           position: settings.values.pillPosition)
         return (frame, frame.insetBy(dx: PillPanel.margin, dy: 0))
     }
 

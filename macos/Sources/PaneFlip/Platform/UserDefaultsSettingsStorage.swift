@@ -23,6 +23,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.gap = defaults.object(forKey: "gap") as? Double ?? v.gap
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
+        v.pillPosition = defaults.string(forKey: "pillPosition").flatMap(PillPosition.init(rawValue:)) ?? v.pillPosition
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
@@ -41,6 +42,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.gap, forKey: "gap")
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
+        defaults.set(v.pillPosition.rawValue, forKey: "pillPosition")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")

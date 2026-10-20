@@ -22,7 +22,7 @@ Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming
-│   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
+│   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition
 │   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
@@ -57,7 +57,7 @@ Sources/
                              SliderSettingRow, ScreenLayoutsSection, LayoutCard, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
-                             PillContent+Title, SnapTrigger+Title, AppLanguages
+                             PillContent+Title, PillPosition+Title, SnapTrigger+Title, AppLanguages
 ```
 
 ## File conventions
