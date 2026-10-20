@@ -171,6 +171,48 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertLessThan(viewport.offset(for: key), 750, "it did not go on to the zone")
     }
 
+    func testTheFingersLeadTheLayoutAndItComesToRestAtTheNearestRestPosition() {
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed())
+        for _ in 0 ..< 3 { run(30); settle() }   // the pictures cover the screen
+        scroller.moveLed(by: -100, at: 0)
+        scroller.moveLed(by: -100, at: 0.5)
+        XCTAssertEqual(stage.shifts.last, -200, "the pictures follow the fingers: the area beyond the right edge comes in")
+        scroller.moveLed(by: -50, at: 1.0)
+        scroller.endLed()
+        for _ in 0 ..< 4 { run(60); settle() }
+
+        XCTAssertEqual(viewport.offset(for: key), 250, "the rest position beyond: the area is in view")
+    }
+
+    func testAShortSwipeGoesBackToWhereTheLayoutWas() {
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed())
+        for _ in 0 ..< 3 { run(30); settle() }
+        scroller.moveLed(by: -30, at: 0)
+        scroller.moveLed(by: -10, at: 0.6)
+        scroller.endLed()
+        for _ in 0 ..< 4 { run(60); settle() }
+
+        XCTAssertEqual(viewport.offset(for: key), 0)
+    }
+
+    func testTheFingersMayLiftBeforeThePicturesAreOnTheStage() {
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed())
+        scroller.moveLed(by: -200, at: 0)
+        scroller.endLed()
+        for _ in 0 ..< 5 { run(60); settle() }
+
+        XCTAssertEqual(viewport.offset(for: key), 250)
+    }
+
     func testTheCoordinatorAsksForTheScrollWhenTheFocusIsOnAParkedWindow() {
         var asked: [UUID] = []
         coordinator.onFocusBeyondTheEdge = { asked.append($0) }

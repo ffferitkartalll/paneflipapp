@@ -51,6 +51,11 @@ struct SettingsView: View {
                 .tabItem { Label("Shortcuts", systemImage: "command") }
                 .tag(SettingsTab.shortcuts)
 
+            TrackpadPane(settings: settings)
+                .fixedSize(horizontal: false, vertical: true)
+                .tabItem { Label("Trackpad", systemImage: "rectangle.and.hand.point.up.left") }
+                .tag(SettingsTab.trackpad)
+
             UpdatesPane(model: updates)
                 .fixedSize(horizontal: false, vertical: true)
                 .tabItem { Label("Updates", systemImage: "arrow.triangle.2.circlepath") }

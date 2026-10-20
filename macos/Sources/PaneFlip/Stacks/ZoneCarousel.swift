@@ -92,4 +92,43 @@ final class ZoneCarousel {
                   }) else { return background(swap) }
         }
     }
+
+    // MARK: A slide the fingers lead
+
+    /// The pictures of the zone's windows (`windows` in order, `current` the one in front) go on the stage, to follow the fingers
+    /// (`scrub`). `ready` gets the windows that have a picture, in order, or nil when there is nothing to lead: motion is reduced, a
+    /// slide runs, or the window in front could not be photographed. From the call until `endScrub` (or a nil `ready`) the carousel
+    /// counts as sliding, so nothing else slides.
+    func beginScrub(windows: [WindowRef], current: CGWindowID, in zone: CGRect, ready: @escaping ([CGWindowID]?) -> Void) {
+        guard !isSliding, !reduceMotion() else { return ready(nil) }
+        isSliding = true
+        snapshots.snapshots(of: windows) { [weak self] images in
+            guard let self else { return }
+            let shown = windows.filter { images[$0.id] != nil }
+            guard let index = shown.firstIndex(where: { $0.id == current }),
+                  stage.beginScrub(pictures: shown.compactMap { images[$0.id] }, current: index, in: zone) else {
+                isSliding = false
+                return ready(nil)
+            }
+            onStage = true
+            ready(shown.map(\.id))
+        }
+    }
+
+    func scrub(to offset: CGFloat) { stage.scrub(to: offset) }
+
+    /// The fingers lifted: the pictures glide on `shift` windows from the one in front. `swap` brings the real window forward, as in
+    /// `slide` (it is not called for a shift of 0).
+    func endScrub(shift: Int, swap: @escaping () -> Void) {
+        stage.endScrub(shift: shift, covered: { [background] done in
+            background {
+                if shift != 0 { swap() }
+                DispatchQueue.main.async(execute: done)
+            }
+        }) { [weak self] in
+            self?.isSliding = false
+            self?.running = nil
+            self?.onStage = false
+        }
+    }
 }

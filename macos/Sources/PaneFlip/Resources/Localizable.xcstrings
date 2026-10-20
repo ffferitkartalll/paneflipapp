@@ -13770,6 +13770,568 @@
         }
       }
     },
+    "Hold these keys and scroll over a zone, with two fingers or the mouse wheel, to move through its windows." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط هذه المفاتيح مع التمرير فوق منطقة، بإصبعين أو بعجلة الفأرة، للتنقل بين نوافذها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задръжте тези клавиши и превъртете над зона, с два пръста или с колелцето на мишката, за да преминавате между прозорците ѝ."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এই কী চেপে ধরে রেখে কোনো জোনের উপর দুই আঙুলে বা মাউস হুইলে স্ক্রল করলে তার উইন্ডোগুলোর মধ্যে যাওয়া যায়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén premudes aquestes tecles i desplaça't sobre una zona, amb dos dits o amb la roda del ratolí, per passar d'una finestra a una altra."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte tyto klávesy a posouvejte nad zónou dvěma prsty nebo kolečkem myši: přepnete mezi jejími okny."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold disse taster nede og rul over en zone med to fingre eller musehjulet for at gå gennem dens vinduer."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte diese Tasten gedrückt und scrolle über einer Zone mit zwei Fingern oder dem Mausrad, um durch ihre Fenster zu wechseln."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κρατήστε πατημένα αυτά τα πλήκτρα και κυλήστε πάνω από μια ζώνη, με δύο δάχτυλα ή τον τροχό του ποντικιού, για να περάσετε στα παράθυρά της."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsadas estas teclas y desplázate sobre una zona, con dos dedos o con la rueda del ratón, para pasar por sus ventanas."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoia neid klahve all ja keri tsooni kohal kahe sõrme või hiirerattaga, et liikuda selle akende vahel."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این کلیدها را نگه دارید و روی یک ناحیه با دو انگشت یا چرخ ماوس پیمایش کنید تا بین پنجره‌هایش حرکت کنید."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä näitä näppäimiä painettuna ja vieritä alueen päällä kahdella sormella tai hiiren rullalla, niin siirryt sen ikkunoiden välillä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindutin nang matagal ang mga key na ito at mag-scroll sa ibabaw ng zone, gamit ang dalawang daliri o ang mouse wheel, para lumipat sa mga window nito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenez ces touches et faites défiler sur une zone, à deux doigts ou avec la molette de la souris, pour parcourir ses fenêtres."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "החזק את המקשים האלה וגלול מעל אזור, בשתי אצבעות או בגלגלת העכבר, כדי לעבור בין החלונות שלו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इन कुंजियों को दबाए रखें और किसी ज़ोन के ऊपर दो उँगलियों या माउस व्हील से स्क्रोल करें, ताकि उसकी विंडो में आगे-पीछे जा सकें।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drži ove tipke i pomiči iznad zone, s dva prsta ili kotačićem miša, da prolaziš kroz njezine prozore."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tartsa lenyomva ezeket a billentyűket, és görgessen egy zóna fölött két ujjal vagy az egérkerékkel, hogy végigléphessen az ablakain."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan tombol ini dan gulir di atas zona, dengan dua jari atau roda mouse, untuk berpindah antar jendelanya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tieni premuti questi tasti e scorri su una zona, con due dita o con la rotellina del mouse, per passare tra le sue finestre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらのキーを押したまま、ゾーン上で2本指またはマウスのホイールでスクロールすると、そのゾーンのウインドウを切り替えられます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키를 누른 채 영역 위에서 두 손가락이나 마우스 휠로 스크롤하면 그 영역의 윈도우를 넘겨 볼 수 있습니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laikykite šiuos klavišus ir slinkite virš zonos dviem pirštais arba pelės ratuku, kad pereitumėte per jos langus."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turiet nospiestus šos taustiņus un ritiniet virs zonas ar diviem pirkstiem vai peles ratiņu, lai pārslēgtos starp tās logiem."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "या कळा दाबून ठेवा आणि झोनवर दोन बोटांनी किंवा माउस व्हीलने स्क्रोल करा, म्हणजे त्याच्या विंडोंमधून पुढे-मागे जाता येईल."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan kekunci ini dan tatal di atas zon, dengan dua jari atau roda tetikus, untuk bergerak antara tetingkapnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold disse tastene nede og rull over en sone med to fingre eller musehjulet for å gå gjennom vinduene i den."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd deze toetsen ingedrukt en scrol boven een zone, met twee vingers of het muiswiel, om door de vensters ervan te gaan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przytrzymaj te klawisze i przewijaj nad strefą dwoma palcami lub kółkiem myszy, aby przechodzić między jej oknami."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha estas teclas premidas e desloque sobre uma zona, com dois dedos ou com a roda do rato, para passar pelas suas janelas."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha estas teclas pressionadas e role sobre uma zona, com dois dedos ou com a roda do mouse, para passar pelas janelas dela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ține apăsate aceste taste și derulează peste o zonă, cu două degete sau cu rotița mouse-ului, pentru a trece prin ferestrele ei."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удерживайте эти клавиши и прокручивайте над зоной двумя пальцами или колёсиком мыши, чтобы переключаться между её окнами."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte tieto klávesy a posúvajte nad zónou dvoma prstami alebo kolieskom myši, aby ste prechádzali medzi jej oknami."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Držite ti tipki in drsite nad območjem z dvema prstoma ali s kolescem miške, da se premikate med njegovimi okni."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Држи ове тастере и помери изнад зоне, са два прста или точкићем миша, да пролазиш кроз њене прозоре."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll ned de här tangenterna och rulla över en zon med två fingrar eller mushjulet för att gå genom dess fönster."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இந்த விசைகளை அழுத்திப் பிடித்தபடி, ஒரு மண்டலத்தின் மேல் இரு விரல்களால் அல்லது சுட்டி சக்கரத்தால் உருட்டினால் அதன் சாளரங்களுக்கிடையே செல்லலாம்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఈ కీలను పట్టుకుని, జోన్ మీద రెండు వేళ్లతో లేదా మౌస్ వీల్‌తో స్క్రోల్ చేస్తే దాని విండోల మధ్య వెళ్లవచ్చు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กดปุ่มเหล่านี้ค้างไว้ แล้วเลื่อนเหนือโซนด้วยสองนิ้วหรือล้อเมาส์ เพื่อสลับไปมาระหว่างหน้าต่างของโซนนั้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu tuşları basılı tutarak bir bölgenin üstünde iki parmakla ya da fare tekerleğiyle kaydır: bölgedeki pencereler arasında geçiş yaparsın."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Утримуйте ці клавіші й прокручуйте над зоною двома пальцями або коліщатком миші, щоб перемикатися між її вікнами."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ان کلیدوں کو دبائے رکھیں اور کسی زون کے اوپر دو انگلیوں یا ماؤس وہیل سے اسکرول کریں تاکہ اس کی ونڈوز میں آگے پیچھے جا سکیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giữ các phím này và cuộn trên một vùng, bằng hai ngón tay hoặc con lăn chuột, để chuyển qua lại giữa các cửa sổ của vùng đó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住这些键，在区域上用双指或鼠标滚轮滚动，即可在该区域的窗口之间切换。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住這些按鍵，在區域上用雙指或滑鼠滾輪捲動，即可在該區域的視窗之間切換。"
+          }
+        }
+      }
+    },
+    "Hold these keys and scroll over the screen, with two fingers or the mouse wheel, to slide to the zones beyond its edges." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط باستمرار على هذه المفاتيح ومرّر فوق الشاشة، بإصبعين أو بعجلة الفأرة، للانتقال إلى المناطق خارج حافتيها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задръжте тези клавиши и превъртете над екрана, с два пръста или с колелцето на мишката, за да се придвижите към зоните отвъд краищата му."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এই কী চেপে ধরে রেখে স্ক্রিনের উপর দুই আঙুলে বা মাউস হুইলে স্ক্রল করলে তার প্রান্তের বাইরের জোনগুলোতে যাওয়া যায়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén premudes aquestes tecles i desplaça't sobre la pantalla, amb dos dits o amb la roda del ratolí, per anar a les zones més enllà de les seves vores."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte tyto klávesy a posouvejte nad obrazovkou dvěma prsty nebo kolečkem myši: přejdete do zón za jejími okraji."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold disse taster nede og rul over skærmen med to fingre eller musehjulet for at komme til zonerne ud over dens kanter."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte diese Tasten gedrückt und scrolle über dem Bildschirm mit zwei Fingern oder dem Mausrad, um zu den Zonen jenseits seiner Ränder zu gleiten."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κρατήστε πατημένα αυτά τα πλήκτρα και κυλήστε πάνω από την οθόνη, με δύο δάχτυλα ή τον τροχό του ποντικιού, για να μεταβείτε στις ζώνες πέρα από τις άκρες της."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsadas estas teclas y desplázate sobre la pantalla, con dos dedos o con la rueda del ratón, para ir a las zonas más allá de sus bordes."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoia neid klahve all ja keri ekraani kohal kahe sõrme või hiirerattaga, et liikuda ekraani servadest kaugemal asuvatesse tsoonidesse."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این کلیدها را نگه دارید و روی صفحه با دو انگشت یا چرخ ماوس پیمایش کنید تا به ناحیه‌های فراتر از لبه‌هایش بروید."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä näitä näppäimiä painettuna ja vieritä näytön päällä kahdella sormella tai hiiren rullalla, niin liu'ut sen reunojen takana oleville alueille."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindutin nang matagal ang mga key na ito at mag-scroll sa ibabaw ng screen, gamit ang dalawang daliri o ang mouse wheel, para pumunta sa mga zone sa kabila ng mga gilid nito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenez ces touches et faites défiler sur l'écran, à deux doigts ou avec la molette de la souris, pour glisser vers les zones au-delà de ses bords."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "החזק את המקשים האלה וגלול מעל המסך, בשתי אצבעות או בגלגלת העכבר, כדי לעבור לאזורים שמעבר לקצוות שלו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इन कुंजियों को दबाए रखें और स्क्रीन के ऊपर दो उँगलियों या माउस व्हील से स्क्रोल करें, ताकि उसके किनारों के पार के ज़ोन तक जा सकें।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drži ove tipke i pomiči iznad zaslona, s dva prsta ili kotačićem miša, da kliziš do zona iza njegovih rubova."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tartsa lenyomva ezeket a billentyűket, és görgessen a képernyő fölött két ujjal vagy az egérkerékkel, hogy a szélein túli zónákra csúszhasson."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan tombol ini dan gulir di atas layar, dengan dua jari atau roda mouse, untuk bergeser ke zona di luar tepinya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tieni premuti questi tasti e scorri sullo schermo, con due dita o con la rotellina del mouse, per passare alle zone oltre i suoi bordi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらのキーを押したまま、画面上で2本指またはマウスのホイールでスクロールすると、画面の端の外にあるゾーンへ移動できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키를 누른 채 화면 위에서 두 손가락이나 마우스 휠로 스크롤하면 화면 가장자리 너머의 영역으로 이동합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laikykite šiuos klavišus ir slinkite virš ekrano dviem pirštais arba pelės ratuku, kad nuslystumėte į zonas už jo kraštų."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turiet nospiestus šos taustiņus un ritiniet virs ekrāna ar diviem pirkstiem vai peles ratiņu, lai pārietu uz zonām aiz tā malām."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "या कळा दाबून ठेवा आणि स्क्रीनवर दोन बोटांनी किंवा माउस व्हीलने स्क्रोल करा, म्हणजे तिच्या कडांच्या पलीकडच्या झोनकडे जाता येईल."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan kekunci ini dan tatal di atas skrin, dengan dua jari atau roda tetikus, untuk beralih ke zon di luar tepinya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold disse tastene nede og rull over skjermen med to fingre eller musehjulet for å gli til sonene utenfor kantene."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd deze toetsen ingedrukt en scrol over het scherm, met twee vingers of het muiswiel, om naar de zones voorbij de randen te glijden."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przytrzymaj te klawisze i przewijaj nad ekranem dwoma palcami lub kółkiem myszy, aby przesunąć się do stref poza jego krawędziami."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha estas teclas premidas e desloque sobre o ecrã, com dois dedos ou com a roda do rato, para deslizar para as zonas além dos seus limites."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha estas teclas pressionadas e role sobre a tela, com dois dedos ou com a roda do mouse, para deslizar até as zonas além das bordas dela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ține apăsate aceste taste și derulează peste ecran, cu două degete sau cu rotița mouse-ului, pentru a trece la zonele din afara marginilor lui."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удерживайте эти клавиши и прокручивайте над экраном двумя пальцами или колёсиком мыши, чтобы перейти к зонам за его краями."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte tieto klávesy a posúvajte nad obrazovkou dvoma prstami alebo kolieskom myši, aby ste sa presunuli do zón za jej okrajmi."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Držite ti tipki in drsite nad zaslonom z dvema prstoma ali s kolescem miške, da zdrsnete do območij za njegovimi robovi."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Држи ове тастере и помери изнад екрана, са два прста или точкићем миша, да клизиш до зона иза његових ивица."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll ned de här tangenterna och rulla över skärmen med två fingrar eller mushjulet för att glida till zonerna bortom dess kanter."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இந்த விசைகளை அழுத்திப் பிடித்தபடி, திரையின் மேல் இரு விரல்களால் அல்லது சுட்டி சக்கரத்தால் உருட்டினால் அதன் விளிம்புகளுக்கு அப்பாலுள்ள மண்டலங்களுக்குச் செல்லலாம்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఈ కీలను పట్టుకుని, స్క్రీన్ మీద రెండు వేళ్లతో లేదా మౌస్ వీల్‌తో స్క్రోల్ చేస్తే దాని అంచుల అవతల ఉన్న జోన్‌లకు వెళ్లవచ్చు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กดปุ่มเหล่านี้ค้างไว้ แล้วเลื่อนเหนือหน้าจอด้วยสองนิ้วหรือล้อเมาส์ เพื่อไปยังโซนที่อยู่เลยขอบของหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu tuşları basılı tutarak ekranın üstünde iki parmakla ya da fare tekerleğiyle kaydır: kenarlarının ötesindeki bölgelere geçersin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Утримуйте ці клавіші й прокручуйте над екраном двома пальцями або коліщатком миші, щоб перейти до зон за його краями."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ان کلیدوں کو دبائے رکھیں اور اسکرین کے اوپر دو انگلیوں یا ماؤس وہیل سے اسکرول کریں تاکہ اس کے کناروں سے آگے کے زونز تک جا سکیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giữ các phím này và cuộn trên màn hình, bằng hai ngón tay hoặc con lăn chuột, để trượt tới các vùng ngoài mép của nó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住这些键，在屏幕上用双指或鼠标滚轮滚动，即可滑到屏幕边缘之外的区域。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住這些按鍵，在螢幕上用雙指或滑鼠滾輪捲動，即可滑到螢幕邊緣之外的區域。"
+          }
+        }
+      }
+    },
     "Hold while dragging a window" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14047,6 +14609,568 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拖移視窗時按住"
+          }
+        }
+      }
+    },
+    "Hold while scrolling" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط باستمرار أثناء التمرير"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задръжте при превъртане"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "স্ক্রল করার সময় ধরে রাখুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén premut en desplaçar"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte při posouvání"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold nede under rulning"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Scrollen halten"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κρατήστε πατημένο κατά την κύλιση"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantener al desplazar"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoia all kerimisel"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هنگام پیمایش نگه دارید"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä alhaalla vieritettäessä"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindutin habang nag-i-scroll"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenir pendant le défilement"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "החזק בזמן גלילה"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रोल करते समय दबाए रखें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drži pri pomicanju"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tartsa lenyomva görgetéskor"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan saat menggulir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tieni premuto durante lo scorrimento"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スクロール中に押し続ける"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스크롤할 때 누르고 있기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laikykite slinkdami"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turiet, ritinot"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रोल करताना दाबून ठेवा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan semasa menatal"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold nede under rulling"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vasthouden tijdens scrollen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przytrzymaj podczas przewijania"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manter durante o deslocamento"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manter ao rolar"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ține apăsat la derulare"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удерживать при прокрутке"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržte pri posúvaní"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Držite med drsenjem"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Држи при померању"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll nere vid rullning"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "உருட்டும்போது பிடித்திருக்கவும்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "స్క్రోల్ చేసేటప్పుడు పట్టుకోండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กดค้างขณะเลื่อน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydırırken basılı tut"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Утримувати під час прокручування"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسکرول کرتے وقت دبائے رکھیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giữ khi cuộn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "滚动时按住"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "捲動時按住"
+          }
+        }
+      }
+    },
+    "How far the content goes for the same stroke of two fingers when you scroll with the keys held. It also follows the tracking speed set for the system's trackpad." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المسافة التي يقطعها المحتوى لنفس حركة إصبعين عند التمرير مع الضغط على المفاتيح. وهي تتبع أيضًا سرعة التتبع المضبوطة للوحة التتبع في النظام."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Докъде стига съдържанието при същото движение на два пръста, когато превъртате със задържани клавиши. Следва и скоростта на проследяване, зададена за тракпада на системата."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কী চেপে ধরে স্ক্রল করার সময় দুই আঙুলের একই টানে কনটেন্ট কতদূর যায়। এটি সিস্টেমের ট্র্যাকপ্যাডের ট্র্যাকিং গতিও অনুসরণ করে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fins on arriba el contingut amb el mateix gest de dos dits quan et desplaces amb les tecles premudes. També segueix la velocitat de seguiment del trackpad del sistema."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jak daleko se obsah posune při stejném pohybu dvou prstů, když posouváte s podrženými klávesami. Řídí se také rychlostí sledování nastavenou pro trackpad systému."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor langt indholdet går ved samme strøg med to fingre, når du ruller med tasterne nede. Den følger også systemets indstillede sporingshastighed for pegefeltet."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie weit der Inhalt bei gleicher Bewegung zweier Finger geht, wenn du mit gehaltenen Tasten scrollst. Sie folgt auch der Zeigergeschwindigkeit, die für das Trackpad des Systems eingestellt ist."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πόσο μακριά πάει το περιεχόμενο για την ίδια κίνηση δύο δαχτύλων όταν κυλάτε με πατημένα τα πλήκτρα. Ακολουθεί επίσης την ταχύτητα παρακολούθησης που έχει οριστεί για το trackpad του συστήματος."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasta dónde llega el contenido con el mismo gesto de dos dedos al desplazarte con las teclas pulsadas. También sigue la velocidad de seguimiento del trackpad del sistema."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kui kaugele sisu läheb sama kahe sõrme liigutusega, kui keerad klahvid all. See järgib ka süsteemi puuteplaadi jaoks seatud jälgimiskiirust."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محتوا با همان حرکت دو انگشت هنگام پیمایش با نگه‌داشتن کلیدها چقدر پیش می‌رود. این مقدار از سرعت ردیابی تاچ‌پد سیستم نیز پیروی می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuinka pitkälle sisältö menee samalla kahden sormen vedolla, kun vierität näppäimet painettuina. Se seuraa myös järjestelmän ohjauslevylle asetettua seurantanopeutta."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gaano kalayo ang pupuntahan ng content sa parehong galaw ng dalawang daliri kapag nag-i-scroll habang nakapindot ang mga key. Sumusunod din ito sa tracking speed na itinakda para sa trackpad ng system."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La distance que parcourt le contenu pour le même geste à deux doigts lorsque vous faites défiler avec les touches maintenues. Elle suit aussi la vitesse de suivi réglée pour le trackpad du système."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כמה רחוק התוכן זז באותה תנועה של שתי אצבעות בגלילה עם מקשים לחוצים. היא גם עוקבת אחר מהירות המעקב שהוגדרה למשטח העקיבה של המערכת."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुंजियाँ दबाए रखकर स्क्रोल करते समय दो उँगलियों की उसी चाल पर सामग्री कितनी दूर जाती है। यह सिस्टम के ट्रैकपैड की ट्रैकिंग गति का भी पालन करती है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koliko daleko ide sadržaj pri istom potezu dvaju prstiju kad pomičete s držanim tipkama. Prati i brzinu praćenja postavljenu za trackpad sustava."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Milyen messzire megy a tartalom ugyanannál a kétujjas mozdulatnál, ha lenyomott billentyűkkel görget. Követi a rendszer trackpadjéhez beállított követési sebességet is."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seberapa jauh konten bergerak untuk gerakan dua jari yang sama saat menggulir dengan tombol ditahan. Ini juga mengikuti kecepatan pelacakan yang diatur untuk trackpad sistem."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quanto va lontano il contenuto con lo stesso gesto a due dita quando scorri con i tasti premuti. Segue anche la velocità di tracciamento impostata per il trackpad del sistema."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キーを押したままスクロールするとき、同じ2本指の動きでコンテンツがどれだけ進むかを決めます。システムのトラックパッドの軌跡の速さにも従います。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키를 누른 채 스크롤할 때 두 손가락을 같은 거리만큼 움직이면 콘텐츠가 얼마나 이동하는지 정합니다. 시스템 트랙패드에 설정된 추적 속도도 따릅니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kiek toli juda turinys tuo pačiu dviejų pirštų judesiu, kai slenkate laikydami klavišus. Ji taip pat seka sistemos jutiklinei planšetei nustatytą sekimo greitį."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cik tālu virzās saturs ar to pašu divu pirkstu kustību, ritinot ar turētiem taustiņiem. Tas ievēro arī sistēmas skārienpaliktnim iestatīto izsekošanas ātrumu."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कळा दाबून ठेवून स्क्रोल करताना दोन बोटांच्या तितक्याच हालचालीसाठी मजकूर किती दूर जातो. हे सिस्टमच्या ट्रॅकपॅडसाठी ठरवलेल्या ट्रॅकिंग वेगाचेही पालन करते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sejauh mana kandungan bergerak untuk gerakan dua jari yang sama semasa menatal dengan kekunci ditahan. Ia juga mengikut kelajuan penjejakan yang ditetapkan untuk pad jejak sistem."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor langt innholdet går for samme strøk med to fingre når du ruller med tastene nede. Den følger også sporingshastigheten som er satt for systemets styreflate."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe ver de inhoud gaat bij dezelfde beweging van twee vingers als je scrolt met ingedrukte toetsen. Het volgt ook de volgsnelheid die voor de trackpad van het systeem is ingesteld."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jak daleko przesuwa się zawartość przy tym samym ruchu dwóch palców podczas przewijania z przytrzymanymi klawiszami. Uwzględnia też szybkość śledzenia ustawioną dla gładzika systemu."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A que distância vai o conteúdo com o mesmo gesto de dois dedos ao deslocar com as teclas premidas. Segue também a velocidade de rastreio definida para o trackpad do sistema."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Até onde o conteúdo vai com o mesmo gesto de dois dedos ao rolar com as teclas pressionadas. Também acompanha a velocidade de rastreamento definida para o trackpad do sistema."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cât de departe merge conținutul pentru aceeași mișcare a două degete când derulezi cu tastele apăsate. Urmează și viteza de urmărire setată pentru trackpadul sistemului."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Насколько далеко уходит содержимое при том же движении двух пальцев, когда вы прокручиваете с зажатыми клавишами. Учитывается и скорость отслеживания, заданная для трекпада системы."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ako ďaleko sa posunie obsah pri rovnakom pohybe dvoch prstov, keď posúvate s podržanými klávesmi. Riadi sa aj rýchlosťou sledovania nastavenou pre trackpad systému."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kako daleč gre vsebina ob enaki potezi dveh prstov, ko drsite z držanimi tipkami. Upošteva tudi hitrost sledenja, nastavljeno za sledilno ploščico sistema."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Колико далеко иде садржај при истом потезу два прста када померате са држаним тастерима. Прати и брзину праћења подешену за трекпед система."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hur långt innehållet går för samma drag med två fingrar när du rullar med tangenterna nedtryckta. Den följer också den spårningshastighet som är inställd för systemets styrplatta."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "விசைகளை அழுத்திப் பிடித்தபடி உருட்டும்போது இரு விரல்களின் அதே இழுப்புக்கு உள்ளடக்கம் எவ்வளவு தூரம் செல்கிறது. கணினியின் டிராக்பேடுக்கு அமைத்த கண்காணிப்பு வேகத்தையும் இது பின்பற்றுகிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కీలను పట్టుకుని స్క్రోల్ చేసేటప్పుడు రెండు వేళ్ల అదే కదలికకు కంటెంట్ ఎంత దూరం వెళ్తుంది. సిస్టమ్ ట్రాక్‌ప్యాడ్‌కు సెట్ చేసిన ట్రాకింగ్ వేగాన్ని కూడా ఇది అనుసరిస్తుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เนื้อหาเลื่อนไปไกลแค่ไหนเมื่อลากสองนิ้วเท่ากันขณะเลื่อนพร้อมกดปุ่มค้างไว้ และยังตามความเร็วการติดตามที่ตั้งไว้สำหรับแทร็กแพดของระบบด้วย"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuşlar basılıyken kaydırırken iki parmağın aynı hareketi için içeriğin ne kadar uzağa gittiği. Sistemin izleme dörtgeni için ayarlanan izleme hızını da izler."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наскільки далеко йде вміст за того самого руху двох пальців, коли ви прокручуєте із затиснутими клавішами. Враховується і швидкість відстеження, задана для трекпада системи."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کلیدیں دبائے رکھ کر اسکرول کرتے وقت دو انگلیوں کی اسی حرکت پر مواد کتنی دور جاتا ہے۔ یہ سسٹم کے ٹریک پیڈ کے لیے طے کردہ ٹریکنگ رفتار کی بھی پیروی کرتی ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nội dung đi xa bao nhiêu với cùng một cử chỉ hai ngón tay khi bạn cuộn trong lúc giữ phím. Nó cũng theo tốc độ theo dõi đã đặt cho bàn di chuột của hệ thống."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住这些键滚动时，同样的双指移动让内容前进多远。它也会跟随系统触控板设置的跟踪速度。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住這些按鍵捲動時，同樣的雙指移動讓內容前進多遠。它也會跟隨系統觸控式軌跡板設定的追蹤速度。"
           }
         }
       }
@@ -36246,6 +37370,568 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "頂部"
+          }
+        }
+      }
+    },
+    "Trackpad" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لوحة التتبع"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тракпад"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ট্র্যাকপ্যাড"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pegefelt"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puuteplaat"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تاچ‌پد"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohjauslevy"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "משטח עקיבה"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रैकपैड"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トラックパッド"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트랙패드"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jutiklinė planšetė"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skārienpaliktnis"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रॅकपॅड"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pad jejak"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styreflate"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gładzik"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трекпад"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sledilna ploščica"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трекпед"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styrplatta"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "டிராக்பேட்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ట్రాక్‌ప్యాడ్"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แทร็กแพด"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İzleme dörtgeni"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трекпад"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ٹریک پیڈ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bàn di chuột"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触控板"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "觸控式軌跡板"
+          }
+        }
+      }
+    },
+    "Trackpad speed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعة لوحة التتبع"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорост на тракпада"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ট্র্যাকপ্যাডের গতি"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocitat del trackpad"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rychlost trackpadu"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pegefeltets hastighed"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad-Geschwindigkeit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ταχύτητα trackpad"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidad del trackpad"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puuteplaadi kiirus"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت تاچ‌پد"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohjauslevyn nopeus"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilis ng trackpad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitesse du trackpad"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מהירות משטח העקיבה"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रैकपैड की गति"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brzina trackpada"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpad sebessége"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kecepatan trackpad"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocità del trackpad"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トラックパッドの速度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트랙패드 속도"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jutiklinės planšetės greitis"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skārienpaliktņa ātrums"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रॅकपॅडचा वेग"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kelajuan pad jejak"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styreflatens hastighet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpadsnelheid"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prędkość gładzika"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidade do trackpad"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidade do trackpad"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viteza trackpadului"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорость трекпада"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rýchlosť trackpadu"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitrost sledilne ploščice"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Брзина трекпеда"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styrplattans hastighet"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "டிராக்பேட் வேகம்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ట్రాక్‌ప్యాడ్ వేగం"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ความเร็วแทร็กแพด"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İzleme dörtgeni hızı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Швидкість трекпада"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ٹریک پیڈ کی رفتار"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tốc độ bàn di chuột"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触控板速度"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "觸控式軌跡板速度"
           }
         }
       }

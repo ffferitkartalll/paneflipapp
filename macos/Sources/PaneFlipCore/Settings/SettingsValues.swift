@@ -28,6 +28,13 @@ public struct SettingsValues: Equatable {
     public var snapTrigger = SnapTrigger.leftCommand
     /// The modifier key that, tapped twice, hides the pill under the pointer.
     public var hidePillKey = SnapTrigger.leftCommand
+    /// Held while scrolling over a zone, with two fingers or the mouse wheel, to move through its windows.
+    public var windowScrollKeys = SnapTrigger.windowScroll
+    /// How far the content goes for the same stroke of two fingers when scrolling with those keys held, as a multiplier of the system's own
+    /// trackpad speed.
+    public var trackpadSpeed = 2.0
+    /// Held while scrolling over the screen, with two fingers or the mouse wheel, to slide to the zones beyond its edges.
+    public var stripScrollKeys = SnapTrigger.stripScroll
 
     /// Bring the next or the previous window of the focused window's zone forward.
     public var nextWindowShortcut = SnapTrigger.nextWindow

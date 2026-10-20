@@ -21,7 +21,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
-│   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming
+│   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition
 │   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
@@ -40,6 +40,7 @@ Sources/
     │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        ReleaseChecking (+ ReleaseInfo) ← GitHubReleaseChecker,
     │                        UpdateInstalling ← DiskImageUpdateInstaller (downloads the release disk image, checks its signature against the running app, swaps the app after it quits with `UpdateSwapScript`, which gives up if the app does not quit),
+    │                        ScrollSwitchListening ← EventTapScrollSwitch (the keys held while scrolling: two fingers lead the slide through a zone's windows or the layout toward the zones beyond the edges, the wheel steps; `ScrollSwitchEvent`, `ScrollSwitchTarget`),
     │                        KeyShortcutListening ← EventTapKeyShortcut (four changeable shortcuts, `KeyChord` in Core: next/previous window of a zone, scroll toward the zones beyond the right/left edge; `KeyShortcut` is what a press asks for),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
@@ -48,12 +49,12 @@ Sources/
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide, WindowMover
-    ├── Zones/               ZonePlanner, ZoneEngine, LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
+    ├── Zones/               ZonePlanner, ZoneEngine, ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrollStepper (scroll over the pill steps through the windows), IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
-    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
+    └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, ShortcutsPane, TrackpadPane, UpdatesPane, UpdatesModel, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, AppsPane, IgnoredAppsSection, LayoutCard, LayoutGapRow, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,

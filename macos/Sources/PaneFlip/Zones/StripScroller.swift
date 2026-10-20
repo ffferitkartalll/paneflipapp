@@ -47,6 +47,10 @@ final class StripScroller {
         var glideFrom: CGFloat = 0
         var glideTo: CGFloat = 0
         var glideBegan: TimeInterval = 0
+        /// Two fingers lead this scroll: the pictures follow `gesture` until the fingers lift (`released`), then glide on to a rest position.
+        var led = false
+        var released = false
+        var gesture = ScrubGesture()
     }
 
     /// Calls `tick` on every frame until it returns false.
@@ -147,19 +151,22 @@ final class StripScroller {
         return scroll(toward: edge, on: screen, to: nil)
     }
 
-    /// The scroll itself; `wanted` is the rest position to go to (the next one toward `edge` when there is none).
-    private func scroll(toward edge: ScreenEdge, on screen: ScreenInfo, to wanted: CGFloat?) -> Bool {
+    /// The scroll itself; `wanted` is the rest position to go to (the next one toward `edge` when there is none). `led`: the fingers lead
+    /// it, from where the layout is now.
+    private func scroll(toward edge: ScreenEdge, on screen: ScreenInfo, to wanted: CGFloat?, led: Bool = false) -> Bool {
         guard settings.values.placementEnabled, !isBusy() else { return false }
         if scrolling != nil { return carryOn(toward: edge, on: screen) }
         let all = screens.screens()
         guard let (geometry, found) = planner.strip(of: screen, among: all), let side = found else { return false }
         let offset = geometry.clamped(viewport.offset(for: screen.key))
-        guard let target = wanted ?? nextRest(from: offset, toward: edge, in: geometry) else { return false }
+        guard let target = led ? offset : wanted ?? nextRest(from: offset, toward: edge, in: geometry) else { return false }
         count += 1
         var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
+        current.led = led
         let fronts = current.held.filter(\.isFront)
         guard !reduceMotion(), !fronts.isEmpty else {
+            guard !led else { return false }   // nothing to show the fingers' work with: the caller steps instead
             scrolling = current
             land(current, at: target)
             return true
@@ -317,10 +324,80 @@ final class StripScroller {
         current.glideTo = current.target
         current.glideBegan = now()
         scrolling = current
-        if !ticking {
-            ticking = true
-            metronome { [weak self] in self?.frame() ?? false }
+        if current.led {
+            // The pictures follow the fingers, from where they are now; no clock moves them until the fingers lift.
+            followFingers()
+            return
         }
+        startGliding()
+    }
+
+    private func startGliding() {
+        guard !ticking else { return }
+        ticking = true
+        metronome { [weak self] in self?.frame() ?? false }
+    }
+
+    // MARK: Led by the fingers
+
+    /// Two fingers came down: the layout of the screen under the pointer follows them, with everything beyond its edges, until they
+    /// lift. False when this cannot be done (a scroll runs, nothing to scroll, motion is reduced): the caller steps on lifting.
+    @discardableResult
+    func beginLed() -> Bool {
+        revealing = nil
+        guard scrolling == nil else { return false }
+        let all = screens.screens()
+        guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first,
+              let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
+              geometry.range.lowerBound < geometry.range.upperBound else { return false }
+        return scroll(toward: .right, on: screen, to: nil, led: true)
+    }
+
+    /// The fingers moved by `delta` points (to the right is positive: the content follows them, the zones beyond the left edge come in).
+    func moveLed(by delta: CGFloat, at time: TimeInterval) {
+        guard var current = scrolling, current.led, !current.released else { return }
+        current.gesture.add(delta, at: time)
+        scrolling = current
+        if current.phase == .gliding { followFingers() }
+    }
+
+    /// The fingers lifted: the pictures glide on to the rest position the swipe chose.
+    func endLed() {
+        guard var current = scrolling, current.led, !current.released else { return }
+        current.released = true
+        scrolling = current
+        if current.phase == .gliding { glideOn() }
+    }
+
+    /// Where the layout stands for the fingers' work so far: the start less what the content was taken, held in the range with a little
+    /// give past its ends.
+    private func ledPosition(_ current: Scrolling) -> CGFloat {
+        let range = current.geometry.range
+        let wanted = current.start - current.gesture.offset
+        if wanted > range.upperBound { return range.upperBound + min((wanted - range.upperBound) * 0.28, 70) }
+        if wanted < range.lowerBound { return range.lowerBound - min((range.lowerBound - wanted) * 0.28, 70) }
+        return wanted
+    }
+
+    private func followFingers() {
+        guard var current = scrolling, current.led, current.phase == .gliding else { return }
+        current.shown = ledPosition(current)
+        scrolling = current
+        stage.follow(shift: current.start - current.shown)
+        if current.released { glideOn() }
+    }
+
+    /// The pictures glide from where the fingers left them to the nearest rest position to where they would come to rest.
+    private func glideOn() {
+        guard var current = scrolling, current.led, current.phase == .gliding else { return }
+        let wanted = current.start - current.gesture.landing
+        let target = current.geometry.rests.min { abs($0 - wanted) < abs($1 - wanted) } ?? current.start
+        current.target = target
+        current.glideFrom = current.shown
+        current.glideTo = target
+        current.glideBegan = now()
+        scrolling = current
+        startGliding()
     }
 
     // MARK: Moving

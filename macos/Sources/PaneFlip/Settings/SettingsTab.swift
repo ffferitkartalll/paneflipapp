@@ -1,4 +1,4 @@
 /// The tabs of the Settings window.
 enum SettingsTab: Hashable {
-    case general, apps, layouts, zones, stacking, shortcuts, updates
+    case general, apps, layouts, zones, stacking, shortcuts, trackpad, updates
 }

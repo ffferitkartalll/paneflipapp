@@ -7,7 +7,7 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, hidePill, nextWindow, previousWindow, scrollRight, scrollLeft }
+    private enum Shortcut { case snap, hidePill, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut]
@@ -42,6 +42,9 @@ struct ShortcutsPane: View {
             Section("Windows in a zone") {
                 chordRow(.nextWindow, title: "Next window", path: \.nextWindowShortcut, standard: .nextWindow)
                 chordRow(.previousWindow, title: "Previous window", path: \.previousWindowShortcut, standard: .previousWindow)
+                row(.windowScroll, title: "Hold while scrolling",
+                    detail: "Hold these keys and scroll over a zone, with two fingers or the mouse wheel, to move through its windows.",
+                    value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }
                 chordHint
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
@@ -49,6 +52,9 @@ struct ShortcutsPane: View {
             Section("Zones beyond the screen") {
                 chordRow(.scrollRight, title: "Scroll to the right", path: \.scrollRightShortcut, standard: .scrollRight)
                 chordRow(.scrollLeft, title: "Scroll to the left", path: \.scrollLeftShortcut, standard: .scrollLeft)
+                row(.stripScroll, title: "Hold while scrolling",
+                    detail: "Hold these keys and scroll over the screen, with two fingers or the mouse wheel, to slide to the zones beyond its edges.",
+                    value: settings.values.stripScrollKeys, standard: .stripScroll) { settings.values.stripScrollKeys = $0 }
                 chordHint
             }
             .disabled(!settings.values.placementEnabled || !settings.values.overflowZonesEnabled)
