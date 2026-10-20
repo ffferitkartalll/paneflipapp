@@ -17,6 +17,11 @@ final class ZoneCarousel {
     /// dead for the rest of the session.
     private let giveUpAfter: TimeInterval
     private var slideCount = 0
+    /// The direction and zone of the slide that runs, and whether a picture for its extension is being taken.
+    private var running: (forward: Bool, zone: CGRect)?
+    private var extending = false
+    /// The pictures are on the stage (the slide is not still waiting for its photographs).
+    private var onStage = false
 
     init(snapshots: WindowSnapshotting, stage: SlideStaging, reduceMotion: @escaping () -> Bool,
          background: @escaping (@escaping () -> Void) -> Void, giveUpAfter: TimeInterval = 3) {
@@ -37,17 +42,20 @@ final class ZoneCarousel {
         guard !isSliding else { return }
         guard !reduceMotion() else { return swap() }
         isSliding = true
+        running = (forward, zone)
         slideCount += 1
         let mine = slideCount
         DispatchQueue.main.asyncAfter(deadline: .now() + giveUpAfter) { [weak self] in
-            if let self, slideCount == mine { isSliding = false }
+            if let self, slideCount == mine { isSliding = false; running = nil; onStage = false }
         }
         snapshots.snapshots(of: [leaving, entering]) { [weak self] images in
             guard let self else { return }
             guard let out = images[leaving.id], let into = images[entering.id] else {
                 isSliding = false
+                running = nil
                 return swap()
             }
+            onStage = true
             stage.slide(leaving: out, entering: into, in: zone, forward: forward, covered: { [background] done in
                 background {
                     swap()
@@ -55,7 +63,33 @@ final class ZoneCarousel {
                 }
             }) { [weak self] in
                 self?.isSliding = false
+                self?.running = nil
+                self?.onStage = false
             }
+        }
+    }
+
+    /// Whether the slide that runs can be carried on to one more window: it goes the same way in the same zone, and no other
+    /// extension is waiting for its picture.
+    func canExtend(forward: Bool, in zone: CGRect) -> Bool {
+        isSliding && onStage && !extending && running?.forward == forward && running?.zone == zone
+    }
+
+    /// Carries the running slide on to `entering` (the pictures are already there for the windows it passed; this one is
+    /// photographed now). `swap` is as in `slide`. If the slide is over by the time the picture is there, or there is none, the
+    /// window just comes forward.
+    func extend(entering: WindowRef, forward: Bool, swap: @escaping () -> Void) {
+        extending = true
+        snapshots.snapshots(of: [entering]) { [weak self] images in
+            guard let self else { return }
+            extending = false
+            guard let picture = images[entering.id],
+                  stage.extend(entering: picture, forward: forward, covered: { [background] done in
+                      background {
+                          swap()
+                          DispatchQueue.main.async(execute: done)
+                      }
+                  }) else { return background(swap) }
         }
     }
 }

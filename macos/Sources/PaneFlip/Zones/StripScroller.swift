@@ -24,7 +24,7 @@ final class StripScroller {
     /// A frame or two for the windows to be drawn where they now stand, before the pictures go.
     private static let drawTime: TimeInterval = 0.05
 
-    private enum Phase { case touching, waiting, covering, following, gliding, direct }
+    private enum Phase { case touching, waiting, covering, following, gliding, direct, landing }
 
     /// A window of the screen's zones, with where its zone stood when the swipe began.
     private struct Held {
@@ -53,6 +53,8 @@ final class StripScroller {
         var glideFrom: CGFloat = 0
         var glideTo: CGFloat = 0
         var glideBegan: TimeInterval = 0
+        /// Where a scroll by shortcut or edge is heading (nil for a swipe by distance).
+        var target: CGFloat?
     }
 
     /// Calls `tick` on every frame until it returns false.
@@ -183,17 +185,19 @@ final class StripScroller {
     }
 
     /// The shortcut: scrolls the screen under the pointer.
-    func scroll(toward edge: ScreenEdge) {
+    @discardableResult
+    func scroll(toward edge: ScreenEdge) -> Bool {
         let all = screens.screens()
-        guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first else { return }
-        scroll(toward: edge, on: screen)
+        guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first else { return false }
+        return scroll(toward: edge, on: screen)
     }
 
     /// Brings the next rest position beyond `edge` of `screen` into view (a scroll as a swipe of the right length would make: the
     /// pictures glide, the windows land). False when there is nothing more that way, or the windows are not free to be moved.
     @discardableResult
     func scroll(toward edge: ScreenEdge, on screen: ScreenInfo) -> Bool {
-        guard swipe == nil, settings.values.placementEnabled, !isBusy() else { return false }
+        guard settings.values.placementEnabled, !isBusy() else { return false }
+        if swipe != nil { return carryOn(toward: edge, on: screen) }
         let all = screens.screens()
         guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil else { return false }
         let offset = geometry.clamped(viewport.offset(for: screen.key))
@@ -201,8 +205,30 @@ final class StripScroller {
         guard let target = edge == .right ? rests.first(where: { $0 > offset + 0.5 }) : rests.last(where: { $0 < offset - 0.5 }) else { return false }
         begin(on: screen)
         guard swipe != nil else { return false }
+        swipe?.target = target
         handle(.moved(Double((offset - target) / (screen.axVisible.width * Self.swipeToScreens))))
         handle(.ended(velocity: 0))
+        return true
+    }
+
+    /// A scroll that runs goes on to the next rest position the same way, or turns back when asked the other way: the pictures
+    /// of every window are on the stage already, so it only gets a new aim.
+    private func carryOn(toward edge: ScreenEdge, on screen: ScreenInfo) -> Bool {
+        guard var current = swipe, current.screen.key == screen.key, let heading = current.target,
+              [.waiting, .covering, .gliding].contains(current.phase) else { return false }
+        let rests = current.geometry.rests
+        guard let target = edge == .right ? rests.first(where: { $0 > heading + 0.5 }) : rests.last(where: { $0 < heading - 0.5 })
+        else { return false }
+        current.target = target
+        if current.phase == .gliding {
+            current.glideFrom = current.shown
+            current.glideTo = target
+            current.glideBegan = now()
+        } else {
+            // The pictures are not up yet: the end is still to come, and it lands at the rest position nearest to this distance.
+            current.distance = Double((current.start - target) / (current.screen.axVisible.width * Self.swipeToScreens))
+        }
+        swipe = current
         return true
     }
 
@@ -225,7 +251,7 @@ final class StripScroller {
             startGlide(current, velocity: velocity)
         case .direct:
             land(current, at: rest(of: current, velocity: velocity))
-        case .gliding:
+        case .gliding, .landing:
             break
         }
     }
@@ -394,6 +420,7 @@ final class StripScroller {
     /// out, and the pictures give way to the windows.
     private func land(_ current: Swipe, at offset: CGFloat) {
         guard let now = swipe, now.id == current.id else { return }
+        swipe?.phase = .landing
         viewport.set(offset, for: current.screen.key)
         let plan = planner.plan(on: screens.screens())
         for held in current.held {

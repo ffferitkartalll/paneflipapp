@@ -10,4 +10,9 @@ protocol SlideStaging {
     /// `covered` runs.
     func slide(leaving: WindowPicture, entering: WindowPicture, in zone: CGRect, forward: Bool,
                covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void)
+
+    /// Carries the slide that is running on to one more picture in the same direction: everything moves one more zone along
+    /// and `entering` comes in. `covered` is as in `slide`. False when no such slide is running, or it is already giving way
+    /// to the real windows; nothing has happened then.
+    func extend(entering: WindowPicture, forward: Bool, covered: @escaping (_ done: @escaping () -> Void) -> Void) -> Bool
 }

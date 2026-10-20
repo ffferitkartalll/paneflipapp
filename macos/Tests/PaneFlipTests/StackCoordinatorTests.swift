@@ -123,6 +123,28 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(stack.activeID, 3)
     }
 
+    func testPressingTheShortcutAgainDuringTheSlideCarriesItOnToTheNextWindow() {
+        let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
+        snapshots.images = [1: FakeWindowSnapshots.picture(), 2: FakeWindowSnapshots.picture(), 3: FakeWindowSnapshots.picture()]
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
+        let stack = coordinator.stacks[zone]!
+
+        windows.focused = .fake(1)
+        coordinator.cycleFocusedZone(reverse: false)
+        XCTAssertEqual(stack.activeID, 2)
+        coordinator.cycleFocusedZone(reverse: false)   // the focus is still on window 1 until the real window comes forward
+        XCTAssertEqual(stack.activeID, 3, "the second press goes on from the window the slide goes to")
+        XCTAssertEqual(stage.slides.count, 1)
+        XCTAssertEqual(stage.extensions, [true])
+        XCTAssertEqual(windows.raised.last, 3)
+
+        coordinator.cycleFocusedZone(reverse: true)
+        XCTAssertEqual(stack.activeID, 3, "the other way is ignored while the slide runs")
+    }
+
     func testWithStageManagerADroppedWindowIsOnlyPlacedAndNothingElseHappens() {
         let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100)
         coordinator.apply(zones: [zone: rect])

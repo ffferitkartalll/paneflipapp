@@ -90,4 +90,38 @@ final class ZoneCarouselTests: XCTestCase {
         XCTAssertFalse(second)
         XCTAssertEqual(stage.slides.count, 1)
     }
+
+    func testARunningSlideIsCarriedOnToTheNextWindowInTheSameDirection() {
+        snapshots.images[3] = FakeWindowSnapshots.picture()
+        slide(forward: true)
+        XCTAssertTrue(carousel.canExtend(forward: true, in: zone))
+        XCTAssertFalse(carousel.canExtend(forward: false, in: zone), "the other way is not carried on")
+        XCTAssertFalse(carousel.canExtend(forward: true, in: zone.offsetBy(dx: 500, dy: 0)), "nor in another zone")
+        var swapped = 0
+        carousel.extend(entering: .fake(3), forward: true) { swapped += 1 }
+        XCTAssertEqual(stage.extensions, [true])
+        XCTAssertEqual(swapped, 1, "the real window of the new picture comes forward under the pictures")
+        XCTAssertEqual(stage.slides.count, 1, "no second slide is started")
+    }
+
+    func testAnExtensionWaitsForItsPictureAndIsAskedForOnlyOnce() {
+        snapshots.images[3] = FakeWindowSnapshots.picture()
+        slide()
+        snapshots.answersAtOnce = false
+        carousel.extend(entering: .fake(3), forward: true) {}
+        XCTAssertFalse(carousel.canExtend(forward: true, in: zone), "one extension at a time")
+        snapshots.answer()
+        XCTAssertEqual(stage.extensions.count, 1)
+        XCTAssertTrue(carousel.canExtend(forward: true, in: zone))
+    }
+
+    func testAnExtensionTooLateJustBringsTheWindowForward() {
+        snapshots.images[3] = FakeWindowSnapshots.picture()
+        slide()
+        stage.canExtend = false   // the slide is giving way to the real windows
+        var swapped = 0
+        carousel.extend(entering: .fake(3), forward: true) { swapped += 1 }
+        XCTAssertEqual(swapped, 1)
+        XCTAssertTrue(stage.extensions.isEmpty)
+    }
 }
