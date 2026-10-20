@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import PaneFlipCore
 
 /// What the settings need to decide, per layout, which app opens in which zone and in what order the pill shows
 /// them (and, within an app, its windows). `zones` is always the layout's zone identifiers.
@@ -12,6 +13,10 @@ protocol LayoutAppsEditing: AnyObject {
     func glyph(ofApp bundleID: String) -> NSImage
     /// Running apps that can be added.
     func runningApps() -> [(bundleID: String, name: String)]
+    /// The apps of the layout that are ticked to be started and still have a zone in it.
+    func startApps(of layout: NamedLayout) -> [String]
+    /// Starts those of the apps that are not running (they are placed as they open).
+    func open(apps bundleIDs: [String])
     func addApp(bundleID: String, to zone: UUID)
     func move(app bundleID: String, from zone: UUID, to target: UUID, inZones zones: [UUID])
     /// -1 shows the app earlier in its zone's pill, 1 later.

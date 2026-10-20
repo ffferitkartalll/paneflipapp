@@ -93,6 +93,13 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
+    /// Ticks or unticks an app to be started with the layout.
+    public func setStartApp(_ bundleID: String, chosen: Bool, ofLayout id: UUID, key: String) {
+        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        if chosen { s.layouts[i].startApps.insert(bundleID) } else { s.layouts[i].startApps.remove(bundleID) }
+        screens[Self.split(key).display] = s
+    }
+
     public func setDefaultZone(_ zone: UUID?, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].defaultZoneID = zone

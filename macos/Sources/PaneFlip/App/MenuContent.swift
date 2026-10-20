@@ -8,6 +8,7 @@ struct MenuContent: View {
     let layouts: LayoutManaging
     let screens: ScreenProviding
     @Bindable var settings: AppSettings
+    let apps: LayoutAppsEditing
 
     var body: some View {
         Button("PaneFlip") {}
@@ -15,6 +16,9 @@ struct MenuContent: View {
         Toggle("Enable", isOn: $settings.values.placementEnabled)
         Divider()
         MenuLayouts(repository: repository, layouts: layouts, screens: screens)
+        let toStart = screens.screens().compactMap { repository.activeLayout(for: $0.key) }.flatMap { apps.startApps(of: $0) }
+        Button("Open selected apps") { apps.open(apps: toStart) }
+            .disabled(toStart.isEmpty)
         SettingsLink { Text("Settings") }
         Divider()
         Button("Quit") { NSApp.terminate(nil) }

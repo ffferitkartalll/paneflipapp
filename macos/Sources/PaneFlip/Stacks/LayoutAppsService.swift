@@ -16,15 +16,17 @@ final class LayoutAppsService: LayoutAppsEditing {
     @ObservationIgnored private let refresher: ZoneRefreshing
     @ObservationIgnored private let iconFont: IconFont
     @ObservationIgnored private let settings: AppSettings
+    @ObservationIgnored private let windows: WindowSystem
 
     init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont,
-         settings: AppSettings) {
+         settings: AppSettings, windows: WindowSystem) {
         self.memory = memory
         self.coordinator = coordinator
         self.apps = apps
         self.refresher = refresher
         self.iconFont = iconFont
         self.settings = settings
+        self.windows = windows
     }
 
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {
@@ -52,6 +54,24 @@ final class LayoutAppsService: LayoutAppsEditing {
     func runningApps() -> [(bundleID: String, name: String)] {
         apps.regularApps().filter { !$0.bundleID.isEmpty && !settings.values.ignoredApps.contains($0.bundleID) }.map { ($0.bundleID, $0.name) }
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    func startApps(of layout: NamedLayout) -> [String] {
+        Set(memory.apps(inZones: layout.strip.zoneIDs).map(\.bundleID)).intersection(layout.startApps).sorted()
+    }
+
+    /// An app that is not running is started; one that is running but shows no window (closed with Cmd+W) is asked to open one.
+    func open(apps bundleIDs: [String]) {
+        let running = Dictionary(apps.regularApps().map { ($0.bundleID, $0.pid) }, uniquingKeysWith: { first, _ in first })
+        var started = false
+        for bundleID in Set(bundleIDs) where !settings.values.ignoredApps.contains(bundleID) {
+            if let pid = running[bundleID], windows.isShowingWindow(ofApp: pid) { continue }
+            apps.launch(bundleID: bundleID)
+            started = true
+        }
+        // The windows take a moment to appear, and an app that was not brought to the front is not looked at otherwise.
+        guard started else { return }
+        for delay in [0.7, 2.0, 4.0] { DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [refresher] in refresher.restoreWindows() } }
     }
 
     func addApp(bundleID: String, to zone: UUID) {

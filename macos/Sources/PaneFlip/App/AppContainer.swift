@@ -90,7 +90,7 @@ final class AppContainer {
         self.layouts = layouts
         self.engine = engine
         self.layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine,
-                                              iconFont: iconFont, settings: settings)
+                                              iconFont: iconFont, settings: settings, windows: windows)
         self.appCatalog = apps
         self.activation = activation
         self.settingsNavigation = navigation

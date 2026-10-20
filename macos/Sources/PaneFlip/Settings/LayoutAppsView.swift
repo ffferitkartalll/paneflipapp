@@ -13,6 +13,7 @@ struct LayoutAppsView: View {
     let showsOverflow: Bool
     let defaultZone: UUID?
     let setDefaultZone: (UUID) -> Void
+    let setStartApp: (_ bundleID: String, _ chosen: Bool) -> Void
     @Environment(\.dismiss) private var dismiss
     /// The zone whose apps are framed for a moment after the sheet opened on it.
     @State private var highlighted: UUID?
@@ -47,7 +48,7 @@ struct LayoutAppsView: View {
             Form {
                 ForEach(zones, id: \.self) { zone in
                     Section {
-                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, name: name, editor: editor)
+                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, name: name, editor: editor, startApps: layout.startApps, setStartApp: setStartApp)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 8)
                                     .strokeBorder(Color.accentColor, lineWidth: 2)
@@ -66,6 +67,10 @@ struct LayoutAppsView: View {
             .onChange(of: focus) { _, new in reveal(new, proxy) }
             }
             HStack {
+                Button { editor.open(apps: editor.startApps(of: layout)) } label: {
+                    Label("Open selected apps", systemImage: "play")
+                }
+                .disabled(editor.startApps(of: layout).isEmpty)
                 Spacer()
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
             }
@@ -112,6 +117,8 @@ private struct ZoneAppsList: View {
     let zones: [UUID]
     let name: (UUID) -> String
     let editor: LayoutAppsEditing
+    let startApps: Set<String>
+    let setStartApp: (String, Bool) -> Void
 
     static let appHeight: CGFloat = 44
     static let windowHeight: CGFloat = 34
@@ -121,11 +128,15 @@ private struct ZoneAppsList: View {
         ReorderableStack(items: entries, height: height, space: "zoneApps") { from, to in
             editor.reorder(app: entries[from].bundleID, in: entries[from].zoneID, by: to - from, inZones: zones)
         } row: { entry, isCarried, drag, drop in
-            LayoutAppRow(entry: entry, zones: zones, name: name, editor: editor, isCarried: isCarried, isOpen: opened.contains(entry.id),
+            LayoutAppRow(entry: entry, zones: zones, name: name, editor: editor, isChosen: binding(for: entry), isCarried: isCarried, isOpen: opened.contains(entry.id),
                          toggle: { toggle(entry.id) }, drag: drag, drop: drop)
                 .frame(height: height(entry), alignment: .top)
                 .overlay(alignment: .bottom) { if entry.id != entries.last?.id { Divider() } }
         }
+    }
+
+    private func binding(for entry: LayoutAppEntry) -> Binding<Bool> {
+        Binding(get: { startApps.contains(entry.bundleID) }, set: { setStartApp(entry.bundleID, $0) })
     }
 
     private func height(_ entry: LayoutAppEntry) -> CGFloat {
@@ -226,6 +237,7 @@ private struct LayoutAppRow: View {
     let zones: [UUID]
     let name: (UUID) -> String
     let editor: LayoutAppsEditing
+    @Binding var isChosen: Bool
     let isCarried: Bool
     let isOpen: Bool
     let toggle: () -> Void
@@ -253,6 +265,10 @@ private struct LayoutAppRow: View {
                     Button(action: toggle) { Image(systemName: isOpen ? "chevron.up" : "chevron.down") }
                         .help("Show the windows")
                 }
+                Toggle("Open selected apps", isOn: $isChosen)
+                    .toggleStyle(.checkbox)
+                    .labelsHidden()
+                    .help("Open selected apps")
                 Menu {
                     ForEach(zones, id: \.self) { zone in
                         Button("Zone \(name(zone))") {
