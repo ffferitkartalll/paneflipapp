@@ -115,4 +115,17 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         repository.setGap(nil, ofLayout: layout.id, key: "A|d1")
         XCTAssertNil(repository.activeLayout(for: "A|d1")?.gap)
     }
+
+    func testTheTickedAppsAreKeptWithTheLayoutAndNotCopied() {
+        let store = MemoryStore()
+        let repository = LayoutRepository(store: store)
+        let layout = repository.addLayout(for: "A|d1")
+
+        repository.setStartApp("com.example.one", chosen: true, ofLayout: layout.id, key: "A|d1")
+        repository.setStartApp("com.example.two", chosen: true, ofLayout: layout.id, key: "A|d1")
+        repository.setStartApp("com.example.two", chosen: false, ofLayout: layout.id, key: "A|d1")
+
+        XCTAssertEqual(LayoutRepository(store: store).layout(id: layout.id, key: "A|d1")?.startApps, ["com.example.one"], "kept across a restart")
+        XCTAssertTrue(repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!.startApps.isEmpty)
+    }
 }

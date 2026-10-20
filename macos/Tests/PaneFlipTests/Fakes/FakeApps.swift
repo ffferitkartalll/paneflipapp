@@ -9,4 +9,6 @@ final class FakeApps: AppCatalog {
     func icon(pid: pid_t) -> NSImage? { nil }
     func name(bundleID: String) -> String? { apps.first { $0.bundleID == bundleID }?.name }
     func icon(bundleID: String) -> NSImage? { nil }
+    var launched: [String] = []
+    func launch(bundleID: String) { launched.append(bundleID) }
 }

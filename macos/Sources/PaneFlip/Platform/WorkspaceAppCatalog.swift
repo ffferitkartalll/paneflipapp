@@ -32,6 +32,13 @@ final class WorkspaceAppCatalog: AppCatalog {
         return NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID).map { NSWorkspace.shared.icon(forFile: $0.path) }
     }
 
+    func launch(bundleID: String) {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else { return }
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = false
+        NSWorkspace.shared.openApplication(at: url, configuration: configuration)
+    }
+
     private func info(_ a: NSRunningApplication) -> AppInfo {
         AppInfo(pid: a.processIdentifier, bundleID: a.bundleIdentifier ?? "", name: a.localizedName ?? "?")
     }

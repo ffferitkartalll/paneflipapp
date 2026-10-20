@@ -11,6 +11,8 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var trailing: Overflow?
     /// The gap between its zones; nil takes the one of the settings.
     public var gap: Double?
+    /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
+    public var startApps: Set<String> = []
 
     public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,
                 leading: Overflow? = nil, trailing: Overflow? = nil, gap: Double? = nil) {
@@ -33,7 +35,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return copy
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -45,6 +47,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         leading = try c.decodeIfPresent(Overflow.self, forKey: .leading)
         trailing = try c.decodeIfPresent(Overflow.self, forKey: .trailing)
         gap = try c.decodeIfPresent(Double.self, forKey: .gap)
+        startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
     }
 
     /// The screen's layout with the areas beyond its edges.

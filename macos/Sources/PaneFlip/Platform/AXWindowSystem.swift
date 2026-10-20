@@ -105,6 +105,15 @@ final class AXWindowSystem: WindowSystem {
         return (all, onScreen)
     }
 
+    func isShowingWindow(ofApp pid: pid_t) -> Bool {
+        windowList(.optionOnScreenOnly).contains { info in
+            guard (info[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value == pid,
+                  (info[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
+                  let bounds = info[kCGWindowBounds as String] as? [String: CGFloat] else { return false }
+            return (bounds["Width"] ?? 0) > 40 && (bounds["Height"] ?? 0) > 40
+        }
+    }
+
     /// The system lists windows front to back.
     func windowIDsFrontToBack() -> [CGWindowID] {
         windowList(.optionOnScreenOnly).compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value }

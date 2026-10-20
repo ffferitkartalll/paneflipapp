@@ -82,6 +82,10 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         refresher?.restoreWindows()
     }
 
+    func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {
+        repository.setStartApp(bundleID, chosen: chosen, ofLayout: id, key: key)
+    }
+
     func rename(key: String, id: UUID, to name: String) {
         repository.rename(layout: id, key: key, to: name)
     }

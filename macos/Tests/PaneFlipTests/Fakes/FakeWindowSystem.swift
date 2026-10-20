@@ -18,6 +18,8 @@ final class FakeWindowSystem: WindowSystem {
     func focusedWindow() -> WindowRef? { focused }
     func windowUnderPointer() -> (ref: WindowRef, frame: CGRect)? { nil }
     func windows(ofApp pid: pid_t) -> [WindowRef] { windowsByPID[pid] ?? [] }
+    var showingPIDs: Set<pid_t> = []
+    func isShowingWindow(ofApp pid: pid_t) -> Bool { showingPIDs.contains(pid) }
     func frame(of ref: WindowRef) -> CGRect? { frames[ref.id] }
     func setFrame(_ rect: CGRect, of ref: WindowRef) { frames[ref.id] = rect; setCalls += 1 }
     /// A window changed by something else than the code under test.
