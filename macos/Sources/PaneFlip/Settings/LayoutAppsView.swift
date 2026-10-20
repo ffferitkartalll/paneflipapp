@@ -80,6 +80,9 @@ struct LayoutAppsView: View {
                 }
             }
             .formStyle(.grouped)
+            // The grouped form insets its cards by about 20 pt on each side: the sheet's own padding is enough, so the cards line
+            // up with the text above them.
+            .padding(.horizontal, -20)
             .alert("Rename Zone", isPresented: Binding(get: { renamingZone != nil }, set: { if !$0 { renamingZone = nil } })) {
                 TextField("Zone name", text: $zoneNameDraft)
                 Button("Rename") { if let zone = renamingZone { setZoneName(zone, zoneNameDraft) } }
@@ -308,7 +311,7 @@ private struct LayoutAppRow: View {
                 .help("Remove")
             }
             .buttonStyle(.borderless)
-            .padding(.horizontal, 6)
+            .padding(.trailing, 6)   // the handle brings its own room on the left
             .frame(height: ZoneAppsList.appHeight)
 
             if isOpen, entry.windows.count > 1 { windows }
@@ -338,7 +341,7 @@ private struct LayoutAppRow: View {
     private func handle(drag: @escaping (CGFloat) -> Void, drop: @escaping () -> Void, space: String) -> some View {
         Image(systemName: "line.3.horizontal")
             .foregroundStyle(.secondary)
-            .frame(width: 22, height: 30)
+            .frame(width: 20, height: 30)
             .contentShape(.rect)
             .help("Drag to change the order")
             .onHover { inside in
