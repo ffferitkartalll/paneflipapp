@@ -20,7 +20,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 ```
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
-│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, Overflow, StripLayout, StripGeometry, Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
+│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent
 │   ├── Updates/             AppVersion
@@ -54,7 +54,7 @@ Sources/
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
     └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
-                             SliderSettingRow, ScreenLayoutsSection, LayoutCard, KeyRecorder, GeneralPane, LaunchAtLoginModel,
+                             SliderSettingRow, ScreenLayoutsSection, LayoutCard, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
                              PillContent+Title, SnapTrigger+Title, AppLanguages

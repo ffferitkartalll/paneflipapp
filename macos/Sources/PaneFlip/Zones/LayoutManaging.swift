@@ -3,7 +3,7 @@ import PaneFlipCore
 
 /// What the UI may do to layouts. The settings window and the editor depend on this, not on the service.
 protocol LayoutManaging: AnyObject {
-    @discardableResult func addLayout(for key: String) -> NamedLayout
+    @discardableResult func addLayout(for key: String, preset: LayoutPreset) -> NamedLayout
     func duplicate(key: String, id: UUID)
     func updateLayout(key: String, id: UUID, strip: StripLayout)
     func removeLayout(key: String, id: UUID)
