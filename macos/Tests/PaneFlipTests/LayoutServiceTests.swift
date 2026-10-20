@@ -41,6 +41,34 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(memory.records[0].zoneID, beyond)
     }
 
+    func testSwitchingLayoutsSendsEveryAppToTheNewDefaultZoneAndBackToWhereItWas() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let first = repository.addLayout(for: "screen")
+        var strip = first.strip
+        let beyond = UUID(), second = UUID()
+        strip.trailing = Overflow(width: 0.25, root: .leaf(beyond))
+        repository.setStrip(strip, ofLayout: first.id, key: "screen")
+        let other = repository.addLayout(for: "screen")
+        var otherStrip = other.strip
+        otherStrip.root = .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(other.root.leafIDs[0]), second: .leaf(second))
+        repository.setStrip(otherStrip, ofLayout: other.id, key: "screen")
+        repository.setDefaultZone(second, ofLayout: other.id, key: "screen")
+        memory.remember(zoneID: first.root.leafIDs[0], bundleID: "inside", title: "")
+        memory.remember(zoneID: beyond, bundleID: "outside", title: "")
+
+        service.activate(key: "screen", id: other.id)
+
+        XCTAssertEqual(memory.records.map(\.zoneID), [second, second])
+
+        service.activate(key: "screen", id: first.id)
+
+        XCTAssertEqual(memory.records.map(\.zoneID), [first.root.leafIDs[0], beyond])
+    }
+
     private func screen(_ key: String) -> ScreenInfo {
         let area = CGRect(x: 0, y: 0, width: 1000, height: 600)
         return ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area)
