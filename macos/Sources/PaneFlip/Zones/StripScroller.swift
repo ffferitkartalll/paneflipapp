@@ -66,6 +66,8 @@ final class StripScroller {
     private let reduceMotion: () -> Bool
     private let isBusy: () -> Bool
     private var scrolling: Scrolling?
+    /// Called when a scroll is over and the windows are in their places.
+    var onRest: (() -> Void)?
     private var ticking = false
     private var count = 0
     private var isRunning = false
@@ -125,14 +127,6 @@ final class StripScroller {
     }
 
     // MARK: Scrolling
-
-    /// Whether a scroll toward `edge` of `screen` would take the layout back toward its own place (the zones beyond the other
-    /// edge are in view now).
-    func isReturning(toward edge: ScreenEdge, on screen: ScreenInfo) -> Bool {
-        guard scrolling == nil, let (geometry, side) = planner.strip(of: screen, among: screens.screens()), side != nil else { return false }
-        let offset = geometry.clamped(viewport.offset(for: screen.key))
-        return edge == .left ? offset > 0.5 : offset < -0.5
-    }
 
     /// The shortcut: scrolls the screen under the pointer.
     @discardableResult
@@ -346,11 +340,13 @@ final class StripScroller {
         refresher?.refreshZones()
         guard current.phase == .gliding else {
             scrolling = nil
+            onRest?()
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.drawTime) { [weak self] in
             self?.stage.finish {
                 self?.scrolling = nil
+                self?.onRest?()
                 // Apps that settle late (a window that fits itself to its new place) are looked at once more.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self?.refresher?.refreshZones() }
                 // Fresh photographs for the next scroll, once the machine is quiet again.
