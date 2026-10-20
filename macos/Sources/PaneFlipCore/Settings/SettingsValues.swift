@@ -12,6 +12,8 @@ public struct SettingsValues: Equatable {
     public var minZoneSize = 240.0
     /// What the stack pill shows for each window.
     public var pillContent = PillContent.icon
+    /// The edge of its zone the pill sits along.
+    public var pillPosition = PillPosition.top
     /// Show the pill for a zone that holds a single window too (else it appears from two windows on).
     public var pillForSingleWindow = false
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).

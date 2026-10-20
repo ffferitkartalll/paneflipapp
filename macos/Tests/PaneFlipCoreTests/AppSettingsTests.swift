@@ -52,6 +52,14 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertFalse(AppSettings(storage: Storage()).values.pillForSingleWindow)
     }
 
+    func testThePillSitsAlongTheTopUnlessAsked() {
+        let storage = Storage()
+        let settings = AppSettings(storage: storage)
+        XCTAssertEqual(settings.values.pillPosition, .top)
+        settings.values.pillPosition = .bottom
+        XCTAssertEqual(storage.saved?.pillPosition, .bottom)
+    }
+
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
         let storage = Storage()
         var old = SettingsValues()
