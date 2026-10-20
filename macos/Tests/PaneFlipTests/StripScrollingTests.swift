@@ -93,6 +93,16 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(plan[areaZone]?.isParked, true)
     }
 
+    func testTheMarginKeepsTheZonesAwayFromTheEdgesOfTheScreen() {
+        let bare = planner.plan(on: screens.infos)[screenZone]?.rect
+        settings.values.edgeMargin = 20
+
+        let rect = planner.plan(on: screens.infos)[screenZone]?.rect
+
+        // The area lies on the right: the margin runs round the strip, so the zone keeps the right edge and has it on the others.
+        XCTAssertEqual(rect, bare.map { CGRect(x: $0.minX + 20, y: $0.minY + 20, width: $0.width - 20, height: $0.height - 40) })
+    }
+
     func testSwitchedOffTheAreaHasNoZoneAndNothingScrolls() {
         settings.values.overflowZonesEnabled = false
         let plan = planner.plan(on: screens.infos)

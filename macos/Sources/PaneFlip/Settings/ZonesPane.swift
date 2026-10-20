@@ -14,6 +14,11 @@ struct ZonesPane: View {
                                  value: $settings.values.gap, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
                     if !editing { refresh() }
                 }
+                SliderSettingRow(title: "Margin at screen edges",
+                                 detail: "Space between the zones and the edges of the screen.",
+                                 value: $settings.values.edgeMargin, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
+                    if !editing { refresh() }
+                }
                 SliderSettingRow(title: "Minimum zone size",
                                  detail: "The layout editor won't split or resize a zone below this.",
                                  value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange,

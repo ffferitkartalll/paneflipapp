@@ -35,6 +35,7 @@ public final class AppSettings {
         self.storage = storage
         var loaded = storage.load()
         loaded.gap = Self.snapped(loaded.gap, to: Self.gapRange, step: Self.gapStep)
+        loaded.edgeMargin = Self.snapped(loaded.edgeMargin, to: Self.gapRange, step: Self.gapStep)
         loaded.minZoneSize = Self.snapped(loaded.minZoneSize, to: Self.minZoneSizeRange, step: Self.minZoneSizeStep)
         launchLanguage = loaded.language
         values = loaded

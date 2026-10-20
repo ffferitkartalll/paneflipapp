@@ -17,7 +17,8 @@ struct ZonePlanner {
         for screen in screens {
             guard let (geometry, side) = strip(of: screen, among: screens) else { continue }
             let offset = geometry.clamped(viewport.offset(for: screen.key))
-            for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap)) {
+            for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap),
+                                         margin: CGFloat(settings.values.edgeMargin)) {
                 if zone.isOnScreen {
                     zones[zone.id] = PlannedZone(rect: zone.rect)
                 } else if let side {
@@ -34,6 +35,7 @@ struct ZonePlanner {
         guard let layout = layouts.activeLayout(for: screen.key) else { return nil }
         let others = screens.filter { $0.displayID != screen.displayID }.map(\.cocoaFrame)
         let side = Parking.side(of: screen.cocoaFrame, others: others)
-        return (StripGeometry(strip: side == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip, screen: screen.axVisible), side)
+        return (StripGeometry(strip: side == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip,
+                                       screen: screen.axVisible), side)
     }
 }
