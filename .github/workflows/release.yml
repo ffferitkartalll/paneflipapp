@@ -1,28 +1,33 @@
 name: Release
 
-# A release is published by hand, from main: `gh workflow run release.yml` (or Actions > Release > Run workflow) once the
-# version was raised in macos/project.yml. Nothing runs for a pull request. The tests run first on that commit, then the
-# release is built, signed and published. Its version comes from MARKETING_VERSION in macos/project.yml and the release is
-# tagged `v<version>`; a version that already has a release stops the job.
+# A release is started by hand by pushing the tag `v<version>` on a commit of main, once the version was raised in
+# macos/project.yml (`git tag v1.2.3 && git push origin v1.2.3`). Nothing runs for a pull request. A push event, unlike a
+# manual run, shows its result (the green tick) next to the commit on the repository page. The tests run first on the tagged
+# commit, then the release is built, signed and published. The tag must name MARKETING_VERSION; a version that already has a
+# release, or a commit that is not on main, stops the job. A failed run is run again from Actions (Re-run).
 # Its notes list the issues the merged pull requests closed (not the pull requests), made in the step before Publish.
 # Last, the cask in ffferitkartalll/homebrew-tap gets the new version (secret TAP_TOKEN: contents write on that repository).
 on:
-  workflow_dispatch:
+  push:
+    tags: ['v*']
 
 jobs:
   test:
-    if: github.ref == 'refs/heads/main'
     runs-on: xcode-27
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
 
-      # Stop before the tests when the version was not raised: the release is tagged with it.
-      - name: Version is new
+      # Stop before the tests when the tag is not a release of main with a new version.
+      - name: Tag is a new version on main
         working-directory: macos
         run: |
           version="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml | head -1)"
+          [ "$GITHUB_REF_NAME" = "v$version" ] || { echo "The tag $GITHUB_REF_NAME is not v$version, the MARKETING_VERSION in macos/project.yml."; exit 1; }
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main || { echo "$GITHUB_REF_NAME is not on main."; exit 1; }
           if gh release view "v$version" >/dev/null 2>&1; then
             echo "Release v$version exists already: raise MARKETING_VERSION in macos/project.yml."
             exit 1
@@ -154,7 +159,7 @@ jobs:
       - name: Publish
         run: |
           gh release create "v${{ steps.version.outputs.version }}" "PaneFlip-${{ steps.version.outputs.version }}.dmg" \
-            --target "${{ github.sha }}" \
+            --verify-tag \
             --title "PaneFlip ${{ steps.version.outputs.version }}" --notes-file "$RUNNER_TEMP/notes.md"
 
       - name: Update the cask
