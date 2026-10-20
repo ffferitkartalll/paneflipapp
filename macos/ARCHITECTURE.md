@@ -5,7 +5,7 @@
 - `Tests/PaneFlipCoreTests` (`swift test`): the pure domain.
 - `Tests/PaneFlipTests` (`xcodebuild … test`): the app-layer rules (closed-window detection, restore order, zone
   hit-testing, the JSON store). They compile the services and their ports, not the app, and use fakes.
-- `.github/workflows/test.yml` runs both on every pull request.
+- `.github/workflows/release.yml` runs both on main before it publishes a release (started by hand); no workflow runs for a pull request.
 
 ## Build layout
 
