@@ -128,4 +128,28 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         XCTAssertEqual(LayoutRepository(store: store).layout(id: layout.id, key: "A|d1")?.startApps, ["com.example.one"], "kept across a restart")
         XCTAssertTrue(repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!.startApps.isEmpty)
     }
+
+    func testAZoneKeepsItsNameUntilItIsClearedOrGoneAndACopyKeepsTheNames() {
+        let repository = LayoutRepository(store: MemoryStore())
+        var layout = repository.addLayout(for: "A|d1")
+        var strip = layout.strip
+        strip.root = strip.root.splitting(strip.root.leafIDs[0], sideBySide: true, ratio: 0.5)
+        repository.setStrip(strip, ofLayout: layout.id, key: "A|d1")
+        layout = repository.layout(id: layout.id, key: "A|d1")!
+        let chat = layout.root.leafIDs[0], code = layout.root.leafIDs[1]
+
+        repository.setZoneName("  Chat ", ofZone: chat, inLayout: layout.id, key: "A|d1")
+        repository.setZoneName("Code", ofZone: code, inLayout: layout.id, key: "A|d1")
+        XCTAssertEqual(repository.layout(id: layout.id, key: "A|d1")?.zoneNames, [chat: "Chat", code: "Code"])
+
+        let copy = repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!
+        XCTAssertEqual(Set(copy.zoneNames.values), ["Chat", "Code"])
+        XCTAssertTrue(Set(copy.zoneNames.keys).isDisjoint(with: [chat, code]), "under the copy's own zones")
+
+        repository.setZoneName("", ofZone: chat, inLayout: layout.id, key: "A|d1")
+        XCTAssertEqual(repository.layout(id: layout.id, key: "A|d1")?.zoneNames, [code: "Code"], "an empty name takes it away")
+
+        repository.setStrip(StripLayout(root: .leaf(chat)), ofLayout: layout.id, key: "A|d1")
+        XCTAssertTrue(repository.layout(id: layout.id, key: "A|d1")!.zoneNames.isEmpty, "a zone that is gone takes its name with it")
+    }
 }

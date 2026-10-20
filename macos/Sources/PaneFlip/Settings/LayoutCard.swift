@@ -40,7 +40,8 @@ struct LayoutCard: View {
             set: { if !$0 && navigation.ordering?.layoutID == layout.id { navigation.ordering = nil } })) {
             LayoutAppsView(layout: layout, editor: apps, focus: navigation.ordering, showsOverflow: showsOverflow, defaultZone: layout.fallbackZoneID,
                            setDefaultZone: { layouts.setDefaultZone(key: screen.key, id: layout.id, to: $0) },
-                           setStartApp: { layouts.setStartApp(key: screen.key, id: layout.id, bundleID: $0, chosen: $1) })
+                           setStartApp: { layouts.setStartApp(key: screen.key, id: layout.id, bundleID: $0, chosen: $1) },
+                           setZoneName: { layouts.setZoneName(key: screen.key, id: layout.id, zone: $0, to: $1) })
         }
         .alert("Rename Layout", isPresented: $isRenaming) {
             TextField("Layout name", text: $draftName)

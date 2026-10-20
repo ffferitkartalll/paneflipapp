@@ -14,16 +14,25 @@ struct LayoutAppsView: View {
     let defaultZone: UUID?
     let setDefaultZone: (UUID) -> Void
     let setStartApp: (_ bundleID: String, _ chosen: Bool) -> Void
+    let setZoneName: (_ zone: UUID, _ name: String) -> Void
     @Environment(\.dismiss) private var dismiss
     /// The zone whose apps are framed for a moment after the sheet opened on it.
     @State private var highlighted: UUID?
     @State private var highlightRequest: UUID?
+    /// The zone being renamed, and the name typed so far.
+    @State private var renamingZone: UUID?
+    @State private var zoneNameDraft = ""
 
     /// Every zone, in the order across the strip: beyond the left edge, the screen, beyond the right edge.
     private var zones: [UUID] { showsOverflow ? layout.strip.zoneIDs : layout.root.leafIDs }
     /// The zones a default can be: those of the screen (the others are out of sight).
     private var screenZones: [UUID] { layout.root.leafIDs }
     private func name(_ zone: UUID) -> String { ZoneLabel.text(of: zone, in: layout.strip) }
+    /// "Zone 1", with the name the user gave it after a dot.
+    private func title(_ zone: UUID) -> Text {
+        let number = Text("Zone \(name(zone))")
+        return layout.zoneNames[zone].map { number + Text(verbatim: " · \($0)") } ?? number
+    }
 
     var body: some View {
         let entries = editor.entries(inZones: zones)
@@ -36,7 +45,7 @@ struct LayoutAppsView: View {
                 Picker("Default zone", selection: Binding(get: { defaultZone ?? screenZones.first ?? UUID() },
                                                           set: { setDefaultZone($0) })) {
                     ForEach(screenZones, id: \.self) { zone in
-                        Text("Zone \(name(zone))").tag(zone)
+                        title(zone).tag(zone)
                     }
                 }
                 .fixedSize()
@@ -48,7 +57,7 @@ struct LayoutAppsView: View {
             Form {
                 ForEach(zones, id: \.self) { zone in
                     Section {
-                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, name: name, editor: editor, startApps: layout.startApps, setStartApp: setStartApp)
+                        ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, title: title, editor: editor, startApps: layout.startApps, setStartApp: setStartApp)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 8)
                                     .strokeBorder(Color.accentColor, lineWidth: 2)
@@ -57,12 +66,25 @@ struct LayoutAppsView: View {
                             }
                         addMenu(to: zone)
                     } header: {
-                        Text("Zone \(name(zone))")
+                        HStack(spacing: 6) {
+                            title(zone)
+                            Button {
+                                zoneNameDraft = layout.zoneNames[zone] ?? ""
+                                renamingZone = zone
+                            } label: { Image(systemName: "pencil") }
+                                .buttonStyle(.borderless)
+                                .help("Rename Zone")
+                        }
                     }
                     .id(zone)
                 }
             }
             .formStyle(.grouped)
+            .alert("Rename Zone", isPresented: Binding(get: { renamingZone != nil }, set: { if !$0 { renamingZone = nil } })) {
+                TextField("Zone name", text: $zoneNameDraft)
+                Button("Rename") { if let zone = renamingZone { setZoneName(zone, zoneNameDraft) } }
+                Button("Cancel", role: .cancel) {}
+            }
             .onAppear { reveal(focus, proxy) }
             .onChange(of: focus) { _, new in reveal(new, proxy) }
             }
@@ -115,7 +137,7 @@ struct LayoutAppsView: View {
 private struct ZoneAppsList: View {
     let entries: [LayoutAppEntry]
     let zones: [UUID]
-    let name: (UUID) -> String
+    let title: (UUID) -> Text
     let editor: LayoutAppsEditing
     let startApps: Set<String>
     let setStartApp: (String, Bool) -> Void
@@ -128,7 +150,7 @@ private struct ZoneAppsList: View {
         ReorderableStack(items: entries, height: height, space: "zoneApps") { from, to in
             editor.reorder(app: entries[from].bundleID, in: entries[from].zoneID, by: to - from, inZones: zones)
         } row: { entry, isCarried, drag, drop in
-            LayoutAppRow(entry: entry, zones: zones, name: name, editor: editor, isChosen: binding(for: entry), isCarried: isCarried, isOpen: opened.contains(entry.id),
+            LayoutAppRow(entry: entry, zones: zones, title: title, editor: editor, isChosen: binding(for: entry), isCarried: isCarried, isOpen: opened.contains(entry.id),
                          toggle: { toggle(entry.id) }, drag: drag, drop: drop)
                 .frame(height: height(entry), alignment: .top)
                 .overlay(alignment: .bottom) { if entry.id != entries.last?.id { Divider() } }
@@ -235,7 +257,7 @@ private struct ReorderableStack<Item: Identifiable, Row: View>: View {
 private struct LayoutAppRow: View {
     let entry: LayoutAppEntry
     let zones: [UUID]
-    let name: (UUID) -> String
+    let title: (UUID) -> Text
     let editor: LayoutAppsEditing
     @Binding var isChosen: Bool
     let isCarried: Bool
@@ -271,9 +293,9 @@ private struct LayoutAppRow: View {
                     .help("Open selected apps")
                 Menu {
                     ForEach(zones, id: \.self) { zone in
-                        Button("Zone \(name(zone))") {
+                        Button {
                             editor.move(app: entry.bundleID, from: entry.zoneID, to: zone, inZones: zones)
-                        }
+                        } label: { title(zone) }
                         .disabled(zone == entry.zoneID)
                     }
                 } label: { Image(systemName: "rectangle.split.2x2") }
