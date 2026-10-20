@@ -2530,6 +2530,287 @@
         }
       }
     },
+    "Always show" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعرض دائمًا"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Винаги показвай"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "সবসময় দেখান"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra sempre"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vždy zobrazit"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis altid"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer anzeigen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να εμφανίζεται πάντα"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar siempre"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näita alati"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "همیشه نمایش بده"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytä aina"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laging ipakita"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toujours afficher"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצג תמיד"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हमेशा दिखाएँ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uvijek prikaži"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mindig látszik"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selalu tampilkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra sempre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常に表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "항상 표시"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodyti visada"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rādīt vienmēr"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नेहमी दाखवा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sentiasa tunjuk"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis alltid"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altijd tonen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zawsze pokazuj"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar sempre"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar sempre"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afișează mereu"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всегда показывать"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vždy zobraziť"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedno prikaži"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увек прикажи"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa alltid"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "எப்போதும் காட்டு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఎల్లప్పుడూ చూపు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แสดงเสมอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her zaman göster"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показувати завжди"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ہمیشہ دکھائیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luôn hiển thị"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "始终显示"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永遠顯示"
+          }
+        }
+      }
+    },
     "An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14890,6 +15171,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在安裝…"
+          }
+        }
+      }
+    },
+    "Keep the pill in view instead of showing it only while the pointer is over it or the stack changes. The hide key still hides it until the pointer moves away." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أبقِ الكبسولة ظاهرة بدل إظهارها فقط عند وجود المؤشر فوقها أو عند تغيّر الحزمة. يظل مفتاح الإخفاء يخفيها إلى أن يبتعد المؤشر."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дръж хапчето видимо, вместо да се показва само докато показалецът е над него или когато стекът се промени. Клавишът за скриване пак го скрива, докато показалецът не се отдалечи."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "পয়েন্টার পিলের উপরে থাকলে বা স্ট্যাক বদলালে দেখানোর বদলে পিলটি সবসময় দৃশ্যমান রাখুন। লুকানোর কী এখনও পয়েন্টার সরে যাওয়া পর্যন্ত এটি লুকিয়ে রাখে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén la píndola visible en lloc de mostrar-la només quan el punter hi és a sobre o quan canvia la pila. La tecla d'amagar encara l'amaga fins que el punter s'allunya."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponechá pilulku na očích, místo aby se zobrazovala jen při najetí ukazatele nebo při změně zásobníku. Klávesa pro skrytí ji stále skryje, dokud ukazatel neodjede."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold pillen synlig i stedet for kun at vise den, når markøren er over den, eller stakken ændres. Skjul-tasten skjuler den stadig, indtil markøren flytter sig væk."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Pille sichtbar lassen, statt sie nur zu zeigen, wenn der Zeiger darüber steht oder sich der Stapel ändert. Die Ausblendtaste blendet sie weiterhin aus, bis der Zeiger weggeht."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κρατά το χάπι ορατό αντί να εμφανίζεται μόνο όταν ο δείκτης είναι πάνω του ή όταν αλλάζει η στοίβα. Το πλήκτρο απόκρυψης το κρύβει ακόμη μέχρι να απομακρυνθεί ο δείκτης."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantiene la píldora visible en lugar de mostrarla solo cuando el puntero está encima o cambia la pila. La tecla de ocultar sigue ocultándola hasta que el puntero se aleje."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoia tablett nähtaval, selle asemel et näidata seda ainult siis, kui kursor on selle kohal või virn muutub. Peitmisklahv peidab selle endiselt, kuni kursor eemaldub."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قرص را به‌جای نمایش فقط هنگام قرار گرفتن اشاره‌گر روی آن یا تغییر پشته، همیشه نمایان نگه دارید. کلید پنهان‌کردن همچنان آن را تا دور شدن اشاره‌گر پنهان می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pitää pillerin näkyvissä sen sijaan, että se näkyisi vain osoittimen ollessa sen päällä tai pinon muuttuessa. Piilotusnäppäin piilottaa sen yhä, kunnes osoitin siirtyy pois."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panatilihing nakikita ang pill sa halip na ipakita lang kapag nasa ibabaw nito ang pointer o nagbago ang stack. Itinatago pa rin ito ng hide key hanggang lumayo ang pointer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garde la pastille visible au lieu de ne l'afficher que lorsque le pointeur est dessus ou que la pile change. La touche de masquage la masque toujours jusqu'à ce que le pointeur s'éloigne."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "משאיר את הגלולה גלויה במקום להציג אותה רק כשהסמן מעליה או כשהערימה משתנה. מקש ההסתרה עדיין מסתיר אותה עד שהסמן מתרחק."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पिल को केवल तब दिखाने के बजाय जब पॉइंटर उस पर हो या स्टैक बदले, उसे हमेशा दिखाए रखें। छिपाने की कुंजी अब भी पॉइंटर के दूर जाने तक उसे छिपाती है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drži tabletu vidljivom umjesto da se prikazuje samo kad je pokazivač iznad nje ili se stog promijeni. Tipka za skrivanje i dalje je skriva dok se pokazivač ne odmakne."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A pirula mindig látható marad, nem csak akkor jelenik meg, ha a mutató fölötte van vagy a verem megváltozik. Az elrejtő billentyű továbbra is elrejti, amíg a mutató el nem távolodik."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biarkan pil tetap terlihat, bukan hanya saat penunjuk berada di atasnya atau tumpukan berubah. Tombol sembunyikan tetap menyembunyikannya sampai penunjuk menjauh."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantiene la pillola visibile invece di mostrarla solo quando il puntatore è sopra o la pila cambia. Il tasto per nascondere la nasconde comunque finché il puntatore non si allontana."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ポインタが重なっているときやスタックが変わったときだけでなく、ピルを常に表示します。非表示キーを使うと、ポインタが離れるまで非表示になります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "포인터가 위에 있거나 스택이 바뀔 때만 보이는 대신 알약을 항상 표시합니다. 숨기기 키는 포인터가 멀어질 때까지 계속 알약을 숨깁니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palikti tabletę matomą, užuot rodžius ją tik kai žymeklis virš jos arba pasikeičia dėklas. Slėpimo klavišas ir toliau paslepia ją, kol žymeklis nutolsta."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tablete paliek redzama, nevis parādās tikai tad, kad rādītājs ir virs tās vai steks mainās. Slēpšanas taustiņš to joprojām paslēpj, līdz rādītājs attālinās."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पॉइंटर गोळीवर असतानाच किंवा स्टॅक बदलल्यावरच दाखवण्याऐवजी गोळी नेहमी दिसत ठेवा. लपवण्याची कळ पॉइंटर दूर जाईपर्यंत ती अजूनही लपवते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kekalkan pil kelihatan dan bukannya hanya dipaparkan apabila penuding berada di atasnya atau tindanan berubah. Kekunci sembunyi masih menyembunyikannya sehingga penuding menjauh."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold pillen synlig i stedet for å vise den bare når pekeren er over den eller stabelen endres. Skjul-tasten skjuler den fortsatt til pekeren flytter seg bort."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd de pil in beeld in plaats van hem alleen te tonen als de aanwijzer erboven staat of de stapel verandert. De verbergtoets verbergt hem nog steeds tot de aanwijzer wegbeweegt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pigułka pozostaje widoczna zamiast pojawiać się tylko wtedy, gdy wskaźnik jest nad nią lub stos się zmienia. Klawisz ukrywania nadal ją ukrywa, dopóki wskaźnik się nie oddali."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantém a pílula visível em vez de a mostrar apenas quando o ponteiro está por cima ou a pilha muda. A tecla de ocultar continua a ocultá-la até o ponteiro se afastar."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantém a pílula visível em vez de mostrá-la apenas quando o ponteiro está sobre ela ou a pilha muda. A tecla de ocultar continua ocultando-a até o ponteiro se afastar."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Păstrează pastila vizibilă, în loc să apară doar când cursorul e deasupra ei sau când stiva se schimbă. Tasta de ascundere o ascunde în continuare până când cursorul se îndepărtează."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таблетка остаётся на виду, а не появляется только при наведении указателя или изменении стопки. Клавиша скрытия по-прежнему прячет её, пока указатель не отойдёт."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponechá pilulku na očiach namiesto zobrazenia len pri nastavení ukazovateľa nad ňu alebo pri zmene zásobníka. Kláves na skrytie ju stále skryje, kým sa ukazovateľ nevzdiali."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tableta ostane vidna, namesto da se prikaže le, ko je kazalec nad njo ali se sklad spremeni. Tipka za skrivanje jo še vedno skrije, dokler se kazalec ne odmakne."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Држи таблету видљивом уместо да се приказује само када је показивач изнад ње или се стек промени. Тастер за сакривање је и даље сакрива док се показивач не удаљи."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll pillret synligt i stället för att bara visa det när pekaren är över det eller stapeln ändras. Dölj-tangenten döljer det fortfarande tills pekaren flyttas bort."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சுட்டி மேலே இருக்கும்போது அல்லது அடுக்கு மாறும்போது மட்டும் காட்டாமல் மாத்திரையை எப்போதும் தெரியும்படி வைக்கவும். மறைக்கும் விசை சுட்டி விலகும் வரை அதை இன்னும் மறைக்கும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "పాయింటర్ దానిపై ఉన్నప్పుడు లేదా స్టాక్ మారినప్పుడు మాత్రమే చూపకుండా మాత్రను ఎల్లప్పుడూ కనిపించేలా ఉంచండి. పాయింటర్ దూరంగా వెళ్లే వరకు దాచే కీ ఇప్పటికీ దానిని దాచిపెడుతుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คงแคปซูลให้มองเห็นอยู่ แทนที่จะแสดงเฉพาะเมื่อตัวชี้อยู่เหนือมันหรือสแตกเปลี่ยน ปุ่มซ่อนยังซ่อนมันไว้จนกว่าตัวชี้จะเลื่อนออกไป"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapı yalnızca imleç üzerindeyken ya da yığın değişince göstermek yerine her zaman görünür tutar. Gizleme tuşu imleç uzaklaşana kadar yine de onu gizler."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таблетка залишається на виду, а не з'являється лише коли вказівник над нею або змінюється стос. Клавіша приховування все одно ховає її, поки вказівник не відійде."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "گولی کو صرف اس وقت دکھانے کے بجائے جب پوائنٹر اس پر ہو یا اسٹیک بدلے، اسے ہمیشہ نظر آتا رکھیں۔ چھپانے کی کلید اب بھی پوائنٹر کے دور جانے تک اسے چھپاتی ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giữ viên thuốc luôn hiển thị thay vì chỉ hiện khi con trỏ ở trên nó hoặc ngăn xếp thay đổi. Phím ẩn vẫn ẩn nó cho đến khi con trỏ rời đi."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让胶囊始终可见，而不是仅在指针位于其上或堆栈变化时显示。隐藏键仍会将其隐藏，直到指针移开。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讓膠囊持續可見，而不是只在指標位於其上或堆疊變更時顯示。隱藏鍵仍會將其隱藏，直到指標移開。"
           }
         }
       }
