@@ -4,10 +4,13 @@ import PaneFlipCore
 
 /// Scrolls the layout at once when the pointer reaches the left or right edge of a screen: the zones beyond that edge come into
 /// view. While the pointer stays there it goes on, a rest position at a time, until there is nothing more that way; after that
-/// the pointer must leave the edge and come back to scroll again.
+/// the pointer must leave the edge and come back to scroll again. The ends of the edge, near the corners, are left alone: macOS
+/// Hot Corners need the pointer there.
 final class EdgeScroller {
     /// How close to the edge of the screen counts as at the edge, in points (the pointer stops at the edge itself).
     private static let reach: CGFloat = 2
+    /// How much of the edge at each end belongs to the corners (Hot Corners), in points: the pointer there scrolls nothing.
+    private static let corner: CGFloat = 120
 
     private let listener: PointerMoveListening
     private let screens: ScreenProviding
@@ -65,7 +68,7 @@ final class EdgeScroller {
     /// asks for plain frames only.
     private func edge(at point: CGPoint) -> (frame: CGRect, edge: ScreenEdge)? {
         for frame in screens.frames {
-            guard point.y >= frame.minY, point.y <= frame.maxY else { continue }
+            guard point.y >= frame.minY + Self.corner, point.y <= frame.maxY - Self.corner else { continue }
             if point.x >= frame.minX - 1, point.x <= frame.minX + Self.reach { return (frame, .left) }
             if point.x <= frame.maxX + 1, point.x >= frame.maxX - Self.reach { return (frame, .right) }
         }

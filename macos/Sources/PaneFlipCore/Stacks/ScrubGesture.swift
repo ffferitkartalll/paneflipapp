@@ -7,6 +7,7 @@ public struct ScrubGesture: Equatable {
     /// How far the content has been taken, in points.
     public private(set) var offset: CGFloat = 0
     private var samples: [(time: TimeInterval, offset: CGFloat)] = []
+    private var limits: ClosedRange<CGFloat> = -.infinity ... .infinity
 
     /// A fast flick counts from this speed (points per second) and this distance, whatever the zone's width.
     public static let flickSpeed: CGFloat = 450
@@ -20,8 +21,27 @@ public struct ScrubGesture: Equatable {
 
     public static func == (a: ScrubGesture, b: ScrubGesture) -> Bool { a.offset == b.offset }
 
+    /// Where the offset may go for the window `current` of `count` in a zone `zoneWidth` wide: not past the first window (to the
+    /// right) nor the last (to the left), so nothing of the pictures' ends ever shows.
+    public static func range(zoneWidth: CGFloat, current: Int, count: Int) -> ClosedRange<CGFloat> {
+        -CGFloat(max(count - 1 - current, 0)) * zoneWidth ... CGFloat(max(current, 0)) * zoneWidth
+    }
+
+    /// Keeps the offset inside `range` from now on; the fingers going on past an end change nothing.
+    public mutating func limit(to range: ClosedRange<CGFloat>) {
+        limits = range
+        offset = min(max(offset, range.lowerBound), range.upperBound)
+    }
+
+    /// The fingers came down again while the content still glided: the swipe goes on from where the content is (`offset`), and the speed
+    /// of the earlier swipe is forgotten.
+    public mutating func resume(at offset: CGFloat) {
+        self.offset = min(max(offset, limits.lowerBound), limits.upperBound)
+        samples = []
+    }
+
     public mutating func add(_ delta: CGFloat, at time: TimeInterval) {
-        offset += delta
+        offset = min(max(offset + delta, limits.lowerBound), limits.upperBound)
         samples.append((time, offset))
         samples.removeAll { time - $0.time > Self.window * 3 }
     }

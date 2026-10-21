@@ -20,6 +20,11 @@ protocol SlideStaging {
     /// zone and follow `scrub`; `endScrub` lets go. False when there is nothing to show (no screen shows the zone).
     func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool
 
+    /// The fingers came down again while the pictures of a swipe still glide to their windows: the pictures stop where they are and
+    /// follow the fingers again (`scrub`, `endScrub`). Returns how far they are from the window in front, which is where the new
+    /// swipe goes on from; nil when no such glide runs.
+    func catchScrub() -> CGFloat?
+
     /// Takes the pictures `offset` points from where they began (to the right is positive: the windows before come in). Past the
     /// first or the last the pictures give way a little and pull back.
     func scrub(to offset: CGFloat)

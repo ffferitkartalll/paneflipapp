@@ -36,6 +36,43 @@ final class ScrubGestureTests: XCTestCase {
         XCTAssertEqual(far.shift(zoneWidth: 400, current: 2, count: 3), 0)
     }
 
+    func testTheOffsetStaysBetweenTheFirstAndTheLastWindow() {
+        let range = ScrubGesture.range(zoneWidth: 400, current: 1, count: 4)
+        XCTAssertEqual(range, -800 ... 400, "one window before it, two after it")
+        XCTAssertEqual(ScrubGesture.range(zoneWidth: 400, current: 0, count: 1), 0 ... 0)
+
+        var gesture = ScrubGesture()
+        gesture.limit(to: range)
+        gesture.add(500, at: 0)
+        XCTAssertEqual(gesture.offset, 400, "no further to the right than the first window")
+        gesture.add(-100, at: 0.1)
+        XCTAssertEqual(gesture.offset, 300, "going back starts at once: the pull past the end is not kept")
+        gesture.add(-2000, at: 0.2)
+        XCTAssertEqual(gesture.offset, -800)
+        XCTAssertEqual(gesture.speed, 0, accuracy: 0.001, "a flick that runs into the end does not carry on")
+    }
+
+    func testNewFingersGoOnFromWhereTheContentIsAndForgetTheSpeedOfTheOldSwipe() {
+        var gesture = ScrubGesture()
+        gesture.limit(to: -800 ... 400)
+        gesture.add(-100, at: 0)
+        gesture.add(-300, at: 0.05)   // a hard flick
+        gesture.resume(at: -150)
+        XCTAssertEqual(gesture.offset, -150)
+        XCTAssertEqual(gesture.speed, 0)
+        gesture.add(-30, at: 1)
+        XCTAssertEqual(gesture.offset, -180, "the swipe goes on from there")
+        gesture.resume(at: -5000)
+        XCTAssertEqual(gesture.offset, -800, "and still within the first and the last window")
+    }
+
+    func testLimitsCutWhatTheFingersAlreadyDid() {
+        var gesture = ScrubGesture()
+        gesture.add(900, at: 0)
+        gesture.limit(to: -400 ... 400)
+        XCTAssertEqual(gesture.offset, 400)
+    }
+
     func testAFlickBackAfterAWideSwipeCancels() {
         let swipeAndBack = swipe([(-200, 0), (-50, 0.1), (60, 0.2), (80, 0.25)])   // taken far left, flicked back right
         XCTAssertEqual(swipeAndBack.shift(zoneWidth: 400, current: 1, count: 3), 0)

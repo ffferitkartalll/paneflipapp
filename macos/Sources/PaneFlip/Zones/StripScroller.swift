@@ -164,6 +164,8 @@ final class StripScroller {
         var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
         current.led = led
+        // The fingers cannot take the layout past its first and its last rest: nothing of the ends gives way, and going back is followed at once.
+        if led { current.gesture.limit(to: offset - geometry.range.upperBound ... offset - geometry.range.lowerBound) }
         let fronts = current.held.filter(\.isFront)
         guard !reduceMotion(), !fronts.isEmpty else {
             guard !led else { return false }   // nothing to show the fingers' work with: the caller steps instead
@@ -345,6 +347,13 @@ final class StripScroller {
     @discardableResult
     func beginLed() -> Bool {
         revealing = nil
+        // Fingers that come down while the layout still glides to its rest position take it over where it is.
+        if var current = scrolling, current.led, current.released, current.phase == .gliding {
+            current.released = false
+            current.gesture.resume(at: current.start - current.shown)
+            scrolling = current
+            return true
+        }
         guard scrolling == nil else { return false }
         let all = screens.screens()
         guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first,
@@ -369,15 +378,8 @@ final class StripScroller {
         if current.phase == .gliding { glideOn() }
     }
 
-    /// Where the layout stands for the fingers' work so far: the start less what the content was taken, held in the range with a little
-    /// give past its ends.
-    private func ledPosition(_ current: Scrolling) -> CGFloat {
-        let range = current.geometry.range
-        let wanted = current.start - current.gesture.offset
-        if wanted > range.upperBound { return range.upperBound + min((wanted - range.upperBound) * 0.28, 70) }
-        if wanted < range.lowerBound { return range.lowerBound - min((range.lowerBound - wanted) * 0.28, 70) }
-        return wanted
-    }
+    /// Where the layout stands for the fingers' work so far: the start less what the content was taken (the gesture keeps that inside the range).
+    private func ledPosition(_ current: Scrolling) -> CGFloat { current.start - current.gesture.offset }
 
     private func followFingers() {
         guard var current = scrolling, current.led, current.phase == .gliding else { return }
@@ -404,7 +406,8 @@ final class StripScroller {
 
     /// One frame of the display: the pictures glide on to the target.
     private func frame() -> Bool {
-        guard var current = scrolling, current.phase == .gliding else {
+        // A glide the fingers have taken over again waits for them.
+        guard var current = scrolling, current.phase == .gliding, !(current.led && !current.released) else {
             ticking = false
             return false
         }

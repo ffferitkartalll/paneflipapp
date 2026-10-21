@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import PaneFlipCore
 
 /// Listens with an event tap, which (unlike a monitor) can keep the scrolling from the app under the pointer, and needs only the
 /// Accessibility permission the app already has.
@@ -14,6 +15,8 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     /// How far the content goes for each point the fingers scroll; read when two fingers come down.
     private let gain: () -> CGFloat
     private var gestureGain: CGFloat = 1
+    /// Whether the swipe in progress is a horizontal one: decided in its first points, kept to its end.
+    private var axis = AxisLock()
 
     init(gain: @escaping () -> CGFloat, target: @escaping () -> ScrollSwitchTarget?) {
         self.gain = gain
@@ -50,6 +53,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         if inGesture, aimed != gestureTarget {
             inGesture = false
             gestureTarget = nil
+            axis = AxisLock()
             send(.ended)
         }
         guard let aimed else { return Unmanaged.passUnretained(event) }
@@ -63,23 +67,27 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             return nil
         }
 
-        // Two fingers: the content follows them. Whichever way they go counts, up or down as well as left or right.
-        let vertical = event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)
-        let horizontal = event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)
-        let delta = CGFloat(abs(vertical) >= abs(horizontal) ? vertical : horizontal)
+        // Two fingers: the content follows them to the left and the right, in a swipe that began that way (see `AxisLock`); a swipe that
+        // began up or down moves nothing, however it goes on.
         let phase = event.getIntegerValueField(.scrollWheelEventScrollPhase)   // 1 began, 2 changed, 4 ended, 8 cancelled
+        if phase == 1 { axis = AxisLock() }
+        let delta = axis.add(horizontal: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)),
+                             vertical: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))
         let finished = phase == 4 || phase == 8
-        if !inGesture && !finished {
+        if !inGesture && !finished && delta != 0 {
             inGesture = true
             gestureTarget = aimed
             gestureGain = gain()
             send(.began(aimed))
         }
         if delta != 0 && !finished { send(.moved(delta * gestureGain, at: TimeInterval(event.timestamp) / 1e9)) }
-        if finished && inGesture {
-            inGesture = false
-            gestureTarget = nil
-            send(.ended)
+        if finished {
+            axis = AxisLock()
+            if inGesture {
+                inGesture = false
+                gestureTarget = nil
+                send(.ended)
+            }
         }
         return nil
     }

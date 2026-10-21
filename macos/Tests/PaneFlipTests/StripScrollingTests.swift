@@ -187,6 +187,47 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 250, "the rest position beyond: the area is in view")
     }
 
+    func testTheFingersCannotTakeTheLayoutPastItsFirstOrItsLastPosition() {
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed())
+        for _ in 0 ..< 3 { run(30); settle() }
+        scroller.moveLed(by: 300, at: 0)
+        XCTAssertEqual(stage.shifts.last, 0, "nothing beyond the first position gives way")
+        scroller.moveLed(by: -900, at: 0.5)
+        XCTAssertEqual(stage.shifts.last, -250, "nor beyond the last: the area beyond the edge is just in view")
+        scroller.moveLed(by: 40, at: 1.0)
+        XCTAssertEqual(stage.shifts.last, -210, "going back is followed at once")
+        scroller.endLed()
+    }
+
+    func testNewFingersTakeTheLayoutOverWhileItStillGlidesToItsRest() {
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed())
+        for _ in 0 ..< 3 { run(30); settle() }
+        scroller.moveLed(by: -200, at: 0)
+        scroller.endLed()
+        run(10)   // a little way into the glide toward the rest position beyond
+        let glidingAt = stage.shifts.last
+        XCTAssertNotEqual(glidingAt, 0)
+
+        XCTAssertTrue(scroller.beginLed(), "the fingers come down again: the glide is theirs")
+        let shifts = stage.shifts.count
+        run(60)
+        XCTAssertEqual(stage.shifts.count, shifts, "the glide waits for the fingers, it does not go on by itself")
+
+        scroller.moveLed(by: 20, at: 1.0)
+        XCTAssertEqual(stage.shifts.last ?? 0, (glidingAt ?? 0) + 20, accuracy: 0.001, "the layout follows them from where it was")
+        scroller.moveLed(by: 400, at: 1.3)
+        XCTAssertEqual(stage.shifts.last, 0, "taken back past where it began, it stops at the first position")
+        scroller.endLed()
+        for _ in 0 ..< 4 { run(60); settle() }
+        XCTAssertEqual(viewport.offset(for: key), 0, "and comes to rest there")
+    }
+
     func testAShortSwipeGoesBackToWhereTheLayoutWas() {
         let scroller = scroller()
         scroller.start()
@@ -548,5 +589,17 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertFalse(pointerMoves.isListening, "the pointer is not watched while the setting is off")
     }
 
-    private func pointer_(at x: CGFloat) { pointerMoves.move(to: CGPoint(x: x, y: 250)) }
+    func testTheCornersAreLeftToHotCorners() {
+        _ = edgeScroller()
+        for y: CGFloat in [0, 60, 119, 381, 440, 500] { pointer_(at: 999.5, y: y) }   // the 120 pt at each end of the edge
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 0, "the pointer on its way to a corner scrolls nothing")
+        XCTAssertTrue(stage.begun.isEmpty)
+
+        pointer_(at: 999.5, y: 380)   // just out of the corner area
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
+    }
+
+    private func pointer_(at x: CGFloat, y: CGFloat = 250) { pointerMoves.move(to: CGPoint(x: x, y: y)) }
 }
