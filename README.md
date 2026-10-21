@@ -13,6 +13,7 @@
 
 <p align="center">
   <a href="#install-a-release">Install</a> ·
+  <a href="#quick-look">Quick look</a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="#features">Features</a> ·
   <a href="#shortcuts">Shortcuts</a> ·
@@ -23,6 +24,12 @@
 PaneFlip is a native macOS menu-bar app (Swift, SwiftUI, Liquid Glass). It lays your screens out in zones that you draw,
 puts each app where it belongs, and lets several apps share one zone: a small glass pill over the zone switches between
 them. Your layouts and settings stay on your Mac, and the app is free and open source.
+
+## Quick look
+
+<p align="center">
+  <video src="https://github.com/ffferitkartalll/paneflipapp/raw/main/docs/paneflip-promo.mp4" poster="docs/banner.jpg" width="100%" autoplay muted loop playsinline></video>
+</p>
 
 ## How it works
 
