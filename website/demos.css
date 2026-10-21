@@ -1,0 +1,90 @@
+/* Animated mock-ups for the feature sections. Sizes use cqw (1% of the frame's width) so a demo scales as a whole. */
+:root { --ease: cubic-bezier(.4, 0, .2, 1); }
+.feature { padding: 72px 0 8px; }
+.feature-inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 52px; align-items: center; }
+.feature.rev .copy { order: 2; }
+@media (max-width: 860px) {
+  .feature-inner { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .feature.rev .copy { order: 0; }
+}
+.kicker { color: var(--mint); text-transform: uppercase; letter-spacing: .12em; font-size: 14px; font-weight: 700; margin: 0 0 8px; }
+.feature h3 { font-size: clamp(28px, 3.4vw, 38px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.01em; }
+.feature .blurb { color: var(--muted); margin: 0; }
+
+.keys { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: center; font-size: 15px; color: var(--muted); }
+.keys li { display: inline-flex; align-items: center; gap: 8px; }
+.keys em { font-style: normal; color: var(--text); }
+
+.frame {
+  position: relative; aspect-ratio: 16 / 10; border-radius: 18px; overflow: hidden; container-type: inline-size;
+  background: #062820; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+}
+.mb {
+  position: absolute; inset: 0 0 auto 0; height: 4.4cqw; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2cqw; background: rgba(0, 0, 0, .3); z-index: 5;
+}
+.mb .l, .mb .r { display: flex; align-items: center; gap: 1.4cqw; }
+.mb i { display: block; height: 1cqw; border-radius: 1cqw; background: rgba(255, 255, 255, .26); }
+.mb .app { width: 2.4cqw; height: 2.4cqw; border-radius: .7cqw; background: var(--mint); }
+.screen { position: absolute; inset: 4.4cqw 0 0 0; background: #0b3f33; }
+.clip { position: absolute; inset: 0; overflow: hidden; }
+.strip { position: absolute; inset: 0; transition: transform 1.5s var(--ease); }
+.frame.nt *, .frame.static * { transition: none !important; }
+
+.win {
+  position: absolute; border-radius: 1.5cqw; overflow: hidden; box-shadow: 0 .6cqw 1.8cqw rgba(0, 0, 0, .28);
+  transition: left .9s var(--ease), top .9s var(--ease), width .9s var(--ease), height .9s var(--ease), opacity .5s, transform .9s var(--ease);
+}
+.win .bar { display: flex; align-items: center; gap: .6cqw; padding: 1.3cqw 1.6cqw 0; }
+.win .bar b { width: .9cqw; height: .9cqw; border-radius: 50%; background: color-mix(in srgb, currentColor 35%, transparent); }
+.win .bar span { width: 28%; height: .8cqw; margin-left: 1cqw; border-radius: 1cqw; background: color-mix(in srgb, currentColor 25%, transparent); }
+.win .blk { position: absolute; inset: 4.6cqw 1.6cqw 1.6cqw; border-radius: 1cqw; background: color-mix(in srgb, currentColor 12%, transparent); overflow: hidden; }
+.win .blk::before { content: ""; position: absolute; left: 1.4cqw; top: 1.4cqw; width: 46%; height: .8cqw; border-radius: 1cqw; background: color-mix(in srgb, currentColor 24%, transparent); box-shadow: 0 1.7cqw 0 -0cqw color-mix(in srgb, currentColor 24%, transparent); }
+.win.p2 .blk::before { width: 22%; height: 22%; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: none; }
+.win.p3 .blk::before { inset: 1.4cqw auto 1.4cqw 1.4cqw; width: 46%; height: auto; border-radius: 1cqw; box-shadow: 1.4cqw 0 0 0 transparent; }
+.win.p3 .blk::after { content: ""; position: absolute; inset: 1.4cqw 1.4cqw 1.4cqw auto; width: 40%; border-radius: 1cqw; background: color-mix(in srgb, currentColor 24%, transparent); }
+.w1 { background: #f4fbf8; color: #0b3d31; } .w2 { background: #9fecd3; color: #0b3d31; } .w3 { background: #1d8a70; color: #fff; }
+.w4 { background: #0e5444; color: #fff; } .w5 { background: #dcefe6; color: #0b3d31; } .w6 { background: #fff; color: #0b3d31; } .w7 { background: #2ba386; color: #fff; }
+
+.zo { position: absolute; border-radius: 1.5cqw; border: .25cqw dashed rgba(59, 232, 176, .55); background: rgba(59, 232, 176, .05); transition: opacity .5s, left .9s var(--ease), top .9s var(--ease), width .9s var(--ease), height .9s var(--ease); }
+.hl { position: absolute; border-radius: 1.5cqw; border: .3cqw solid var(--mint); background: rgba(59, 232, 176, .16); opacity: 0; transition: opacity .35s; pointer-events: none; z-index: 3; }
+.hl.on { opacity: 1; }
+
+.stack { position: absolute; border-radius: 1.5cqw; overflow: hidden; }
+.stack .win { left: 0; top: 0; width: 100%; height: 100%; box-shadow: none; border-radius: 0; transition: transform .8s var(--ease); }
+.pill {
+  position: absolute; display: flex; padding: .7cqw; border-radius: 99px; background: #083428; border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: 0 .8cqw 2cqw rgba(0, 0, 0, .4); z-index: 10; transform: translateX(-50%);
+}
+.pill .cell { width: 4cqw; height: 3.2cqw; display: grid; place-items: center; }
+.pill .cell i { width: 1.5cqw; height: 1.5cqw; border-radius: 50%; background: #9fe6cc; opacity: .85; }
+.pill .cap { position: absolute; left: .7cqw; top: .7cqw; width: 4cqw; height: 3.2cqw; border-radius: 99px; background: var(--mint); display: grid; place-items: center; transition: transform .8s var(--ease); }
+.pill .cap::after { content: ""; width: 1.3cqw; height: 1.3cqw; border-radius: .4cqw; background: #083428; }
+
+.cur { position: absolute; width: 2.4cqw; z-index: 30; pointer-events: none; opacity: 0; transition: left .95s var(--ease), top .95s var(--ease), opacity .4s; filter: drop-shadow(0 .2cqw .3cqw rgba(0, 0, 0, .5)); }
+.cur svg { display: block; width: 100%; height: auto; }
+.rip { position: absolute; width: 1cqw; height: 1cqw; border-radius: 50%; border: .3cqw solid var(--mint); z-index: 29; pointer-events: none; opacity: 0; transform: translate(-50%, -50%); }
+.rip.go { animation: rip .6s ease-out; }
+@keyframes rip { from { opacity: .9; width: 1cqw; height: 1cqw; } to { opacity: 0; width: 5cqw; height: 5cqw; } }
+
+.keys { min-height: 44px; }
+.keys kbd { transition: transform .2s var(--ease), background .2s, color .2s, box-shadow .2s; }
+.keys kbd.on { background: var(--mint); color: var(--ink); border-color: var(--mint); transform: translateY(-3px); box-shadow: 0 5px 0 rgba(0, 0, 0, .28); }
+.keys .touch { position: relative; display: inline-block; width: 52px; height: 32px; border-radius: 8px; border: 1.5px solid rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .06); vertical-align: middle; transition: border-color .3s, background .3s; }
+.keys .touch.live { border-color: var(--mint); background: rgba(59, 232, 176, .1); }
+.keys .touch .f { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--mint); opacity: .25; transition: opacity .3s, transform 1.4s var(--ease); }
+.keys .touch.down .f { opacity: 1; }
+
+.edge { position: absolute; top: 28%; height: 44%; width: 3.2cqw; border-radius: 1.2cqw; border: .25cqw dashed rgba(59, 232, 176, .7); background: rgba(59, 232, 176, .06); z-index: 8; display: grid; place-items: center; color: var(--mint); font-size: 2.4cqw; font-weight: 700; transition: opacity .5s; }
+.edge.r { right: .6cqw; } .edge.l { left: .6cqw; opacity: 0; }
+
+.z { position: absolute; transition: left .9s var(--ease), top .9s var(--ease), width .9s var(--ease), height .9s var(--ease), opacity .5s; }
+.z .zf { position: absolute; inset: 0; border-radius: 1.5cqw; border: .25cqw dashed rgba(59, 232, 176, .7); background: rgba(59, 232, 176, .08); display: grid; place-items: center; font: 700 4cqw/1 inherit; color: rgba(59, 232, 176, .8); }
+.dd {
+  position: absolute; right: 1.2cqw; top: .4cqw; width: 27cqw; padding: .6cqw; border-radius: 1.4cqw; z-index: 25; background: rgba(6, 40, 32, .97);
+  border: 1px solid var(--line); box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .5); opacity: 0; transform: translateY(-1cqw); transition: opacity .3s, transform .3s;
+}
+.dd.show { opacity: 1; transform: none; }
+.dd div { height: 4.4cqw; display: flex; align-items: center; gap: 1cqw; padding: 0 1.4cqw; border-radius: 1cqw; font-size: 2cqw; white-space: nowrap; color: var(--text); transition: background .2s, color .2s; }
+.dd div.on { background: var(--mint); color: #062820; }
+.dd div b { width: 2cqw; font-weight: 700; }
