@@ -48,6 +48,8 @@ final class PanelSlideStage: SlideStaging {
         var fading = false
         /// The first start has happened (the pictures had their few frames on screen): an extension before it would start it twice.
         var started = false
+        /// The slide is the glide of a swipe the fingers led: its pictures, the window they glide to (an index) and the zone's width.
+        var swipe: (layers: [CALayer], current: Int, width: CGFloat)?
 
         init(clip: CALayer, zone: CGRect, forward: Bool, completion: @escaping () -> Void) {
             self.clip = clip
@@ -67,10 +69,6 @@ final class PanelSlideStage: SlideStaging {
         let width: CGFloat
     }
     private var scrubbing: Scrubbing?
-
-    /// How much of a pull past the first or the last window the pictures follow, and the most they give way.
-    private static let giveWay: CGFloat = 0.28
-    private static let giveWayLimit: CGFloat = 70
 
     func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool {
         let cocoaZone = screens.flip(zone)
@@ -94,17 +92,32 @@ final class PanelSlideStage: SlideStaging {
 
     func scrub(to offset: CGFloat) {
         guard let s = scrubbing else { return }
-        // The pictures stop being led past the first and the last window: they follow a little, with less and less of the pull.
-        let most = CGFloat(s.current) * s.width, least = -CGFloat(s.layers.count - 1 - s.current) * s.width
-        var shown = offset
-        if shown > most { shown = most + min((shown - most) * Self.giveWay, Self.giveWayLimit) }
-        if shown < least { shown = least - min((least - shown) * Self.giveWay, Self.giveWayLimit) }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         for (index, layer) in s.layers.enumerated() {
-            layer.position.x = CGFloat(index - s.current) * s.width + layer.bounds.width / 2 + shown
+            layer.position.x = CGFloat(index - s.current) * s.width + layer.bounds.width / 2 + offset
         }
         CATransaction.commit()
+    }
+
+    func catchScrub() -> CGFloat? {
+        guard scrubbing == nil, let slide = running, let swipe = slide.swipe, let first = swipe.layers.first else { return nil }
+        // Whatever was going to happen at the end of the glide is called off, the pictures stay where they are.
+        slide.generation += 1
+        if slide.fading {
+            slide.fading = false
+            slide.clip.removeAnimation(forKey: "fade")
+        }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        let from = (first.presentation() ?? first).position.x - first.bounds.width / 2
+        for layer in swipe.layers {
+            layer.position = (layer.presentation() ?? layer).position
+            layer.removeAnimation(forKey: "slide")
+        }
+        CATransaction.commit()
+        scrubbing = Scrubbing(slide: slide, layers: swipe.layers, current: swipe.current, width: swipe.width)
+        return from + CGFloat(swipe.current) * swipe.width   // the first picture rests `current` windows to the left of the one in front
     }
 
     func endScrub(shift: Int, covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
@@ -113,6 +126,7 @@ final class PanelSlideStage: SlideStaging {
             return completion()
         }
         scrubbing = nil
+        s.slide.swipe = (s.layers, s.current + shift, s.width)
         s.slide.completion = completion
         s.slide.items = s.layers.enumerated().map { index, layer in
             .init(layer: layer, restLeft: CGFloat(index - s.current - shift) * s.width)

@@ -322,6 +322,52 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 4)
     }
 
+    func testTheSwipeIsNotLedPastTheFirstOrTheLastWindow() {
+        let (stage, _, zone) = scrubSetUp()   // three windows of 400 pt, the middle one in front
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: 900, at: 0)
+        XCTAssertEqual(stage.scrubOffsets.last, 400, "the first window's left edge is where the pictures stop")
+        coordinator.moveWindowScrub(by: -2400, at: 0.5)
+        XCTAssertEqual(stage.scrubOffsets.last, -400, "and the last window's")
+        coordinator.endWindowScrub()
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: -500, at: 0)
+        XCTAssertEqual(stage.scrubOffsets.last, 0, "the last window is in front: nothing more that way")
+        coordinator.moveWindowScrub(by: 60, at: 0.2)
+        XCTAssertEqual(stage.scrubOffsets.last, 60, "coming back is followed at once")
+        coordinator.endWindowScrub()
+    }
+
+    func testFingersThatComeDownWhileThePicturesGlideTakeThemOverWhereTheyAre() {
+        let (stage, snapshots, zone) = scrubSetUp()
+        stage.holdsGlide = true
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: -300, at: 0)
+        coordinator.endWindowScrub()
+        XCTAssertEqual(stage.scrubEnded, [1])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+        XCTAssertTrue(coordinator.isSliding, "the pictures still glide")
+
+        // New fingers, while they glide: no new photographs and no new start, the pictures are taken over 120 pt short of their window.
+        let photographs = snapshots.requests
+        stage.glidingAt = 120
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        XCTAssertEqual(stage.catches, 1)
+        XCTAssertEqual(stage.scrubBegun.count, 1, "the pictures are the ones that were gliding")
+        XCTAssertEqual(snapshots.requests, photographs)
+        XCTAssertEqual(stage.scrubOffsets.last, 120, "they stand where they were")
+        coordinator.moveWindowScrub(by: -50, at: 1.0)
+        XCTAssertEqual(stage.scrubOffsets.last, 70, "and follow the fingers from there")
+
+        coordinator.moveWindowScrub(by: -300, at: 1.2)
+        XCTAssertEqual(stage.scrubOffsets.last, 0, "the last window still is the end")
+        coordinator.endWindowScrub()
+    }
+
     func testTheEndMayComeBeforeThePicturesAndIsActedOnWhenTheyArrive() {
         let (stage, snapshots, zone) = scrubSetUp()
         snapshots.answersAtOnce = false

@@ -22,6 +22,11 @@ final class ZoneCarousel {
     private var extending = false
     /// The pictures are on the stage (the slide is not still waiting for its photographs).
     private var onStage = false
+    /// The windows the pictures of a swipe the fingers led show, in order, from when it began until its glide has ended.
+    private var swiped: [CGWindowID]?
+
+    /// The pictures of a swipe still glide to their window: new fingers can take them over (`beginScrub`).
+    var isSettlingSwipe: Bool { isSliding && swiped != nil }
 
     init(snapshots: WindowSnapshotting, stage: SlideStaging, reduceMotion: @escaping () -> Bool,
          background: @escaping (@escaping () -> Void) -> Void, giveUpAfter: TimeInterval = 3) {
@@ -97,10 +102,12 @@ final class ZoneCarousel {
 
     /// The pictures of the zone's windows (`windows` in order, `current` the one in front) go on the stage, to follow the fingers
     /// (`scrub`). `ready` gets the windows that have a picture, in order, or nil when there is nothing to lead: motion is reduced, a
-    /// slide runs, or the window in front could not be photographed. From the call until `endScrub` (or a nil `ready`) the carousel
-    /// counts as sliding, so nothing else slides.
-    func beginScrub(windows: [WindowRef], current: CGWindowID, in zone: CGRect, ready: @escaping ([CGWindowID]?) -> Void) {
-        guard !isSliding, !reduceMotion() else { return ready(nil) }
+    /// slide runs, or the window in front could not be photographed; and, when the pictures were taken over from a swipe that still glided, how far they are from the window in front.
+    /// From the call until `endScrub` (or a nil `ready`) the carousel counts as sliding, so nothing else slides. The pictures of an
+    /// earlier swipe that still glide are taken over where they are, with no new photographs.
+    func beginScrub(windows: [WindowRef], current: CGWindowID, in zone: CGRect, ready: @escaping ([CGWindowID]?, CGFloat?) -> Void) {
+        if isSettlingSwipe, let shown = swiped, shown.contains(current), let carried = stage.catchScrub() { return ready(shown, carried) }
+        guard !isSliding, !reduceMotion() else { return ready(nil, nil) }
         isSliding = true
         snapshots.snapshots(of: windows) { [weak self] images in
             guard let self else { return }
@@ -108,10 +115,11 @@ final class ZoneCarousel {
             guard let index = shown.firstIndex(where: { $0.id == current }),
                   stage.beginScrub(pictures: shown.compactMap { images[$0.id] }, current: index, in: zone) else {
                 isSliding = false
-                return ready(nil)
+                return ready(nil, nil)
             }
             onStage = true
-            ready(shown.map(\.id))
+            swiped = shown.map(\.id)
+            ready(swiped, nil)
         }
     }
 
@@ -129,6 +137,7 @@ final class ZoneCarousel {
             self?.isSliding = false
             self?.running = nil
             self?.onStage = false
+            self?.swiped = nil
         }
     }
 }

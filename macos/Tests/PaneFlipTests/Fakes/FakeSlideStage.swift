@@ -43,9 +43,23 @@ final class FakeSlideStage: SlideStaging {
 
     func scrub(to offset: CGFloat) { scrubOffsets.append(offset) }
 
+    /// How far the pictures of a gliding swipe are when new fingers take them over; nil: no swipe glides.
+    var glidingAt: CGFloat?
+    private(set) var catches = 0
+    func catchScrub() -> CGFloat? {
+        guard let glidingAt else { return nil }
+        catches += 1
+        return glidingAt
+    }
+
+    /// The glide after the fingers lift goes on until `endGlide` (new fingers can take the pictures over meanwhile).
+    var holdsGlide = false
+    private var glideEnd: (() -> Void)?
+    func endGlide() { glideEnd?(); glideEnd = nil }
+
     func endScrub(shift: Int, covered: @escaping (_ done: @escaping () -> Void) -> Void, completion: @escaping () -> Void) {
         scrubEnded.append(shift)
         covered {}
-        completion()
+        if holdsGlide { glideEnd = completion } else { completion() }
     }
 }

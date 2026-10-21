@@ -234,7 +234,7 @@ final class StackCoordinator {
 
     /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through.
     func beginWindowScrub(at point: CGPoint) {
-        guard windowScrub == nil, !placementOnly(), !isSliding,
+        guard windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
               let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }),
               stack.tabs.count > 1, let start = stack.activeID else { return }
         let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
@@ -244,10 +244,12 @@ final class StackCoordinator {
             if self?.windowScrub === scrub { self?.endWindowScrub() }
         }
         guard let carousel else { scrub.failed = true; return }
-        carousel.beginScrub(windows: stack.tabs.compactMap { stack.refs[$0.id] }, current: start, in: scrub.rect) { [weak self] shown in
+        carousel.beginScrub(windows: stack.tabs.compactMap { stack.refs[$0.id] }, current: start, in: scrub.rect) { [weak self] shown, carried in
             guard let self, windowScrub === scrub else { return }
             if let shown {
                 scrub.windows = shown
+                scrub.gesture.limit(to: ScrubGesture.range(zoneWidth: scrub.rect.width, current: shown.firstIndex(of: start) ?? 0, count: shown.count))
+                if let carried { scrub.gesture.resume(at: carried) }   // fingers that took over a gliding swipe go on from where its pictures are
                 scrub.ready = true
                 carousel.scrub(to: scrub.gesture.offset)
             } else {
