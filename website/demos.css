@@ -17,7 +17,7 @@
 
 .frame {
   position: relative; aspect-ratio: 16 / 10; border-radius: 18px; overflow: hidden; container-type: inline-size;
-  background: #062820; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+  background: var(--frame); border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
 }
 .mb {
   position: absolute; inset: 0 0 auto 0; height: 4.4cqw; display: flex; align-items: center; justify-content: space-between;
@@ -26,7 +26,7 @@
 .mb .l, .mb .r { display: flex; align-items: center; gap: 1.4cqw; }
 .mb i { display: block; height: 1cqw; border-radius: 1cqw; background: rgba(255, 255, 255, .26); }
 .mb .app { width: 2.4cqw; height: 2.4cqw; border-radius: .7cqw; background: var(--mint); }
-.screen { position: absolute; inset: 4.4cqw 0 0 0; background: #0b3f33; }
+.screen { position: absolute; inset: 4.4cqw 0 0 0; background: var(--screen); }
 .clip { position: absolute; inset: 0; overflow: hidden; }
 .strip { position: absolute; inset: 0; transition: transform 1.5s var(--ease); }
 .frame.nt *, .frame.static * { transition: none !important; }
