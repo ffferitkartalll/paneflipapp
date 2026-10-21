@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PaneFlip: zones for your Mac</title>
+<meta name="description" content="PaneFlip is a free, open-source macOS menu-bar app. Split your displays into zones, drop apps into them and flip between a zone's apps with one glass pill.">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PaneFlip: zones for your Mac">
+<meta property="og:description" content="Split your displays into zones, drop apps into them and flip between a zone's apps with one glass pill. Free and open source.">
+<meta property="og:image" content="https://ffferitkartalll.github.io/paneflipapp/banner.jpg">
+<meta property="og:url" content="https://ffferitkartalll.github.io/paneflipapp/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="app-icon.png">
+<style>
+:root {
+  --bg: #06352b;
+  --bg-2: #0a4a3b;
+  --panel: rgba(255, 255, 255, 0.06);
+  --line: rgba(255, 255, 255, 0.14);
+  --text: #f1fbf7;
+  --muted: #b5e8d5;
+  --mint: #3be8b0;
+  --ink: #062820;
+  --radius: 22px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  background-image: linear-gradient(160deg, #06352b 0%, #0a4a3b 55%, #137a5c 100%);
+  background-attachment: fixed;
+  font: 18px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--mint); }
+a:hover { color: #fff; }
+:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; border-radius: 8px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+header.top { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 20px; }
+.brand img { width: 36px; height: 36px; border-radius: 9px; }
+nav { display: flex; gap: 22px; align-items: center; font-size: 16px; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover { color: #fff; }
+@media (max-width: 720px) { nav a.hide-s { display: none; } }
+
+.hero { text-align: center; padding: 56px 0 32px; }
+.hero img.icon { width: 120px; height: 120px; border-radius: 27px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35); }
+h1 { font-size: clamp(44px, 8vw, 84px); line-height: 1.05; margin: 22px 0 14px; letter-spacing: -0.02em; }
+.lead { font-size: clamp(20px, 2.6vw, 26px); color: var(--muted); max-width: 720px; margin: 0 auto 30px; line-height: 1.4; }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border-radius: 999px;
+  font-weight: 700; font-size: 18px; text-decoration: none; border: 2px solid var(--mint);
+  background: var(--mint); color: var(--ink);
+}
+.btn:hover { background: #7df2cc; color: var(--ink); }
+.btn.ghost { background: transparent; color: var(--mint); }
+.btn.ghost:hover { background: rgba(59, 232, 176, 0.14); color: #fff; }
+.note { color: var(--muted); font-size: 15px; margin-top: 16px; }
+
+.code {
+  display: inline-flex; align-items: center; gap: 12px; max-width: 100%; margin-top: 22px;
+  background: #062820; border: 1px solid var(--line); border-radius: 999px; padding: 10px 12px 10px 22px;
+}
+.code code { font: 600 16px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mint); overflow-x: auto; white-space: nowrap; }
+.code button {
+  font: 600 14px/1 inherit; cursor: pointer; background: rgba(255, 255, 255, 0.1); color: var(--text);
+  border: 0; border-radius: 999px; padding: 9px 16px;
+}
+.code button:hover { background: rgba(255, 255, 255, 0.2); }
+
+.shot { margin: 40px auto 8px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); background: #06352b; }
+.shot video { display: block; width: 100%; height: auto; }
+
+section { padding: 64px 0 8px; }
+h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.01em; }
+.sub { color: var(--muted); max-width: 680px; margin: 0 0 32px; }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+.card .n { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--mint); color: var(--ink); font-weight: 800; margin-bottom: 14px; }
+.card h3 { margin: 0 0 8px; font-size: 22px; }
+.card p { margin: 0; color: var(--muted); font-size: 17px; }
+.features { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 760px) { .features { grid-template-columns: minmax(0, 1fr); } }
+.features .card h3 { font-size: 20px; }
+.features ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 17px; }
+.features li { margin: 6px 0; }
+
+kbd {
+  font: 600 0.85em/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  display: inline-block; min-width: 1.6em; text-align: center; padding: 0.3em 0.5em; margin: 0 1px;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 7px; color: var(--text);
+}
+table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 17px; }
+tr:last-child td { border-bottom: 0; }
+td:last-child { color: var(--muted); }
+.table-wrap { overflow-x: auto; }
+
+.install .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 860px) { .install .grid { grid-template-columns: minmax(0, 1fr); } }
+.install pre {
+  margin: 14px 0 0; padding: 14px 18px; background: #062820; border: 1px solid var(--line); border-radius: 14px;
+  overflow-x: auto; font: 600 15px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mint);
+}
+footer { margin-top: 72px; padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
+footer a { color: var(--muted); }
+footer a:hover { color: #fff; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 16px; top: 16px; background: var(--mint); color: var(--ink); padding: 8px 14px; border-radius: 8px; z-index: 10; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#"><img src="app-icon.png" alt="" width="36" height="36">PaneFlip</a>
+    <nav aria-label="Main">
+      <a class="hide-s" href="#how">How it works</a>
+      <a class="hide-s" href="#features">Features</a>
+      <a class="hide-s" href="#shortcuts">Shortcuts</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/ffferitkartalll/paneflipapp">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="hero">
+      <img class="icon" src="app-icon.png" alt="PaneFlip app icon" width="120" height="120">
+      <h1>PaneFlip</h1>
+      <p class="lead">Split your Mac's screens into zones. Drop apps into them. Flip between a zone's apps with one glass pill.</p>
+      <div class="actions">
+        <a class="btn" href="https://github.com/ffferitkartalll/paneflipapp/releases/latest">Download for macOS</a>
+        <a class="btn ghost" href="https://github.com/ffferitkartalll/paneflipapp">View on GitHub</a>
+      </div>
+      <div class="code">
+        <code id="brew">brew install --cask ffferitkartalll/tap/paneflipapp</code>
+        <button type="button" id="copy" aria-label="Copy the Homebrew command">Copy</button>
+      </div>
+      <p class="note">Free and open source (MIT). Needs macOS 27.</p>
+    </div>
+
+    <div class="shot">
+      <video id="demo" src="promo.mp4" poster="banner.jpg" autoplay muted loop playsinline preload="auto"
+             aria-label="A short animation: windows snap into zones, stack under a pill, and scroll past the edge of the screen"></video>
+    </div>
+
+    <section id="how">
+      <h2>How it works</h2>
+      <p class="sub">Three ideas, and your windows always know where to go.</p>
+      <div class="grid">
+        <div class="card"><div class="n">1</div><h3>Snap</h3>
+          <p>Drag a window while you hold <kbd>⌘</kbd>. The zones light up; let go over one and the window slides in and fills it. Apps you put in a zone are remembered and return when they reopen.</p></div>
+        <div class="card"><div class="n">2</div><h3>Stack and flip</h3>
+          <p>Several apps can share one zone. Point at it and the glass pill appears: click an app, scroll over the pill, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> <kbd>→</kbd> to flip.</p></div>
+        <div class="card"><div class="n">3</div><h3>Go beyond the screen</h3>
+          <p>A layout can go on past the edge of the display, with as many zones as you like. Push the pointer to the edge, or hold the keys and scroll with two fingers.</p></div>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2>Made for the way you work</h2>
+      <p class="sub">Layouts you draw, a pill that stays out of the way, and a Mac that remembers.</p>
+      <div class="features">
+        <div class="card"><h3>Layouts</h3><ul>
+          <li>Draw zones in the editor: click to split, drag a line to resize, drop one on a neighbour to merge.</li>
+          <li>Start from twenty common shapes or a blank layout. Name layouts and zones, set a gap per layout.</li>
+          <li>Switch layouts from the menu bar. Every desktop of a display can use its own.</li></ul></div>
+        <div class="card"><h3>Stacks and the pill</h3><ul>
+          <li>Icons, names or both, along the top or bottom of the zone, always or only when you point at it.</li>
+          <li>Choose which app opens in which zone and open them all with one click.</li>
+          <li>A window dragged out of its zone glides back to the size it had.</li></ul></div>
+        <div class="card"><h3>Zones beyond the screen</h3><ul>
+          <li>Any number of areas past each edge, one after the other.</li>
+          <li>Hold keys and scroll with two fingers or the mouse wheel; a window that gets focus brings its zone into view.</li>
+          <li>Trackpad speed is a setting.</li></ul></div>
+        <div class="card"><h3>Everywhere</h3><ul>
+          <li>Several displays and desktops. Unplug a display and its apps move to the main screen; plug it in and they go back.</li>
+          <li>Closed, hidden and minimized windows leave their zone and return when they do.</li>
+          <li>Updates from inside the app. 46 languages.</li></ul></div>
+      </div>
+    </section>
+
+    <section id="shortcuts">
+      <h2>Shortcuts</h2>
+      <p class="sub">Every one of them can be changed in Settings.</p>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><td>Snap a window into a zone</td><td>hold <kbd>⌘</kbd> (left) while dragging</td></tr>
+            <tr><td>Hide the pill under the pointer</td><td>double-tap <kbd>⌘</kbd> (left)</td></tr>
+            <tr><td>Next / previous window of the zone</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
+            <tr><td>Zones beyond the right / left edge</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
+            <tr><td>Scroll through a zone's windows</td><td>hold <kbd>⌥</kbd><kbd>⌃</kbd> and scroll</td></tr>
+            <tr><td>Scroll toward the zones beyond the edge</td><td>hold <kbd>⌘</kbd><kbd>⌥</kbd><kbd>⌃</kbd> and scroll</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="install" class="install">
+      <h2>Install</h2>
+      <p class="sub">PaneFlip asks for two permissions on the first launch, Accessibility and Screen Recording, and tells you why.</p>
+      <div class="grid">
+        <div class="card"><h3>From a download</h3>
+          <p>Open the <code>.dmg</code> of the latest release and drag PaneFlip into Applications. The app is signed with its own certificate, not an Apple developer one: the first time, open it, then choose <em>System Settings ▸ Privacy &amp; Security ▸ Open Anyway</em>.</p>
+          <p style="margin-top:18px"><a class="btn" href="https://github.com/ffferitkartalll/paneflipapp/releases/latest">Get the latest release</a></p></div>
+        <div class="card"><h3>With Homebrew</h3>
+          <p>Homebrew removes the quarantine mark, so no extra step is needed.</p>
+          <pre>brew install --cask ffferitkartalll/tap/paneflipapp</pre>
+          <p style="margin-top:14px">Or take the quarantine mark off by hand:</p>
+          <pre>xattr -dr com.apple.quarantine /Applications/PaneFlip.app</pre></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>PaneFlip is free and open source, MIT license.</span>
+    <span><a href="https://github.com/ffferitkartalll/paneflipapp">Source</a> ·
+      <a href="https://github.com/ffferitkartalll/paneflipapp/issues">Issues</a> ·
+      <a href="https://github.com/ffferitkartalll/paneflipapp/releases">Releases</a> ·
+      <a href="https://crowdin.com/project/paneflipapp">Translations</a></span>
+  </footer>
+</div>
+<script>
+  const demo = document.getElementById('demo');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { demo.removeAttribute('autoplay'); demo.pause(); demo.controls = true; }
+  document.getElementById('copy').addEventListener('click', async (e) => {
+    try { await navigator.clipboard.writeText(document.getElementById('brew').textContent); e.target.textContent = 'Copied'; }
+    catch { e.target.textContent = 'Press ⌘C'; }
+    setTimeout(() => { e.target.textContent = 'Copy'; }, 2000);
+  });
+</script>
+</body>
+</html>
