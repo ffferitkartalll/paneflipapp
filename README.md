@@ -27,9 +27,7 @@ them. Your layouts and settings stay on your Mac, and the app is free and open s
 
 ## Quick look
 
-<p align="center">
-  <video src="https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a" width="100%" autoplay muted loop playsinline></video>
-</p>
+https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 
 ## How it works
 
