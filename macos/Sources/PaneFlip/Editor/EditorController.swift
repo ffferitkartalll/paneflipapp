@@ -53,9 +53,23 @@ final class EditorController: LayoutEditing {
         NSApp.activate(ignoringOtherApps: true)
         panel = p
 
-        monitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown]) { [weak model] event in
-            if event.type == .flagsChanged { model?.shift = event.modifierFlags.contains(.shift) }
-            else if event.keyCode == 53 { model?.close(); return nil }   // Esc
+        monitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown, .scrollWheel]) { [weak model] event in
+            switch event.type {
+            case .flagsChanged: model?.shift = event.modifierFlags.contains(.shift)
+            case .keyDown where event.keyCode == 53:   // Esc
+                model?.close()
+                return nil
+            case .scrollWheel:
+                // The glide after the fingers lifted means nothing; two fingers move a screen along, a wheel steps.
+                guard event.momentumPhase.isEmpty else { return nil }
+                if event.hasPreciseScrollingDeltas {
+                    model?.scrolled(horizontal: event.scrollingDeltaX, finished: event.phase.contains(.ended) || event.phase.contains(.cancelled))
+                } else {
+                    model?.wheel(event.scrollingDeltaY)
+                }
+                return nil
+            default: break
+            }
             return event
         }
     }

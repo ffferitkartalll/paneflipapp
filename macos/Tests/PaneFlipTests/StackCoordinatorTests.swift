@@ -97,7 +97,7 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertFalse(coordinator.isSliding)
     }
 
-    func testTheShortcutCyclesTheFocusedWindowsZoneAroundTheEnd() {
+    func testTheShortcutMovesTheFocusedWindowsZoneOnAndBackAndNotPastTheEnds() {
         let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
         snapshots.images = [1: FakeWindowSnapshots.picture(), 2: FakeWindowSnapshots.picture(), 3: FakeWindowSnapshots.picture()]
         coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
@@ -105,44 +105,53 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
         [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
         let stack = coordinator.stacks[zone]!
+        let begun = stage.scrubBegun.count
 
         windows.focused = .fake(3)
         coordinator.cycleFocusedZone(reverse: false)
-        XCTAssertEqual(stack.activeID, 1, "after the last comes the first")
-        XCTAssertEqual(stage.slides.last?.forward, true, "and it still slides the same way")
-        stage.end()
-
+        XCTAssertEqual(stack.activeID, 3, "after the last there is nothing: it does not go round to the first")
         windows.focused = .fake(1)
         coordinator.cycleFocusedZone(reverse: true)
-        XCTAssertEqual(stack.activeID, 3)
-        XCTAssertEqual(stage.slides.last?.forward, false)
-        stage.end()
+        XCTAssertEqual(stack.activeID, 1, "nor before the first (the window in focus is the one in front)")
+        XCTAssertEqual(stage.scrubBegun.count, begun, "and nothing is photographed for it")
+
+        coordinator.cycleFocusedZone(reverse: false)
+        XCTAssertEqual(stage.scrubEnded, [1], "in between the pictures go on one window, the way a turn of the wheel over the pill does")
+        XCTAssertEqual(stack.activeID, 2)
+        windows.focused = .fake(2)
+        coordinator.cycleFocusedZone(reverse: true)
+        XCTAssertEqual(stage.scrubEnded, [1, -1])
+        XCTAssertEqual(stack.activeID, 1)
 
         windows.focused = .fake(9)   // not in any zone
         coordinator.cycleFocusedZone(reverse: false)
-        XCTAssertEqual(stack.activeID, 3)
+        XCTAssertEqual(stack.activeID, 1)
     }
 
-    func testPressingTheShortcutAgainDuringTheSlideCarriesItOnToTheNextWindow() {
+    func testPressingTheShortcutAgainWhileThePicturesGlideGoesOnFromWhereTheyAreInEitherDirection() {
         let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
-        snapshots.images = [1: FakeWindowSnapshots.picture(), 2: FakeWindowSnapshots.picture(), 3: FakeWindowSnapshots.picture()]
+        snapshots.images = Dictionary(uniqueKeysWithValues: (1...4).map { (CGWindowID($0), FakeWindowSnapshots.picture()) })
         coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
-        [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
+        [1, 2, 3, 4].forEach { coordinator.snap(.fake($0), into: zone) }
         let stack = coordinator.stacks[zone]!
+        stage.end()
+        stage.holdsGlide = true
 
         windows.focused = .fake(1)
+        stack.activeID = 1
         coordinator.cycleFocusedZone(reverse: false)
         XCTAssertEqual(stack.activeID, 2)
+        stage.glidingAt = 60
         coordinator.cycleFocusedZone(reverse: false)   // the focus is still on window 1 until the real window comes forward
-        XCTAssertEqual(stack.activeID, 3, "the second press goes on from the window the slide goes to")
-        XCTAssertEqual(stage.slides.count, 1)
-        XCTAssertEqual(stage.extensions, [true])
-        XCTAssertEqual(windows.raised.last, 3)
+        XCTAssertEqual(stack.activeID, 3, "the second press goes on from the window the pictures go to")
+        XCTAssertEqual(stage.catches, 1, "no waiting for them to settle")
+        XCTAssertEqual(stage.scrubEnded, [1, 1])
 
         coordinator.cycleFocusedZone(reverse: true)
-        XCTAssertEqual(stack.activeID, 3, "the other way is ignored while the slide runs")
+        XCTAssertEqual(stack.activeID, 2, "and the other way is not ignored while they glide")
+        XCTAssertEqual(stage.scrubEnded, [1, 1, -1])
     }
 
     func testWithStageManagerADroppedWindowIsOnlyPlacedAndNothingElseHappens() {
@@ -225,14 +234,14 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.snap(.fake(3), into: other)
         coordinator.stacks[zone]?.activeID = 1
 
-        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: 1)
+        coordinator.stepWindowScrub(at: CGPoint(x: 50, y: 50), by: 1)
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "one step on, in the zone under the pointer")
 
-        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: 1)
+        coordinator.stepWindowScrub(at: CGPoint(x: 50, y: 50), by: 1)
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "the end: no going round")
         XCTAssertEqual(coordinator.stacks[other]?.activeID, 3, "the other zone is left alone")
 
-        coordinator.stepWindows(at: CGPoint(x: 50, y: 50), by: -1)
+        coordinator.stepWindowScrub(at: CGPoint(x: 50, y: 50), by: -1)
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1, "a step back")
     }
 
@@ -366,6 +375,149 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.moveWindowScrub(by: -300, at: 1.2)
         XCTAssertEqual(stage.scrubOffsets.last, 0, "the last window still is the end")
         coordinator.endWindowScrub()
+    }
+
+    func testAChoiceTheRunningSlideCannotTakeOnWaitsAndIsDoneWhenItIsOver() {
+        let (stage, _, zone) = scrubSetUp()   // three windows, the middle one in front
+        let stack = coordinator.stacks[zone]!
+        let before = stage.slides.count
+
+        coordinator.slideSelect(3, in: stack)   // a click on the pill: a slide, which the pictures of a swipe cannot take over
+        XCTAssertEqual(stage.slides.suffix(from: before).map(\.forward), [true])
+        coordinator.stepWindowScrub(in: stack, by: -1)   // the other way, while the slide runs
+        XCTAssertEqual(stage.slides.count, before + 1, "not now")
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+
+        stage.end()
+        XCTAssertEqual(stage.slides.suffix(from: before).map(\.forward), [true, false], "but it is not lost: it is done as soon as the slide is over")
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2)
+    }
+
+    func testAChoiceThatComesWhileThePicturesAreStillBeingTakenCarriesTheSlideOnWhenTheyAreThere() {
+        let (stage, snapshots, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        snapshots.answersAtOnce = false
+
+        coordinator.slideSelect(3, in: stack)   // 2 to 3: the photographs are on their way
+        coordinator.stepWindowScrub(in: stack, by: 1)   // 3 to 4: the slide is not on the stage to be carried on yet
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+        XCTAssertTrue(stage.extensions.isEmpty)
+
+        snapshots.answer()   // the slide goes on the stage; the waiting choice carries it on, and its picture is asked for
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 4)
+        snapshots.answer()
+        XCTAssertEqual(stage.extensions, [true], "one more window along the same slide")
+    }
+
+    func testOnlyAFewChoicesWaitSoThatAKeyHeldDownDoesNotGoOnAfterItIsLetGo() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 8)
+        let stack = coordinator.stacks[zone]!
+        stack.activeID = 5
+
+        coordinator.slideSelect(6, in: stack)   // 5 to 6, and the slide runs
+        for _ in 0 ..< 6 { coordinator.stepWindowScrub(in: stack, by: -1) }   // the other way: none can be taken now
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 6)
+
+        stage.end()
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3, "three of the six were kept, one window back for each, not all six")
+    }
+
+    // MARK: Scrolling over a pill
+
+    func testTwoFingersOverAPillLeadThePicturesOverAsManyWindowsAsTheyGoAndLetGoOnTheNearest() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)   // the second of six in front, 400 pt wide
+        let stack = coordinator.stacks[zone]!
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+
+        router.trackpad(over: stack, horizontal: -300, vertical: 5, began: true, finished: false, at: 0)
+        router.trackpad(over: stack, horizontal: -300, vertical: 0, began: false, finished: false, at: 0.5)
+        router.trackpad(over: stack, horizontal: -300, vertical: 0, began: false, finished: false, at: 1.0)
+        XCTAssertEqual(stage.scrubOffsets.last, -900, "no step by step: the pictures follow the fingers all the way")
+
+        router.trackpad(over: stack, horizontal: 0, vertical: 0, began: false, finished: true, at: 1.1)
+        XCTAssertEqual(stage.scrubEnded, [2], "and come to rest on the window they are nearest")
+        XCTAssertEqual(stack.activeID, 4)
+    }
+
+    func testAnUpwardSwipeOverAPillGoesOnToTheNextWindowsToo() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+
+        router.trackpad(over: stack, horizontal: 1, vertical: -60, began: true, finished: false, at: 0)
+        router.trackpad(over: stack, horizontal: 0, vertical: -300, began: false, finished: false, at: 0.4)
+        router.trackpad(over: stack, horizontal: 0, vertical: 0, began: false, finished: true, at: 0.5)
+        XCTAssertEqual(stage.scrubEnded.count, 1)
+        XCTAssertGreaterThan(stage.scrubEnded[0], 0, "fingers up: on to the next windows")
+    }
+
+    func testANewSwipeOverAPillTakesTheGlidingPicturesOverAndGoesOnFromThere() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        stage.holdsGlide = true
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+
+        router.trackpad(over: stack, horizontal: -450, vertical: 0, began: true, finished: false, at: 0)
+        router.trackpad(over: stack, horizontal: 0, vertical: 0, began: false, finished: true, at: 0.5)   // 450 pt: one window on, gliding
+        XCTAssertEqual(stage.scrubEnded, [1])
+
+        stage.glidingAt = 150   // the pictures are 150 pt short of it
+        router.trackpad(over: stack, horizontal: -100, vertical: 0, began: true, finished: false, at: 1)
+        XCTAssertEqual(stage.catches, 1, "no waiting for the glide to end")
+        XCTAssertEqual(stage.scrubOffsets.last, 50, "they follow the new fingers from where they were")
+        router.trackpad(over: stack, horizontal: 0, vertical: 0, began: false, finished: true, at: 1.5)
+        XCTAssertEqual(stage.scrubEnded.count, 2)
+    }
+
+    func testEachTurnOfAWheelOverAPillIsAStepThroughThePicturesEvenWhileTheyGlide() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        stage.holdsGlide = true
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+
+        router.wheel(over: stack, delta: -1)   // toward you: the next window
+        XCTAssertEqual(stage.scrubEnded, [1])
+        XCTAssertEqual(stack.activeID, 3)
+
+        stage.glidingAt = 120
+        router.wheel(over: stack, delta: -1)   // the pictures are still on their way: one more, from where they are
+        XCTAssertEqual(stage.catches, 1)
+        XCTAssertEqual(stage.scrubEnded, [1, 1])
+        XCTAssertEqual(stack.activeID, 4)
+
+        router.wheel(over: stack, delta: 2)   // away from you: back, also while they glide
+        XCTAssertEqual(stage.scrubEnded, [1, 1, -1])
+        XCTAssertEqual(stack.activeID, 3)
+    }
+
+    func testTurnsThatComeWhileThePicturesAreBeingTakenAddUp() {
+        let (stage, snapshots, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        snapshots.answersAtOnce = false
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+
+        router.wheel(over: stack, delta: -1)
+        router.wheel(over: stack, delta: -1)
+        router.wheel(over: stack, delta: -1)
+        XCTAssertTrue(stage.scrubEnded.isEmpty, "the pictures are not there yet")
+
+        snapshots.answer()
+        XCTAssertEqual(stage.scrubEnded, [3], "all three turns, as one glide")
+        XCTAssertEqual(stack.activeID, 5)
+    }
+
+    func testAWheelOverAPillAlsoStepsWhenThePicturesCannotMoveBecauseAnotherSlideRuns() {
+        let (stage, _, zone) = scrubSetUp(windowCount: 6)
+        let stack = coordinator.stacks[zone]!
+        let router = PillScrollRouter(coordinator: coordinator, gain: { 1 })
+        let before = stage.slides.count
+
+        coordinator.slideSelect(3, in: stack)   // a click on the pill: a slide
+        router.wheel(over: stack, delta: 1)   // back, while it runs: it waits
+        XCTAssertEqual(stage.slides.count, before + 1)
+        stage.end()
+        XCTAssertEqual(stage.slides.suffix(from: before).map(\.forward), [true, false], "and is not lost")
+        XCTAssertEqual(stack.activeID, 2)
     }
 
     func testTheEndMayComeBeforeThePicturesAndIsActedOnWhenTheyArrive() {

@@ -17,7 +17,9 @@ final class StackCoordinator {
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
     /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
-    var carousel: ZoneCarousel?
+    var carousel: ZoneCarousel? {
+        didSet { carousel?.onFree = { [weak self] in self?.runWaiting() } }
+    }
     var glide: WindowGlide?
     /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
     /// window is sized and placed by its zone. Nothing is held, remembered, stacked or followed, and nothing that was
@@ -160,14 +162,19 @@ final class StackCoordinator {
 
     /// A click on the pill: the chosen window slides in beside the one in front. Without a carousel, or when there
     /// is nothing to slide past, it simply comes to the front.
-    /// `forward` (the new window comes in from the right) is the pill's order unless the caller knows better: a cycle
-    /// that wraps around keeps going the same way.
-    func slideSelect(_ id: CGWindowID, in stack: ZoneStack, forward: Bool? = nil) {
+    /// `forward` (the new window comes in from the right) is the pill's order unless the caller knows better.
+    /// False when a slide runs that cannot take the choice on yet (it goes the other way, or a picture for it is being taken): nothing
+    /// has happened then.
+    @discardableResult
+    func slideSelect(_ id: CGWindowID, in stack: ZoneStack, forward: Bool? = nil) -> Bool {
         if isSliding { return extendSlide(to: id, in: stack, forward: forward) }
         guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
               let leaving = stack.refs[frontID],
               let from = stack.tabs.firstIndex(where: { $0.id == frontID }), let to = stack.tabs.firstIndex(where: { $0.id == id })
-        else { return select(id, in: stack) }
+        else {
+            select(id, in: stack)
+            return true
+        }
         // The pill moves to the new window now, together with the slide, not once the slide is over.
         stack.activeID = id
         onActivity?(stack.id)
@@ -176,34 +183,60 @@ final class StackCoordinator {
             windows.setFrame(rect, of: entering)
             windows.raise(entering)
         }
+        return true
     }
 
     /// A choice while a slide runs: if it goes the same way in the same zone, the slide is carried on to the new window (the
-    /// pictures of the windows it passed are there already); otherwise the choice is ignored.
-    private func extendSlide(to id: CGWindowID, in stack: ZoneStack, forward: Bool?) {
+    /// pictures of the windows it passed are there already). False when it cannot be yet: nothing has happened then.
+    private func extendSlide(to id: CGWindowID, in stack: ZoneStack, forward: Bool?) -> Bool {
         guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
               let from = stack.tabs.firstIndex(where: { $0.id == frontID }), let to = stack.tabs.firstIndex(where: { $0.id == id })
-        else { return }
+        else { return true }
         let forward = forward ?? (to > from)
         let rect = stack.rect
-        guard carousel.canExtend(forward: forward, in: rect) else { return }
+        guard carousel.canExtend(forward: forward, in: rect) else { return false }
         stack.activeID = id
         onActivity?(stack.id)
         carousel.extend(entering: entering, forward: forward) { [windows] in
             windows.setFrame(rect, of: entering)
             windows.raise(entering)
         }
+        return true
     }
 
-    /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when
-    /// `reverse`), around the end. A window outside any zone, or a zone with one window, does nothing.
+    // MARK: Choices that wait
+
+    /// Choices made with the keys or the wheel while a slide runs that cannot take them on (the other way, or while a picture for the
+    /// carrying on is taken). They are not lost: each is tried again, in turn, when the slide can take it. A few at most, so that a key held
+    /// down does not go on after it is let go.
+    private var waiting: [() -> Bool] = []
+    private static let mostWaiting = 3
+
+    /// Does `attempt` now, or lets it wait. An attempt returns false when it has to wait.
+    private func doOrWait(_ attempt: @escaping () -> Bool) {
+        if waiting.isEmpty, attempt() { return }
+        if waiting.count < Self.mostWaiting { waiting.append(attempt) }
+    }
+
+    private func runWaiting() {
+        while !waiting.isEmpty {
+            // Taken out first: trying it can call this again (a picture that is there at once), and must not find it still in the list.
+            let first = waiting.removeFirst()
+            guard first() else {
+                waiting.insert(first, at: 0)
+                return
+            }
+        }
+    }
+
+    /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when `reverse`), the way a
+    /// turn of the wheel over its pill does, and not past the first and the last. A window outside any zone, or a zone with one window,
+    /// does nothing.
     func cycleFocusedZone(reverse: Bool) {
         guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1 else { return }
-        // While a slide runs the window in front is the one it goes to, not the one that is still in focus.
-        let current = isSliding ? (stack.activeID ?? focused.id) : focused.id
-        guard let from = stack.tabs.firstIndex(where: { $0.id == current }) else { return }
-        let count = stack.tabs.count
-        slideSelect(stack.tabs[(from + (reverse ? count - 1 : 1)) % count].id, in: stack, forward: !reverse)
+        // With nothing moving the window in front is the one in focus; while pictures glide it is the one they go to, and stays.
+        if windowScrub == nil, !isSliding, stack.activeID != focused.id { stack.activeID = focused.id }
+        stepWindowScrub(in: stack, by: reverse ? -1 : 1)
     }
 
     // MARK: A swipe the fingers lead
@@ -213,6 +246,8 @@ final class StackCoordinator {
     private final class WindowScrub {
         let stack: ZoneStack
         let rect: CGRect
+        /// A wheel, not fingers, moves it: it lets go this many windows from the one in front, whatever the swipe did.
+        var forced: Int?
         /// The windows the swipe passes, in order: those that have a picture (all of them until the pictures are there).
         var windows: [CGWindowID]
         let start: CGWindowID
@@ -232,18 +267,27 @@ final class StackCoordinator {
     }
     private var windowScrub: WindowScrub?
 
-    /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through.
-    func beginWindowScrub(at point: CGPoint) {
+    /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through. False
+    /// when the pictures cannot follow the fingers (a slide that is not a swipe runs, there is nothing to swipe through): the caller steps
+    /// instead, and a step that has to wait for the slide waits.
+    @discardableResult
+    func beginWindowScrub(at point: CGPoint) -> Bool {
+        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return false }
+        return beginWindowScrub(in: stack)
+    }
+
+    /// The same for a zone that is known (a pill that is scrolled over).
+    @discardableResult
+    func beginWindowScrub(in stack: ZoneStack) -> Bool {
         guard windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
-              let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }),
-              stack.tabs.count > 1, let start = stack.activeID else { return }
+              stack.tabs.count > 1, let start = stack.activeID else { return false }
         let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
         windowScrub = scrub
         // A swipe whose end never comes (a lost event) must not hold the windows for good.
         DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
             if self?.windowScrub === scrub { self?.endWindowScrub() }
         }
-        guard let carousel else { scrub.failed = true; return }
+        guard let carousel else { scrub.failed = true; return true }
         carousel.beginScrub(windows: stack.tabs.compactMap { stack.refs[$0.id] }, current: start, in: scrub.rect) { [weak self] shown, carried in
             guard let self, windowScrub === scrub else { return }
             if let shown {
@@ -257,6 +301,7 @@ final class StackCoordinator {
             }
             if scrub.ended { finishWindowScrub(scrub) }
         }
+        return true
     }
 
     /// The fingers moved by `delta` points (to the right is positive: the content follows them).
@@ -264,6 +309,26 @@ final class StackCoordinator {
         guard let scrub = windowScrub, !scrub.ended else { return }
         scrub.gesture.add(delta, at: time)
         if scrub.ready { carousel?.scrub(to: scrub.gesture.offset) }
+    }
+
+    /// A turn of the wheel over a pill: the pictures of the zone's windows go `step` windows on (or back), from the one they are going to
+    /// if they are already on their way, so that turns follow one another as quickly as they come, in either direction. Without
+    /// pictures to move (a slide that is not a swipe runs, motion is reduced) it is a step like those of the keys.
+    func stepWindowScrub(in stack: ZoneStack, by step: Int) {
+        guard step != 0 else { return }
+        if let scrub = windowScrub {
+            // Turns that come while the pictures of an earlier one are still being taken add up to it.
+            if scrub.stack === stack, scrub.ended, let forced = scrub.forced { scrub.forced = forced + step }
+            return
+        }
+        // Not past the first and the last window: there is nothing to move to, and nothing is photographed for it.
+        guard !placementOnly(), let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), stack.tabs.indices.contains(from + step) else { return }
+        guard beginWindowScrub(in: stack) else {
+            doOrWait { [weak self, weak stack] in stack.map { self?.stepStack($0, by: step) ?? true } ?? true }
+            return
+        }
+        windowScrub?.forced = step
+        endWindowScrub()
     }
 
     /// The fingers lifted.
@@ -277,7 +342,8 @@ final class StackCoordinator {
         windowScrub = nil
         let stack = scrub.stack
         guard let index = scrub.windows.firstIndex(of: scrub.start) else { return carousel?.endScrub(shift: 0) { } ?? () }
-        let shift = scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
+        let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
+            ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
         guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else { return carousel?.endScrub(shift: 0) { } ?? () }
         // The pill moves to the chosen window as the pictures settle.
         stack.activeID = entering.id
@@ -290,14 +356,17 @@ final class StackCoordinator {
         }
     }
 
-    /// Scrolling with the keys held: the zone under `point` (else the zone of the window in focus) moves `step` windows on or back,
-    /// without going round the end. A zone with one window does nothing.
-    func stepWindows(at point: CGPoint, by step: Int) {
-        guard !placementOnly() else { return }
-        let stack = zoneID(at: point).flatMap { stacks[$0] } ?? windows.focusedWindow().flatMap { stack(containing: $0.id) }
-        guard let stack, stack.tabs.count > 1, let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }),
-              stack.tabs.indices.contains(from + step) else { return }
-        slideSelect(stack.tabs[from + step].id, in: stack, forward: step > 0)
+    /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point` (else the zone of the window in
+    /// focus) goes `step` windows on or back, the way a turn of the wheel over its pill does (`stepWindowScrub(in:by:)`).
+    func stepWindowScrub(at point: CGPoint, by step: Int) {
+        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return }
+        stepWindowScrub(in: stack, by: step)
+    }
+
+    private func stepStack(_ stack: ZoneStack, by step: Int) -> Bool {
+        guard !placementOnly(), stack.tabs.count > 1, let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }),
+              stack.tabs.indices.contains(from + step) else { return true }
+        return slideSelect(stack.tabs[from + step].id, in: stack, forward: step > 0)
     }
 
     func select(_ id: CGWindowID, in stack: ZoneStack) {

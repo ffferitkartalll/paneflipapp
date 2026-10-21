@@ -119,7 +119,7 @@ final class AppContainer {
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
                                      settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
-                                     stage: PanelScrollStage(screens: screens, panels: stagePanels),
+                                     stage: PanelScrollStage(screens: screens, panels: stagePanels), preview: PanelScrollPreview(),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })

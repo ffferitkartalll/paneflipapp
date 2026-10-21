@@ -125,4 +125,46 @@ final class StripLayoutTests: XCTestCase {
         XCTAssertTrue(s.position(of: e)! == (.trailing, 1))
         XCTAssertNil(s.position(of: UUID()))
     }
+
+    func testAViewOfOneScreenRestsAtTheScreenAndAtTheFarEdgeOfEachArea() {
+        XCTAssertEqual(StripLayout(root: .leaf(screen)).areaRests, [0])
+        let s = StripLayout(leading: [Overflow(width: 0.5, root: .leaf(left)), Overflow(width: 1, root: .leaf(UUID()))], root: .leaf(screen),
+                            trailing: [Overflow(width: 1, root: .leaf(right)), Overflow(width: 0.25, root: .leaf(UUID()))])
+        XCTAssertEqual(s.areaRests, [-1.5, -0.5, 0, 1, 1.25], "from the left to the right")
+    }
+
+    func testTheAreaAViewRestsAtIsTheOneWhoseFarEdgeItStandsAt() {
+        let near = Overflow(width: 1, root: .leaf(right)), far = Overflow(width: 1, root: .leaf(UUID())), left = Overflow(width: 0.5, root: .leaf(left))
+        let s = StripLayout(leading: [left], root: .leaf(screen), trailing: [near, far])
+        XCTAssertNil(s.area(at: 0), "the screen's own layout is no area")
+        XCTAssertEqual(s.area(at: 1)?.id, near.id)
+        XCTAssertEqual(s.area(at: 2)?.id, far.id)
+        XCTAssertEqual(s.area(at: -0.5)?.id, left.id)
+        XCTAssertNil(s.area(at: 0.7), "between two rests")
+    }
+
+    func testEveryLineBetweenZonesIsARestPositionOnTheScreenAndInTheAreas() {
+        let main = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.4, first: .leaf(UUID()), second: .leaf(UUID()))
+        let area = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(UUID()), second: .leaf(UUID()))
+        let s = StripLayout(root: main, trailing: [Overflow(width: 1, root: area), Overflow(width: 1, root: .leaf(UUID()))])
+
+        XCTAssertEqual(s.zoneEdges, [0, 0.4, 1, 1.5, 2, 3])
+        // A line at the left edge of the screen (the screen's own, the start of an area, the middle of the first area, ...) or at its
+        // right edge (...), and no further than the strip goes.
+        XCTAssertEqual(s.rests, [0, 0.4, 0.5, 1, 1.5, 2])
+        XCTAssertEqual(StripLayout(root: .leaf(screen)).rests, [0])
+    }
+
+    func testAnAreaThatIsAWholeZoneStillRestsAtItsFarEdge() {
+        // The layouts of before: every area one zone, a quarter of a screen wide.
+        XCTAssertEqual(strip(leading: 0.25, trailing: 0.25).rests, [-0.25, 0, 0.25])
+    }
+
+    func testZonesThatDoNotShareTheirLinesGiveALineEach() {
+        // A column split into two rows has no line of its own, but the column beside it is split at another place.
+        let left = LayoutNode.split(id: UUID(), sideBySide: false, ratio: 0.5, first: .leaf(UUID()), second: .leaf(UUID()))
+        let right = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.3, first: .leaf(UUID()), second: .leaf(UUID()))
+        let main = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: left, second: right)
+        XCTAssertEqual(StripLayout(root: main).zoneEdges, [0, 0.5, 0.65, 1])
+    }
 }

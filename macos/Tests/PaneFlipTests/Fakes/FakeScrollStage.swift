@@ -20,6 +20,10 @@ final class FakeScrollStage: ScrollStaging {
 
     func finish(completion: @escaping () -> Void) { finished += 1; completion() }
 
+    /// How many times the pictures were kept after all.
+    private(set) var kept = 0
+    func keep() { kept += 1 }
+
     /// The pictures are on screen now.
     func cover() { covers.forEach { $0() }; covers = [] }
 }

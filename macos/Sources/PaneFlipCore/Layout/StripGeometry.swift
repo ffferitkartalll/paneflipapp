@@ -14,8 +14,8 @@ public struct StripGeometry: Equatable {
     /// few pixels showing (it pulls it back to show about forty), so such a zone waits at the edge like the ones further out.
     public static let visibleEnough: CGFloat = 8
 
-    private let strip: StripLayout
-    private let screen: CGRect
+    public let strip: StripLayout
+    public let screen: CGRect
 
     public init(strip: StripLayout, screen: CGRect) {
         self.strip = strip
@@ -29,14 +29,7 @@ public struct StripGeometry: Equatable {
     public var range: ClosedRange<CGFloat> { -leadingWidth ... trailingWidth }
 
     /// The offsets where scrolling comes to rest: the screen's own layout and each area's far edge, on both sides.
-    public var rests: [CGFloat] {
-        var offsets: Set<CGFloat> = [0]
-        var reached: CGFloat = 0
-        for area in strip.trailing { reached += screen.width * area.width; offsets.insert(reached) }
-        reached = 0
-        for area in strip.leading { reached += screen.width * area.width; offsets.insert(-reached) }
-        return offsets.sorted()
-    }
+    public var rests: [CGFloat] { strip.rests.map { screen.width * CGFloat($0) } }
 
     public func clamped(_ offset: CGFloat) -> CGFloat { min(max(offset, range.lowerBound), range.upperBound) }
 

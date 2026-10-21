@@ -12,6 +12,8 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private let select: (CGWindowID) -> Void
     private let reorder: () -> Void
     private let hide: () -> Void
+    /// What scrolling over the pill does.
+    private let scrolling: PillScrolling?
     /// What the system control adds around a segment's text, in points.
     private static let segmentPadding: CGFloat = 22
     private let groupID = NSToolbarItem.Identifier("tabs")
@@ -32,13 +34,14 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     private var fitPending = false
 
     init(stack: ZoneStack, settings: AppSettings, iconFont: IconFont,
-         select: @escaping (CGWindowID) -> Void, reorder: @escaping () -> Void, hide: @escaping () -> Void) {
+         select: @escaping (CGWindowID) -> Void, reorder: @escaping () -> Void, hide: @escaping () -> Void, scrolling: PillScrolling? = nil) {
         self.stack = stack
         self.settings = settings
         self.iconFont = iconFont
         self.select = select
         self.reorder = reorder
         self.hide = hide
+        self.scrolling = scrolling
         _ = Self.looksActive
         _ = Self.fitsSegments
         super.init(contentRect: NSRect(x: 0, y: 0, width: 100, height: PillMetrics.height),
@@ -62,17 +65,16 @@ final class PillPanel: NSPanel, NSToolbarDelegate {
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 
-    private var scrollStepper = PillScrollStepper()
-
-    /// Scrolling over the pill moves through the zone's windows, one step per swipe.
+    /// Scrolling over the pill: two fingers lead the windows of the zone (`PillScrolling`), a wheel steps through them.
     private func scrolled(_ event: NSEvent) {
-        if event.phase == .began { scrollStepper.reset() }
         guard event.momentumPhase.isEmpty else { return }   // the glide after the fingers lifted is not a new swipe
-        let delta = abs(event.scrollingDeltaY) >= abs(event.scrollingDeltaX) ? event.scrollingDeltaY : event.scrollingDeltaX
-        let step = scrollStepper.step(delta: delta, precise: event.hasPreciseScrollingDeltas, at: event.timestamp)
-        guard step != 0, let current = stack.tabs.firstIndex(where: { $0.id == stack.activeID }),
-              stack.tabs.indices.contains(current + step) else { return }
-        select(stack.tabs[current + step].id)
+        if event.hasPreciseScrollingDeltas {
+            scrolling?.trackpad(over: stack, horizontal: event.scrollingDeltaX, vertical: event.scrollingDeltaY,
+                                began: event.phase.contains(.began) || event.phase.contains(.mayBegin),
+                                finished: event.phase.contains(.ended) || event.phase.contains(.cancelled), at: event.timestamp)
+        } else {
+            scrolling?.wheel(over: stack, delta: abs(event.scrollingDeltaY) >= abs(event.scrollingDeltaX) ? event.scrollingDeltaY : event.scrollingDeltaX)
+        }
     }
 
     /// Only the left button is used. The right button does nothing (not even the toolbar's own context menu).

@@ -10,10 +10,10 @@ struct EditorView: View {
 
     var body: some View {
         GeometryReader { geo in
-            // With areas beyond the screen's edges the whole strip is drawn smaller, in the middle of the panel.
+            // The strip is drawn at full size, one screen of it in view; the rest lies to the left and to the right, out of the panel.
             let total = CGFloat(model.strip.totalWidth)
-            let height = geo.size.height / total
-            let rect = CGRect(x: 0, y: (geo.size.height - height) / 2, width: geo.size.width, height: height)
+            let rect = CGRect(x: -CGFloat(model.strip.leadingWidth + model.offset) * geo.size.width, y: 0,
+                              width: total * geo.size.width, height: geo.size.height)
             let zones = model.root.zones(in: rect).enumerated().map { ZoneRect(id: $1.id, index: $0, rect: $1.rect) }
             let dividers = model.root.dividers(in: rect)
             let target = splitTarget(zones: zones, dividers: dividers, size: geo.size)
@@ -61,17 +61,17 @@ struct EditorView: View {
                         .allowsHitTesting(false)
                 }
 
-                ForEach(dividers) { d in dividerView(d) }
+                // The edge of an area is not a line to drag: a screen has the width of the screen.
+                ForEach(dividers.filter { !model.isAreaLine($0.id) }) { d in dividerView(d) }
 
                 controls
                 overflowButtons(size: geo.size)
             }
+            .animation(.smooth(duration: 0.4), value: model.offset)
+            .overlay(alignment: .bottomTrailing) { if total > 1 { preview.padding(24) } }
             .coordinateSpace(name: "editor")
         }
     }
-
-    /// The drawing is scaled down by this much when areas beyond the screen are shown (zone sizes are in screen points).
-    private var scale: CGFloat { 1 / CGFloat(model.strip.totalWidth) }
 
     // MARK: Areas beyond the screen
 
@@ -88,21 +88,32 @@ struct EditorView: View {
             .allowsHitTesting(false)
     }
 
+    /// A plus button stands at an edge only where there is no screen beyond it: the view is at the outermost screen on that side.
     private func overflowButtons(size: CGSize) -> some View {
         ZStack {
-            if model.allowsOverflow {
+            if model.canAddLeading {
                 Button { model.addLeading() } label: { Image(systemName: "plus") }
-                    .help("Add zones beyond the left edge")
+                    .help("Add a screen on the left")
                     .position(x: 32, y: size.height / 2)
             }
-            if model.allowsOverflow {
+            if model.canAddTrailing {
                 Button { model.addTrailing() } label: { Image(systemName: "plus") }
-                    .help("Add zones beyond the right edge")
+                    .help("Add a screen on the right")
                     .position(x: size.width - 32, y: size.height / 2)
             }
         }
         .buttonStyle(.glass)
         .controlSize(.large)
+    }
+
+    // MARK: Preview of the strip
+
+    /// The whole strip in small, with the screen the editor shows marked, and which screen it is.
+    private var preview: some View {
+        let rests = model.strip.areaRests
+        let here = rests.indices.min { abs(rests[$0] - model.offset) < abs(rests[$1] - model.offset) } ?? 0
+        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(rests.count)"), animated: true)
+            .allowsHitTesting(false)
     }
 
     // MARK: Controls
@@ -115,6 +126,10 @@ struct EditorView: View {
                         .buttonStyle(.glass)
                     Button { model.reset() } label: { Label("Reset", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.glass)
+                    if model.editedArea != nil {
+                        Button { model.removeEditedArea() } label: { Label("Remove screen", systemImage: "trash") }
+                            .buttonStyle(.glass)
+                    }
                     Button { model.apply() } label: { Label("Apply", systemImage: "checkmark") }
                         .buttonStyle(.glassProminent)
                         .keyboardShortcut(.defaultAction)
@@ -139,7 +154,7 @@ struct EditorView: View {
     }
 
     private var overflowHint: some View {
-        Text("Zones beyond the screen's edge are reached by scrolling.\nDouble-click the handle on the dashed line to remove them")
+        Text("Scroll with two fingers or the mouse wheel to move between screens.")
             .multilineTextAlignment(.center)
             .font(.callout).foregroundStyle(.secondary)
             .padding(.horizontal, 14).padding(.vertical, 8)
@@ -234,7 +249,7 @@ struct EditorView: View {
         let side = !model.shift
         let extent = side ? z.rect.width : z.rect.height
         let origin = side ? z.rect.minX : z.rect.minY
-        let minSize = settings.values.minZoneSize * scale
+        let minSize = settings.values.minZoneSize
         let valid = extent >= 2 * minSize
 
         var pos = side ? p.x : p.y
@@ -252,7 +267,7 @@ struct EditorView: View {
         var pos = d.sideBySide ? p.x : p.y
         if abs(pos - (origin + d.extent / 2)) < snapDistance { pos = origin + d.extent / 2 }
         var r = Double((pos - origin) / d.extent)
-        let lo = min(settings.values.minZoneSize * scale / Double(d.extent), 0.5)
+        let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         model.setRatio(d.id, r)
     }

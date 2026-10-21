@@ -12,8 +12,8 @@ final class ScrollSwitchHandler {
     private let scroller: StripScroller
     private let screens: ScreenProviding
     private var target: ScrollSwitchTarget?
-    /// The layout follows the fingers; when it cannot, `plain` keeps what they did, for the step.
-    private var layoutFollows = false
+    /// The pictures follow the fingers (the windows of a zone, or the layout); when they cannot, `plain` keeps what the fingers did, for the step.
+    private var follows = false
     private var plain = ScrubGesture()
 
     init(coordinator: StackCoordinator, scroller: StripScroller, screens: ScreenProviding) {
@@ -26,33 +26,37 @@ final class ScrollSwitchHandler {
         switch event {
         case .began(let aimed):
             target = aimed
+            plain = ScrubGesture()
             switch aimed {
-            case .windows: coordinator.beginWindowScrub(at: screens.pointerAX)
-            case .strip:
-                plain = ScrubGesture()
-                layoutFollows = scroller.beginLed()
+            case .windows: follows = coordinator.beginWindowScrub(at: screens.pointerAX)
+            case .strip: follows = scroller.beginLed()
             }
         case .moved(let delta, let time):
             switch target {
-            case .windows: coordinator.moveWindowScrub(by: delta, at: time)
-            case .strip:
-                if layoutFollows { scroller.moveLed(by: delta, at: time) } else { plain.add(delta, at: time) }
+            case .windows: if follows { coordinator.moveWindowScrub(by: delta, at: time) } else { plain.add(delta, at: time) }
+            case .strip: if follows { scroller.moveLed(by: delta, at: time) } else { plain.add(delta, at: time) }
             case nil: break
             }
         case .ended:
             switch target {
-            case .windows: coordinator.endWindowScrub()
+            case .windows:
+                // A swipe the pictures could not follow still moves one window, once it has gone far enough; the step waits for a slide that runs.
+                if follows { coordinator.endWindowScrub() } else if abs(plain.offset) >= Self.stepDistance {
+                    coordinator.stepWindowScrub(at: screens.pointerAX, by: plain.offset < 0 ? 1 : -1)
+                }
             case .strip:
-                if layoutFollows { scroller.endLed() } else if abs(plain.offset) >= Self.stepDistance {
+                if follows { scroller.endLed() } else if abs(plain.offset) >= Self.stepDistance {
                     scroller.scroll(toward: plain.offset < 0 ? .right : .left)
                 }
             case nil: break
             }
             target = nil
-            layoutFollows = false
+            follows = false
         case .step(let aimed, let step):
             switch aimed {
-            case .windows: coordinator.stepWindows(at: screens.pointerAX, by: step)
+            // Over a zone with the keys held the wheel goes the other way round from the one over its pill: toward you is the previous window,
+            // away from you the next (the tap's step counts that way).
+            case .windows: coordinator.stepWindowScrub(at: screens.pointerAX, by: step)
             case .strip: scroller.scroll(toward: step > 0 ? .right : .left)
             }
         }

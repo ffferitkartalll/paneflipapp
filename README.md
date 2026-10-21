@@ -42,7 +42,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 ## Features
 
 **Layouts**
-- Draw a layout in the editor: click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge.
+- Draw a layout in the editor: click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge. A plus at an edge
+  adds a whole screen there; scroll to it and draw it at full size, with a small map showing where you are.
 - Start from one of twenty common shapes (columns, rows, grids, a main zone with side zones, banners) or from a blank
   layout that opens in the editor at once. Name your layouts and your zones, duplicate a layout, set a gap per layout.
 - A layout belongs to a display, and every desktop of that display uses the layout you choose for it. Switch layouts from
@@ -50,8 +51,9 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 - A margin runs round the edges of the screen, and a gap between the zones.
 
 **Zones beyond the screen**
-- Any number of areas beyond each edge, one after the other, reached with the shortcuts or by resting the pointer at the
-  edge. A window that gets the focus there brings its zone into view by itself.
+- Any number of areas beyond each edge, one after the other, reached with the shortcuts, by pushing the pointer to the
+  edge or with two fingers. The layout stops at every vertical line between zones, on the screen and beyond it, so each
+  step brings the next zone in. A window that gets the focus there brings its zone into view by itself.
 
 **Stacks and the pill**
 - The pill shows the apps of a zone as icons, names or both, along the top or the bottom of the zone, always or only when
