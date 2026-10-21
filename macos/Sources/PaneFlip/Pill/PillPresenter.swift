@@ -136,6 +136,9 @@ final class PillPresenter: ZonePresenting {
         update()
     }
 
+    private lazy var scrolling = PillScrollRouter(coordinator: coordinator,
+                                                  gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) })
+
     private func makePanel(for stack: ZoneStack) -> PillPanel {
         PillPanel(
             stack: stack, settings: settings, iconFont: iconFont,
@@ -147,6 +150,7 @@ final class PillPresenter: ZonePresenting {
             },
             hide: { [weak self, weak stack] in
                 if let stack { self?.hide(zone: stack.id) }
-            })
+            },
+            scrolling: scrolling)
     }
 }

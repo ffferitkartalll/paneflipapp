@@ -12,16 +12,19 @@ final class ZoneCarousel {
     private let background: (@escaping () -> Void) -> Void
 
     /// True from the click until the slide has ended; a click in between is ignored.
-    private(set) var isSliding = false
+    private(set) var isSliding = false { didSet { if !isSliding { onFree?() } } }
+    /// Called whenever a choice that had to wait may be tried again: a slide is over, one can be carried on, or a picture for the
+    /// carrying on has been taken. The state of the slide is settled before it is called.
+    var onFree: (() -> Void)?
     /// A slide that has not ended after this long is given up on, so a capture that never answers cannot leave the pill
     /// dead for the rest of the session.
     private let giveUpAfter: TimeInterval
     private var slideCount = 0
     /// The direction and zone of the slide that runs, and whether a picture for its extension is being taken.
     private var running: (forward: Bool, zone: CGRect)?
-    private var extending = false
+    private var extending = false { didSet { if !extending { onFree?() } } }
     /// The pictures are on the stage (the slide is not still waiting for its photographs).
-    private var onStage = false
+    private var onStage = false { didSet { if onStage { onFree?() } } }
     /// The windows the pictures of a swipe the fingers led show, in order, from when it began until its glide has ended.
     private var swiped: [CGWindowID]?
 
@@ -51,26 +54,28 @@ final class ZoneCarousel {
         slideCount += 1
         let mine = slideCount
         DispatchQueue.main.asyncAfter(deadline: .now() + giveUpAfter) { [weak self] in
-            if let self, slideCount == mine { isSliding = false; running = nil; onStage = false }
+            if let self, slideCount == mine { running = nil; onStage = false; isSliding = false }
         }
         snapshots.snapshots(of: [leaving, entering]) { [weak self] images in
             guard let self else { return }
             guard let out = images[leaving.id], let into = images[entering.id] else {
-                isSliding = false
                 running = nil
-                return swap()
+                swap()
+                isSliding = false
+                return
             }
-            onStage = true
             stage.slide(leaving: out, entering: into, in: zone, forward: forward, covered: { [background] done in
                 background {
                     swap()
                     DispatchQueue.main.async(execute: done)
                 }
             }) { [weak self] in
-                self?.isSliding = false
                 self?.running = nil
                 self?.onStage = false
+                self?.isSliding = false
             }
+            // The pictures are on the stage now: a choice that waits may carry the slide on.
+            if isSliding { onStage = true }
         }
     }
 
@@ -117,8 +122,8 @@ final class ZoneCarousel {
                 isSliding = false
                 return ready(nil, nil)
             }
-            onStage = true
             swiped = shown.map(\.id)
+            onStage = true
             ready(swiped, nil)
         }
     }
@@ -134,10 +139,10 @@ final class ZoneCarousel {
                 DispatchQueue.main.async(execute: done)
             }
         }) { [weak self] in
-            self?.isSliding = false
             self?.running = nil
             self?.onStage = false
             self?.swiped = nil
+            self?.isSliding = false
         }
     }
 }

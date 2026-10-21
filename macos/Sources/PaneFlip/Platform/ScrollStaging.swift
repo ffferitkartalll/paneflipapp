@@ -12,4 +12,6 @@ protocol ScrollStaging {
     func follow(shift: CGFloat)
     /// Takes the pictures away, softly, once the real windows stand where they are; `completion` runs when they are gone.
     func finish(completion: @escaping () -> Void)
+    /// The pictures stay after all: a `finish` that is under way is called off (they are fully there again) and its `completion` does not run.
+    func keep()
 }

@@ -18,7 +18,12 @@ final class FakeWindowSnapshots: WindowSnapshotting {
         if answersAtOnce { completion(result) } else { waiting.append { completion(result) } }
     }
 
-    func answer() { waiting.forEach { $0() }; waiting = [] }
+    /// Answers what is waiting now (a request made by an answer waits for the next call).
+    func answer() {
+        let now = waiting
+        waiting = []
+        now.forEach { $0() }
+    }
 
     static func picture() -> WindowPicture {
         let image = CGContext(data: nil, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(),

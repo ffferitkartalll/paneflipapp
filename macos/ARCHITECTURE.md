@@ -20,7 +20,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 ```
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
-│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
+│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), AxisLock (a swipe is horizontal or not, decided in its first points)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition
 │   ├── Updates/             AppVersion
@@ -32,7 +32,7 @@ Sources/
     ├── Platform/            Ports, their value types and adapters:
     │                        WindowSystem ← AXWindowSystem (+ WindowRef),
     │                        WindowSnapshotting ← ScreenCaptureWindowSnapshots,
-    │                        SlideStaging ← PanelSlideStage, ScrollStaging ← PanelScrollStage (both draw on StagePanels),
+    │                        SlideStaging ← PanelSlideStage, ScrollStaging ← PanelScrollStage (both draw on StagePanels), ScrollPreviewing ← PanelScrollPreview (the map of the strip shown while the layout scrolls),
     │                        DisplayLinkMetronome (a function called at every refresh of a screen),
     │                        PointerMoveListening ← GlobalPointerMoves,
     │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
@@ -49,8 +49,8 @@ Sources/
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide, WindowMover
-    ├── Zones/               ZonePlanner, ZoneEngine, ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
-    ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrollStepper (scroll over the pill steps through the windows), IconFont, DoubleTapDetector
+    ├── Zones/               ZonePlanner, ZoneEngine, StripPreview (the map of a strip: the layout editor and the scroll show it), ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
+    ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrolling, PillScrollRouter (scrolling over the pill: two fingers lead the zone's windows, a wheel steps through them), IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
@@ -75,13 +75,13 @@ Sources/
 | Type | Single job |
 |---|---|
 | `LayoutRepository` | Store layouts per display (shared by its desktops) and which one each desktop uses. Knows nothing about windows. |
-| `StripLayout` / `StripGeometry` | A screen's layout with the zones (`Overflow`) beyond its left and right edges as one strip; where each zone stands for a scroll offset, how far the screen may scroll and where a scroll comes to rest. Pure arithmetic. `Parking` tells where a window waits when its zone is out of sight (one pixel on the display, at a side with no display beside it). |
-| `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. A press while a scroll runs gives it a new aim (the next rest position, or back). Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
+| `StripLayout` / `StripGeometry` | A screen's layout with the zones (`Overflow`) beyond its left and right edges as one strip; where each zone stands for a scroll offset, how far the screen may scroll and where a scroll comes to rest: whenever any vertical line between zones (on the screen or in an area) is at the left or the right edge of the screen (`StripLayout.rests`; `areaRests`, the far edges of the areas, is what the layout editor's view rests at). Pure arithmetic. `Parking` tells where a window waits when its zone is out of sight (one pixel on the display, at a side with no display beside it). |
+| `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. A press while a scroll runs gives it a new aim (the next rest position, or back); fingers or a press that come while it lands (its windows being put in place, its pictures about to give way) take it over: the pictures stay, the windows are parked again and the new scroll goes on from where it came to rest (without pictures, a press waits for the landing, three at most). Two fingers that come down while a scroll glides take it over where it is, whatever started it (keys, wheel, the pointer at the edge, earlier fingers). Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
 | `EdgeScroller` | Push the pointer to the left or right edge of a screen and the zones beyond that edge scroll into view; the pointer must leave the edge to scroll again. The ends of the edge (120 pt at each corner) are left to macOS Hot Corners. |
 | `WindowMover` | Writes the positions of many windows off the main thread, one app at a time, latest wanted place only. |
 | `StackMemory` | Remember which app belongs to which zone, in the user's order. Knows nothing about windows. |
 | `StackCoordinator` | Keep live stacks and memory in step with real windows (snap, select, release). |
-| `ZoneCarousel` | Slide the chosen window of a zone in beside the one in front: both are photographed (Screen Recording), the pictures slide inside the zone while the real windows swap underneath, so nothing shows outside the zone. A press in the same direction while it runs carries the slide on to the next window (one more picture, the same spring). Fingers that come down while the pictures of a swipe still glide take them over where they are (`StripScroller` does the same with the layout). |
+| `ZoneCarousel` | Slide the chosen window of a zone in beside the one in front: both are photographed (Screen Recording), the pictures slide inside the zone while the real windows swap underneath, so nothing shows outside the zone. A press in the same direction while it runs carries the slide on to the next window (one more picture, the same spring); a choice it cannot take on yet (the other way, or while a picture is being taken) waits in `StackCoordinator` and is tried again when the carousel is free (`onFree`), three at most. Fingers that come down while the pictures of a swipe still glide take them over where they are (`StripScroller` does the same with the layout). |
 | `WindowGlide` | Move a window the user just dropped from where it is to its zone in a short ease-out glide (steps follow the clock, off the main thread, the last one exact; no glide with Reduce Motion). |
 | `UpdatesModel` | Ask, when the user presses the button, whether a newer release exists and install it when the user asks. Nothing is checked on its own. |
 | `WindowRestorer` | Put running windows in the zone their app belongs in: remembered ones in their slots, every other window of the app next to them. |

@@ -72,11 +72,17 @@ final class PanelScrollStage: ScrollStaging {
         CATransaction.commit()
     }
 
+    /// Counts the finishes and the calls to keep the pictures: the end of a finish that was called off must not take them away.
+    private var finishing = 0
+
     func finish(completion: @escaping () -> Void) {
         guard let clip else { return completion() }
+        finishing += 1
+        let mine = finishing
         CATransaction.begin()
         CATransaction.setCompletionBlock { [weak self] in
-            self?.remove()
+            guard let self, finishing == mine else { return }
+            remove()
             completion()
         }
         let fade = CABasicAnimation(keyPath: "opacity")
@@ -87,6 +93,11 @@ final class PanelScrollStage: ScrollStaging {
         fade.isRemovedOnCompletion = false
         clip.add(fade, forKey: "fade")
         CATransaction.commit()
+    }
+
+    func keep() {
+        finishing += 1
+        clip?.removeAnimation(forKey: "fade")
     }
 
     private func remove() {
