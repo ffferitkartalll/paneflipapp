@@ -13,6 +13,7 @@
 <meta property="og:url" content="https://ffferitkartalll.github.io/paneflipapp/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="app-icon.png">
+<link rel="stylesheet" href="demos.css">
 <style>
 :root {
   --bg: #06352b;
@@ -42,7 +43,6 @@ a:hover { color: #fff; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 header.top { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 20px; }
-.brand img { width: 36px; height: 36px; border-radius: 9px; }
 nav { display: flex; gap: 22px; align-items: center; font-size: 16px; }
 nav a { color: var(--muted); text-decoration: none; }
 nav a:hover { color: #fff; }
@@ -68,14 +68,7 @@ h1 { font-size: clamp(44px, 8vw, 84px); line-height: 1.05; margin: 22px 0 14px; 
   background: #062820; border: 1px solid var(--line); border-radius: 999px; padding: 10px 12px 10px 22px;
 }
 .code code { font: 600 16px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mint); overflow-x: auto; white-space: nowrap; }
-.code button {
-  font: 600 14px/1 inherit; cursor: pointer; background: rgba(255, 255, 255, 0.1); color: var(--text);
-  border: 0; border-radius: 999px; padding: 9px 16px;
-}
-.code button:hover { background: rgba(255, 255, 255, 0.2); }
 
-.shot { margin: 40px auto 8px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); background: #06352b; }
-.shot video { display: block; width: 100%; height: auto; }
 
 section { padding: 64px 0 8px; }
 h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.01em; }
@@ -105,6 +98,14 @@ td:last-child { color: var(--muted); }
 
 .install .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 860px) { .install .grid { grid-template-columns: minmax(0, 1fr); } }
+.copy-btn {
+  flex: none; display: inline-grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 999px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.1); color: var(--text); transition: background .2s, opacity .3s;
+}
+.copy-btn:hover { background: rgba(255, 255, 255, 0.2); }
+.copy-btn.done { opacity: .4; }
+.cmd { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 6px 8px 6px 0; background: #062820; border: 1px solid var(--line); border-radius: 14px; }
+.install .cmd pre { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; padding: 8px 8px 8px 18px; background: none; border: 0; }
 .install pre {
   margin: 14px 0 0; padding: 14px 18px; background: #062820; border: 1px solid var(--line); border-radius: 14px;
   overflow-x: auto; font: 600 15px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--mint);
@@ -120,7 +121,7 @@ footer a:hover { color: #fff; }
 <a class="skip" href="#main">Skip to the content</a>
 <div class="wrap">
   <header class="top">
-    <a class="brand" href="#"><img src="app-icon.png" alt="" width="36" height="36">PaneFlip</a>
+    <a class="brand" href="#">PaneFlip</a>
     <nav aria-label="Main">
       <a class="hide-s" href="#how">How it works</a>
       <a class="hide-s" href="#features">Features</a>
@@ -140,15 +141,10 @@ footer a:hover { color: #fff; }
         <a class="btn ghost" href="https://github.com/ffferitkartalll/paneflipapp">View on GitHub</a>
       </div>
       <div class="code">
-        <code id="brew">brew install --cask ffferitkartalll/tap/paneflipapp</code>
-        <button type="button" id="copy" aria-label="Copy the Homebrew command">Copy</button>
+        <code>brew install --cask ffferitkartalll/tap/paneflipapp</code>
+        <button type="button" class="copy-btn" aria-label="Copy the command"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H16"/></svg></button>
       </div>
       <p class="note">Free and open source (MIT). Needs macOS 27.</p>
-    </div>
-
-    <div class="shot">
-      <video id="demo" src="promo.mp4" poster="banner.jpg" autoplay muted loop playsinline preload="auto"
-             aria-label="A short animation: windows snap into zones, stack under a pill, and scroll past the edge of the screen"></video>
     </div>
 
     <section id="how">
@@ -167,6 +163,46 @@ footer a:hover { color: #fff; }
     <section id="features">
       <h2>Made for the way you work</h2>
       <p class="sub">Layouts you draw, a pill that stays out of the way, and a Mac that remembers.</p>
+    </section>
+    <article class="feature" id="f-snap">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Snap</p><h3>Drag a window into a zone</h3><p class="blurb">Hold <kbd>⌘</kbd> while you drag and the zones light up. Let go over one and the window slides in and fills it. PaneFlip remembers which app belongs where and puts it back when the app reopens.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="snap" role="img" aria-label="A window is dragged into a zone while the command key is held"></div><ul class="keys"><li><span><kbd data-hold="k">⌘</kbd></span> hold while dragging <em>Show the zones</em></li><li>let go <em>Fill the zone</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature rev" id="f-stack">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Stacks</p><h3>Many apps, one zone</h3><p class="blurb">Put more apps in a zone and they stack. A small glass pill appears when you point at it: click an app, scroll over the pill, or use the arrow keys to flip. The next window glides in beside the one it replaces.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="stack" role="img" aria-label="The pill of a zone is clicked to flip between three stacked windows"></div><ul class="keys"><li><span><kbd data-hold="next">⌃</kbd><kbd data-hold="next">⌥</kbd><kbd data-hold="next">→</kbd></span> <em>Next window</em></li><li><span><kbd data-hold="prev">⌃</kbd><kbd data-hold="prev">⌥</kbd><kbd data-hold="prev">←</kbd></span> <em>Previous window</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature" id="f-scroll">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Scroll</p><h3>Scroll through a zone’s windows</h3><p class="blurb">Hold <kbd>⌥</kbd> <kbd>⌃</kbd> and scroll with two fingers: the windows follow your fingers, pass several at once and settle on the nearest one. A mouse wheel steps one window at a time. The speed is a setting.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="scroll" role="img" aria-label="Two fingers scroll through the stacked windows of a zone"></div><ul class="keys"><li><span><kbd data-hold="k">⌥</kbd><kbd data-hold="k">⌃</kbd></span> + scroll <em>Through a zone’s windows</em></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em>Two fingers</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature rev" id="f-beyond">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Beyond the screen</p><h3>Zones past the edge</h3><p class="blurb">A layout can go on past the edge of the display, with as many zones as you like. Push the pointer to the edge, or hold <kbd>⌘</kbd> <kbd>⌥</kbd> <kbd>⌃</kbd> and scroll, and the whole layout slides over.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="beyond" role="img" aria-label="The whole layout slides over to zones beyond the right edge of the screen"></div><ul class="keys"><li><span><kbd data-hold="right">⌃</kbd><kbd data-hold="right">⌥</kbd><kbd data-hold="right">⌘</kbd><kbd data-hold="right">→</kbd></span> <em>Zones to the right</em></li><li><span><kbd data-hold="left">⌃</kbd><kbd data-hold="left">⌥</kbd><kbd data-hold="left">⌘</kbd><kbd data-hold="left">←</kbd></span> <em>Zones to the left</em></li><li><span><kbd data-hold="scroll">⌘</kbd><kbd data-hold="scroll">⌥</kbd><kbd data-hold="scroll">⌃</kbd></span> + scroll <em>Slide the layout</em></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em>Two fingers</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature" id="f-editor">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Layouts</p><h3>Draw your own layout</h3><p class="blurb">Click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge. Or start from one of twenty common shapes. Name your layouts and zones, and set a gap for each.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="editor" role="img" aria-label="A zone is split in two, one part is split again, and a line is dragged to resize"></div><ul class="keys"><li>click <em>Split</em></li><li>drag a line <em>Resize</em></li><li>drag a zone <em>Merge</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature rev" id="f-layouts">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker">Menu bar</p><h3>Switch layouts in one click</h3><p class="blurb">Every desktop of a display can use the layout you choose for it. Pick another from the menu bar and the windows glide to their new zones.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="layouts" role="img" aria-label="A layout is chosen in the menu bar and the windows glide to their new zones"></div><ul class="keys"><li><span><kbd>Menu bar</kbd></span> <em>Choose a layout</em></li></ul></div>
+      </div>
+    </article>
+    <section id="more">
+      <h2>And everything around it</h2>
+      <p class="sub">The details that make it feel like part of the Mac.</p>
       <div class="features">
         <div class="card"><h3>Layouts</h3><ul>
           <li>Draw zones in the editor: click to split, drag a line to resize, drop one on a neighbour to merge.</li>
@@ -213,9 +249,9 @@ footer a:hover { color: #fff; }
           <p style="margin-top:18px"><a class="btn" href="https://github.com/ffferitkartalll/paneflipapp/releases/latest">Get the latest release</a></p></div>
         <div class="card"><h3>With Homebrew</h3>
           <p>Homebrew removes the quarantine mark, so no extra step is needed.</p>
-          <pre>brew install --cask ffferitkartalll/tap/paneflipapp</pre>
+          <div class="cmd"><pre><code>brew install --cask ffferitkartalll/tap/paneflipapp</code></pre><button type="button" class="copy-btn" aria-label="Copy the command"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H16"/></svg></button></div>
           <p style="margin-top:14px">Or take the quarantine mark off by hand:</p>
-          <pre>xattr -dr com.apple.quarantine /Applications/PaneFlip.app</pre></div>
+          <div class="cmd"><pre><code>xattr -dr com.apple.quarantine /Applications/PaneFlip.app</code></pre><button type="button" class="copy-btn" aria-label="Copy the command"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H16"/></svg></button></div></div>
       </div>
     </section>
   </main>
@@ -229,13 +265,22 @@ footer a:hover { color: #fff; }
   </footer>
 </div>
 <script>
-  const demo = document.getElementById('demo');
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { demo.removeAttribute('autoplay'); demo.pause(); demo.controls = true; }
-  document.getElementById('copy').addEventListener('click', async (e) => {
-    try { await navigator.clipboard.writeText(document.getElementById('brew').textContent); e.target.textContent = 'Copied'; }
-    catch { e.target.textContent = 'Press ⌘C'; }
-    setTimeout(() => { e.target.textContent = 'Copy'; }, 2000);
-  });
+  // The clipboard API needs a secure page; the older way covers the rest.
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch { /* fall through */ }
+    const t = document.createElement('textarea');
+    t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.append(t); t.select();
+    const ok = document.execCommand('copy');
+    t.remove();
+    return ok;
+  }
+  document.querySelectorAll('.copy-btn').forEach((btn) => btn.addEventListener('click', async () => {
+    if (!await copyText(btn.closest('.cmd, .code').querySelector('code').textContent)) return;
+    btn.classList.add('done'); btn.setAttribute('aria-label', 'Copied');
+    setTimeout(() => { btn.classList.remove('done'); btn.setAttribute('aria-label', 'Copy the command'); }, 1600);
+  }));
 </script>
+<script src="demos.js"></script>
 </body>
 </html>
