@@ -34,7 +34,7 @@ targets:
       base:
         PRODUCT_NAME: PaneFlip
         PRODUCT_BUNDLE_IDENTIFIER: $(PANEFLIP_BUNDLE_ID)
-        MARKETING_VERSION: "1.1.7"
+        MARKETING_VERSION: "1.1.8"
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon   # Resources/AppIcon.icon (Icon Composer)
 
