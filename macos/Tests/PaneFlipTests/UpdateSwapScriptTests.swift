@@ -46,6 +46,12 @@ final class UpdateSwapScriptTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: app.path + ".old"))
     }
 
+    func testTheStagedCopyDoesNotStayBehindWhenTheSwapFails() throws {
+        try FileManager.default.removeItem(at: app)   // nothing to move aside: the swap cannot start
+        try run(waitingFor: gone)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staged.path))
+    }
+
     func testAnAppThatDoesNotQuitLeavesEverythingAsItWasAndTheStagedCopyIsRemoved() throws {
         let status = try run(waitingFor: ProcessInfo.processInfo.processIdentifier, patience: 2)   // this test process stays alive
         XCTAssertNotEqual(status, 0)

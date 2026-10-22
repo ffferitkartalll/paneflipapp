@@ -57,7 +57,7 @@ public final class LayoutRepository {
     public func addLayout(for key: String, named name: String? = nil, preset: LayoutPreset = .single) -> NamedLayout {
         let (display, desktop) = Self.split(key)
         var s = screens[display] ?? ScreenLayouts()
-        let layout = NamedLayout(name: name ?? "Layout \(s.layouts.count + 1)", root: preset.root)
+        let layout = NamedLayout(name: name ?? "", root: preset.root)
         s.layouts.append(layout)
         if s.byDesktop[desktop] == nil { s.byDesktop[desktop] = layout.id }
         screens[display] = s
