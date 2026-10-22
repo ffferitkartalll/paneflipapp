@@ -5,6 +5,8 @@ import SwiftUI
 struct EditorView: View {
     let model: EditorModel
     let settings: AppSettings
+    /// The area zones are laid out in, in points: one screen's width of the editor stands for it.
+    let area: CGSize
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
     private let snapDistance: CGFloat = 20
 
@@ -27,6 +29,9 @@ struct EditorView: View {
                         .frame(width: max(z.rect.width - 6, 0), height: max(z.rect.height - 6, 0))
                         .overlay(alignment: .topLeading) {
                             Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
+                        }
+                        .overlay {
+                            Text(verbatim: size(of: z.rect, in: geo.size)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
                         }
                         .offset(x: z.rect.minX + 3, y: z.rect.minY + 3)
                         .allowsHitTesting(false)
@@ -62,7 +67,10 @@ struct EditorView: View {
                 }
 
                 // The edge of an area is not a line to drag: a screen has the width of the screen.
-                ForEach(dividers.filter { !model.isAreaLine($0.id) }) { d in dividerView(d) }
+                // All lines first, then all handles: another divider's line must not run over a handle.
+                let lines = dividers.filter { !model.isAreaLine($0.id) }
+                ForEach(lines) { d in lineView(d) }
+                ForEach(lines) { d in handleView(d) }
 
                 controls
                 overflowButtons(size: geo.size)
@@ -71,6 +79,11 @@ struct EditorView: View {
             .overlay(alignment: .bottomTrailing) { if total > 1 { preview.padding(24) } }
             .coordinateSpace(name: "editor")
         }
+    }
+
+    /// A zone's size in points, worked out from its share of the editor.
+    private func size(of rect: CGRect, in view: CGSize) -> String {
+        "\(Int((rect.width / view.width * area.width).rounded())) × \(Int((rect.height / view.height * area.height).rounded()))"
     }
 
     // MARK: Areas beyond the screen
@@ -277,10 +290,11 @@ struct EditorView: View {
             .onChanged { resize(d, to: $0.location) }
     }
 
-    private func dividerView(_ d: SplitDivider) -> some View {
-        let mid = d.sideBySide
-            ? CGPoint(x: d.position, y: d.parent.midY)
-            : CGPoint(x: d.parent.midX, y: d.position)
+    private func middle(of d: SplitDivider) -> CGPoint {
+        d.sideBySide ? CGPoint(x: d.position, y: d.parent.midY) : CGPoint(x: d.parent.midX, y: d.position)
+    }
+
+    private func lineView(_ d: SplitDivider) -> some View {
         let centered = abs(d.ratio - 0.5) < 0.0001
         return ZStack {
             Rectangle().fill(centered ? Color.white : Color.accentColor)
@@ -292,15 +306,20 @@ struct EditorView: View {
                 .onHover { inside in
                     if inside { (d.sideBySide ? NSCursor.resizeLeftRight : NSCursor.resizeUpDown).push() } else { NSCursor.pop() }
                 }
-            Image(systemName: d.sideBySide ? "pause" : "equal")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(centered ? Color.black : Color.white)
-                .frame(width: 24, height: 24)
-                .background(Circle().fill(centered ? Color.white : Color.accentColor))
-                .contentShape(Circle())
-                .gesture(drag(d))
-                .onTapGesture(count: 2) { model.collapse(d.id) }
         }
-        .position(mid)
+        .position(middle(of: d))
+    }
+
+    private func handleView(_ d: SplitDivider) -> some View {
+        let centered = abs(d.ratio - 0.5) < 0.0001
+        return Image(systemName: d.sideBySide ? "pause" : "equal")
+            .font(.system(size: 11, weight: .bold))
+            .foregroundStyle(centered ? Color.black : Color.white)
+            .frame(width: 24, height: 24)
+            .background(Circle().fill(centered ? Color.white : Color.accentColor))
+            .contentShape(Circle())
+            .gesture(drag(d))
+            .onTapGesture(count: 2) { model.collapse(d.id) }
+            .position(middle(of: d))
     }
 }
