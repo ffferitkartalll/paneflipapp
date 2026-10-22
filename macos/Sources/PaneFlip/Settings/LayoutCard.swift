@@ -45,7 +45,7 @@ struct LayoutCard: View {
         }
         .alert("Rename Layout", isPresented: $isRenaming) {
             TextField("Layout name", text: $draftName)
-            Button("Rename", action: commitRename)
+            Button("Done", action: commitRename)
             Button("Cancel", role: .cancel) {}
         }
     }

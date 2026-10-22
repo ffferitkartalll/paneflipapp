@@ -85,7 +85,7 @@ struct LayoutAppsView: View {
             .padding(.horizontal, -20)
             .alert("Rename Zone", isPresented: Binding(get: { renamingZone != nil }, set: { if !$0 { renamingZone = nil } })) {
                 TextField("Zone name", text: $zoneNameDraft)
-                Button("Rename") { if let zone = renamingZone { setZoneName(zone, zoneNameDraft) } }
+                Button("Done") { if let zone = renamingZone { setZoneName(zone, zoneNameDraft) } }
                 Button("Cancel", role: .cancel) {}
             }
             .onAppear { reveal(focus, proxy) }

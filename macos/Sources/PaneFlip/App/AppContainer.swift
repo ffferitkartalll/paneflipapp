@@ -107,7 +107,8 @@ final class AppContainer {
                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
                 .compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
-        let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) }) { [settings, keys, coordinator] in
+        let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
+                                                       twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers }) { [settings, keys, coordinator] in
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly() else { return nil }
             let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
@@ -123,7 +124,12 @@ final class AppContainer {
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
-        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens)
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator] target in
+            let v = settings.values
+            return v.placementEnabled && !coordinator.placementOnly() && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
+        }
+        let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
+                                                       isOn: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers })
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
@@ -145,6 +151,7 @@ final class AppContainer {
             scroller.start()
             edgeScroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
+            fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

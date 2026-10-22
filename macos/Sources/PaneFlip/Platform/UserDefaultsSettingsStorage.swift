@@ -32,6 +32,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
+        v.trackpadMethod = defaults.string(forKey: "trackpadMethod").flatMap(TrackpadMethod.init(rawValue:)) ?? v.trackpadMethod
         v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
         v.hidePillKey = defaults.data(forKey: "hidePillKey").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.hidePillKey
         for (key, path) in Self.shortcuts {
@@ -52,6 +53,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
         defaults.set(v.pillPosition.rawValue, forKey: "pillPosition")
+        defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(v.pillForSingleWindow, forKey: "pillForSingleWindow")
         defaults.set(v.pillAlwaysVisible, forKey: "pillAlwaysVisible")

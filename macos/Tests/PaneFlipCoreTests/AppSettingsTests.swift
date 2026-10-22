@@ -80,6 +80,9 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(settings.values.pillPosition, .top)
         settings.values.pillPosition = .bottom
         XCTAssertEqual(storage.saved?.pillPosition, .bottom)
+        XCTAssertEqual(settings.values.trackpadMethod, .keysAndTwoFingers, "the keys and two fingers until the user asks for three and four")
+        settings.values.trackpadMethod = .threeAndFourFingers
+        XCTAssertEqual(storage.saved?.trackpadMethod, .threeAndFourFingers)
     }
 
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {
