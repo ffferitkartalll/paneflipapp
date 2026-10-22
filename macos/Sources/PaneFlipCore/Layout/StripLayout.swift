@@ -36,6 +36,12 @@ public struct StripLayout: Equatable {
         return offsets.sorted()
     }
 
+    /// The place in `areaRests` that is nearest to `offset`.
+    public func nearestAreaRestIndex(to offset: Double) -> Int {
+        let rests = areaRests
+        return rests.indices.min { abs(rests[$0] - offset) < abs(rests[$1] - offset) } ?? 0
+    }
+
     /// Every place across the strip where a zone ends and the next begins, or the strip ends, in screen widths from the screen's left
     /// edge: the vertical lines between zones, on the screen and in all the areas.
     public var zoneEdges: [Double] {
