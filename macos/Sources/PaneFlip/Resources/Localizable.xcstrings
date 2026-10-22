@@ -10403,278 +10403,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "تحرير التخطيط"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Редактиране на оформлението"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "লেআউট সম্পাদনা করুন"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edita la disposició"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upravit rozvržení"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rediger layout"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Layout bearbeiten"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Επεξεργασία διάταξης"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editar disposición"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muuda paigutust"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "ویرایش چیدمان"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muokkaa asettelua"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "I-edit ang layout"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modifier la disposition"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "עריכת הפריסה"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउट संपादित करें"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uredi raspored"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elrendezés szerkesztése"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit tata letak"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modifica layout"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "レイアウトを編集"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "레이아웃 편집"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redaguoti išdėstymą"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rediģēt izkārtojumu"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउट संपादित करा"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit reka letak"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rediger oppsett"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indeling bewerken"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edytuj układ"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editar disposição"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editar layout"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editează aspectul"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Изменить раскладку"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upraviť rozloženie"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uredi postavitev"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Уреди распоред"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redigera layout"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "தளவமைப்பைத் திருத்து"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "లేఅవుట్‌ను సవరించు"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "แก้ไขเลย์เอาต์"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şablonu düzenle"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Редагувати розкладку"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "لے آؤٹ میں ترمیم کریں"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Chỉnh sửa bố cục"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "编辑布局"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "編輯版面配置"
+            "state" : "new",
+            "value" : "Edit layout"
           }
         }
       }
@@ -34569,278 +34569,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "إظهار الحبة"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показвай хапчето"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "পিল দেখান"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostra la píndola"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zobrazit pilulku"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vis pillen"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pille anzeigen"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Εμφάνιση της κάψουλας"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar la píldora"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näita pillit"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "نمایش قرص"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näytä pilleri"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ipakita ang pill"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher la pilule"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "הצג את הכדור"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "पिल दिखाएँ"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prikaži tabletu"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pirula megjelenítése"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tampilkan pil"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostra la pillola"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "ピルを表示"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "필 표시"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rodyti piliulę"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rādīt tableti"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "पिल दाखवा"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tunjukkan pil"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vis pillen"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pil tonen"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaż pigułkę"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar a pílula"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar a pílula"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afișează pastila"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показывать таблетку"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zobraziť pilulku"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaži tableto"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Прикажи таблету"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visa pillret"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "பில்லைக் காட்டு"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "పిల్‌ను చూపించు"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "แสดงพิล"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hapı göster"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показувати пігулку"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "پل دکھائیں"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hiện viên thuốc"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示药丸"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示藥丸"
+            "state" : "new",
+            "value" : "Show the pill"
           }
         }
       }
@@ -40470,278 +40470,278 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "أوقف الحبة تمامًا. تبقى النوافذ مكدّسة؛ تنقّل بينها بالمفاتيح أو لوحة التتبع."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "bg" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Изключете хапчето напълно. Прозорците остават подредени; превключвайте между тях с клавишите или тракпада."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "bn" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "পিল সম্পূর্ণ বন্ধ করুন। উইন্ডোগুলো স্ট্যাকেই থাকে; কি বা ট্র্যাকপ্যাড দিয়ে সেগুলোর মধ্যে বদলান।"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desactiva la píndola del tot. Les finestres continuen apilades; canvia entre elles amb les tecles o el trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "cs" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pilulku úplně vypněte. Okna zůstanou naskládaná; přepínejte mezi nimi klávesami nebo trackpadem."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Slå pillen helt fra. Vinduerne forbliver stablet; skift mellem dem med tasterne eller trackpad'en."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Pille ganz ausschalten. Die Fenster bleiben gestapelt; wechsle mit den Tasten oder dem Trackpad zwischen ihnen."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "el" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Απενεργοποιήστε εντελώς την κάψουλα. Τα παράθυρα παραμένουν στοιβαγμένα· εναλλάξτε τα με τα πλήκτρα ή το trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desactiva la píldora por completo. Las ventanas siguen apiladas; cambia entre ellas con las teclas o el trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "et" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lülitage pill täielikult välja. Aknad jäävad virna; vahetage nende vahel klahvide või puuteplaadiga."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "fa" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "قرص را کاملاً خاموش کنید. پنجره‌ها همچنان روی هم می‌مانند؛ با کلیدها یا ترک‌پد بینشان جابه‌جا شوید."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poista pilleri kokonaan käytöstä. Ikkunat pysyvät pinossa; vaihda niiden välillä näppäimillä tai ohjauslevyllä."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "fil" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ganap na patayin ang pill. Nananatiling nakasalansan ang mga window; lumipat sa pagitan nila gamit ang mga key o ang trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Désactivez complètement la pilule. Les fenêtres restent empilées ; passez de l'une à l'autre avec les touches ou le trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "כבה את הכדור לחלוטין. החלונות נשארים מוערמים; עבור ביניהם עם המקשים או משטח המגע."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "पिल को पूरी तरह बंद करें। विंडो स्टैक में ही रहती हैं; कीज़ या ट्रैकपैड से उनके बीच बदलें।"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "hr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Potpuno isključite tabletu. Prozori ostaju složeni; među njima se prebacujte tipkama ili trackpadom."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kapcsolja ki teljesen a pirulát. Az ablakok egymásra rakva maradnak; a billentyűkkel vagy az érintőpaddal válthat közöttük."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "id" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Matikan pil sepenuhnya. Jendela tetap bertumpuk; beralih di antaranya dengan tombol atau trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disattiva del tutto la pillola. Le finestre restano impilate; passa dall'una all'altra con i tasti o il trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "ピルを完全にオフにします。ウインドウは重ねたままで、キーまたはトラックパッドで切り替えられます。"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "필을 완전히 끕니다. 윈도우는 계속 쌓여 있으며, 키나 트랙패드로 전환할 수 있습니다."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "lt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visiškai išjunkite piliulę. Langai lieka sukrauti; tarp jų perjunkite klavišais arba jutikliniu kilimėliu."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "lv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pilnībā izslēdziet tableti. Logi paliek sakrauti; pārslēdzieties starp tiem ar taustiņiem vai skārienpaliktni."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "mr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "पिल पूर्णपणे बंद करा. विंडो स्टॅक केलेल्याच राहतात; कीज किंवा ट्रॅकपॅडने त्यांच्यात बदला."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ms" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Matikan pil sepenuhnya. Tetingkap kekal bertindih; tukar antaranya dengan kekunci atau pad jejak."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Slå pillen helt av. Vinduene forblir stablet; bytt mellom dem med tastene eller styreflaten."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zet de pil helemaal uit. De vensters blijven gestapeld; wissel ertussen met de toetsen of het trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wyłącz pigułkę całkowicie. Okna pozostają ułożone w stos; przełączaj się między nimi klawiszami lub gładzikiem."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desative a pílula por completo. As janelas continuam empilhadas; alterne entre elas com as teclas ou o trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desative a pílula por completo. As janelas continuam empilhadas; alterne entre elas com as teclas ou o trackpad."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ro" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dezactivați complet pastila. Ferestrele rămân stivuite; comutați între ele cu tastele sau trackpadul."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Полностью отключите таблетку. Окна остаются в стопке; переключайтесь между ними клавишами или трекпадом."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pilulku úplne vypnite. Okná zostanú naskladané; medzi nimi prepínajte klávesmi alebo trackpadom."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "sl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tableto popolnoma izklopite. Okna ostanejo naložena; med njimi preklapljajte s tipkami ali sledilno ploščico."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Потпуно искључите таблету. Прозори остају сложени; међу њима се пребацујте тастерима или тракпедом."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stäng av pillret helt. Fönstren förblir staplade; växla mellan dem med tangenterna eller styrplattan."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ta" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "பில்லை முழுவதுமாக அணைக்கவும். சாளரங்கள் அடுக்கிலேயே இருக்கும்; விசைகள் அல்லது டிராக்பேடால் அவற்றுக்கிடையே மாறவும்."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "te" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "పిల్‌ను పూర్తిగా ఆఫ్ చేయండి. విండోలు స్టాక్‌లోనే ఉంటాయి; కీలు లేదా ట్రాక్‌ప్యాడ్‌తో వాటి మధ్య మారండి."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "th" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "ปิดพิลทั้งหมด หน้าต่างยังซ้อนกันอยู่ สลับระหว่างหน้าต่างด้วยปุ่มหรือแทร็กแพด"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hapı tamamen kapat. Pencereler yine üst üste kalır; aralarında tuşlarla ya da trackpad ile geçiş yap."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Повністю вимкніть пігулку. Вікна залишаються в стосі; перемикайтеся між ними клавішами або трекпадом."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "پل کو مکمل طور پر بند کریں۔ ونڈوز اسٹیک میں رہتی ہیں؛ کیز یا ٹریک پیڈ سے ان کے درمیان بدلیں۔"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tắt hẳn viên thuốc. Các cửa sổ vẫn xếp chồng; chuyển giữa chúng bằng phím hoặc bàn di chuột."
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "完全关闭药丸。窗口仍保持堆叠，可用按键或触控板在它们之间切换。"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "完全關閉藥丸。視窗仍保持堆疊，可用按鍵或觸控式軌跡板在它們之間切換。"
+            "state" : "new",
+            "value" : "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad."
           }
         }
       }
