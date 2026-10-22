@@ -21,8 +21,8 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
-│   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), AxisLock (a swipe is horizontal or not, decided in its first points)
-│   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition
+│   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), FingerSwipe (the fingers on the trackpad as a swipe with three or four: when it begins and ends), AxisLock (a swipe is horizontal or not, decided in its first points)
+│   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition, TrackpadMethod
 │   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
@@ -40,7 +40,7 @@ Sources/
     │                        BrandGlyphSource ← CDNBrandGlyphs,
     │                        ReleaseChecking (+ ReleaseInfo) ← GitHubReleaseChecker,
     │                        UpdateInstalling ← DiskImageUpdateInstaller (downloads the release disk image, checks its signature against the running app, swaps the app after it quits with `UpdateSwapScript`, which gives up if the app does not quit),
-    │                        ScrollSwitchListening ← EventTapScrollSwitch (the keys held while scrolling: two fingers lead the slide through a zone's windows or the layout toward the zones beyond the edges, the wheel steps; `ScrollSwitchEvent`, `ScrollSwitchTarget`),
+    │                        ScrollSwitchListening ← EventTapScrollSwitch (the mouse wheel with the keys held steps through a zone's windows or the layout, and so do two fingers with the keys held when the `TrackpadMethod` setting is `keysAndTwoFingers`) and MultitouchSwipes (when it is `threeAndFourFingers`: three fingers on the trackpad lead the slide through a zone's windows, four the layout toward the zones beyond the edges; read through the system's private multitouch framework, loaded at start; `ScrollSwitchEvent`, `ScrollSwitchTarget`),
     │                        KeyShortcutListening ← EventTapKeyShortcut (four changeable shortcuts, `KeyChord` in Core: next/previous window of a zone, scroll toward the zones beyond the right/left edge; `KeyShortcut` is what a press asks for),
     │                        KeyStateProviding ← HardwareKeyState (+ SnapTrigger+KeyState),
     │                        LoginItemControlling ← SMAppServiceLoginItem,
@@ -58,7 +58,7 @@ Sources/
                              SliderSettingRow, ScreenLayoutsSection, AppsPane, IgnoredAppsSection, LayoutCard, LayoutGapRow, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
                              WindowPresenceReporter, WindowPresenceView,
-                             PillContent+Title, PillPosition+Title, SnapTrigger+Title, AppLanguages
+                             PillContent+Title, PillPosition+Title, TrackpadMethod+Title, View+CappedHeight, SnapTrigger+Title, AppLanguages
 ```
 
 ## File conventions
@@ -76,7 +76,7 @@ Sources/
 |---|---|
 | `LayoutRepository` | Store layouts per display (shared by its desktops) and which one each desktop uses. Knows nothing about windows. |
 | `StripLayout` / `StripGeometry` | A screen's layout with the zones (`Overflow`) beyond its left and right edges as one strip; where each zone stands for a scroll offset, how far the screen may scroll and where a scroll comes to rest: whenever any vertical line between zones (on the screen or in an area) is at the left or the right edge of the screen (`StripLayout.rests`; `areaRests`, the far edges of the areas, is what the layout editor's view rests at). Pure arithmetic. `Parking` tells where a window waits when its zone is out of sight (one pixel on the display, at a side with no display beside it). |
-| `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. A press while a scroll runs gives it a new aim (the next rest position, or back); fingers or a press that come while it lands (its windows being put in place, its pictures about to give way) take it over: the pictures stay, the windows are parked again and the new scroll goes on from where it came to rest (without pictures, a press waits for the landing, three at most). Two fingers that come down while a scroll glides take it over where it is, whatever started it (keys, wheel, the pointer at the edge, earlier fingers). Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
+| `StripScroller` / `StripViewport` | A scroll (the shortcut or `EdgeScroller`) moves the screen along its strip: pictures of the windows in front glide (the render server moves them, so they glide whatever the apps or the machine do) while the real windows wait at the display's edge; the pictures glide on to the nearest rest position, the windows are put where they belong, and the pictures fade away. A press while a scroll runs gives it a new aim (the next rest position, or back); fingers or a press that come while it lands (its windows being put in place, its pictures about to give way) take it over: the pictures stay, the windows are parked again and the new scroll goes on from where it came to rest (without pictures, a press waits for the landing, three at most). Fingers (four) that come down while a scroll glides take it over where it is, whatever started it (keys, wheel, the pointer at the edge, earlier fingers). Pictures taken in earlier scrolls stand in at once. The viewport remembers each screen's offset for `ZonePlanner`. |
 | `EdgeScroller` | Push the pointer to the left or right edge of a screen and the zones beyond that edge scroll into view; the pointer must leave the edge to scroll again. The ends of the edge (120 pt at each corner) are left to macOS Hot Corners. |
 | `WindowMover` | Writes the positions of many windows off the main thread, one app at a time, latest wanted place only. |
 | `StackMemory` | Remember which app belongs to which zone, in the user's order. Knows nothing about windows. |

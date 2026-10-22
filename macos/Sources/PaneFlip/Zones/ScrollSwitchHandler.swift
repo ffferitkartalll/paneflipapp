@@ -2,8 +2,8 @@ import CoreGraphics
 import Foundation
 import PaneFlipCore
 
-/// Does what the scroll with the chosen keys held asks for: the windows of the zone under the pointer, or the layout of the screen
-/// toward the zones beyond its edges, follow two fingers on the trackpad; a turn of the mouse wheel steps.
+/// Does what the swipe or the scroll asks for: the windows of the zone under the pointer follow three fingers on the trackpad, the layout
+/// of the screen toward the zones beyond its edges follows four; a turn of the mouse wheel with the chosen keys held steps.
 final class ScrollSwitchHandler {
     /// Without pictures to show it with, a swipe over the screen does one step if the fingers have gone this far.
     private static let stepDistance: CGFloat = 80
@@ -11,12 +11,15 @@ final class ScrollSwitchHandler {
     private let coordinator: StackCoordinator
     private let scroller: StripScroller
     private let screens: ScreenProviding
+    /// Whether fingers on the trackpad may move this now (the setting is on, nothing else is being placed). The wheel is asked before it is heard.
+    private let allows: (ScrollSwitchTarget) -> Bool
     private var target: ScrollSwitchTarget?
     /// The pictures follow the fingers (the windows of a zone, or the layout); when they cannot, `plain` keeps what the fingers did, for the step.
     private var follows = false
     private var plain = ScrubGesture()
 
-    init(coordinator: StackCoordinator, scroller: StripScroller, screens: ScreenProviding) {
+    init(coordinator: StackCoordinator, scroller: StripScroller, screens: ScreenProviding, allows: @escaping (ScrollSwitchTarget) -> Bool = { _ in true }) {
+        self.allows = allows
         self.coordinator = coordinator
         self.scroller = scroller
         self.screens = screens
@@ -25,6 +28,7 @@ final class ScrollSwitchHandler {
     func handle(_ event: ScrollSwitchEvent) {
         switch event {
         case .began(let aimed):
+            guard allows(aimed) else { return }   // its moves and its end find no target and do nothing
             target = aimed
             plain = ScrubGesture()
             switch aimed {

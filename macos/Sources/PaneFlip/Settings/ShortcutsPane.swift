@@ -18,9 +18,6 @@ struct ShortcutsPane: View {
                 row(.snap, title: "Hold while dragging a window",
                     detail: "Zones light up while the keys are held; release the mouse over a zone to add the window.",
                     value: settings.values.snapTrigger, standard: .leftCommand) { settings.values.snapTrigger = $0 }
-                Text("Click the field, then press any key or combination. Esc cancels.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             .disabled(!settings.values.placementEnabled)
 
@@ -33,9 +30,6 @@ struct ShortcutsPane: View {
                         settings.values.hidePillKey = trigger
                     }
                 }
-                Text("Click the field, then press a modifier key. Esc cancels.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
 
@@ -43,9 +37,8 @@ struct ShortcutsPane: View {
                 chordRow(.nextWindow, title: "Next window", path: \.nextWindowShortcut, standard: .nextWindow)
                 chordRow(.previousWindow, title: "Previous window", path: \.previousWindowShortcut, standard: .previousWindow)
                 row(.windowScroll, title: "Hold while scrolling",
-                    detail: "Hold these keys and scroll over a zone, with two fingers or the mouse wheel, to move through its windows.",
+                    detail: "Hold these keys and scroll over a zone with the mouse wheel to move through its windows. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }
-                chordHint
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
 
@@ -53,20 +46,13 @@ struct ShortcutsPane: View {
                 chordRow(.scrollRight, title: "Scroll to the right", path: \.scrollRightShortcut, standard: .scrollRight)
                 chordRow(.scrollLeft, title: "Scroll to the left", path: \.scrollLeftShortcut, standard: .scrollLeft)
                 row(.stripScroll, title: "Hold while scrolling",
-                    detail: "Hold these keys and scroll over the screen, with two fingers or the mouse wheel, to slide to the zones beyond its edges.",
+                    detail: "Hold these keys and scroll over the screen with the mouse wheel to slide to the zones beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.stripScrollKeys, standard: .stripScroll) { settings.values.stripScrollKeys = $0 }
-                chordHint
             }
             .disabled(!settings.values.placementEnabled || !settings.values.overflowZonesEnabled)
         }
         .formStyle(.grouped)
         .onDisappear { stopRecording() }
-    }
-
-    private var chordHint: some View {
-        Text("Click the field, then press a key with at least one modifier key. Esc cancels.")
-            .font(.caption)
-            .foregroundStyle(.secondary)
     }
 
     private func chordRow(_ shortcut: Shortcut, title: LocalizedStringKey, path: ChordPath, standard: SnapTrigger) -> some View {
@@ -80,14 +66,16 @@ struct ShortcutsPane: View {
 
     private func row(_ shortcut: Shortcut, title: LocalizedStringKey, detail: LocalizedStringKey?, value: SnapTrigger,
                      standard: SnapTrigger, set: @escaping (SnapTrigger) -> Void) -> some View {
-        SettingRow(title: title, detail: detail) {
+        // With an explanation under its title, the field goes on a line of its own.
+        SettingRow(title: title, detail: detail, controlBelow: detail != nil) {
             HStack(spacing: 8) {
                 // The width belongs to the label: a frame around the button would leave empty space beside it.
                 Button { toggleRecording(shortcut, set: set) } label: {
-                    Text(verbatim: recording == shortcut ? recordingTitle : value.displayTitle).frame(minWidth: 110)
+                    Text(verbatim: recording == shortcut && recorder.isRecording ? recordingTitle : value.displayTitle).frame(minWidth: 110)
                 }
                 Button("Reset") { set(standard) }.disabled(value == standard)
             }
+            .frame(maxWidth: detail == nil ? nil : .infinity, alignment: .trailing)   // on its own line it keeps to the trailing edge
         }
     }
 
@@ -96,7 +84,7 @@ struct ShortcutsPane: View {
     }
 
     private func toggleRecording(_ shortcut: Shortcut, set: @escaping (SnapTrigger) -> Void) {
-        let wasRecording = recording == shortcut
+        let wasRecording = recording == shortcut && recorder.isRecording   // Esc stops the recorder and leaves `recording` set
         stopRecording()
         guard !wasRecording else { return }
         recording = shortcut

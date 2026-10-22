@@ -52,7 +52,7 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 
 **Zones beyond the screen**
 - Any number of areas beyond each edge, one after the other, reached with the shortcuts, by pushing the pointer to the
-  edge or with two fingers. The layout stops at every vertical line between zones, on the screen and beyond it, so each
+  edge or on the trackpad, by your choice: four fingers, or two fingers with the keys held. The layout stops at every vertical line between zones, on the screen and beyond it, so each
   step brings the next zone in. A window that gets the focus there brings its zone into view by itself.
 
 **Stacks and the pill**

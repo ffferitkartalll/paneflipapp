@@ -3,7 +3,8 @@ import Foundation
 import PaneFlipCore
 
 /// Listens with an event tap, which (unlike a monitor) can keep the scrolling from the app under the pointer, and needs only the
-/// Accessibility permission the app already has.
+/// Accessibility permission the app already has. It hears the mouse wheel with the chosen keys held, and (when the settings ask for it)
+/// two fingers on the trackpad with the keys held; three and four fingers are `MultitouchSwipes`.
 final class EventTapScrollSwitch: ScrollSwitchListening {
     private var tap: CFMachPort?
     private var onEvent: ((ScrollSwitchEvent) -> Void)?
@@ -18,8 +19,12 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     /// Whether the swipe in progress is a horizontal one: decided in its first points, kept to its end.
     private var axis = AxisLock()
 
-    init(gain: @escaping () -> CGFloat, target: @escaping () -> ScrollSwitchTarget?) {
+    /// Whether the settings let two fingers with the keys held lead the slide.
+    private let twoFingers: () -> Bool
+
+    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
         self.gain = gain
+        self.twoFingers = twoFingers
         self.target = target
     }
 
@@ -48,7 +53,9 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             return Unmanaged.passUnretained(event)
         }
         guard type == .scrollWheel else { return Unmanaged.passUnretained(event) }
-        let aimed = target()
+        // Fingers on the trackpad scroll as they always do unless the settings give them to the keys; a mouse wheel is the keys' either way.
+        let wheel = event.getIntegerValueField(.scrollWheelEventIsContinuous) == 0
+        let aimed = wheel || twoFingers() ? target() : nil
         // The keys were let go (or others taken) in the middle of a swipe: it ends here.
         if inGesture, aimed != gestureTarget {
             inGesture = false
