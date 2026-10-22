@@ -271,6 +271,11 @@ final class StackCoordinator {
     /// when the pictures cannot follow the fingers (a slide that is not a swipe runs, there is nothing to swipe through): the caller steps
     /// instead, and a step that has to wait for the slide waits.
     @discardableResult
+    /// Whether a swipe through the windows could begin with the pointer here: a zone with more than one window, nothing else being placed.
+    func canScrubWindows(at point: CGPoint) -> Bool {
+        !placementOnly() && (zoneID(at: point).flatMap { stacks[$0] }?.tabs.count ?? 0) > 1
+    }
+
     func beginWindowScrub(at point: CGPoint) -> Bool {
         guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return false }
         return beginWindowScrub(in: stack)

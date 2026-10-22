@@ -98,7 +98,8 @@ final class AppContainer {
         self.updates = UpdatesModel(
             currentVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
             checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
-        self.editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
+        let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
+        self.editor = editor
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
@@ -108,14 +109,16 @@ final class AppContainer {
                 .compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                                       twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers }) { [settings, keys, coordinator] in
+                                                       twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers }) { [settings, keys, coordinator, screens, editor] in
             let v = settings.values
-            guard v.placementEnabled, !coordinator.placementOnly() else { return nil }
+            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown else { return nil }
             let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
             let windows = v.stackingEnabled && v.windowScrollKeys.isHeld(using: keys)
             // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
-            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return .strip }
-            return windows ? .windows : nil
+            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return screens.isMissionControlActive ? nil : .strip }
+            let target: ScrollSwitchTarget? = windows ? .windows : nil
+            // Asked only once a key is held: it costs a window list. Nothing of ours moves under Mission Control or App Exposé.
+            return target != nil && screens.isMissionControlActive ? nil : target
         }
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
@@ -123,13 +126,21 @@ final class AppContainer {
                                      stage: PanelScrollStage(screens: screens, panels: stagePanels), preview: PanelScrollPreview(),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                     isBusy: { coordinator.placementOnly() || screens.isMissionControlActive })
-        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator] target in
+                                     isBusy: { coordinator.placementOnly() || editor.isShown || screens.isMissionControlActive })
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, screens, editor] target in
             let v = settings.values
-            return v.placementEnabled && !coordinator.placementOnly() && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
+            return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
+                && !screens.isMissionControlActive
         }
         let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        isOn: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers })
+        let mouseSwipes: ScrollSwitchListening = MouseButtonSwipes(
+            gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
+            canBegin: { [settings, coordinator, screens, editor] in
+                let v = settings.values
+                return v.placementEnabled && v.stackingEnabled && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
+                    && !screens.isMissionControlActive
+            })
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
@@ -152,6 +163,7 @@ final class AppContainer {
             edgeScroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
+            mouseSwipes.start(onEvent: scrollSwitchHandler.handle)
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)
