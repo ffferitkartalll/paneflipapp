@@ -14,6 +14,8 @@ public struct SettingsValues: Equatable {
     public var edgeMargin = 0.0
     /// Smallest width/height a zone may have, in points.
     public var minZoneSize = 240.0
+    /// Show the stack pill at all. When off, windows are still stacked and switched with the keys and the trackpad.
+    public var pillEnabled = true
     /// What the stack pill shows for each window.
     public var pillContent = PillContent.icon
     /// The edge of its zone the pill sits along.

@@ -65,6 +65,19 @@ final class PillPresenterTests: XCTestCase {
         XCTAssertEqual(panels.first?.ignoresMouseEvents, true, "it does not take the mouse until the pointer is on it")
     }
 
+    func testTheSettingTurnsThePillOffCompletely() {
+        settings.values.pillAlwaysVisible = true
+        settings.values.pillEnabled = false
+        presenter.zonesDidChange()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+        XCTAssertEqual(panels.first?.alphaValue, 0)
+        XCTAssertEqual(panels.first?.ignoresMouseEvents, true)
+        settings.values.pillEnabled = true
+        presenter.zonesDidChange()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+        XCTAssertEqual(panels.first?.alphaValue, 1)
+    }
+
     func testThePillStaysAwayWhileMissionControlIsOpen() {
         screens.isMissionControlActive = true
         presenter.zonesDidChange()
