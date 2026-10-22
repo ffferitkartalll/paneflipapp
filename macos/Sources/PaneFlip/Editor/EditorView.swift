@@ -31,7 +31,7 @@ struct EditorView: View {
                             Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
                         }
                         .overlay {
-                            Text(verbatim: size(of: z.rect, in: geo.size)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
+                            Text(verbatim: EditorModel.size(of: z.rect, in: geo.size, area: area)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
                         }
                         .offset(x: z.rect.minX + 3, y: z.rect.minY + 3)
                         .allowsHitTesting(false)
@@ -81,11 +81,6 @@ struct EditorView: View {
         }
     }
 
-    /// A zone's size in points, worked out from its share of the editor.
-    private func size(of rect: CGRect, in view: CGSize) -> String {
-        "\(Int((rect.width / view.width * area.width).rounded())) × \(Int((rect.height / view.height * area.height).rounded()))"
-    }
-
     // MARK: Areas beyond the screen
 
     /// Zones are named as everywhere else: 1, 2, 3 on the screen, -1, -2 beyond the left edge, +1, +2 beyond the right one.
@@ -123,9 +118,8 @@ struct EditorView: View {
 
     /// The whole strip in small, with the screen the editor shows marked, and which screen it is.
     private var preview: some View {
-        let rests = model.strip.areaRests
-        let here = rests.indices.min { abs(rests[$0] - model.offset) < abs(rests[$1] - model.offset) } ?? 0
-        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(rests.count)"), animated: true)
+        let here = model.strip.nearestAreaRestIndex(to: model.offset)
+        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(model.strip.areaRests.count)"), animated: true)
             .allowsHitTesting(false)
     }
 

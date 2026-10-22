@@ -131,6 +131,8 @@ final class StripLayoutTests: XCTestCase {
         let s = StripLayout(leading: [Overflow(width: 0.5, root: .leaf(left)), Overflow(width: 1, root: .leaf(UUID()))], root: .leaf(screen),
                             trailing: [Overflow(width: 1, root: .leaf(right)), Overflow(width: 0.25, root: .leaf(UUID()))])
         XCTAssertEqual(s.areaRests, [-1.5, -0.5, 0, 1, 1.25], "from the left to the right")
+        XCTAssertEqual(s.nearestAreaRestIndex(to: 0.4), 2)
+        XCTAssertEqual(s.nearestAreaRestIndex(to: -1), 0, "a tie goes to the left")
     }
 
     func testTheAreaAViewRestsAtIsTheOneWhoseFarEdgeItStandsAt() {

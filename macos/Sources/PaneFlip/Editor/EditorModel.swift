@@ -66,8 +66,8 @@ final class EditorModel {
     /// The view moves `steps` screens along (negative: to the left), as far as there are.
     func step(_ steps: Int) {
         let rests = strip.areaRests
-        guard steps != 0, let here = rests.indices.min(by: { abs(rests[$0] - offset) < abs(rests[$1] - offset) }) else { return }
-        offset = rests[min(max(here + steps, 0), rests.count - 1)]
+        guard steps != 0 else { return }
+        offset = rests[min(max(strip.nearestAreaRestIndex(to: offset) + steps, 0), rests.count - 1)]
     }
 
     /// Two fingers moved sideways, or lifted.
@@ -78,8 +78,13 @@ final class EditorModel {
 
     /// After an area went: the view rests at the nearest of the rests there are.
     private func settle() {
-        let rests = strip.areaRests
-        offset = rests.min { abs($0 - offset) < abs($1 - offset) } ?? 0
+        offset = strip.areaRests[strip.nearestAreaRestIndex(to: offset)]
+    }
+
+    /// A zone's size in points, worked out from its share of the view; empty while the view has no size yet.
+    static func size(of rect: CGRect, in view: CGSize, area: CGSize) -> String {
+        guard view.width > 0, view.height > 0 else { return "" }
+        return "\(Int((rect.width / view.width * area.width).rounded())) × \(Int((rect.height / view.height * area.height).rounded()))"
     }
 
     /// Whether a line of the tree is the edge of an area (the editor does not let the user drag those: a screen has the width of the screen).

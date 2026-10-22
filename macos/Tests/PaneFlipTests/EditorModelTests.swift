@@ -94,4 +94,10 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(editor.offset, 1.25)
         XCTAssertEqual(editor.strip.areaRests, [0, 0.25, 1.25])
     }
+
+    func testAZoneSizeIsItsShareOfTheAreaInPoints() {
+        let area = CGSize(width: 1440, height: 900)
+        XCTAssertEqual(EditorModel.size(of: CGRect(x: 0, y: 0, width: 500, height: 400), in: CGSize(width: 1000, height: 800), area: area), "720 × 450")
+        XCTAssertEqual(EditorModel.size(of: CGRect(x: 0, y: 0, width: 5, height: 5), in: .zero, area: area), "", "no size yet, nothing to divide by")
+    }
 }
