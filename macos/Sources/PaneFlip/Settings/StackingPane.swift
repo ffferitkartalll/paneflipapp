@@ -16,6 +16,11 @@ struct StackingPane: View {
             .disabled(!settings.values.placementEnabled)
 
             Section("Pill") {
+                SettingRow(title: "Show the pill",
+                           detail: "Turn the pill off completely. Windows stay stacked; switch between them with the keys or the trackpad.") {
+                    Toggle("Show the pill", isOn: $settings.values.pillEnabled).labelsHidden()
+                }
+                Group {
                 SettingRow(title: "Show for a single window",
                            detail: "Show the pill also in a zone that holds only one window. When off, the pill appears once a zone holds two or more.") {
                     Toggle("Show for a single window", isOn: $settings.values.pillForSingleWindow).labelsHidden()
@@ -44,6 +49,8 @@ struct StackingPane: View {
                            detail: "Looks up an icon for apps the system has none for. The names of the apps in your zones are sent to a public icon host (jsDelivr). When off, nothing is looked up: icons already downloaded stay and other apps use a shape from their own icon.") {
                     Toggle("Fetch brand icons", isOn: $settings.values.fetchBrandIcons).labelsHidden()
                 }
+                }
+                .disabled(!settings.values.pillEnabled)
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
         }
