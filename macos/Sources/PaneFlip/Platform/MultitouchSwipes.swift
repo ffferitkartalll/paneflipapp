@@ -61,7 +61,18 @@ final class MultitouchSwipes: ScrollSwitchListening {
 
     private func startDevices() {
         guard let list = symbol("MTDeviceCreateList", as: Devices.self), let register = symbol("MTRegisterContactFrameCallbackWithRefcon", as: Register.self),
-              let start = symbol("MTDeviceStart", as: Switch.self), let all = list()?.takeRetainedValue() else { return }
+              let start = symbol("MTDeviceStart", as: Switch.self) else { return }
+        // The framework prints a line about every trackpad it finds ("Recognized … family"); that is not ours to show.
+        fflush(stdout)
+        let console = dup(STDOUT_FILENO), quiet = open("/dev/null", O_WRONLY)
+        dup2(quiet, STDOUT_FILENO)
+        defer {
+            fflush(stdout)
+            dup2(console, STDOUT_FILENO)
+            close(console)
+            close(quiet)
+        }
+        guard let all = list()?.takeRetainedValue() else { return }
         devices = all
         for index in 0..<CFArrayGetCount(all) {
             guard let device = CFArrayGetValueAtIndex(all, index) else { continue }
