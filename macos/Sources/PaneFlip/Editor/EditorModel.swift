@@ -82,6 +82,13 @@ final class EditorModel {
         offset = 0
     }
 
+    /// The screen's own layout takes the shape of a preset; its zones keep the identities of the zones it had, in order.
+    func useShape(_ preset: LayoutPreset) {
+        checkpoint()
+        strip.root = preset.root.reusing(strip.root.leafIDs)
+        offset = 0
+    }
+
     /// The area the view is about (nil on the screen's own layout), which the user may remove.
     var editedArea: Overflow? { strip.area(at: offset) }
     /// The plus buttons show where the view is at the outermost screen on that side: another one comes after it.

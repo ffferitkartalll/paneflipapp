@@ -16,7 +16,7 @@ struct LayoutPresetSheet: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: Self.width), spacing: 14)], spacing: 14) {
                     blankTile
-                    ForEach(LayoutPreset.all) { preset in
+                    ForEach(LayoutPreset.suggested(for: screen.size)) { preset in
                         Button {
                             pick(preset, false)
                             dismiss()

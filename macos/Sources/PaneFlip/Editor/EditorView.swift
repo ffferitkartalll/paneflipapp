@@ -7,6 +7,7 @@ struct EditorView: View {
     let settings: AppSettings
     /// The area zones are laid out in, in points: one screen's width of the editor stands for it.
     let area: CGSize
+    @State private var showShapes = false
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
     private let snapDistance: CGFloat = 20
 
@@ -130,6 +131,24 @@ struct EditorView: View {
 
     // MARK: Controls
 
+    private var shapes: some View {
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
+                ForEach(LayoutPreset.suggested(for: area)) { preset in
+                    Button {
+                        model.useShape(preset)
+                        showShapes = false
+                    } label: {
+                        LayoutMiniature(root: preset.root, screenSize: area, width: 120)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(14)
+        }
+        .frame(width: 440, height: 380)
+    }
+
     private var controls: some View {
         VStack(spacing: 12) {
             GlassEffectContainer(spacing: 12) {
@@ -144,6 +163,9 @@ struct EditorView: View {
                         .buttonStyle(.glass)
                         .keyboardShortcut("z", modifiers: [.command, .shift])
                         .disabled(!model.canRedo)
+                    Button { showShapes = true } label: { Label("Layouts", systemImage: "square.grid.2x2") }
+                        .buttonStyle(.glass)
+                        .popover(isPresented: $showShapes) { shapes }
                     Button { model.reset() } label: { Label("Reset", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.glass)
                     if model.editedArea != nil {
