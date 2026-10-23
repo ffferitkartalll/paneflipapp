@@ -1,5 +1,6 @@
 import PaneFlipCore
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// One screen: its name and size, then its layouts as cards and the card for adding another.
 struct ScreenLayoutsSection: View {
@@ -12,6 +13,8 @@ struct ScreenLayoutsSection: View {
     let showsOverflow: Bool
     let defaultGap: Double
     @State private var choosesShape = false
+    @State private var importing = false
+    @State private var importFailed = false
 
     var body: some View {
         Section {
@@ -48,6 +51,31 @@ struct ScreenLayoutsSection: View {
                 .foregroundStyle(.secondary)
             }
         }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+            guard case .success(let url) = result else { return }
+            let opened = url.startAccessingSecurityScopedResource()
+            defer { if opened { url.stopAccessingSecurityScopedResource() } }
+            if let data = try? Data(contentsOf: url), let layout = try? NamedLayout.imported(from: data) {
+                layouts.importLayout(for: screen.key, layout)
+            } else {
+                importFailed = true
+            }
+        }
+        .alert("This file is not a layout.", isPresented: $importFailed) { Button("Done") {} }
+    }
+
+    private func halfCard(_ icon: String, _ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon).font(.system(size: 22, weight: .regular))
+                Text(title).font(.headline)
+            }
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.quaternary, in: .rect(cornerRadius: 8))
+            .contentShape(.rect(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
     }
 
     /// Which layout each desktop of the display uses; a layout is offered to one desktop at a time.
@@ -73,17 +101,11 @@ struct ScreenLayoutsSection: View {
                        layouts: layouts, editor: editor, apps: apps, navigation: navigation, showsOverflow: showsOverflow, defaultGap: defaultGap)
                 .hidden()
 
-            Button { choosesShape = true } label: {
-                VStack(spacing: 8) {
-                    Image(systemName: "plus").font(.system(size: 22, weight: .regular))
-                    Text("Add layout").font(.headline)
-                }
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.quaternary, in: .rect(cornerRadius: 8))
-                .contentShape(.rect(cornerRadius: 8))
+            // The card in two halves: Add on top, Import below.
+            VStack(spacing: 6) {
+                halfCard("plus", "Add") { choosesShape = true }
+                halfCard("square.and.arrow.down", "Import") { importing = true }
             }
-            .buttonStyle(.plain)
             .sheet(isPresented: $choosesShape) {
                 LayoutPresetSheet(screen: screen) { preset, edit in
                     let layout = layouts.addLayout(for: screen.key, preset: preset)

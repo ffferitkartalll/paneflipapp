@@ -32,6 +32,10 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.duplicateLayout(id: id, key: key, named: String(localized: "Layout \(repository.layouts(for: key).count + 1)"))
     }
 
+    func importLayout(for key: String, _ layout: NamedLayout) {
+        repository.importLayout(layout, key: key)
+    }
+
     func updateLayout(key: String, id: UUID, strip: StripLayout) {
         guard let old = repository.layout(id: id, key: key) else { return }
         let isActive = repository.activeLayout(for: key)?.id == id

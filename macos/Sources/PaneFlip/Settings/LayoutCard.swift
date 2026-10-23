@@ -20,6 +20,7 @@ struct LayoutCard: View {
 
     @State private var isRenaming = false
     @State private var draftName = ""
+    @State private var exporting = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -30,6 +31,9 @@ struct LayoutCard: View {
             HStack(spacing: 6) {
                 Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
                 Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }
+                Button { exporting = true } label: { Image(systemName: "square.and.arrow.up") }
+                    .help("Export…")
+                    .accessibilityLabel("Export…")
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -43,6 +47,8 @@ struct LayoutCard: View {
                            setStartApp: { layouts.setStartApp(key: screen.key, id: layout.id, bundleID: $0, chosen: $1) },
                            setZoneName: { layouts.setZoneName(key: screen.key, id: layout.id, zone: $0, to: $1) })
         }
+        .fileExporter(isPresented: $exporting, document: LayoutFile(data: (try? layout.exported()) ?? Data()),
+                      contentType: .json, defaultFilename: layout.name) { _ in }
         .alert("Rename Layout", isPresented: $isRenaming) {
             TextField("Layout name", text: $draftName)
             Button("Done", action: commitRename)
