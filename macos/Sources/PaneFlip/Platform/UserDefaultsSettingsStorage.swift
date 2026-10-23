@@ -26,6 +26,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
         v.pillEnabled = defaults.object(forKey: "pillEnabled") as? Bool ?? v.pillEnabled
+        v.mouseButtonSwipe = defaults.object(forKey: "mouseButtonSwipe") as? Bool ?? v.mouseButtonSwipe
         v.pillPosition = defaults.string(forKey: "pillPosition").flatMap(PillPosition.init(rawValue:)) ?? v.pillPosition
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.pillForSingleWindow = defaults.object(forKey: "pillForSingleWindow") as? Bool ?? v.pillForSingleWindow
@@ -54,6 +55,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
         defaults.set(v.pillEnabled, forKey: "pillEnabled")
+        defaults.set(v.mouseButtonSwipe, forKey: "mouseButtonSwipe")
         defaults.set(v.pillPosition.rawValue, forKey: "pillPosition")
         defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")

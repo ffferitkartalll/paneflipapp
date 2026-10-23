@@ -25,6 +25,7 @@ struct MenuContent: View {
             }
         }
         .labelStyle(.titleAndIcon)
+        .accessibilityAddTraits(settings.values.placementEnabled ? .isSelected : [])
         Divider()
         MenuLayouts(repository: repository, layouts: layouts, screens: screens)
         let toStart = screens.screens().compactMap { repository.activeLayout(for: $0.key) }.flatMap { apps.startApps(of: $0) }

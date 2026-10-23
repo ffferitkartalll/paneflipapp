@@ -136,6 +136,14 @@ struct EditorView: View {
                 HStack(spacing: 12) {
                     Button { model.close() } label: { Label("Close", systemImage: "xmark") }
                         .buttonStyle(.glass)
+                    Button { model.undo() } label: { Label("Undo", systemImage: "arrow.uturn.backward") }
+                        .buttonStyle(.glass)
+                        .keyboardShortcut("z", modifiers: .command)
+                        .disabled(!model.canUndo)
+                    Button { model.redo() } label: { Label("Redo", systemImage: "arrow.uturn.forward") }
+                        .buttonStyle(.glass)
+                        .keyboardShortcut("z", modifiers: [.command, .shift])
+                        .disabled(!model.canRedo)
                     Button { model.reset() } label: { Label("Reset", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.glass)
                     if model.editedArea != nil {
@@ -302,6 +310,7 @@ struct EditorView: View {
     private func drag(_ d: SplitDivider) -> some Gesture {
         DragGesture(minimumDistance: 1, coordinateSpace: .named("editor"))
             .onChanged { resize(d, to: $0.location) }
+            .onEnded { _ in model.endResize() }
     }
 
     private func middle(of d: SplitDivider) -> CGPoint {

@@ -138,7 +138,7 @@ final class AppContainer {
             gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
             canBegin: { [settings, coordinator, screens, editor] in
                 let v = settings.values
-                return v.placementEnabled && v.stackingEnabled && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
+                return v.placementEnabled && v.stackingEnabled && v.mouseButtonSwipe && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
                     && !screens.isMissionControlActive
             })
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }

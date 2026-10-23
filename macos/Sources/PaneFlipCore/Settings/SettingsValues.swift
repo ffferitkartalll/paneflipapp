@@ -26,6 +26,8 @@ public struct SettingsValues: Equatable {
     public var pillAlwaysVisible = false
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).
     public var fetchBrandIcons = true
+    /// The mouse's wheel button, held and moved to the side over a zone, moves through its windows.
+    public var mouseButtonSwipe = true
     /// Held while dragging a window to highlight zones and snap into one.
     public var snapTrigger = SnapTrigger.leftCommand
     /// The modifier key that, tapped twice, hides the pill under the pointer.
