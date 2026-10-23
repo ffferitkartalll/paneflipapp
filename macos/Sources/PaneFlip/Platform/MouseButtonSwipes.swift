@@ -8,8 +8,10 @@ private func CGSMainConnectionID() -> Int32
 private func CGSSetConnectionProperty(_ connection: Int32, _ target: Int32, _ key: CFString, _ value: CFTypeRef) -> Int32
 
 /// The wheel button of a mouse, held down and moved to the side, leads the windows of a zone like three fingers do: the mouse is a
-/// trackpad then. The pointer stays where it is and shows a hand. A click of the button that never moves is given back to the app under
-/// the pointer, so the button keeps its use (a link opened in a new tab) everywhere a swipe could not begin.
+/// trackpad then. Nothing happens until the mouse moves: the button pressed and let go is given back to the app under the pointer as the click
+/// it is (a tab closed, a link opened in a new tab). From the first move the pointer stays where it was pressed and shows a hand. The pointer
+/// is only held still for good while this app is the active one, so it takes the focus for the swipe; the window that comes to the front at
+/// its end takes the focus back (`StackCoordinator`), and the app that had it is given it back if no window does.
 final class MouseButtonSwipes: ScrollSwitchListening {
     private static let wheelButton: Int64 = 2
     /// Marks the click given back, so it is not taken again.
@@ -21,6 +23,10 @@ final class MouseButtonSwipes: ScrollSwitchListening {
     private let canBegin: () -> Bool
     /// How far the content goes for each point the mouse moves.
     private let gain: () -> CGFloat
+    /// The app under the pointer set its own pointer at every move: the hand is set again right after, for as long as the swipe lasts.
+    private var handTimer: Timer?
+    /// The app that was in front when the swipe began.
+    private var previousApp: NSRunningApplication?
     private var held = false
     private var moved = false
     private var pressedAt = CGPoint.zero
@@ -61,20 +67,21 @@ final class MouseButtonSwipes: ScrollSwitchListening {
             guard canBegin() else { return Unmanaged.passUnretained(event) }
             held = true
             moved = false
-            // The event's place is the mouse's own count, which after a swipe is not where the pointer is: take the pointer's.
-            pressedAt = CGEvent(source: nil)?.location ?? event.location
-            CGAssociateMouseAndMouseCursorPosition(0)   // the pointer stays; the mouse still reports how far it goes
-            showHand()
-            return nil
+            pressedAt = CGEvent(source: nil)?.location ?? event.location   // where the pointer is: the count of the mouse may be elsewhere
+            return nil   // kept until it is known whether this is a click or a swipe
         case .otherMouseDragged where held:
             let dx = CGFloat(event.getDoubleValueField(.mouseEventDeltaX))
-            guard dx != 0 else { return nil }
+            guard dx != 0 || moved else { return nil }
             if !moved {
                 moved = true
+                previousApp = NSWorkspace.shared.frontmostApplication
+                NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
+                CGAssociateMouseAndMouseCursorPosition(0)   // the pointer stays; the mouse still reports how far it goes
+                showHand()
+                handTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { [weak self] _ in self?.showHand() }
                 send(.began(.windows))
             }
-            send(.moved(dx * gain(), at: Double(event.timestamp) / 1_000_000_000))
-            showHand()
+            if dx != 0 { send(.moved(dx * gain(), at: ProcessInfo.processInfo.systemUptime)) }   // the event's own stamp is in machine ticks
             return nil
         case .otherMouseUp where held:
             let clicked = !moved
@@ -90,10 +97,21 @@ final class MouseButtonSwipes: ScrollSwitchListening {
     private func release() {
         guard held else { return }
         held = false
+        handTimer?.invalidate()
+        handTimer = nil
+        guard moved else { return }
         CGAssociateMouseAndMouseCursorPosition(1)
         // Joined to the mouse again, the pointer must be where it was left, not where the mouse counts it.
         CGWarpMouseCursorPosition(pressedAt)
         NSCursor.arrow.set()
+        // The window that comes to the front takes the focus (when its pictures have settled); if none does, the app that had it gets it back.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in self?.giveFocusBack() }
+    }
+
+    private func giveFocusBack() {
+        defer { previousApp = nil }
+        guard !held, NSApp.isActive, NSApp.keyWindow == nil, let previous = previousApp, previous != NSRunningApplication.current else { return }
+        previous.activate()
     }
 
     /// Another app's pointer is only set from the background when the connection says so.
