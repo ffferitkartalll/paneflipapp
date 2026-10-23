@@ -60,18 +60,18 @@ struct SettingsView: View {
 
             StackingPane(settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.stacking))
-                .tabItem { Label("Stacking", systemImage: "square.stack.3d.up") }
+                .tabItem { Label("Stacking", systemImage: "interface.window.stack") }
                 .tag(SettingsTab.stacking)
+
+            TrackpadPane(settings: settings)
+                .cappedHeight(contentHeight, natural: natural(.trackpad))
+                .tabItem { Label("Moving", systemImage: "appwindow.swipe.rectangle") }
+                .tag(SettingsTab.trackpad)
 
             ShortcutsPane(settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.shortcuts))
                 .tabItem { Label("Shortcuts", systemImage: "command") }
                 .tag(SettingsTab.shortcuts)
-
-            TrackpadPane(settings: settings)
-                .cappedHeight(contentHeight, natural: natural(.trackpad))
-                .tabItem { Label("Trackpad", systemImage: "rectangle.and.hand.point.up.left") }
-                .tag(SettingsTab.trackpad)
 
             UpdatesPane(model: updates)
                 .cappedHeight(contentHeight, natural: natural(.updates))

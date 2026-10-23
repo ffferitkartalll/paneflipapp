@@ -100,4 +100,50 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(EditorModel.size(of: CGRect(x: 0, y: 0, width: 500, height: 400), in: CGSize(width: 1000, height: 800), area: area), "720 × 450")
         XCTAssertEqual(EditorModel.size(of: CGRect(x: 0, y: 0, width: 5, height: 5), in: .zero, area: area), "", "no size yet, nothing to divide by")
     }
+
+    func testUndoAndRedoGoBackAndForthAlongTheChanges() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        XCTAssertFalse(editor.canUndo)
+        editor.split(a, sideBySide: true, ratio: 0.5)
+        editor.addTrailing()
+        XCTAssertEqual(editor.strip.trailing.count, 1)
+
+        editor.undo()
+        XCTAssertTrue(editor.strip.trailing.isEmpty)
+        XCTAssertEqual(editor.offset, 0, "the view goes back with it")
+        XCTAssertEqual(editor.root.leafIDs.count, 2, "the split is still there")
+        editor.redo()
+        XCTAssertEqual(editor.strip.trailing.count, 1)
+        editor.undo(); editor.undo()
+        XCTAssertEqual(editor.root.leafIDs, [a])
+        XCTAssertFalse(editor.canUndo)
+        XCTAssertTrue(editor.canRedo)
+    }
+
+    func testANewChangeEndsTheRedoes() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.split(a, sideBySide: true, ratio: 0.5)
+        editor.undo()
+        XCTAssertTrue(editor.canRedo)
+        editor.split(a, sideBySide: false, ratio: 0.5)
+        XCTAssertFalse(editor.canRedo)
+    }
+
+    func testTheMovesOfOneDragAreOneChange() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.split(a, sideBySide: true, ratio: 0.5)
+        guard case .split(let line, _, _, _, _) = editor.root else { return XCTFail("a split") }
+        for ratio in [0.45, 0.4, 0.35, 0.3] { editor.setRatio(line, ratio) }
+        editor.endResize()
+        editor.setRatio(line, 0.6)   // a second drag
+        editor.undo()
+        guard case .split(_, _, let afterOne, _, _) = editor.root else { return XCTFail("a split") }
+        XCTAssertEqual(afterOne, 0.3, accuracy: 1e-9, "the second drag is undone as a whole")
+        editor.undo()
+        guard case .split(_, _, let afterTwo, _, _) = editor.root else { return XCTFail("a split") }
+        XCTAssertEqual(afterTwo, 0.5, accuracy: 1e-9, "and the first as a whole")
+    }
 }

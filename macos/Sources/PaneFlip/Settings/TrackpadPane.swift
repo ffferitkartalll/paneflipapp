@@ -1,7 +1,7 @@
 import PaneFlipCore
 import SwiftUI
 
-/// Tab: what the trackpad moves through the windows and the zones beyond the screen with, and how fast.
+/// Tab: what the trackpad (and the mouse) moves through the windows and the zones beyond the screen with, and how fast.
 struct TrackpadPane: View {
     @Bindable var settings: AppSettings
 
@@ -26,6 +26,14 @@ struct TrackpadPane: View {
                 }
             }
             .disabled(!settings.values.placementEnabled)
+
+            Section("Mouse") {
+                SettingRow(title: "Move with the wheel button",
+                           detail: "Hold the mouse's wheel button over a zone with several windows and move the mouse to the side to move through them. When off, the button works as it does in any app.") {
+                    Toggle("Move with the wheel button", isOn: $settings.values.mouseButtonSwipe).labelsHidden()
+                }
+            }
+            .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
         }
         .formStyle(.grouped)
     }
