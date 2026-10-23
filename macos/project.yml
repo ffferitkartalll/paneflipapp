@@ -96,6 +96,7 @@ targets:
       - path: Sources/PaneFlip/Pill/PillPresenter.swift
       - path: Sources/PaneFlip/Pill/DoubleTapDetector.swift
       - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
+      - path: Sources/PaneFlip/Settings/SnapTrigger+Title.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
       - path: Sources/PaneFlip/Zones/LayoutAppEntry.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift

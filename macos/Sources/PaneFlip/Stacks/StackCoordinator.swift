@@ -31,8 +31,13 @@ final class StackCoordinator {
     var isScrolling = false
     /// Whether PaneFlip itself has the focus (a swipe with the mouse's wheel button): the window a swipe ends on is then given the focus.
     var holdsTheFocus: () -> Bool = { false }
+    /// Shows the focus going from one zone to another (a keyboard shortcut moved it): the rectangle of the zone it left and of the one it reached.
+    var flashZone: (CGRect, CGRect) -> Void = { _, _ in }
     /// Called when the focus is on a window of a zone beyond the screen's edge, which is out of sight: the layout should scroll to it.
     var onFocusBeyondTheEdge: ((UUID) -> Void)?
+    /// A shortcut moved the focus to a zone beyond the edge: the layout should scroll to it, without showing the map of the strip.
+    /// It tells where the zone will stand when the scroll is over, as the scroll starts.
+    var onReachBeyondTheEdge: ((UUID, _ standsAt: @escaping (CGRect) -> Void) -> Void)?
 
     private let windows: WindowSystem
     private let memory: StackMemory
@@ -62,6 +67,7 @@ final class StackCoordinator {
             stack.rect = zone.rect
             stack.frame = zone.frame
             stack.isParked = zone.isParked
+            stack.number = zone.number
             guard !placementOnly(), !isScrolling else { continue }   // a scroll is moving the windows
             for tab in stack.tabs {
                 guard let ref = stack.refs[tab.id] else { continue }
@@ -239,6 +245,57 @@ final class StackCoordinator {
         // With nothing moving the window in front is the one in focus; while pictures glide it is the one they go to, and stays.
         if windowScrub == nil, !isSliding, stack.activeID != focused.id { stack.activeID = focused.id }
         stepWindowScrub(in: stack, by: reverse ? -1 : 1)
+    }
+
+    /// Control+Option+O/K/L/;: the focus goes to the front window of the zone beside the zone of the window in focus (the zone of the window
+    /// under the pointer when that one is in none). Past the last zone on the screen to the left or to the right it goes on to the zones
+    /// beyond the screen's edge, which the layout scrolls into view. Nothing happens where there is no such zone.
+    func focusZone(toward direction: ZoneDirection) {
+        guard settings.values.zoneNavigationEnabled, !placementOnly(), windowScrub == nil, !isSliding else { return }
+        let from = windows.focusedWindow().flatMap { stack(containing: $0.id) }
+        guard let current = from ?? windows.windowUnderPointer().flatMap({ stack(containing: $0.ref.id) }) else { return }
+        let others = visibleStacks.filter { $0.id != current.id && !$0.isEmpty }.map { (id: $0.id, rect: $0.rect, number: $0.number) }
+        if let id = ZoneNeighbour.nearest(to: current.rect, number: current.number, among: others, toward: direction),
+           let target = stacks[id], let active = target.activeID, let ref = target.refs[active] {
+            // First the frame, which the render server animates by itself; bringing the window forward may keep this thread busy a while.
+            flashZone(current.rect, target.rect)
+            return windows.raise(ref)
+        }
+        // None on the screen: the nearest zone with windows beyond its edge, the one next to the screen first. It stands out of sight: the layout
+        // scrolls to it, and only when that is over (`finishFocusBeyondTheEdge`) the window comes forward and the frame shows, so that nothing
+        // keeps the machine busy while the pictures glide.
+        guard direction == .left || direction == .right, settings.values.zoneNavigationBeyondEdges, settings.values.overflowZonesEnabled else { return }
+        let beyond = stacks.values.filter { $0.isParked && !$0.isEmpty }.map { (id: $0.id, rect: $0.rect, number: $0.number) }
+        guard let id = ZoneNeighbour.nearest(to: current.rect, number: 0, among: beyond, toward: direction),
+              let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
+        focusPending = (target.id, ref, Date().addingTimeInterval(3), false)
+        // The frame goes at once to where the zone will stand, as the layout scrolls it there: the zone comes to rest in the frame.
+        let left = current.rect
+        onReachBeyondTheEdge?(target.id) { [weak self] rect in
+            self?.focusPending?.flashed = true
+            self?.flashZone(left, rect)
+        }
+    }
+
+    /// A zone beyond the edge that a shortcut asked for, and the window to bring forward in it once it is in view.
+    private var focusPending: (zone: UUID, ref: WindowRef, until: Date, flashed: Bool)?
+
+    /// The glide has come to its end and the zones stand where they will: the frame shows now, not when the windows are all in place.
+    func showFocusFrame(in plan: [UUID: PlannedZone]) {
+        guard var pending = focusPending, !pending.flashed, pending.until > Date(), let zone = plan[pending.zone], !zone.isParked else { return }   // when no frame went ahead
+        pending.flashed = true
+        focusPending = pending
+        flashZone(zone.rect, zone.rect)
+    }
+
+    /// The scroll is over: if the zone the shortcut asked for is in view now, its window comes forward and its frame shows.
+    func finishFocusBeyondTheEdge() {
+        guard let pending = focusPending else { return }
+        guard pending.until > Date() else { return focusPending = nil }
+        guard let stack = stacks[pending.zone], !stack.isParked else { return }   // a scroll that follows brings it in
+        focusPending = nil
+        if !pending.flashed { flashZone(stack.rect, stack.rect) }
+        windows.raise(pending.ref)
     }
 
     // MARK: A swipe the fingers lead

@@ -49,6 +49,16 @@ public struct SettingsValues: Equatable {
     public var scrollRightShortcut = SnapTrigger.scrollRight
     public var scrollLeftShortcut = SnapTrigger.scrollLeft
 
+    /// The shortcuts that move the focus to the zone beside the one in focus work at all.
+    public var zoneNavigationEnabled = true
+    /// Past the last zone on the screen they go on to the zones beyond its edge (the layout scrolls to them).
+    public var zoneNavigationBeyondEdges = true
+    /// Move the focus to the zone above, to the left, below or to the right of the zone of the focused window.
+    public var zoneUpShortcut = SnapTrigger.zoneUp
+    public var zoneLeftShortcut = SnapTrigger.zoneLeft
+    public var zoneDownShortcut = SnapTrigger.zoneDown
+    public var zoneRightShortcut = SnapTrigger.zoneRight
+
     /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
     /// off and the apps in them are moved to the screen's default zone.
     public var overflowZonesEnabled = true

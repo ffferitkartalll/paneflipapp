@@ -33,6 +33,14 @@ public struct SnapTrigger: Codable, Equatable {
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
 
+    /// Move to the zone above, to the left, below or to the right: Control+Option and O, K, L or the key beside L, which on a US keyboard is ;
+    /// (the four keys form an inverted T; they are named by their key codes, so the shortcuts stay on the same four keys in every layout).
+    private static func letter(_ code: Int, _ name: String) -> Key { Key(code: code, name: name) }
+    public static let zoneUp = SnapTrigger(keys: [letter(31, "O"), leftOption, leftControl])
+    public static let zoneLeft = SnapTrigger(keys: [letter(40, "K"), leftOption, leftControl])
+    public static let zoneDown = SnapTrigger(keys: [letter(37, "L"), leftOption, leftControl])
+    public static let zoneRight = SnapTrigger(keys: [letter(41, ";"), leftOption, leftControl])
+
     /// Device-dependent flag bits (NX_DEVICE*KEYMASK) for each modifier key code.
     public static let modifierMasks: [Int: UInt] = [56: 0x2, 60: 0x4, 59: 0x1, 62: 0x2000, 58: 0x20, 61: 0x40, 55: 0x8, 54: 0x10]
 

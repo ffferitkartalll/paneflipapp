@@ -30,6 +30,19 @@ struct ZonesPane: View {
             }
             .disabled(!settings.values.placementEnabled)
 
+            Section("Moving between zones") {
+                SettingRow(title: "Move between zones with the keyboard",
+                           detail: "The shortcuts in the Shortcuts tab move the focus to the zone above, to the left, below or to the right.") {
+                    Toggle("Move between zones with the keyboard", isOn: $settings.values.zoneNavigationEnabled).labelsHidden()
+                }
+                SettingRow(title: "Also to zones beyond the screen's edges",
+                           detail: "Past the last zone on the screen, the focus goes on to the zones beyond its edge, and the layout scrolls to them.") {
+                    Toggle("Also to zones beyond the screen's edges", isOn: $settings.values.zoneNavigationBeyondEdges).labelsHidden()
+                }
+                .disabled(!settings.values.zoneNavigationEnabled || !settings.values.overflowZonesEnabled)
+            }
+            .disabled(!settings.values.placementEnabled)
+
             Section("Zones beyond the screen") {
                 SettingRow(title: "Zones beyond the screen's edges",
                            detail: "Lets a layout have zones beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by resting the pointer at the screen's edge. Switched off, the editor does not show them and their apps move to the default zone of the screen.") {
