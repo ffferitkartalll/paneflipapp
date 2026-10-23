@@ -75,6 +75,14 @@ public final class LayoutRepository {
         return copy
     }
 
+    /// Adds a layout that came from a file to the display's layouts; no desktop uses it yet.
+    public func importLayout(_ layout: NamedLayout, key: String) {
+        let display = Self.split(key).display
+        var s = screens[display] ?? ScreenLayouts()
+        s.layouts.append(layout)
+        screens[display] = s
+    }
+
     public func setStrip(_ strip: StripLayout, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].strip = strip

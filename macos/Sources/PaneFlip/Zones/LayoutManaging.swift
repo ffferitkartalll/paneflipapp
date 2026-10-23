@@ -5,6 +5,7 @@ import PaneFlipCore
 protocol LayoutManaging: AnyObject {
     @discardableResult func addLayout(for key: String, preset: LayoutPreset) -> NamedLayout
     func duplicate(key: String, id: UUID)
+    func importLayout(for key: String, _ layout: NamedLayout)
     func updateLayout(key: String, id: UUID, strip: StripLayout)
     func removeLayout(key: String, id: UUID)
     func activate(key: String, id: UUID)
