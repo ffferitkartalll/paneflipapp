@@ -31,7 +31,10 @@ struct EditorView: View {
                             Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
                         }
                         .overlay {
-                            Text(verbatim: EditorModel.size(of: z.rect, in: geo.size, area: area)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
+                            // Under the pointer the zone shows what a split there would leave (see `splitLabels`), not its whole size.
+                            if target?.zone.id != z.id {
+                                Text(verbatim: EditorModel.size(of: z.rect, in: geo.size, area: area)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
+                            }
                         }
                         .offset(x: z.rect.minX + 3, y: z.rect.minY + 3)
                         .allowsHitTesting(false)
@@ -58,6 +61,8 @@ struct EditorView: View {
                 if let m = mergePreview(zones: zones, area: rect) {
                     mergeOverlay(m)
                 }
+
+                if let t = target { splitLabels(t, view: geo.size) }
 
                 if let t = target {
                     Path { p in p.move(to: t.line.0); p.addLine(to: t.line.1) }
@@ -259,21 +264,36 @@ struct EditorView: View {
         let minSize = settings.values.minZoneSize
         let valid = extent >= 2 * minSize
 
-        var pos = side ? p.x : p.y
+        let pos = side ? p.x : p.y
         var snapped = false
-        if valid, abs(pos - (origin + extent / 2)) < snapDistance { pos = origin + extent / 2; snapped = true }
         var r = Double((pos - origin) / extent)
+        if valid, let step = SplitSnap.step(near: r, extent: Double(extent), distance: Double(snapDistance)) { r = step; snapped = true }
         if valid { let lo = minSize / Double(extent); r = min(max(r, lo), 1 - lo) }
         return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped)
+    }
+
+    /// What each side of the split under the pointer would be: its size in points, or, on a step, its share of the zone.
+    private func splitLabels(_ t: SplitTarget, view: CGSize) -> some View {
+        let sides = [(t.halves.0, t.ratio), (t.halves.1, 1 - t.ratio)]
+        return ZStack {
+            ForEach(sides.indices, id: \.self) { i in
+                let (rect, share) = sides[i]
+                let step = t.snapped ? SplitSnap.share(of: share) : nil
+                Text(verbatim: step.map { "\($0.numerator)/\($0.denominator)" } ?? EditorModel.size(of: rect, in: view, area: area))
+                    .font(.title3.monospacedDigit())
+                    .foregroundStyle(.white.opacity(step == nil ? 0.4 : 0.9))
+                    .position(x: rect.midX, y: rect.midY)
+            }
+        }
+        .allowsHitTesting(false)
     }
 
     // MARK: Dividers
 
     private func resize(_ d: SplitDivider, to p: CGPoint) {
         let origin = d.sideBySide ? d.parent.minX : d.parent.minY
-        var pos = d.sideBySide ? p.x : p.y
-        if abs(pos - (origin + d.extent / 2)) < snapDistance { pos = origin + d.extent / 2 }
-        var r = Double((pos - origin) / d.extent)
+        var r = Double(((d.sideBySide ? p.x : p.y) - origin) / d.extent)
+        if let step = SplitSnap.step(near: r, extent: Double(d.extent), distance: Double(snapDistance)) { r = step }
         let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         model.setRatio(d.id, r)
@@ -289,7 +309,7 @@ struct EditorView: View {
     }
 
     private func lineView(_ d: SplitDivider) -> some View {
-        let centered = abs(d.ratio - 0.5) < 0.0001
+        let centered = SplitSnap.isStep(d.ratio)
         return ZStack {
             Rectangle().fill(centered ? Color.white : Color.accentColor)
                 .frame(width: d.sideBySide ? 2 : d.parent.width, height: d.sideBySide ? d.parent.height : 2)
@@ -305,7 +325,7 @@ struct EditorView: View {
     }
 
     private func handleView(_ d: SplitDivider) -> some View {
-        let centered = abs(d.ratio - 0.5) < 0.0001
+        let centered = SplitSnap.isStep(d.ratio)
         return Image(systemName: d.sideBySide ? "pause" : "equal")
             .font(.system(size: 11, weight: .bold))
             .foregroundStyle(centered ? Color.black : Color.white)
