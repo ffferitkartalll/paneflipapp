@@ -29,6 +29,8 @@ final class StackCoordinator {
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the pills are hidden.
     var isScrolling = false
+    /// Whether PaneFlip itself has the focus (a swipe with the mouse's wheel button): the window a swipe ends on is then given the focus.
+    var holdsTheFocus: () -> Bool = { false }
     /// Called when the focus is on a window of a zone beyond the screen's edge, which is out of sight: the layout should scroll to it.
     var onFocusBeyondTheEdge: ((UUID) -> Void)?
 
@@ -349,7 +351,11 @@ final class StackCoordinator {
         guard let index = scrub.windows.firstIndex(of: scrub.start) else { return carousel?.endScrub(shift: 0) { } ?? () }
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
-        guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else { return carousel?.endScrub(shift: 0) { } ?? () }
+        guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else {
+            // Back on the window it began on: a swipe that took the focus (the mouse's wheel button) gives it to this window.
+            let staying = stack.refs[scrub.start]
+            return carousel?.endScrub(shift: 0) { [windows, weak self] in if self?.holdsTheFocus() == true, let staying { windows.raise(staying) } } ?? ()
+        }
         // The pill moves to the chosen window as the pictures settle.
         stack.activeID = entering.id
         onActivity?(stack.id)

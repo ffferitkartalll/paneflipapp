@@ -141,6 +141,7 @@ final class AppContainer {
                 return v.placementEnabled && v.stackingEnabled && v.mouseButtonSwipe && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
                     && !screens.isMissionControlActive
             })
+        coordinator.holdsTheFocus = { NSApp.isActive }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
