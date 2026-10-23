@@ -50300,283 +50300,283 @@
         }
       }
     },
-    "Zones light up while the keys are held; release the mouse over a zone to add the window." : {
+    "Zones light up while the keys are held, or after you shake the mouse from side to side during the drag (shake again to end it); release the mouse over a zone to add the window." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تُضيء المناطق أثناء الضغط على المفاتيح؛ حرّر الفأرة فوق منطقة لإضافة النافذة."
+            "value" : "تُضيء المناطق أثناء الضغط على المفاتيح، أو بعد أن تهزّ الفأرة يمينًا ويسارًا أثناء السحب (هزّها مرة أخرى لإنهاء ذلك)؛ حرّر الفأرة فوق منطقة لإضافة النافذة."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоните светват, докато клавишите са натиснати; пуснете мишката над зона, за да добавите прозореца."
+            "value" : "Зоните светват, докато клавишите са натиснати, или след като разклатите мишката настрани по време на плъзгането (разклатете отново, за да спре); пуснете мишката над зона, за да добавите прозореца."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "কী ধরে রাখলে জোনগুলো জ্বলে ওঠে; উইন্ডো যোগ করতে একটি জোনের উপর মাউস ছেড়ে দিন।"
+            "value" : "কী ধরে রাখলে, অথবা টানার সময় মাউস পাশাপাশি ঝাঁকালে জোনগুলো জ্বলে ওঠে (বন্ধ করতে আবার ঝাঁকান); উইন্ডো যোগ করতে একটি জোনের উপর মাউস ছেড়ে দিন।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les zones s’il·luminen mentre es mantenen les tecles; deixa anar el ratolí sobre una zona per afegir-hi la finestra."
+            "value" : "Les zones s’il·luminen mentre es mantenen les tecles, o després de sacsejar el ratolí d’un costat a l’altre durant l’arrossegament (sacseja’l una altra vegada per acabar-ho); deixa anar el ratolí sobre una zona per afegir-hi la finestra."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zóny se rozsvítí, dokud jsou klávesy drženy; uvolněním myši nad zónou přidáte okno."
+            "value" : "Zóny se rozsvítí, dokud jsou klávesy drženy, nebo poté, co během přetahování zatřesete myší ze strany na stranu (dalším zatřesením to skončí); uvolněním myši nad zónou přidáte okno."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zoner lyser op, mens tasterne holdes nede; slip musen over en zone for at tilføje vinduet."
+            "value" : "Zoner lyser op, mens tasterne holdes nede, eller efter du ryster musen fra side til side under trækningen (ryst igen for at afslutte); slip musen over en zone for at tilføje vinduet."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonen leuchten auf, solange die Tasten gehalten werden; lasse die Maus über einer Zone los, um das Fenster hinzuzufügen."
+            "value" : "Zonen leuchten auf, solange die Tasten gehalten werden, oder nachdem du die Maus beim Ziehen seitlich hin und her schüttelst (erneut schütteln beendet es); lasse die Maus über einer Zone los, um das Fenster hinzuzufügen."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Οι ζώνες φωτίζονται όσο κρατιούνται τα πλήκτρα· αφήστε το ποντίκι πάνω από μια ζώνη για να προσθέσετε το παράθυρο."
+            "value" : "Οι ζώνες φωτίζονται όσο κρατιούνται τα πλήκτρα ή αφού κουνήσετε το ποντίκι δεξιά-αριστερά κατά τη σύρση (κουνήστε το ξανά για να τερματιστεί)· αφήστε το ποντίκι πάνω από μια ζώνη για να προσθέσετε το παράθυρο."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las zonas se iluminan mientras se mantienen las teclas; suelta el ratón sobre una zona para añadir la ventana."
+            "value" : "Las zonas se iluminan mientras se mantienen las teclas, o después de sacudir el ratón de lado a lado durante el arrastre (sacúdelo otra vez para terminarlo); suelta el ratón sobre una zona para añadir la ventana."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tsoonid süttivad, kui klahve hoitakse all; akna lisamiseks vabastage hiir tsooni kohal."
+            "value" : "Tsoonid süttivad, kui klahve hoitakse all, või pärast seda, kui lohistamise ajal hiirt küljelt küljele raputate (uuesti raputamine lõpetab selle); akna lisamiseks vabastage hiir tsooni kohal."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تا زمانی که کلیدها نگه داشته شوند ناحیه‌ها روشن می‌شوند؛ برای افزودن پنجره، ماوس را روی یک ناحیه رها کنید."
+            "value" : "تا زمانی که کلیدها نگه داشته شوند، یا پس از تکان دادن ماوس به چپ و راست در حین کشیدن، ناحیه‌ها روشن می‌شوند (برای پایان دادن دوباره تکانش دهید)؛ برای افزودن پنجره، ماوس را روی یک ناحیه رها کنید."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alueet syttyvät, kun näppäimiä pidetään painettuna; vapauta hiiri alueen päällä lisätäksesi ikkunan."
+            "value" : "Alueet syttyvät, kun näppäimiä pidetään painettuna tai kun hiirtä ravistetaan sivulta toiselle vedon aikana (uusi ravistus lopettaa sen); vapauta hiiri alueen päällä lisätäksesi ikkunan."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Umiilaw ang mga zone habang hawak ang mga key; bitawan ang mouse sa isang zone para idagdag ang window."
+            "value" : "Umiilaw ang mga zone habang hawak ang mga key, o pagkatapos mong yugyugin ang mouse pakaliwa-pakanan habang nagda-drag (yugyugin muli para tapusin); bitawan ang mouse sa isang zone para idagdag ang window."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les zones s’allument tant que les touches sont maintenues ; relâchez la souris sur une zone pour y ajouter la fenêtre."
+            "value" : "Les zones s’allument tant que les touches sont maintenues, ou après avoir secoué la souris de gauche à droite pendant le glissement (secouez-la de nouveau pour l’arrêter) ; relâchez la souris sur une zone pour y ajouter la fenêtre."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "האזורים מוארים כל עוד המקשים לחוצים; שחרר את העכבר מעל אזור כדי להוסיף את החלון."
+            "value" : "האזורים מוארים כל עוד המקשים לחוצים, או לאחר שמנענעים את העכבר מצד לצד בזמן הגרירה (ניענוע נוסף מסיים זאת); שחרר את העכבר מעל אזור כדי להוסיף את החלון."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कुंजियाँ दबाए रखने पर ज़ोन चमकते हैं; विंडो जोड़ने के लिए माउस को किसी ज़ोन के ऊपर छोड़ें।"
+            "value" : "कुंजियाँ दबाए रखने पर, या खींचते समय माउस को अगल-बगल हिलाने पर ज़ोन चमकते हैं (बंद करने के लिए फिर से हिलाएँ); विंडो जोड़ने के लिए माउस को किसी ज़ोन के ऊपर छोड़ें।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zone svijetle dok se drže tipke; otpustite miš iznad zone da dodate prozor."
+            "value" : "Zone svijetle dok se drže tipke ili nakon što tijekom povlačenja protresete miš s jedne strane na drugu (ponovno protresite da prestane); otpustite miš iznad zone da dodate prozor."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A zónák kivilágosodnak, amíg a billentyűk nyomva vannak; engedje fel az egeret egy zóna fölött az ablak hozzáadásához."
+            "value" : "A zónák kivilágosodnak, amíg a billentyűk nyomva vannak, vagy ha húzás közben oldalirányban megrázza az egeret (újabb rázás megszünteti); engedje fel az egeret egy zóna fölött az ablak hozzáadásához."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zona menyala selama tombol ditahan; lepaskan mouse di atas zona untuk menambahkan jendela."
+            "value" : "Zona menyala selama tombol ditahan, atau setelah Anda menggoyangkan mouse ke kiri dan kanan saat menyeret (goyangkan lagi untuk mengakhiri); lepaskan mouse di atas zona untuk menambahkan jendela."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le zone si illuminano mentre i tasti sono premuti; rilascia il mouse su una zona per aggiungere la finestra."
+            "value" : "Le zone si illuminano mentre i tasti sono premuti, o dopo aver scosso il mouse da un lato all’altro durante il trascinamento (scuotilo di nuovo per terminare); rilascia il mouse su una zona per aggiungere la finestra."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "キーを押している間ゾーンが点灯します。ゾーン上でマウスを離すとウインドウが追加されます。"
+            "value" : "キーを押している間、またはドラッグ中にマウスを左右に振るとゾーンが点灯します（もう一度振ると解除）。ゾーン上でマウスを離すとウインドウが追加されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "키를 누르고 있는 동안 영역이 밝게 표시됩니다. 영역 위에서 마우스를 놓으면 윈도우가 추가됩니다."
+            "value" : "키를 누르고 있는 동안, 또는 드래그 중 마우스를 좌우로 흔들면 영역이 밝게 표시됩니다(다시 흔들면 해제). 영역 위에서 마우스를 놓으면 윈도우가 추가됩니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonos šviečia, kol laikomi klavišai; atleiskite pelę virš zonos, kad pridėtumėte langą."
+            "value" : "Zonos šviečia, kol laikomi klavišai, arba kai vilkdami pelę papurtote į šonus (dar kartą papurčius tai baigiasi); atleiskite pelę virš zonos, kad pridėtumėte langą."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonas iedegas, kamēr taustiņi tiek turēti; atlaidiet peli virs zonas, lai pievienotu logu."
+            "value" : "Zonas iedegas, kamēr taustiņi tiek turēti, vai pēc tam, kad vilkšanas laikā papurināt peli uz sāniem (vēlreiz papurinot tas beidzas); atlaidiet peli virs zonas, lai pievienotu logu."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कीज दाबून ठेवल्यावर झोन उजळतात; विंडो जोडण्यासाठी झोनवर माउस सोडा."
+            "value" : "कीज दाबून ठेवल्यावर, किंवा ओढताना माउस बाजूबाजूला हलवल्यावर झोन उजळतात (बंद करण्यासाठी पुन्हा हलवा); विंडो जोडण्यासाठी झोनवर माउस सोडा."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zon menyala semasa kekunci ditahan; lepaskan tetikus di atas zon untuk menambah tetingkap."
+            "value" : "Zon menyala semasa kekunci ditahan, atau selepas anda menggoyang tetikus ke kiri dan kanan semasa menyeret (goyang lagi untuk menamatkannya); lepaskan tetikus di atas zon untuk menambah tetingkap."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Soner lyser opp mens tastene holdes nede; slipp musen over en sone for å legge til vinduet."
+            "value" : "Soner lyser opp mens tastene holdes nede, eller etter at du rister musen fra side til side under draingen (rist igjen for å avslutte); slipp musen over en sone for å legge til vinduet."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zones lichten op zolang de toetsen ingedrukt zijn; laat de muis los boven een zone om het venster toe te voegen."
+            "value" : "Zones lichten op zolang de toetsen ingedrukt zijn, of nadat je tijdens het slepen de muis heen en weer schudt (nogmaals schudden beëindigt het); laat de muis los boven een zone om het venster toe te voegen."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Strefy podświetlają się, gdy klawisze są przytrzymane; zwolnij mysz nad strefą, aby dodać okno."
+            "value" : "Strefy podświetlają się, gdy klawisze są przytrzymane, lub po potrząśnięciu myszą na boki podczas przeciągania (ponowne potrząśnięcie kończy to); zwolnij mysz nad strefą, aby dodać okno."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "As zonas acendem enquanto as teclas estão premidas; solte o rato sobre uma zona para adicionar a janela."
+            "value" : "As zonas acendem enquanto as teclas estão premidas, ou depois de abanar o rato de um lado para o outro durante o arrastamento (abane outra vez para terminar); solte o rato sobre uma zona para adicionar a janela."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "As zonas se iluminam enquanto as teclas são mantidas; solte o mouse sobre uma zona para adicionar a janela."
+            "value" : "As zonas se iluminam enquanto as teclas são mantidas, ou depois de balançar o mouse de um lado para o outro durante o arrasto (balance de novo para encerrar); solte o mouse sobre uma zona para adicionar a janela."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonele se luminează cât timp tastele sunt apăsate; eliberează mouse-ul deasupra unei zone pentru a adăuga fereastra."
+            "value" : "Zonele se luminează cât timp tastele sunt apăsate sau după ce scuturi mouse-ul dintr-o parte în alta în timpul tragerii (scutură din nou pentru a opri); eliberează mouse-ul deasupra unei zone pentru a adăuga fereastra."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоны подсвечиваются, пока удерживаются клавиши; отпустите мышь над зоной, чтобы добавить окно."
+            "value" : "Зоны подсвечиваются, пока удерживаются клавиши, или после встряхивания мыши из стороны в сторону во время перетаскивания (ещё одно встряхивание отключает подсветку); отпустите мышь над зоной, чтобы добавить окно."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zóny sa rozsvietia, kým sú klávesy držané; uvoľnením myši nad zónou pridáte okno."
+            "value" : "Zóny sa rozsvietia, kým sú klávesy držané, alebo po zatrasení myšou zo strany na stranu počas ťahania (ďalším zatrasením to skončí); uvoľnením myši nad zónou pridáte okno."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Območja zasvetijo, dokler so tipke pritisnjene; spustite miško nad območjem, da dodate okno."
+            "value" : "Območja zasvetijo, dokler so tipke pritisnjene, ali ko med vlečenjem pretresete miško s strani na stran (ponoven pretres to konča); spustite miško nad območjem, da dodate okno."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоне светле док су типке притиснуте; отпустите миш изнад зоне да додате прозор."
+            "value" : "Зоне светле док су типке притиснуте или након што током превлачења протресете миш са стране на страну (поновно протресање то прекида); отпустите миш изнад зоне да додате прозор."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zoner lyser upp medan tangenterna hålls nedtryckta; släpp musen över en zon för att lägga till fönstret."
+            "value" : "Zoner lyser upp medan tangenterna hålls nedtryckta, eller efter att du skakar musen från sida till sida under dragningen (skaka igen för att avsluta); släpp musen över en zon för att lägga till fönstret."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "விசைகளை அழுத்திப் பிடிக்கும்போது மண்டலங்கள் ஒளிரும்; சாளரத்தைச் சேர்க்க ஒரு மண்டலத்தின் மேல் சுட்டியை விடவும்."
+            "value" : "விசைகளை அழுத்திப் பிடிக்கும்போது, அல்லது இழுக்கும்போது சுட்டியை பக்கவாட்டில் குலுக்கிய பின் மண்டலங்கள் ஒளிரும் (முடிக்க மீண்டும் குலுக்கவும்); சாளரத்தைச் சேர்க்க ஒரு மண்டலத்தின் மேல் சுட்டியை விடவும்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "కీలను పట్టుకున్నప్పుడు జోన్‌లు వెలుగుతాయి; విండోను జోడించడానికి జోన్‌పై మౌస్‌ను వదలండి."
+            "value" : "కీలను పట్టుకున్నప్పుడు, లేదా లాగుతున్నప్పుడు మౌస్‌ను పక్కకు పక్కకు ఊపిన తర్వాత జోన్‌లు వెలుగుతాయి (ముగించడానికి మళ్లీ ఊపండి); విండోను జోడించడానికి జోన్‌పై మౌస్‌ను వదలండి."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "โซนจะสว่างขึ้นขณะกดปุ่มค้างไว้ ปล่อยเมาส์เหนือโซนเพื่อเพิ่มหน้าต่าง"
+            "value" : "โซนจะสว่างขึ้นขณะกดปุ่มค้างไว้ หรือหลังเขย่าเมาส์ไปทางซ้ายขวาระหว่างลาก (เขย่าอีกครั้งเพื่อสิ้นสุด) ปล่อยเมาส์เหนือโซนเพื่อเพิ่มหน้าต่าง"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tuşlar basılıyken bölgeler aydınlanır; Bölgeye pencere eklemek için fareyi bırakın."
+            "value" : "Tuşlar basılıyken ya da sürüklerken fareyi yana yana sallayınca bölgeler aydınlanır (bitirmek için yeniden sallayın); bölgeye pencere eklemek için fareyi bırakın."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зони підсвічуються, поки утримуються клавіші; відпустіть мишу над зоною, щоб додати вікно."
+            "value" : "Зони підсвічуються, поки утримуються клавіші, або після струшування миші з боку в бік під час перетягування (ще одне струшування вимикає підсвічування); відпустіть мишу над зоною, щоб додати вікно."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "کلیدیں دبائے رکھنے پر زونز روشن ہوتے ہیں؛ ونڈو شامل کرنے کے لیے ماؤس کو کسی زون پر چھوڑ دیں۔"
+            "value" : "کلیدیں دبائے رکھنے پر، یا کھینچتے وقت ماؤس کو دائیں بائیں ہلانے پر زونز روشن ہوتے ہیں (ختم کرنے کے لیے دوبارہ ہلائیں)؛ ونڈو شامل کرنے کے لیے ماؤس کو کسی زون پر چھوڑ دیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Các vùng sáng lên khi giữ phím; thả chuột trên một vùng để thêm cửa sổ."
+            "value" : "Các vùng sáng lên khi giữ phím, hoặc sau khi bạn lắc chuột sang hai bên lúc kéo (lắc lần nữa để dừng); thả chuột trên một vùng để thêm cửa sổ."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住按键时区域会亮起；在区域上松开鼠标即可添加窗口。"
+            "value" : "按住按键时，或拖动中左右摇晃鼠标后，区域会亮起（再摇晃一次即可取消）；在区域上松开鼠标即可添加窗口。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住按鍵時區域會亮起；在區域上放開滑鼠即可加入視窗。"
+            "value" : "按住按鍵時，或拖移中左右搖晃滑鼠後，區域會亮起（再搖晃一次即可取消）；在區域上放開滑鼠即可加入視窗。"
           }
         }
       }

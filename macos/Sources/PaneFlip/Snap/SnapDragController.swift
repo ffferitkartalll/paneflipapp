@@ -14,6 +14,9 @@ final class SnapDragController {
     private var monitor: Any?
     private var candidate: (ref: WindowRef, start: CGRect)?
     private var dragging = false
+    /// A shake of the mouse during the drag switched the snap on, as if the trigger were held (another shake switches it off again).
+    private var latched = false
+    private var shake = ShakeDetector()
     private var pressedAt = Date.distantPast
     private var lastCheck = Date.distantPast
     private var timer: Timer?
@@ -32,13 +35,13 @@ final class SnapDragController {
         monitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .leftMouseDragged, .leftMouseUp]) { [weak self] event in
             switch event.type {
             case .leftMouseDown: self?.pressed()
-            case .leftMouseDragged: self?.dragged()
+            case .leftMouseDragged: self?.dragged(at: event.timestamp)
             default: self?.released()
             }
         }
     }
 
-    private var triggerHeld: Bool { settings.values.snapTrigger.isHeld(using: keys) }
+    private var snapOn: Bool { settings.values.snapTrigger.isHeld(using: keys) || latched }
 
     private func pressed() {
         guard settings.values.placementEnabled, let hit = windows.windowUnderPointer() else { candidate = nil; return }
@@ -47,7 +50,7 @@ final class SnapDragController {
         lastCheck = .distantPast
     }
 
-    private func dragged() {
+    private func dragged(at time: TimeInterval) {
         guard let c = candidate else { return }
         if !dragging {
             // A window drag starts at once and moves the window. Anything else (selecting text, a slider) is not
@@ -62,12 +65,14 @@ final class SnapDragController {
                   abs(f.width - c.start.width) < 2, abs(f.height - c.start.height) < 2 else { return }
             dragging = true
             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in self?.updateOverlay() }
+            shake.reset()
         }
+        if settings.values.placementEnabled, shake.feed(x: NSEvent.mouseLocation.x, at: time) { latched.toggle() }
         updateOverlay()
     }
 
     private func updateOverlay() {
-        let held = triggerHeld
+        let held = snapOn
         if held && !overlay.isShown {
             overlay.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) })
         }
@@ -78,7 +83,7 @@ final class SnapDragController {
     private func released() {
         defer { reset() }
         guard dragging, let c = candidate else { return }
-        if triggerHeld, let zone = coordinator.zoneID(at: screens.pointerAX) {
+        if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX) {
             coordinator.snap(c.ref, into: zone)
         } else {
             // Dragged out of its zone without snapping elsewhere: it just leaves the stack. Nothing else is brought
@@ -92,6 +97,7 @@ final class SnapDragController {
         timer = nil
         candidate = nil
         dragging = false
+        latched = false
         overlay.hide()
     }
 }

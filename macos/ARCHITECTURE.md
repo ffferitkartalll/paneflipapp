@@ -22,6 +22,7 @@ Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
 │   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, NamedLayout+File (a layout as a file: export, import), LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneDirection, ZoneNeighbour (the zone beside a zone in a direction), ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), FingerSwipe (the fingers on the trackpad as a swipe with three or four: when it begins and ends), AxisLock (a swipe is horizontal or not, decided in its first points)
+│   ├── Snap/                ShakeDetector (a shake of the pointer from side to side: it switches the snap on during a window drag)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition, TrackpadMethod
 │   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
@@ -94,7 +95,7 @@ Sources/
 | `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
 | `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
 | `LayoutAppsService` | Edits which app belongs in which zone of a layout, and in what pill order; lets the restorer place the windows. |
-| `SnapDragController` | Window drag + trigger key → snap. |
+| `SnapDragController` | Window drag + trigger key (or a shake of the mouse during the drag) → snap. |
 | `AppContainer` | Build everything once and wire it. No globals anywhere else. |
 
 ## Principles in practice
