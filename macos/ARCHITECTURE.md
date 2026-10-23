@@ -20,7 +20,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 ```
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
-│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
+│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), FingerSwipe (the fingers on the trackpad as a swipe with three or four: when it begins and ends), AxisLock (a swipe is horizontal or not, decided in its first points)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition, TrackpadMethod
 │   ├── Updates/             AppVersion
