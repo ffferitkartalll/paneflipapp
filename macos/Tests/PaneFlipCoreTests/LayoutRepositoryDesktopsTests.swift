@@ -90,14 +90,14 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
     }
 
     func testEveryPresetMakesZonesNoOtherLayoutShares() {
-        XCTAssertEqual(LayoutPreset.all.count, 20)
+        XCTAssertEqual(LayoutPreset.all.count, 21)
         XCTAssertEqual(Set(LayoutPreset.all.map(\.id)).count, LayoutPreset.all.count)
 
         let repository = LayoutRepository(store: MemoryStore())
         let layouts = LayoutPreset.all.map { repository.addLayout(for: "A|d1", preset: $0) }
 
         XCTAssertEqual(layouts.map { $0.root.leafIDs.count },
-                       [2, 3, 4, 2, 3, 4, 6, 6, 9, 2, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3])
+                       [2, 3, 4, 2, 3, 4, 4, 6, 6, 9, 2, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3])
         XCTAssertEqual(Set(layouts.flatMap(\.root.leafIDs)).count, layouts.map { $0.root.leafIDs.count }.reduce(0, +))
     }
 

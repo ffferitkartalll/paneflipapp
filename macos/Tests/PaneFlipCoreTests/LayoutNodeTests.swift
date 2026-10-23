@@ -64,4 +64,23 @@ final class LayoutNodeTests: XCTestCase {
         let data = try JSONEncoder().encode(tree)
         XCTAssertEqual(try JSONDecoder().decode(LayoutNode.self, from: data), tree)
     }
+
+    func testReusingPutsTheGivenZonesInTreeOrderAndKeepsTheRestNew() {
+        let a = UUID(), b = UUID()
+        let shape = LayoutPreset.all[1].root   // three columns
+        let ids = shape.leafIDs
+        let result = shape.reusing([a, b])
+        XCTAssertEqual(Array(result.leafIDs.prefix(2)), [a, b])
+        XCTAssertEqual(result.leafIDs[2], ids[2])
+        XCTAssertEqual(shape.reusing([a]).leafIDs.count, 3)
+    }
+
+    func testEveryKindOfScreenGetsItsOwnShapes() {
+        let ids = { (w: CGFloat, h: CGFloat) in LayoutPreset.suggested(for: CGSize(width: w, height: h)).map(\.id) }
+        let sets = [ids(3440, 1440), ids(1920, 1080), ids(1200, 1000), ids(1080, 1920)]
+        XCTAssertTrue(sets.allSatisfy { $0.count >= 10 }, "no id is missing from the catalog")
+        XCTAssertEqual(Set(sets.map { $0.joined(separator: ",") }).count, 4)
+        XCTAssertEqual(sets[0].first, "columns3")
+        XCTAssertEqual(sets[3].first, "rows2")
+    }
 }

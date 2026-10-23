@@ -146,4 +146,17 @@ final class EditorModelTests: XCTestCase {
         guard case .split(_, _, let afterTwo, _, _) = editor.root else { return XCTFail("a split") }
         XCTAssertEqual(afterTwo, 0.5, accuracy: 1e-9, "and the first as a whole")
     }
+
+    func testAShapeReplacesTheScreenLayoutAndKeepsTheOldZonesInOrder() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.addTrailing()
+        editor.useShape(LayoutPreset.all[1])   // three columns
+        XCTAssertEqual(editor.strip.root.leafIDs.count, 3)
+        XCTAssertEqual(editor.strip.root.leafIDs.first, a, "the first zone keeps its stack")
+        XCTAssertEqual(editor.strip.trailing.count, 1, "the areas beyond stay")
+        XCTAssertEqual(editor.offset, 0)
+        editor.undo()
+        XCTAssertEqual(editor.strip.root.leafIDs, [a])
+    }
 }

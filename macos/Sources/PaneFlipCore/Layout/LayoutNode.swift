@@ -27,6 +27,20 @@ public indirect enum LayoutNode: Codable, Equatable {
         }
     }
 
+    /// The same shape with its zones standing for `ids` in tree order (so those zones keep their stacks); zones beyond `ids` stay new.
+    public func reusing(_ ids: [UUID]) -> LayoutNode {
+        var rest = ids[...]
+        func walk(_ node: LayoutNode) -> LayoutNode {
+            switch node {
+            case .leaf(let l): return .leaf(rest.popFirst() ?? l)
+            case .split(let id, let s, let r, let a, let b):
+                let first = walk(a)
+                return .split(id: id, sideBySide: s, ratio: r, first: first, second: walk(b))
+            }
+        }
+        return walk(self)
+    }
+
     static func childRects(_ rect: CGRect, sideBySide: Bool, ratio: Double) -> (CGRect, CGRect) {
         if sideBySide {
             let w = rect.width * ratio

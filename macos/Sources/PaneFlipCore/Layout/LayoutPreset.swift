@@ -15,13 +15,14 @@ public struct LayoutPreset: Identifiable {
 
     public static let single = LayoutPreset("single") { zone }
 
-    /// The shapes offered when a layout is added: the twenty most used ones, plainest first.
+    /// The shapes offered when a layout is added: every shape there is, plainest first. A screen is offered `suggested(for:)`.
     public static let all: [LayoutPreset] = [
         LayoutPreset("columns2") { columns(2) },
         LayoutPreset("columns3") { columns(3) },
         LayoutPreset("columns4") { columns(4) },
         LayoutPreset("rows2") { rows(2) },
         LayoutPreset("rows3") { rows(3) },
+        LayoutPreset("rows4") { rows(4) },
         LayoutPreset("grid2x2") { grid(rows: 2, columns: 2) },
         LayoutPreset("grid2x3") { grid(rows: 2, columns: 3) },
         LayoutPreset("grid3x2") { grid(rows: 3, columns: 2) },
@@ -38,6 +39,26 @@ public struct LayoutPreset: Identifiable {
         LayoutPreset("bannerTop") { above(0.3, zone, columns(2)) },
         LayoutPreset("bannerBottom") { above(0.7, columns(2), zone) },
     ]
+
+    /// The shapes that make sense for a screen of this shape (very wide, wide, nearly square, upright), the best first.
+    public static func suggested(for screen: CGSize) -> [LayoutPreset] {
+        let aspect = screen.width / max(screen.height, 1)
+        let ids: [String]
+        switch aspect {
+        case 2...:
+            ids = ["columns3", "centre", "columns2", "columns4", "mainLeft", "mainRight", "mainLeftTwoColumns", "grid2x2", "grid2x3",
+                   "mainLeftStackedRight", "stackedLeftMainRight"]
+        case 1.3..<2:
+            ids = ["columns2", "grid2x2", "columns3", "mainLeft", "mainRight", "mainLeftTwoColumns", "mainLeftStackedRight",
+                   "stackedLeftMainRight", "mainLeftThreeRight", "centre", "rows2", "mainTop", "bannerTop", "grid2x3", "mainTopThreeBelow"]
+        case 0.8..<1.3:
+            ids = ["grid2x2", "columns2", "rows2", "mainLeft", "mainTop", "mainLeftStackedRight", "columns3", "rows3", "bannerTop",
+                   "bannerBottom", "grid3x3"]
+        default:
+            ids = ["rows2", "rows3", "rows4", "mainTop", "mainTopThreeBelow", "bannerTop", "bannerBottom", "grid3x2", "grid2x2", "columns2"]
+        }
+        return ids.compactMap { id in all.first { $0.id == id } }
+    }
 
     // MARK: Building blocks
 
