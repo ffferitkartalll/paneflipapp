@@ -34,6 +34,8 @@ final class ZoneStack {
     /// out of sight.
     @ObservationIgnored var frame: CGRect = .zero
     @ObservationIgnored var isParked = false
+    /// The number the zone shows in its layout.
+    @ObservationIgnored var number = 0
 
     init(id: UUID) { self.id = id }
 

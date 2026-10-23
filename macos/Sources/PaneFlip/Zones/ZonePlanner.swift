@@ -16,17 +16,26 @@ struct ZonePlanner {
         var zones: [UUID: PlannedZone] = [:]
         for screen in screens {
             guard let (geometry, side) = strip(of: screen, among: screens) else { continue }
+            let layout = layouts.activeLayout(for: screen.key)
             let offset = geometry.clamped(viewport.offset(for: screen.key))
             for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap),
                                          margin: CGFloat(settings.values.edgeMargin)) {
+                let number = layout?.strip.position(of: zone.id)?.number ?? 0
                 if zone.isOnScreen {
-                    zones[zone.id] = PlannedZone(rect: zone.rect)
+                    zones[zone.id] = PlannedZone(rect: zone.rect, number: number)
                 } else if let side {
-                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true)
+                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true, number: number)
                 }
             }
         }
         return zones
+    }
+
+    /// Where a zone will stand on `screen` once the layout has scrolled to `offset`: the same rectangle `plan` gives then.
+    func rect(of zone: UUID, at offset: CGFloat, on screen: ScreenInfo, among screens: [ScreenInfo]) -> CGRect? {
+        guard let (geometry, _) = strip(of: screen, among: screens) else { return nil }
+        return geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap),
+                              margin: CGFloat(settings.values.edgeMargin)).first { $0.id == zone }?.rect
     }
 
     /// The strip of a screen's active layout and the side its out-of-sight windows wait at (nil: nowhere, so the areas

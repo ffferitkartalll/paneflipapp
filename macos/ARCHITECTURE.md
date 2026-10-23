@@ -20,7 +20,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 ```
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
-│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, NamedLayout+File (a layout as a file: export, import), LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneRemapper
+│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, NamedLayout+File (a layout as a file: export, import), LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneDirection, ZoneNeighbour (the zone beside a zone in a direction), ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), FingerSwipe (the fingers on the trackpad as a swipe with three or four: when it begins and ends), AxisLock (a swipe is horizontal or not, decided in its first points)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition, TrackpadMethod
 │   ├── Updates/             AppVersion
@@ -49,7 +49,7 @@ Sources/
     │                        JSONFileStore, UserDefaultsSettingsStorage
     ├── Stacks/              ZoneStack, StackCoordinator, WindowRestorer, ClosedWindowMonitor, LayoutAppsService,
     │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide, WindowMover
-    ├── Zones/               ZonePlanner, ZoneEngine, StripPreview (the map of a strip: the layout editor and the scroll show it), ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
+    ├── Zones/               ZonePlanner, ZoneFlash (outlines the zone the focus went to), ZoneEngine, StripPreview (the map of a strip: the layout editor and the scroll show it), ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrolling, PillScrollRouter (scrolling over the pill: two fingers lead the zone's windows, a wheel steps through them), IconFont, DoubleTapDetector
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,

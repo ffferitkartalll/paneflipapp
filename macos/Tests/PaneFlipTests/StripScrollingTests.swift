@@ -89,10 +89,19 @@ final class StripScrollingTests: XCTestCase {
 
     func testAZoneBeyondTheEdgeWaitsWithOnePixelOnTheScreen() {
         let plan = planner.plan(on: screens.infos)
-        XCTAssertEqual(plan[screenZone], PlannedZone(rect: CGRect(x: 0, y: 0, width: 1000, height: 500)))
+        XCTAssertEqual(plan[screenZone], PlannedZone(rect: CGRect(x: 0, y: 0, width: 1000, height: 500), number: 1))
         XCTAssertEqual(plan[areaZone]?.rect, CGRect(x: 1000, y: 0, width: 250, height: 500))
         XCTAssertEqual(plan[areaZone]?.frame, CGRect(x: 999, y: 0, width: 250, height: 500))
         XCTAssertEqual(plan[areaZone]?.isParked, true)
+        XCTAssertEqual(plan[areaZone]?.number, 1, "numbered from the screen outwards, as the zone is shown")
+    }
+
+    func testAZoneBeyondTheEdgeIsToldWhereItWillStandAfterTheScroll() {
+        let screen = screens.infos[0]
+        let predicted = planner.rect(of: areaZone, at: 250, on: screen, among: screens.infos)
+        XCTAssertNotNil(predicted)
+        viewport.set(250, for: screen.key)
+        XCTAssertEqual(planner.plan(on: screens.infos)[areaZone]?.rect, predicted, "the rectangle the plan gives once it has scrolled there")
     }
 
     func testTheMarginKeepsTheZonesAwayFromTheEdgesOfTheScreen() {

@@ -104,9 +104,13 @@ final class AppContainer {
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens))
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
             let v = settings.values
-            return [(KeyShortcut.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
-                    (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
-                .compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
+            var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
+                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
+            if v.zoneNavigationEnabled {
+                all += [(.focusZone(.up), v.zoneUpShortcut), (.focusZone(.left), v.zoneLeftShortcut),
+                        (.focusZone(.down), v.zoneDownShortcut), (.focusZone(.right), v.zoneRightShortcut)]
+            }
+            return all.compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers }) { [settings, keys, coordinator, screens, editor] in
@@ -141,9 +145,15 @@ final class AppContainer {
                 return v.placementEnabled && v.stackingEnabled && v.mouseButtonSwipe && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
                     && !screens.isMissionControlActive
             })
-        coordinator.holdsTheFocus = { NSApp.isActive }
+        coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
+        let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
+        coordinator.flashZone = { zoneFlash.flash(from: $0, to: $1) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
+        coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, quiet: true, standsAt: standsAt) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
+        // After the edge scroller took the hook: a zone a shortcut asked for beyond the edge is focused once the scroll is over.
+        let afterEdgeScroll = scroller.onRest
+        scroller.onRest = { afterEdgeScroll?(); coordinator.finishFocusBeyondTheEdge() }
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
             scroller?.settingDidChange()
             edgeScroller?.settingDidChange()
@@ -169,6 +179,7 @@ final class AppContainer {
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)
                 case .scroll(let edge): scroller.scroll(toward: edge)
+                case .focusZone(let direction): coordinator.focusZone(toward: direction)
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }

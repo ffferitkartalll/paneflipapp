@@ -91,7 +91,7 @@ final class AXWindowSystem: WindowSystem {
         AXUIElementSetAttributeValue(ref.element, kAXMainAttribute as CFString, kCFBooleanTrue)
         // Making the owning app frontmost through AX works while PaneFlip itself is not the active app; while it is (a swipe with the
         // mouse's wheel button), the app is asked to take the focus instead.
-        if NSApp.isActive { NSRunningApplication(processIdentifier: ref.pid)?.activate() }
+        if NSRunningApplication.current.isActive { NSRunningApplication(processIdentifier: ref.pid)?.activate() }   // not NSApp: this runs off the main thread too
         AXUIElementSetAttributeValue(AXUIElementCreateApplication(ref.pid), kAXFrontmostAttribute as CFString, kCFBooleanTrue)
     }
 

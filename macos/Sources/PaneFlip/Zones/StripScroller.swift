@@ -60,6 +60,8 @@ final class StripScroller {
         var shift: CGFloat { origin - shown }
         /// The pictures were on the stage when it landed: it can be taken over.
         var staged = false
+        /// Asked for by a shortcut that moves the focus: the map of the strip is not shown, the zone shows itself where it lands.
+        var quiet = false
     }
 
     /// Calls `tick` on every frame until it returns false.
@@ -88,6 +90,8 @@ final class StripScroller {
     private var queued: [(edge: ScreenEdge, screen: ScreenInfo)] = []
     private static let mostQueued = 3
     private var ticking = false
+    /// The next scroll that starts is a quiet one (see `Scrolling.quiet`).
+    private var quietNext = false
     private var count = 0
     private var isRunning = false
     /// The latest photograph of each window, with when it was taken.
@@ -191,6 +195,8 @@ final class StripScroller {
         var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
         current.led = led
+        current.quiet = quietNext
+        quietNext = false
         current.origin = offset
         // The fingers cannot take the layout past its first and its last rest: nothing of the ends gives way, and going back is followed at once.
         if led { current.gesture.limit(to: offset - geometry.range.upperBound ... offset - geometry.range.lowerBound) }
@@ -222,7 +228,7 @@ final class StripScroller {
     /// it, however many areas lie between. A scroll that runs when this is asked is followed by this one. False when no screen has
     /// the zone out of sight, or the windows are not free to be moved.
     @discardableResult
-    func reveal(zone id: UUID) -> Bool {
+    func reveal(zone id: UUID, quiet: Bool = false, standsAt: ((CGRect) -> Void)? = nil) -> Bool {
         guard scrolling == nil else {
             revealing = id
             return false
@@ -239,7 +245,12 @@ final class StripScroller {
             let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
             let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
             guard let target = (whole ?? shown.first)?.0 else { return false }
-            return scroll(toward: edge, on: screen, to: target)
+            quietNext = quiet
+            defer { quietNext = false }
+            let started = scroll(toward: edge, on: screen, to: target)
+            // Where the zone will stand when the scroll is over, told as the scroll starts.
+            if started, let rect = planner.rect(of: id, at: target, on: screen, among: all) { standsAt?(rect) }
+            return started
         }
         return false
     }
@@ -281,6 +292,7 @@ final class StripScroller {
 
     /// The map of the strip shows where the screen is, to the pictures' own frame.
     private func showPreview(_ current: Scrolling) {
+        guard !current.quiet else { return }
         preview.show(strip: current.geometry.strip, offset: Double(current.shown / current.geometry.screen.width), on: current.screen)
     }
 
@@ -516,9 +528,10 @@ final class StripScroller {
         guard let now = scrolling, now.id == current.id else { return }
         scrolling?.phase = .landing
         scrolling?.staged = current.phase == .gliding
-        preview.show(strip: current.geometry.strip, offset: Double(offset / current.geometry.screen.width), on: current.screen)
+        if !current.quiet { preview.show(strip: current.geometry.strip, offset: Double(offset / current.geometry.screen.width), on: current.screen) }
         viewport.set(offset, for: current.screen.key)
         let plan = planner.plan(on: screens.screens())
+        coordinator.showFocusFrame(in: plan)   // the zone shows at once, while the pictures still cover the screen
         for held in current.held {
             if let zone = plan[held.zone] { mover.move(held.ref, to: zone.frame.origin) }
         }
@@ -532,6 +545,7 @@ final class StripScroller {
         // that did not answer) is put back exactly, with its size. The pictures hide this.
         coordinator.isScrolling = false
         refresher?.refreshZones()
+        coordinator.finishFocusBeyondTheEdge()   // the windows stand in their places: the pictures hide the window that comes forward
         guard current.phase == .gliding else {
             scrolling = nil
             rested()

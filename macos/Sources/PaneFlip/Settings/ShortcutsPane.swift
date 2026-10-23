@@ -7,10 +7,11 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, hidePill, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft }
+    private enum Shortcut { case snap, hidePill, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
-    private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut]
+    private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
+                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut]
 
     var body: some View {
         Form {
@@ -41,6 +42,14 @@ struct ShortcutsPane: View {
                     value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }
             }
             .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
+
+            Section("Moving between zones") {
+                chordRow(.zoneUp, title: "Zone above", path: \.zoneUpShortcut, standard: .zoneUp)
+                chordRow(.zoneLeft, title: "Zone on the left", path: \.zoneLeftShortcut, standard: .zoneLeft)
+                chordRow(.zoneDown, title: "Zone below", path: \.zoneDownShortcut, standard: .zoneDown)
+                chordRow(.zoneRight, title: "Zone on the right", path: \.zoneRightShortcut, standard: .zoneRight)
+            }
+            .disabled(!settings.values.placementEnabled || !settings.values.zoneNavigationEnabled)
 
             Section("Zones beyond the screen") {
                 chordRow(.scrollRight, title: "Scroll to the right", path: \.scrollRightShortcut, standard: .scrollRight)

@@ -8,6 +8,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
     private static let shortcuts: [(String, WritableKeyPath<SettingsValues, SnapTrigger>)] = [
         ("nextWindowShortcut", \.nextWindowShortcut), ("previousWindowShortcut", \.previousWindowShortcut),
         ("scrollRightShortcut", \.scrollRightShortcut), ("scrollLeftShortcut", \.scrollLeftShortcut),
+        ("zoneUpShortcut", \.zoneUpShortcut), ("zoneLeftShortcut", \.zoneLeftShortcut),
+        ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut),
     ]
 
     init(defaults: UserDefaults = .standard) { self.defaults = defaults }
@@ -26,6 +28,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.pillContent = defaults.string(forKey: "pillContent").flatMap(PillContent.init(rawValue:)) ?? v.pillContent
         v.pillEnabled = defaults.object(forKey: "pillEnabled") as? Bool ?? v.pillEnabled
+        v.zoneNavigationEnabled = defaults.object(forKey: "zoneNavigationEnabled") as? Bool ?? v.zoneNavigationEnabled
+        v.zoneNavigationBeyondEdges = defaults.object(forKey: "zoneNavigationBeyondEdges") as? Bool ?? v.zoneNavigationBeyondEdges
         v.mouseButtonSwipe = defaults.object(forKey: "mouseButtonSwipe") as? Bool ?? v.mouseButtonSwipe
         v.pillPosition = defaults.string(forKey: "pillPosition").flatMap(PillPosition.init(rawValue:)) ?? v.pillPosition
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
@@ -55,6 +59,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.pillContent.rawValue, forKey: "pillContent")
         defaults.set(v.pillEnabled, forKey: "pillEnabled")
+        defaults.set(v.zoneNavigationEnabled, forKey: "zoneNavigationEnabled")
+        defaults.set(v.zoneNavigationBeyondEdges, forKey: "zoneNavigationBeyondEdges")
         defaults.set(v.mouseButtonSwipe, forKey: "mouseButtonSwipe")
         defaults.set(v.pillPosition.rawValue, forKey: "pillPosition")
         defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
