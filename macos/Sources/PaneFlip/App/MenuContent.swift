@@ -2,7 +2,7 @@ import AppKit
 import PaneFlipCore
 import SwiftUI
 
-/// The menu bar menu: the app's name, the on/off switch, the layout switcher, Settings and Quit, each group set apart by a divider.
+/// The menu bar menu: the app's name, the on/off switch, the layout switcher and layout actions, Settings and Quit, each group set apart by a divider.
 struct MenuContent: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
@@ -21,8 +21,11 @@ struct MenuContent: View {
         Button("Edit layout") { editor.toggleAtPointer() }
         Button("Open selected apps") { apps.open(apps: toStart) }
             .disabled(toStart.isEmpty)
+        Divider()
         SettingsLink { Text("Settings") }
+            .keyboardShortcut(",")
         Divider()
         Button("Quit") { NSApp.terminate(nil) }
+            .keyboardShortcut("q")
     }
 }
