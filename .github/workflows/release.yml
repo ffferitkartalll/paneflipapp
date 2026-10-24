@@ -5,8 +5,11 @@ name: Release
 # manual run, shows its result (the green tick) next to the commit on the repository page. The tests run first on the tagged
 # commit, then the release is built, signed and published. The tag must name MARKETING_VERSION; a version that already has a
 # release, or a commit that is not on main, stops the job. A failed run is run again from Actions (Re-run).
-# Its notes list the issues the merged pull requests closed (not the pull requests), made in the step before Publish.
-# Last, the cask in ffferitkartalll/homebrew-tap gets the new version (secret TAP_TOKEN: contents write on that repository).
+# Its notes list the issues the merged pull requests closed (not the pull requests), made in the step before Publish: the issues
+# labelled `highlight` (the big new feature that raised the second number of the version) come first, with the first paragraph of
+# their description.
+# Last, the cask in ffferitkartalll/homebrew-tap gets the new version and the notes (its caveats, which `brew upgrade` shows; the
+# commit message of the tap carries them too) (secret TAP_TOKEN: contents write on that repository).
 on:
   push:
     tags: ['v*']
@@ -128,27 +131,32 @@ jobs:
           numbers="$(gh api "repos/$repo/compare/$previous...${{ github.sha }}" --paginate \
             --jq '.commits[].commit.message | split("\n")[0] | capture("\\(#(?<n>[0-9]+)\\)$").n')"
           # The issues those pull requests closed, except those of a release pull request, the documentation-only ones and the ones
-          # labelled internal.
+          # labelled internal. A line each: number, whether it is a highlight, title, first paragraph of the description.
           for number in $numbers; do
             gh api graphql -f owner="${repo%/*}" -f name="${repo#*/}" -F number="$number" -f query='
               query($owner: String!, $name: String!, $number: Int!) {
                 repository(owner: $owner, name: $name) {
                   pullRequest(number: $number) {
                     labels(first: 20) { nodes { name } }
-                    closingIssuesReferences(first: 50) { nodes { number title labels(first: 20) { nodes { name } } } }
+                    closingIssuesReferences(first: 50) { nodes { number title body labels(first: 20) { nodes { name } } } }
                   }
                 }
               }' --jq '.data.repository.pullRequest
                 | select(([.labels.nodes[].name] | index("release")) == null)
                 | .closingIssuesReferences.nodes[]
                 | select([.labels.nodes[].name] != ["documentation"] and (.labels.nodes | map(.name) | index("internal")) == null)
-                | "\(.number)\t\(.title)"'
+                | "\(.number)\t\(if (.labels.nodes | map(.name) | index("highlight")) != null then "highlight" else "-" end)\t\(.title)\t\(.body | gsub("\r"; "") | split("\n\n")[0] | gsub("\n"; " "))"'
           done | sort -n -u > "$RUNNER_TEMP/issues.tsv"
           {
+            if awk -F'\t' '$2 == "highlight" { found = 1 } END { exit !found }' "$RUNNER_TEMP/issues.tsv"; then
+              echo "## Highlight"
+              echo
+              awk -F'\t' '$2 == "highlight" { printf "### %s (#%s)\n\n%s\n\n", $3, $1, $4 }' "$RUNNER_TEMP/issues.tsv"
+            fi
             echo "## What's new"
             echo
-            if [ -s "$RUNNER_TEMP/issues.tsv" ]; then
-              awk -F'\t' '{ printf "* %s (#%s)\n", $2, $1 }' "$RUNNER_TEMP/issues.tsv"
+            if awk -F'\t' '$2 != "highlight" { found = 1 } END { exit !found }' "$RUNNER_TEMP/issues.tsv"; then
+              awk -F'\t' '$2 != "highlight" { printf "* %s (#%s)\n", $3, $1 }' "$RUNNER_TEMP/issues.tsv"
             else
               echo "* Small fixes and improvements."
             fi
@@ -170,8 +178,22 @@ jobs:
           cd "$RUNNER_TEMP/tap"
           sed -i.bak 's/^\( *version \)".*"/\1"${{ steps.version.outputs.version }}"/' casks/paneflipapp.rb
           rm casks/paneflipapp.rb.bak
+          # The notes of the release go in the caveats of the cask, which `brew install` and `brew upgrade` show: between two marker lines,
+          # replaced at every release. Headings and the changelog link are left out; the heredoc is quoted, so nothing in it is interpreted.
+          awk '/# BEGIN release notes/ { skip = 1 } !skip { print } /# END release notes/ { skip = 0 }' casks/paneflipapp.rb > "$RUNNER_TEMP/cask.rb"
+          {
+            echo "  # BEGIN release notes (written by the Release workflow of the app)"
+            echo "  caveats <<~'EOS'"
+            { echo "What's new in PaneFlip ${{ steps.version.outputs.version }}:"; echo; grep -v '^\*\*Full Changelog' "$RUNNER_TEMP/notes.md" | sed -e 's/^## .*//' -e 's/^### //'; } | cat -s | sed -e '/^$/!s/^/    /'
+            echo "  EOS"
+            echo "  # END release notes"
+            echo
+          } > "$RUNNER_TEMP/caveats.rb"
+          # Before the `zap` stanza.
+          awk -v file="$RUNNER_TEMP/caveats.rb" '/^ *zap / { while ((getline line < file) > 0) print line } { print }' "$RUNNER_TEMP/cask.rb" > casks/paneflipapp.rb
           git diff --quiet && { echo "The cask has this version already."; exit 0; }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Update paneflipapp to ${{ steps.version.outputs.version }}"
+          { echo "Update paneflipapp to ${{ steps.version.outputs.version }}"; echo; cat "$RUNNER_TEMP/notes.md"; } > "$RUNNER_TEMP/commit.txt"
+          git commit -aqF "$RUNNER_TEMP/commit.txt"
           git push
