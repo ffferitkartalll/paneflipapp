@@ -641,7 +641,7 @@
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accessibility"
+            "value" : "Pagiging naa-access"
           }
         },
         "fr" : {
@@ -10793,7 +10793,7 @@
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit"
+            "value" : "Ubah"
           }
         },
         "it" : {
@@ -10835,7 +10835,7 @@
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit"
+            "value" : "Sunting"
           }
         },
         "nb-NO" : {
@@ -17017,7 +17017,7 @@
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Import"
+            "value" : "Impor"
           }
         },
         "nb-NO" : {
@@ -23719,7 +23719,7 @@
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mouse"
+            "value" : "Tetikus"
           }
         },
         "it" : {
@@ -40262,7 +40262,7 @@
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startup"
+            "value" : "Pagsisimula"
           }
         },
         "fr" : {
@@ -40298,7 +40298,7 @@
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startup"
+            "value" : "Mulai"
           }
         },
         "it" : {
@@ -45039,7 +45039,7 @@
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update"
+            "value" : "I-update"
           }
         },
         "fr" : {
@@ -46725,7 +46725,7 @@
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Window snapping"
+            "value" : "Pag-snap ng window"
           }
         },
         "fr" : {
