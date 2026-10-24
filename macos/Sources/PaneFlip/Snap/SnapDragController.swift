@@ -74,16 +74,16 @@ final class SnapDragController {
     private func updateOverlay() {
         let held = snapOn
         if held && !overlay.isShown {
-            overlay.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) })
+            overlay.show(zones: coordinator.dropStacks.map { ($0.id, $0.rect) })
         }
         if !held && overlay.isShown { overlay.hide() }
-        if held { overlay.highlight(zone: coordinator.zoneID(at: screens.pointerAX)) }
+        if held { overlay.highlight(zone: coordinator.zoneID(at: screens.pointerAX, forDrop: true)) }
     }
 
     private func released() {
         defer { reset() }
         guard dragging, let c = candidate else { return }
-        if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX) {
+        if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX, forDrop: true) {
             coordinator.snap(c.ref, into: zone)
         } else {
             // Dragged out of its zone without snapping elsewhere: it just leaves the stack. Nothing else is brought

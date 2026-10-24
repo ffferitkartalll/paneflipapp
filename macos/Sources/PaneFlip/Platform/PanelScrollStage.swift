@@ -7,7 +7,7 @@ final class PanelScrollStage: ScrollStaging {
     private let panels: StagePanels
     private var clip: CALayer?
     private var strip: CALayer?
-    private var layers: [CGWindowID: CALayer] = [:]
+    private var layers: [CGWindowID: WindowPictureLayer] = [:]
     private var visible = CGRect.zero
 
     init(screens: ScreenProviding, panels: StagePanels) {
@@ -43,19 +43,14 @@ final class PanelScrollStage: ScrollStaging {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         for item in pictures {
-            if let layer = layers[item.id] { layer.contents = item.picture.image } else { add(item) }
+            if let layer = layers[item.id] { layer.update(item.picture.image) } else { add(item) }
         }
         CATransaction.commit()
     }
 
     private func add(_ item: ScrollPicture) {
         let picture = item.picture
-        let layer = CALayer()
-        layer.contents = picture.image
-        layer.contentsGravity = .resize
-        layer.cornerRadius = picture.cornerRadius
-        layer.cornerCurve = .continuous
-        layer.masksToBounds = true
+        let layer = WindowPictureLayer(picture)
         // The layer's origin is bottom-left.
         layer.frame = CGRect(x: picture.frame.minX - visible.minX,
                              y: visible.height - (picture.frame.minY - visible.minY) - picture.frame.height,

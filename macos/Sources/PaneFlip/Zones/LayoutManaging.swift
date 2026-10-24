@@ -16,6 +16,8 @@ protocol LayoutManaging: AnyObject {
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool)
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String)
     func rename(key: String, id: UUID, to name: String)
+    /// A zone floats over the middle of `host`, taking `scale` of its width and height; nil takes the floating zone away.
+    func setFloatingZone(key: String, id: UUID, over host: UUID?, scale: Double)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.
     func setDefaultZone(key: String, id: UUID, to zone: UUID?)
 }

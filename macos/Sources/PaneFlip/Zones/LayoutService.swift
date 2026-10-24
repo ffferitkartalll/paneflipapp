@@ -42,6 +42,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         // The layout is saved first: if the app quits between the two writes, memory never names zones that the
         // saved layout lacks.
         repository.setStrip(strip, ofLayout: id, key: key)
+        moveApps(ofFloatingZone: old.floatingZone, from: id, key: key)
         if isActive, let area = screens.screens().first(where: { $0.key == key })?.axVisible {
             release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: area)))
         }
@@ -67,8 +68,8 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         let old = repository.activeLayout(for: key)
         repository.activate(layout: id, key: key)
         if let old, old.id != id, let home = new.fallbackZoneID {
-            let map = Dictionary(uniqueKeysWithValues: old.strip.zoneIDs.map { ($0, home) })
-            release(memory.remap(map, preferred: Set(new.strip.zoneIDs)))
+            let map = Dictionary(uniqueKeysWithValues: old.zoneIDs.map { ($0, home) })
+            release(memory.remap(map, preferred: Set(new.zoneIDs)))
         }
         refresher?.refreshZones()
         refresher?.restoreWindows()
@@ -96,6 +97,15 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func rename(key: String, id: UUID, to name: String) {
         repository.rename(layout: id, key: key, to: name)
+    }
+
+    func setFloatingZone(key: String, id: UUID, over host: UUID?, scale: Double) {
+        let before = repository.layout(id: id, key: key)?.floatingZone
+        repository.setFloatingZone(over: host, scale: scale, ofLayout: id, key: key)
+        moveApps(ofFloatingZone: before, from: id, key: key)
+        prune()
+        refresher?.refreshZones()
+        refresher?.restoreWindows()
     }
 
     func setDefaultZone(key: String, id: UUID, to zone: UUID?) {
@@ -159,8 +169,8 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         let back = connected.subtracting(before)
         if !before.isEmpty, !back.isEmpty {
             let home = Set(current.filter { back.contains($0.displayID) }
-                .compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.strip.zoneIDs })
-            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap { $0.strip.zoneIDs }
+                .compactMap { repository.activeLayout(for: $0.key) }.flatMap(\.zoneIDs))
+            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap(\.zoneIDs)
             release(memory.remap(Dictionary(uniqueKeysWithValues: everywhere.map { ($0, $0) }), preferred: home))
         }
         refresher?.restoreWindows()
@@ -177,6 +187,13 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
     /// Their slots now name new zones; let go of the live windows so they are re-attached there.
     private func release(_ windowIDs: [CGWindowID]) {
         windowIDs.forEach { coordinator.removeFromStack(window: $0) }
+    }
+
+    /// A floating zone that is gone (it was taken away, or its host was): its apps go to the layout's default zone.
+    private func moveApps(ofFloatingZone floating: FloatingZone?, from layoutID: UUID, key: String) {
+        guard let floating, let layout = repository.layout(id: layoutID, key: key), layout.floatingZone == nil,
+              let home = layout.fallbackZoneID else { return }
+        release(memory.remap([floating.id: home]))
     }
 
     func prune() {

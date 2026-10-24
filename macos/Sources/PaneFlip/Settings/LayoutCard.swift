@@ -28,6 +28,7 @@ struct LayoutCard: View {
             nameRow
             actionRow
             LayoutGapRow(layout: layout, defaultGap: defaultGap) { layouts.setGap(key: screen.key, id: layout.id, to: $0) }
+            LayoutFloatingRow(layout: layout) { layouts.setFloatingZone(key: screen.key, id: layout.id, over: $0, scale: $1) }
             HStack(spacing: 6) {
                 Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
                 Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }

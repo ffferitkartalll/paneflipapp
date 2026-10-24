@@ -27,6 +27,14 @@ struct ZonePlanner {
                     zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true, number: number)
                 }
             }
+            if let floating = layout?.floatingZone, let host = zones[floating.host] {
+                let rect = floating.rect(over: host.rect)
+                let number = (zones.values.map(\.number).max() ?? 0) + 1
+                zones[floating.id] = host.isParked && side != nil
+                    ? PlannedZone(rect: rect, frame: Parking.frame(for: rect, on: screen.cocoaFrame, side: side!), isParked: true, number: number, isFloating: true)
+                    : PlannedZone(rect: rect, number: number, isFloating: true,
+                                  awayFrame: side == .right ? Parking.frame(for: rect, on: screen.cocoaFrame, side: .right) : nil)
+            }
         }
         return zones
     }
