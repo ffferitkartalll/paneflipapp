@@ -84,6 +84,11 @@ final class AXWindowSystem: WindowSystem {
         return s
     }
 
+    func isResizable(_ ref: WindowRef) -> Bool {
+        var settable = DarwinBoolean(false)
+        return AXUIElementIsAttributeSettable(ref.element, kAXSizeAttribute as CFString, &settable) != .success || settable.boolValue
+    }
+
     func isMinimized(_ ref: WindowRef) -> Bool { minimized(ref.element) }
 
     func raise(_ ref: WindowRef) {

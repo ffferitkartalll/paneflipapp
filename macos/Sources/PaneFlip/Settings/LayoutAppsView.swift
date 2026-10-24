@@ -24,12 +24,13 @@ struct LayoutAppsView: View {
     @State private var zoneNameDraft = ""
 
     /// Every zone, in the order across the strip: beyond the left edge, the screen, beyond the right edge.
-    private var zones: [UUID] { showsOverflow ? layout.strip.zoneIDs : layout.root.leafIDs }
+    private var zones: [UUID] { (showsOverflow ? layout.strip.zoneIDs : layout.root.leafIDs) + (layout.floatingZone.map { [$0.id] } ?? []) }
     /// The zones a default can be: those of the screen (the others are out of sight).
     private var screenZones: [UUID] { layout.root.leafIDs }
     private func name(_ zone: UUID) -> String { ZoneLabel.text(of: zone, in: layout.strip) }
     /// "Zone 1", with the name the user gave it after a dot.
     private func title(_ zone: UUID) -> Text {
+        if zone == layout.floatingZone?.id { return Text(verbatim: layout.zoneNames[zone].map { "\(String(localized: "Floating zone")) · \($0)" } ?? String(localized: "Floating zone")) }
         let number = String(localized: "Zone \(name(zone))")
         return Text(verbatim: layout.zoneNames[zone].map { "\(number) · \($0)" } ?? number)
     }

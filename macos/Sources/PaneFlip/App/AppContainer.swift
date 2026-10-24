@@ -47,6 +47,9 @@ final class AppContainer {
         coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                             background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
+        coordinator.snapshots = snapshots
+        coordinator.floatStage = PanelFloatStage(screens: screens, panels: stagePanels)
+        coordinator.reduceMotion = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
         coordinator.glide = WindowGlide(windows: windows, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                         background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let availability = WindowAvailability(windows: windows, screens: screens)
@@ -65,7 +68,7 @@ final class AppContainer {
         let navigation = SettingsNavigation()
         let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont) { zone in
             navigation.tab = .layouts
-            let layout = repository.screens.values.flatMap(\.layouts).first { $0.strip.zoneIDs.contains(zone) }
+            let layout = repository.screens.values.flatMap(\.layouts).first { $0.zoneIDs.contains(zone) }
             navigation.ordering = layout.map { OrderingTarget(layoutID: $0.id, zoneID: zone) }
             navigation.openSettings()
         }

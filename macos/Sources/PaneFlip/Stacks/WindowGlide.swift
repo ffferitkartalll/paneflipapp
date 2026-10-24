@@ -25,7 +25,8 @@ final class WindowGlide {
         self.duration = duration
     }
 
-    func glide(_ ref: WindowRef, to target: CGRect) {
+    /// `spring`: with the spring of the slides inside a zone (and its time) instead of the usual ease-out.
+    func glide(_ ref: WindowRef, to target: CGRect, spring: Bool = false) {
         guard !reduceMotion(), let start = windows.frame(of: ref), start != target else { return windows.setFrame(target, of: ref) }
         lock.lock()
         count += 1
@@ -34,9 +35,12 @@ final class WindowGlide {
         lock.unlock()
         background { [self] in
             let begin = now()
+            let length = spring ? SlideSpring.settling : duration
             while isCurrent(mine, for: ref.id) {
-                let progress = min((now() - begin) / duration, 1)
-                windows.setFrame(progress >= 1 ? target : Self.frame(from: start, to: target, progress: progress), of: ref)
+                let elapsed = now() - begin
+                let progress = min(elapsed / length, 1)
+                let eased = spring ? SlideSpring.progress(at: elapsed) : 1 - pow(1 - progress, 3)   // ease-out: fast at first, landing softly
+                windows.setFrame(progress >= 1 ? target : Self.frame(from: start, to: target, eased: eased), of: ref)
                 if progress >= 1 { return finish(mine, for: ref.id) }
             }
         }
@@ -61,9 +65,7 @@ final class WindowGlide {
         lock.unlock()
     }
 
-    /// Ease-out: fast at first, landing softly.
-    private static func frame(from a: CGRect, to b: CGRect, progress: Double) -> CGRect {
-        let t = 1 - pow(1 - progress, 3)
+    private static func frame(from a: CGRect, to b: CGRect, eased t: Double) -> CGRect {
         func mix(_ x: CGFloat, _ y: CGFloat) -> CGFloat { x + (y - x) * t }
         return CGRect(x: mix(a.minX, b.minX), y: mix(a.minY, b.minY), width: mix(a.width, b.width), height: mix(a.height, b.height))
     }

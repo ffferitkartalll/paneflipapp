@@ -38,6 +38,10 @@ final class ZoneEngine: ZoneRefreshing {
             self?.refreshZones()
             self?.scheduleRestore()
         }
+        // A floating zone follows the focus: look at once when another app comes to the front, not at the next tick.
+        workspace.addObserver(forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.coordinator.followFocus()
+        }
         // A remembered app comes back when it starts, is shown again or is brought to the front.
         for name in [NSWorkspace.didLaunchApplicationNotification, NSWorkspace.didActivateApplicationNotification,
                      NSWorkspace.didUnhideApplicationNotification] {

@@ -34,12 +34,21 @@ final class ZoneStack {
     /// out of sight.
     @ObservationIgnored var frame: CGRect = .zero
     @ObservationIgnored var isParked = false
+    /// The zone floats over another one (see `FloatingZone`); its windows go to `awayFrame` while the focus is elsewhere.
+    @ObservationIgnored var isFloating = false
+    @ObservationIgnored var awayFrame: CGRect?
+    /// The window in view in a floating zone: the one with the focus. The others, and all of them when the focus is elsewhere, wait at `awayFrame`.
+    @ObservationIgnored var shownID: CGWindowID?
+    /// Counts the changes of the window in view: pictures taken for an earlier change are not shown for a later one.
+    @ObservationIgnored var changes = 0
     /// The number the zone shows in its layout.
     @ObservationIgnored var number = 0
 
     init(id: UUID) { self.id = id }
 
     var isEmpty: Bool { tabs.isEmpty }
+    /// A floating zone with nothing in view, which has a place beyond the edge to wait at.
+    var isAway: Bool { isFloating && awayFrame != nil && !isParked && shownID == nil }
 
     func refreshNames() {
         let names = TabNaming.displayNames(for: tabs.map { .init(appName: $0.appName, title: $0.title) })

@@ -48,7 +48,7 @@ final class PillPresenter: ZonePresenting {
     // MARK: ZonePresenting
 
     func zonesDidChange() {
-        let visible = coordinator.visibleStacks
+        let visible = coordinator.visibleStacks.filter { !$0.isFloating }   // a floating zone does not stack: it has no pill
         let ids = Set(visible.map(\.id))
         for (id, panel) in panels where !ids.contains(id) {
             panel.orderOut(nil)
