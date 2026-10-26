@@ -16,7 +16,6 @@ final class StripScrollingTests: XCTestCase {
     private var coordinator: StackCoordinator!
     private var snapshots: FakeWindowSnapshots!
     private var stage: FakeScrollStage!
-    private var preview: FakeScrollPreview!
     private var reduceMotion = false
     private var clock = 0.0
     private var frames: [() -> Bool] = []
@@ -66,13 +65,12 @@ final class StripScrollingTests: XCTestCase {
         snapshots = FakeWindowSnapshots()
         snapshots.images = [3: picture(CGRect(x: 0, y: 0, width: 1000, height: 500)), 2: picture(CGRect(x: 999, y: 0, width: 250, height: 500))]
         stage = FakeScrollStage()
-        preview = FakeScrollPreview()
     }
 
     private func scroller(busy: Bool = false) -> StripScroller {
         StripScroller(screens: screens, planner: planner, viewport: viewport, settings: settings,
                       coordinator: coordinator, mover: WindowMover(windows: windows, background: { $0() }), snapshots: snapshots,
-                      stage: stage, preview: preview, metronome: { [unowned self] tick in frames.append(tick) }, refresher: refresher,
+                      stage: stage, metronome: { [unowned self] tick in frames.append(tick) }, refresher: refresher,
                       reduceMotion: { [unowned self] in reduceMotion }, isBusy: { busy }, now: { [unowned self] in clock })
     }
 
@@ -86,6 +84,15 @@ final class StripScrollingTests: XCTestCase {
 
     /// Past the time the pictures take to go (asked after the windows have been put).
     private func settle() { RunLoop.current.run(until: Date().addingTimeInterval(0.15)) }
+
+    /// A screen with nothing placed on it: no window in any zone.
+    private func emptyTheZones() {
+        for stack in coordinator.stacks.values {
+            stack.refs = [:]
+            stack.tabs = []
+            stack.activeID = nil
+        }
+    }
 
     func testAZoneBeyondTheEdgeWaitsWithOnePixelOnTheScreen() {
         let plan = planner.plan(on: screens.infos)
@@ -274,27 +281,6 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertTrue(scroller.scroll(toward: .left))
         for _ in 0 ..< 5 { settle(); run(60) }
         XCTAssertEqual(viewport.offset(for: key), 400, "1000, one stop back, one more: 400")
-    }
-
-    func testTheMapOfTheStripFollowsTheScrollAndGoesAwayAfterIt() {
-        _ = setUpZoneLines()
-        let scroller = scroller()
-        scroller.start()
-
-        XCTAssertTrue(preview.offsets.isEmpty)
-        XCTAssertTrue(scroller.scroll(toward: .right))
-        XCTAssertEqual(preview.offsets.last, 0, "it appears with the scroll, at the screen's own place")
-        run(5)
-        let early = preview.offsets.last ?? 0
-        XCTAssertGreaterThan(early, 0)
-        XCTAssertLessThan(early, 0.4, "its frame follows the pictures, in screen widths")
-        run(60)
-        XCTAssertEqual(preview.offsets.last ?? 0, 0.4, accuracy: 0.0001, "and ends where the layout comes to rest")
-        XCTAssertTrue(preview.hides.isEmpty, "it stays while the windows are put in place")
-
-        for _ in 0 ..< 3 { settle(); run(60) }
-        XCTAssertEqual(preview.hides.count, 1, "the scroll is over: the map goes away after a moment")
-        XCTAssertGreaterThan(preview.hides[0], 0)
     }
 
     func testAPressWithNoStopBeyondIsNotKeptForLater() {
@@ -583,6 +569,60 @@ final class StripScrollingTests: XCTestCase {
         scroller.scroll(toward: .right)
         settle()
         XCTAssertTrue(stage.begun.isEmpty)
+        XCTAssertEqual(viewport.offset(for: key), 250)
+    }
+
+    func testAScreenWithNoWindowsStillGlidesForTheFrameOfTheIsland() {
+        emptyTheZones()
+        let scroller = scroller()
+        var froms: [CGFloat?] = [], tos: [CGFloat] = []
+        scroller.onGlide = { _, from, to in froms.append(from); tos.append(to) }
+        scroller.start()
+
+        XCTAssertTrue(scroller.scroll(toward: .right))
+
+        XCTAssertEqual(tos, [250], "the island is told at once, as it is when there are pictures")
+        XCTAssertEqual(froms, [0])
+        XCTAssertEqual(viewport.offset(for: key), 0, "the layout waits for the glide")
+        XCTAssertTrue(coordinator.isScrolling, "the island keeps its picture while the frame glides")
+        XCTAssertTrue(stage.begun.isEmpty, "nothing to put on the stage")
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
+        XCTAssertFalse(coordinator.isScrolling)
+    }
+
+    func testTheFingersLeadAScreenWithNoWindowsToo() {
+        emptyTheZones()
+        let scroller = scroller()
+        var follows: [CGFloat] = [], tos: [CGFloat] = []
+        scroller.onFollow = { _, offset in follows.append(offset) }
+        scroller.onGlide = { _, _, to in tos.append(to) }
+        scroller.start()
+
+        XCTAssertTrue(scroller.beginLed(), "nothing to photograph: the fingers lead at once")
+        scroller.moveLed(by: -100, at: 0)
+        scroller.moveLed(by: -100, at: 0.5)
+        XCTAssertEqual(follows.last, 200, "the frame of the island follows the fingers")
+        scroller.moveLed(by: -50, at: 1.0)
+        scroller.endLed()
+        XCTAssertEqual(tos, [250], "and glides on to the nearest rest position")
+        for _ in 0 ..< 4 { run(60); settle() }
+
+        XCTAssertEqual(viewport.offset(for: key), 250)
+        XCTAssertFalse(coordinator.isScrolling)
+    }
+
+    func testReducedMotionWithNoWindowsDoesNotGlideEither() {
+        emptyTheZones()
+        reduceMotion = true
+        let scroller = scroller()
+        var glides = 0
+        scroller.onGlide = { _, _, _ in glides += 1 }
+        scroller.start()
+        XCTAssertFalse(scroller.beginLed(), "motion is reduced: the caller steps on lifting")
+        scroller.scroll(toward: .right)
+        settle()
+        XCTAssertEqual(glides, 0)
         XCTAssertEqual(viewport.offset(for: key), 250)
     }
 

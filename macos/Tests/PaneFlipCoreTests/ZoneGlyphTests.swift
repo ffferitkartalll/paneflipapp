@@ -36,6 +36,28 @@ struct ZoneGlyphTests {
         #expect(rects[0].maxX == rects[1].minX)
     }
 
+    @Test func theRealGapIsTheGapOfTheLayoutInTheUnitsOfThePicture() {
+        // The screen is drawn a tenth of its size: a gap of 20 is 2 in the picture; none is 0.
+        let zones: [(id: UUID, rect: CGRect)] = [(a, CGRect(x: 0, y: 0, width: 500, height: 500))]
+        let gapped = ZoneGlyph(zones: zones, screen: screen, screenSize: CGSize(width: 100, height: 50), grow: 10)
+        let bare = ZoneGlyph(zones: zones, screen: screen, screenSize: CGSize(width: 100, height: 50))
+        #expect(gapped.gap == 2)
+        #expect(bare.gap == 0)
+    }
+
+    @Test func zonesAreOnePointApartAtRestAndTheRealGapShowsWhenOpenButNeverLess() {
+        let zones: [(id: UUID, rect: CGRect)] = [(a, CGRect(x: 0, y: 0, width: 500, height: 500))]
+        let size = CGSize(width: 100, height: 50)
+        let wide = ZoneGlyph(zones: zones, screen: screen, screenSize: size, grow: 10)    // a gap of 2 in the picture
+        let none = ZoneGlyph(zones: zones, screen: screen, screenSize: size)
+        #expect(wide.inset(zoom: 1, openZoom: 5) == 0.5, "at rest: 1 pt apart whatever the gap")
+        #expect(none.inset(zoom: 1, openZoom: 5) == 0.5)
+        #expect(wide.inset(zoom: 5, openZoom: 5) == 5, "open: the real gap, 2 × 5 = 10 pt apart")
+        #expect(none.inset(zoom: 5, openZoom: 5) == 0.5, "open, with no gap in the layout: still 1 pt")
+        #expect(wide.inset(zoom: 3, openZoom: 5) == 1.75, "on the way it is between the two")
+        #expect(wide.inset(zoom: 3, openZoom: 1) == 0.5, "an island that cannot grow stays at rest")
+    }
+
     @Test func theWholeReachOfTheScrollIsInThePicture() {
         // A strip of 1600 on a screen of 1000, scrolled 0 or 600: the picture is the same size at both.
         let size = CGSize(width: 100, height: 50)

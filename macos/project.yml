@@ -113,7 +113,6 @@ targets:
       - path: Sources/PaneFlip/Zones/StripScroller.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift
       - path: Sources/PaneFlip/Platform/ScrollStaging.swift
-      - path: Sources/PaneFlip/Platform/ScrollPreviewing.swift
       - path: Sources/PaneFlip/Platform/ScrollPicture.swift
       - path: Sources/PaneFlip/Platform/AppInfo.swift
       - path: Sources/PaneFlip/Platform/ScreenProviding.swift
