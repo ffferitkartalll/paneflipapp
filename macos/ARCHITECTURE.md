@@ -55,7 +55,7 @@ Sources/
     ├── Zones/               ZonePlanner, ZoneFlash (outlines the zone the focus went to), ZoneEngine, StripPreview (the map of a strip: the layout editor and the scroll show it), ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrolling, PillScrollRouter (scrolling over the pill: two fingers lead the zone's windows, a wheel steps through them), IconFont, DoubleTapDetector
     ├── Island/              MenuBarIsland (a ZonePresenting: the island in the menu bar, never taller than it, hanging from the notch where there is one: the zones drawn small and the name of the zone with the focus), MenuBarIslandModel, MenuBarIslandView
-    ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
+    ├── Snap/                SnapDragController, ZoneDropTarget, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget
     └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, LayoutsPane, ZonesPane, StackingPane, TrackpadPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
@@ -99,7 +99,8 @@ Sources/
 | `IconFont` | Single-colour glyphs for segments (system glyph table, brand glyphs, or the app icon's shape). |
 | `CDNBrandGlyphs` | Fetch a brand glyph from a public icon set once and keep it on disk; asks nothing while the setting is off. |
 | `LayoutAppsService` | Edits which app belongs in which zone of a layout, and in what pill order; lets the restorer place the windows. |
-| `SnapDragController` | Window drag + trigger key (or a shake of the mouse during the drag) → snap. |
+| `SnapDragController` | Window drag + trigger key (or a shake of the mouse during the drag) → snap; a drop on a zone of the island snaps too. |
+| `ZoneDropTarget` | Port: a place besides the screen (the island) where a dragged window can be dropped on a zone. |
 | `AppContainer` | Build everything once and wire it. No globals anywhere else. |
 
 ## Principles in practice

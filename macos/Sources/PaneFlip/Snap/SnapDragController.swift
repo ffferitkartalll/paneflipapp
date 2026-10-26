@@ -10,6 +10,7 @@ final class SnapDragController {
     private let settings: AppSettings
     private let keys: KeyStateProviding
     private let overlay: SnapZoneOverlay
+    private let island: ZoneDropTarget
 
     private var monitor: Any?
     private var candidate: (ref: WindowRef, start: CGRect)?
@@ -22,13 +23,14 @@ final class SnapDragController {
     private var timer: Timer?
 
     init(windows: WindowSystem, screens: ScreenProviding, coordinator: StackCoordinator,
-         settings: AppSettings, keys: KeyStateProviding, overlay: SnapZoneOverlay) {
+         settings: AppSettings, keys: KeyStateProviding, overlay: SnapZoneOverlay, island: ZoneDropTarget) {
         self.windows = windows
         self.screens = screens
         self.coordinator = coordinator
         self.settings = settings
         self.keys = keys
         self.overlay = overlay
+        self.island = island
     }
 
     func start() {
@@ -72,6 +74,7 @@ final class SnapDragController {
     }
 
     private func updateOverlay() {
+        island.dragMoved(to: NSEvent.mouseLocation)
         let held = snapOn
         if held && !overlay.isShown {
             overlay.show(zones: coordinator.dropStacks.map { ($0.id, $0.rect) })
@@ -83,6 +86,12 @@ final class SnapDragController {
     private func released() {
         defer { reset() }
         guard dragging, let c = candidate else { return }
+        // On the island in the menu bar: dropped on one of its zones the window goes there; anywhere else on it nothing happens.
+        let pointer = NSEvent.mouseLocation
+        if island.isOver(pointer) {
+            if let zone = island.zone(at: pointer) { coordinator.snap(c.ref, into: zone) }
+            return
+        }
         if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX, forDrop: true) {
             coordinator.snap(c.ref, into: zone)
         } else {
@@ -93,11 +102,13 @@ final class SnapDragController {
     }
 
     private func reset() {
+        let wasDragging = dragging
         timer?.invalidate()
         timer = nil
         candidate = nil
         dragging = false
         latched = false
         overlay.hide()
+        if wasDragging { island.dragEnded() }   // a plain click on the island is no drag: it stays open
     }
 }
