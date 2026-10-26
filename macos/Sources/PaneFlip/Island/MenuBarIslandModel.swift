@@ -13,6 +13,16 @@ final class MenuBarIslandModel {
     var blend: CGFloat = 1
     /// How far the frame of the screen is from where the glyph was drawn it: it slides along the strip while the layout scrolls.
     var outlineShift: CGFloat = 0
+    /// How many times as large as at rest the picture is drawn (1 at rest; more while the pointer is on the island, when each zone also shows its name
+    ///). The island then reaches below the menu bar.
+    var zoom: CGFloat = 1
+    /// The zoom of the open island: `MenuBarIslandView.hoverZoom`, or less when the picture would not fit the display.
+    var openZoom: CGFloat = MenuBarIslandView.hoverZoom
+    /// The pointer is on the island: it stands below the menu bar as one block.
+    var expanded = false
+    /// A dragged window is over a zone of the island: that zone is lit whole, also the part of it beyond the edges of the screen.
+    var dropping = false
+    var cellTexts: [UUID: String] = [:]
     var label = ""
     var labelWidth: CGFloat = 0
     var barHeight: CGFloat = 24

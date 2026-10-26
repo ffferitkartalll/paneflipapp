@@ -67,7 +67,10 @@ final class CGSScreenProvider: ScreenProviding {
     private func notch(of screen: NSScreen) -> (width: CGFloat, height: CGFloat) {
         #if DEBUG
         // To try the app without a notched display: PANEFLIP_FAKE_NOTCH=1 (or =<width>x<height>), or the default PaneFlipFakeNotch, gives the main display one.
-        if let fake = Self.fakeNotch, screen == NSScreen.screens.first, screen.safeAreaInsets.top == 0 { return fake }
+        if let fake = Self.fakeNotch, screen == NSScreen.screens.first, screen.safeAreaInsets.top == 0 {
+            // Without a height of its own the notch is as tall as the menu bar, as on a notched display.
+            return (fake.width, fake.height > 0 ? fake.height : max(screen.frame.maxY - screen.visibleFrame.maxY, menuBarThickness))
+        }
         #endif
         guard screen.safeAreaInsets.top > 0, let left = screen.auxiliaryTopLeftArea, let right = screen.auxiliaryTopRightArea else { return (0, 0) }
         return (max(0, screen.frame.width - left.width - right.width), screen.safeAreaInsets.top)
@@ -78,7 +81,7 @@ final class CGSScreenProvider: ScreenProviding {
         // From the scheme's environment (PANEFLIP_FAKE_NOTCH) or, without touching the scheme, from the app's defaults (PaneFlipFakeNotch).
         guard let value = ProcessInfo.processInfo.environment["PANEFLIP_FAKE_NOTCH"] ?? UserDefaults.standard.string(forKey: "PaneFlipFakeNotch"), !value.isEmpty, value != "0" else { return nil }
         let sizes = value.lowercased().split(separator: "x").compactMap { Double($0) }.map { CGFloat($0) }
-        return sizes.count == 2 ? (sizes[0], sizes[1]) : (200, 32)
+        return sizes.count == 2 ? (sizes[0], sizes[1]) : (200, 0)
     }()
     #endif
 

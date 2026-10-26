@@ -4,13 +4,20 @@ import SwiftUI
 
 /// The island in the menu bar of every display: the zones of its layout, those beyond its edges too, with the zone of the window that has the focus lit up,
 /// and that zone's name. It hangs from the notch where there is one and is as tall as the menu bar.
-final class MenuBarIsland: ZonePresenting {
+final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// One display's island.
     private final class Entry {
         let model = MenuBarIslandModel()
         let panel: NSPanel
         var zoneNames: [UUID: String] = [:]
         var zones: Set<UUID> = []
+        /// How each zone is numbered: 1, 2 on the screen; -1 beyond the left edge; +1 beyond the right one.
+        var numbers: [UUID: String] = [:]
+        var hovered = false
+        /// A drop just ended on the island: it stays closed until the pointer has left it.
+        var cooling = false
+        /// The zone a dragged window would be dropped on: it is lit, as a zone with the focus is.
+        var dropZone: UUID?
         /// The layout offset the picture of the zones was built at: the frame is drawn at the offsets of the scroll minus this one.
         var builtOffset: CGFloat = 0
         /// Counts the glides told to the island: one that is overtaken does not start.
@@ -33,6 +40,8 @@ final class MenuBarIsland: ZonePresenting {
     private let viewport: StripViewport
     private var entries: [String: Entry] = [:]
     private var timer: Timer?
+    private var monitor: Any?
+    private var dragging = false
     private var followed: UUID?
 
     init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport) {
@@ -45,7 +54,11 @@ final class MenuBarIsland: ZonePresenting {
         self.screens = screens
     }
 
+    /// How many times as large the picture is while the pointer is on the island.
+
     func start() {
+        // A cheap test of where the pointer is, per move: the island is a panel that lets the mouse through.
+        monitor = NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] _ in self?.hover(at: NSEvent.mouseLocation) }
         timer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { [weak self] _ in
             guard let self, followed != coordinator.focusedZoneID else { return }
             followFocus()
@@ -80,6 +93,8 @@ final class MenuBarIsland: ZonePresenting {
         let model = entry.model
         entry.zoneNames = layout.zoneNames
         entry.zones = Set(layout.zoneIDs)
+        defer { model.cellTexts = entry.zones.subtracting(layout.floatingZone.map { [$0.id] } ?? []).reduce(into: [:]) { $0[$1] = entry.zoneNames[$1] ?? entry.numbers[$1] } }
+        entry.numbers = Dictionary(uniqueKeysWithValues: layout.zoneIDs.map { ($0, ZoneLabel.text(of: $0, in: layout.strip)) })
         // How far the layout can be scrolled either way: the picture holds the whole strip, whatever the scroll.
         var reach: ClosedRange<CGFloat> = 0 ... 0
         entry.builtOffset = 0
@@ -96,8 +111,12 @@ final class MenuBarIsland: ZonePresenting {
         model.barHeight = bar
         model.notchWidth = screen.notchWidth
         model.scale = native?.backingScaleFactor ?? 2
-        let width = min(1000, screen.cocoaFrame.width)
-        let frame = CGRect(x: screen.cocoaFrame.midX - width / 2, y: screen.cocoaFrame.maxY - bar, width: width, height: bar)
+        // The open island is as wide as its picture and must fit the display, with room for the name and the margins.
+        model.openZoom = max(1, min(MenuBarIslandView.hoverZoom, (screen.cocoaFrame.width - 2 * bar - 2 * margin - 200) / max(model.glyph.size.width, 1)))
+        let width = screen.cocoaFrame.width
+        // Tall enough for the island at its largest.
+        let tall = 2 * bar + ceil(model.glyph.size.height * model.openZoom)
+        let frame = CGRect(x: screen.cocoaFrame.midX - width / 2, y: screen.cocoaFrame.maxY - tall, width: width, height: tall)
         if entry.panel.frame != frame { entry.panel.setFrame(frame, display: true) }
         entry.panel.orderFrontRegardless()
         #if DEBUG
@@ -159,6 +178,76 @@ final class MenuBarIsland: ZonePresenting {
         }
     }
 
+    // MARK: Hover
+
+    private func hover(at point: CGPoint) {
+        for entry in entries.values {
+            let model = entry.model, bar = entry.panel.frame
+            let m = MenuBarIslandView.margin
+            let hit: Bool
+            if entry.hovered {
+                // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
+                let width = model.glyph.size.width * model.openZoom + 2 * model.barHeight + (model.label.isEmpty ? 0 : 2 * m + model.labelWidth)
+                hit = point.y >= bar.maxY - model.barHeight - model.glyph.size.height * model.openZoom - model.barHeight && point.y <= bar.maxY && abs(point.x - bar.midX) <= width / 2
+            } else {
+                let half = model.notchWidth > 0 ? model.notchWidth / 2 : 0.5
+                // Dragging a window, the pointer need not hit the island exactly: three times the height of the menu bar around it (left, right, below).
+                let reach = dragging ? 3 * model.barHeight : 0
+                hit = point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY
+                    && point.x >= bar.midX - half - 2 * m - model.glyph.size.width - reach && point.x <= bar.midX + half + 2 * m + model.labelWidth + reach
+            }
+            if entry.cooling { if hit { continue }; entry.cooling = false }
+            let drop = dragging && hit && entry.hovered ? cell(at: point, in: entry) : nil
+            if drop != entry.dropZone { entry.dropZone = drop; entry.model.dropping = drop != nil; entry.model.select(drop ?? focused(in: entry)) }
+            guard hit != entry.hovered else { continue }
+            setOpen(hit, for: entry)
+        }
+    }
+
+    private func setOpen(_ open: Bool, for entry: Entry) {
+        entry.hovered = open
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            entry.model.expanded = open
+            entry.model.zoom = open ? entry.model.openZoom : 1
+        }
+    }
+
+    private func focused(in entry: Entry) -> UUID? { coordinator.focusedZoneID.flatMap { entry.zones.contains($0) ? $0 : nil } }
+
+    /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
+    private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
+        let model = entry.model, bar = model.barHeight, frame = entry.panel.frame
+        let width = 2 * bar + model.glyph.size.width * model.openZoom + (model.label.isEmpty ? 0 : 2 * MenuBarIslandView.margin + model.labelWidth)
+        let x = (point.x - (frame.midX - width / 2 + bar)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
+        guard entry.hovered else { return nil }
+        return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
+    }
+
+    // MARK: ZoneDropTarget
+
+    func dragMoved(to point: CGPoint) {
+        dragging = true
+        hover(at: point)
+    }
+
+    func isOver(_ point: CGPoint) -> Bool {
+        hover(at: point)
+        return entries.values.contains { $0.hovered }
+    }
+
+    func zone(at point: CGPoint) -> UUID? {
+        hover(at: point)
+        return entries.values.lazy.compactMap { self.cell(at: point, in: $0) }.first
+    }
+
+    func dragEnded() {
+        dragging = false
+        for entry in entries.values {
+            if entry.dropZone != nil { entry.dropZone = nil; entry.model.dropping = false; entry.model.select(focused(in: entry)) }
+            if entry.hovered { entry.cooling = true; setOpen(false, for: entry) }   // the drop is done: the island closes, and opens again for a new visit
+        }
+    }
+
     // MARK: Focus
 
     private func followFocus() {
@@ -166,9 +255,9 @@ final class MenuBarIsland: ZonePresenting {
         followed = id
         for entry in entries.values {
             let here = id.flatMap { entry.zones.contains($0) ? $0 : nil }
-            entry.model.select(here)
+            if entry.dropZone == nil { entry.model.select(here) }
             let stack = here.flatMap { coordinator.stacks[$0] }
-            let name = here.flatMap { entry.zoneNames[$0] }.map { String(localized: "Zone: \($0)") } ?? (stack.map { $0.isFloating ? String(localized: "Floating zone") : String(localized: "Zone: \(String($0.number))") } ?? "")
+            let name = here.flatMap { entry.zoneNames[$0] }.map { String(localized: "Zone: \($0)") } ?? (stack.map { $0.isFloating ? String(localized: "Floating zone") : String(localized: "Zone: \(here.flatMap { entry.numbers[$0] } ?? String($0.number))") } ?? "")
             entry.model.label = name
             entry.model.labelWidth = name.isEmpty ? 0 : ceil((name as NSString).size(withAttributes: [.font: NSFont.menuBarFont(ofSize: 0)]).width)
         }
@@ -186,7 +275,17 @@ final class MenuBarIsland: ZonePresenting {
         p.ignoresMouseEvents = true
         p.collectionBehavior = [.canJoinAllSpaces, .stationary]
         let entry = Entry(panel: p)
-        p.contentView = NSHostingView(rootView: MenuBarIslandView(model: entry.model))
+        let hosting = NSHostingView(rootView: MenuBarIslandView(model: entry.model))
+        // The panel is sized here, never by its content: the content changes size with every step of the animation, and a window that asks again for
+        // its size after each one never settles (the layout pass runs over and over).
+        hosting.sizingOptions = []
+        hosting.safeAreaRegions = []
+        // Behind a plain view, so that the window's own layout does not run through the hosting view (it would ask for its size again after each pass).
+        let container = NSView(frame: .zero)
+        hosting.frame = container.bounds
+        hosting.autoresizingMask = [.width, .height]
+        container.addSubview(hosting)
+        p.contentView = container
         entries[screen.displayID] = entry
         return entry
     }

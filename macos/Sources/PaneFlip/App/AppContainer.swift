@@ -106,7 +106,7 @@ final class AppContainer {
         let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
-                                      keys: keys, overlay: SnapZoneOverlay(screens: screens))
+                                      keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island)
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
