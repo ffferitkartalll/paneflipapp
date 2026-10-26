@@ -73,6 +73,8 @@ final class AppContainer {
             navigation.openSettings()
         }
         engine.add(presenter: pill)
+        let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport)
+        engine.add(presenter: island)
         coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in
@@ -155,6 +157,8 @@ final class AppContainer {
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, quiet: true, standsAt: standsAt) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         // After the edge scroller took the hook: a zone a shortcut asked for beyond the edge is focused once the scroll is over.
+        scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
+        scroller.onGlide = { [weak island] screen, from, to in island?.glide(on: screen, from: from, to: to) }
         let afterEdgeScroll = scroller.onRest
         scroller.onRest = { afterEdgeScroll?(); coordinator.finishFocusBeyondTheEdge() }
         settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
@@ -172,6 +176,7 @@ final class AppContainer {
             engine.start()
             closedMonitor.start()
             pill.start()
+            island.start()
             snap.start()
             scroller.start()
             edgeScroller.start()

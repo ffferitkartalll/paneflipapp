@@ -84,4 +84,20 @@ final class ScrubGestureTests: XCTestCase {
         let flick = swipe([(-100, 0), (-100, 0.05), (-100, 0.1)])   // 3000 pt/s
         XCTAssertLessThan(flick.landing, -300, "it goes on a little further than the fingers did")
     }
+
+    func testAShortFastSwipeIsAFlickAndASlowOrBackwardOneIsNot() {
+        XCTAssertTrue(swipe([(-40, 0), (-40, 0.02), (-40, 0.04)]).isFlick)
+        XCTAssertFalse(swipe([(-40, 0), (-40, 0.5)]).isFlick, "too slow")
+        XCTAssertFalse(swipe([(-10, 0), (-10, 0.01)]).isFlick, "too short")
+        XCTAssertFalse(swipe([(-200, 0), (-50, 0.1), (60, 0.2), (80, 0.25)]).isFlick, "the fingers came back")
+    }
+
+    func testAFlickAfterCatchingTheContentCountsFromWhereTheFingersTookHoldAgain() {
+        var gesture = swipe([(-300, 0), (-300, 0.5)])    // a long swipe to the left, then the fingers lift
+        gesture.resume(at: -600)                          // they catch the glide: the content is taken far to the left of where it began
+        gesture.add(60, at: 1.00)
+        gesture.add(60, at: 1.02)
+        gesture.add(60, at: 1.04)                         // and flick back to the right
+        XCTAssertTrue(gesture.isFlick, "a flick back is a flick however far the content already was from the start")
+    }
 }

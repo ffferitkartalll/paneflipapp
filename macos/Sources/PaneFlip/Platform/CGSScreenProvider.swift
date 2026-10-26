@@ -56,11 +56,31 @@ final class CGSScreenProvider: ScreenProviding {
             let desktops = ordinaryDesktops(onDisplay: uuid)
             let position = desktops.firstIndex(of: space).map { $0 + 1 }
             let usable = DockArea.excluding(dock, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
+            let notch = notch(of: s)
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
-                              legacyKey: legacy, desktopCount: desktops.count)
+                              legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height)
         }
     }
+
+    /// The notch of a display: what lies between the two usable parts of the top edge, and how far down it reaches; zero without one.
+    private func notch(of screen: NSScreen) -> (width: CGFloat, height: CGFloat) {
+        #if DEBUG
+        // To try the app without a notched display: PANEFLIP_FAKE_NOTCH=1 (or =<width>x<height>), or the default PaneFlipFakeNotch, gives the main display one.
+        if let fake = Self.fakeNotch, screen == NSScreen.screens.first, screen.safeAreaInsets.top == 0 { return fake }
+        #endif
+        guard screen.safeAreaInsets.top > 0, let left = screen.auxiliaryTopLeftArea, let right = screen.auxiliaryTopRightArea else { return (0, 0) }
+        return (max(0, screen.frame.width - left.width - right.width), screen.safeAreaInsets.top)
+    }
+
+    #if DEBUG
+    static let fakeNotch: (width: CGFloat, height: CGFloat)? = {
+        // From the scheme's environment (PANEFLIP_FAKE_NOTCH) or, without touching the scheme, from the app's defaults (PaneFlipFakeNotch).
+        guard let value = ProcessInfo.processInfo.environment["PANEFLIP_FAKE_NOTCH"] ?? UserDefaults.standard.string(forKey: "PaneFlipFakeNotch"), !value.isEmpty, value != "0" else { return nil }
+        let sizes = value.lowercased().split(separator: "x").compactMap { Double($0) }.map { CGFloat($0) }
+        return sizes.count == 2 ? (sizes[0], sizes[1]) : (200, 32)
+    }()
+    #endif
 
     /// The Dock's tray in top-left-origin coordinates while the Dock is showing. After a display was unplugged the
     /// Dock lands on the remaining one before the system's usable area of that display has made room for it (it

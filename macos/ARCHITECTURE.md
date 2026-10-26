@@ -20,7 +20,7 @@ Two modules, dependencies point one way: `PaneFlip` (app) → `PaneFlipCore` (do
 ```
 Sources/
 ├── PaneFlipCore/            Pure domain. Foundation + CoreGraphics only; unit-tested.
-│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, NamedLayout+File (a layout as a file: export, import), LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, FloatingZone (a zone that floats over the middle of another one: its size, where it stands, how a window that cannot be resized is centred in it), ZoneDirection, ZoneNeighbour (the zone beside a zone in a direction), ZoneRemapper
+│   ├── Layout/              LayoutNode, SplitDivider, NamedLayout, NamedLayout+File (a layout as a file: export, import), LayoutPreset, SplitSnap (the proportions a split line sticks to: 1/4, 1/3, 1/2, 2/3, 3/4), Overflow, StripLayout, StripGeometry, PagedScroll (a swipe or a wheel notch as a step to the next screen), Parking, ScreenLayouts, LayoutRepository, ZoneGlyph (a screen's zones, those beyond its edges too, drawn small in a row), FloatingZone (a zone that floats over the middle of another one: its size, where it stands, how a window that cannot be resized is centred in it), ZoneDirection, ZoneNeighbour (the zone beside a zone in a direction), ZoneRemapper
 │   ├── Stacks/              StackRecord, LayoutSlot, LayoutApp, StackMemory (what belongs where, in what order), TabNaming, ScrubGesture (a swipe through a zone's windows: how far, how fast, what it chooses), FingerSwipe (the fingers on the trackpad as a swipe with three or four: when it begins and ends), AxisLock (a swipe is horizontal or not, decided in its first points)
 │   ├── Snap/                ShakeDetector (a shake of the pointer from side to side: it switches the snap on during a window drag)
 │   ├── Settings/            AppSettings, SettingsValues, SettingsStorage (port), SnapTrigger, PillContent, PillPosition, TrackpadMethod
@@ -54,6 +54,7 @@ Sources/
     │                        WindowAvailability, WindowSnapshot, ZoneCarousel, WindowGlide, WindowMover
     ├── Zones/               ZonePlanner, ZoneFlash (outlines the zone the focus went to), ZoneEngine, StripPreview (the map of a strip: the layout editor and the scroll show it), ScrollSwitchHandler (what the scroll with the keys held asks for), LayoutService; ports LayoutManaging, DisplayChangeHandling, LayoutAppsEditing (+ LayoutAppEntry, LayoutWindowEntry), ZonePresenting, ZoneRefreshing
     ├── Pill/                PillPresenter, PillPanel, PillMetrics, PillScrolling, PillScrollRouter (scrolling over the pill: two fingers lead the zone's windows, a wheel steps through them), IconFont, DoubleTapDetector
+    ├── Island/              MenuBarIsland (a ZonePresenting: the island in the menu bar, never taller than it, hanging from the notch where there is one: the zones drawn small and the name of the zone with the focus), MenuBarIslandModel, MenuBarIslandView
     ├── Snap/                SnapDragController, SnapZoneOverlay, SnapOverlayModel, SnapOverlayView
     ├── Editor/              EditorController, LayoutEditing (port), EditorModel, EditorView, EditorPanel,
     │                        EditorZone, SplitTarget

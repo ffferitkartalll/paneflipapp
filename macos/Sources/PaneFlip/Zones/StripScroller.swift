@@ -17,6 +17,8 @@ final class StripScroller {
     private static let freshFor: TimeInterval = 10
     /// A frame or two for the windows to be drawn where they now stand, before the pictures go.
     private static let drawTime: TimeInterval = 0.05
+    /// A layout this close to a rest is at it, for fingers that catch it on its way.
+    private static let arrived: CGFloat = 80
     /// How long the map of the strip stays after a scroll, in seconds.
     private static let previewStays: TimeInterval = 0.8
 
@@ -60,6 +62,9 @@ final class StripScroller {
         var shift: CGFloat { origin - shown }
         /// The pictures were on the stage when it landed: it can be taken over.
         var staged = false
+        /// Fingers caught a glide on its way: the rest it was heading to, and where the pictures stood when they were caught.
+        var heading: CGFloat?
+        var caughtAt: CGFloat = 0
         /// Asked for by a shortcut that moves the focus: the map of the strip is not shown, the zone shows itself where it lands.
         var quiet = false
     }
@@ -84,6 +89,10 @@ final class StripScroller {
     private var scrolling: Scrolling?
     /// Called when a scroll is over and the windows are in their places.
     var onRest: (() -> Void)?
+    /// A glide of the layout begins or is given a new aim: the screen, how far it goes (from, to: layout offsets; from is nil when it goes on from where it is).
+    /// The fingers move the layout of a screen: its layout offset. Called as often as the pictures move.
+    var onFollow: ((ScreenInfo, _ offset: CGFloat) -> Void)?
+    var onGlide: ((ScreenInfo, _ from: CGFloat?, _ to: CGFloat) -> Void)?
     /// The zone a focus change asked the scroll to bring into view; each scroll that comes to rest goes on until it shows.
     private var revealing: UUID?
     /// Presses that came while a scroll landed, to be done when it is over.
@@ -285,6 +294,7 @@ final class StripScroller {
             current.glideFrom = current.shown
             current.glideTo = target
             current.glideBegan = now()
+            onGlide?(current.screen, nil, target)
         }
         scrolling = current
         return true
@@ -382,6 +392,7 @@ final class StripScroller {
         current.glideTo = current.target
         current.glideBegan = now()
         scrolling = current
+        if !current.led { onGlide?(current.screen, current.start, current.target) }
         if current.led {
             // The pictures follow the fingers, from where they are now; no clock moves them until the fingers lift.
             followFingers()
@@ -412,8 +423,11 @@ final class StripScroller {
                 current.gesture.limit(to: current.start - current.geometry.range.upperBound ... current.start - current.geometry.range.lowerBound)
             }
             current.released = false
+            current.heading = current.glideTo
+            current.caughtAt = current.shown
             current.gesture.resume(at: current.start - current.shown)
             scrolling = current
+            onFollow?(current.screen, current.shown)   // the pictures stop here: so does the frame of the island
             return true
         }
         if scrolling?.phase == .landing { return takeOverLanding(led: true) }
@@ -483,6 +497,7 @@ final class StripScroller {
         scrolling = current
         stage.follow(shift: current.shift)
         showPreview(current)
+        onFollow?(current.screen, current.shown)
         if current.released { glideOn() }
     }
 
@@ -490,12 +505,25 @@ final class StripScroller {
     private func glideOn() {
         guard var current = scrolling, current.led, current.phase == .gliding else { return }
         let wanted = current.start - current.gesture.landing
-        let target = current.geometry.rests.min { abs($0 - wanted) < abs($1 - wanted) } ?? current.start
+        var target = current.geometry.rests.min { abs($0 - wanted) < abs($1 - wanted) } ?? current.start
+        // A flick, however small, goes on to the next rest the way it went: one that falls just short of half the way would come back. The next one
+        // from where the fingers took hold: where the layout rested, or, when they caught a glide, where that was (a glide that has all but arrived has arrived).
+        if current.gesture.isFlick {
+            let from = current.heading == nil ? current.start : current.caughtAt
+            let beyond = current.geometry.rests.filter { wanted > from ? $0 > from + Self.arrived : $0 < from - Self.arrived }
+            if let next = beyond.min(by: { abs($0 - wanted) < abs($1 - wanted) }) { target = next }
+        }
+        // Fingers that caught a glide, rested or went on the way it was going: it goes on to the rest it was heading to, not back to the one it came from.
+        if !current.gesture.isFlick, let heading = current.heading {
+            let moved = current.shown - current.caughtAt
+            if abs(moved) < ScrubGesture.flickDistance || moved * (heading - current.caughtAt) > 0 { target = heading }
+        }
         current.target = target
         current.glideFrom = current.shown
         current.glideTo = target
         current.glideBegan = now()
         scrolling = current
+        onGlide?(current.screen, current.shown, target)
         startGliding()
     }
 
