@@ -7,6 +7,8 @@ import PaneFlipCore
 final class StackCoordinator {
     private(set) var stacks: [UUID: ZoneStack] = [:]
     private(set) var visibleZoneIDs: Set<UUID> = []
+    /// The zone of the window that had the focus at the last look (see `followFocus`); nil when that window is in none.
+    private(set) var focusedZoneID: UUID?
     /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
@@ -303,6 +305,7 @@ final class StackCoordinator {
         let left = current.rect
         onReachBeyondTheEdge?(target.id) { [weak self] rect in
             self?.focusPending?.flashed = true
+            self?.focusedZoneID = target.id   // the layout scrolls to it now
             self?.flashZone(left, rect)
         }
     }
@@ -619,6 +622,8 @@ final class StackCoordinator {
         guard !placementOnly() else { return }
         guard !isSliding else { return }
         let focused = windows.focusedWindow()
+        // A zone a shortcut brings into view counts as focused from the moment the layout starts to scroll to it.
+        focusedZoneID = focusPending.flatMap { $0.flashed && $0.until > Date() ? $0.zone : nil } ?? focused.flatMap { stack(containing: $0.id)?.id }
         // Only a focus that has just moved there asks for the scroll: a window the user scrolled away from keeps the focus without
         // the layout scrolling back to it.
         let moved = focused?.id != lastFocusedID

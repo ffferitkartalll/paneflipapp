@@ -15,6 +15,9 @@ struct ScreenInfo: Identifiable, Equatable {
     var legacyKey: String? = nil
     /// How many ordinary desktops the display has; 0 when the system could not tell.
     var desktopCount = 0
+    /// The notch of the display (its width and its height, the height of the menu bar there); 0 on a display without one.
+    var notchWidth: CGFloat = 0
+    var notchHeight: CGFloat = 0
 
     var id: String { key }
 

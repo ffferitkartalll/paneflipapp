@@ -16,6 +16,8 @@ final class ZoneEngine: ZoneRefreshing {
     private let windows: WindowSystem
     private var presenters: [ZonePresenting] = []
     private var lastSignatures: [String] = []
+    /// The displays as seen at the last look (see `refreshZones`): for those who need them as often and must not ask the Dock again.
+    private(set) var lastScreens: [ScreenInfo] = []
     private var timer: Timer?
 
     init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
@@ -61,6 +63,7 @@ final class ZoneEngine: ZoneRefreshing {
     func refreshZones() {
         let current = screens.screens()
         lastSignatures = current.map(\.layoutSignature)
+        lastScreens = current
         displayHandler?.desktopsDidChange(on: current)
         coordinator.apply(plan: planner.plan(on: current))
         presenters.forEach { $0.zonesDidChange() }
