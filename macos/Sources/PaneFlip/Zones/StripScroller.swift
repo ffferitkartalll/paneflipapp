@@ -133,7 +133,7 @@ final class StripScroller {
     /// Photographs the windows in front in every zone of the screens that can scroll, so the first scroll already has
     /// pictures to show.
     func warm() {
-        guard isRunning, settings.values.overflowZonesEnabled, settings.values.placementEnabled, !isBusy(), !reduceMotion() else { return }
+        guard isRunning, settings.values.overflowZonesEnabled, settings.values.placementEnabled, !isBusy(), !reduceMotion(), !coordinator.isMoving else { return }
         let all = screens.screens()
         for screen in all {
             guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
@@ -408,7 +408,7 @@ final class StripScroller {
     func beginLed() -> Bool {
         revealing = nil
         // Fingers that come down while a scroll is on its way take it over where it is: one that fingers let go of, and also one a
-        // key, the pointer at the edge or a wheel started. Not while it lands: the windows are being put in their places then.
+        // key, the wheel over the island or an earlier swipe started. Not while it lands: the windows are being put in their places then.
         if var current = scrolling, current.phase != .landing, !(current.led && !current.released) {
             if !current.led {
                 current.led = true

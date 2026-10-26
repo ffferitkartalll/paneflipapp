@@ -14,6 +14,9 @@ private func CGSCopyManagedDisplaySpaces(_ cid: Int32) -> CFArray?
 private func CGSCopySpacesForWindows(_ cid: Int32, _ mask: Int32, _ wids: CFArray) -> CFArray?
 
 final class CGSScreenProvider: ScreenProviding {
+    /// The Dock, found once (looking for it costs Launch Services calls at every look) and again only after it quit.
+    private var dockApp: NSRunningApplication?
+
     private var primaryHeight: CGFloat { NSScreen.screens.first?.frame.height ?? 0 }
 
     func flip(_ r: CGRect) -> CGRect {
@@ -44,16 +47,15 @@ final class CGSScreenProvider: ScreenProviding {
         }
     }
 
-    var frames: [CGRect] { NSScreen.screens.map(\.frame) }
-
     func screens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
+        let managed = CGSCopyManagedDisplaySpaces(conn) as? [[String: Any]] ?? []   // once for every display
         return NSScreen.screens.map { s in
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
             let legacy = "\(uuid)|\(space)"
-            let desktops = ordinaryDesktops(onDisplay: uuid)
+            let desktops = ordinaryDesktops(onDisplay: uuid, in: managed)
             let position = desktops.firstIndex(of: space).map { $0 + 1 }
             let usable = DockArea.excluding(dock, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
             let notch = notch(of: s)
@@ -90,7 +92,8 @@ final class CGSScreenProvider: ScreenProviding {
     /// stayed unchanged for as long as the Dock was there), so the Dock is asked for itself.
     private func dockRect() -> CGRect? {
         let hides = CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false
-        guard !hides, let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else { return nil }
+        if dockApp?.isTerminated != false { dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first }
+        guard !hides, let dock = dockApp else { return nil }
         var children: CFTypeRef?
         guard AXUIElementCopyAttributeValue(AXUIElementCreateApplication(dock.processIdentifier), kAXChildrenAttribute as CFString,
                                             &children) == .success,
@@ -111,9 +114,8 @@ final class CGSScreenProvider: ScreenProviding {
 
     /// The display's ordinary desktops in order (full-screen spaces are not counted); a desktop's 1-based place among
     /// them is what tells it apart.
-    private func ordinaryDesktops(onDisplay uuid: String) -> [UInt64] {
-        guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: Any]],
-              let display = displays.first(where: { ($0["Display Identifier"] as? String)?.caseInsensitiveCompare(uuid) == .orderedSame }),
+    private func ordinaryDesktops(onDisplay uuid: String, in displays: [[String: Any]]) -> [UInt64] {
+        guard let display = displays.first(where: { ($0["Display Identifier"] as? String)?.caseInsensitiveCompare(uuid) == .orderedSame }),
               let spaces = display["Spaces"] as? [[String: Any]] else { return [] }
         return spaces.filter { ($0["type"] as? Int ?? 0) == 0 }.compactMap { ($0["ManagedSpaceID"] as? NSNumber)?.uint64Value }
     }

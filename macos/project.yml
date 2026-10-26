@@ -108,9 +108,12 @@ targets:
       - path: Sources/PaneFlip/Zones/StripViewport.swift
       - path: Sources/PaneFlip/Zones/ZoneLabel.swift
       - path: Sources/PaneFlip/Zones/ScreenEdge.swift
-      - path: Sources/PaneFlip/Zones/EdgeScroller.swift
-      - path: Sources/PaneFlip/Platform/PointerMoveListening.swift
       - path: Sources/PaneFlip/Zones/StripScroller.swift
+      - path: Sources/PaneFlip/Island/MenuBarIslandModel.swift
+      - path: Sources/PaneFlip/Island/MenuBarIslandView.swift
+      - path: Sources/PaneFlip/Island/MenuBarIslandWindowsView.swift
+      - path: Sources/PaneFlip/Island/IslandWindow.swift
+      - path: Sources/PaneFlip/Island/IslandShiftedRow.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift
       - path: Sources/PaneFlip/Platform/ScrollStaging.swift
       - path: Sources/PaneFlip/Platform/ScrollPicture.swift

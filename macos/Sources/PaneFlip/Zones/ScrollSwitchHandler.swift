@@ -33,11 +33,12 @@ final class ScrollSwitchHandler {
             plain = ScrubGesture()
             switch aimed {
             case .windows: follows = coordinator.beginWindowScrub(at: screens.pointerAX)
+            case .zoneWindows(let zone): follows = coordinator.stacks[zone].map { coordinator.beginWindowScrub(in: $0) } ?? false
             case .strip: follows = scroller.beginLed()
             }
         case .moved(let delta, let time):
             switch target {
-            case .windows: if follows { coordinator.moveWindowScrub(by: delta, at: time) } else { plain.add(delta, at: time) }
+            case .windows, .zoneWindows: if follows { coordinator.moveWindowScrub(by: delta, at: time) } else { plain.add(delta, at: time) }
             case .strip: if follows { scroller.moveLed(by: delta, at: time) } else { plain.add(delta, at: time) }
             case nil: break
             }
@@ -47,6 +48,10 @@ final class ScrollSwitchHandler {
                 // A swipe the pictures could not follow still moves one window, once it has gone far enough; the step waits for a slide that runs.
                 if follows { coordinator.endWindowScrub() } else if abs(plain.offset) >= Self.stepDistance {
                     coordinator.stepWindowScrub(at: screens.pointerAX, by: plain.offset < 0 ? 1 : -1)
+                }
+            case .zoneWindows(let zone):
+                if follows { coordinator.endWindowScrub() } else if abs(plain.offset) >= Self.stepDistance, let stack = coordinator.stacks[zone] {
+                    coordinator.stepWindowScrub(in: stack, by: plain.offset < 0 ? 1 : -1)
                 }
             case .strip:
                 if follows { scroller.endLed() } else if abs(plain.offset) >= Self.stepDistance {
@@ -61,6 +66,7 @@ final class ScrollSwitchHandler {
             // Over a zone with the keys held the wheel goes the other way round from the one over its pill: toward you is the previous window,
             // away from you the next (the tap's step counts that way).
             case .windows: coordinator.stepWindowScrub(at: screens.pointerAX, by: step)
+            case .zoneWindows(let zone): if let stack = coordinator.stacks[zone] { coordinator.stepWindowScrub(in: stack, by: step) }
             case .strip: scroller.scroll(toward: step > 0 ? .right : .left)
             }
         }

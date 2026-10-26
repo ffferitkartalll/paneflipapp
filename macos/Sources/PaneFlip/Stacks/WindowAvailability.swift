@@ -10,9 +10,13 @@ final class WindowAvailability {
         self.screens = screens
     }
 
-    func snapshot() -> WindowSnapshot {
-        let sets = windows.windowSets()
-        return WindowSnapshot(all: sets.all, onScreen: sets.onScreen, currentSpaces: screens.currentSpaceIDs())
+    func snapshot() -> WindowSnapshot { snapshot(of: windowSets(), currentSpaces: screens.currentSpaceIDs()) }
+
+    /// The system window list alone: the one slow part of a snapshot, and safe to take off the main thread.
+    func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>) { windows.windowSets() }
+
+    func snapshot(of sets: (all: Set<CGWindowID>, onScreen: Set<CGWindowID>), currentSpaces: Set<UInt64>) -> WindowSnapshot {
+        WindowSnapshot(all: sets.all, onScreen: sets.onScreen, currentSpaces: currentSpaces)
     }
 
     /// Closed windows either vanish from the system list or, for apps that merely hide a window on close

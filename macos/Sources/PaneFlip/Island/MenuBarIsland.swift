@@ -31,6 +31,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         #endif
         /// The last offset the fingers told, and whether it is being drawn already: told as often as events come, drawn once per turn of the run loop.
         var following: CGFloat?
+        var dragging: CGFloat?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel
@@ -45,6 +46,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private let screensNow: () -> [ScreenInfo]
     private let planner: ZonePlanner
     private let viewport: StripViewport
+    private let iconFont: IconFont
+    private var glyphs: [String: NSImage] = [:]
+    private var glyphsRevision = 0
     private var entries: [String: Entry] = [:]
     private var timer: Timer?
     private var monitor: Any?
@@ -54,7 +58,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private var dragging = false
     private var followed: UUID?
 
-    init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport) {
+    init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont) {
+        self.iconFont = iconFont
         self.screensNow = screensNow
         self.planner = planner
         self.viewport = viewport
@@ -72,7 +77,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             return event
         }
         timer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { [weak self] _ in
-            guard let self, followed != coordinator.focusedZoneID else { return }
+            guard let self else { return }
+            guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
+            for entry in entries.values { refreshWindows(of: entry) }   // a window that came, went or came to the front while the row is open
+            guard followed != coordinator.focusedZoneID else { return }
             followFocus()
         }
     }
@@ -127,11 +135,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         // The open island is as wide as its picture and the room beside it, and must fit the display.
         model.openZoom = max(1, min(MenuBarIslandView.hoverZoom, (screen.cocoaFrame.width - 2 * bar) / max(model.glyph.size.width, 1)))
         let width = screen.cocoaFrame.width
-        // Tall enough for the island at its largest.
-        let tall = 2 * bar + ceil(model.glyph.size.height * model.openZoom)
+        // Tall enough for the island at its largest, with a row of cards under its picture.
+        let tall = ceil(model.tallestOpenHeight)
         let frame = CGRect(x: screen.cocoaFrame.midX - width / 2, y: screen.cocoaFrame.maxY - tall, width: width, height: tall)
         if entry.panel.frame != frame { entry.panel.setFrame(frame, display: true) }
         entry.panel.orderFrontRegardless()
+        refreshWindows(of: entry)
         entry.shrinking?.cancel()
         entry.shield.setFrame(islandFrame(of: entry, open: entry.hovered), display: false)
         entry.shield.orderFrontRegardless()
@@ -194,6 +203,46 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         }
     }
 
+    // MARK: What scrolls over the island
+
+    /// What the wheel and two fingers scroll with the pointer here, if it is on an island that is open: over the picture, and the room round it, the layout of
+    /// the screen; over the cards of the zone chosen in the picture, the windows of that zone (when it stands on the screen and has more than one window).
+    func scrollTarget(at point: CGPoint) -> ScrollSwitchTarget? {
+        for entry in entries.values where entry.hovered {
+            let frame = islandFrame(of: entry, open: true), model = entry.model
+            guard frame.contains(point) else { continue }
+            guard let zone = model.windowsZone, frame.maxY - point.y > model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap / 2 else { return .strip }
+            guard let stack = coordinator.stacks[zone], stack.tabs.count > 1, !stack.isParked, !stack.isFloating else { return nil }
+            return .zoneWindows(zone)
+        }
+        return nil
+    }
+
+    /// The windows of the zones changed (one came to the front): the rows of cards show it at once.
+    func windowsDidChange() {
+        for entry in entries.values { refreshWindows(of: entry) }
+    }
+
+    /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle with the spring of the pictures on the screen).
+    func windowsScrubbed(zone: UUID, by fraction: CGFloat) {
+        for entry in entries.values where entry.model.windowsZone == zone {
+            if fraction == 0 {
+                entry.dragging = nil
+                withAnimation(.interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping)) { entry.model.windowsDrag = 0 }
+            } else {
+                // Not inside the handling of the finger event, and once for all the events that came meanwhile.
+                let queued = entry.dragging != nil
+                entry.dragging = fraction
+                guard !queued else { continue }
+                DispatchQueue.main.async {
+                    guard let fraction = entry.dragging else { return }
+                    entry.dragging = nil
+                    withTransaction(Transaction(animation: nil)) { entry.model.windowsDrag = fraction }
+                }
+            }
+        }
+    }
+
     // MARK: Hover
 
     private func hover(at point: CGPoint) {
@@ -203,8 +252,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             let hit: Bool
             if entry.hovered {
                 // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
-                let width = model.glyph.size.width * model.openZoom + 2 * model.barHeight
-                hit = point.y >= bar.maxY - model.barHeight - model.glyph.size.height * model.openZoom - model.barHeight && point.y <= bar.maxY && abs(point.x - bar.midX) <= width / 2
+                let size = model.openSize
+                hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
             } else {
                 // The island itself; with a notch, the notch and the height of the menu bar beside it (the island is not shown at rest there).
                 let half = model.notchWidth > 0 ? model.notchWidth / 2 + model.barHeight : model.glyph.size.width / 2 + m
@@ -222,35 +271,88 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
 
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
-        placeShield(of: entry, open: open)
         withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
             entry.model.expanded = open
             entry.model.zoom = open ? entry.model.openZoom : 1
+            if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
         }
+        placeShield(of: entry)
     }
 
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
     private func islandFrame(of entry: Entry, open: Bool) -> CGRect {
-        let model = entry.model, top = entry.panel.frame, bar = model.barHeight, picture = model.glyph.size
-        let width = open ? picture.width * model.openZoom + 2 * bar : (model.notchWidth > 0 ? model.notchWidth : picture.width + 2 * MenuBarIslandView.margin)
-        let height = open ? bar + picture.height * model.openZoom + bar : bar
-        return CGRect(x: top.midX - width / 2, y: top.maxY - height, width: width, height: height)
+        let model = entry.model, top = entry.panel.frame
+        let size = open ? model.openSize : CGSize(width: model.notchWidth > 0 ? model.notchWidth : model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
+        return CGRect(x: top.midX - size.width / 2, y: top.maxY - size.height, width: size.width, height: size.height)
     }
 
     /// The shield grows with the island at once, so that the island never has the mouse go through it, and shrinks once the island has shrunk.
-    private func placeShield(of entry: Entry, open: Bool) {
+    private func placeShield(of entry: Entry) {
         entry.shrinking?.cancel()
         entry.shrinking = nil
-        if open {
-            entry.shield.setFrame(islandFrame(of: entry, open: true), display: false)
-            return
-        }
+        let target = islandFrame(of: entry, open: entry.hovered), current = entry.shield.frame
+        let covering = current.isEmpty ? target : current.union(target)
+        if covering != current { entry.shield.setFrame(covering, display: false) }
+        guard covering != target else { return }
         let work = DispatchWorkItem { [weak self, weak entry] in
             guard let self, let entry else { return }
-            entry.shield.setFrame(islandFrame(of: entry, open: false), display: false)
+            entry.shield.setFrame(islandFrame(of: entry, open: entry.hovered), display: false)
         }
         entry.shrinking = work
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.shrinkAfter, execute: work)
+    }
+
+    // MARK: The windows of a zone
+
+    /// A click on the shield: on a zone in the picture of the open island, a row of cards, one for each window of that zone, opens under the picture and the island
+    /// grows to hold it; on the same zone again, the row closes and the island shrinks back.
+    private func click(at point: CGPoint) {
+        for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
+            guard let zone = cell(at: point, in: entry) else { continue }
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+                if entry.model.windowsZone == zone {
+                    entry.model.windowsZone = nil
+                } else {
+                    entry.dragging = nil
+                    entry.model.windowsDrag = 0
+                    entry.model.windows = windows(of: zone)
+                    entry.model.windowsZone = zone
+                }
+            }
+            placeShield(of: entry)
+        }
+    }
+
+    /// The windows of the open row: as they are now (one that came, went or came to the front is shown), or, if the zone is gone, no row.
+    private func refreshWindows(of entry: Entry) {
+        guard let zone = entry.model.windowsZone else { return }
+        guard entry.zones.contains(zone) else {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) { entry.model.windowsZone = nil }
+            return placeShield(of: entry)
+        }
+        let now = windows(of: zone)
+        // Nothing changed (nearly every look): no animation, no shield to place.
+        guard now != entry.model.windows else { return }
+        // Another window in front only moves the row: with the spring of the pictures on the screen. Windows that came or went grow or shrink the island.
+        let moves = now.map(\.id) == entry.model.windows.map(\.id)
+        let spring: Animation = moves ? .interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping) : .spring(response: 0.4, dampingFraction: 0.78)
+        withAnimation(spring) { entry.model.windows = now }
+        placeShield(of: entry)
+    }
+
+    /// The picture of an app is made once (the font gives a new image every time, and the rows are refreshed several times a second); made again when a brand glyph arrives.
+    private func glyph(of tab: ZoneStack.Tab) -> NSImage {
+        if glyphsRevision != iconFont.revision { glyphs = [:]; glyphsRevision = iconFont.revision }
+        let key = tab.bundleID.isEmpty ? tab.appName : tab.bundleID
+        if let known = glyphs[key] { return known }
+        let made = iconFont.image(bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
+        glyphs[key] = made
+        return made
+    }
+
+    private func windows(of zone: UUID) -> [IslandWindow] {
+        guard let stack = coordinator.stacks[zone] else { return [] }
+        return stack.tabs.map { IslandWindow(id: $0.id, name: $0.displayName.isEmpty ? $0.appName : $0.displayName, glyph: glyph(of: $0), glyphRevision: iconFont.revision, isActive: $0.id == stack.activeID) }
     }
 
     private func focused(in entry: Entry) -> UUID? { coordinator.focusedZoneID.flatMap { entry.zones.contains($0) ? $0 : nil } }
@@ -258,7 +360,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
     private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
         let model = entry.model, bar = model.barHeight, frame = entry.panel.frame
-        let width = 2 * bar + model.glyph.size.width * model.openZoom
+        let width = model.openSize.width
         let x = (point.x - (frame.midX - width / 2 + bar)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
         guard entry.hovered else { return nil }
         return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
@@ -316,7 +418,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         shield.acceptsMouseMovedEvents = true
         shield.collectionBehavior = [.canJoinAllSpaces, .stationary]
         // Not quite clear: the window server lets the mouse through the pixels of a window that are fully clear. A hundredth of black cannot be seen.
-        let cover = NSView(frame: .zero)
+        let cover = IslandShieldView(frame: .zero)
+        cover.onClick = { [weak self] point in self?.click(at: point) }
         cover.wantsLayer = true
         cover.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.01).cgColor
         shield.contentView = cover

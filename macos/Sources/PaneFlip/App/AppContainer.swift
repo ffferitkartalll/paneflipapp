@@ -25,6 +25,7 @@ final class AppContainer {
     let settingsNavigation: SettingsNavigation
 
     private let launcher: AppLauncher
+    private let memoryPressure: MemoryPressureWatch
 
     init() {
         let documents = JSONFileStore()
@@ -42,7 +43,20 @@ final class AppContainer {
         let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
         coordinator.placementOnly = { windowManagerDefaults?.bool(forKey: "GloballyEnabled") ?? false }
         let stagePanels = StagePanels()
-        let snapshots = ScreenCaptureWindowSnapshots()
+        let capture = ScreenCaptureWindowSnapshots()
+        let pictures = WindowPictureCache(now: { ProcessInfo.processInfo.systemUptime })
+        // A zone's windows are photographed ahead of time (PictureKeeper) and the pictures are reused; a window in front is live, so its picture counts only for a moment.
+        let snapshots = CachedWindowSnapshots(inner: capture, cache: pictures,
+                                              zoneSize: { [unowned coordinator] id in coordinator.stack(containing: id).flatMap { $0.isFloating ? nil : $0.rect.size } },
+                                              isFront: { [unowned coordinator] id in coordinator.stack(containing: id).map { $0.activeID == id || $0.shownID == id } ?? false })
+        coordinator.pictures = pictures
+        let keeper = PictureKeeper(coordinator: coordinator, snapshots: capture, cache: pictures,
+                                   canCapture: { CGPreflightScreenCaptureAccess() },
+                                   reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
+                                   now: { ProcessInfo.processInfo.systemUptime })
+        coordinator.onFocusLeft = { [weak keeper] in keeper?.windowLeftFocus($0) }
+        coordinator.onMotionEnded = { [weak keeper] in keeper?.motionEnded() }
+        self.memoryPressure = MemoryPressureWatch { pictures.removeAll() }
         let slideStage = PanelSlideStage(screens: screens, panels: stagePanels)
         coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
@@ -73,9 +87,13 @@ final class AppContainer {
             navigation.openSettings()
         }
         engine.add(presenter: pill)
-        let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport)
+        let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont)
         engine.add(presenter: island)
-        coordinator.onActivity = { [weak pill] zone in pill?.flash(zone: zone) }
+        coordinator.onActivity = { [weak pill, weak island] zone in
+            pill?.flash(zone: zone)
+            island?.windowsDidChange()
+        }
+        coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in
             if let settings { engine?.placementChanged(enabled: settings.values.placementEnabled) }
@@ -117,17 +135,32 @@ final class AppContainer {
             }
             return all.compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
+        // The tap asks this for every scroll event (momentum included): a window list each time would stall the main thread, so the answer is kept for a moment.
+        var missionControlAsked = (at: Date.distantPast, active: false)
+        let missionControl: () -> Bool = { [screens] in
+            if Date().timeIntervalSince(missionControlAsked.at) > 0.3 { missionControlAsked = (Date(), screens.isMissionControlActive) }
+            return missionControlAsked.active
+        }
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                                       twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers }) { [settings, keys, coordinator, screens, editor] in
+                                                       twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers },
+                                                       overIsland: { [settings, coordinator, editor, island] in
+            // The cheap test first: nearly every scroll event of the system is not over the island.
+            guard let target = island.scrollTarget(at: NSEvent.mouseLocation) else { return nil }
+            let v = settings.values
+            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown,
+                  target == .strip ? v.overflowZonesEnabled : v.stackingEnabled else { return nil }
+            // Asked last, only over the island: it costs a window list, and every scroll event of the system comes through here.
+            return missionControl() ? nil : target
+        }) { [settings, keys, coordinator, editor] in
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown else { return nil }
             let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
             let windows = v.stackingEnabled && v.windowScrollKeys.isHeld(using: keys)
             // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
-            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return screens.isMissionControlActive ? nil : .strip }
+            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return missionControl() ? nil : .strip }
             let target: ScrollSwitchTarget? = windows ? .windows : nil
             // Asked only once a key is held: it costs a window list. Nothing of ours moves under Mission Control or App Exposé.
-            return target != nil && screens.isMissionControlActive ? nil : target
+            return target != nil && missionControl() ? nil : target
         }
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
@@ -135,11 +168,11 @@ final class AppContainer {
                                      stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                     isBusy: { coordinator.placementOnly() || editor.isShown || screens.isMissionControlActive })
+                                     isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() })
         let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, screens, editor] target in
             let v = settings.values
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
-                && !screens.isMissionControlActive
+                && !missionControl()
         }
         let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        isOn: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers })
@@ -148,22 +181,22 @@ final class AppContainer {
             canBegin: { [settings, coordinator, screens, editor] in
                 let v = settings.values
                 return v.placementEnabled && v.stackingEnabled && v.mouseButtonSwipe && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
-                    && !screens.isMissionControlActive
+                    && !missionControl()
             })
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash(from: $0, to: $1) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) }
-        let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
-        // After the edge scroller took the hook: a zone a shortcut asked for beyond the edge is focused once the scroll is over.
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
         scroller.onGlide = { [weak island] screen, from, to in island?.glide(on: screen, from: from, to: to) }
-        let afterEdgeScroll = scroller.onRest
-        scroller.onRest = { afterEdgeScroll?(); coordinator.finishFocusBeyondTheEdge() }
-        settings.onOverflowZonesChanged = { [weak scroller, weak edgeScroller, weak layouts, weak engine, viewport, settings] in
+        // A zone a shortcut asked for beyond the edge is focused once the scroll is over.
+        scroller.onRest = {
+            coordinator.finishFocusBeyondTheEdge()
+            coordinator.onMotionEnded?()
+        }
+        settings.onOverflowZonesChanged = { [weak scroller, weak layouts, weak engine, viewport, settings] in
             scroller?.settingDidChange()
-            edgeScroller?.settingDidChange()
             guard !settings.values.overflowZonesEnabled else {
                 layouts?.returnOverflowAppsToTheirZones()
                 return
@@ -179,7 +212,6 @@ final class AppContainer {
             island.start()
             snap.start()
             scroller.start()
-            edgeScroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             mouseSwipes.start(onEvent: scrollSwitchHandler.handle)
@@ -191,6 +223,7 @@ final class AppContainer {
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) { keeper.motionEnded() }   // the first pictures, once the windows have settled in their zones
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }
         self.launcher = launcher
