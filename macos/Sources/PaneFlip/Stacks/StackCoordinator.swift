@@ -18,21 +18,34 @@ final class StackCoordinator {
     private var originalSizes: [CGWindowID: CGSize] = [:]
     /// Called when a stack changed in a way the pill should announce (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
+    /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The island's frame follows them.
+    var onWindowScrub: ((UUID, CGFloat) -> Void)?
     /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
-        didSet { carousel?.onFree = { [weak self] in self?.runWaiting() } }
+        didSet { carousel?.onFree = { [weak self] in
+            self?.runWaiting()
+            self?.onMotionEnded?()
+        } }
     }
     var glide: WindowGlide?
     /// A window of a floating zone that leaves is photographed and its picture glides out from behind the window that took the focus, in front
     /// of the others, never in front of it; without these (or with motion reduced) the window itself glides.
     var floatStage: FloatStaging?
     var snapshots: WindowSnapshotting?
+    /// Pictures taken ahead of time: one is dropped when its window goes or its title changes (the content changed).
+    var pictures: WindowPictureCache?
+    /// A window lost the focus to another one.
+    var onFocusLeft: ((CGWindowID) -> Void)?
+    /// Something that moved windows may be over (a slide, a swipe, a new layout): the pictures may be taken again after a moment of rest.
+    var onMotionEnded: (() -> Void)?
     var reduceMotion: () -> Bool = { false }
     /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
     /// window is sized and placed by its zone. Nothing is held, remembered, stacked or followed, and nothing that was
     /// remembered before is changed.
     var placementOnly: () -> Bool = { false }
     var isSliding: Bool { carousel?.isSliding ?? false }
+    /// Anything of ours is moving other apps' windows (a layout scroll or a zone's windows): periodic jobs that ask or list windows wait.
+    var isMoving: Bool { isScrolling || windowScrub != nil || isSliding }
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the pills are hidden.
     var isScrolling = false
@@ -84,6 +97,7 @@ final class StackCoordinator {
                 place(ref, at: standing(ref, in: stack))
             }
         }
+        onMotionEnded?()
     }
 
     /// Puts a window at a frame, writing only what differs: a window already there is left alone (an app redraws, and
@@ -393,6 +407,7 @@ final class StackCoordinator {
                 if let carried { scrub.gesture.resume(at: carried) }   // fingers that took over a gliding swipe go on from where its pictures are
                 scrub.ready = true
                 carousel.scrub(to: scrub.gesture.offset)
+                onWindowScrub?(stack.id, scrub.gesture.offset / scrub.rect.width)
             } else {
                 scrub.failed = true
             }
@@ -405,7 +420,10 @@ final class StackCoordinator {
     func moveWindowScrub(by delta: CGFloat, at time: TimeInterval) {
         guard let scrub = windowScrub, !scrub.ended else { return }
         scrub.gesture.add(delta, at: time)
-        if scrub.ready { carousel?.scrub(to: scrub.gesture.offset) }
+        if scrub.ready {
+            carousel?.scrub(to: scrub.gesture.offset)
+            onWindowScrub?(scrub.stack.id, scrub.gesture.offset / scrub.rect.width)
+        }
     }
 
     /// A turn of the wheel over a pill: the pictures of the zone's windows go `step` windows on (or back), from the one they are going to
@@ -437,7 +455,9 @@ final class StackCoordinator {
 
     private func finishWindowScrub(_ scrub: WindowScrub) {
         windowScrub = nil
+        defer { onMotionEnded?() }
         let stack = scrub.stack
+        onWindowScrub?(stack.id, 0)
         guard let index = scrub.windows.firstIndex(of: scrub.start) else { return carousel?.endScrub(shift: 0) { } ?? () }
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
@@ -517,6 +537,7 @@ final class StackCoordinator {
     /// front: the system decides what is revealed, and the pill's selection follows the focus.
     func removeFromStack(window id: CGWindowID) {
         glide?.cancel(id)
+        pictures?.forget(id)
         for stack in stacks.values where stack.refs[id] != nil {
             if stack.shownID == id { stack.shownID = nil }
             stack.refs[id] = nil
@@ -554,6 +575,7 @@ final class StackCoordinator {
                 let title = windows.title(of: ref) ?? tab.appName
                 guard title != tab.title else { continue }
                 stack.tabs[i].title = title
+                pictures?.forget(tab.id)
                 stack.refreshNames()
                 memory.updateTitle(ofWindow: tab.id, to: title)
             }
@@ -627,7 +649,9 @@ final class StackCoordinator {
         // Only a focus that has just moved there asks for the scroll: a window the user scrolled away from keeps the focus without
         // the layout scrolling back to it.
         let moved = focused?.id != lastFocusedID
+        let previous = lastFocusedID
         lastFocusedID = focused?.id
+        if moved, let previous { onFocusLeft?(previous) }
         updateFloatingZones(focus: focused)
         guard let focused, let stack = stack(containing: focused.id) else { return }
         if moved, stack.isParked, !isScrolling { onFocusBeyondTheEdge?(stack.id) }

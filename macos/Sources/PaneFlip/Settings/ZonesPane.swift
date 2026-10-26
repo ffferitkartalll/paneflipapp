@@ -45,7 +45,7 @@ struct ZonesPane: View {
 
             Section("Zones beyond the screen") {
                 SettingRow(title: "Zones beyond the screen's edges",
-                           detail: "Lets a layout have zones beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by resting the pointer at the screen's edge. Switched off, the editor does not show them and their apps move to the default zone of the screen.") {
+                           detail: "Lets a layout have zones beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen.") {
                     Toggle("Zones beyond the screen's edges", isOn: $settings.values.overflowZonesEnabled).labelsHidden()
                 }
             }

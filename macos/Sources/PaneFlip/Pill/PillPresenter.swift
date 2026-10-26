@@ -94,7 +94,9 @@ final class PillPresenter: ZonePresenting {
             // Hidden while a scroll moves the zones; the panels are kept, making them again is slow.
             if stack.tabs.count >= (settings.values.pillForSingleWindow ? 1 : 2) && settings.values.stackingEnabled && settings.values.pillEnabled && !coordinator.placementOnly()
                 && !coordinator.isScrolling {
-                panel.refresh()
+                // While windows slide, the pill stays as it is; only the costly work (refreshing, moving the panel) waits.
+                let moving = coordinator.isMoving
+                if !moving { panel.refresh() }
                 let (frame, pill) = pillRects(stack, panel)
                 // Released only once the pointer is clear of it; forget what was recorded while hidden so it
                 // doesn't flash back for a moment after the pointer has left.
@@ -110,9 +112,9 @@ final class PillPresenter: ZonePresenting {
                 // Clicks in the transparent margins go to the windows below.
                 clickable = show && (stack.interacting || pill.contains(pointer))
                 let screenFrame = screens.flip(frame)
-                if panel.frame != screenFrame { panel.setFrame(screenFrame, display: true) }
+                if !moving && panel.frame != screenFrame { panel.setFrame(screenFrame, display: true) }
             }
-            panel.ignoresMouseEvents = !clickable
+            if panel.ignoresMouseEvents == clickable { panel.ignoresMouseEvents = !clickable }
             if shown[id] != show {
                 shown[id] = show
                 if show { coordinator.prepareSlides() }

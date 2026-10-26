@@ -19,6 +19,8 @@ final class ZoneEngine: ZoneRefreshing {
     /// The displays as seen at the last look (see `refreshZones`): for those who need them as often and must not ask the Dock again.
     private(set) var lastScreens: [ScreenInfo] = []
     private var timer: Timer?
+    /// Counts the bursts of apps starting or coming to the front: the looks of an earlier burst give way to those of the last.
+    private var restoreBurst = 0
 
     init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
          screens: ScreenProviding, windows: WindowSystem) {
@@ -90,14 +92,28 @@ final class ZoneEngine: ZoneRefreshing {
 
     /// A freshly started app needs a moment to create its windows, so look now and again shortly after.
     private func scheduleRestore() {
+        restoreBurst += 1
+        let burst = restoreBurst
         for delay in [0.0, 0.7, 2.0] {
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in self?.restorer.restore() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in self?.restore(burst: burst) }
         }
+    }
+
+    /// One look at the apps' windows for a burst. Every window that a slide brings forward brings its app to the front, which asks for a look; the
+    /// look asks every app with a zone for its windows (a stall of up to several hundred ms on the main thread), so while windows move it waits
+    /// (a few seconds at most) and the look is made once, when they have come to rest.
+    private func restore(burst: Int, waited: Int = 0) {
+        guard burst == restoreBurst else { return }
+        if coordinator.isMoving, waited < 40 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.restore(burst: burst, waited: waited + 1) }
+            return
+        }
+        restorer.restore()
     }
 
     private func tick() {
         guard windows.isTrusted else { return onPermissionLost?() ?? () }
-        guard !coordinator.isScrolling else { return }   // the windows are being moved; asking them now only slows the scroll
+        guard !coordinator.isMoving else { return }   // the windows are being moved; asking them now only slows the scroll
         if screens.screens().map(\.layoutSignature) != lastSignatures { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()

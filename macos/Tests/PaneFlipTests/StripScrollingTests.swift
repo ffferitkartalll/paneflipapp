@@ -703,63 +703,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(ZoneLabel.text(of: UUID(), in: strip), "?")
     }
 
-    // MARK: The edge of the screen
-
-    private final class FakePointerMoves: PointerMoveListening {
-        private(set) var isListening = false
-        private var onMove: ((CGPoint) -> Void)?
-        func start(onMove: @escaping (CGPoint) -> Void) { isListening = true; self.onMove = onMove }
-        func stop() { isListening = false; onMove = nil }
-        func move(to point: CGPoint) { onMove?(point) }
-    }
-
-    private var pointerMoves: FakePointerMoves!
-    private var edgeScrollerHeld: EdgeScroller?
-
-    private func edgeScroller() -> EdgeScroller {
-        pointerMoves = FakePointerMoves()
-        let edge = EdgeScroller(listener: pointerMoves, screens: screens, settings: settings, scroller: scroller())
-        edge.start()
-        edgeScrollerHeld = edge
-        return edge
-    }
-
-    func testReachingTheRightEdgeScrollsAtOnceAndLeavingItBackAgain() {
-        _ = edgeScroller()
-        XCTAssertEqual(viewport.offset(for: key), 0)
-        pointer_(at: 999.5)
-        run(60); settle()
-        XCTAssertEqual(viewport.offset(for: key), 250, "the area beyond the right edge came into view, without a wait")
-
-        // Still at the edge: nothing again until it has left and come back.
-        let begun = stage.begun.count
-        pointer_(at: 999.5)
-        pointer_(at: 998.8)
-        XCTAssertEqual(stage.begun.count, begun, "no new scroll while it has not left the edge")
-        pointer_(at: 500)
-        pointer_(at: 0.5)   // the left edge now: back
-        run(60); settle()
-        XCTAssertEqual(viewport.offset(for: key), 0, "back to the screen's own layout")
-    }
-
-    func testStayingAtTheEdgeGoesOnScrollingToTheEnd() {
-        var strip = repository.activeLayout(for: key)!.strip
-        strip.leading = [Overflow(width: 0.25, root: .leaf(UUID()))]
-        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
-        viewport.set(-250, for: key)   // the area beyond the left edge is in view
-        _ = edgeScroller()
-
-        screens.pointerCocoa = CGPoint(x: 999.5, y: 250)
-        pointer_(at: 999.5)
-        for _ in 0 ..< 4 { run(60); settle() }
-
-        XCTAssertEqual(viewport.offset(for: key), 250, "one rest position after the other, to the one beyond the right edge")
-
-        // At the end there is nothing more: no further scroll, and the pointer has not left the edge.
-        let begun = stage.begun.count
-        for _ in 0 ..< 2 { run(60); settle() }
-        XCTAssertEqual(stage.begun.count, begun)
-    }
+    // MARK: Scrolling through many areas
 
     func testScrollingGoesOnAreaByAreaThroughAsManyAreasAsThereAre() {
         var strip = repository.activeLayout(for: key)!.strip
@@ -778,46 +722,4 @@ final class StripScrollingTests: XCTestCase {
         run(60); settle()
         XCTAssertEqual(viewport.offset(for: key), 250)
     }
-
-    func testMovingThePointerAroundTheMiddleOfTheScreenAsksNothingOfTheDockOrTheDesktops() {
-        _ = edgeScroller()
-        let before = screens.screensCalls
-        for x in stride(from: 100.0, through: 900.0, by: 100) { pointer_(at: x) }
-        XCTAssertEqual(screens.screensCalls, before, "this runs on every mouse move: only plain frames are read")
-    }
-
-    func testTheScreensAreLookedAtOncePerVisitToAnEdge() {
-        _ = edgeScroller()
-        pointer_(at: 0.5)   // the left edge: nothing that way
-        let first = screens.screensCalls
-        pointer_(at: 0.2)
-        pointer_(at: 0.8)
-        XCTAssertEqual(screens.screensCalls, first, "a pointer that stays at the edge is not looked at on every move")
-    }
-
-    func testNothingScrollsWhereThereIsNothingMoreAndNotWhileTheZonesAreSwitchedOff() {
-        let edge = edgeScroller()
-        pointer_(at: 0.5)   // the left edge: no area that way
-        run(60); settle()
-        XCTAssertEqual(viewport.offset(for: key), 0)
-        XCTAssertTrue(stage.begun.isEmpty)
-
-        settings.values.overflowZonesEnabled = false
-        edge.settingDidChange()
-        XCTAssertFalse(pointerMoves.isListening, "the pointer is not watched while the setting is off")
-    }
-
-    func testTheCornersAreLeftToHotCorners() {
-        _ = edgeScroller()
-        for y: CGFloat in [0, 60, 119, 381, 440, 500] { pointer_(at: 999.5, y: y) }   // the 120 pt at each end of the edge
-        run(60); settle()
-        XCTAssertEqual(viewport.offset(for: key), 0, "the pointer on its way to a corner scrolls nothing")
-        XCTAssertTrue(stage.begun.isEmpty)
-
-        pointer_(at: 999.5, y: 380)   // just out of the corner area
-        run(60); settle()
-        XCTAssertEqual(viewport.offset(for: key), 250)
-    }
-
-    private func pointer_(at x: CGFloat, y: CGFloat = 250) { pointerMoves.move(to: CGPoint(x: x, y: y)) }
 }

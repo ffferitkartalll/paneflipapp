@@ -15,16 +15,15 @@ struct MenuBarIslandView: View {
     /// One island that is always fixed to the top of the screen. With the pointer on it, the same black shape reaches down below the menu bar and the
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
-        let m = Self.margin, open = model.expanded, bar = model.barHeight
+        let m = Self.margin, open = model.expanded, bar = model.barHeight, size = model.openSize
         let hidden = model.notchWidth > 0 && !open
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
         let left: CGFloat, right: CGFloat, glyphLeft: CGFloat, glyphTop: CGFloat, height: CGFloat
         if open {
             // The height of the menu bar again as room right, left and below.
-            let width = 2 * bar + gw
-            left = -width / 2; right = width / 2
-            glyphLeft = left + bar; glyphTop = bar; height = bar + gh + bar
+            left = -size.width / 2; right = size.width / 2
+            glyphLeft = left + bar; glyphTop = bar; height = size.height
         } else if hidden {
             left = -model.notchWidth / 2; right = model.notchWidth / 2   // no more than the notch itself; the picture is there, but not shown
             glyphLeft = -gw / 2; glyphTop = m; height = bar
@@ -39,6 +38,14 @@ struct MenuBarIslandView: View {
             glyph
                 .offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
                 .opacity(hidden ? 0 : 1)
+            if open {
+                // Under the picture, as wide as it; it grows out of the picture's foot as the island grows, and fades.
+                MenuBarIslandWindowsView(model: model)
+                    .frame(width: gw, height: model.windowsHeight, alignment: .top)
+                    .clipped()
+                    .offset(x: glyphLeft + gw / 2, y: bar + gh + model.windowsGap)
+                    .opacity(model.windowsZone == nil ? 0 : 1)
+            }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.78), value: model.glyph.size)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -48,7 +55,7 @@ struct MenuBarIslandView: View {
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
 
     private var glyph: some View {
-        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, dropping: model.dropping, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
+        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, dropping: model.dropping, selectedID: model.windowsZone, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
             .frame(width: px(model.glyph.size.width * model.zoom), height: px(model.glyph.size.height * model.zoom))
     }
 }
@@ -63,6 +70,8 @@ private struct GlyphCanvas: View, Animatable {
     /// The zoom the picture has when the island is open.
     let openZoom: CGFloat
     let dropping: Bool
+    /// The zone whose windows are shown under the picture: outlined.
+    let selectedID: UUID?
     let activeID: UUID?
     let previousID: UUID?
     var blend: CGFloat
@@ -111,6 +120,9 @@ private struct GlyphCanvas: View, Animatable {
                 context.drawLayer { layer in
                     if !dropping || (cell.id != activeID && cell.id != previousID) { layer.clip(to: windowPath) }
                     layer.fill(Path(roundedRect: rect, cornerRadius: 2), with: .color(fill(of: cell.id)))
+                }
+                if cell.id == selectedID {
+                    context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(.white.opacity(0.9)), lineWidth: 1.5)
                 }
                 if zoom > 1, let text = texts[cell.id] {
                     context.drawLayer { layer in

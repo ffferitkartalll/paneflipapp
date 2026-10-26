@@ -36,8 +36,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 2. **Stack and flip.** Put more apps in the same zone and they stack. Point at the zone and the glass pill appears:
    click an app, scroll over the pill, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd> to flip. The next
    window glides in beside the one it replaces.
-3. **Go beyond the screen.** A layout can go on past the edge of the display, as many zones as you like. Push the pointer
-   to the edge, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> / <kbd>→</kbd>, and the whole layout slides over.
+3. **Go beyond the screen.** A layout can go on past the edge of the display, as many zones as you like. Scroll with the
+   wheel or two fingers over the island in the menu bar, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> / <kbd>→</kbd>, and the whole layout slides over.
 
 ## Features
 
@@ -51,8 +51,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 - A margin runs round the edges of the screen, and a gap between the zones.
 
 **Zones beyond the screen**
-- Any number of areas beyond each edge, one after the other, reached with the shortcuts, by pushing the pointer to the
-  edge or on the trackpad, by your choice: four fingers, or two fingers with the keys held. The layout stops at every vertical line between zones, on the screen and beyond it, so each
+- Any number of areas beyond each edge, one after the other, reached with the shortcuts, with the wheel or two fingers over the island in the
+  menu bar, or on the trackpad, by your choice: four fingers, or two fingers with the keys held. The layout stops at every vertical line between zones, on the screen and beyond it, so each
   step brings the next zone in. A window that gets the focus there brings its zone into view by itself.
 
 **Stacks and the pill**

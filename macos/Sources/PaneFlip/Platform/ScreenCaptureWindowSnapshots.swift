@@ -8,10 +8,23 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
         private var byID: [CGWindowID: SCWindow] = [:]
         private var loadedAt = Date.distantPast
 
+        private var loading: Task<Void, Never>?
+
+        /// One reload at a time: a caller that arrives meanwhile waits for it instead of starting a second one.
         func reload(unlessNewerThan age: TimeInterval = 0) async {
+            if let loading { return await loading.value }
             guard Date().timeIntervalSince(loadedAt) > age else { return }
-            guard let content = try? await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: false) else { return }
-            byID = Dictionary(content.windows.map { ($0.windowID, $0) }, uniquingKeysWith: { first, _ in first })
+            let task = Task {
+                guard let content = try? await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: false) else { return }
+                self.store(content.windows)
+            }
+            loading = task
+            await task.value
+            loading = nil
+        }
+
+        private func store(_ list: [SCWindow]) {
+            byID = Dictionary(list.map { ($0.windowID, $0) }, uniquingKeysWith: { first, _ in first })
             loadedAt = Date()
         }
 

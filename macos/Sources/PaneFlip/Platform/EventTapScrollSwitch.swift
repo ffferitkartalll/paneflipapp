@@ -4,7 +4,8 @@ import PaneFlipCore
 
 /// Listens with an event tap, which (unlike a monitor) can keep the scrolling from the app under the pointer, and needs only the
 /// Accessibility permission the app already has. It hears the mouse wheel with the chosen keys held, and (when the settings ask for it)
-/// two fingers on the trackpad with the keys held; three and four fingers are `MultitouchSwipes`.
+/// two fingers on the trackpad with the keys held; and, with no key held, the wheel and two fingers over the open island in the menu bar,
+/// which are the layout's (over its picture) or a zone's windows' (over their cards). Three and four fingers are `MultitouchSwipes`.
 final class EventTapScrollSwitch: ScrollSwitchListening {
     private var tap: CFMachPort?
     private var onEvent: ((ScrollSwitchEvent) -> Void)?
@@ -21,10 +22,13 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
 
     /// Whether the settings let two fingers with the keys held lead the slide.
     private let twoFingers: () -> Bool
+    /// What the wheel and two fingers scroll with the pointer on the open island, if anything: that, whatever the settings and the keys.
+    private let overIsland: () -> ScrollSwitchTarget?
 
-    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, target: @escaping () -> ScrollSwitchTarget?) {
         self.gain = gain
         self.twoFingers = twoFingers
+        self.overIsland = overIsland
         self.target = target
     }
 
@@ -55,7 +59,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         guard type == .scrollWheel else { return Unmanaged.passUnretained(event) }
         // Fingers on the trackpad scroll as they always do unless the settings give them to the keys; a mouse wheel is the keys' either way.
         let wheel = event.getIntegerValueField(.scrollWheelEventIsContinuous) == 0
-        let aimed = wheel || twoFingers() ? target() : nil
+        let aimed: ScrollSwitchTarget? = overIsland() ?? (wheel || twoFingers() ? target() : nil)
         // The keys were let go (or others taken) in the middle of a swipe: it ends here.
         if inGesture, aimed != gestureTarget {
             inGesture = false

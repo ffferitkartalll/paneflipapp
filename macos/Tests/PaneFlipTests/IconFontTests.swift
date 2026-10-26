@@ -35,4 +35,10 @@ final class IconFontTests: XCTestCase {
         XCTAssertEqual(u16(start + 74), 800)   // usWinAscent
         XCTAssertEqual(u16(start + 76), 200)   // usWinDescent
     }
+
+    func testAPictureOfAnAppDoesNotRegisterAGlyph() {
+        let font = IconFont(brands: CDNBrandGlyphs(isEnabled: { false }))
+        _ = font.image(bundleID: "com.example.app", appName: "App", icon: NSImage(size: NSSize(width: 8, height: 8)), size: 16)
+        XCTAssertTrue(font.codePoints.isEmpty)
+    }
 }
