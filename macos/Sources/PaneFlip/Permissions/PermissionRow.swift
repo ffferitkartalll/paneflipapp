@@ -11,7 +11,7 @@ struct PermissionRow: View {
             Image(systemName: item.permission.symbol)
                 .font(.system(size: 22))
                 .frame(width: 36, height: 36)
-                .foregroundStyle(.tint)
+                .foregroundStyle(AppAccent.color)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.permission.title).font(.headline)

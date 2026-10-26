@@ -5,6 +5,8 @@ protocol AppCatalog {
     func app(pid: pid_t) -> AppInfo?
     /// Running apps that show up in the Dock.
     func regularApps() -> [AppInfo]
+    /// The running apps of the Dock among these bundle identifiers: cheaper than `regularApps()` when only a few are wanted.
+    func regularApps(withBundleIDs bundleIDs: Set<String>) -> [AppInfo]
     func icon(pid: pid_t) -> NSImage?
     var frontmostPID: pid_t? { get }
     /// The name and the icon of an installed app, running or not.

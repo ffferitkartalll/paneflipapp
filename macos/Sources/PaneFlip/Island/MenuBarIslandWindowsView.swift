@@ -9,8 +9,6 @@ import SwiftUI
 struct MenuBarIslandWindowsView: View {
     let model: MenuBarIslandModel
 
-    private static let lit = Color(red: 0.23, green: 0.91, blue: 0.69)
-
     var body: some View {
         let size = model.windowsFrame
         VStack(spacing: 4) {
@@ -49,7 +47,7 @@ struct MenuBarIslandWindowsView: View {
             })
         }
         return ZStack {
-            frame.fill(Self.lit).frame(width: size.width, height: size.height)
+            frame.fill(AppAccent.color).frame(width: size.width, height: size.height)
             // Outside the frame: the outlines of the windows beyond it, and the pictures, light.
             ZStack {
                 row { _ in AnyView(RoundedRectangle(cornerRadius: 2).strokeBorder(.white.opacity(0.5), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))) }
@@ -57,7 +55,7 @@ struct MenuBarIslandWindowsView: View {
             }
             .mask { ZStack { Rectangle(); frame.frame(width: size.width, height: size.height).blendMode(.destinationOut) }.compositingGroup() }
             // Inside it: the pictures, dark.
-            row { picture($0, .black.opacity(0.75)) }
+            row { picture($0, AppAccent.ink) }
                 .mask { frame.frame(width: size.width, height: size.height) }
             frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: size.width, height: size.height)
         }

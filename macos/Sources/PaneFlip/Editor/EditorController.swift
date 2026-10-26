@@ -48,7 +48,7 @@ final class EditorController: LayoutEditing {
         p.level = .statusBar
         p.backgroundColor = .black
         p.setFrame(frame, display: true)
-        p.contentView = NSHostingView(rootView: EditorView(model: model, settings: settings, area: frame.size))
+        p.contentView = NSHostingView(rootView: EditorView(model: model, settings: settings, area: frame.size).tint(AppAccent.color))
         p.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         panel = p

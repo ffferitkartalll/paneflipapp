@@ -5,18 +5,14 @@ final class WorkspaceAppCatalog: AppCatalog {
         NSRunningApplication(processIdentifier: pid).map(info)
     }
 
-    /// An app's activation policy, as it was asked once: reading it is a round trip to the system's launch service (several ms for each running app),
-    /// and it rarely changes while an app runs.
-    private var policies: [pid_t: NSApplication.ActivationPolicy] = [:]
-
     func regularApps() -> [AppInfo] {
-        let running = NSWorkspace.shared.runningApplications
-        policies = policies.filter { pid, _ in running.contains { $0.processIdentifier == pid } }
-        return running.filter { app in
-            let pid = app.processIdentifier
-            if policies[pid] == nil { policies[pid] = app.activationPolicy }
-            return policies[pid] == .regular
-        }.map(info)
+        NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }.map(info)
+    }
+
+    /// Reading anything of a running app is a round trip to the system's launch service (several ms for each), so the few that are wanted are
+    /// asked for by name instead of looking at all of them.
+    func regularApps(withBundleIDs bundleIDs: Set<String>) -> [AppInfo] {
+        bundleIDs.flatMap { NSRunningApplication.runningApplications(withBundleIdentifier: $0) }.filter { $0.activationPolicy == .regular }.map(info)
     }
 
     var frontmostPID: pid_t? { NSWorkspace.shared.frontmostApplication?.processIdentifier }

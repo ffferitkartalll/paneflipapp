@@ -32,6 +32,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         /// The last offset the fingers told, and whether it is being drawn already: told as often as events come, drawn once per turn of the run loop.
         var following: CGFloat?
         var dragging: CGFloat?
+        /// The windows of the zone with the focus, waiting for the island to have grown.
+        var opening: DispatchWorkItem?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel
@@ -55,6 +57,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private var localMonitor: Any?
     /// How long the island takes to shrink back, with some room.
     private static let shrinkAfter: TimeInterval = 0.7
+    /// How long the island has to grow before the windows of the zone with the focus show under its picture.
+    private static let windowsOpenAfter: TimeInterval = 0.3
     private var dragging = false
     private var followed: UUID?
 
@@ -78,10 +82,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         }
         timer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { [weak self] _ in
             guard let self else { return }
+            // The lit zone follows the focus also while windows move (a layout scrolls to a zone beyond the edge): it costs next to nothing, and the zone the
+            // focus goes to must not wait for the scroll to be over.
+            if followed != coordinator.focusedZoneID { followFocus() }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
             for entry in entries.values { refreshWindows(of: entry) }   // a window that came, went or came to the front while the row is open
-            guard followed != coordinator.focusedZoneID else { return }
-            followFocus()
+            warmGlyph()
         }
     }
 
@@ -223,6 +229,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         for entry in entries.values { refreshWindows(of: entry) }
     }
 
+    /// The focus was moved by a shortcut: the lit zone follows at once, not at the next look.
+    func focusDidMove() { followFocus() }
+
     /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle with the spring of the pictures on the screen).
     func windowsScrubbed(zone: UUID, by fraction: CGFloat) {
         for entry in entries.values where entry.model.windowsZone == zone {
@@ -263,7 +272,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             }
             if entry.cooling { if hit { continue }; entry.cooling = false }
             let drop = dragging && hit && entry.hovered ? cell(at: point, in: entry) : nil
-            if drop != entry.dropZone { entry.dropZone = drop; entry.model.dropping = drop != nil; entry.model.select(drop ?? focused(in: entry)) }
+            if drop != entry.dropZone { entry.dropZone = drop; entry.model.select(drop ?? focused(in: entry)) }
             guard hit != entry.hovered else { continue }
             setOpen(hit, for: entry)
         }
@@ -271,12 +280,31 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
 
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
+        if !open { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
         withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
             entry.model.expanded = open
+            if open { entry.model.contentOpacity = 1 }
             entry.model.zoom = open ? entry.model.openZoom : 1
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
         }
         placeShield(of: entry)
+        // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, once the island has grown (not
+        // before: they would look like something that is not in the island).
+        entry.opening?.cancel()
+        entry.opening = nil
+        guard open, !dragging else { return }
+        let work = DispatchWorkItem { [weak self, weak entry] in
+            guard let self, let entry, entry.hovered, entry.model.windowsZone == nil, !dragging, let zone = focused(in: entry), coordinator.stacks[zone]?.isEmpty == false else { return }
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+                entry.dragging = nil
+                entry.model.windowsDrag = 0
+                entry.model.windows = self.windows(of: zone)
+                entry.model.windowsZone = zone
+            }
+            placeShield(of: entry)
+        }
+        entry.opening = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.windowsOpenAfter, execute: work)
     }
 
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
@@ -309,6 +337,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private func click(at point: CGPoint) {
         for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
             guard let zone = cell(at: point, in: entry) else { continue }
+            coordinator.focus(zone: zone)
+            followFocus()   // the highlight goes to the zone at once
             withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
                 if entry.model.windowsZone == zone {
                     entry.model.windowsZone = nil
@@ -338,6 +368,18 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         let spring: Animation = moves ? .interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping) : .spring(response: 0.4, dampingFraction: 0.78)
         withAnimation(spring) { entry.model.windows = now }
         placeShield(of: entry)
+    }
+
+    /// While the island rests, the picture of one more app is made at each look, so that the first click on a zone does not wait for it (the font that
+    /// holds the pictures is made again for each new one).
+    private func warmGlyph() {
+        guard !entries.values.contains(where: \.hovered) else { return }
+        for stack in coordinator.stacks.values {
+            for tab in stack.tabs where glyphs[tab.bundleID.isEmpty ? tab.appName : tab.bundleID] == nil || glyphsRevision != iconFont.revision {
+                _ = glyph(of: tab)
+                return
+            }
+        }
     }
 
     /// The picture of an app is made once (the font gives a new image every time, and the rows are refreshed several times a second); made again when a brand glyph arrives.
@@ -386,7 +428,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     func dragEnded() {
         dragging = false
         for entry in entries.values {
-            if entry.dropZone != nil { entry.dropZone = nil; entry.model.dropping = false; entry.model.select(focused(in: entry)) }
+            if entry.dropZone != nil { entry.dropZone = nil; entry.model.select(focused(in: entry)) }
             if entry.hovered { entry.cooling = true; setOpen(false, for: entry) }   // the drop is done: the island closes, and opens again for a new visit
         }
     }

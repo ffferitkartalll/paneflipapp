@@ -19,8 +19,9 @@ final class ZoneEngine: ZoneRefreshing {
     /// The displays as seen at the last look (see `refreshZones`): for those who need them as often and must not ask the Dock again.
     private(set) var lastScreens: [ScreenInfo] = []
     private var timer: Timer?
-    /// Counts the bursts of apps starting or coming to the front: the looks of an earlier burst give way to those of the last.
-    private var restoreBurst = 0
+    /// Counts the bursts of an app starting or coming to the front (key 0: no app in particular): the looks of an earlier burst of the same key give way to
+    /// those of the last.
+    private var restoreBursts: [pid_t: Int] = [:]
 
     init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
          screens: ScreenProviding, windows: WindowSystem) {
@@ -49,7 +50,10 @@ final class ZoneEngine: ZoneRefreshing {
         // A remembered app comes back when it starts, is shown again or is brought to the front.
         for name in [NSWorkspace.didLaunchApplicationNotification, NSWorkspace.didActivateApplicationNotification,
                      NSWorkspace.didUnhideApplicationNotification] {
-            workspace.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in self?.scheduleRestore() }
+            // Only the app that came is looked at: asking every app with a zone for its windows at each switch held the main thread for long.
+            workspace.addObserver(forName: name, object: nil, queue: .main) { [weak self] note in
+                self?.scheduleRestore(onlyApp: (note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.processIdentifier)
+            }
         }
         NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in
@@ -91,24 +95,25 @@ final class ZoneEngine: ZoneRefreshing {
     // MARK: Housekeeping
 
     /// A freshly started app needs a moment to create its windows, so look now and again shortly after.
-    private func scheduleRestore() {
-        restoreBurst += 1
-        let burst = restoreBurst
+    private func scheduleRestore(onlyApp pid: pid_t? = nil) {
+        let key = pid ?? 0
+        restoreBursts[key, default: 0] += 1
+        let burst = restoreBursts[key]!
         for delay in [0.0, 0.7, 2.0] {
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in self?.restore(burst: burst) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in self?.restore(burst: burst, key: key, onlyApp: pid) }
         }
     }
 
     /// One look at the apps' windows for a burst. Every window that a slide brings forward brings its app to the front, which asks for a look; the
     /// look asks every app with a zone for its windows (a stall of up to several hundred ms on the main thread), so while windows move it waits
     /// (a few seconds at most) and the look is made once, when they have come to rest.
-    private func restore(burst: Int, waited: Int = 0) {
-        guard burst == restoreBurst else { return }
+    private func restore(burst: Int, key: pid_t, onlyApp pid: pid_t?, waited: Int = 0) {
+        guard restoreBursts[key] == burst else { return }
         if coordinator.isMoving, waited < 40 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.restore(burst: burst, waited: waited + 1) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.restore(burst: burst, key: key, onlyApp: pid, waited: waited + 1) }
             return
         }
-        restorer.restore()
+        if let pid { restorer.restoreAfterListing(app: pid) } else { restorer.restore() }
     }
 
     private func tick() {

@@ -62,6 +62,8 @@ final class AppContainer {
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                             background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         coordinator.snapshots = snapshots
+        let focusQueue = DispatchQueue(label: "PaneFlip.focus", qos: .userInteractive)
+        coordinator.focusQueue = { focusQueue.async(execute: $0) }
         coordinator.floatStage = PanelFloatStage(screens: screens, panels: stagePanels)
         coordinator.reduceMotion = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
         coordinator.glide = WindowGlide(windows: windows, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
@@ -69,6 +71,7 @@ final class AppContainer {
         let availability = WindowAvailability(windows: windows, screens: screens)
         let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
+        restorer.background = { focusQueue.async(execute: $0) }
         let viewport = StripViewport()
         let planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
         let engine = ZoneEngine(planner: planner,
@@ -93,6 +96,7 @@ final class AppContainer {
             pill?.flash(zone: zone)
             island?.windowsDidChange()
         }
+        coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in
@@ -185,7 +189,7 @@ final class AppContainer {
             })
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
-        coordinator.flashZone = { zoneFlash.flash(from: $0, to: $1) }
+        coordinator.flashZone = { zoneFlash.flash($0) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }

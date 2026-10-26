@@ -319,6 +319,22 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertFalse(scroller.reveal(zone: far), "it shows now: nothing more")
     }
 
+    func testAShortcutThatFollowsQuicklyGivesTheRunningScrollANewAim() {
+        let far = UUID()
+        var strip = repository.activeLayout(for: key)!.strip
+        strip.trailing.append(Overflow(width: 0.5, root: .leaf(far)))
+        repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
+        refresher.onRefresh()
+        let scroller = scroller()
+        scroller.start()
+
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        XCTAssertTrue(scroller.reveal(zone: far), "the scroll that runs heads for the next zone at once, it does not wait for the landing")
+        for _ in 0 ..< 4 { run(60); settle() }
+
+        XCTAssertEqual(viewport.offset(for: key), 750, "one scroll to the second zone")
+    }
+
     func testAScrollOfTheUsersOwnEndsWhatAFocusChangeAskedFor() {
         let far = UUID()
         var strip = repository.activeLayout(for: key)!.strip

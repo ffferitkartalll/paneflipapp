@@ -21,18 +21,20 @@ struct ZonePlanner {
             for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap),
                                          margin: CGFloat(settings.values.edgeMargin)) {
                 let number = layout?.strip.position(of: zone.id)?.number ?? 0
+                let order = layout?.strip.zoneIDs.firstIndex(of: zone.id) ?? 0
                 if zone.isOnScreen {
-                    zones[zone.id] = PlannedZone(rect: zone.rect, number: number)
+                    zones[zone.id] = PlannedZone(rect: zone.rect, number: number, order: order)
                 } else if let side {
-                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true, number: number)
+                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true, number: number, order: order)
                 }
             }
             if let floating = layout?.floatingZone, let host = zones[floating.host] {
                 let rect = floating.rect(over: host.rect)
                 let number = (zones.values.map(\.number).max() ?? 0) + 1
+                let order = (zones.values.map(\.order).max() ?? 0) + 1
                 zones[floating.id] = host.isParked && side != nil
-                    ? PlannedZone(rect: rect, frame: Parking.frame(for: rect, on: screen.cocoaFrame, side: side!), isParked: true, number: number, isFloating: true)
-                    : PlannedZone(rect: rect, number: number, isFloating: true,
+                    ? PlannedZone(rect: rect, frame: Parking.frame(for: rect, on: screen.cocoaFrame, side: side!), isParked: true, number: number, order: order, isFloating: true)
+                    : PlannedZone(rect: rect, number: number, order: order, isFloating: true,
                                   awayFrame: side == .right ? Parking.frame(for: rect, on: screen.cocoaFrame, side: .right) : nil)
             }
         }

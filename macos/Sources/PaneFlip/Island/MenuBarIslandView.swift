@@ -44,7 +44,7 @@ struct MenuBarIslandView: View {
                     .frame(width: gw, height: model.windowsHeight, alignment: .top)
                     .clipped()
                     .offset(x: glyphLeft + gw / 2, y: bar + gh + model.windowsGap)
-                    .opacity(model.windowsZone == nil ? 0 : 1)
+                    .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.78), value: model.glyph.size)
@@ -55,7 +55,7 @@ struct MenuBarIslandView: View {
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
 
     private var glyph: some View {
-        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, dropping: model.dropping, selectedID: model.windowsZone, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
+        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
             .frame(width: px(model.glyph.size.width * model.zoom), height: px(model.glyph.size.height * model.zoom))
     }
 }
@@ -69,7 +69,8 @@ private struct GlyphCanvas: View, Animatable {
     var zoom: CGFloat
     /// The zoom the picture has when the island is open.
     let openZoom: CGFloat
-    let dropping: Bool
+    /// How much of the numbers of the zones shows: 1 while the island is open, 0 once it begins to shrink.
+    var labels: CGFloat
     /// The zone whose windows are shown under the picture: outlined.
     let selectedID: UUID?
     let activeID: UUID?
@@ -78,15 +79,17 @@ private struct GlyphCanvas: View, Animatable {
     var shift: CGFloat
     let scale: CGFloat
 
-    var animatableData: AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>> {
-        get { AnimatablePair(shift, AnimatablePair(blend, zoom)) }
-        set { shift = newValue.first; blend = newValue.second.first; zoom = newValue.second.second }
+    var animatableData: AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>> {
+        get { AnimatablePair(shift, AnimatablePair(blend, AnimatablePair(zoom, labels))) }
+        set { shift = newValue.first; blend = newValue.second.first; zoom = newValue.second.second.first; labels = newValue.second.second.second }
     }
 
     /// The fill of a zone: grey, or the lit colour, or between the two while the focus moves from one zone to another.
+    private func lit(_ id: UUID) -> CGFloat { id == activeID ? blend : (id == previousID ? 1 - blend : 0) }
+
     private func fill(of id: UUID) -> Color {
-        let lit = id == activeID ? blend : (id == previousID ? 1 - blend : 0)
-        return Color(red: 1 + (0.23 - 1) * lit, green: 1 + (0.91 - 1) * lit, blue: 1 + (0.69 - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
+        let lit = lit(id)
+        return Color(red: 1 + (AppAccent.red - 1) * lit, green: 1 + (AppAccent.green - 1) * lit, blue: 1 + (AppAccent.blue - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
     }
 
     private func px(_ value: CGFloat) -> CGFloat { (value * scale).rounded() / scale }
@@ -117,9 +120,17 @@ private struct GlyphCanvas: View, Animatable {
             }
             for cell in glyph.cells {
                 let rect = inner(cell.rect)
+                let shape = Path(roundedRect: rect, cornerRadius: 2)
                 context.drawLayer { layer in
-                    if !dropping || (cell.id != activeID && cell.id != previousID) { layer.clip(to: windowPath) }
-                    layer.fill(Path(roundedRect: rect, cornerRadius: 2), with: .color(fill(of: cell.id)))
+                    layer.clip(to: windowPath)
+                    layer.fill(shape, with: .color(fill(of: cell.id)))
+                }
+                // The zone with the focus is lit beyond the frame too (the zone it left fades out there); a zone without the focus is not filled out of view.
+                if lit(cell.id) > 0 {
+                    context.drawLayer { layer in
+                        layer.clip(to: windowPath, options: .inverse)
+                        layer.fill(shape, with: .color(AppAccent.color.opacity(lit(cell.id))))
+                    }
                 }
                 if cell.id == selectedID {
                     context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(.white.opacity(0.9)), lineWidth: 1.5)
@@ -127,8 +138,9 @@ private struct GlyphCanvas: View, Animatable {
                 if zoom > 1, let text = texts[cell.id] {
                     context.drawLayer { layer in
                         layer.clip(to: Path(rect))
-                        let ink = Color.white.opacity(min(zoom - 1, 1))
-                        layer.draw(Text(verbatim: text).font(.system(size: 11, weight: .semibold)).foregroundStyle(ink), at: CGPoint(x: rect.midX, y: rect.midY))
+                        // White on the grey zones, dark on the lit one (and between the two as the focus moves), as the date and the time of the menu bar are written.
+                        let ink = Color(white: 1 - 0.92 * lit(cell.id)).opacity(min(zoom - 1, 1) * labels)
+                        layer.draw(Text(verbatim: text).font(Font(NSFont.menuBarFont(ofSize: 0))).foregroundStyle(ink), at: CGPoint(x: rect.midX, y: rect.midY))
                     }
                 }
             }

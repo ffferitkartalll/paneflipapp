@@ -20,7 +20,7 @@ final class PermissionsWindowController: NSObject, NSWindowDelegate {
                 onContinue()
             },
             onQuit: { NSApp.terminate(nil) })
-        let w = NSWindow(contentViewController: NSHostingController(rootView: view))
+        let w = NSWindow(contentViewController: NSHostingController(rootView: view.tint(AppAccent.color)))
         w.title = "PaneFlip"
         w.styleMask = [.titled, .closable]
         w.isReleasedWhenClosed = false

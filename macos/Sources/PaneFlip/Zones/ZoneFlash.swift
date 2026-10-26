@@ -1,8 +1,8 @@
 import AppKit
 
-/// Shows where the focus went: a frame that glides from the zone it left to the zone it reached and then fades. With reduced motion it
-/// appears at the new zone and goes. The frame is a layer moved by Core Animation, which runs by itself: a window that is moved or an app that
-/// is brought forward right after cannot make it stutter.
+/// Shows where the focus went: a frame in the app's accent colour round the zone it reached, which shows at once and fades. It does not travel from the zone the
+/// focus left. The frame is a layer faded by Core Animation, which runs by itself: a window that is moved or an app that is brought forward right after
+/// cannot make it stutter.
 final class ZoneFlash {
     private let screens: ScreenProviding
     private let reduceMotion: () -> Bool
@@ -18,7 +18,7 @@ final class ZoneFlash {
         let view = NSView()
         view.wantsLayer = true
         outline.cornerRadius = 10
-        outline.borderWidth = 5
+        outline.borderWidth = 1
         outline.opacity = 0
         view.layer?.addSublayer(outline)
         p.contentView = view
@@ -32,49 +32,30 @@ final class ZoneFlash {
         self.reduceMotion = reduceMotion
     }
 
-    /// Both are zones in Accessibility coordinates. A frame still showing from the last move starts from where it is.
-    func flash(from old: CGRect, to new: CGRect) {
+    /// `zone` is a zone in Accessibility coordinates. A frame still showing from the last move goes at once.
+    func flash(_ zone: CGRect) {
         generation += 1
         let mine = generation
-        let target = screens.flip(new)
+        let target = screens.flip(zone)
         guard let screen = screens.screens().first(where: { $0.cocoaFrame.contains(CGPoint(x: target.midX, y: target.midY)) }) else { return }
         let origin = screen.cocoaFrame.origin
-        func local(_ rect: CGRect) -> CGRect { rect.offsetBy(dx: -origin.x, dy: -origin.y) }
-        let oldRect = screens.flip(old)
-        let moves = !reduceMotion() && screen.cocoaFrame.contains(CGPoint(x: oldRect.midX, y: oldRect.midY))
 
-        let onThisScreen = panel.isVisible && panel.frame == screen.cocoaFrame
-        let shown = onThisScreen ? outline.presentation() : nil
-        let start = (shown?.opacity ?? 0) > 0.05 ? shown?.frame : nil
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         if panel.frame != screen.cocoaFrame { panel.setFrame(screen.cocoaFrame, display: true) }
-        outline.borderColor = NSColor.controlAccentColor.cgColor
-        outline.frame = start ?? local(moves ? oldRect : target)
+        outline.borderColor = AppAccent.nsColor.cgColor
+        outline.frame = target.offsetBy(dx: -origin.x, dy: -origin.y)
         outline.opacity = 1
         CATransaction.commit()
         panel.orderFrontRegardless()
-
-        let travel = moves ? 0.32 : 0
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(travel)
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
-        outline.frame = local(target)
-        CATransaction.commit()
         // Out to the render server now, before the caller does anything that keeps the main thread busy.
         CATransaction.flush()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + travel + (moves ? 0.35 : 0.7)) { [weak self] in
+        let reduced = reduceMotion()
+        DispatchQueue.main.asyncAfter(deadline: .now() + (reduced ? 0.7 : 0.35)) { [weak self] in
             guard let self, generation == mine else { return }
-            guard moves else {
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-                outline.opacity = 0
-                CATransaction.commit()
-                return panel.orderOut(nil)
-            }
             CATransaction.begin()
-            CATransaction.setAnimationDuration(0.7)
+            if reduced { CATransaction.setDisableActions(true) } else { CATransaction.setAnimationDuration(0.7) }
             CATransaction.setCompletionBlock { [weak self] in
                 if self?.generation == mine { self?.panel.orderOut(nil) }
             }

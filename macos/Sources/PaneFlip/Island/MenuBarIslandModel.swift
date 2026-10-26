@@ -20,8 +20,9 @@ final class MenuBarIslandModel {
     var openZoom: CGFloat = MenuBarIslandView.hoverZoom
     /// The pointer is on the island: it stands below the menu bar as one block.
     var expanded = false
-    /// A dragged window is over a zone of the island: that zone is lit whole, also the part of it beyond the edges of the screen.
-    var dropping = false
+    /// What the open island holds beyond the little picture (the numbers of the zones, the windows of a zone): shown while it is open, gone at once
+    /// when it begins to shrink, so that none of it is seen on the shrinking background.
+    var contentOpacity: CGFloat = 0
     var cellTexts: [UUID: String] = [:]
     /// The zone chosen in the picture by a click: its windows stand under the picture, in a frame while it is set.
     var windowsZone: UUID?
