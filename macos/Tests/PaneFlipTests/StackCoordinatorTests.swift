@@ -62,20 +62,161 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.snap(.fake(1), into: left)
         coordinator.snap(.fake(2), into: topRight)
         windows.focused = .fake(1)
-        var flashed: [[CGRect]] = []
-        coordinator.flashZone = { flashed.append([$0, $1]) }
+        var flashed: [CGRect] = []
+        coordinator.flashZone = { flashed.append($0) }
 
+        let raisedBefore = windows.raised.count
+        coordinator.focusZone(toward: .left)
+        XCTAssertEqual(windows.raised.count, raisedBefore, "nothing is left of the first zone: the focus stays")
         coordinator.focusZone(toward: .right)
         XCTAssertEqual(windows.raised.last, 2)
-        XCTAssertEqual(flashed, [[CGRect(x: 0, y: 0, width: 500, height: 800), CGRect(x: 504, y: 0, width: 496, height: 400)]], "from the zone it left to the zone it reached")
-        coordinator.focusZone(toward: .left)
-        XCTAssertEqual(windows.raised.last, 2, "nothing is left of the first zone: the focus stays")
-        windows.focused = .fake(2)
+        XCTAssertEqual(flashed, [CGRect(x: 504, y: 0, width: 496, height: 400)], "the zone it reached is highlighted: no frame travels")
+        windows.focused = .fake(2)   // the app has caught up
+        coordinator.followFocus()
         coordinator.focusZone(toward: .down)
         XCTAssertEqual(windows.raised.last, 2, "the zone below holds no window")
         coordinator.focusZone(toward: .left)
         XCTAssertEqual(windows.raised.last, 1)
         XCTAssertEqual(flashed.count, 2, "nothing is shown where the focus does not move")
+    }
+
+    func testTheFocusIsAskedOffTheMainThreadOneQuestionAtATime() {
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 500, height: 800)])
+        coordinator.snap(.fake(1), into: zone)
+        windows.focused = .fake(1)
+        var queued: [() -> Void] = []
+        coordinator.focusQueue = { queued.append($0) }
+
+        coordinator.followFocus()
+        coordinator.followFocus()
+        coordinator.followFocus()
+        XCTAssertEqual(queued.count, 1, "the others wait for the answer")
+        XCTAssertNil(coordinator.focusedZoneID, "nothing is known before the answer comes")
+
+        queued.removeFirst()()   // the question is answered off the main thread
+        let answered = expectation(description: "the answer is taken on the main thread")
+        DispatchQueue.main.async { answered.fulfill() }
+        wait(for: [answered], timeout: 2)
+        XCTAssertEqual(coordinator.focusedZoneID, zone)
+        XCTAssertEqual(queued.count, 1, "the question that came meanwhile is asked once more")
+    }
+
+    func testQuickPressesGoOnFromWhereTheLastOneWentBeforeTheAppHasCaughtUp() {
+        let a = UUID(), b = UUID(), c = UUID()
+        coordinator.apply(zones: [a: CGRect(x: 0, y: 0, width: 300, height: 800), b: CGRect(x: 304, y: 0, width: 300, height: 800),
+                                  c: CGRect(x: 608, y: 0, width: 300, height: 800)])
+        [(1, a), (2, b), (3, c)].forEach { coordinator.snap(.fake(CGWindowID($0.0)), into: $0.1) }
+        windows.focused = .fake(1)   // and the app goes on saying so
+        coordinator.followFocus()
+
+        coordinator.focusZone(toward: .right)
+        coordinator.focusZone(toward: .right)
+        XCTAssertEqual(windows.raised.suffix(2), [2, 3], "the second press starts from the zone the first one went to")
+        XCTAssertEqual(coordinator.focusedZoneID, c)
+        coordinator.focusZone(toward: .left)
+        XCTAssertEqual(windows.raised.last, 2)
+    }
+
+    func testAClickOnAZoneOfTheIslandBringsTheFocusThereUnlessItIsThereAlready() {
+        let left = UUID(), right = UUID(), empty = UUID()
+        let leftRect = CGRect(x: 0, y: 0, width: 500, height: 800), rightRect = CGRect(x: 504, y: 0, width: 496, height: 400)
+        coordinator.apply(zones: [left: leftRect, right: rightRect, empty: CGRect(x: 504, y: 404, width: 496, height: 396)])
+        coordinator.snap(.fake(1), into: left)
+        coordinator.snap(.fake(2), into: right)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var flashed: [CGRect] = []
+        coordinator.flashZone = { flashed.append($0) }
+
+        coordinator.focus(zone: left)
+        XCTAssertTrue(flashed.isEmpty, "the focus is in that zone already")
+        coordinator.focus(zone: empty)
+        XCTAssertTrue(flashed.isEmpty, "a zone with no window has nothing to focus")
+        coordinator.focus(zone: right)
+        XCTAssertEqual(windows.raised.last, 2)
+        XCTAssertTrue(flashed.isEmpty, "a click on the island shows no frame: the zone takes the focus at once")
+        XCTAssertEqual(coordinator.focusedZoneID, right, "the highlight does not wait for the app to take the focus")
+        coordinator.followFocus()   // the app has not caught up yet: it still says the first window has the focus
+        XCTAssertEqual(coordinator.focusedZoneID, right, "an answer that is behind is not believed")
+        windows.focused = .fake(2)
+        coordinator.followFocus()
+        XCTAssertEqual(coordinator.focusedZoneID, right)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        XCTAssertEqual(coordinator.focusedZoneID, left, "once seen there, the focus is read as it is")
+    }
+
+    func testQuickPressesGoOnThroughSeveralZonesBeyondTheEdge() {
+        let screenZone = UUID(), first = UUID(), second = UUID()
+        let here = CGRect(x: 0, y: 0, width: 1000, height: 800)
+        coordinator.apply(plan: [screenZone: PlannedZone(rect: here),
+                                 first: PlannedZone(rect: CGRect(x: 1000, y: 0, width: 1000, height: 800), frame: CGRect(x: 999, y: 0, width: 1000, height: 800), isParked: true),
+                                 second: PlannedZone(rect: CGRect(x: 2000, y: 0, width: 1000, height: 800), frame: CGRect(x: 999, y: 0, width: 1000, height: 800), isParked: true)])
+        coordinator.snap(.fake(1), into: screenZone)
+        coordinator.snap(.fake(2), into: first)
+        coordinator.snap(.fake(3), into: second)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var asked: [UUID] = []
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(here) }
+
+        coordinator.focusZone(toward: .right)
+        coordinator.focusZone(toward: .right)   // before the first scroll is over
+        XCTAssertEqual(asked, [first, second], "the second press goes on from the zone the first one asked for")
+    }
+
+    func testGoingLeftOfTwoZonesOnTopOfEachOtherTakesTheOneThatFollowsInTheOrderOfTheZones() {
+        // 1 / 2 | 3 | 4 / 5 | +1 : the order of the zones is 1, 2, 3, 4, 5, +1.
+        let ids = (0 ..< 6).map { _ in UUID() }
+        let rects = [CGRect(x: 0, y: 0, width: 300, height: 400), CGRect(x: 0, y: 404, width: 300, height: 396), CGRect(x: 304, y: 0, width: 300, height: 800),
+                     CGRect(x: 608, y: 0, width: 300, height: 400), CGRect(x: 608, y: 404, width: 300, height: 396), CGRect(x: 912, y: 0, width: 300, height: 800)]
+        var plan: [UUID: PlannedZone] = [:]
+        for (i, id) in ids.enumerated() {
+            plan[id] = PlannedZone(rect: rects[i], frame: i == 5 ? CGRect(x: 999, y: 0, width: 300, height: 800) : nil, isParked: i == 5, order: i)
+            coordinator.apply(plan: plan)
+        }
+        for (i, id) in ids.enumerated() { coordinator.snap(.fake(CGWindowID(i + 1)), into: id) }
+        windows.focused = .fake(6)
+        coordinator.followFocus()
+
+        coordinator.focusZone(toward: .left)
+        XCTAssertEqual(windows.raised.last, 5, "from +1 the zone 5, which comes before it, not the zone 4")
+        coordinator.focusZone(toward: .left)
+        XCTAssertEqual(windows.raised.last, 3)
+        coordinator.focusZone(toward: .left)
+        XCTAssertEqual(windows.raised.last, 2, "from 3 the zone 2, which comes before it, not the zone 1")
+    }
+
+    func testPressesBackAndForthWhileTheLayoutScrollsEndOnTheLastZoneAskedFor() {
+        let screenZone = UUID(), first = UUID(), second = UUID()
+        let here = CGRect(x: 0, y: 0, width: 1000, height: 800)
+        let beyondFrame = CGRect(x: 999, y: 0, width: 1000, height: 800)
+        func plan(parked: Bool) -> [UUID: PlannedZone] {
+            [screenZone: PlannedZone(rect: here),
+             first: PlannedZone(rect: CGRect(x: 1000, y: 0, width: 1000, height: 800), frame: beyondFrame, isParked: parked),
+             second: PlannedZone(rect: CGRect(x: 2000, y: 0, width: 1000, height: 800), frame: beyondFrame, isParked: true)]
+        }
+        coordinator.apply(plan: plan(parked: true))
+        [(1, screenZone), (2, first), (3, second)].forEach { coordinator.snap(.fake(CGWindowID($0.0)), into: $0.1) }
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var asked: [UUID] = []
+        coordinator.onReachBeyondTheEdge = { zone, _ in asked.append(zone) }
+        coordinator.isScrolling = true   // the layout is on its way to the first zone
+        let raisedBefore = windows.raised.count
+
+        coordinator.focusZone(toward: .right)   // first
+        coordinator.focusZone(toward: .right)   // second
+        coordinator.focusZone(toward: .left)    // first again
+        coordinator.focusZone(toward: .left)    // back on the screen's own zone, which the scroll is taking away
+        XCTAssertEqual(asked, [first, second, first, screenZone], "every press goes on from where the last one went, whatever the scroll does")
+        XCTAssertEqual(windows.raised.count, raisedBefore, "nothing is brought forward while the layout scrolls")
+        XCTAssertEqual(coordinator.focusedZoneID, screenZone)
+
+        coordinator.isScrolling = false   // it has landed, and the screen's zone is in view
+        coordinator.finishFocusBeyondTheEdge()
+        XCTAssertEqual(windows.raised.last, 1, "only the last zone asked for gets the focus")
     }
 
     func testTheFocusGoesOnToAZoneBeyondTheEdgeAndTheFrameWaitsForItToComeIntoView() {
@@ -85,9 +226,9 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.snap(.fake(1), into: screenZone)
         coordinator.snap(.fake(2), into: beyond)
         windows.focused = .fake(1)
-        var flashed: [[CGRect]] = []
+        var flashed: [CGRect] = []
         var asked: [UUID] = []
-        coordinator.flashZone = { flashed.append([$0, $1]) }
+        coordinator.flashZone = { flashed.append($0) }
         let standsAt = CGRect(x: 0, y: 0, width: 1000, height: 800)
         coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(standsAt) }
 
@@ -100,7 +241,7 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.focusZone(toward: .right)
         XCTAssertEqual(asked, [beyond], "the layout is asked to scroll to it")
         XCTAssertTrue(windows.raised.isEmpty || windows.raised.last != 2, "the window waits for the scroll to be over")
-        XCTAssertEqual(flashed, [[here, standsAt]], "the frame goes at once to where the zone will stand")
+        XCTAssertEqual(flashed, [standsAt], "the frame shows at once where the zone will stand")
 
         coordinator.finishFocusBeyondTheEdge()
         XCTAssertEqual(flashed.count, 1, "still out of sight: a later scroll may bring it")

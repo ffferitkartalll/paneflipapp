@@ -37,6 +37,7 @@ targets:
         MARKETING_VERSION: "1.3"
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon   # Resources/AppIcon.icon (Icon Composer)
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor   # the app's green: the accent of every native control (same as AppAccent)
 
         # Info.plist is generated from these keys.
         GENERATE_INFOPLIST_FILE: YES
@@ -112,6 +113,7 @@ targets:
       - path: Sources/PaneFlip/Island/MenuBarIslandModel.swift
       - path: Sources/PaneFlip/Island/MenuBarIslandView.swift
       - path: Sources/PaneFlip/Island/MenuBarIslandWindowsView.swift
+      - path: Sources/PaneFlip/App/AppAccent.swift
       - path: Sources/PaneFlip/Island/IslandWindow.swift
       - path: Sources/PaneFlip/Island/IslandShiftedRow.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift

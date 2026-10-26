@@ -233,28 +233,54 @@ final class StripScroller {
     /// the zone out of sight, or the windows are not free to be moved.
     @discardableResult
     func reveal(zone id: UUID, standsAt: ((CGRect) -> Void)? = nil) -> Bool {
-        guard scrolling == nil else {
-            revealing = id
-            return false
+        if let current = scrolling {
+            // Presses of the shortcut that follow quickly go straight on: the scroll that runs is given a new aim, the rest that shows the zone, instead of the
+            // press waiting for the landing and starting a scroll of its own after it.
+            guard current.phase != .landing, let aim = rest(showing: id, from: current.target, on: current.screen, geometry: current.geometry) else {
+                revealing = id
+                return false
+            }
+            aimAt(aim.rest)
+            if let rect = planner.rect(of: id, at: aim.rest, on: current.screen, among: screens.screens()) { standsAt?(rect) }
+            return true
         }
         let all = screens.screens()
         for screen in all {
-            guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
-                  let placed = geometry.zones(offset: geometry.clamped(viewport.offset(for: screen.key))).first(where: { $0.id == id }),
-                  !placed.isOnScreen else { continue }
-            let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
+            guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil else { continue }
             let offset = geometry.clamped(viewport.offset(for: screen.key))
-            let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
-            // The nearest rest that shows the whole zone, else the nearest that shows any of it: a line between zones is a rest too now.
-            let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
-            let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
-            guard let target = (whole ?? shown.first)?.0 else { return false }
-            let started = scroll(toward: edge, on: screen, to: target)
+            guard geometry.zones(offset: offset).first(where: { $0.id == id }).map({ !$0.isOnScreen }) == true else { continue }
+            guard let aim = rest(showing: id, from: offset, on: screen, geometry: geometry) else { return false }
+            let started = scroll(toward: aim.edge, on: screen, to: aim.rest)
             // Where the zone will stand when the scroll is over, told as the scroll starts.
-            if started, let rect = planner.rect(of: id, at: target, on: screen, among: all) { standsAt?(rect) }
+            if started, let rect = planner.rect(of: id, at: aim.rest, on: screen, among: all) { standsAt?(rect) }
             return started
         }
         return false
+    }
+
+    /// The nearest rest position beyond `offset` that shows the zone (all of it, else any of it), and the edge it lies toward; nil when the zone is in view at
+    /// `offset` or no rest shows it.
+    private func rest(showing id: UUID, from offset: CGFloat, on screen: ScreenInfo, geometry: StripGeometry) -> (edge: ScreenEdge, rest: CGFloat)? {
+        guard let placed = geometry.zones(offset: offset).first(where: { $0.id == id }), !placed.isOnScreen else { return nil }
+        let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
+        let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
+        // The nearest rest that shows the whole zone, else the nearest that shows any of it: a line between zones is a rest too now.
+        let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
+        let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
+        return (whole ?? shown.first).map { (edge, $0.0) }
+    }
+
+    /// The scroll that runs heads for another rest position.
+    private func aimAt(_ target: CGFloat) {
+        guard var current = scrolling else { return }
+        current.target = target
+        if current.phase == .gliding {
+            current.glideFrom = current.shown
+            current.glideTo = target
+            current.glideBegan = now()
+            onGlide?(current.screen, nil, target)
+        }
+        scrolling = current
     }
 
     /// A scroll has come to rest: the zone a focus change asked for is brought on, if it is not in view yet.
@@ -279,16 +305,9 @@ final class StripScroller {
 
     /// A scroll that runs gets a new aim: the pictures of every window are on the stage already.
     private func carryOn(toward edge: ScreenEdge, on screen: ScreenInfo) -> Bool {
-        guard var current = scrolling, current.screen.key == screen.key, current.phase != .landing,
+        guard let current = scrolling, current.screen.key == screen.key, current.phase != .landing,
               let target = nextRest(from: current.target, toward: edge, in: current.geometry) else { return false }
-        current.target = target
-        if current.phase == .gliding {
-            current.glideFrom = current.shown
-            current.glideTo = target
-            current.glideBegan = now()
-            onGlide?(current.screen, nil, target)
-        }
-        scrolling = current
+        aimAt(target)
         return true
     }
 

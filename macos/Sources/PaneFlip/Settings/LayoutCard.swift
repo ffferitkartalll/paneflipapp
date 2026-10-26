@@ -61,7 +61,7 @@ struct LayoutCard: View {
 
     private var miniature: some View {
         LayoutMiniature(root: layout.root, screenSize: screen.size, width: Self.width)
-            .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? Color.accentColor : .clear, lineWidth: 2) }
+            .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? AppAccent.color : .clear, lineWidth: 2) }
     }
 
     private var nameRow: some View {

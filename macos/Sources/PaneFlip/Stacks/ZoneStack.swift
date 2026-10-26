@@ -43,6 +43,8 @@ final class ZoneStack {
     @ObservationIgnored var changes = 0
     /// The number the zone shows in its layout.
     @ObservationIgnored var number = 0
+    /// Its place among all the zones of the strip, from the outermost on the left to the outermost on the right.
+    @ObservationIgnored var order = 0
 
     init(id: UUID) { self.id = id }
 

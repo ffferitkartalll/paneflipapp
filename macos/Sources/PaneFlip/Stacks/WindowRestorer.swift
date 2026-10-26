@@ -33,17 +33,44 @@ final class WindowRestorer {
               let app = apps.app(pid: pid), !settings.values.ignoredApps.contains(app.bundleID),
               memory.records.contains(where: { $0.bundleID == app.bundleID && coordinator.visibleZoneIDs.contains($0.zoneID) })
         else { return }
-        let claimed = memory.boundWindowIDs
-        let free = Set(windows.windows(ofApp: pid).map(\.id)).subtracting(claimed).subtracting(coordinator.pulledOut)
+        guard let background else { return decide(from: windows.windows(ofApp: pid), of: pid) }
+        // The app's windows are asked off the main thread, one round at a time: an app that is slow to answer must not hold the app.
+        guard !asking else { return }
+        asking = true
+        background { [windows] in
+            let list = windows.windows(ofApp: pid)
+            DispatchQueue.main.async { [self] in
+                asking = false
+                decide(from: list, of: pid)
+            }
+        }
+    }
+
+    private func decide(from list: [WindowRef], of pid: pid_t) {
+        let free = Set(list.map(\.id)).subtracting(memory.boundWindowIDs).subtracting(coordinator.pulledOut)
         guard free != lastFree else { return }
         lastFree = free
         if !free.isEmpty { restore(onlyApp: pid) }
     }
 
+    /// `restore(onlyApp:)` for an app that has just come: its windows are asked off the main thread first. An app that is slow to answer (one
+    /// still busy bringing its window up) would otherwise hold the main thread, and with it everything that is drawn.
+    func restoreAfterListing(app pid: pid_t) {
+        guard let background else { return restore(onlyApp: pid) }
+        background { [windows] in
+            let list = windows.windows(ofApp: pid)
+            DispatchQueue.main.async { [self] in restore(onlyApp: pid, listed: [pid: list]) }
+        }
+    }
+
+    /// Runs the question to an app for its windows off the main thread (nil: where it is asked, in tests).
+    var background: ((@escaping () -> Void) -> Void)?
+    private var asking = false
+
     /// Puts running windows into the zones their apps belong in: a window of an app with a waiting slot takes that
     /// slot (in the order of the memory), and any other window of such an app joins the zone of the app's first
     /// remembered window. `onlyApp` limits it to one app.
-    func restore(onlyApp onlyPID: pid_t? = nil) {
+    func restore(onlyApp onlyPID: pid_t? = nil, listed: [pid_t: [WindowRef]] = [:]) {
         guard windows.isTrusted, settings.values.placementEnabled, !coordinator.placementOnly() else { return }
         let visible = coordinator.visibleZoneIDs
         // The zone an app belongs in: where its first remembered window is.
@@ -60,8 +87,8 @@ final class WindowRestorer {
         let claimed = memory.boundWindowIDs
         let snapshot = availability.snapshot()
         var candidates: [String: [WindowRef]] = [:]
-        for app in apps.regularApps() where ruleZone[app.bundleID] != nil && (onlyPID == nil || app.pid == onlyPID) {
-            let free = windows.windows(ofApp: app.pid).filter {
+        for app in apps.regularApps(withBundleIDs: Set(ruleZone.keys)) where onlyPID == nil || app.pid == onlyPID {
+            let free = (listed[app.pid] ?? windows.windows(ofApp: app.pid)).filter {
                 !claimed.contains($0.id) && !coordinator.pulledOut.contains($0.id) && !availability.isGone($0, in: snapshot)
             }
             if !free.isEmpty { candidates[app.bundleID, default: []] += free }

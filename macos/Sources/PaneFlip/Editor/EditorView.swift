@@ -67,7 +67,7 @@ struct EditorView: View {
 
                 if let t = target {
                     Path { p in p.move(to: t.line.0); p.addLine(to: t.line.1) }
-                        .stroke(t.valid ? (t.snapped ? Color.white : Color.accentColor) : Color.red,
+                        .stroke(t.valid ? (t.snapped ? Color.white : AppAccent.color) : Color.red,
                                 lineWidth: t.snapped ? 3 : 2)
                         .allowsHitTesting(false)
                 }
@@ -245,7 +245,7 @@ struct EditorView: View {
 
     @ViewBuilder
     private func mergeOverlay(_ m: MergePreview) -> some View {
-        highlight(m.source.rect, color: .accentColor)
+        highlight(m.source.rect, color: AppAccent.color)
         if let t = m.target {
             highlight(t.rect, color: m.valid ? .green : .red)
             if m.valid {
@@ -342,7 +342,7 @@ struct EditorView: View {
     private func lineView(_ d: SplitDivider) -> some View {
         let centered = SplitSnap.isStep(d.ratio)
         return ZStack {
-            Rectangle().fill(centered ? Color.white : Color.accentColor)
+            Rectangle().fill(centered ? Color.white : AppAccent.color)
                 .frame(width: d.sideBySide ? 2 : d.parent.width, height: d.sideBySide ? d.parent.height : 2)
             Rectangle().fill(.clear)
                 .frame(width: d.sideBySide ? 14 : d.parent.width, height: d.sideBySide ? d.parent.height : 14)
@@ -361,7 +361,7 @@ struct EditorView: View {
             .font(.system(size: 11, weight: .bold))
             .foregroundStyle(centered ? Color.black : Color.white)
             .frame(width: 24, height: 24)
-            .background(Circle().fill(centered ? Color.white : Color.accentColor))
+            .background(Circle().fill(centered ? Color.white : AppAccent.color))
             .contentShape(Circle())
             .gesture(drag(d))
             .onTapGesture(count: 2) { model.collapse(d.id) }

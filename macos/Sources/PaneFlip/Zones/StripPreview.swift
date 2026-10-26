@@ -31,7 +31,7 @@ struct StripPreview: View {
                         .offset(x: CGFloat(starts[i]) * unit + 1)
                 }
                 RoundedRectangle(cornerRadius: 5)
-                    .strokeBorder(Color.accentColor, lineWidth: 2)
+                    .strokeBorder(AppAccent.color, lineWidth: 2)
                     .frame(width: unit, height: height + 4)
                     .offset(x: CGFloat(strip.leadingWidth + offset) * unit, y: -2)
                     .animation(.smooth(duration: 0.4), value: offset)

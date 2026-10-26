@@ -61,7 +61,7 @@ struct LayoutAppsView: View {
                         ZoneAppsList(entries: entries.filter { $0.zoneID == zone }, zones: zones, title: title, editor: editor, startApps: layout.startApps, setStartApp: setStartApp)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 8)
-                                    .strokeBorder(Color.accentColor, lineWidth: 2)
+                                    .strokeBorder(AppAccent.color, lineWidth: 2)
                                     .padding(-6)
                                     .opacity(highlighted == zone ? 1 : 0)
                             }
