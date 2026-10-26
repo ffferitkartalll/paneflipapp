@@ -75,7 +75,7 @@ final class MouseButtonSwipes: ScrollSwitchListening {
             if !moved {
                 moved = true
                 previousApp = NSWorkspace.shared.frontmostApplication
-                NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
+                NSRunningApplication.current.activate()
                 CGAssociateMouseAndMouseCursorPosition(0)   // the pointer stays; the mouse still reports how far it goes
                 showHand()
                 handTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { [weak self] _ in self?.showHand() }

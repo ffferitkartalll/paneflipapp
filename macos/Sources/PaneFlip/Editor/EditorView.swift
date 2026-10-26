@@ -125,7 +125,7 @@ struct EditorView: View {
     /// The whole strip in small, with the screen the editor shows marked, and which screen it is.
     private var preview: some View {
         let here = model.strip.nearestAreaRestIndex(to: model.offset)
-        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(model.strip.areaRests.count)"), animated: true)
+        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(model.strip.areaRests.count)"))
             .allowsHitTesting(false)
     }
 

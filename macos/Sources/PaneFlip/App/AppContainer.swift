@@ -132,7 +132,7 @@ final class AppContainer {
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
                                      settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
-                                     stage: PanelScrollStage(screens: screens, panels: stagePanels), preview: PanelScrollPreview(),
+                                     stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || editor.isShown || screens.isMissionControlActive })
@@ -154,7 +154,7 @@ final class AppContainer {
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash(from: $0, to: $1) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
-        coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, quiet: true, standsAt: standsAt) }
+        coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) }
         let edgeScroller = EdgeScroller(listener: GlobalPointerMoves(), screens: screens, settings: settings, scroller: scroller)
         // After the edge scroller took the hook: a zone a shortcut asked for beyond the edge is focused once the scroll is over.
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }

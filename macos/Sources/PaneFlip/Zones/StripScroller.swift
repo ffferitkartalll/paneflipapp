@@ -19,8 +19,6 @@ final class StripScroller {
     private static let drawTime: TimeInterval = 0.05
     /// A layout this close to a rest is at it, for fingers that catch it on its way.
     private static let arrived: CGFloat = 80
-    /// How long the map of the strip stays after a scroll, in seconds.
-    private static let previewStays: TimeInterval = 0.8
 
     private enum Phase { case waiting, covering, gliding, landing }
 
@@ -65,8 +63,6 @@ final class StripScroller {
         /// Fingers caught a glide on its way: the rest it was heading to, and where the pictures stood when they were caught.
         var heading: CGFloat?
         var caughtAt: CGFloat = 0
-        /// Asked for by a shortcut that moves the focus: the map of the strip is not shown, the zone shows itself where it lands.
-        var quiet = false
     }
 
     /// Calls `tick` on every frame until it returns false.
@@ -80,7 +76,6 @@ final class StripScroller {
     private let mover: WindowMover
     private let snapshots: WindowSnapshotting
     private let stage: ScrollStaging
-    private let preview: ScrollPreviewing
     private let metronome: Metronome
     private let now: () -> TimeInterval
     private weak var refresher: ZoneRefreshing?
@@ -99,8 +94,6 @@ final class StripScroller {
     private var queued: [(edge: ScreenEdge, screen: ScreenInfo)] = []
     private static let mostQueued = 3
     private var ticking = false
-    /// The next scroll that starts is a quiet one (see `Scrolling.quiet`).
-    private var quietNext = false
     private var count = 0
     private var isRunning = false
     /// The latest photograph of each window, with when it was taken.
@@ -109,7 +102,7 @@ final class StripScroller {
     /// `isBusy`: something else holds the windows (Stage Manager, Mission Control): no scrolling then.
     init(screens: ScreenProviding, planner: ZonePlanner, viewport: StripViewport,
          settings: AppSettings, coordinator: StackCoordinator, mover: WindowMover, snapshots: WindowSnapshotting,
-         stage: ScrollStaging, preview: ScrollPreviewing, metronome: @escaping Metronome, refresher: ZoneRefreshing,
+         stage: ScrollStaging, metronome: @escaping Metronome, refresher: ZoneRefreshing,
          reduceMotion: @escaping () -> Bool, isBusy: @escaping () -> Bool,
          now: @escaping () -> TimeInterval = { CFAbsoluteTimeGetCurrent() }) {
         self.screens = screens
@@ -120,7 +113,6 @@ final class StripScroller {
         self.mover = mover
         self.snapshots = snapshots
         self.stage = stage
-        self.preview = preview
         self.metronome = metronome
         self.refresher = refresher
         self.reduceMotion = reduceMotion
@@ -204,21 +196,24 @@ final class StripScroller {
         var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
         current.led = led
-        current.quiet = quietNext
-        quietNext = false
         current.origin = offset
         // The fingers cannot take the layout past its first and its last rest: nothing of the ends gives way, and going back is followed at once.
         if led { current.gesture.limit(to: offset - geometry.range.upperBound ... offset - geometry.range.lowerBound) }
         let fronts = current.held.filter(\.isFront)
-        guard !reduceMotion(), !fronts.isEmpty else {
+        guard !reduceMotion() else {
             guard !led else { return false }   // nothing to show the fingers' work with: the caller steps instead
             scrolling = current
             land(current, at: target)
             return true
         }
+        // No window in any zone of the screen: nothing to photograph or to park. The frame of the island still glides
+        // (or follow the fingers), and the layout goes there when they are done.
+        guard !fronts.isEmpty else {
+            beginGliding(current)
+            return true
+        }
         for front in fronts { current.pictures[front.ref.id] = keptPicture(of: front) }
         scrolling = current
-        showPreview(current)
         let id = current.id
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.giveUpAfter) { [weak self] in self?.giveUp(id) }
         // Photographing seven windows while the pictures glide takes the machine's time and makes the glide stutter, and the new
@@ -237,7 +232,7 @@ final class StripScroller {
     /// it, however many areas lie between. A scroll that runs when this is asked is followed by this one. False when no screen has
     /// the zone out of sight, or the windows are not free to be moved.
     @discardableResult
-    func reveal(zone id: UUID, quiet: Bool = false, standsAt: ((CGRect) -> Void)? = nil) -> Bool {
+    func reveal(zone id: UUID, standsAt: ((CGRect) -> Void)? = nil) -> Bool {
         guard scrolling == nil else {
             revealing = id
             return false
@@ -254,8 +249,6 @@ final class StripScroller {
             let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
             let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
             guard let target = (whole ?? shown.first)?.0 else { return false }
-            quietNext = quiet
-            defer { quietNext = false }
             let started = scroll(toward: edge, on: screen, to: target)
             // Where the zone will stand when the scroll is over, told as the scroll starts.
             if started, let rect = planner.rect(of: id, at: target, on: screen, among: all) { standsAt?(rect) }
@@ -266,7 +259,6 @@ final class StripScroller {
 
     /// A scroll has come to rest: the zone a focus change asked for is brought on, if it is not in view yet.
     private func rested() {
-        preview.hide(after: Self.previewStays)   // a scroll that starts at once shows it again
         if let id = revealing {
             revealing = nil
             reveal(zone: id)
@@ -298,12 +290,6 @@ final class StripScroller {
         }
         scrolling = current
         return true
-    }
-
-    /// The map of the strip shows where the screen is, to the pictures' own frame.
-    private func showPreview(_ current: Scrolling) {
-        guard !current.quiet else { return }
-        preview.show(strip: current.geometry.strip, offset: Double(current.shown / current.geometry.screen.width), on: current.screen)
     }
 
     // MARK: Pictures
@@ -380,10 +366,16 @@ final class StripScroller {
 
     /// The pictures are on screen: the real windows wait at the display's edge, and the pictures glide on to the target.
     private func covered(_ id: Int) {
-        guard var current = scrolling, current.id == id, current.phase == .covering else { return }
+        guard let current = scrolling, current.id == id, current.phase == .covering else { return }
         for held in current.held {
             mover.move(held.ref, to: Parking.frame(for: held.rect, on: current.screen.cocoaFrame, side: current.side).origin)
         }
+        beginGliding(current)
+    }
+
+    /// The layout glides from where it stands to the target, or follows the fingers that lead it. The pictures, when there are any, are on the stage.
+    private func beginGliding(_ started: Scrolling) {
+        var current = started
         coordinator.isScrolling = true
         refresher?.refreshZones()   // the pills go away
         current.phase = .gliding
@@ -410,7 +402,8 @@ final class StripScroller {
     // MARK: Led by the fingers
 
     /// Two fingers came down: the layout of the screen under the pointer follows them, with everything beyond its edges, until they
-    /// lift. False when this cannot be done (a scroll runs, nothing to scroll, motion is reduced): the caller steps on lifting.
+    /// lift. False when this cannot be done (a scroll runs, nothing to scroll, motion is reduced): the caller steps on lifting. A screen with no
+    /// window is followed too: the frame of the island and the map of the strip show the fingers' work.
     @discardableResult
     func beginLed() -> Bool {
         revealing = nil
@@ -467,7 +460,6 @@ final class StripScroller {
         coordinator.isScrolling = true
         refresher?.refreshZones()   // the pills go away
         scrolling = next
-        showPreview(next)
         if led { followFingers() }
         return true
     }
@@ -496,7 +488,6 @@ final class StripScroller {
         current.shown = ledPosition(current)
         scrolling = current
         stage.follow(shift: current.shift)
-        showPreview(current)
         onFollow?(current.screen, current.shown)
         if current.released { glideOn() }
     }
@@ -541,7 +532,6 @@ final class StripScroller {
         current.shown = current.glideFrom + (current.glideTo - current.glideFrom) * CGFloat(eased)
         scrolling = current
         stage.follow(shift: current.shift)
-        showPreview(current)
         guard progress >= 1 else { return true }
         ticking = false
         land(current, at: current.glideTo)
@@ -556,7 +546,6 @@ final class StripScroller {
         guard let now = scrolling, now.id == current.id else { return }
         scrolling?.phase = .landing
         scrolling?.staged = current.phase == .gliding
-        if !current.quiet { preview.show(strip: current.geometry.strip, offset: Double(offset / current.geometry.screen.width), on: current.screen) }
         viewport.set(offset, for: current.screen.key)
         let plan = planner.plan(on: screens.screens())
         coordinator.showFocusFrame(in: plan)   // the zone shows at once, while the pictures still cover the screen
