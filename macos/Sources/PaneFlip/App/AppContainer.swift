@@ -181,13 +181,6 @@ final class AppContainer {
         }
         let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        isOn: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers })
-        let mouseSwipes: ScrollSwitchListening = MouseButtonSwipes(
-            gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-            canBegin: { [settings, coordinator, screens, editor] in
-                let v = settings.values
-                return v.placementEnabled && v.stackingEnabled && v.mouseButtonSwipe && !editor.isShown && coordinator.canScrubWindows(at: screens.pointerAX)
-                    && !missionControl()
-            })
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
@@ -219,7 +212,6 @@ final class AppContainer {
             scroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
-            mouseSwipes.start(onEvent: scrollSwitchHandler.handle)
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

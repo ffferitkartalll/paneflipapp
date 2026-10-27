@@ -157,7 +157,6 @@ final class FloatingZoneCoordinatorTests: XCTestCase {
 
     func testAFloatingZoneNeverStacks() {
         coordinator.snap(.fake(4), into: floating)
-        XCTAssertFalse(coordinator.canScrubWindows(at: CGPoint(x: 500, y: 400)))
         XCTAssertFalse(coordinator.beginWindowScrub(in: coordinator.stacks[floating]!))
     }
 
