@@ -49,6 +49,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private let planner: ZonePlanner
     private let viewport: StripViewport
     private let iconFont: IconFont
+    private let memory: StackMemory
+    private let apps: AppCatalog
+    private let openApp: (String) -> Void
     private var glyphs: [String: NSImage] = [:]
     private var glyphsRevision = 0
     private var entries: [String: Entry] = [:]
@@ -62,8 +65,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private var dragging = false
     private var followed: UUID?
 
-    init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont) {
+    init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
+         memory: StackMemory, apps: AppCatalog, openApp: @escaping (String) -> Void) {
         self.iconFont = iconFont
+        self.memory = memory
+        self.apps = apps
+        self.openApp = openApp
         self.screensNow = screensNow
         self.planner = planner
         self.viewport = viewport
@@ -336,6 +343,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// grows to hold it; on the same zone again, the row closes and the island shrinks back.
     private func click(at point: CGPoint) {
         for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
+            if selectWindow(at: point, in: entry) { continue }
             guard let zone = cell(at: point, in: entry) else { continue }
             coordinator.focus(zone: zone)
             followFocus()   // the highlight goes to the zone at once
@@ -351,6 +359,25 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             }
             placeShield(of: entry)
         }
+    }
+
+    /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
+    /// True when the click was on the row.
+    private func selectWindow(at point: CGPoint, in entry: Entry) -> Bool {
+        let model = entry.model, frame = islandFrame(of: entry, open: true), size = model.windowsFrame
+        guard let zone = model.windowsZone, size.width > 0 else { return false }
+        let top = model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap, fromTop = frame.maxY - point.y
+        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.glyph.size.width * model.openZoom / 2 else { return false }
+        let index = Int(((model.cardsAt ?? 0) + (point.x - frame.midX) / size.width).rounded())
+        guard model.windows.indices.contains(index), let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return true }
+        let card = model.windows[index]
+        if let id = card.windowID {
+            if card.isActive { coordinator.focus(zone: zone) } else { coordinator.slideSelect(id, in: stack) }
+            followFocus()
+        } else {
+            openApp(card.bundleID)
+        }
+        return true
     }
 
     /// The windows of the open row: as they are now (one that came, went or came to the front is shown), or, if the zone is gone, no row.
@@ -384,17 +411,43 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
 
     /// The picture of an app is made once (the font gives a new image every time, and the rows are refreshed several times a second); made again when a brand glyph arrives.
     private func glyph(of tab: ZoneStack.Tab) -> NSImage {
+        glyph(bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon)
+    }
+
+    private func glyph(bundleID: String, appName: String, icon: NSImage?) -> NSImage {
         if glyphsRevision != iconFont.revision { glyphs = [:]; glyphsRevision = iconFont.revision }
-        let key = tab.bundleID.isEmpty ? tab.appName : tab.bundleID
+        let key = bundleID.isEmpty ? appName : bundleID
         if let known = glyphs[key] { return known }
-        let made = iconFont.image(bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
+        let made = iconFont.image(bundleID: bundleID, appName: appName, icon: icon ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
         glyphs[key] = made
         return made
     }
 
+    /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place.
     private func windows(of zone: UUID) -> [IslandWindow] {
         guard let stack = coordinator.stacks[zone] else { return [] }
-        return stack.tabs.map { IslandWindow(id: $0.id, name: $0.displayName.isEmpty ? $0.appName : $0.displayName, glyph: glyph(of: $0), glyphRevision: iconFont.revision, isActive: $0.id == stack.activeID) }
+        let tabs = Dictionary(stack.tabs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let openApps = Set(stack.tabs.map(\.bundleID))
+        let slots = memory.slots(inZones: [zone])
+        let running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
+        var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
+        func card(_ tab: ZoneStack.Tab) -> IslandWindow {
+            IslandWindow(windowID: tab.id, bundleID: tab.bundleID, name: tab.displayName.isEmpty ? tab.appName : tab.displayName, glyph: glyph(of: tab),
+                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID)
+        }
+        for slot in slots {
+            if let id = slot.windowID, let tab = tabs[id] {
+                cards.append(card(tab))
+                shown.insert(id)
+            } else if !openApps.contains(slot.bundleID), closed.insert(slot.bundleID).inserted {
+                let name = apps.name(bundleID: slot.bundleID) ?? slot.bundleID
+                // An app that is not running is closed, whatever became of its last window.
+                let absence = running.contains(slot.bundleID) ? coordinator.absences[slot.bundleID] ?? .closed : .closed
+                cards.append(IslandWindow(windowID: nil, bundleID: slot.bundleID, name: name, glyph: glyph(bundleID: slot.bundleID, appName: name, icon: apps.icon(bundleID: slot.bundleID)),
+                                          glyphRevision: iconFont.revision, absence: absence, isActive: false))
+            }
+        }
+        return cards + stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
     }
 
     private func focused(in entry: Entry) -> UUID? { coordinator.focusedZoneID.flatMap { entry.zones.contains($0) ? $0 : nil } }

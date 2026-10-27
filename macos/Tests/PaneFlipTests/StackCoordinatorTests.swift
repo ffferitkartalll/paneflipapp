@@ -166,6 +166,25 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(asked, [first, second], "the second press goes on from the zone the first one asked for")
     }
 
+    func testAClickOnAZoneBeyondTheEdgeAsksTheLayoutToBringItIntoView() {
+        let here = UUID(), beyond = UUID()
+        coordinator.apply(plan: [here: PlannedZone(rect: CGRect(x: 0, y: 0, width: 1000, height: 800)),
+                                 beyond: PlannedZone(rect: CGRect(x: 1000, y: 0, width: 1000, height: 800), frame: CGRect(x: 999, y: 0, width: 1000, height: 800), isParked: true)])
+        coordinator.snap(.fake(1), into: here)
+        coordinator.snap(.fake(2), into: beyond)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var asked: [UUID] = []
+        var flashed: [CGRect] = []
+        coordinator.flashZone = { flashed.append($0) }
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(CGRect(x: 0, y: 0, width: 1000, height: 800)) }
+
+        coordinator.focus(zone: beyond)
+        XCTAssertEqual(asked, [beyond])
+        XCTAssertTrue(flashed.isEmpty, "a click on the island shows no frame")
+        XCTAssertEqual(coordinator.focusedZoneID, beyond, "the highlight does not wait for the scroll")
+    }
+
     func testGoingLeftOfTwoZonesOnTopOfEachOtherTakesTheOneThatFollowsInTheOrderOfTheZones() {
         // 1 / 2 | 3 | 4 / 5 | +1 : the order of the zones is 1, 2, 3, 4, 5, +1.
         let ids = (0 ..< 6).map { _ in UUID() }

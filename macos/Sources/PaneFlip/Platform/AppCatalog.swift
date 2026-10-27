@@ -9,6 +9,8 @@ protocol AppCatalog {
     func regularApps(withBundleIDs bundleIDs: Set<String>) -> [AppInfo]
     func icon(pid: pid_t) -> NSImage?
     var frontmostPID: pid_t? { get }
+    /// The app was hidden (Command+H).
+    func isHidden(pid: pid_t) -> Bool
     /// The name and the icon of an installed app, running or not.
     func name(bundleID: String) -> String?
     func icon(bundleID: String) -> NSImage?

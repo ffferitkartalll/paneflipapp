@@ -17,6 +17,8 @@ final class WorkspaceAppCatalog: AppCatalog {
 
     var frontmostPID: pid_t? { NSWorkspace.shared.frontmostApplication?.processIdentifier }
 
+    func isHidden(pid: pid_t) -> Bool { NSRunningApplication(processIdentifier: pid)?.isHidden ?? false }
+
     func icon(pid: pid_t) -> NSImage? {
         NSRunningApplication(processIdentifier: pid)?.icon
     }

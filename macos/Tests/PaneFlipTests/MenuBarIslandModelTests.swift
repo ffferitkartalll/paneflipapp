@@ -34,8 +34,8 @@ final class MenuBarIslandModelTests: XCTestCase {
     func testAChosenZoneAddsTheGapTheFrameAndTheTitleToTheHeight() {
         let model = model()
         choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
-        XCTAssertEqual(model.windowsHeight, 40 + 4 + 16)
-        XCTAssertEqual(model.openSize.height, 24 + 80 + 12 + 60 + 24, "the gap is half the height of the menu bar")
+        XCTAssertEqual(model.windowsHeight, 40 + 12 + 16)
+        XCTAssertEqual(model.openSize.height, 24 + 80 + 12 + 68 + 12, "the gaps are half the height of the menu bar, the title as far from the frame as from the lower edge")
         XCTAssertEqual(model.openSize.width, 32 * 5 + 48, "the frame is not wider than the picture")
     }
 
