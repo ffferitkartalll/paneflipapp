@@ -229,26 +229,37 @@ final class StripScroller {
     }
 
     /// The focus went to a window in a zone beyond the screen's edge: scrolls straight to the nearest rest position that shows
-    /// it, however many areas lie between. A scroll that runs when this is asked is followed by this one. False when no screen has
+    /// it, however many areas lie between. The focus went to a zone of the screen itself while the layout is scrolled away from it: scrolls back, so that
+    /// no zone beyond the edge is in view. A scroll that runs when this is asked is followed by this one. False when no screen has
     /// the zone out of sight, or the windows are not free to be moved.
     @discardableResult
     func reveal(zone id: UUID, standsAt: ((CGRect) -> Void)? = nil) -> Bool {
         if let current = scrolling {
             // Presses of the shortcut that follow quickly go straight on: the scroll that runs is given a new aim, the rest that shows the zone, instead of the
             // press waiting for the landing and starting a scroll of its own after it.
-            guard current.phase != .landing, let aim = rest(showing: id, from: current.target, on: current.screen, geometry: current.geometry) else {
-                revealing = id
-                return false
+            var aim = rest(showing: id, from: current.target, on: current.screen, geometry: current.geometry)
+            // A scroll that lands is taken over, as a press of the scroll shortcut does: the zone is not in view where it comes to rest.
+            if current.phase == .landing, aim != nil, !takeOverLanding(led: false) { aim = nil }
+            if let aim {
+                aimAt(aim.rest)
+                startGliding()
             }
-            aimAt(aim.rest)
-            if let rect = planner.rect(of: id, at: aim.rest, on: current.screen, among: screens.screens()) { standsAt?(rect) }
-            return true
+            // The zone stands in view at the rest the scroll heads for (the one it was given, or the one it already has): it tells where, at once. A scroll that
+            // lands has nothing to wait for: a zone in view is brought forward at once.
+            let target = aim?.rest ?? current.target
+            if !current.led, aim != nil || current.phase != .landing && current.geometry.zones(offset: target).first(where: { $0.id == id })?.isOnScreen == true,
+               let rect = planner.rect(of: id, at: target, on: current.screen, among: screens.screens()) {
+                standsAt?(rect)
+                return true
+            }
+            revealing = id
+            return false
         }
         let all = screens.screens()
         for screen in all {
             guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil else { continue }
             let offset = geometry.clamped(viewport.offset(for: screen.key))
-            guard geometry.zones(offset: offset).first(where: { $0.id == id }).map({ !$0.isOnScreen }) == true else { continue }
+            guard geometry.zones(offset: offset).contains(where: { $0.id == id }) else { continue }
             guard let aim = rest(showing: id, from: offset, on: screen, geometry: geometry) else { return false }
             let started = scroll(toward: aim.edge, on: screen, to: aim.rest)
             // Where the zone will stand when the scroll is over, told as the scroll starts.
@@ -261,6 +272,7 @@ final class StripScroller {
     /// The nearest rest position beyond `offset` that shows the zone (all of it, else any of it), and the edge it lies toward; nil when the zone is in view at
     /// `offset` or no rest shows it.
     private func rest(showing id: UUID, from offset: CGFloat, on screen: ScreenInfo, geometry: StripGeometry) -> (edge: ScreenEdge, rest: CGFloat)? {
+        if let home = homeRest(of: id, from: offset, geometry: geometry) { return (offset > home ? .left : .right, home) }
         guard let placed = geometry.zones(offset: offset).first(where: { $0.id == id }), !placed.isOnScreen else { return nil }
         let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
         let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
@@ -268,6 +280,12 @@ final class StripScroller {
         let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
         let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
         return (whole ?? shown.first).map { (edge, $0.0) }
+    }
+
+    /// The rest position of the screen itself (no zone beyond its edges in view), when `id` is a zone of the screen and the layout is scrolled away from it.
+    private func homeRest(of id: UUID, from offset: CGFloat, geometry: StripGeometry) -> CGFloat? {
+        guard abs(offset) > 0.5, geometry.zones(offset: 0).first(where: { $0.id == id })?.isOnScreen == true else { return nil }
+        return 0
     }
 
     /// The scroll that runs heads for another rest position.

@@ -41,7 +41,8 @@ extension MenuBarIslandModel {
     /// The frame of the chosen zone's windows under the picture: as large as that zone is drawn in the open picture (never wider than it), and the line
     /// with the title of the window in front under it. The gap between the picture and the frame.
     var windowsGap: CGFloat { barHeight / 2 }
-    private var titleHeight: CGFloat { 16 }
+    /// The title under a card, and the line under that.
+    var captionHeight: CGFloat { 30 }
     private var titleGap: CGFloat { windowsGap }   // the title stands as far from the frame as from the island's lower edge
 
     var windowsFrame: CGSize {
@@ -60,14 +61,14 @@ extension MenuBarIslandModel {
     }
 
     /// The height of what stands under the picture: none while no zone is chosen.
-    var windowsHeight: CGFloat { windowsZone == nil ? 0 : windowsFrame.height + titleGap + titleHeight }
+    var windowsHeight: CGFloat { windowsZone == nil ? 0 : windowsFrame.height + titleGap + captionHeight }
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize { CGSize(width: glyph.size.width * openZoom + 2 * barHeight, height: openHeight(windows: windowsHeight)) }
 
     /// The tallest the open island gets, with the largest zone chosen: the panel it grows in is as tall as that.
     var tallestOpenHeight: CGFloat {
-        openHeight(windows: (glyph.cells.map(\.rect.height).max() ?? 0) * openZoom + titleGap + titleHeight)
+        openHeight(windows: (glyph.cells.map(\.rect.height).max() ?? 0) * openZoom + titleGap + captionHeight)
     }
 
     private func openHeight(windows rowHeight: CGFloat) -> CGFloat { barHeight + glyph.size.height * openZoom + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
