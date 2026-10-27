@@ -45,6 +45,18 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.bundleID), ["a", "b", "c"], "nowhere to go: nothing changes")
     }
 
+    func testASlotCanBePlacedBesideAnotherOneFromEitherSide() {
+        for (i, j, after, expected) in [(3, 1, false, ["a", "d", "b", "c"]), (3, 1, true, ["a", "b", "d", "c"]),
+                                        (0, 2, false, ["b", "a", "c", "d"]), (0, 2, true, ["b", "c", "a", "d"]),
+                                        (3, 3, true, ["a", "b", "c", "d"])] {
+            let memory = StackMemory(store: MemoryStore())
+            let zone = UUID()
+            for b in ["a", "b", "c", "d"] { _ = memory.remember(zoneID: zone, bundleID: b, title: "") }
+            memory.moveSlot(i, toPlaceOf: StackMemory.place(of: i, beside: j, after: after))
+            XCTAssertEqual(memory.records.map(\.bundleID), expected, "slot \(i) \(after ? "after" : "before") slot \(j)")
+        }
+    }
+
     func testUnbindKeepsTheSlotForgetRemovesIt() {
         let memory = StackMemory(store: MemoryStore())
         let zone = UUID()

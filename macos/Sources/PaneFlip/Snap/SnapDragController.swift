@@ -84,7 +84,7 @@ final class SnapDragController {
         // On the island in the menu bar: dropped on one of its zones the window goes there; anywhere else on it nothing happens.
         let pointer = NSEvent.mouseLocation
         if island.isOver(pointer) {
-            if let zone = island.zone(at: pointer) { coordinator.snap(c.ref, into: zone) }
+            island.drop(c.ref, at: pointer)
             return
         }
         if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX, forDrop: true) {
