@@ -3,10 +3,10 @@ import QuartzCore
 
 /// A transparent panel over each screen, always on screen and click-through. A slide only adds a layer to it, cut
 /// off at the zone's edge and rounded like the windows. The panel itself never appears or disappears while a slide
-/// runs: a window that turns up under the pill while its selection moves disturbs the pill's glass for a few frames.
+/// runs: a window that turns up while the island's front card moves disturbs the island for a few frames.
 /// The animation runs in the render server, not in the app: it does not stutter when the app is busy.
 final class PanelSlideStage: SlideStaging {
-    /// A spring, like the pill's own thumb: it starts quickly and lands softly, without the long standstill at the end
+    /// A spring, like the front card of the island: it starts quickly and lands softly, without the long standstill at the end
     /// of an ease-in-out curve. Critically damped: no overshoot.
     static let stiffness = SlideSpring.stiffness
     static let damping = SlideSpring.damping
@@ -28,7 +28,7 @@ final class PanelSlideStage: SlideStaging {
     }
 
     /// Puts the panels on screen: done once, a moment after the app has started and while nothing else is being set up,
-    /// not when a pill appears (a window made at that moment can upset the pill's toolbar while it lays itself out).
+    /// not when the island opens (a window made at that moment can upset it while it lays itself out).
     func prepare() { NSScreen.screens.forEach { _ = panels.panel(for: $0) } }
 
     /// The slide that runs: the clip layer with its pictures, and where each of them comes to rest (the left edge, in the zone).

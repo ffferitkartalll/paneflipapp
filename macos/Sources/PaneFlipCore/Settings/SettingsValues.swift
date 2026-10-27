@@ -2,10 +2,8 @@ import Foundation
 
 /// The persisted shape of the settings.
 public struct SettingsValues: Equatable {
-    /// Master switch: place apps into zones at all (snapping, remembering, restoring, the pill).
+    /// Master switch: place apps into zones at all (snapping, remembering, restoring, the island).
     public var placementEnabled = true
-    /// Several apps per zone, switched with the pill. When off, a zone holds one app and a new one replaces it.
-    public var stackingEnabled = true
     /// Space between zones in points; not applied to screen edges.
     public var gap = 4.0
     /// A window dragged out of its zone goes back to the size it had before the zone took it in.
@@ -14,22 +12,10 @@ public struct SettingsValues: Equatable {
     public var edgeMargin = 0.0
     /// Smallest width/height a zone may have, in points.
     public var minZoneSize = 240.0
-    /// Show the stack pill at all. When off, windows are still stacked and switched with the keys and the trackpad.
-    public var pillEnabled = true
-    /// What the stack pill shows for each window.
-    public var pillContent = PillContent.icon
-    /// The edge of its zone the pill sits along.
-    public var pillPosition = PillPosition.top
-    /// Show the pill for a zone that holds a single window too (else it appears from two windows on).
-    public var pillForSingleWindow = false
-    /// Keep the pill in view instead of showing it only while the pointer is over it or the stack changed.
-    public var pillAlwaysVisible = false
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).
     public var fetchBrandIcons = true
     /// Held while dragging a window to highlight zones and snap into one.
     public var snapTrigger = SnapTrigger.leftCommand
-    /// The modifier key that, tapped twice, hides the pill under the pointer.
-    public var hidePillKey = SnapTrigger.leftCommand
     /// Held while scrolling over a zone, with the mouse wheel or two fingers, to move through its windows.
     public var windowScrollKeys = SnapTrigger.windowScroll
     /// What the trackpad moves through the windows and the zones beyond the screen with.

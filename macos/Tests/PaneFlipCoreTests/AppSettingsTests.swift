@@ -24,14 +24,6 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertTrue(AppSettings(storage: Storage()).values.fetchBrandIcons)
     }
 
-    func testTheHideKeyDefaultsToLeftCommandAndPersists() {
-        let storage = Storage()
-        let settings = AppSettings(storage: storage)
-        XCTAssertEqual(settings.values.hidePillKey, .leftCommand)
-        settings.values.hidePillKey = SnapTrigger(keys: [.init(code: 61, name: "Right Option")])
-        XCTAssertEqual(storage.saved?.hidePillKey.keys.first?.code, 61)
-    }
-
     func testTheLanguageFollowsTheSystemUnlessChosen() {
         XCTAssertEqual(AppSettings(storage: Storage()).values.language, SettingsValues.systemLanguage)
     }
@@ -46,10 +38,6 @@ final class AppSettingsTests: XCTestCase {
         settings.values.language = SettingsValues.systemLanguage
         XCTAssertEqual(settings.launchLanguage, "en")
         XCTAssertNotEqual(settings.values.language, settings.launchLanguage)
-    }
-
-    func testThePillIsNotShownForASingleWindowUnlessAsked() {
-        XCTAssertFalse(AppSettings(storage: Storage()).values.pillForSingleWindow)
     }
 
     func testScrollingThroughTheWindowsNeedsLeftOptionAndLeftControlUnlessChanged() {
@@ -72,17 +60,6 @@ final class AppSettingsTests: XCTestCase {
         old.trackpadSpeed = 40
         storage.saved = old
         XCTAssertEqual(AppSettings(storage: storage).values.trackpadSpeed, 8)
-    }
-
-    func testThePillSitsAlongTheTopUnlessAsked() {
-        let storage = Storage()
-        let settings = AppSettings(storage: storage)
-        XCTAssertEqual(settings.values.pillPosition, .top)
-        settings.values.pillPosition = .bottom
-        XCTAssertEqual(storage.saved?.pillPosition, .bottom)
-        XCTAssertEqual(settings.values.trackpadMethod, .keysAndTwoFingers, "the keys and two fingers until the user asks for three and four")
-        settings.values.trackpadMethod = .threeAndFourFingers
-        XCTAssertEqual(storage.saved?.trackpadMethod, .threeAndFourFingers)
     }
 
     func testStoredValuesFromOlderLimitsAreBroughtIntoRange() {

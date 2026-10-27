@@ -8,7 +8,7 @@ final class ZoneCarousel {
     private let stage: SlideStaging
     private let reduceMotion: () -> Bool
     /// Runs the window changes of a slide. Raising a window waits for the other app to answer, which can take a
-    /// while; on the main thread it would hold up everything that moves with the slide, the pill included.
+    /// while; on the main thread it would hold up everything that moves with the slide, the island included.
     private let background: (@escaping () -> Void) -> Void
 
     /// True from the click until the slide has ended; a click in between is ignored.
@@ -16,7 +16,7 @@ final class ZoneCarousel {
     /// Called whenever a choice that had to wait may be tried again: a slide is over, one can be carried on, or a picture for the
     /// carrying on has been taken. The state of the slide is settled before it is called.
     var onFree: (() -> Void)?
-    /// A slide that has not ended after this long is given up on, so a capture that never answers cannot leave the pill
+    /// A slide that has not ended after this long is given up on, so a capture that never answers cannot leave the island
     /// dead for the rest of the session.
     private let giveUpAfter: TimeInterval
     private var slideCount = 0
@@ -40,7 +40,7 @@ final class ZoneCarousel {
         self.background = background
     }
 
-    /// A pill is about to be used: get the pictures' machinery warm.
+    /// A card of the island is about to be clicked: get the pictures' machinery warm.
     func prepare() { snapshots.prepare() }
 
     /// Slides `entering` in beside `leaving`. `swap` brings the real window forward (window calls only, it may run

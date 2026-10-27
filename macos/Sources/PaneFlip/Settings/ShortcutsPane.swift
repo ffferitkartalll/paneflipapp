@@ -7,7 +7,7 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, hidePill, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
+    private enum Shortcut { case snap, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
@@ -22,18 +22,6 @@ struct ShortcutsPane: View {
             }
             .disabled(!settings.values.placementEnabled)
 
-            Section("Pill") {
-                row(.hidePill, title: "Double-tap to hide the pill",
-                    detail: "Hides the pill under the pointer until the pointer moves away. Works with one modifier key: Shift, Control, Option or Command.",
-                    value: settings.values.hidePillKey, standard: .leftCommand) { trigger in
-                    // A double tap is only seen for a single modifier key.
-                    if trigger.keys.count == 1, let code = trigger.keys.first?.code, SnapTrigger.modifierMasks[code] != nil {
-                        settings.values.hidePillKey = trigger
-                    }
-                }
-            }
-            .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
-
             Section("Windows in a zone") {
                 chordRow(.nextWindow, title: "Next window", path: \.nextWindowShortcut, standard: .nextWindow)
                 chordRow(.previousWindow, title: "Previous window", path: \.previousWindowShortcut, standard: .previousWindow)
@@ -41,7 +29,7 @@ struct ShortcutsPane: View {
                     detail: "Hold these keys and scroll over a zone with the mouse wheel to move through its windows. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }
             }
-            .disabled(!settings.values.placementEnabled || !settings.values.stackingEnabled)
+            .disabled(!settings.values.placementEnabled)
 
             Section("Moving between zones") {
                 chordRow(.zoneUp, title: "Zone above", path: \.zoneUpShortcut, standard: .zoneUp)

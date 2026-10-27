@@ -101,11 +101,11 @@ final class IconFont {
                          hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
     }
 
-    /// The picture the pill draws for an app, as an image `size` points wide: the very bitmap of the font's glyph,
-    /// so the settings and the pill cannot differ. Made (and added to the font) when it does not exist yet.
+    /// The picture the island draws for an app, as an image `size` points wide: the very bitmap of the font's glyph,
+    /// so the settings and the island cannot differ. Made (and added to the font) when it does not exist yet.
     func image(bundleID: String, appName: String, icon: NSImage, size: CGFloat) -> NSImage {
         let key = bundleID.isEmpty ? appName : bundleID
-        // Only the bitmap: registering the glyph rebuilds the whole font on the main thread, which the pill does when it needs the character.
+        // Only the bitmap: registering the glyph rebuilds the whole font on the main thread, which the island does when it needs the character.
         if images[key] == nil { images[key] = rendered(bundleID: bundleID, appName: appName, icon: icon, size: Self.bitmapSize).representation(using: .png, properties: [:])! }
         let image = images[key].flatMap(NSImage.init(data:)) ?? NSImage()
         image.size = NSSize(width: size, height: size)

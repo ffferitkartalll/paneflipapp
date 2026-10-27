@@ -80,7 +80,7 @@ final class ZoneCarouselTests: XCTestCase {
         XCTAssertTrue(carousel.isSliding)
         let end = Date().addingTimeInterval(1)
         while carousel.isSliding && Date() < end { RunLoop.main.run(until: Date().addingTimeInterval(0.01)) }
-        XCTAssertFalse(carousel.isSliding, "the pill must not stay dead")
+        XCTAssertFalse(carousel.isSliding, "the island must not stay dead")
     }
 
     func testASlideStartedWhileOneRunsIsIgnored() {

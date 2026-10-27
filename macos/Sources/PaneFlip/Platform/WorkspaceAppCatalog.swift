@@ -23,7 +23,7 @@ final class WorkspaceAppCatalog: AppCatalog {
         NSRunningApplication(processIdentifier: pid)?.icon
     }
 
-    /// A running app is asked first, so a name or an icon is the very one the pill uses for it.
+    /// A running app is asked first, so a name or an icon is the very one the island uses for it.
     func name(bundleID: String) -> String? {
         if let running = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first?.localizedName {
             return running

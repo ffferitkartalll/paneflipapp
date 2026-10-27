@@ -24,11 +24,11 @@ final class StackCoordinator {
     private var originalSizes: [CGWindowID: CGSize] = [:]
     /// Called when the zone the focus goes to changed by a shortcut or a click, before the window has it: the island lights the zone at once.
     var onFocusMoved: (() -> Void)?
-    /// Called when a stack changed in a way the pill should announce (window added, tab switched).
+    /// Called when a stack changed in a way the island should show (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
     /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The island's frame follows them.
     var onWindowScrub: ((UUID, CGFloat) -> Void)?
-    /// Slides windows when the pill is clicked; without one the chosen window just comes to the front.
+    /// Slides windows when a card of the island is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
         didSet { carousel?.onFree = { [weak self] in
             self?.runWaiting()
@@ -55,7 +55,7 @@ final class StackCoordinator {
     /// Anything of ours is moving other apps' windows (a layout scroll or a zone's windows): periodic jobs that ask or list windows wait.
     var isMoving: Bool { isScrolling || windowScrub != nil || isSliding }
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
-    /// anything, and the pills are hidden.
+    /// anything, and the island follows.
     var isScrolling = false
     /// Whether PaneFlip itself has the focus (one of its own windows is in front): the window a swipe ends on is then given the focus.
     var holdsTheFocus: () -> Bool = { false }
@@ -168,10 +168,6 @@ final class StackCoordinator {
         }
         unsnap(window: ref.id)
         pulledOut.remove(ref.id)
-        // Without stacking a zone holds one app: the newcomer replaces whatever was there.
-        if !settings.values.stackingEnabled, let current = stacks[zoneID] {
-            for id in Array(current.refs.keys) { unsnap(window: id) }
-        }
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
         attach(ref, toSlot: slot, raise: true, glide: true)
     }
@@ -222,12 +218,12 @@ final class StackCoordinator {
         if raise { select(ref.id, in: stack) } else { onActivity?(stack.id) }
     }
 
-    /// A pill appeared: the next click will slide.
+    /// The island opened: the next click on a card will slide.
     func prepareSlides() { carousel?.prepare() }
 
-    /// A click on the pill: the chosen window slides in beside the one in front. Without a carousel, or when there
+    /// A click on a card of the island: the chosen window slides in beside the one in front. Without a carousel, or when there
     /// is nothing to slide past, it simply comes to the front.
-    /// `forward` (the new window comes in from the right) is the pill's order unless the caller knows better.
+    /// `forward` (the new window comes in from the right) is the order of the cards unless the caller knows better.
     /// False when a slide runs that cannot take the choice on yet (it goes the other way, or a picture for it is being taken): nothing
     /// has happened then.
     @discardableResult
@@ -240,7 +236,7 @@ final class StackCoordinator {
             select(id, in: stack)
             return true
         }
-        // The pill moves to the new window now, together with the slide, not once the slide is over.
+        // The island moves to the new window now, together with the slide, not once the slide is over.
         stack.activeID = id
         onActivity?(stack.id)
         let rect = stack.rect
@@ -295,7 +291,7 @@ final class StackCoordinator {
     }
 
     /// Control+Option+Right/Left: the zone of the window in focus moves on to its next window (the previous one when `reverse`), the way a
-    /// turn of the wheel over its pill does, and not past the first and the last. A window outside any zone, or a zone with one window,
+    /// turn of the wheel over its row of cards does, and not past the first and the last. A window outside any zone, or a zone with one window,
     /// does nothing.
     func cycleFocusedZone(reverse: Bool) {
         guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1, !stack.isFloating else { return }
@@ -431,7 +427,7 @@ final class StackCoordinator {
         return beginWindowScrub(in: stack)
     }
 
-    /// The same for a zone that is known (a pill that is scrolled over).
+    /// The same for a zone that is known (the row of cards that is scrolled over).
     @discardableResult
     func beginWindowScrub(in stack: ZoneStack) -> Bool {
         guard windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
@@ -470,7 +466,7 @@ final class StackCoordinator {
         }
     }
 
-    /// A turn of the wheel over a pill: the pictures of the zone's windows go `step` windows on (or back), from the one they are going to
+    /// A turn of the wheel over the row of cards: the pictures of the zone's windows go `step` windows on (or back), from the one they are going to
     /// if they are already on their way, so that turns follow one another as quickly as they come, in either direction. Without
     /// pictures to move (a slide that is not a swipe runs, motion is reduced) it is a step like those of the keys.
     func stepWindowScrub(in stack: ZoneStack, by step: Int) {
@@ -510,7 +506,7 @@ final class StackCoordinator {
             let staying = stack.refs[scrub.start]
             return carousel?.endScrub(shift: 0) { [windows, weak self] in if self?.holdsTheFocus() == true, let staying { windows.raise(staying) } } ?? ()
         }
-        // The pill moves to the chosen window as the pictures settle.
+        // The island moves to the chosen window as the pictures settle.
         stack.activeID = entering.id
         onActivity?(stack.id)
         guard !scrub.failed else { return select(entering.id, in: stack) }
@@ -522,7 +518,7 @@ final class StackCoordinator {
     }
 
     /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point` (else the zone of the window in
-    /// focus) goes `step` windows on or back, the way a turn of the wheel over its pill does (`stepWindowScrub(in:by:)`).
+    /// focus) goes `step` windows on or back, the way a turn of the wheel over its row of cards does (`stepWindowScrub(in:by:)`).
     func stepWindowScrub(at point: CGPoint, by step: Int) {
         guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return }
         stepWindowScrub(in: stack, by: step)
@@ -542,7 +538,7 @@ final class StackCoordinator {
         onActivity?(stack.id)
     }
 
-    /// Makes the pill's selection the window that is really in front in the zone (restored windows are not raised,
+    /// Makes the island's front card the window that is really in front in the zone (restored windows are not raised,
     /// so the first one attached must not count as the active one).
     func followFrontmost(in stack: ZoneStack) {
         guard let front = windows.windowIDsFrontToBack().first(where: { stack.refs[$0] != nil }), stack.activeID != front else { return }
@@ -595,7 +591,7 @@ final class StackCoordinator {
     }
 
     /// Removes a window from the live stack only; the memory is the caller's business. Nothing is brought to the
-    /// front: the system decides what is revealed, and the pill's selection follows the focus.
+    /// front: the system decides what is revealed, and the island's front card follows the focus.
     func removeFromStack(window id: CGWindowID) {
         glide?.cancel(id)
         pictures?.forget(id)
@@ -606,7 +602,7 @@ final class StackCoordinator {
             stack.refreshNames()
             stack.mru.removeAll { $0 == id }
             guard stack.activeID == id else { continue }
-            // The pill shows the window that was in front before this one; the window itself is not raised.
+            // The island shows the window that was in front before this one; the window itself is not raised.
             stack.activeID = stack.mru.first { stack.refs[$0] != nil } ?? stack.tabs.last?.id
         }
     }
@@ -614,14 +610,6 @@ final class StackCoordinator {
     /// Placement switched off: let go of every window (the memory stays).
     func releaseAll() {
         for stack in stacks.values { for id in Array(stack.refs.keys) { release(window: id) } }
-    }
-
-    /// Stacking switched off: each zone keeps only its front window; the others wait until the zone is free.
-    func enforceSingleApp() {
-        for stack in stacks.values where stack.tabs.count > 1 {
-            let keep = stack.activeID ?? stack.tabs[0].id
-            for id in stack.tabs.map(\.id) where id != keep { release(window: id) }
-        }
     }
 
     // MARK: Keeping in step with the system

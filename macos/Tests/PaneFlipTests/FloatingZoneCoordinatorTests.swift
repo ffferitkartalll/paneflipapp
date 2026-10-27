@@ -136,7 +136,7 @@ final class FloatingZoneCoordinatorTests: XCTestCase {
         windows.focused = .fake(1)
         coordinator.followFocus()
         let middle = CGPoint(x: 500, y: 400)
-        XCTAssertEqual(coordinator.zoneID(at: middle), host, "scrolling and the pill over the middle belong to the zone below")
+        XCTAssertEqual(coordinator.zoneID(at: middle), host, "scrolling and the island over the middle belong to the zone below")
         XCTAssertEqual(coordinator.zoneID(at: middle, forDrop: true), floating)
         XCTAssertFalse(coordinator.visibleStacks.contains { $0.id == floating })
         XCTAssertTrue(coordinator.dropStacks.contains { $0.id == floating })

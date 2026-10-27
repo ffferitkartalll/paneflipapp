@@ -1,6 +1,6 @@
 import Foundation
 
-/// How stacked windows are labelled on the pill.
+/// How stacked windows are labelled in the island.
 public enum TabNaming {
     public struct Entry {
         public let appName: String

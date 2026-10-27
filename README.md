@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/banner.jpg" width="100%" alt="PaneFlip: zones for your Mac, stacked apps, one glass pill">
+  <img src="docs/banner.jpg" width="100%" alt="PaneFlip: zones for your Mac, stacked apps, one island in the menu bar">
 </p>
 
-<h3 align="center">Split your displays into zones. Drop apps into them.<br>Flip between a zone's apps with one glass pill.</h3>
+<h3 align="center">Split your displays into zones. Drop apps into them.<br>Flip between a zone's apps from the island in the menu bar.</h3>
 
 <p align="center">
   <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/ffferitkartalll/paneflipapp?color=4c1" alt="Latest release"></a>
@@ -22,7 +22,7 @@
 </p>
 
 PaneFlip is a native macOS menu-bar app (Swift, SwiftUI, Liquid Glass). It lays your screens out in zones that you draw,
-puts each app where it belongs, and lets several apps share one zone: a small glass pill over the zone switches between
+puts each app where it belongs, and lets several apps share one zone: the island in the menu bar switches between
 them. Your layouts and settings stay on your Mac, and the app is free and open source.
 
 ## Quick look
@@ -33,8 +33,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 
 1. **Snap.** Drag a window while you hold <kbd>⌘</kbd> (the left one): the zones light up. Let go over one and the window
    slides in and fills it. Apps you put in a zone are remembered, and come back to it when they reopen.
-2. **Stack and flip.** Put more apps in the same zone and they stack. Point at the zone and the glass pill appears:
-   click an app, scroll over the pill, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd> to flip. The next
+2. **Stack and flip.** Put more apps in the same zone and they stack. Point at the island in the menu bar and click the zone:
+   click an app in its row, scroll over the row, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd> to flip. The next
    window glides in beside the one it replaces.
 3. **Go beyond the screen.** A layout can go on past the edge of the display, as many zones as you like. Scroll with the
    wheel or two fingers over the island in the menu bar, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> / <kbd>→</kbd>, and the whole layout slides over.
@@ -55,10 +55,10 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
   menu bar, or on the trackpad, by your choice: four fingers, or two fingers with the keys held. The layout stops at every vertical line between zones, on the screen and beyond it, so each
   step brings the next zone in. A window that gets the focus there brings its zone into view by itself.
 
-**Stacks and the pill**
-- The pill shows the apps of a zone as icons, names or both, along the top or the bottom of the zone, always or only when
-  you point at it. Double-tap <kbd>⌘</kbd> to move it out of the way.
-- Choose which app opens in which zone, in what order the pill shows them, and open the ones you tick with one click, from
+**Stacks and the island**
+- The island's row shows the windows of a zone as cards, with the title of each under it. Click a card to bring its window
+  forward, or drag cards to put the windows in another order.
+- Choose which app opens in which zone, in what order the island shows them, and open the ones you tick with one click, from
   the layout or from the menu bar. Apps you never want in a zone go on the list of ignored apps.
 - A window dragged out of its zone glides back to the size it had before.
 
@@ -73,7 +73,6 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 | | Default | |
 |---|---|---|
 | Snap a window into a zone | hold <kbd>⌘</kbd> (left) while dragging | changeable |
-| Hide the pill under the pointer | double-tap <kbd>⌘</kbd> (left) | changeable |
 | Next / previous window of the zone | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
 | Scroll to the zones beyond the right / left edge | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
 
@@ -189,8 +188,7 @@ The app is an agent app (menu bar only, no Dock icon). The first launch asks for
 
 - **Not for the Mac App Store.** To move other apps' windows PaneFlip needs the Accessibility permission and runs
   without the App Sandbox, and it uses some undocumented system interfaces (private CoreGraphics Services calls
-  for desktops and the cursor, private AppKit selectors for the pill's look). A system update can change them; the
-  app then falls back to a plainer look instead of failing.
+  for desktops and the cursor). A system update can change them.
 - **Brand icons.** When an app has no system symbol, PaneFlip can fetch a one-colour brand icon from the
   [Simple Icons](https://simpleicons.org) set through the jsDelivr CDN (`Settings ▸ Stacking ▸ Fetch brand
   icons`, on by default; the names of the apps in your zones are sent to the host, nothing else). Trademarks and
@@ -226,7 +224,7 @@ platform's native UI and window APIs. Start from the platform's own README or `A
 ## Adding a platform
 
 Create a new top-level folder (`windows/`, `linux/`, …). Keep platform code inside it; do not share source files
-across platforms. Product behaviour that should stay identical (how zones, stacks and the pill behave) is the
+across platforms. Product behaviour that should stay identical (how zones, stacks and the island behave) is the
 reference in `macos/ARCHITECTURE.md` and the unit tests of `macos/Sources/PaneFlipCore`.
 
 ## License

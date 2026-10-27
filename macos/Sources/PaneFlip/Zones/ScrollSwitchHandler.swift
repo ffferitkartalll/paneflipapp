@@ -63,7 +63,7 @@ final class ScrollSwitchHandler {
             follows = false
         case .step(let aimed, let step):
             switch aimed {
-            // Over a zone with the keys held the wheel goes the other way round from the one over its pill: toward you is the previous window,
+            // Over a zone with the keys held the wheel goes the other way round from the one over the island's row of cards: toward you is the previous window,
             // away from you the next (the tap's step counts that way).
             case .windows: coordinator.stepWindowScrub(at: screens.pointerAX, by: step)
             case .zoneWindows(let zone): if let stack = coordinator.stacks[zone] { coordinator.stepWindowScrub(in: stack, by: step) }

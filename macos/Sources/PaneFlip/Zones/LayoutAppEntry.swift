@@ -16,7 +16,7 @@ struct LayoutAppEntry: Identifiable {
     let bundleID: String
     let name: String
     let icon: NSImage?
-    /// The open windows, in pill order.
+    /// The open windows, in the island's order.
     let windows: [LayoutWindowEntry]
 
     var id: String { "\(zoneID)/\(bundleID)" }

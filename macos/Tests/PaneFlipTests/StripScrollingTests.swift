@@ -490,8 +490,8 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertFalse(scroller.reveal(zone: screenZone), "back at the screen: nothing more")
     }
 
-    func testAParkedZoneHasNoPillAndTakesNoDrops() {
-        XCTAssertEqual(coordinator.visibleStacks.map(\.id), [screenZone], "the parked zone has no pill and takes no drops")
+    func testAParkedZoneHasNoIslandAndTakesNoDrops() {
+        XCTAssertEqual(coordinator.visibleStacks.map(\.id), [screenZone], "the parked zone has no cards and takes no drops")
         XCTAssertNotNil(coordinator.zoneID(at: CGPoint(x: 500, y: 250)))
         XCTAssertNil(coordinator.zoneID(at: CGPoint(x: 1100, y: 250)))
     }

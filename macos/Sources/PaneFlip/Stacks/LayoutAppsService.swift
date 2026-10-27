@@ -43,7 +43,7 @@ final class LayoutAppsService: LayoutAppsEditing {
         glyph(bundleID: bundleID, name: apps.name(bundleID: bundleID) ?? bundleID)
     }
 
-    /// The icon as the pill draws it: a one-colour glyph, which follows the text colour.
+    /// The icon as the island draws it: a one-colour glyph, which follows the text colour.
     private func glyph(bundleID: String, name: String) -> NSImage {
         let icon = apps.icon(bundleID: bundleID) ?? NSWorkspace.shared.icon(for: .applicationBundle)
         let image = iconFont.image(bundleID: bundleID, appName: name, icon: icon, size: 18)

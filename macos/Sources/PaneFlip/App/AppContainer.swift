@@ -83,21 +83,11 @@ final class AppContainer {
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
         let navigation = SettingsNavigation()
-        let pill = PillPresenter(coordinator: coordinator, settings: settings, screens: screens, iconFont: iconFont) { zone in
-            navigation.tab = .layouts
-            let layout = repository.screens.values.flatMap(\.layouts).first { $0.zoneIDs.contains(zone) }
-            navigation.ordering = layout.map { OrderingTarget(layoutID: $0.id, zoneID: zone) }
-            navigation.openSettings()
-        }
-        engine.add(presenter: pill)
         let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, iconFont: iconFont, settings: settings, windows: windows)
         let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) })
         engine.add(presenter: island)
-        coordinator.onActivity = { [weak pill, weak island] zone in
-            pill?.flash(zone: zone)
-            island?.windowsDidChange()
-        }
+        coordinator.onActivity = { [weak island] _ in island?.windowsDidChange() }
         coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
@@ -107,9 +97,6 @@ final class AppContainer {
         settings.onIgnoredAppsChanged = { [weak coordinator, weak engine] in
             coordinator?.releaseIgnoredApps()
             engine?.refreshZones()
-        }
-        settings.onStackingChanged = { [weak engine, weak settings] in
-            if let settings { engine?.stackingChanged(enabled: settings.values.stackingEnabled) }
         }
 
         self.settings = settings
@@ -153,14 +140,14 @@ final class AppContainer {
             guard let target = island.scrollTarget(at: NSEvent.mouseLocation) else { return nil }
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown,
-                  target == .strip ? v.overflowZonesEnabled : v.stackingEnabled else { return nil }
+                  target != .strip || v.overflowZonesEnabled else { return nil }
             // Asked last, only over the island: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
         }) { [settings, keys, coordinator, editor] in
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown else { return nil }
             let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
-            let windows = v.stackingEnabled && v.windowScrollKeys.isHeld(using: keys)
+            let windows = v.windowScrollKeys.isHeld(using: keys)
             // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
             if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return missionControl() ? nil : .strip }
             let target: ScrollSwitchTarget? = windows ? .windows : nil
@@ -176,7 +163,7 @@ final class AppContainer {
                                      isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() })
         let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, editor] target in
             let v = settings.values
-            return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
+            return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target != .strip || v.overflowZonesEnabled)
                 && !missionControl()
         }
         let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
@@ -206,7 +193,6 @@ final class AppContainer {
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
-            pill.start()
             island.start()
             snap.start()
             scroller.start()

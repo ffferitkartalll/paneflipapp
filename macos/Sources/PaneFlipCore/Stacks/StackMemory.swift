@@ -32,7 +32,7 @@ public final class StackMemory {
         zones.contains(record.zoneID) ? record.zoneID : record.otherZones.first(where: zones.contains)
     }
 
-    /// The slots of one layout, in memory order (the order of the pills).
+    /// The slots of one layout, in memory order (the order of the cards).
     public func slots(inZones zones: [UUID]) -> [LayoutSlot] {
         let set = Set(zones)
         return records.indices.compactMap { i in
