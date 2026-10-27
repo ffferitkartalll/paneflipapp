@@ -17,7 +17,7 @@ struct ShortcutsPane: View {
         Form {
             Section("Window snapping") {
                 row(.snap, title: "Hold while dragging a window",
-                    detail: "Zones light up while the keys are held, or after you shake the mouse from side to side during the drag (shake again to end it); release the mouse over a zone to add the window.",
+                    detail: "Zones light up while the keys are held during the drag; release the mouse over a zone to add the window.",
                     value: settings.values.snapTrigger, standard: .leftCommand) { settings.values.snapTrigger = $0 }
             }
             .disabled(!settings.values.placementEnabled)

@@ -8,7 +8,6 @@ struct IslandShiftedRow<Content: View>: View {
     let content: Content
 
     var body: some View {
-        let at = CGFloat(model.windows.firstIndex(where: \.isActive) ?? 0) - model.windowsDrag
-        content.offset(x: (CGFloat(model.windows.count - 1) / 2 - at) * size.width)
+        content.offset(x: (CGFloat(model.windows.count - 1) / 2 - (model.cardsAt ?? 0)) * size.width)
     }
 }

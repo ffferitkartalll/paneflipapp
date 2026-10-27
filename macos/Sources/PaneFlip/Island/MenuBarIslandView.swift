@@ -88,8 +88,8 @@ private struct GlyphCanvas: View, Animatable {
     private func lit(_ id: UUID) -> CGFloat { id == activeID ? blend : (id == previousID ? 1 - blend : 0) }
 
     private func fill(of id: UUID) -> Color {
-        let lit = lit(id)
-        return Color(red: 1 + (AppAccent.red - 1) * lit, green: 1 + (AppAccent.green - 1) * lit, blue: 1 + (AppAccent.blue - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
+        let lit = lit(id), accent = AppAccent.rgb
+        return Color(red: 1 + (accent.red - 1) * lit, green: 1 + (accent.green - 1) * lit, blue: 1 + (accent.blue - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
     }
 
     private func px(_ value: CGFloat) -> CGFloat { (value * scale).rounded() / scale }

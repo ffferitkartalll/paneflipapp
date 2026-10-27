@@ -83,6 +83,5 @@ struct SettingsView: View {
         .background(FixedWindowTitle(title: String(localized: "Settings")))
         .background(WindowPresenceReporter(activation: activation, level: .floating, minimizable: true))
         .onAppear { NSApp.activate(ignoringOtherApps: true) }
-        .tint(AppAccent.color)   // the app's own accent in the controls, not the system's
     }
 }

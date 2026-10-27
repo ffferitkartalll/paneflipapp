@@ -42,11 +42,21 @@ extension MenuBarIslandModel {
     /// with the title of the window in front under it. The gap between the picture and the frame.
     var windowsGap: CGFloat { barHeight / 2 }
     private var titleHeight: CGFloat { 16 }
-    private var titleGap: CGFloat { 4 }
+    private var titleGap: CGFloat { windowsGap }   // the title stands as far from the frame as from the island's lower edge
 
     var windowsFrame: CGSize {
         guard let cell = glyph.cells.first(where: { $0.id == windowsZone }) else { return .zero }
         return CGSize(width: min(cell.rect.width * openZoom, glyph.size.width * openZoom), height: cell.rect.height * openZoom)
+    }
+
+    /// The place of the window in front among the cards, in cards: the fingers' drag moves it among the open windows, and the cards of apps that are not
+    /// open lie between. Nil when no window is in front.
+    var cardsAt: CGFloat? {
+        let open = windows.indices.filter { windows[$0].windowID != nil }
+        guard let front = open.firstIndex(where: { windows[$0].isActive }) else { return nil }
+        let place = min(max(CGFloat(front) - windowsDrag, 0), CGFloat(open.count - 1))
+        let low = Int(place.rounded(.down)), high = min(low + 1, open.count - 1)
+        return CGFloat(open[low]) + CGFloat(open[high] - open[low]) * (place - CGFloat(low))
     }
 
     /// The height of what stands under the picture: none while no zone is chosen.
@@ -60,7 +70,7 @@ extension MenuBarIslandModel {
         openHeight(windows: (glyph.cells.map(\.rect.height).max() ?? 0) * openZoom + titleGap + titleHeight)
     }
 
-    private func openHeight(windows rowHeight: CGFloat) -> CGFloat { barHeight + glyph.size.height * openZoom + (rowHeight > 0 ? windowsGap + rowHeight : 0) + barHeight }
+    private func openHeight(windows rowHeight: CGFloat) -> CGFloat { barHeight + glyph.size.height * openZoom + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
 
     /// The focus went to another zone: it lights up as the old one goes out.
     func select(_ id: UUID?) {

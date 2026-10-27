@@ -7588,6 +7588,287 @@
         }
       }
     },
+    "Closed" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مغلق"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Затворен"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "বন্ধ"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tancada"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavřeno"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lukket"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschlossen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κλειστό"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrada"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suletud"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بسته"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suljettu"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sarado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermée"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סגור"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बंद"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatvoren"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezárva"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditutup"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiusa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閉じた"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "닫힘"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uždarytas"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aizvērts"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बंद"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditutup"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lukket"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesloten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zamknięte"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fechada"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fechada"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Închisă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыто"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatvorené"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaprto"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Затворен"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stängt"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மூடப்பட்டது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "మూసివేయబడింది"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ปิดแล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapalı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрито"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بند"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã đóng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已关闭"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已關閉"
+          }
+        }
+      },
+      "extractionState" : "manual"
+    },
     "Continue" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14050,6 +14331,287 @@
           }
         }
       }
+    },
+    "Hidden" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مخفي"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрит"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "লুকানো"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amagada"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skryto"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjult"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeblendet"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κρυφό"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peidetud"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنهان"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piilotettu"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nakatago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquée"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מוסתר"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "छिपा हुआ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriven"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elrejtve"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disembunyikan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nascosta"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "숨겨짐"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paslėptas"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paslēpts"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लपवलेली"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disembunyikan"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjult"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verborgen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukryte"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ascunsă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыто"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skryté"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrito"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скривен"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dolt"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மறைக்கப்பட்டது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "దాచబడింది"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ซ่อนอยู่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gizli"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приховано"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چھپی ہوئی"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã ẩn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已隐藏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已隱藏"
+          }
+        }
+      },
+      "extractionState" : "manual"
     },
     "Hide the pill" : {
       "extractionState" : "manual",
@@ -22482,7 +23044,285 @@
       }
     },
     "Lets a layout have zones beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen." : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتيح أن يحتوي التخطيط على مناطق خارج الحافتين اليمنى واليسرى للشاشة. يمكنك الوصول إليها باختصارات التمرير (راجع الاختصارات)، أو بالتمرير فوق الجزيرة في شريط القوائم. عند الإيقاف لا يعرضها المحرّر وتنتقل تطبيقاتها إلى المنطقة الافتراضية للشاشة."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволява на оформлението да има зони извън левия и десния край на екрана. Стигате до тях с клавишните комбинации за превъртане (вижте Клавишни комбинации) или като превъртате над острова в лентата с менюта. Когато е изключено, редакторът не ги показва, а приложенията им преминават в зоната по подразбиране на екрана."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "একটি লেআউটে স্ক্রিনের বাঁ ও ডান প্রান্তের বাইরে জোন রাখার সুযোগ দেয়। স্ক্রল শর্টকাট (শর্টকাট দেখুন) দিয়ে, অথবা মেনু বারের আইল্যান্ডের ওপর স্ক্রল করে সেগুলোতে পৌঁছানো যায়। বন্ধ থাকলে এডিটর সেগুলো দেখায় না এবং সেগুলোর অ্যাপ স্ক্রিনের ডিফল্ট জোনে চলে যায়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permet que una disposició tingui zones més enllà de les vores esquerra i dreta de la pantalla. S'hi arriba amb les dreceres de desplaçament (vegeu Dreceres) o desplaçant-se sobre l'illa de la barra de menús. Si està desactivat, l'editor no les mostra i les seves apps passen a la zona predeterminada de la pantalla."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umožní, aby rozložení mělo zóny za levým a pravým okrajem obrazovky. Dostanete se k nim zkratkami pro posouvání (viz Zkratky) nebo posouváním nad ostrovem v řádku nabídek. Když je vypnuto, editor je nezobrazuje a jejich aplikace přejdou do výchozí zóny obrazovky."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lader et layout have zoner uden for skærmens venstre og højre kant. Du når dem med rullegenvejene (se Genveje) eller ved at rulle over øen i menulinjen. Når det er slået fra, viser editoren dem ikke, og deres apps flyttes til skærmens standardzone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaubt einem Layout Zonen jenseits des linken und rechten Bildschirmrands. Du erreichst sie mit den Scroll-Tastenkürzeln (siehe Tastenkürzel) oder durch Scrollen über der Insel in der Menüleiste. Ist die Option aus, zeigt der Editor sie nicht an, und ihre Apps wandern in die Standardzone des Bildschirms."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιτρέπει σε μια διάταξη να έχει ζώνες πέρα από το αριστερό και το δεξί άκρο της οθόνης. Τις φτάνετε με τις συντομεύσεις κύλισης (βλ. Συντομεύσεις) ή κυλώντας πάνω από το νησί στη γραμμή μενού. Όταν είναι απενεργοποιημένο, ο επεξεργαστής δεν τις εμφανίζει και οι εφαρμογές τους μετακινούνται στην προεπιλεγμένη ζώνη της οθόνης."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite que una disposición tenga zonas más allá de los bordes izquierdo y derecho de la pantalla. Se llega a ellas con los atajos de desplazamiento (consulta Atajos) o desplazándote sobre la isla de la barra de menús. Si se desactiva, el editor no las muestra y sus apps pasan a la zona predeterminada de la pantalla."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lubab paigutusel olla tsoone ekraani vasaku ja parema serva taga. Nendeni jõuab kerimise kiirklahvidega (vt Kiirklahvid) või menüüribal oleva saare kohal kerides. Väljalülitatuna redaktor neid ei näita ja nende rakendused liiguvad ekraani vaiketsooni."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به یک چیدمان اجازه می‌دهد ناحیه‌هایی فراتر از لبه‌های چپ و راست صفحه‌نمایش داشته باشد. با میان‌برهای پیمایش (به میان‌برها نگاه کنید) یا با پیمایش روی جزیره در نوار منو می‌توانید به آن‌ها برسید. اگر خاموش باشد، ویرایشگر آن‌ها را نشان نمی‌دهد و برنامه‌هایشان به ناحیهٔ پیش‌فرض صفحه‌نمایش منتقل می‌شوند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sallii asettelulle alueita näytön vasemman ja oikean reunan takana. Niihin pääsee vierityspikanäppäimillä (katso Pikanäppäimet) tai vierittämällä valikkorivin saaren päällä. Kun asetus on pois päältä, editori ei näytä alueita ja niiden apit siirtyvät näytön oletusalueelle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinapayagan ang isang layout na magkaroon ng mga zone lampas sa kaliwa at kanang gilid ng screen. Maaabot ang mga ito gamit ang mga scroll shortcut (tingnan ang Mga shortcut), o sa pag-scroll sa ibabaw ng island sa menu bar. Kapag naka-off, hindi ipinapakita ng editor ang mga ito at lilipat ang kanilang mga app sa default na zone ng screen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permet à une disposition d'avoir des zones au-delà des bords gauche et droit de l'écran. On y accède avec les raccourcis de défilement (voir Raccourcis) ou en faisant défiler au-dessus de l'îlot de la barre des menus. Désactivé, l'éditeur ne les affiche pas et leurs apps passent dans la zone par défaut de l'écran."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מאפשר לפריסה לכלול אזורים מעבר לקצה השמאלי והימני של המסך. אפשר להגיע אליהם בעזרת קיצורי הגלילה (ראה קיצורי דרך) או בגלילה מעל האי בשורת התפריטים. כשהאפשרות כבויה, העורך אינו מציג אותם והאפליקציות שלהם עוברות לאזור ברירת המחדל של המסך."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी लेआउट को स्क्रीन के बाएँ और दाएँ किनारों से परे ज़ोन रखने देता है। उन तक स्क्रॉल शॉर्टकट (देखें शॉर्टकट) से, या मेनू बार के आइलैंड पर स्क्रॉल करके पहुँचा जा सकता है। बंद होने पर एडिटर उन्हें नहीं दिखाता और उनके ऐप स्क्रीन के डिफ़ॉल्ट ज़ोन में चले जाते हैं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omogućuje rasporedu zone izvan lijevog i desnog ruba zaslona. Do njih se dolazi prečacima za pomicanje (vidi Prečaci) ili pomicanjem iznad otoka u traci izbornika. Kad je isključeno, uređivač ih ne prikazuje, a njihove se aplikacije premještaju u zadanu zonu zaslona."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lehetővé teszi, hogy az elrendezésnek legyenek zónái a képernyő bal és jobb széle mögött. Ezeket a görgetési billentyűparancsokkal (lásd Billentyűparancsok) vagy a menüsor szigete fölötti görgetéssel éred el. Kikapcsolva a szerkesztő nem mutatja őket, az alkalmazásaik pedig a képernyő alapértelmezett zónájába kerülnek."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memungkinkan tata letak memiliki zona di luar tepi kiri dan kanan layar. Zona itu dijangkau dengan pintasan gulir (lihat Pintasan), atau dengan menggulir di atas pulau di bilah menu. Jika dimatikan, editor tidak menampilkannya dan app di dalamnya pindah ke zona default layar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permette a un layout di avere zone oltre i bordi sinistro e destro dello schermo. Si raggiungono con le scorciatoie di scorrimento (vedi Scorciatoie) o scorrendo sopra l'isola nella barra dei menu. Se disattivato, l'editor non le mostra e le loro app passano alla zona predefinita dello schermo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レイアウトに、画面の左右の端の外側にあるゾーンを持たせます。スクロールのショートカット（「ショートカット」を参照）や、メニューバーのアイランド上でのスクロールで移動できます。オフにすると、エディタにはそれらのゾーンが表示されず、そのアプリは画面のデフォルトのゾーンに移ります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레이아웃이 화면의 왼쪽과 오른쪽 가장자리 밖에 영역을 가질 수 있게 합니다. 스크롤 단축키(단축키 참조)나 메뉴 막대의 아일랜드 위에서 스크롤하여 이동할 수 있습니다. 끄면 편집기에 해당 영역이 표시되지 않으며, 그 영역의 앱은 화면의 기본 영역으로 이동합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leidžia išdėstymui turėti zonų už kairiojo ir dešiniojo ekrano krašto. Jas pasiekiate slinkimo spartieji klavišais (žr. Spartieji klavišai) arba slinkdami virš salos meniu juostoje. Kai išjungta, redaktorius jų nerodo, o jų programos perkeliamos į numatytąją ekrano zoną."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ļauj izkārtojumam būt zonām aiz ekrāna kreisās un labās malas. Tām var piekļūt ar ritināšanas īsinājumtaustiņiem (skatiet Īsinājumtaustiņi) vai ritinot virs salas izvēlņu joslā. Ja izslēgts, redaktors tās nerāda, un to lietotnes pāriet uz ekrāna noklusējuma zonu."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लेआउटला स्क्रीनच्या डाव्या आणि उजव्या कडांच्या पलीकडे झोन ठेवू देते. स्क्रोल शॉर्टकटने (शॉर्टकट पहा) किंवा मेनू बारमधील आयलंडवर स्क्रोल करून त्यांपर्यंत पोहोचता येते. बंद केल्यास एडिटर ते दाखवत नाही आणि त्यांचे अ‍ॅप स्क्रीनच्या डीफॉल्ट झोनमध्ये जातात."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Membolehkan reka letak mempunyai zon di luar tepi kiri dan kanan skrin. Zon itu boleh dicapai dengan pintasan tatal (lihat Pintasan), atau dengan menatal di atas pulau dalam bar menu. Jika dimatikan, editor tidak menunjukkannya dan apl di dalamnya berpindah ke zon lalai skrin."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lar et layout ha soner utenfor skjermens venstre og høyre kant. Du når dem med rullesnarveiene (se Snarveier) eller ved å rulle over øya i menylinjen. Når det er slått av, viser ikke editoren dem, og appene deres flyttes til skjermens standardsone."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat een indeling zones hebben voorbij de linker- en rechterrand van het scherm. Je bereikt ze met de scrolltoetsen (zie Sneltoetsen) of door te scrollen boven het eiland in de menubalk. Als dit uit staat, toont de editor ze niet en gaan hun apps naar de standaardzone van het scherm."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozwala układowi mieć strefy poza lewą i prawą krawędzią ekranu. Dotrzesz do nich skrótami przewijania (zobacz Skróty) lub przewijając nad wyspą na pasku menu. Gdy opcja jest wyłączona, edytor ich nie pokazuje, a ich aplikacje przechodzą do domyślnej strefy ekranu."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite que uma disposição tenha zonas para lá dos limites esquerdo e direito do ecrã. Chega-se a elas com os atalhos de deslocamento (consulte Atalhos) ou deslocando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e as suas apps passam para a zona predefinida do ecrã."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite que um layout tenha zonas além das bordas esquerda e direita da tela. Você chega a elas com os atalhos de rolagem (veja Atalhos) ou rolando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e os apps delas vão para a zona padrão da tela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite unui aspect să aibă zone dincolo de marginile stângă și dreaptă ale ecranului. Le poți atinge cu comenzile rapide de derulare (vezi Comenzi rapide) sau derulând deasupra insulei din bara de meniu. Când este oprit, editorul nu le afișează, iar aplicațiile lor trec în zona implicită a ecranului."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволяет раскладке иметь зоны за левым и правым краями экрана. До них можно добраться сочетаниями клавиш прокрутки (см. «Сочетания клавиш») или прокруткой над островом в строке меню. Если выключено, редактор их не показывает, а их приложения переходят в зону экрана по умолчанию."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umožňuje, aby rozloženie malo zóny za ľavým a pravým okrajom obrazovky. K nim sa dostanete skratkami na posúvanie (pozri Skratky) alebo posúvaním nad ostrovom v paneli ponúk. Keď je vypnuté, editor ich nezobrazuje a ich aplikácie sa presunú do predvolenej zóny obrazovky."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postavitvi omogoča, da ima območja onkraj levega in desnega roba zaslona. Do njih pridete z bližnjicami za pomikanje (glejte Bližnjice) ali s pomikanjem nad otokom v menijski vrstici. Če je izklopljeno, jih urejevalnik ne prikazuje, njihove aplikacije pa se premaknejo v privzeto območje zaslona."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Омогућава распореду да има зоне изван левог и десног руба екрана. До њих се стиже пречицама за померање (погледајте Пречице) или померањем изнад острва у траци менија. Када је искључено, уређивач их не приказује, а њихове апликације прелазе у подразумевану зону екрана."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låter en layout ha zoner bortom skärmens vänstra och högra kant. Du når dem med rullningsgenvägarna (se Kortkommandon) eller genom att rulla över ön i menyraden. När det är av visar redigeraren dem inte, och deras appar flyttas till skärmens standardzon."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ஒரு தளவமைப்பு திரையின் இடது, வலது விளிம்புகளுக்கு அப்பால் மண்டலங்களைக் கொண்டிருக்க அனுமதிக்கிறது. உருள் குறுக்குவழிகள் (குறுக்குவழிகளைப் பார்க்கவும்) மூலமாகவோ, மெனு பட்டியில் உள்ள தீவின் மேல் உருட்டியோ அவற்றை அடையலாம். அணைத்திருந்தால் எடிட்டர் அவற்றைக் காட்டாது, அவற்றின் பயன்பாடுகள் திரையின் இயல்புநிலை மண்டலத்துக்கு நகரும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "లేఅవుట్‌కు స్క్రీన్ ఎడమ, కుడి అంచులకు ఆవల జోన్‌లు ఉండేలా అనుమతిస్తుంది. స్క్రోల్ షార్ట్‌కట్‌ల ద్వారా (షార్ట్‌కట్‌లు చూడండి) లేదా మెనూ బార్‌లోని ఐలాండ్ పైన స్క్రోల్ చేసి వాటిని చేరుకోవచ్చు. ఆఫ్ చేస్తే ఎడిటర్ వాటిని చూపదు, వాటి యాప్‌లు స్క్రీన్ డిఫాల్ట్ జోన్‌కు మారతాయి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ให้เลย์เอาต์มีโซนอยู่เลยขอบซ้ายและขอบขวาของหน้าจอได้ เข้าถึงโซนเหล่านั้นด้วยทางลัดเลื่อน (ดูทางลัด) หรือเลื่อนบนไอส์แลนด์ในแถบเมนู เมื่อปิดอยู่ ตัวแก้ไขจะไม่แสดงโซนเหล่านั้น และแอปในโซนจะย้ายไปที่โซนเริ่มต้นของหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir düzenin ekranın sol ve sağ kenarlarının ötesinde bölgeler içermesine izin verir. Bunlara kaydırma kısayollarıyla (bkz. Kısayollar) ya da menü çubuğundaki adanın üzerinde kaydırarak ulaşılır. Kapalıyken düzenleyici bunları göstermez ve uygulamaları ekranın varsayılan bölgesine taşınır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дає змогу розкладці мати зони за лівим і правим краями екрана. До них можна дістатися скороченнями прокручування (див. «Скорочення») або прокручуванням над островом у рядку меню. Якщо вимкнено, редактор їх не показує, а їхні програми переходять у зону екрана за замовчуванням."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لے آؤٹ کو اسکرین کے بائیں اور دائیں کناروں سے آگے زونز رکھنے دیتا ہے۔ ان تک اسکرول شارٹ کٹس (شارٹ کٹس دیکھیں) سے، یا مینو بار میں جزیرے پر اسکرول کر کے پہنچا جا سکتا ہے۔ بند ہونے پر ایڈیٹر انہیں نہیں دکھاتا اور ان کی ایپس اسکرین کے ڈیفالٹ زون میں چلی جاتی ہیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cho phép một bố cục có các vùng nằm ngoài mép trái và mép phải của màn hình. Bạn đến các vùng đó bằng phím tắt cuộn (xem Phím tắt) hoặc bằng cách cuộn trên đảo trong thanh menu. Khi tắt, trình chỉnh sửa không hiển thị các vùng đó và ứng dụng của chúng chuyển sang vùng mặc định của màn hình."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许布局拥有位于屏幕左右边缘之外的区域。可以通过滚动快捷键（见“快捷键”）或在菜单栏的岛上滚动来到达这些区域。关闭后，编辑器不再显示它们，其中的应用会移到屏幕的默认区域。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許版面配置擁有位於螢幕左右邊緣之外的區域。可以透過捲動快速鍵（見「快速鍵」）或在選單列的島上捲動來到達這些區域。關閉後，編輯器不再顯示它們，其中的 App 會移到螢幕的預設區域。"
+          }
+        }
+      }
     },
     "Looks for a newer release on GitHub. Nothing is sent but the request itself." : {
       "extractionState" : "manual",
@@ -23607,6 +24447,287 @@
           }
         }
       }
+    },
+    "Minimized" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مصغّر"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Минимизиран"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ছোট করা"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimitzada"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimalizováno"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimeret"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimiert"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ελαχιστοποιημένο"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizada"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimeeritud"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کوچک‌شده"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pienennetty"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naka-minimize"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduite"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ממוזער"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "छोटा किया हुआ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimiziran"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimalizálva"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminimalkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ridotta a icona"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最小化"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최소화됨"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sumažintas"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samazināts"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लहान केलेली"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminimumkan"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimert"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geminimaliseerd"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zminimalizowane"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizada"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizada"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizată"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свернуто"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimalizované"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimirano"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Умањен"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimerat"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சிறிதாக்கப்பட்டது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కుదించబడింది"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ย่ออยู่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Küçültülmüş"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Згорнуто"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چھوٹی کی گئی"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã thu nhỏ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已最小化"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已最小化"
+          }
+        }
+      },
+      "extractionState" : "manual"
     },
     "Minimum zone size" : {
       "extractionState" : "manual",
@@ -26700,7 +27821,285 @@
       }
     },
     "No windows" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد نوافذ"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Няма прозорци"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কোনো উইন্ডো নেই"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cap finestra"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žádná okna"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen vinduer"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Fenster"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κανένα παράθυρο"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin ventanas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aknaid pole"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنجره‌ای نیست"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ei ikkunoita"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune fenêtre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אין חלונות"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई विंडो नहीं"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nema prozora"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nincs ablak"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna finestra"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 없음"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langų nėra"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nav logu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोणतीही विंडो नाही"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiada tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen vinduer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen vensters"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak okien"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem janelas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem janelas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicio fereastră"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет окон"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žiadne okná"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ni oken"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нема прозора"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inga fönster"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரங்கள் இல்லை"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోలు లేవు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ไม่มีหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencere yok"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає вікон"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کوئی ونڈو نہیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有視窗"
+          }
+        }
+      }
     },
     "Open PaneFlip automatically when you log in to your Mac." : {
       "extractionState" : "manual",
@@ -50868,283 +52267,283 @@
         }
       }
     },
-    "Zones light up while the keys are held, or after you shake the mouse from side to side during the drag (shake again to end it); release the mouse over a zone to add the window." : {
+    "Zones light up while the keys are held during the drag; release the mouse over a zone to add the window." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تُضيء المناطق أثناء الضغط على المفاتيح، أو بعد أن تهزّ الفأرة يمينًا ويسارًا أثناء السحب (هزّها مرة أخرى لإنهاء ذلك)؛ حرّر الفأرة فوق منطقة لإضافة النافذة."
+            "value" : "تُضيء المناطق أثناء الضغط على المفاتيح خلال السحب؛ حرّر الفأرة فوق منطقة لإضافة النافذة إليها."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоните светват, докато клавишите са натиснати, или след като разклатите мишката настрани по време на плъзгането (разклатете отново, за да спре); пуснете мишката над зона, за да добавите прозореца."
+            "value" : "Зоните светват, докато клавишите са натиснати по време на плъзгането; пуснете мишката върху зона, за да добавите прозореца."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "কী ধরে রাখলে, অথবা টানার সময় মাউস পাশাপাশি ঝাঁকালে জোনগুলো জ্বলে ওঠে (বন্ধ করতে আবার ঝাঁকান); উইন্ডো যোগ করতে একটি জোনের উপর মাউস ছেড়ে দিন।"
+            "value" : "টেনে আনার সময় কিগুলো চেপে ধরে রাখলে জোনগুলো জ্বলে ওঠে; উইন্ডো যোগ করতে কোনো জোনের ওপর মাউস ছেড়ে দিন।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les zones s’il·luminen mentre es mantenen les tecles, o després de sacsejar el ratolí d’un costat a l’altre durant l’arrossegament (sacseja’l una altra vegada per acabar-ho); deixa anar el ratolí sobre una zona per afegir-hi la finestra."
+            "value" : "Les zones s'il·luminen mentre es mantenen premudes les tecles durant l'arrossegament; deixa anar el ratolí sobre una zona per afegir-hi la finestra."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zóny se rozsvítí, dokud jsou klávesy drženy, nebo poté, co během přetahování zatřesete myší ze strany na stranu (dalším zatřesením to skončí); uvolněním myši nad zónou přidáte okno."
+            "value" : "Zóny se rozsvítí, dokud při přetahování držíte klávesy; pusťte myš nad zónou a okno do ní přidáte."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zoner lyser op, mens tasterne holdes nede, eller efter du ryster musen fra side til side under trækningen (ryst igen for at afslutte); slip musen over en zone for at tilføje vinduet."
+            "value" : "Zonerne lyser, mens tasterne holdes nede under trækket; slip musen over en zone for at tilføje vinduet."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonen leuchten auf, solange die Tasten gehalten werden, oder nachdem du die Maus beim Ziehen seitlich hin und her schüttelst (erneut schütteln beendet es); lasse die Maus über einer Zone los, um das Fenster hinzuzufügen."
+            "value" : "Die Zonen leuchten auf, solange die Tasten beim Ziehen gedrückt sind; lass die Maus über einer Zone los, um das Fenster hinzuzufügen."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Οι ζώνες φωτίζονται όσο κρατιούνται τα πλήκτρα ή αφού κουνήσετε το ποντίκι δεξιά-αριστερά κατά τη σύρση (κουνήστε το ξανά για να τερματιστεί)· αφήστε το ποντίκι πάνω από μια ζώνη για να προσθέσετε το παράθυρο."
+            "value" : "Οι ζώνες φωτίζονται όσο κρατάτε πατημένα τα πλήκτρα κατά τη μεταφορά· αφήστε το ποντίκι πάνω από μια ζώνη για να προσθέσετε το παράθυρο."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las zonas se iluminan mientras se mantienen las teclas, o después de sacudir el ratón de lado a lado durante el arrastre (sacúdelo otra vez para terminarlo); suelta el ratón sobre una zona para añadir la ventana."
+            "value" : "Las zonas se iluminan mientras se mantienen pulsadas las teclas durante el arrastre; suelta el ratón sobre una zona para añadir la ventana."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tsoonid süttivad, kui klahve hoitakse all, või pärast seda, kui lohistamise ajal hiirt küljelt küljele raputate (uuesti raputamine lõpetab selle); akna lisamiseks vabastage hiir tsooni kohal."
+            "value" : "Tsoonid süttivad, kuni klahve lohistamise ajal all hoitakse; akna lisamiseks lase hiir tsooni kohal lahti."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تا زمانی که کلیدها نگه داشته شوند، یا پس از تکان دادن ماوس به چپ و راست در حین کشیدن، ناحیه‌ها روشن می‌شوند (برای پایان دادن دوباره تکانش دهید)؛ برای افزودن پنجره، ماوس را روی یک ناحیه رها کنید."
+            "value" : "تا زمانی که کلیدها را هنگام کشیدن نگه دارید، ناحیه‌ها روشن می‌شوند؛ برای افزودن پنجره، ماوس را روی یک ناحیه رها کنید."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alueet syttyvät, kun näppäimiä pidetään painettuna tai kun hiirtä ravistetaan sivulta toiselle vedon aikana (uusi ravistus lopettaa sen); vapauta hiiri alueen päällä lisätäksesi ikkunan."
+            "value" : "Alueet syttyvät, kun näppäimiä pidetään painettuna vedon aikana; lisää ikkuna vapauttamalla hiiri alueen päällä."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Umiilaw ang mga zone habang hawak ang mga key, o pagkatapos mong yugyugin ang mouse pakaliwa-pakanan habang nagda-drag (yugyugin muli para tapusin); bitawan ang mouse sa isang zone para idagdag ang window."
+            "value" : "Umiilaw ang mga zone habang hawak ang mga key sa pag-drag; bitawan ang mouse sa ibabaw ng isang zone para idagdag ang window."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les zones s’allument tant que les touches sont maintenues, ou après avoir secoué la souris de gauche à droite pendant le glissement (secouez-la de nouveau pour l’arrêter) ; relâchez la souris sur une zone pour y ajouter la fenêtre."
+            "value" : "Les zones s'allument tant que les touches sont maintenues pendant le glissement ; relâchez la souris sur une zone pour y ajouter la fenêtre."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "האזורים מוארים כל עוד המקשים לחוצים, או לאחר שמנענעים את העכבר מצד לצד בזמן הגרירה (ניענוע נוסף מסיים זאת); שחרר את העכבר מעל אזור כדי להוסיף את החלון."
+            "value" : "האזורים נדלקים כל עוד המקשים לחוצים בזמן הגרירה; שחרר את העכבר מעל אזור כדי להוסיף אליו את החלון."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कुंजियाँ दबाए रखने पर, या खींचते समय माउस को अगल-बगल हिलाने पर ज़ोन चमकते हैं (बंद करने के लिए फिर से हिलाएँ); विंडो जोड़ने के लिए माउस को किसी ज़ोन के ऊपर छोड़ें।"
+            "value" : "खींचते समय कुंजियाँ दबाए रखने तक ज़ोन चमकते हैं; विंडो जोड़ने के लिए माउस को किसी ज़ोन के ऊपर छोड़ें।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zone svijetle dok se drže tipke ili nakon što tijekom povlačenja protresete miš s jedne strane na drugu (ponovno protresite da prestane); otpustite miš iznad zone da dodate prozor."
+            "value" : "Zone svijetle dok se tipke drže tijekom povlačenja; otpustite miš iznad zone da u nju dodate prozor."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A zónák kivilágosodnak, amíg a billentyűk nyomva vannak, vagy ha húzás közben oldalirányban megrázza az egeret (újabb rázás megszünteti); engedje fel az egeret egy zóna fölött az ablak hozzáadásához."
+            "value" : "A zónák kivilágosodnak, amíg a húzás közben nyomva tartod a billentyűket; engedd el az egeret egy zóna fölött, hogy hozzáadd az ablakot."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zona menyala selama tombol ditahan, atau setelah Anda menggoyangkan mouse ke kiri dan kanan saat menyeret (goyangkan lagi untuk mengakhiri); lepaskan mouse di atas zona untuk menambahkan jendela."
+            "value" : "Zona menyala selama tombol ditahan saat menyeret; lepaskan mouse di atas zona untuk menambahkan jendela."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le zone si illuminano mentre i tasti sono premuti, o dopo aver scosso il mouse da un lato all’altro durante il trascinamento (scuotilo di nuovo per terminare); rilascia il mouse su una zona per aggiungere la finestra."
+            "value" : "Le zone si illuminano finché i tasti restano premuti durante il trascinamento; rilascia il mouse su una zona per aggiungervi la finestra."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "キーを押している間、またはドラッグ中にマウスを左右に振るとゾーンが点灯します（もう一度振ると解除）。ゾーン上でマウスを離すとウインドウが追加されます。"
+            "value" : "ドラッグ中にキーを押している間、ゾーンが点灯します。ゾーンの上でマウスを離すと、ウインドウがそこに追加されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "키를 누르고 있는 동안, 또는 드래그 중 마우스를 좌우로 흔들면 영역이 밝게 표시됩니다(다시 흔들면 해제). 영역 위에서 마우스를 놓으면 윈도우가 추가됩니다."
+            "value" : "드래그하는 동안 키를 누르고 있으면 영역이 켜집니다. 영역 위에서 마우스를 놓으면 윈도우가 추가됩니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonos šviečia, kol laikomi klavišai, arba kai vilkdami pelę papurtote į šonus (dar kartą papurčius tai baigiasi); atleiskite pelę virš zonos, kad pridėtumėte langą."
+            "value" : "Zonos šviečia, kol vilkdami laikote nuspaustus klavišus; atleiskite pelę virš zonos, kad pridėtumėte langą."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonas iedegas, kamēr taustiņi tiek turēti, vai pēc tam, kad vilkšanas laikā papurināt peli uz sāniem (vēlreiz papurinot tas beidzas); atlaidiet peli virs zonas, lai pievienotu logu."
+            "value" : "Zonas iedegas, kamēr velkot turat nospiestus taustiņus; atlaidiet peli virs zonas, lai tai pievienotu logu."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कीज दाबून ठेवल्यावर, किंवा ओढताना माउस बाजूबाजूला हलवल्यावर झोन उजळतात (बंद करण्यासाठी पुन्हा हलवा); विंडो जोडण्यासाठी झोनवर माउस सोडा."
+            "value" : "ड्रॅग करताना कळा दाबून ठेवेपर्यंत झोन उजळतात; विंडो जोडण्यासाठी माउस झोनवर सोडा."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zon menyala semasa kekunci ditahan, atau selepas anda menggoyang tetikus ke kiri dan kanan semasa menyeret (goyang lagi untuk menamatkannya); lepaskan tetikus di atas zon untuk menambah tetingkap."
+            "value" : "Zon menyala selagi kekunci ditahan semasa menyeret; lepaskan tetikus di atas zon untuk menambah tetingkap."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Soner lyser opp mens tastene holdes nede, eller etter at du rister musen fra side til side under draingen (rist igjen for å avslutte); slipp musen over en sone for å legge til vinduet."
+            "value" : "Sonene lyser mens tastene holdes inne under draing; slipp musen over en sone for å legge til vinduet."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zones lichten op zolang de toetsen ingedrukt zijn, of nadat je tijdens het slepen de muis heen en weer schudt (nogmaals schudden beëindigt het); laat de muis los boven een zone om het venster toe te voegen."
+            "value" : "De zones lichten op zolang je tijdens het slepen de toetsen ingedrukt houdt; laat de muis los boven een zone om het venster toe te voegen."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Strefy podświetlają się, gdy klawisze są przytrzymane, lub po potrząśnięciu myszą na boki podczas przeciągania (ponowne potrząśnięcie kończy to); zwolnij mysz nad strefą, aby dodać okno."
+            "value" : "Strefy zaświecają się, dopóki podczas przeciągania trzymasz klawisze; puść mysz nad strefą, aby dodać do niej okno."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "As zonas acendem enquanto as teclas estão premidas, ou depois de abanar o rato de um lado para o outro durante o arrastamento (abane outra vez para terminar); solte o rato sobre uma zona para adicionar a janela."
+            "value" : "As zonas acendem-se enquanto as teclas são mantidas premidas durante o arrasto; solte o rato sobre uma zona para adicionar a janela."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "As zonas se iluminam enquanto as teclas são mantidas, ou depois de balançar o mouse de um lado para o outro durante o arrasto (balance de novo para encerrar); solte o mouse sobre uma zona para adicionar a janela."
+            "value" : "As zonas acendem enquanto as teclas são mantidas pressionadas durante o arrasto; solte o mouse sobre uma zona para adicionar a janela."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonele se luminează cât timp tastele sunt apăsate sau după ce scuturi mouse-ul dintr-o parte în alta în timpul tragerii (scutură din nou pentru a opri); eliberează mouse-ul deasupra unei zone pentru a adăuga fereastra."
+            "value" : "Zonele se aprind cât timp ții apăsate tastele în timpul tragerii; eliberează mouse-ul peste o zonă ca să adaugi fereastra."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоны подсвечиваются, пока удерживаются клавиши, или после встряхивания мыши из стороны в сторону во время перетаскивания (ещё одно встряхивание отключает подсветку); отпустите мышь над зоной, чтобы добавить окно."
+            "value" : "Зоны подсвечиваются, пока при перетаскивании удерживаются клавиши; отпустите мышь над зоной, чтобы добавить в неё окно."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zóny sa rozsvietia, kým sú klávesy držané, alebo po zatrasení myšou zo strany na stranu počas ťahania (ďalším zatrasením to skončí); uvoľnením myši nad zónou pridáte okno."
+            "value" : "Zóny sa rozsvietia, kým pri presúvaní držíte klávesy; pustite myš nad zónou a okno do nej pridáte."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Območja zasvetijo, dokler so tipke pritisnjene, ali ko med vlečenjem pretresete miško s strani na stran (ponoven pretres to konča); spustite miško nad območjem, da dodate okno."
+            "value" : "Območja zasvetijo, dokler med vlečenjem držite tipke; spustite miško nad območjem, da vanj dodate okno."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зоне светле док су типке притиснуте или након што током превлачења протресете миш са стране на страну (поновно протресање то прекида); отпустите миш изнад зоне да додате прозор."
+            "value" : "Зоне светле док се током превлачења држе тастери; отпустите миш изнад зоне да бисте јој додали прозор."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zoner lyser upp medan tangenterna hålls nedtryckta, eller efter att du skakar musen från sida till sida under dragningen (skaka igen för att avsluta); släpp musen över en zon för att lägga till fönstret."
+            "value" : "Zonerna lyser upp medan tangenterna hålls nere under dragningen; släpp musen över en zon för att lägga till fönstret."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "விசைகளை அழுத்திப் பிடிக்கும்போது, அல்லது இழுக்கும்போது சுட்டியை பக்கவாட்டில் குலுக்கிய பின் மண்டலங்கள் ஒளிரும் (முடிக்க மீண்டும் குலுக்கவும்); சாளரத்தைச் சேர்க்க ஒரு மண்டலத்தின் மேல் சுட்டியை விடவும்."
+            "value" : "இழுக்கும்போது விசைகளை அழுத்திப் பிடித்திருக்கும் வரை மண்டலங்கள் ஒளிரும்; சாளரத்தைச் சேர்க்க மண்டலத்தின் மேல் சுட்டியை விடுங்கள்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "కీలను పట్టుకున్నప్పుడు, లేదా లాగుతున్నప్పుడు మౌస్‌ను పక్కకు పక్కకు ఊపిన తర్వాత జోన్‌లు వెలుగుతాయి (ముగించడానికి మళ్లీ ఊపండి); విండోను జోడించడానికి జోన్‌పై మౌస్‌ను వదలండి."
+            "value" : "లాగుతున్నప్పుడు కీలను నొక్కి ఉంచినంత సేపు జోన్‌లు వెలుగుతాయి; విండోను జోడించడానికి జోన్ పైన మౌస్‌ను వదలండి."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "โซนจะสว่างขึ้นขณะกดปุ่มค้างไว้ หรือหลังเขย่าเมาส์ไปทางซ้ายขวาระหว่างลาก (เขย่าอีกครั้งเพื่อสิ้นสุด) ปล่อยเมาส์เหนือโซนเพื่อเพิ่มหน้าต่าง"
+            "value" : "โซนจะสว่างขึ้นขณะที่กดปุ่มค้างไว้ระหว่างการลาก ปล่อยเมาส์เหนือโซนเพื่อเพิ่มหน้าต่างลงไป"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tuşlar basılıyken ya da sürüklerken fareyi yana yana sallayınca bölgeler aydınlanır (bitirmek için yeniden sallayın); bölgeye pencere eklemek için fareyi bırakın."
+            "value" : "Sürüklerken tuşlar basılı tutulduğu sürece bölgeler yanar; pencereyi eklemek için fareyi bir bölgenin üzerinde bırakın."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зони підсвічуються, поки утримуються клавіші, або після струшування миші з боку в бік під час перетягування (ще одне струшування вимикає підсвічування); відпустіть мишу над зоною, щоб додати вікно."
+            "value" : "Зони підсвічуються, доки під час перетягування утримуються клавіші; відпустіть мишу над зоною, щоб додати до неї вікно."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "کلیدیں دبائے رکھنے پر، یا کھینچتے وقت ماؤس کو دائیں بائیں ہلانے پر زونز روشن ہوتے ہیں (ختم کرنے کے لیے دوبارہ ہلائیں)؛ ونڈو شامل کرنے کے لیے ماؤس کو کسی زون پر چھوڑ دیں۔"
+            "value" : "گھسیٹتے وقت جب تک کیز دبی رہیں زونز روشن رہتے ہیں؛ ونڈو شامل کرنے کے لیے ماؤس کو کسی زون پر چھوڑ دیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Các vùng sáng lên khi giữ phím, hoặc sau khi bạn lắc chuột sang hai bên lúc kéo (lắc lần nữa để dừng); thả chuột trên một vùng để thêm cửa sổ."
+            "value" : "Các vùng sáng lên khi bạn giữ các phím trong lúc kéo; thả chuột trên một vùng để thêm cửa sổ vào đó."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住按键时，或拖动中左右摇晃鼠标后，区域会亮起（再摇晃一次即可取消）；在区域上松开鼠标即可添加窗口。"
+            "value" : "拖动时按住按键，区域就会亮起；在区域上松开鼠标即可把窗口添加进去。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住按鍵時，或拖移中左右搖晃滑鼠後，區域會亮起（再搖晃一次即可取消）；在區域上放開滑鼠即可加入視窗。"
+            "value" : "拖移時按住按鍵，區域就會亮起；在區域上放開滑鼠即可將視窗加入。"
           }
         }
       }

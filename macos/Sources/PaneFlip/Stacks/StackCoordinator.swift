@@ -302,11 +302,20 @@ final class StackCoordinator {
         stepWindowScrub(in: stack, by: reverse ? -1 : 1)
     }
 
-    /// A click on a zone of the island: the focus goes to the front window of that zone, unless the focus is in the zone already (or it is out of
-    /// sight beyond the screen's edge, or has no window). At once, with no frame sliding over from the zone that had the focus, as it does for the shortcuts.
+    /// A click on a zone of the island: the focus goes to the front window of that zone, unless the focus is in the zone already (or it
+    /// has no window). A zone beyond the screen's edge is scrolled into view first. At once, with no frame sliding over from the zone that had the focus, as it does for the shortcuts.
     func focus(zone id: UUID) {
         guard !placementOnly(), windowScrub == nil, !isSliding, focusedZoneID != id,
-              let target = stacks[id], !target.isParked, let active = target.activeID, let ref = target.refs[active] else { return }
+              let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
+        if target.isParked {
+            // Beyond the screen's edge: as for the shortcuts, the layout brings it into view and the window comes forward once it stands there.
+            chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
+            focusedZoneID = id
+            onFocusMoved?()
+            focusPending = (id, ref, Date().addingTimeInterval(4), true)   // flashed: a click on the island shows no frame, as for a zone on the screen
+            onReachBeyondTheEdge?(id) { _ in }
+            return
+        }
         // The highlight goes at once, and the app is asked off the main thread: an app that is slow to answer (a mail client busy bringing its window up)
         // must neither keep the highlight waiting nor hold the whole app. What is read back from it is not believed until it has caught up (2 s at most).
         chosenFocus = (id, ref.id, Date().addingTimeInterval(2))
@@ -568,8 +577,16 @@ final class StackCoordinator {
         removeFromStack(window: id)
     }
 
+    /// Why the last window of an app left its zone, for the card that stands for the app in the island.
+    private(set) var absences: [String: WindowAbsence] = [:]
+
+    private func app(of ref: WindowRef) -> String? { apps.app(pid: ref.pid)?.bundleID }
+
     /// The window went away or must wait: leave the zone but keep the memory slot so it can come back.
     func release(window id: CGWindowID) {
+        if let ref = stacks.values.lazy.compactMap({ $0.refs[id] }).first, let bundleID = app(of: ref) {
+            absences[bundleID] = apps.isHidden(pid: ref.pid) ? .hidden : (windows.isMinimized(ref) ? .minimized : .closed)
+        }
         memory.unbind(window: id)
         removeFromStack(window: id)
     }
