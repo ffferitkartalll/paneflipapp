@@ -414,7 +414,7 @@ final class StripScroller {
     private func beginGliding(_ started: Scrolling) {
         var current = started
         coordinator.isScrolling = true
-        refresher?.refreshZones()   // the pills go away
+        refresher?.refreshZones()   // the island follows
         current.phase = .gliding
         current.shown = current.start
         current.glideFrom = current.start
@@ -495,7 +495,7 @@ final class StripScroller {
             mover.move(held.ref, to: Parking.frame(for: held.rect, on: next.screen.cocoaFrame, side: next.side).origin)
         }
         coordinator.isScrolling = true
-        refresher?.refreshZones()   // the pills go away
+        refresher?.refreshZones()   // the island follows
         scrolling = next
         if led { followFingers() }
         return true

@@ -2,8 +2,8 @@ import AppKit
 import Observation
 import PaneFlipCore
 
-/// The live state of one zone: which windows are stacked in it and how the pill is being used.
-/// Observable, so the pill redraws itself when it changes.
+/// The live state of one zone: which windows are stacked in it and which of them is in front.
+/// Observable, so what shows it redraws itself when it changes.
 @Observable
 final class ZoneStack {
     struct Tab: Identifiable {
@@ -12,7 +12,7 @@ final class ZoneStack {
         let appName: String
         let bundleID: String
         let icon: NSImage?
-        /// What the pill shows: the app name, plus the window title when the zone holds several windows of that app.
+        /// What the island shows: the app name, plus the window title when the zone holds several windows of that app.
         var displayName = ""
     }
 
@@ -21,9 +21,6 @@ final class ZoneStack {
     var activeID: CGWindowID? {
         didSet { if let id = activeID { mru.removeAll { $0 == id }; mru.insert(id, at: 0) } }
     }
-
-    /// True while the pill is being pressed or scrubbed, so it stays visible.
-    @ObservationIgnored var interacting = false
 
     /// Windows of this zone, most recently active first.
     @ObservationIgnored var mru: [CGWindowID] = []

@@ -79,17 +79,11 @@ final class ZoneEngine: ZoneRefreshing {
 
     // MARK: Feature switches
 
-    /// Placement switched on or off. Off: let go of every window (the memory stays) and hide the pills.
+    /// Placement switched on or off. Off: let go of every window (the memory stays) and hide the island.
     func placementChanged(enabled: Bool) {
         if !enabled { coordinator.releaseAll() }
         refreshZones()
         if enabled { restorer.restore() }
-    }
-
-    /// Stacking switched on or off. Off: each zone keeps only its front window.
-    func stackingChanged(enabled: Bool) {
-        if !enabled { coordinator.enforceSingleApp() }
-        presenters.forEach { $0.zonesDidChange() }
     }
 
     // MARK: Housekeeping

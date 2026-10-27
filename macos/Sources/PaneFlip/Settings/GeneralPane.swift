@@ -20,7 +20,7 @@ struct GeneralPane: View {
 
             Section("Activity") {
                 SettingRow(title: "Enable",
-                           detail: "Turn all features on or off without quitting the app. When off, windows are left alone and no pills are shown.") {
+                           detail: "Turn all features on or off without quitting the app. When off, windows are left alone and the island is not shown.") {
                     Toggle("Enable", isOn: $settings.values.placementEnabled).labelsHidden()
                 }
             }

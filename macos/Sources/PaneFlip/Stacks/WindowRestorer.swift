@@ -101,8 +101,6 @@ final class WindowRestorer {
         for slot in slots {
             let record = memory.records[slot]
             guard var free = candidates[record.bundleID], !free.isEmpty else { continue }
-            // Without stacking a zone holds one window: leave later slots of an already-filled zone waiting.
-            if !settings.values.stackingEnabled, coordinator.stacks[record.zoneID]?.isEmpty == false { continue }
             // A window stays on the display it is on: one on another display than the zone is left alone. Among the
             // others, the one already inside the zone comes first, then the one with the remembered title.
             let zone = coordinator.stacks[record.zoneID]?.rect
@@ -128,7 +126,6 @@ final class WindowRestorer {
             guard let zoneID = ruleZone[bundleID], let stack = coordinator.stacks[zoneID] else { continue }
             let zoneDisplay = display(of: stack.rect)
             for window in free {
-                if !settings.values.stackingEnabled, !stack.isEmpty { break }
                 if let zoneDisplay, let frame = windows.frame(of: window), let there = display(of: frame), there != zoneDisplay { continue }
                 let slot = memory.remember(zoneID: zoneID, bundleID: bundleID, title: "")
                 coordinator.attach(window, toSlot: slot, raise: false)

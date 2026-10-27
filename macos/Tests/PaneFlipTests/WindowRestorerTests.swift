@@ -44,7 +44,7 @@ final class WindowRestorerTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10, 20])
     }
 
-    func testThePillSelectsTheWindowThatIsInFront() {
+    func testTheIslandSelectsTheWindowThatIsInFront() {
         memory.remember(zoneID: zone, bundleID: "app.a", title: "")
         memory.remember(zoneID: zone, bundleID: "app.b", title: "")
         launch("app.a", pid: 1, window: 10)
@@ -65,18 +65,6 @@ final class WindowRestorerTests: XCTestCase {
 
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 0)
         XCTAssertNil(memory.records[0].windowID)
-    }
-
-    func testWithoutStackingAZoneGetsOnlyOneWindow() {
-        settings.values.stackingEnabled = false
-        memory.remember(zoneID: zone, bundleID: "app.a", title: "")
-        memory.remember(zoneID: zone, bundleID: "app.b", title: "")
-        launch("app.a", pid: 1, window: 10)
-        launch("app.b", pid: 2, window: 20)
-
-        restorer.restore()
-
-        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10])
     }
 
     func testNothingIsRestoredWithoutThePermission() {

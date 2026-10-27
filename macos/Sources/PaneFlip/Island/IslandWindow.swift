@@ -6,7 +6,7 @@ struct IslandWindow: Identifiable, Equatable {
     let windowID: CGWindowID?
     let bundleID: String
     let name: String
-    /// The single-colour picture of its app that the pill draws.
+    /// The single-colour picture of its app that the island draws.
     let glyph: NSImage?
     /// Changes when a brand glyph arrives, so that the picture is made again.
     let glyphRevision: Int

@@ -97,8 +97,6 @@ targets:
       - path: Sources/PaneFlip/Zones/LayoutManaging.swift
       - path: Sources/PaneFlip/Zones/DisplayChangeHandling.swift
       - path: Sources/PaneFlip/Zones/ZonePresenting.swift
-      - path: Sources/PaneFlip/Pill/PillPresenter.swift
-      - path: Sources/PaneFlip/Pill/DoubleTapDetector.swift
       - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
       - path: Sources/PaneFlip/Settings/SnapTrigger+Title.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
@@ -124,15 +122,11 @@ targets:
       - path: Sources/PaneFlip/Platform/ScreenProviding.swift
       - path: Sources/PaneFlip/Platform/ScreenInfo.swift
       - path: Sources/PaneFlip/Platform/JSONFileStore.swift
-      - path: Sources/PaneFlip/Pill/PillMetrics.swift
-      - path: Sources/PaneFlip/Pill/PillScrolling.swift
-      - path: Sources/PaneFlip/Pill/PillScrollRouter.swift
       - path: Sources/PaneFlip/Platform/SystemTrackpadSpeed.swift
       - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
-      - path: Sources/PaneFlip/Pill/IconFont.swift
+      - path: Sources/PaneFlip/Island/IconFont.swift
       - path: Sources/PaneFlip/Settings/ReorderPlace.swift
-      - path: Sources/PaneFlip/Pill/PillPanel.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
       - path: Sources/PaneFlip/Settings/AppLanguages.swift
     dependencies:

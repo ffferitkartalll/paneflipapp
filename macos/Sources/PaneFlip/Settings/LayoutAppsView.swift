@@ -2,7 +2,7 @@ import AppKit
 import PaneFlipCore
 import SwiftUI
 
-/// The apps of one layout: for each zone, the apps that open in it and the order the pill shows them in.
+/// The apps of one layout: for each zone, the apps that open in it and the order the island shows them in.
 struct LayoutAppsView: View {
     let layout: NamedLayout
     let editor: LayoutAppsEditing
@@ -39,7 +39,7 @@ struct LayoutAppsView: View {
         let entries = editor.entries(inZones: zones)
         VStack(alignment: .leading, spacing: 12) {
             Text(verbatim: layout.name).font(.title3.bold())
-            Text("An app opens in the zone you choose for it. Apps of a zone appear in the pill in the order shown here; drag them by the handle to change it.")
+            Text("An app opens in the zone you choose for it. Apps of a zone appear in the island in the order shown here; drag them by the handle to change it.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             HStack {
@@ -275,7 +275,7 @@ private struct LayoutAppRow: View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
                 handle(drag: drag, drop: drop, space: "zoneApps")
-                // The same one-colour glyph as on the pill.
+                // The same one-colour glyph as in the island.
                 if let icon = entry.icon {
                     Image(nsImage: icon).renderingMode(.template).resizable().interpolation(.high).antialiased(true)
                         .frame(width: 18, height: 18)
@@ -319,7 +319,7 @@ private struct LayoutAppRow: View {
         }
     }
 
-    /// The windows of the app, in the order the pill shows them, reordered the same way as the apps.
+    /// The windows of the app, in the order the island shows them, reordered the same way as the apps.
     private var windows: some View {
         ReorderableStack(items: entry.windows, height: { _ in ZoneAppsList.windowHeight }, space: "windows-\(entry.id)") { from, to in
             editor.reorder(window: entry.windows[from].slot, by: to - from, inZones: zones)

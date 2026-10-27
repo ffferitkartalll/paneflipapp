@@ -13,7 +13,7 @@ final class StagePanels {
             return panel
         }
         let panel = NSPanel(contentRect: screen.frame, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        // Above the windows, below the pills (which are floating).
+        // Above the windows, below the island (which is floating).
         panel.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue - 1)
         panel.isOpaque = false
         panel.backgroundColor = .clear
