@@ -32,8 +32,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         /// The last offset the fingers told, and whether it is being drawn already: told as often as events come, drawn once per turn of the run loop.
         var following: CGFloat?
         var dragging: CGFloat?
-        /// The windows of the zone with the focus, waiting for the island to have grown.
-        var opening: DispatchWorkItem?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel
@@ -60,8 +58,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private var localMonitor: Any?
     /// How long the island takes to shrink back, with some room.
     private static let shrinkAfter: TimeInterval = 0.7
-    /// How long the island has to grow before the windows of the zone with the focus show under its picture.
-    private static let windowsOpenAfter: TimeInterval = 0.3
     private var dragging = false
     private var followed: UUID?
 
@@ -292,30 +288,21 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
         if !open { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
+        // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, and the island grows to hold them.
+        let zone = open && !dragging ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
         withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
             entry.model.expanded = open
             if open { entry.model.contentOpacity = 1 }
             entry.model.zoom = open ? entry.model.openZoom : 1
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
-        }
-        placeShield(of: entry)
-        // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, once the island has grown (not
-        // before: they would look like something that is not in the island).
-        entry.opening?.cancel()
-        entry.opening = nil
-        guard open, !dragging else { return }
-        let work = DispatchWorkItem { [weak self, weak entry] in
-            guard let self, let entry, entry.hovered, entry.model.windowsZone == nil, !dragging, let zone = focused(in: entry), coordinator.stacks[zone]?.isEmpty == false else { return }
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            if let zone {
                 entry.dragging = nil
                 entry.model.windowsDrag = 0
-                entry.model.windows = self.windows(of: zone)
+                entry.model.windows = windows(of: zone)
                 entry.model.windowsZone = zone
             }
-            placeShield(of: entry)
         }
-        entry.opening = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.windowsOpenAfter, execute: work)
+        placeShield(of: entry)
     }
 
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
