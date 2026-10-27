@@ -24,6 +24,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         var dropZone: UUID?
         /// The zone of the picture a dragged window has waited on, and since when: after a second its row of cards opens.
         var dwell: (zone: UUID, since: Date)?
+        /// Where the panel stands when the island is in sight.
+        var rest: CGRect = .zero
         /// The layout offset the picture of the zones was built at: the frame is drawn at the offsets of the scroll minus this one.
         var builtOffset: CGFloat = 0
         /// Counts the glides told to the island: one that is overtaken does not start.
@@ -64,6 +66,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
+    /// Mission Control or App Exposé is open: the islands are out of sight until it is closed.
+    private var covered = false
     /// Where a dragged window would be put down among the cards of the open row: the grey card with a plus stands at `index`.
     private var placing: (zone: UUID, index: Int)?
     /// How long a dragged window waits on a zone before its row of cards opens.
@@ -96,6 +100,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             // The lit zone follows the focus also while windows move (a layout scrolls to a zone beyond the edge): it costs next to nothing, and the zone the
             // focus goes to must not wait for the scroll to be over.
             if followed != coordinator.focusedZoneID { followFocus() }
+            let covering = screens.isMissionControlActive
+            if covering != covered { cover(covering) }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
             for entry in entries.values {
                 refreshWindows(of: entry)   // a window that came, went or came to the front while the row is open
@@ -119,10 +125,53 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             entries[id] = nil
         }
         for screen in current {
-            guard let layout = repository.activeLayout(for: screen.key) else { remove(screen.displayID); continue }
-            update(entries[screen.displayID] ?? makeEntry(for: screen), screen: screen, layout: layout, among: current)
+            // A full-screen app has the display: no menu bar, no island.
+            guard screen.desktopNumber != nil, let layout = repository.activeLayout(for: screen.key) else { remove(screen.displayID); continue }
+            let known = entries[screen.displayID]
+            let entry = known ?? makeEntry(for: screen)
+            update(entry, screen: screen, layout: layout, among: current)
+            if known == nil && !covered { slideIn(entry) }
         }
         followFocus()
+    }
+
+    private func cover(_ covering: Bool) {
+        covered = covering
+        for entry in entries.values {
+            if covering {
+                if entry.hovered { setOpen(false, for: entry) }
+                entry.shield.orderOut(nil)
+                slideAway(entry) { [weak self, weak entry] in if self?.covered == true { entry?.panel.orderOut(nil) } }
+            } else {
+                entry.shield.orderFrontRegardless()
+                slideIn(entry)
+            }
+        }
+    }
+
+    private static let slideTime: TimeInterval = 0.25
+
+    /// The island goes up out of the screen, fading, and `done` runs when it has gone.
+    private func slideAway(_ entry: Entry, done: @escaping () -> Void) {
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = Self.slideTime
+            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            entry.panel.animator().setFrame(entry.rest.offsetBy(dx: 0, dy: entry.model.barHeight), display: true)
+            entry.panel.animator().alphaValue = 0
+        }, completionHandler: done)
+    }
+
+    /// The island comes down from above the screen to where it stands, fading in.
+    private func slideIn(_ entry: Entry) {
+        entry.panel.setFrame(entry.rest.offsetBy(dx: 0, dy: entry.model.barHeight), display: true)
+        entry.panel.alphaValue = 0
+        entry.panel.orderFrontRegardless()
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = Self.slideTime
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            entry.panel.animator().setFrame(entry.rest, display: true)
+            entry.panel.animator().alphaValue = 1
+        }
     }
 
     private func update(_ entry: Entry, screen: ScreenInfo, layout: NamedLayout, among all: [ScreenInfo]) {
@@ -159,12 +208,13 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         // Tall enough for the island at its largest, with a row of cards under its picture.
         let tall = ceil(model.tallestOpenHeight)
         let frame = CGRect(x: screen.cocoaFrame.midX - width / 2, y: screen.cocoaFrame.maxY - tall, width: width, height: tall)
-        if entry.panel.frame != frame { entry.panel.setFrame(frame, display: true) }
-        entry.panel.orderFrontRegardless()
+        entry.rest = frame
+        if !covered && entry.panel.frame != frame { entry.panel.setFrame(frame, display: true) }
+        if !covered { entry.panel.orderFrontRegardless() }
         refreshWindows(of: entry)
         entry.shrinking?.cancel()
         entry.shield.setFrame(islandFrame(of: entry, open: entry.hovered), display: false)
-        entry.shield.orderFrontRegardless()
+        if !covered { entry.shield.orderFrontRegardless() }
         #if DEBUG
         showMockNotch(of: entry, on: screen, bar: bar)
         #endif
@@ -681,10 +731,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     }
 
     private func remove(_ id: String) {
-        entries[id]?.shrinking?.cancel()
-        entries[id]?.panel.orderOut(nil)
-        entries[id]?.shield.orderOut(nil)
+        guard let entry = entries[id] else { return }
+        entry.shrinking?.cancel()
+        entry.shield.orderOut(nil)
         entries[id] = nil
+        slideAway(entry) { entry.panel.orderOut(nil) }
     }
 
     private func removeAll() { Array(entries.keys).forEach(remove) }
