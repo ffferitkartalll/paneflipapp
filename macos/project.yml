@@ -116,6 +116,7 @@ targets:
       - path: Sources/PaneFlip/App/AppAccent.swift
       - path: Sources/PaneFlip/Island/IslandWindow.swift
       - path: Sources/PaneFlip/Island/IslandShiftedRow.swift
+      - path: Sources/PaneFlip/Island/IslandCardsLayout.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift
       - path: Sources/PaneFlip/Platform/ScrollStaging.swift
       - path: Sources/PaneFlip/Platform/ScrollPicture.swift
