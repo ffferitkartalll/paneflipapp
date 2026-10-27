@@ -32,6 +32,12 @@ final class CarouselCardsTests: XCTestCase {
         XCTAssertEqual(cards.centres(at: 1.5, other: 20), [-70, -30, 30, 70])
     }
 
+    func testTheRowCanBeHeldOnAPlaceInsteadOfTheFrontCard() {
+        let cards = CarouselCards(count: 3, wide: 100, fit: 1000)
+        XCTAssertEqual(cards.centres(at: 0, other: 100, focus: 1), [-100, 0, 100], "the card in front is first, the row stays where it was")
+        XCTAssertEqual(cards.centres(at: 0, other: 100), [0, 100, 200])
+    }
+
     func testWithNoCardInFrontTheCardsShareTheRoomAndAreCentred() {
         let cards = CarouselCards(count: 4, wide: 100, fit: 200)
         XCTAssertEqual(cards.other(front: nil), 50)

@@ -102,6 +102,15 @@ public final class StackMemory {
         return released
     }
 
+    /// Puts the slot `i` in the place of the slot `j`: moved down it comes after it, moved up before it. Its window stays bound to it; the slots in between
+    /// each move one place the other way.
+    public func moveSlot(_ i: Int, toPlaceOf j: Int) {
+        guard i != j, records.indices.contains(i), records.indices.contains(j) else { return }
+        var copy = records
+        copy.insert(copy.remove(at: i), at: j)
+        records = copy
+    }
+
     /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together; the apps
     /// in between each move one place the other way. Returns the live windows whose slot moved (now
     /// unbound), which the caller must release so they are attached again in the new order.

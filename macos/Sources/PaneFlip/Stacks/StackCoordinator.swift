@@ -581,6 +581,15 @@ final class StackCoordinator {
 
     private func app(of ref: WindowRef) -> String? { apps.app(pid: ref.pid)?.bundleID }
 
+    /// A slot of a zone was put in the place of another one (a card of the island was dragged): the windows of the zone stand in the new order.
+    func moveSlot(_ i: Int, toPlaceOf j: Int, inZone zone: UUID) {
+        memory.moveSlot(i, toPlaceOf: j)
+        guard let stack = stacks[zone] else { return }
+        let place = { (tab: ZoneStack.Tab) in self.memory.index(ofWindow: tab.id) ?? Int.max }
+        stack.tabs = stack.tabs.enumerated().sorted { (place($0.element), $0.offset) < (place($1.element), $1.offset) }.map(\.element)
+        stack.refreshNames()
+    }
+
     /// The window went away or must wait: leave the zone but keep the memory slot so it can come back.
     func release(window id: CGWindowID) {
         if let ref = stacks.values.lazy.compactMap({ $0.refs[id] }).first, let bundleID = app(of: ref) {

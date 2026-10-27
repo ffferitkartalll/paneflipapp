@@ -29,6 +29,22 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(StackMemory(store: store).records[0].title, "Inbox")
     }
 
+    func testASlotMovedToThePlaceOfAnotherKeepsItsWindowAndTheOthersMoveOnePlace() {
+        let memory = StackMemory(store: MemoryStore())
+        let zone = UUID()
+        let slots = ["a", "b", "c"].map { memory.remember(zoneID: zone, bundleID: $0, title: "") }
+        memory.bind(slot: slots[0], toWindow: 1, title: "")
+
+        memory.moveSlot(0, toPlaceOf: 2)
+        XCTAssertEqual(memory.records.map(\.bundleID), ["b", "c", "a"], "moved down: after it")
+        XCTAssertEqual(memory.records[2].windowID, 1)
+        memory.moveSlot(2, toPlaceOf: 0)
+        XCTAssertEqual(memory.records.map(\.bundleID), ["a", "b", "c"], "moved up: before it")
+        memory.moveSlot(1, toPlaceOf: 1)
+        memory.moveSlot(1, toPlaceOf: 9)
+        XCTAssertEqual(memory.records.map(\.bundleID), ["a", "b", "c"], "nowhere to go: nothing changes")
+    }
+
     func testUnbindKeepsTheSlotForgetRemovesIt() {
         let memory = StackMemory(store: MemoryStore())
         let zone = UUID()

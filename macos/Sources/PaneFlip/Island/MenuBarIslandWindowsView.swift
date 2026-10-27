@@ -21,9 +21,8 @@ struct MenuBarIslandWindowsView: View {
             } else {
                 carousel(size: size)
             }
-            // Under each card: its title, and why an app is not open; they are laid out as the cards are and move with them.
-            IslandShiftedRow(model: model, size: CGSize(width: size.width, height: model.captionHeight)) { ForEach(model.windows) { caption($0) } }
-                .frame(width: model.cardsFit, height: model.captionHeight)
+            // The room under the cards: their titles are drawn in it, in the cells of the cards.
+            Color.clear.frame(width: 1, height: model.captionHeight)
         }
         .id(model.windowsZone)   // another zone: its windows fade in as the old ones fade out
         .transition(.opacity)
@@ -36,24 +35,32 @@ struct MenuBarIslandWindowsView: View {
             Text(verbatim: window.name)
                 .font(font)
                 .foregroundStyle(.white.opacity(window.isActive ? 1 : 0.55))
+                .frame(maxWidth: .infinity)   // the text is centred in the width of its card, whatever that is while the card widens or narrows
                 .frame(height: 16)
             Group {
                 if let absence = window.absence { Text(absence.title) } else { Text(verbatim: " ") }
             }
             .font(.system(size: 11))
             .foregroundStyle(.white.opacity(0.5))
+            .frame(maxWidth: .infinity)
             .frame(height: 14)
         }
+        .multilineTextAlignment(.center)
         .lineLimit(1)
+    }
+
+    /// The card the mouse carries lies above the others.
+    private func lifted(_ card: some View, _ window: IslandWindow) -> some View {
+        card.zIndex(model.liftedCard == window.id ? 1 : 0)
     }
 
     private func carousel(size: CGSize) -> some View {
         let wide = model.cardsFit
         let icon = min(32, max(14, min(size.width, size.height) * 0.4))
         let frame = RoundedRectangle(cornerRadius: 3)
-        func row(_ cell: @escaping (IslandWindow) -> AnyView) -> some View {
-            IslandShiftedRow(model: model, size: size) { ForEach(model.windows) { cell($0) } }
-                .frame(width: wide, height: size.height)
+        func row(height: CGFloat? = nil, _ cell: @escaping (IslandWindow) -> AnyView) -> some View {
+            IslandShiftedRow(model: model, size: CGSize(width: size.width, height: height ?? size.height)) { ForEach(model.windows) { lifted(cell($0), $0) } }
+                .frame(width: wide, height: height ?? size.height, alignment: .top)
         }
         func picture(_ window: IslandWindow, _ ink: Color) -> AnyView {
             AnyView(Group {
@@ -62,19 +69,32 @@ struct MenuBarIslandWindowsView: View {
                 }
             })
         }
-        return ZStack {
-            frame.fill(AppAccent.color).frame(width: size.width, height: size.height)
-            // Outside the frame: the outlines of the windows beyond it, and the pictures, light.
-            ZStack {
-                row { _ in AnyView(RoundedRectangle(cornerRadius: 2).strokeBorder(.white.opacity(0.5), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))) }
-                row { picture($0, .white.opacity(0.9)) }
+        // The frame goes with the card in front when the mouse carries that.
+        let shift = model.frameShift
+        return ZStack(alignment: .top) {
+            frame.fill(AppAccent.color).frame(width: size.width, height: size.height).offset(x: shift)
+            // A card the mouse carries is grey, its edge not dashed, whether it is over the frame or not (the front card has its frame).
+            row { window in
+                AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity(window.id == model.liftedCard && !window.isActive ? 0.22 : 0)))
             }
-            .mask { ZStack { Rectangle(); frame.frame(width: size.width, height: size.height).blendMode(.destinationOut) }.compositingGroup() }
+            // Outside the frame: the outlines of the windows beyond it, and the pictures, light.
+            ZStack(alignment: .top) {
+                // Always the same shape, only dimmed while it is carried: it glides with the card to its place, and does not appear there.
+                row { window in AnyView(RoundedRectangle(cornerRadius: 2).strokeBorder(.white.opacity(window.id == model.liftedCard ? 0 : 0.5), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))) }
+                // The title and the line under the picture are in the cell of the card, in the same row, so that they move exactly as the card does.
+                row(height: size.height + model.windowsGap + model.captionHeight) { window in
+                    AnyView(VStack(spacing: model.windowsGap) {
+                        picture(window, .white.opacity(0.9)).frame(height: size.height)
+                        caption(window)
+                    })
+                }
+            }
+            .mask { ZStack(alignment: .top) { Rectangle(); frame.frame(width: size.width, height: size.height).offset(x: shift).blendMode(.destinationOut) }.compositingGroup() }
             // Inside it: the pictures, dark.
             row { picture($0, AppAccent.ink) }
-                .mask { frame.frame(width: size.width, height: size.height) }
-            frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: size.width, height: size.height)
+                .mask { frame.frame(width: size.width, height: size.height).offset(x: shift) }
+            frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: size.width, height: size.height).offset(x: shift)
         }
-        .frame(width: wide, height: size.height)
+        .frame(width: wide, height: size.height, alignment: .top)
     }
 }

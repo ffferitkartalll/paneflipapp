@@ -30,6 +30,13 @@ final class MenuBarIslandModel {
     var windows: [IslandWindow] = []
     /// How far the fingers (or the wheel's turn) have led the windows from the one in front, in windows: positive brings the ones before it in.
     var windowsDrag: CGFloat = 0
+    /// The card the mouse carries (`IslandWindow.id`), and where its middle is, from the middle of the row.
+    var carriedCard: String?
+    /// The card is held up: it is put down while it goes to its place.
+    var liftedCard: String?
+    /// While the front card is carried, the row is held on the place that card had, not moved to wherever it is put among the others.
+    var pinnedFront: Int?
+    var carriedX: CGFloat = 0
     /// A zone on the screen has more than one card in its row: windows and apps that are not open count alike.
     var crowded = false
     var barHeight: CGFloat = 24
@@ -67,8 +74,14 @@ extension MenuBarIslandModel {
     func fitZoom(toDisplayWidth width: CGFloat) -> CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (width - 2 * barHeight) / max(roomWidth, 1))) }
     private var cardsGeometry: CarouselCards { CarouselCards(count: windows.count, wide: windowsFrame.width, fit: cardsFit) }
     var cardsOther: CGFloat { cardsGeometry.other(front: windows.firstIndex(where: \.isActive)) }
+    /// The middle of a card from the middle of the row, where it lies.
+    func cardCentre(of card: Int) -> CGFloat { cardsGeometry.centres(at: cardsAt, other: cardsOther, focus: pinnedFront.map { CGFloat($0) })[card] }
+    /// How far the frame of the window in front is from the middle: it goes with the card when the mouse carries that.
+    var frameShift: CGFloat { carried != nil && carried == windows.firstIndex(where: \.isActive) ? carriedX : 0 }
+    /// The card the mouse carries.
+    var carried: Int? { carriedCard.flatMap { id in windows.firstIndex { $0.id == id } } }
     /// The card under a point `x` from the middle of the row.
-    func card(atX x: CGFloat) -> Int? { cardsGeometry.card(atX: x, at: cardsAt, other: cardsOther) }
+    func card(atX x: CGFloat) -> Int? { cardsGeometry.card(atX: x, at: cardsAt, other: cardsOther, focus: pinnedFront.map { CGFloat($0) }) }
 
     /// The place of the window in front among the cards, in cards: the fingers' drag moves it among the open windows, and the cards of apps that are not
     /// open lie between. Nil when no window is in front.
