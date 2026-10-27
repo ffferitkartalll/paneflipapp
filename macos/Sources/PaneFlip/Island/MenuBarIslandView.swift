@@ -23,7 +23,7 @@ struct MenuBarIslandView: View {
         if open {
             // The height of the menu bar again as room right, left and below.
             left = -size.width / 2; right = size.width / 2
-            glyphLeft = left + bar; glyphTop = bar; height = size.height
+            glyphLeft = -gw / 2; glyphTop = bar; height = size.height   // in the middle: the island is wider than it when no zone waits beyond the edges
         } else if hidden {
             left = -model.notchWidth / 2; right = model.notchWidth / 2   // no more than the notch itself; the picture is there, but not shown
             glyphLeft = -gw / 2; glyphTop = m; height = bar
@@ -39,11 +39,11 @@ struct MenuBarIslandView: View {
                 .offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
                 .opacity(hidden ? 0 : 1)
             if open {
-                // Under the picture, as wide as it; it grows out of the picture's foot as the island grows, and fades.
+                // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades.
                 MenuBarIslandWindowsView(model: model)
-                    .frame(width: gw, height: model.windowsHeight, alignment: .top)
+                    .frame(width: model.cardsFit, height: model.windowsHeight, alignment: .top)
                     .clipped()
-                    .offset(x: glyphLeft + gw / 2, y: bar + gh + model.windowsGap)
+                    .offset(x: 0, y: bar + gh + model.windowsGap)
                     .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
             }
         }

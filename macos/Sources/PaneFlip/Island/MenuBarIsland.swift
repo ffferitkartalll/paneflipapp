@@ -93,7 +93,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             // focus goes to must not wait for the scroll to be over.
             if followed != coordinator.focusedZoneID { followFocus() }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
-            for entry in entries.values { refreshWindows(of: entry) }   // a window that came, went or came to the front while the row is open
+            for entry in entries.values {
+                refreshWindows(of: entry)   // a window that came, went or came to the front while the row is open
+                refreshCrowding(of: entry)
+            }
             warmGlyph()
         }
     }
@@ -146,7 +149,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         model.notchWidth = screen.notchWidth
         model.scale = native?.backingScaleFactor ?? 2
         // The open island is as wide as its picture and the room beside it, and must fit the display.
-        model.openZoom = max(1, min(MenuBarIslandView.hoverZoom, (screen.cocoaFrame.width - 2 * bar) / max(model.glyph.size.width, 1)))
+        model.crowded = isCrowded(entry)
+        model.openZoom = model.fitZoom(toDisplayWidth: screen.cocoaFrame.width)
         let width = screen.cocoaFrame.width
         // Tall enough for the island at its largest, with a row of cards under its picture.
         let tall = ceil(model.tallestOpenHeight)
@@ -367,9 +371,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         let model = entry.model, frame = islandFrame(of: entry, open: true), size = model.windowsFrame
         guard let zone = model.windowsZone, size.width > 0 else { return false }
         let top = model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap, fromTop = frame.maxY - point.y
-        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.glyph.size.width * model.openZoom / 2 else { return false }
-        let index = Int(((model.cardsAt ?? 0) + (point.x - frame.midX) / size.width).rounded())
-        guard model.windows.indices.contains(index), let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return true }
+        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.cardsFit / 2 else { return false }
+        guard let index = model.card(atX: point.x - frame.midX), let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return true }
         let card = model.windows[index]
         if let id = card.windowID {
             if card.isActive { coordinator.focus(zone: zone) } else { coordinator.slideSelect(id, in: stack) }
@@ -395,6 +398,29 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         let spring: Animation = moves ? .interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping) : .spring(response: 0.4, dampingFraction: 0.78)
         withAnimation(spring) { entry.model.windows = now }
         placeShield(of: entry)
+    }
+
+    /// A zone on the screen has several cards: the island is laid out for more room (`roomWidth`).
+    private func isCrowded(_ entry: Entry) -> Bool {
+        entry.model.glyph.cells.contains { $0.isOnScreen && cardCount(of: $0.id) > 1 }
+    }
+
+    private func refreshCrowding(of entry: Entry) {
+        let crowded = isCrowded(entry)
+        guard crowded != entry.model.crowded else { return }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            entry.model.crowded = crowded
+            entry.model.openZoom = entry.model.fitZoom(toDisplayWidth: entry.panel.frame.width)
+        }
+        placeShield(of: entry)
+    }
+
+    /// How many cards `windows(of:)` makes for a zone, counted without the pictures: its windows and the apps of the zone that are not open.
+    private func cardCount(of zone: UUID) -> Int {
+        guard let stack = coordinator.stacks[zone] else { return 0 }
+        let open = Set(stack.tabs.map(\.bundleID))
+        let closed = Set(memory.slots(inZones: [zone]).map(\.bundleID)).subtracting(open)
+        return stack.tabs.count + closed.count
     }
 
     /// While the island rests, the picture of one more app is made at each look, so that the first click on a zone does not wait for it (the font that
@@ -455,8 +481,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
     private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
         let model = entry.model, bar = model.barHeight, frame = entry.panel.frame
-        let width = model.openSize.width
-        let x = (point.x - (frame.midX - width / 2 + bar)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
+        let x = (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
         guard entry.hovered else { return nil }
         return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
     }

@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 /// The windows of the zone chosen in the picture, as a carousel like the one inside the zone: the window in front fills a frame as large as the zone, in
-/// the middle under the picture, drawn as the frame of the screen is in the picture; the other windows lie against it, side by side with no gap, outlined
+/// the middle under the picture, drawn as the frame of the screen is in the picture; the other windows lie against it (narrower, all alike, when they would not fit in the island), side by side with no gap, outlined
 /// as the zones beyond the screen's edge are, and slide through the frame as another comes to the front (or as the fingers lead them). The picture of each
 /// app stands in the middle of its window, dark where it is over the lit frame and light where it is not. The apps of the zone that are not open stand among them in the order of the zone (their pictures dimmer). The title of each is under it, and under that why an app is not open.
 /// The rows are moved, never redrawn, and the masks stand still: a step costs the main thread next to nothing, which fast repeated steps need.
@@ -22,8 +22,8 @@ struct MenuBarIslandWindowsView: View {
                 carousel(size: size)
             }
             // Under each card: its title, and why an app is not open; they are laid out as the cards are and move with them.
-            IslandShiftedRow(model: model, size: size, content: HStack(spacing: 0) { ForEach(model.windows) { caption($0).frame(width: size.width, height: model.captionHeight) } })
-                .frame(width: model.glyph.size.width * model.openZoom, height: model.captionHeight)
+            IslandShiftedRow(model: model, size: CGSize(width: size.width, height: model.captionHeight)) { ForEach(model.windows) { caption($0) } }
+                .frame(width: model.cardsFit, height: model.captionHeight)
         }
         .id(model.windowsZone)   // another zone: its windows fade in as the old ones fade out
         .transition(.opacity)
@@ -48,11 +48,11 @@ struct MenuBarIslandWindowsView: View {
     }
 
     private func carousel(size: CGSize) -> some View {
-        let wide = model.glyph.size.width * model.openZoom
+        let wide = model.cardsFit
         let icon = min(32, max(14, min(size.width, size.height) * 0.4))
         let frame = RoundedRectangle(cornerRadius: 3)
         func row(_ cell: @escaping (IslandWindow) -> AnyView) -> some View {
-            IslandShiftedRow(model: model, size: size, content: HStack(spacing: 0) { ForEach(model.windows) { cell($0).frame(width: size.width, height: size.height) } })
+            IslandShiftedRow(model: model, size: size) { ForEach(model.windows) { cell($0) } }
                 .frame(width: wide, height: size.height)
         }
         func picture(_ window: IslandWindow, _ ink: Color) -> AnyView {

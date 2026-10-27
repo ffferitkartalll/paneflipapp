@@ -25,6 +25,24 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.openSize, CGSize(width: 32 * 5 + 48, height: 24 + 16 * 5 + 24), "the picture and the height of the menu bar round it")
     }
 
+    func testTheIslandIsOnlyWidenedWhereAZoneHoldsSeveralCardsAndZonesDoNotWaitBeyondBothEdges() {
+        let model = model()
+        XCTAssertEqual(model.roomWidth, 32, "no zone with several cards: nothing to cramp")
+        model.crowded = true
+        XCTAssertEqual(model.roomWidth, 96, "as with a screen of zones beyond both edges")
+
+        let beyond = CGRect(x: 1000, y: 0, width: 500, height: 500)
+        model.glyph = ZoneGlyph(zones: [(UUID(), CGRect(x: 0, y: 0, width: 1000, height: 500)), (UUID(), beyond)], screen: CGRect(x: 0, y: 0, width: 1000, height: 500),
+                                screenSize: CGSize(width: 32, height: 16))
+        XCTAssertEqual(model.glyph.size.width, 48)
+        XCTAssertEqual(model.roomWidth, 96, "zones beyond one edge only")
+        model.glyph = ZoneGlyph(zones: [(UUID(), CGRect(x: -500, y: 0, width: 500, height: 500)), (UUID(), CGRect(x: 0, y: 0, width: 1000, height: 500)), (UUID(), beyond)],
+                                screen: CGRect(x: 0, y: 0, width: 1000, height: 500), screenSize: CGSize(width: 32, height: 16))
+        XCTAssertEqual(model.roomWidth, 64, "zones beyond both edges: the picture itself")
+        model.crowded = false
+        XCTAssertEqual(model.roomWidth, 64)
+    }
+
     func testTheFrameIsAsLargeAsTheChosenZoneInThePicture() {
         let model = model()
         choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))   // a quarter of the screen: 16 × 8 in the picture, five times that open

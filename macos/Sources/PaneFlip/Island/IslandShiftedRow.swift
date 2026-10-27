@@ -1,13 +1,13 @@
 import SwiftUI
 
-/// A row of the window carousel, moved sideways by the fingers. It reads the drag itself, so only this small body runs for each finger event
-/// and the rows (built by the parent, which does not read the drag) are moved, not rebuilt.
+/// A row of the window carousel. It reads the front card and the finger drag itself, so only this small body runs for each finger event
+/// and the cards (built by the parent, which does not read them) are laid out again, not rebuilt.
 struct IslandShiftedRow<Content: View>: View {
     let model: MenuBarIslandModel
     let size: CGSize
-    let content: Content
+    @ViewBuilder let content: Content
 
     var body: some View {
-        content.offset(x: (CGFloat(model.windows.count - 1) / 2 - (model.cardsAt ?? 0)) * size.width)
+        IslandCardsLayout(wide: size.width, fit: model.cardsFit, height: size.height, at: model.cardsAt ?? 0, other: model.cardsOther, hasFront: model.cardsAt != nil) { content }
     }
 }
