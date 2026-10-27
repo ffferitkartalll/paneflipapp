@@ -8,6 +8,6 @@ struct IslandShiftedRow<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        IslandCardsLayout(wide: size.width, fit: model.cardsFit, height: size.height, at: model.cardsAt ?? 0, other: model.cardsOther, hasFront: model.cardsAt != nil) { content }
+        IslandCardsLayout(wide: size.width, fit: model.cardsFit, height: size.height, at: model.cardsAt ?? 0, other: model.cardsOther, hasFront: model.cardsAt != nil, focus: model.pinnedFront.map { CGFloat($0) }, carried: model.carried, carriedX: model.carriedX, discrete: model.carriedCard != nil, frontIndex: model.windows.firstIndex(where: \.isActive)) { content }
     }
 }

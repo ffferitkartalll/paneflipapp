@@ -59,6 +59,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// How long the island takes to shrink back, with some room.
     private static let shrinkAfter: TimeInterval = 0.7
     private var dragging = false
+    /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
+    private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
 
     init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
@@ -330,11 +332,79 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
 
     // MARK: The windows of a zone
 
+    /// The mouse went down on the shield: on a card of the open row it waits to see whether this is a click or a drag; on a zone in the picture it is a click.
+    private func press(at point: CGPoint) {
+        pressed = nil
+        for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
+            let row = rowHit(at: point, in: entry)
+            guard row.onRow else { continue }
+            if let index = row.card {
+                let model = entry.model
+                pressed = (entry, model.windows[index].id, point, point.x - islandFrame(of: entry, open: true).midX - model.cardCentre(of: index),
+                           Dictionary(uniqueKeysWithValues: model.windows.indices.map { (model.windows[$0].id, model.cardCentre(of: $0)) }), false)
+            }
+            return
+        }
+        click(at: point)
+    }
+
+    private func drag(to point: CGPoint) {
+        guard var current = pressed else { return }
+        if !current.moved && hypot(point.x - current.from.x, point.y - current.from.y) < 4 { return }
+        let model = current.entry.model, middle = islandFrame(of: current.entry, open: true).midX
+        // The card is where the mouse is, as it was held.
+        let centre = point.x - middle - current.grab
+        if !current.moved {
+            // The card is held up and the hand takes it, from where it lay.
+            withTransaction(Transaction(animation: nil)) {
+                model.carriedX = current.from.x - middle - current.grab
+                model.carriedCard = current.card
+                if model.windows.first(where: { $0.id == current.card })?.isActive == true { model.pinnedFront = model.windows.firstIndex { $0.isActive } }
+            }
+            (current.entry.shield.contentView as? IslandShieldView)?.cursor = .closedHand
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { model.liftedCard = current.card }
+            current.moved = true
+            pressed = current
+        }
+        withTransaction(Transaction(animation: nil)) { model.carriedX = centre }
+        // Where the card goes among the others: after the cards whose middle, as the row lay when the mouse went down, is left of the card's middle. The row
+        // moves as the cards change places, so what it lay like then is what is measured.
+        guard let zone = model.windowsZone, let from = model.windows.firstIndex(where: { $0.id == current.card }) else { return }
+        let to = model.windows.filter { $0.id != current.card }.filter { (current.centres[$0.id] ?? 0) < centre }.count
+        guard to != from, let source = slot(of: model.windows[from], in: zone), let target = slot(of: model.windows[to], in: zone) else { return }
+        coordinator.moveSlot(source, toPlaceOf: target, inZone: zone)
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) { model.windows = windows(of: zone) }
+    }
+
+    private func release(at point: CGPoint) {
+        guard let current = pressed else { return }
+        pressed = nil
+        let model = current.entry.model
+        guard current.moved else {
+            if let zone = model.windowsZone, let card = model.windows.first(where: { $0.id == current.card }) { choose(card, in: zone) }
+            return
+        }
+        // The card goes to its place and is put down.
+        (current.entry.shield.contentView as? IslandShieldView)?.cursor = nil
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            model.pinnedFront = nil   // the front card, if it was carried, comes back to the middle with the row
+            if let index = model.carried { model.carriedX = model.cardCentre(of: index) }
+            model.liftedCard = nil
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if model.liftedCard == nil, model.carriedCard == current.card { model.carriedCard = nil }   // in its place: it is laid out with the others again
+        }
+    }
+
+    /// The slot of the memory that a card stands for: its window's, or the first of the app that is not open.
+    private func slot(of card: IslandWindow, in zone: UUID) -> Int? {
+        memory.slots(inZones: [zone]).first { card.windowID != nil ? $0.windowID == card.windowID : $0.bundleID == card.bundleID }?.index
+    }
+
     /// A click on the shield: on a zone in the picture of the open island, a row of cards, one for each window of that zone, opens under the picture and the island
     /// grows to hold it; on the same zone again, the row closes and the island shrinks back.
     private func click(at point: CGPoint) {
         for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
-            if selectWindow(at: point, in: entry) { continue }
             guard let zone = cell(at: point, in: entry) else { continue }
             coordinator.focus(zone: zone)
             followFocus()   // the highlight goes to the zone at once
@@ -352,22 +422,24 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         }
     }
 
-    /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
-    /// True when the click was on the row.
-    private func selectWindow(at point: CGPoint, in entry: Entry) -> Bool {
+    /// Whether the point is on the open row of cards, and the card under it, if any.
+    private func rowHit(at point: CGPoint, in entry: Entry) -> (onRow: Bool, card: Int?) {
         let model = entry.model, frame = islandFrame(of: entry, open: true), size = model.windowsFrame
-        guard let zone = model.windowsZone, size.width > 0 else { return false }
+        guard model.windowsZone != nil, size.width > 0 else { return (false, nil) }
         let top = model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap, fromTop = frame.maxY - point.y
-        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.cardsFit / 2 else { return false }
-        guard let index = model.card(atX: point.x - frame.midX), let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return true }
-        let card = model.windows[index]
+        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.cardsFit / 2 else { return (false, nil) }
+        return (true, model.card(atX: point.x - frame.midX))
+    }
+
+    /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
+    private func choose(_ card: IslandWindow, in zone: UUID) {
+        guard let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return }
         if let id = card.windowID {
             if card.isActive { coordinator.focus(zone: zone) } else { coordinator.slideSelect(id, in: stack) }
             followFocus()
         } else {
             openApp(card.bundleID)
         }
-        return true
     }
 
     /// The windows of the open row: as they are now (one that came, went or came to the front is shown), or, if the zone is gone, no row.
@@ -526,7 +598,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         shield.collectionBehavior = [.canJoinAllSpaces, .stationary]
         // Not quite clear: the window server lets the mouse through the pixels of a window that are fully clear. A hundredth of black cannot be seen.
         let cover = IslandShieldView(frame: .zero)
-        cover.onClick = { [weak self] point in self?.click(at: point) }
+        cover.onPress = { [weak self] point in self?.press(at: point) }
+        cover.onDrag = { [weak self] point in self?.drag(to: point) }
+        cover.onRelease = { [weak self] point in self?.release(at: point) }
         cover.wantsLayer = true
         cover.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.01).cgColor
         shield.contentView = cover

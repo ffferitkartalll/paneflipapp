@@ -118,6 +118,18 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(windows.raised.last, 2)
     }
 
+    func testASlotMovedToThePlaceOfAnotherPutsTheWindowsOfTheZoneInThatOrder() {
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 500, height: 800)])
+        for id: CGWindowID in 1 ... 3 { coordinator.snap(.fake(id), into: zone) }
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [1, 2, 3])
+        let first = memory.index(ofWindow: 1)!, last = memory.index(ofWindow: 3)!
+
+        coordinator.moveSlot(first, toPlaceOf: last, inZone: zone)
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [2, 3, 1], "the window of the slot comes after the one whose place it took")
+        XCTAssertEqual(memory.records.compactMap(\.windowID), [2, 3, 1], "and so does its slot in the memory")
+    }
+
     func testAClickOnAZoneOfTheIslandBringsTheFocusThereUnlessItIsThereAlready() {
         let left = UUID(), right = UUID(), empty = UUID()
         let leftRect = CGRect(x: 0, y: 0, width: 500, height: 800), rightRect = CGRect(x: 504, y: 0, width: 496, height: 400)
