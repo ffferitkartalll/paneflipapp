@@ -154,7 +154,7 @@ final class StripScrollingTests: XCTestCase {
 
         XCTAssertTrue(scroller.reveal(zone: areaZone))
         XCTAssertTrue(coordinator.isScrolling)
-        XCTAssertFalse(scroller.reveal(zone: areaZone), "not again while it scrolls")
+        XCTAssertTrue(scroller.reveal(zone: areaZone), "it stands in view where the scroll goes: a scroll runs, and the frame is told at once")
     }
 
     /// A screen of two zones (the line at 40 %) with a whole screen beyond its right edge, also of two zones (the line in the middle).
@@ -335,6 +335,26 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 750, "one scroll to the second zone")
     }
 
+    func testAShortcutBackToAZoneOfTheScreenGivesTheRunningScrollANewAimToo() {
+        let scroller = scroller()
+        scroller.start()
+
+        var stands: [CGRect] = []
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        XCTAssertTrue(scroller.reveal(zone: screenZone, standsAt: { stands.append($0) }), "the scroll that runs turns back at once, it does not wait for the landing")
+        XCTAssertEqual(stands.count, 1, "and the frame is told where the zone will stand")
+        XCTAssertTrue(scroller.reveal(zone: screenZone, standsAt: { stands.append($0) }), "a zone that stands in view where the scroll goes is told at once too")
+        XCTAssertEqual(stands.count, 2)
+        for _ in 0 ..< 4 { run(60); settle() }
+        XCTAssertEqual(viewport.offset(for: key), 0)
+
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        run(8)   // somewhere in the glide
+        XCTAssertTrue(scroller.reveal(zone: screenZone), "also in the middle of the glide")
+        for _ in 0 ..< 4 { run(60); settle() }
+        XCTAssertEqual(viewport.offset(for: key), 0)
+    }
+
     func testAScrollOfTheUsersOwnEndsWhatAFocusChangeAskedFor() {
         let far = UUID()
         var strip = repository.activeLayout(for: key)!.strip
@@ -434,27 +454,40 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 250)
     }
 
-    func testTheCoordinatorAsksForTheScrollWhenTheFocusIsOnAParkedWindow() {
+    func testTheCoordinatorAsksForTheScrollWhenTheFocusMovesToAWindow() {
         var asked: [UUID] = []
         coordinator.onFocusBeyondTheEdge = { asked.append($0) }
 
         windows.focused = .fake(3)
         coordinator.followFocus()
-        XCTAssertEqual(asked, [], "a window in view")
+        XCTAssertEqual(asked, [screenZone], "the scroller decides: a zone of the screen asks to be brought back when the layout is scrolled away")
 
         windows.focused = .fake(2)
         coordinator.followFocus()
-        XCTAssertEqual(asked, [areaZone])
+        XCTAssertEqual(asked, [screenZone, areaZone])
 
         coordinator.followFocus()
         coordinator.followFocus()
-        XCTAssertEqual(asked, [areaZone], "the focus staying there does not ask again: a scroll away from it is not undone")
+        XCTAssertEqual(asked, [screenZone, areaZone], "the focus staying there does not ask again: a scroll away from it is not undone")
 
         windows.focused = .fake(3)
         coordinator.followFocus()
         windows.focused = .fake(2)
         coordinator.followFocus()
-        XCTAssertEqual(asked, [areaZone, areaZone], "going back to it asks again")
+        XCTAssertEqual(asked, [screenZone, areaZone, screenZone, areaZone], "going back to it asks again")
+    }
+
+    func testTheFocusGoingToAZoneOfTheScreenScrollsBackSoNoZoneBeyondTheEdgeIsInView() {
+        let scroller = scroller()
+        scroller.start()
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 250)
+
+        XCTAssertTrue(scroller.reveal(zone: screenZone), "a zone of the screen itself, with the layout scrolled away from it")
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 0)
+        XCTAssertFalse(scroller.reveal(zone: screenZone), "back at the screen: nothing more")
     }
 
     func testAParkedZoneHasNoPillAndTakesNoDrops() {

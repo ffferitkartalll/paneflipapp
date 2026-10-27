@@ -159,7 +159,7 @@ final class StackCoordinatorTests: XCTestCase {
         windows.focused = .fake(1)
         coordinator.followFocus()
         var asked: [UUID] = []
-        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(here) }
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(here); return true }
 
         coordinator.focusZone(toward: .right)
         coordinator.focusZone(toward: .right)   // before the first scroll is over
@@ -177,12 +177,33 @@ final class StackCoordinatorTests: XCTestCase {
         var asked: [UUID] = []
         var flashed: [CGRect] = []
         coordinator.flashZone = { flashed.append($0) }
-        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(CGRect(x: 0, y: 0, width: 1000, height: 800)) }
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(CGRect(x: 0, y: 0, width: 1000, height: 800)); return true }
 
         coordinator.focus(zone: beyond)
         XCTAssertEqual(asked, [beyond])
         XCTAssertTrue(flashed.isEmpty, "a click on the island shows no frame")
         XCTAssertEqual(coordinator.focusedZoneID, beyond, "the highlight does not wait for the scroll")
+    }
+
+    func testAClickOnAZoneOfTheScreenWhileTheLayoutIsScrolledAwayScrollsBackBeforeTheWindowComesForward() {
+        let a = UUID(), b = UUID()
+        coordinator.apply(zones: [a: CGRect(x: 0, y: 0, width: 500, height: 800), b: CGRect(x: 504, y: 0, width: 496, height: 800)])
+        coordinator.snap(.fake(1), into: a)
+        coordinator.snap(.fake(2), into: b)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var flashed: [CGRect] = []
+        coordinator.flashZone = { flashed.append($0) }
+        var asked: [UUID] = []
+        coordinator.onReachBeyondTheEdge = { zone, _ in asked.append(zone); return true }
+        let raised = windows.raised.count
+
+        coordinator.focus(zone: b)
+        XCTAssertEqual(asked, [b])
+        XCTAssertEqual(windows.raised.count, raised, "the window comes forward when the layout has scrolled back")
+        XCTAssertTrue(flashed.isEmpty, "a click on the island shows no frame")
+        coordinator.finishFocusBeyondTheEdge()
+        XCTAssertEqual(windows.raised.last, 2)
     }
 
     func testGoingLeftOfTwoZonesOnTopOfEachOtherTakesTheOneThatFollowsInTheOrderOfTheZones() {
@@ -221,7 +242,7 @@ final class StackCoordinatorTests: XCTestCase {
         windows.focused = .fake(1)
         coordinator.followFocus()
         var asked: [UUID] = []
-        coordinator.onReachBeyondTheEdge = { zone, _ in asked.append(zone) }
+        coordinator.onReachBeyondTheEdge = { zone, _ in asked.append(zone); return true }
         coordinator.isScrolling = true   // the layout is on its way to the first zone
         let raisedBefore = windows.raised.count
 
@@ -249,7 +270,7 @@ final class StackCoordinatorTests: XCTestCase {
         var asked: [UUID] = []
         coordinator.flashZone = { flashed.append($0) }
         let standsAt = CGRect(x: 0, y: 0, width: 1000, height: 800)
-        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(standsAt) }
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(standsAt); return true }
 
         coordinator.focusZone(toward: .left)
         XCTAssertTrue(asked.isEmpty, "nothing lies beyond the left edge")

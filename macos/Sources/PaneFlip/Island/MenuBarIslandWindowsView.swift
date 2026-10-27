@@ -4,7 +4,7 @@ import SwiftUI
 /// The windows of the zone chosen in the picture, as a carousel like the one inside the zone: the window in front fills a frame as large as the zone, in
 /// the middle under the picture, drawn as the frame of the screen is in the picture; the other windows lie against it, side by side with no gap, outlined
 /// as the zones beyond the screen's edge are, and slide through the frame as another comes to the front (or as the fingers lead them). The picture of each
-/// app stands in the middle of its window, dark where it is over the lit frame and light where it is not. The apps of the zone that are not open stand among them in the order of the zone (their pictures dimmer). The title of the window in front is under the frame.
+/// app stands in the middle of its window, dark where it is over the lit frame and light where it is not. The apps of the zone that are not open stand among them in the order of the zone (their pictures dimmer). The title of each is under it, and under that why an app is not open.
 /// The rows are moved, never redrawn, and the masks stand still: a step costs the main thread next to nothing, which fast repeated steps need.
 struct MenuBarIslandWindowsView: View {
     let model: MenuBarIslandModel
@@ -21,25 +21,29 @@ struct MenuBarIslandWindowsView: View {
             } else {
                 carousel(size: size)
             }
-            // Under each card: the title of the window in front, or why an app is not open; the titles move with the cards.
-            IslandShiftedRow(model: model, size: size, content: HStack(spacing: 0) { ForEach(model.windows) { caption($0).frame(width: size.width, height: 16) } })
-                .frame(width: model.glyph.size.width * model.openZoom, height: 16)
+            // Under each card: its title, and why an app is not open; they are laid out as the cards are and move with them.
+            IslandShiftedRow(model: model, size: size, content: HStack(spacing: 0) { ForEach(model.windows) { caption($0).frame(width: size.width, height: model.captionHeight) } })
+                .frame(width: model.glyph.size.width * model.openZoom, height: model.captionHeight)
         }
         .id(model.windowsZone)   // another zone: its windows fade in as the old ones fade out
         .transition(.opacity)
     }
 
-    @ViewBuilder private func caption(_ window: IslandWindow) -> some View {
-        Group {
-            if window.isActive {
-                Text(verbatim: window.name).foregroundStyle(.white)
-            } else if let absence = window.absence {
-                Text(absence.title).foregroundStyle(.white.opacity(0.5))
-            } else {
-                Color.clear   // a card with no caption still takes its place: a view with nothing in it is left out of the row
+    /// What stands under a card: its title, and under that why an app is not open. Both are in the cell of the card, so they move with it.
+    private func caption(_ window: IslandWindow) -> some View {
+        let font = Font(NSFont.menuBarFont(ofSize: 0))   // as the date and the time of the menu bar
+        return VStack(spacing: 0) {
+            Text(verbatim: window.name)
+                .font(font)
+                .foregroundStyle(.white.opacity(window.isActive ? 1 : 0.55))
+                .frame(height: 16)
+            Group {
+                if let absence = window.absence { Text(absence.title) } else { Text(verbatim: " ") }
             }
+            .font(.system(size: 11))
+            .foregroundStyle(.white.opacity(0.5))
+            .frame(height: 14)
         }
-        .font(Font(NSFont.menuBarFont(ofSize: 0)))   // as the date and the time of the menu bar
         .lineLimit(1)
     }
 

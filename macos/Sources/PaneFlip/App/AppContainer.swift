@@ -174,7 +174,7 @@ final class AppContainer {
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                      isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() })
-        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, screens, editor] target in
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, editor] target in
             let v = settings.values
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target == .strip ? v.overflowZonesEnabled : v.stackingEnabled)
                 && !missionControl()
@@ -192,7 +192,7 @@ final class AppContainer {
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
-        coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) }
+        coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
         scroller.onGlide = { [weak island] screen, from, to in island?.glide(on: screen, from: from, to: to) }
         // A zone a shortcut asked for beyond the edge is focused once the scroll is over.

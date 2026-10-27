@@ -61,11 +61,13 @@ final class StackCoordinator {
     var holdsTheFocus: () -> Bool = { false }
     /// Highlights the zone the focus went to (a keyboard shortcut moved it): its rectangle.
     var flashZone: (CGRect) -> Void = { _ in }
-    /// Called when the focus is on a window of a zone beyond the screen's edge, which is out of sight: the layout should scroll to it.
+    /// Called when the focus moved to a window: the layout scrolls to its zone if it is out of sight beyond the screen's edge, or back to the screen itself
+    /// if the zone is one of the screen's own and the layout is scrolled away.
     var onFocusBeyondTheEdge: ((UUID) -> Void)?
-    /// A shortcut moved the focus to a zone beyond the edge: the layout should scroll to it, without showing the map of the strip.
-    /// It tells where the zone will stand when the scroll is over, as the scroll starts.
-    var onReachBeyondTheEdge: ((UUID, _ standsAt: @escaping (CGRect) -> Void) -> Void)?
+    /// A shortcut or a click on the island moved the focus to a zone: the layout should scroll to it (beyond the edge) or back (a zone of the screen itself),
+    /// without showing the map of the strip. It tells where the zone will stand when the scroll is over, as the scroll starts. True when a scroll started
+    /// or runs: the window comes forward when it is over.
+    var onReachBeyondTheEdge: ((UUID, _ standsAt: @escaping (CGRect) -> Void) -> Bool)?
 
     private let windows: WindowSystem
     private let memory: StackMemory
@@ -307,20 +309,18 @@ final class StackCoordinator {
     func focus(zone id: UUID) {
         guard !placementOnly(), windowScrub == nil, !isSliding, focusedZoneID != id,
               let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
-        if target.isParked {
-            // Beyond the screen's edge: as for the shortcuts, the layout brings it into view and the window comes forward once it stands there.
-            chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
-            focusedZoneID = id
-            onFocusMoved?()
-            focusPending = (id, ref, Date().addingTimeInterval(4), true)   // flashed: a click on the island shows no frame, as for a zone on the screen
-            onReachBeyondTheEdge?(id) { _ in }
-            return
-        }
         // The highlight goes at once, and the app is asked off the main thread: an app that is slow to answer (a mail client busy bringing its window up)
         // must neither keep the highlight waiting nor hold the whole app. What is read back from it is not believed until it has caught up (2 s at most).
-        chosenFocus = (id, ref.id, Date().addingTimeInterval(2))
+        chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
         focusedZoneID = id
         onFocusMoved?()
+        // Beyond the screen's edge, or on the screen with the layout scrolled away: as for the shortcuts, the layout scrolls and the window comes forward once
+        // it stands there (flashed: a click on the island shows no frame, as for a zone that is in view).
+        if onReachBeyondTheEdge?(id, { _ in }) == true || target.isParked {
+            focusPending = (id, ref, Date().addingTimeInterval(4), true)
+            return
+        }
+        chosenFocus?.until = Date().addingTimeInterval(2)
         if let focusQueue { focusQueue { [windows] in windows.raise(ref) } } else { windows.raise(ref) }
     }
 
@@ -357,20 +357,19 @@ final class StackCoordinator {
         focusedZoneID = id
         onFocusMoved?()
         focusPending = (id, ref, Date().addingTimeInterval(4), false)
-        if !target.isParked, !isScrolling {
+        // Out of sight, scrolled away from the screen's own zones, or a scroll runs that may take it out of sight: the layout is asked to bring it into view (a
+        // scroll that runs is given a new aim), and the window comes forward and the frame shows when that is over (`finishFocusBeyondTheEdge`), so that nothing
+        // keeps the machine busy while the pictures glide. The frame shows at once where the zone will stand when the layout can say so.
+        let scrolls = onReachBeyondTheEdge?(id) { [weak self] rect in
+            self?.focusPending?.flashed = true
+            self?.flashZone(rect)
+        } ?? false
+        if !scrolls, !target.isParked, !isScrolling {
             // In view and nothing moves: the frame first, which the render server fades by itself; bringing the window forward may keep this
             // thread busy a while.
             focusPending = nil
             flashZone(target.rect)
             if let focusQueue { focusQueue { [windows] in windows.raise(ref) } } else { windows.raise(ref) }   // in order, off the main thread
-            return
-        }
-        // Out of sight, or a scroll runs that may take it out of sight: the layout is asked to bring it into view (a scroll that runs is given a new aim),
-        // and the window comes forward and the frame shows when that is over (`finishFocusBeyondTheEdge`), so that nothing keeps the machine busy while
-        // the pictures glide. The frame shows at once where the zone will stand when the layout can say so.
-        onReachBeyondTheEdge?(id) { [weak self] rect in
-            self?.focusPending?.flashed = true
-            self?.flashZone(rect)
         }
     }
 
@@ -742,7 +741,7 @@ final class StackCoordinator {
         if moved, let previous { onFocusLeft?(previous) }
         updateFloatingZones(focus: focused)
         guard let focused, let stack = stack(containing: focused.id) else { return }
-        if moved, stack.isParked, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
+        if moved, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
         guard stack.activeID != focused.id else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)
