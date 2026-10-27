@@ -57,7 +57,7 @@ final class StackCoordinator {
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the pills are hidden.
     var isScrolling = false
-    /// Whether PaneFlip itself has the focus (a swipe with the mouse's wheel button): the window a swipe ends on is then given the focus.
+    /// Whether PaneFlip itself has the focus (one of its own windows is in front): the window a swipe ends on is then given the focus.
     var holdsTheFocus: () -> Bool = { false }
     /// Highlights the zone the focus went to (a keyboard shortcut moved it): its rectangle.
     var flashZone: (CGRect) -> Void = { _ in }
@@ -426,11 +426,6 @@ final class StackCoordinator {
     /// when the pictures cannot follow the fingers (a slide that is not a swipe runs, there is nothing to swipe through): the caller steps
     /// instead, and a step that has to wait for the slide waits.
     @discardableResult
-    /// Whether a swipe through the windows could begin with the pointer here: a zone with more than one window, nothing else being placed.
-    func canScrubWindows(at point: CGPoint) -> Bool {
-        !placementOnly() && (zoneID(at: point).flatMap { stacks[$0] }.map { $0.tabs.count > 1 && !$0.isFloating } ?? false)
-    }
-
     func beginWindowScrub(at point: CGPoint) -> Bool {
         guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return false }
         return beginWindowScrub(in: stack)
@@ -511,7 +506,7 @@ final class StackCoordinator {
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
         guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else {
-            // Back on the window it began on: a swipe that took the focus (the mouse's wheel button) gives it to this window.
+            // Back on the window it began on: a swipe that took the focus gives it to this window.
             let staying = stack.refs[scrub.start]
             return carousel?.endScrub(shift: 0) { [windows, weak self] in if self?.holdsTheFocus() == true, let staying { windows.raise(staying) } } ?? ()
         }

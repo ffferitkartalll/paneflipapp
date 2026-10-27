@@ -26,13 +26,6 @@ final class StackCoordinatorTests: XCTestCase {
         }
     }
 
-    func testASwipeThroughWindowsNeedsAZoneUnderThePointerThatHoldsSeveral() {
-        let zone = UUID()
-        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
-        XCTAssertFalse(coordinator.canScrubWindows(at: CGPoint(x: 50, y: 50)), "an empty zone has nothing to swipe through")
-        XCTAssertFalse(coordinator.canScrubWindows(at: CGPoint(x: 500, y: 500)))
-    }
-
     func testPointJustOutsideAZoneStillCountsThroughTheMargin() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])

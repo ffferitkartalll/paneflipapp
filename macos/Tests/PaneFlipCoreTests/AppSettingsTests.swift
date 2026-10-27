@@ -20,14 +20,6 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(storage.saved?.placementEnabled, false)
     }
 
-    func testTheWheelButtonMovesThroughWindowsUnlessSwitchedOff() {
-        let storage = Storage()
-        let settings = AppSettings(storage: storage)
-        XCTAssertTrue(settings.values.mouseButtonSwipe)
-        settings.values.mouseButtonSwipe = false
-        XCTAssertEqual(storage.saved?.mouseButtonSwipe, false)
-    }
-
     func testBrandIconsAreFetchedUnlessSwitchedOff() {
         XCTAssertTrue(AppSettings(storage: Storage()).values.fetchBrandIcons)
     }
