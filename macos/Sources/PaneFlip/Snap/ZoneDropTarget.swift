@@ -7,8 +7,8 @@ protocol ZoneDropTarget: AnyObject {
     func dragMoved(to point: CGPoint)
     /// The pointer is on the target, on a zone or not.
     func isOver(_ point: CGPoint) -> Bool
-    /// The zone under the pointer, when it is on the target.
-    func zone(at point: CGPoint) -> UUID?
+    /// The window is dropped with the pointer here: it goes to the zone under the pointer, and, over the open row of that zone's windows, to the place the row shows.
+    func drop(_ window: WindowRef, at point: CGPoint)
     /// The drag is over.
     func dragEnded()
 }

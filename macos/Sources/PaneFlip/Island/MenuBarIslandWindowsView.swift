@@ -65,7 +65,7 @@ struct MenuBarIslandWindowsView: View {
         func picture(_ window: IslandWindow, _ ink: Color) -> AnyView {
             AnyView(Group {
                 if let glyph = window.glyph {
-                    Image(nsImage: glyph).renderingMode(.template).resizable().scaledToFit().foregroundStyle(window.windowID == nil ? ink.opacity(0.5) : ink).frame(width: icon, height: icon)
+                    Image(nsImage: glyph).renderingMode(.template).resizable().scaledToFit().foregroundStyle(window.windowID == nil && !window.isPlaceholder ? ink.opacity(0.5) : ink).frame(width: icon, height: icon)
                 }
             })
         }
@@ -75,12 +75,12 @@ struct MenuBarIslandWindowsView: View {
             frame.fill(AppAccent.color).frame(width: size.width, height: size.height).offset(x: shift)
             // A card the mouse carries is grey, its edge not dashed, whether it is over the frame or not (the front card has its frame).
             row { window in
-                AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity(window.id == model.liftedCard && !window.isActive ? 0.22 : 0)))
+                AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity((window.id == model.liftedCard || window.isPlaceholder) && !window.isActive ? 0.22 : 0)))
             }
             // Outside the frame: the outlines of the windows beyond it, and the pictures, light.
             ZStack(alignment: .top) {
                 // Always the same shape, only dimmed while it is carried: it glides with the card to its place, and does not appear there.
-                row { window in AnyView(RoundedRectangle(cornerRadius: 2).strokeBorder(.white.opacity(window.id == model.liftedCard ? 0 : 0.5), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))) }
+                row { window in AnyView(RoundedRectangle(cornerRadius: 2).strokeBorder(.white.opacity(window.id == model.liftedCard || window.isPlaceholder ? 0 : 0.5), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))) }
                 // The title and the line under the picture are in the cell of the card, in the same row, so that they move exactly as the card does.
                 row(height: size.height + model.windowsGap + model.captionHeight) { window in
                     AnyView(VStack(spacing: model.windowsGap) {

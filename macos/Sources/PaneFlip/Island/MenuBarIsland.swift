@@ -22,6 +22,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         var cooling = false
         /// The zone a dragged window would be dropped on: it is lit, as a zone with the focus is.
         var dropZone: UUID?
+        /// The zone of the picture a dragged window has waited on, and since when: after a second its row of cards opens.
+        var dwell: (zone: UUID, since: Date)?
         /// The layout offset the picture of the zones was built at: the frame is drawn at the offsets of the scroll minus this one.
         var builtOffset: CGFloat = 0
         /// Counts the glides told to the island: one that is overtaken does not start.
@@ -62,6 +64,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
+    /// Where a dragged window would be put down among the cards of the open row: the grey card with a plus stands at `index`.
+    private var placing: (zone: UUID, index: Int)?
+    /// How long a dragged window waits on a zone before its row of cards opens.
+    private static let dwellTime: TimeInterval = 1
 
     init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
          memory: StackMemory, apps: AppCatalog, openApp: @escaping (String) -> Void) {
@@ -280,11 +286,48 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
                 hit = point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
             }
             if entry.cooling { if hit { continue }; entry.cooling = false }
-            let drop = dragging && hit && entry.hovered ? cell(at: point, in: entry) : nil
+            let overRow = dragging && hit && entry.hovered && rowHit(at: point, in: entry).onRow
+            let drop = dragging && hit && entry.hovered ? (overRow ? entry.model.windowsZone : cell(at: point, in: entry)) : nil
             if drop != entry.dropZone { entry.dropZone = drop; entry.model.select(drop ?? focused(in: entry)) }
+            if dragging { prepareDrop(on: overRow ? nil : drop, overRow: overRow, at: point, in: entry) }
             guard hit != entry.hovered else { continue }
             setOpen(hit, for: entry)
         }
+    }
+
+    /// A dragged window is over the island: over the row of cards it shows where it would be put down; waiting on a zone of the picture opens that zone's row.
+    private func prepareDrop(on zone: UUID?, overRow: Bool, at point: CGPoint, in entry: Entry) {
+        let model = entry.model
+        if overRow, let open = model.windowsZone {
+            // After the cards whose middle, as the row lies now, is left of the pointer (the grey card itself does not count). A card that is already
+            // counted stays counted a little past its middle, so that a pointer resting on a card does not flip the grey card from one side to the other.
+            let x = point.x - islandFrame(of: entry, open: true).midX, held = placing?.zone == open ? placing?.index : nil
+            let cards = model.windows.indices.filter { !model.windows[$0].isPlaceholder }
+            let left = cards.enumerated().filter { n, card in x > model.cardCentre(of: card) + (held.map { n < $0 } == true ? -10 : 10) }.count
+            setPlacing(left, in: open, entry)
+            entry.dwell = nil
+            return
+        }
+        setPlacing(nil, in: nil, entry)
+        guard let zone else { return entry.dwell = nil }
+        guard let dwell = entry.dwell, dwell.zone == zone else { return entry.dwell = (zone, Date()) }
+        guard model.windowsZone != zone, Date().timeIntervalSince(dwell.since) >= Self.dwellTime else { return }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            entry.dragging = nil
+            model.windowsDrag = 0
+            model.windows = windows(of: zone)
+            model.windowsZone = zone
+        }
+        placeShield(of: entry)
+    }
+
+    private func setPlacing(_ index: Int?, in zone: UUID?, _ entry: Entry) {
+        // Another display's island is not this one's business.
+        if index == nil, let current = placing?.zone, !entry.zones.contains(current) { return }
+        guard placing?.zone != zone || placing?.index != index else { return }
+        placing = zone.flatMap { zone in index.map { (zone, $0) } }
+        guard let shown = entry.model.windowsZone else { return }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { entry.model.windows = windows(of: shown) }
     }
 
     private func setOpen(_ open: Bool, for entry: Entry) {
@@ -532,7 +575,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
                                           glyphRevision: iconFont.revision, absence: absence, isActive: false))
             }
         }
-        return cards + stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
+        cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
+        if let placing, placing.zone == zone { cards.insert(.placeholder, at: min(placing.index, cards.count)) }
+        return cards
     }
 
     private func focused(in entry: Entry) -> UUID? { coordinator.focusedZoneID.flatMap { entry.zones.contains($0) ? $0 : nil } }
@@ -557,14 +602,29 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         return entries.values.contains { $0.hovered }
     }
 
-    func zone(at point: CGPoint) -> UUID? {
+    func drop(_ window: WindowRef, at point: CGPoint) {
         hover(at: point)
-        return entries.values.lazy.compactMap { self.cell(at: point, in: $0) }.first
+        let index = placing?.index
+        let zone = placing?.zone ?? entries.values.lazy.compactMap { self.cell(at: point, in: $0) }.first
+        placing = nil
+        guard let zone else { return }
+        // The cards beside the place, before the window comes: its own card, if it was in this zone, is not a neighbour.
+        let others = windows(of: zone).enumerated().filter { $0.element.windowID != window.id }
+        let next = index.flatMap { i in others.first { $0.offset >= i }?.element }, last = others.last?.element
+        coordinator.snap(window, into: zone)
+        guard index != nil, let own = memory.index(ofWindow: window.id) else { return }
+        if let next, let beside = slot(of: next, in: zone) {
+            coordinator.moveSlot(own, toPlaceOf: StackMemory.place(of: own, beside: beside, after: false), inZone: zone)
+        } else if let last, let beside = slot(of: last, in: zone) {
+            coordinator.moveSlot(own, toPlaceOf: StackMemory.place(of: own, beside: beside, after: true), inZone: zone)
+        }
     }
 
     func dragEnded() {
         dragging = false
+        placing = nil
         for entry in entries.values {
+            entry.dwell = nil
             if entry.dropZone != nil { entry.dropZone = nil; entry.model.select(focused(in: entry)) }
             if entry.hovered { entry.cooling = true; setOpen(false, for: entry) }   // the drop is done: the island closes, and opens again for a new visit
         }

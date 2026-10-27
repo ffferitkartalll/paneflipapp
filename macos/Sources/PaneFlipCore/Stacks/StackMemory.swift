@@ -111,6 +111,11 @@ public final class StackMemory {
         records = copy
     }
 
+    /// Where slot `i` has to be moved to (`moveSlot(_:toPlaceOf:)`) to end up just before slot `j`, or just after it.
+    public static func place(of i: Int, beside j: Int, after: Bool) -> Int {
+        after ? (i < j ? j : j + 1) : (i < j ? j - 1 : j)
+    }
+
     /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together; the apps
     /// in between each move one place the other way. Returns the live windows whose slot moved (now
     /// unbound), which the caller must release so they are attached again in the new order.
