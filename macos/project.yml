@@ -34,7 +34,7 @@ targets:
       base:
         PRODUCT_NAME: PaneFlip
         PRODUCT_BUNDLE_IDENTIFIER: $(PANEFLIP_BUNDLE_ID)
-        MARKETING_VERSION: "1.3"
+        MARKETING_VERSION: "1.4"
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon   # Resources/AppIcon.icon (Icon Composer)
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor   # the app's green: the accent of every native control under Multicolor (same as AppAccent)
