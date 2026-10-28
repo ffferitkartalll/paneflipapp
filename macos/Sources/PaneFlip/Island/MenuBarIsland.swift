@@ -66,8 +66,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
-    /// Mission Control or App Exposé is open: the islands are out of sight until it is closed.
+    /// Mission Control or App Exposé is open, or the layout editor is: the islands are out of sight until it is closed.
     private var covered = false
+    /// True while something else owns the screen (the layout editor); set by `AppContainer`.
+    var isSuppressed: () -> Bool = { false }
     /// Where a dragged window would be put down among the cards of the open row: the grey card with a plus stands at `index`.
     private var placing: (zone: UUID, index: Int)?
     /// How long a dragged window waits on a zone before its row of cards opens.
@@ -100,7 +102,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
             // The lit zone follows the focus also while windows move (a layout scrolls to a zone beyond the edge): it costs next to nothing, and the zone the
             // focus goes to must not wait for the scroll to be over.
             if followed != coordinator.focusedZoneID { followFocus() }
-            let covering = screens.isMissionControlActive
+            let covering = screens.isMissionControlActive || isSuppressed()
             if covering != covered { cover(covering) }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
             for entry in entries.values {
@@ -320,6 +322,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     // MARK: Hover
 
     private func hover(at point: CGPoint) {
+        guard !covered else { return }
         for entry in entries.values {
             let model = entry.model, bar = entry.panel.frame
             let m = MenuBarIslandView.margin
