@@ -152,27 +152,22 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         }
     }
 
-    /// A display that is gone leaves its apps in the default zone of the main screen's layout; one that came
-    /// back gets them again (a slot remembers the zone it had).
+    /// The windows of a display that is gone spread over the usable area of the first display and are in no zone; when the display comes
+    /// back they return to the zones they were in, also when they were put in a zone of another display meanwhile (a slot remembers its home).
     func displaysDidChange() {
         let current = screens.screens()
         let connected = Set(current.map(\.displayID))
         let before = knownDisplays
         knownDisplays = connected
-        // The first look also adopts what a display left behind while the app was not running.
         guard before.isEmpty || before != connected else { return }
 
-        if let main = current.first, let target = repository.activeLayout(for: main.key)?.fallbackZoneID {
-            let orphans = repository.zoneIDs(ofDisplaysNotIn: connected)
-            release(memory.remap(Dictionary(uniqueKeysWithValues: orphans.map { ($0, target) })))
+        // The windows of a display that is gone spread over the usable area of the first display, in no zone; their slots wait for the display.
+        if let main = current.first {
+            coordinator.displace(zones: repository.zoneIDs(ofDisplaysNotIn: connected), over: main.axVisible)
         }
-        let back = connected.subtracting(before)
-        if !before.isEmpty, !back.isEmpty {
-            let home = Set(current.filter { back.contains($0.displayID) }
-                .compactMap { repository.activeLayout(for: $0.key) }.flatMap(\.zoneIDs))
-            let everywhere = current.compactMap { repository.activeLayout(for: $0.key) }.flatMap(\.zoneIDs)
-            release(memory.remap(Dictionary(uniqueKeysWithValues: everywhere.map { ($0, $0) }), preferred: home))
-        }
+        // Every zone of the displays that came back, whichever layout is active there.
+        let home = repository.zoneIDs(ofDisplaysNotIn: before).subtracting(repository.zoneIDs(ofDisplaysNotIn: connected))
+        if !before.isEmpty, !home.isEmpty { release(memory.returnHome(to: home)) }
         refresher?.restoreWindows()
     }
 

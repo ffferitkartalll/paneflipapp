@@ -7,6 +7,7 @@ final class FakeScreens: ScreenProviding {
     var pointerCocoa = CGPoint.zero
     var menuBarThickness: CGFloat = 24
     var isMissionControlActive = false
+    var isDockSettled = true
 
     var infos: [ScreenInfo] = []
 
