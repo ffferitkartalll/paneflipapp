@@ -13,8 +13,11 @@ final class StackCoordinator {
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
     /// Windows of an unplugged display, spread over the usable area of another one: in no zone, their slots wait for the display. Kept for the session only.
-    private var displaced: [CGWindowID: WindowRef] = [:]
+    private var displaced: [CGWindowID: (ref: WindowRef, slot: UUID?)] = [:]
     func isDisplaced(_ id: CGWindowID) -> Bool { displaced[id] != nil }
+    var displacedWindows: [WindowRef] { displaced.values.map(\.ref) }
+    /// The slot a displaced window filled: when its display is back it goes to that slot, not to another one of the same app.
+    func displacedSlot(of id: CGWindowID) -> UUID? { displaced[id]?.slot }
     /// The window that had the focus at the last look (see `followFocus`).
     private var lastFocusedID: CGWindowID?
     /// Runs the question "which window has the focus" off the main thread (nil: where it is asked, in tests). The app that has just come to the front
@@ -603,17 +606,11 @@ final class StackCoordinator {
         for id in zones {
             guard let stack = stacks[id] else { continue }
             for ref in Array(stack.refs.values) {
+                displaced[ref.id] = (ref, memory.index(ofWindow: ref.id).map { memory.records[$0].id })
                 removeFromStack(window: ref.id)
-                displaced[ref.id] = ref
+                windows.setFrame(area, of: ref)
             }
         }
-        spread(over: area)
-    }
-
-    /// Puts the displaced windows over `area` again where they are not: the system moves the windows of an unplugged display on its own, some time after,
-    /// and the Dock may land after the first placement.
-    func spread(over area: CGRect) {
-        for ref in displaced.values where windows.frame(of: ref).map({ $0 != area }) ?? true { windows.setFrame(area, of: ref) }
     }
 
     /// The window has its zone again (or is gone): it is no longer displaced.

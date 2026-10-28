@@ -175,4 +175,80 @@ final class WindowRestorerTests: XCTestCase {
 
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.map(\.id), [10, 11])
     }
+
+    func testTwoWindowsOfOneAppOnTwoDisplaysEachComeBackToTheirOwnZone() {
+        let near = zone, far = UUID()
+        let nearRect = CGRect(x: 0, y: 0, width: 800, height: 600), farRect = CGRect(x: 1000, y: 0, width: 800, height: 600)
+        func info(_ key: String, _ area: CGRect) -> ScreenInfo { ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area) }
+        screens.infos = [info("a|d1", nearRect), info("b|d1", farRect)]
+        apps.apps.append(AppInfo(pid: 1, bundleID: "app.x", name: "x"))
+        windows.windowsByPID[1] = [.fake(1, pid: 1), .fake(2, pid: 1)]
+        for id: CGWindowID in [1, 2] { windows.all.insert(id); windows.onScreen.insert(id); screens.spacesByWindow[id] = [1] }
+        coordinator.apply(zones: [near: nearRect, far: farRect])
+        let slotNear = memory.remember(zoneID: near, bundleID: "app.x", title: "")
+        let slotFar = memory.remember(zoneID: far, bundleID: "app.x", title: "")
+        coordinator.attach(.fake(1, pid: 1), toSlot: slotNear, raise: false)
+        coordinator.attach(.fake(2, pid: 1), toSlot: slotFar, raise: false)
+
+        screens.infos = [info("a|d1", nearRect)]                       // the far display is unplugged
+        coordinator.apply(zones: [near: nearRect])
+        coordinator.displace(zones: [far], over: nearRect)
+        screens.infos = [info("a|d1", nearRect), info("b|d1", farRect)]   // and plugged in again
+        coordinator.apply(zones: [near: nearRect, far: farRect])
+        coordinator.removeFromStack(window: 2)
+        memory.returnHome(to: [far]).forEach { coordinator.removeFromStack(window: $0) }
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[near]?.tabs.map(\.id), [1])
+        XCTAssertEqual(coordinator.stacks[far]?.tabs.map(\.id), [2])
+        XCTAssertEqual(windows.frames[2], farRect)
+    }
+
+    func testAWindowThatLeftWithItsDisplayComesBackEvenWhenTheAppDoesNotListItYet() {
+        let near = zone, far = UUID()
+        let nearRect = CGRect(x: 0, y: 0, width: 800, height: 600), farRect = CGRect(x: 1000, y: 0, width: 800, height: 600)
+        func info(_ key: String, _ area: CGRect) -> ScreenInfo { ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area) }
+        screens.infos = [info("a|d1", nearRect), info("b|d1", farRect)]
+        apps.apps.append(AppInfo(pid: 1, bundleID: "app.x", name: "x"))
+        windows.windowsByPID[1] = [.fake(2, pid: 1)]
+        windows.all.insert(2); windows.onScreen.insert(2); screens.spacesByWindow[2] = [1]
+        coordinator.apply(zones: [near: nearRect, far: farRect])
+        memory.remember(zoneID: near, bundleID: "app.x", title: "")
+        let slotFar = memory.remember(zoneID: far, bundleID: "app.x", title: "")
+        coordinator.attach(.fake(2, pid: 1), toSlot: slotFar, raise: false)
+        coordinator.displace(zones: [far], over: nearRect)
+        coordinator.apply(zones: [near: nearRect, far: farRect])
+        memory.returnHome(to: [far]).forEach { coordinator.removeFromStack(window: $0) }
+        windows.windowsByPID[1] = []      // the app does not list its windows now
+        windows.onScreen.remove(2)
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[far]?.tabs.map(\.id), [2])
+    }
+
+    func testAWindowThatLeftWithItsDisplayDoesNotJoinAZoneOfAnotherDisplayBeforeItsOwnZoneIsInView() {
+        let near = zone, far = UUID()
+        let nearRect = CGRect(x: 0, y: 0, width: 800, height: 600), farRect = CGRect(x: 1000, y: 0, width: 800, height: 600)
+        func info(_ key: String, _ area: CGRect) -> ScreenInfo { ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area) }
+        screens.infos = [info("a|d1", nearRect)]
+        apps.apps.append(AppInfo(pid: 1, bundleID: "app.x", name: "x"))
+        windows.windowsByPID[1] = [.fake(2, pid: 1)]
+        windows.all.insert(2); windows.onScreen.insert(2); screens.spacesByWindow[2] = [1]
+        coordinator.apply(zones: [near: nearRect, far: farRect])
+        memory.remember(zoneID: near, bundleID: "app.x", title: "")
+        let slotFar = memory.remember(zoneID: far, bundleID: "app.x", title: "")
+        coordinator.attach(.fake(2, pid: 1), toSlot: slotFar, raise: false)
+        coordinator.displace(zones: [far], over: nearRect)
+        coordinator.apply(zones: [near: nearRect])                 // the far display is back, its zones not yet in view
+        memory.returnHome(to: [far]).forEach { coordinator.removeFromStack(window: $0) }
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[near]?.tabs.count, 0, "it waits for its own zone")
+        XCTAssertEqual(memory.records.count, 2)
+        coordinator.apply(zones: [near: nearRect, far: farRect])   // the zones are in view
+        restorer.restore()
+        XCTAssertEqual(coordinator.stacks[far]?.tabs.map(\.id), [2])
+    }
 }

@@ -70,7 +70,7 @@ final class ZoneEngine: ZoneRefreshing {
 
     private func displaysChanged(waited: Int = 0) {
         guard waited > 0 || !waitingForDock else { return }   // a wait is already running
-        if !screens.isDockSettled {
+        if !screens.isDockSettled, windows.isTrusted {   // without the permission the Dock cannot be asked, and nothing may wait for it
             waitingForDock = true
             DispatchQueue.main.asyncAfter(deadline: .now() + (waited < 30 ? 0.1 : 0.5)) { [weak self] in self?.displaysChanged(waited: waited + 1) }
             return

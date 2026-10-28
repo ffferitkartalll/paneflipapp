@@ -52,9 +52,7 @@ final class CGSScreenProvider: ScreenProviding {
     /// lands, and a missing answer from the Dock (it does not answer while it moves) means it has not landed.
     var isDockSettled: Bool {
         if CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false { return true }
-        let dock = dockRect()
-        let settled = dock.map { dock in NSScreen.screens.contains { flip($0.frame).intersects(dock) } } ?? false
-        return settled
+        return dockRect().map { dock in NSScreen.screens.contains { flip($0.frame).intersects(dock) } } ?? false
     }
 
     func screens() -> [ScreenInfo] {
@@ -85,12 +83,7 @@ final class CGSScreenProvider: ScreenProviding {
     /// never seen on a display).
     private func missedDock(on s: NSScreen) -> CGRect? {
         guard lastStrip != nil, !(CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false) else { return nil }
-        let display = flip(s.frame)
-        switch CFPreferencesCopyAppValue("orientation" as CFString, "com.apple.dock" as CFString) as? String {
-        case "left": return CGRect(x: display.minX, y: display.midY, width: 1, height: 1)
-        case "right": return CGRect(x: display.maxX - 1, y: display.midY, width: 1, height: 1)
-        default: return CGRect(x: display.midX, y: display.maxY - 1, width: 1, height: 1)
-        }
+        return DockArea.standIn(orientation: CFPreferencesCopyAppValue("orientation" as CFString, "com.apple.dock" as CFString) as? String, onDisplay: flip(s.frame))
     }
 
     /// How much the system keeps free along the Dock's edge, learnt while the Dock stands on a display and the system has made room for it.
@@ -110,13 +103,7 @@ final class CGSScreenProvider: ScreenProviding {
         }
         if inset > 0 { lastStrip = inset }
         guard let strip = lastStrip else { return dock }
-        var wide = dock
-        switch orientation {
-        case "left": wide.origin.x = display.minX; wide.size.width = strip
-        case "right": wide.origin.x = display.maxX - strip; wide.size.width = strip
-        default: wide.origin.y = display.maxY - strip; wide.size.height = strip
-        }
-        return wide
+        return DockArea.reserved(dock, strip: strip, orientation: orientation, onDisplay: display)
     }
 
     /// The notch of a display: what lies between the two usable parts of the top edge, and how far down it reaches; zero without one.
