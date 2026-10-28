@@ -8,7 +8,6 @@ const box = (r) => ({ left: r[0] + '%', top: r[1] + '%', width: r[2] + '%', heig
 // Screen areas as [x, y, width, height] in % of the screen.
 const Z0 = [1.6, 2.7, 38, 94.6], Z1 = [41.2, 2.7, 57.2, 56], Z2 = [41.2, 61.4, 57.2, 35.9];
 const Z1MID = Z1[0] + Z1[2] / 2;
-const PILL_Y = 8.7;
 
 function win(cls, r) {
   const w = h(`<div class="win ${cls}"><div class="bar"><b></b><b></b><b></b><span></span></div><div class="blk"></div></div>`);
@@ -53,15 +52,6 @@ function stack(sc, r, classes) {
     pos(p, ms = 800) { wins.forEach((w, i) => { w.style.transitionDuration = ms + 'ms'; w.style.transform = `translateX(${(i - p) * 101.5}%)`; }); },
   };
 }
-function pill(sc, n) {
-  const el = h(`<div class="pill">${'<div class="cell"><i></i></div>'.repeat(n)}<div class="cap"></div></div>`);
-  css(el, { left: Z1MID + '%', top: 'calc(2.7% + 1.2cqw)' });
-  sc.append(el);
-  const cap = el.querySelector('.cap');
-  return { at(p, ms = 800) { cap.style.transitionDuration = ms + 'ms'; cap.style.transform = `translateX(${p * 100}%)`; } };
-}
-const cellX = (i, n) => Z1MID + (i - (n - 1) / 2) * 4;
-
 const demos = {
   snap(sc, root) {
     const hl = [Z0, Z1, Z2].map((r) => { const e = h('<div class="hl"></div>'); css(e, box(r)); return e; });
@@ -85,19 +75,13 @@ const demos = {
 
   stack(sc, root) {
     sc.append(win('w1 p1', Z0), win('w5 p3', Z2));
-    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']), p = pill(sc, 3), cur = cursor(sc);
+    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']);
     const next = held(root, 'next'), prev = held(root, 'prev');
-    const step = async (wait, key, n) => { key.press(true); await wait(260); s.pos(n); p.at(n); await wait(500); key.press(false); await wait(600); };
+    const step = async (wait, key, n) => { key.press(true); await wait(260); s.pos(n); await wait(500); key.press(false); await wait(600); };
     return {
-      reset() { s.pos(0, 0); p.at(0, 0); cur.show(false); cur.to(Z1MID, 30); next.press(false); prev.press(false); },
+      reset() { s.pos(0, 0); next.press(false); prev.press(false); },
       async body(wait) {
-        cur.show(true); cur.to(cellX(1, 3), PILL_Y); await wait(1100);
-        cur.click(); s.pos(1); p.at(1); await wait(1300);
-        cur.to(cellX(2, 3), PILL_Y); await wait(1000);
-        cur.click(); s.pos(2); p.at(2); await wait(1300);
-        cur.to(cellX(0, 3), PILL_Y); await wait(1000);
-        cur.click(); s.pos(0); p.at(0); await wait(1100);
-        cur.show(false); await wait(700);
+        await wait(700);
         await step(wait, next, 1); await step(wait, next, 2); await step(wait, prev, 1);
         await wait(500);
       },
@@ -106,16 +90,16 @@ const demos = {
 
   scroll(sc, root) {
     sc.append(win('w1 p1', Z0), win('w5 p3', Z2));
-    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']), p = pill(sc, 3), keys = held(root), pad = touch(root);
+    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']), keys = held(root), pad = touch(root);
     return {
-      reset() { s.pos(2, 0); p.at(2, 0); keys.show(false); keys.press(false); pad.show(false); pad.down(false); pad.move(-3, 0); },
+      reset() { s.pos(2, 0); keys.show(false); keys.press(false); pad.show(false); pad.down(false); pad.move(-3, 0); },
       async body(wait) {
         keys.show(true); keys.press(true); pad.show(true); await wait(700);
         pad.down(true); await wait(250);
-        pad.move(4, 1400); s.pos(0, 1400); p.at(0, 1400); await wait(1700);
+        pad.move(4, 1400); s.pos(0, 1400); await wait(1700);
         pad.down(false); await wait(500); pad.move(2, 0); await wait(80);
         pad.down(true); await wait(250);
-        pad.move(-1, 900); s.pos(1, 900); p.at(1, 900); await wait(1200);
+        pad.move(-1, 900); s.pos(1, 900); await wait(1200);
         pad.down(false); await wait(500);
         keys.press(false); keys.show(false); pad.show(false); await wait(300);
       },

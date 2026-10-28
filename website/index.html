@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PaneFlip: zones for your Mac</title>
-<meta name="description" content="PaneFlip is a free, open-source macOS menu-bar app. Split your displays into zones, drop apps into them and flip between a zone's apps with one glass pill.">
+<meta name="description" content="PaneFlip is a free, open-source macOS menu-bar app. Split your Mac's screens into zones. Drop apps into them.">
 <meta name="color-scheme" content="dark">
 <script>
   // The saved choice wins, then the system's; the page is drawn in it from the first paint.
@@ -16,7 +16,7 @@
 </script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="PaneFlip: zones for your Mac">
-<meta property="og:description" content="Split your displays into zones, drop apps into them and flip between a zone's apps with one glass pill. Free and open source.">
+<meta property="og:description" content="Split your displays into zones, drop apps into them and stack several apps in one zone. Free and open source.">
 <meta property="og:image" content="https://ffferitkartalll.github.io/paneflipapp/banner.jpg">
 <meta property="og:url" content="https://ffferitkartalll.github.io/paneflipapp/">
 <meta name="twitter:card" content="summary_large_image">
@@ -193,7 +193,7 @@ footer a:hover { color: #fff; }
       <img class="icon icon-light" src="app-icon-light.png" alt="PaneFlip app icon" data-i18n-alt="hero.icon" width="120" height="120">
       <img class="icon icon-dark" src="app-icon-dark.png" alt="PaneFlip app icon" data-i18n-alt="hero.icon" width="120" height="120">
       <h1>PaneFlip</h1>
-      <p class="lead" data-i18n="hero.lead">Split your Mac's screens into zones. Drop apps into them. Flip between a zone's apps with one glass pill.</p>
+      <p class="lead" data-i18n="hero.lead">Split your Mac's screens into zones. Drop apps into them.</p>
       <div class="actions">
         <a class="btn" href="https://github.com/ffferitkartalll/paneflipapp/releases/latest" data-i18n="hero.download">Download for macOS</a>
         <a class="btn ghost" href="https://github.com/ffferitkartalll/paneflipapp" data-i18n="hero.github">View on GitHub</a>
@@ -212,7 +212,7 @@ footer a:hover { color: #fff; }
         <div class="card"><div class="n">1</div><h3 data-i18n="how.1h">Snap</h3>
           <p data-i18n="how.1p">Drag a window while you hold <kbd>⌘</kbd>. The zones light up; let go over one and the window slides in and fills it. Apps you put in a zone are remembered and return when they reopen.</p></div>
         <div class="card"><div class="n">2</div><h3 data-i18n="how.2h">Stack and flip</h3>
-          <p data-i18n="how.2p">Several apps can share one zone. Point at it and the glass pill appears: click an app, scroll over the pill, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> <kbd>→</kbd> to flip.</p></div>
+          <p data-i18n="how.2p">Several apps can share one zone. Click the zone in the island, then an app, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> <kbd>→</kbd> to flip.</p></div>
         <div class="card"><div class="n">3</div><h3 data-i18n="how.3h">Go beyond the screen</h3>
           <p data-i18n="how.3p">A layout can go on past the edge of the display, with as many zones as you like. Scroll over the island in the menu bar, or hold the keys and scroll with two fingers.</p></div>
       </div>
@@ -220,7 +220,7 @@ footer a:hover { color: #fff; }
 
     <section id="features">
       <h2 data-i18n="feat.h2">Made for the way you work</h2>
-      <p class="sub" data-i18n="feat.sub">Layouts you draw, a pill that stays out of the way, and a Mac that remembers.</p>
+      <p class="sub" data-i18n="feat.sub">Layouts you draw, windows that stack, and a Mac that remembers.</p>
     </section>
     <article class="feature" id="f-snap">
       <div class="feature-inner">
@@ -230,8 +230,8 @@ footer a:hover { color: #fff; }
     </article>
     <article class="feature rev" id="f-stack">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="stack.kicker">Stacks</p><h3 data-i18n="stack.h3">Many apps, one zone</h3><p class="blurb" data-i18n="stack.p">Put more apps in a zone and they stack. A small glass pill appears when you point at it: click an app, scroll over the pill, or use the arrow keys to flip. The next window glides in beside the one it replaces.</p></div>
-        <div class="demo-col"><div class="frame" data-demo="stack" role="img" aria-label="The pill of a zone is clicked to flip between three stacked windows" data-i18n-aria="stack.demo"></div><ul class="keys"><li><span><kbd data-hold="next">⌃</kbd><kbd data-hold="next">⌥</kbd><kbd data-hold="next">→</kbd></span> <em data-i18n="stack.k1">Next window</em></li><li><span><kbd data-hold="prev">⌃</kbd><kbd data-hold="prev">⌥</kbd><kbd data-hold="prev">←</kbd></span> <em data-i18n="stack.k2">Previous window</em></li></ul></div>
+        <div class="copy"><p class="kicker" data-i18n="stack.kicker">Stacks</p><h3 data-i18n="stack.h3">Many apps, one zone</h3><p class="blurb" data-i18n="stack.p">Put more apps in a zone and they stack. Click the zone in the island, then an app, or use the arrow keys to flip. The next window glides in beside the one it replaces.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="stack" role="img" aria-label="Three stacked windows of a zone flip one after another with the arrow keys" data-i18n-aria="stack.demo"></div><ul class="keys"><li><span><kbd data-hold="next">⌃</kbd><kbd data-hold="next">⌥</kbd><kbd data-hold="next">→</kbd></span> <em data-i18n="stack.k1">Next window</em></li><li><span><kbd data-hold="prev">⌃</kbd><kbd data-hold="prev">⌥</kbd><kbd data-hold="prev">←</kbd></span> <em data-i18n="stack.k2">Previous window</em></li></ul></div>
       </div>
     </article>
     <article class="feature" id="f-scroll">
@@ -266,8 +266,7 @@ footer a:hover { color: #fff; }
           <li data-i18n="more.1a">Draw zones in the editor: click to split, drag a line to resize, drop one on a neighbour to merge.</li>
           <li data-i18n="more.1b">Start from twenty common shapes or a blank layout. Name layouts and zones, set a gap per layout.</li>
           <li data-i18n="more.1c">Switch layouts from the menu bar. Every desktop of a display can use its own.</li></ul></div>
-        <div class="card"><h3 data-i18n="more.2h">Stacks and the pill</h3><ul>
-          <li data-i18n="more.2a">Icons, names or both, along the top or bottom of the zone, always or only when you point at it.</li>
+        <div class="card"><h3 data-i18n="more.2h">Stacks</h3><ul>
           <li data-i18n="more.2b">Choose which app opens in which zone and open them all with one click.</li>
           <li data-i18n="more.2c">A window dragged out of its zone glides back to the size it had.</li></ul></div>
         <div class="card"><h3 data-i18n="more.3h">Zones beyond the screen</h3><ul>
@@ -288,7 +287,6 @@ footer a:hover { color: #fff; }
         <table>
           <tbody>
             <tr><td data-i18n="sc.1a">Snap a window into a zone</td><td data-i18n="sc.1b">hold <kbd>⌘</kbd> (left) while dragging</td></tr>
-            <tr><td data-i18n="sc.2a">Hide the pill under the pointer</td><td data-i18n="sc.2b">double-tap <kbd>⌘</kbd> (left)</td></tr>
             <tr><td data-i18n="sc.3a">Next / previous window of the zone</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
             <tr><td data-i18n="sc.4a">Zones beyond the right / left edge</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
             <tr><td data-i18n="sc.5a">Scroll through a zone's windows</td><td data-i18n="sc.5b">hold <kbd>⌥</kbd><kbd>⌃</kbd> and scroll</td></tr>
