@@ -117,6 +117,7 @@ final class AppContainer {
             checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
         let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
+        island.isSuppressed = { [unowned editor] in editor.isShown }
         let menuContent = MenuContent(repository: repository, layouts: layouts, screens: screens, settings: settings, apps: layoutApps, editor: editor,
                                                        openSettings: SettingsWindowOpener.open)
         // A menu does not take the app's language by itself: the one the app started with, as the scenes have it.
