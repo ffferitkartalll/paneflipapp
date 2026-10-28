@@ -50,9 +50,6 @@ struct LayoutAppsView: View {
                     }
                 }
                 .fixedSize()
-                Text("Apps of a screen that is unplugged are placed here.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             ScrollViewReader { proxy in
             Form {
