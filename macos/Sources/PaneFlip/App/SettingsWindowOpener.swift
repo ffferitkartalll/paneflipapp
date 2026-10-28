@@ -9,7 +9,10 @@ enum SettingsWindowOpener {
         DispatchQueue.main.async {
             guard let menu = NSApp.mainMenu?.items.first?.submenu,
                   let index = menu.items.firstIndex(where: { $0.submenu == nil && $0.action == NSSelectorFromString("menuAction:") && $0.target != nil })
-            else { return }
+            else {
+                NSApp.setActivationPolicy(.accessory)   // no window will come to report its close: back to the menu bar
+                return
+            }
             menu.performActionForItem(at: index)
         }
     }

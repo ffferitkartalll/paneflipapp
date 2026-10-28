@@ -54,6 +54,13 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         // The system switches a tap off when it is too slow once; switch it back on.
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
+            // The end of a swipe in progress may have gone by while the tap was off: it ends here.
+            if inGesture {
+                inGesture = false
+                gestureTarget = nil
+                axis = AxisLock()
+                send(.ended)
+            }
             return Unmanaged.passUnretained(event)
         }
         guard type == .scrollWheel else { return Unmanaged.passUnretained(event) }

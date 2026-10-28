@@ -98,6 +98,8 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertNil(coordinator.stack(containing: 1), "in no zone")
         XCTAssertEqual(memory.records.map(\.zoneID), [away, away])
         XCTAssertEqual(memory.records.map(\.windowID), [1, 2], "the slots stay bound")
+        XCTAssertEqual(coordinator.displacedSlot(of: 1), memory.records[0].id, "a displaced window knows its slot")
+        XCTAssertEqual(coordinator.displacedSlot(of: 2), memory.records[1].id)
 
         coordinator.snap(.fake(1), into: main)           // put in a zone of the first display meanwhile
         XCTAssertEqual(memory.records.filter { $0.windowID == 1 }.map(\.home), [away], "the new slot keeps the home")

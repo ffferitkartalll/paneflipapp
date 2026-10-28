@@ -34,4 +34,26 @@ final class DockAreaTests: XCTestCase {
         XCTAssertEqual(DockArea.excluding(right, from: area, onDisplay: display),
                        CGRect(x: 0, y: 30, width: 1610, height: 1020))
     }
+
+    func testTheTrayIsWidenedToTheWholeStripOfItsEdge() {
+        let tray = CGRect(x: 200, y: 980, width: 1280, height: 60)
+        XCTAssertEqual(DockArea.reserved(tray, strip: 70, orientation: nil, onDisplay: display), CGRect(x: 200, y: 980, width: 1280, height: 70))
+        XCTAssertEqual(DockArea.reserved(tray, strip: 60, orientation: "bottom", onDisplay: display), CGRect(x: 200, y: 990, width: 1280, height: 60))
+        XCTAssertEqual(DockArea.reserved(CGRect(x: 5, y: 300, width: 60, height: 600), strip: 70, orientation: "left", onDisplay: display),
+                       CGRect(x: 0, y: 300, width: 70, height: 600))
+        XCTAssertEqual(DockArea.reserved(CGRect(x: 1620, y: 300, width: 60, height: 600), strip: 70, orientation: "right", onDisplay: display),
+                       CGRect(x: 1610, y: 300, width: 70, height: 600))
+    }
+
+    func testAStandInForAMissedDockTakesTheStripOfItsEdge() {
+        for orientation in [nil, "left", "right"] {
+            let stand = DockArea.reserved(DockArea.standIn(orientation: orientation, onDisplay: display), strip: 70, orientation: orientation, onDisplay: display)
+            let usable = DockArea.excluding(stand, from: area, onDisplay: display)
+            switch orientation {
+            case "left": XCTAssertEqual(usable, CGRect(x: 70, y: 30, width: 1610, height: 1020))
+            case "right": XCTAssertEqual(usable, CGRect(x: 0, y: 30, width: 1610, height: 1020))
+            default: XCTAssertEqual(usable, CGRect(x: 0, y: 30, width: 1680, height: 950))
+            }
+        }
+    }
 }
