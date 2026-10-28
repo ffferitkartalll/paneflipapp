@@ -1,5 +1,6 @@
 import AppKit
 import PaneFlipCore
+import SwiftUI
 
 /// The composition root: builds every object once, hands each its collaborators, and wires the few callbacks.
 /// Nothing else in the app reaches for a global.
@@ -23,6 +24,7 @@ final class AppContainer {
     let appCatalog: AppCatalog
     let activation: ActivationPolicyControlling
     let settingsNavigation: SettingsNavigation
+    let menuBar: MenuBarController
 
     private let launcher: AppLauncher
     private let memoryPressure: MemoryPressureWatch
@@ -115,6 +117,11 @@ final class AppContainer {
             checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
         let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
+        let menuContent = MenuContent(repository: repository, layouts: layouts, screens: screens, settings: settings, apps: layoutApps, editor: editor,
+                                                       openSettings: SettingsWindowOpener.open)
+        // A menu does not take the app's language by itself: the one the app started with, as the scenes have it.
+        let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))
+        self.menuBar = MenuBarController(settings: settings, menu: menu)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island)
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
@@ -214,6 +221,7 @@ final class AppContainer {
 
     /// Checks permissions, then starts the services (immediately, or once the user has granted them).
     func start() {
+        menuBar.install()
         layouts.migrateKeys()
         layouts.displaysDidChange()   // remember the displays that are connected
         layouts.prune()   // drop remembered apps whose zone no longer exists in any layout

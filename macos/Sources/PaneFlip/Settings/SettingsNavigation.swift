@@ -8,5 +8,4 @@ final class SettingsNavigation {
     /// The Apps sheet to show (a layout and optionally a zone to scroll to); nil when none is shown. Changing it
     /// switches an open sheet to the other layout.
     var ordering: OrderingTarget?
-    @ObservationIgnored var openSettings: () -> Void = {}
 }
