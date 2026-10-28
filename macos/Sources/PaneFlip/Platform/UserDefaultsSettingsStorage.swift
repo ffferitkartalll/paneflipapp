@@ -12,6 +12,11 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut),
     ]
 
+    /// The defaults some shortcuts had in earlier versions: a stored one that equals its former default was never changed, and is not kept.
+    private static let formerDefaults: [String: SnapTrigger] = [
+        "zoneUpShortcut": .formerZoneUp, "zoneLeftShortcut": .formerZoneLeft, "zoneDownShortcut": .formerZoneDown, "zoneRightShortcut": .formerZoneRight,
+    ]
+
     init(defaults: UserDefaults = .standard) { self.defaults = defaults }
 
     /// Settings that earlier versions had and this one does not: loading forgets them.
@@ -34,7 +39,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.trackpadMethod = defaults.string(forKey: "trackpadMethod").flatMap(TrackpadMethod.init(rawValue:)) ?? v.trackpadMethod
         v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
         for (key, path) in Self.shortcuts {
-            if let trigger = defaults.data(forKey: key).flatMap({ try? JSONDecoder().decode(SnapTrigger.self, from: $0) }) { v[keyPath: path] = trigger }
+            if let trigger = defaults.data(forKey: key).flatMap({ try? JSONDecoder().decode(SnapTrigger.self, from: $0) }), trigger != Self.formerDefaults[key] { v[keyPath: path] = trigger }
         }
         v.ignoredApps = defaults.stringArray(forKey: "ignoredApps") ?? v.ignoredApps
         v.overflowZonesEnabled = defaults.object(forKey: "overflowZonesEnabled") as? Bool ?? v.overflowZonesEnabled

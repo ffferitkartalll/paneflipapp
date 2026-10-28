@@ -39,4 +39,21 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
         // Read from the app's own domain: a plain read falls through to the system's languages.
         XCTAssertNil(defaults.persistentDomain(forName: suite)?["AppleLanguages"])
     }
+
+    func testTheZoneShortcutsOfEarlierVersionsMoveToTheNewKeysUnlessThePersonChangedThem() {
+        var old = SettingsValues()
+        old.zoneUpShortcut = .formerZoneUp            // never changed
+        old.zoneLeftShortcut = .formerZoneLeft
+        old.zoneDownShortcut = SnapTrigger(keys: [.init(code: 5, name: "G"), .init(code: 58, name: "Left Option")])   // chosen by the person
+        old.zoneRightShortcut = .formerZoneRight
+        storage.save(old)
+
+        let loaded = storage.load()
+
+        XCTAssertEqual(loaded.zoneUpShortcut, .zoneUp)
+        XCTAssertEqual(loaded.zoneLeftShortcut, .zoneLeft)
+        XCTAssertEqual(loaded.zoneDownShortcut, old.zoneDownShortcut)
+        XCTAssertEqual(loaded.zoneRightShortcut, .zoneRight)
+        XCTAssertEqual([SnapTrigger.zoneUp, .zoneLeft, .zoneDown, .zoneRight].map { $0.keys.first?.name }, ["I", "J", "K", "L"])
+    }
 }
