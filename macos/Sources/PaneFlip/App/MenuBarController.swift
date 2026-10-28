@@ -4,7 +4,8 @@ import PaneFlipCore
 
 /// The icon in the menu bar. A left click switches PaneFlip on or off; a right click (or a click with Control held) opens the menu.
 /// The icon is filled while PaneFlip is on and only outlined while it is off.
-final class MenuBarController {
+// shortcut: not checked by the compiler; every use is on the main thread (the status item, its clicks and the observation callback).
+final class MenuBarController: @unchecked Sendable {
     private let settings: AppSettings
     private let menu: NSMenu
     private var item: NSStatusItem?
