@@ -223,10 +223,53 @@ public final class StackMemory {
         return released
     }
 
+    /// The zones of unplugged displays: the slots with a live window in them remember the zone as their home (they keep it when put in a zone
+    /// of another display). Returns those windows; their slots stay bound to them.
+    @discardableResult
+    public func displace(zones: Set<UUID>) -> [CGWindowID] {
+        var moved: [CGWindowID] = []
+        var copy = records
+        for i in copy.indices where zones.contains(copy[i].zoneID) {
+            guard let window = copy[i].windowID else { continue }
+            copy[i].home = copy[i].home ?? copy[i].zoneID
+            moved.append(window)
+        }
+        records = copy
+        return moved
+    }
+
+    /// Slots whose home is one of `zones` (their display is back) go there again. Returns the live windows that were bound to them (now unbound), which the
+    /// caller must release so they are attached to their zone again.
+    @discardableResult
+    public func returnHome(to zones: Set<UUID>) -> [CGWindowID] {
+        var released: [CGWindowID] = []
+        var copy = records
+        for i in copy.indices {
+            guard let home = copy[i].home, zones.contains(home) else { continue }
+            copy[i].zoneID = home
+            copy[i].home = nil
+            if let window = copy[i].windowID { released.append(window); copy[i].windowID = nil }
+        }
+        records = copy
+        return released
+    }
+
+    /// The home of the slot a window is bound to.
+    public func home(ofWindow id: CGWindowID) -> UUID? { index(ofWindow: id).flatMap { records[$0].home } }
+
+    /// Gives a slot a home (a window put in a zone gets a new slot, which takes over the home of the old one).
+    public func setHome(slot i: Int, to home: UUID?) {
+        guard records.indices.contains(i), records[i].home != home else { return }
+        records[i].home = home
+    }
+
     /// Drops slots whose zone no longer exists in any layout.
     public func prune(keepingZones alive: Set<UUID>) {
         var kept = records.filter { alive.contains($0.zoneID) }
-        for i in kept.indices { kept[i].otherZones.removeAll { !alive.contains($0) } }
+        for i in kept.indices {
+            kept[i].otherZones.removeAll { !alive.contains($0) }
+            if let home = kept[i].home, !alive.contains(home) { kept[i].home = nil }
+        }
         if kept != records { records = kept }
     }
 }

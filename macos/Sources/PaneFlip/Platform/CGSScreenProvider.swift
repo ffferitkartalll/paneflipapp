@@ -47,6 +47,15 @@ final class CGSScreenProvider: ScreenProviding {
         }
     }
 
+    /// The Dock itself says it stands on a connected display (or it hides). The system's usable area is no sign: it stays unchanged while the Dock
+    /// lands, and a missing answer from the Dock (it does not answer while it moves) means it has not landed.
+    var isDockSettled: Bool {
+        if CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false { return true }
+        let dock = dockRect()
+        let settled = dock.map { dock in NSScreen.screens.contains { flip($0.frame).intersects(dock) } } ?? false
+        return settled
+    }
+
     func screens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
@@ -57,12 +66,38 @@ final class CGSScreenProvider: ScreenProviding {
             let legacy = "\(uuid)|\(space)"
             let desktops = ordinaryDesktops(onDisplay: uuid, in: managed)
             let position = desktops.firstIndex(of: space).map { $0 + 1 }
-            let usable = DockArea.excluding(dock, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
+            let usable = DockArea.excluding(dock.map { reserved($0, on: s) }, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
             let notch = notch(of: s)
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
                               legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height)
         }
+    }
+
+    /// How much the system keeps free along the Dock's edge, learnt while the Dock stands on a display and the system has made room for it.
+    private var lastStrip: CGFloat?
+
+    /// The strip the system keeps free along the Dock's edge (the tray stands a few points inside it, or outside). After a display was unplugged the system
+    /// does not make that room on the display the Dock lands on, so the strip learnt earlier is used.
+    private func reserved(_ dock: CGRect, on s: NSScreen) -> CGRect {
+        let display = flip(s.frame)
+        guard dock.intersects(display) else { return dock }
+        let orientation = CFPreferencesCopyAppValue("orientation" as CFString, "com.apple.dock" as CFString) as? String
+        let inset: CGFloat
+        switch orientation {
+        case "left": inset = s.visibleFrame.minX - s.frame.minX
+        case "right": inset = s.frame.maxX - s.visibleFrame.maxX
+        default: inset = s.visibleFrame.minY - s.frame.minY
+        }
+        if inset > 0 { lastStrip = inset }
+        guard let strip = lastStrip else { return dock }
+        var wide = dock
+        switch orientation {
+        case "left": wide.origin.x = display.minX; wide.size.width = strip
+        case "right": wide.origin.x = display.maxX - strip; wide.size.width = strip
+        default: wide.origin.y = display.maxY - strip; wide.size.height = strip
+        }
+        return wide
     }
 
     /// The notch of a display: what lies between the two usable parts of the top edge, and how far down it reaches; zero without one.

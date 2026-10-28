@@ -253,4 +253,23 @@ final class StackMemoryTests: XCTestCase {
         memory.unbind(window: 2)
         XCTAssertEqual(memory.records.map(\.title), ["two"])
     }
+
+    func testDisplacedSlotsKeepTheirHomeAndGoBackToItWhenTheDisplayReturns() {
+        let memory = StackMemory(store: MemoryStore())
+        let away = UUID(), here = UUID()
+        let a = memory.remember(zoneID: away, bundleID: "app", title: "")
+        let b = memory.remember(zoneID: away, bundleID: "app", title: "")
+        memory.bind(slot: a, toWindow: 1, title: "")
+
+        XCTAssertEqual(memory.displace(zones: [away]), [1], "only the slot with a live window")
+        XCTAssertEqual(memory.records[a].home, away)
+        XCTAssertNil(memory.records[b].home)
+
+        memory.setHome(slot: memory.remember(zoneID: here, bundleID: "app", title: ""), to: away)
+
+        XCTAssertEqual(memory.returnHome(to: [away]), [1], "the live window is released to be attached again")
+        XCTAssertEqual(memory.records[a].windowID, nil)
+        XCTAssertEqual(memory.records.map(\.home), [nil, nil, nil])
+        XCTAssertEqual(memory.records.map(\.zoneID), [away, away, away])
+    }
 }

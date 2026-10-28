@@ -3,6 +3,9 @@ import CoreGraphics
 /// Everything the app needs to know about displays, desktops and the pointer.
 protocol ScreenProviding {
     func screens() -> [ScreenInfo]
+    /// The Dock stands on a connected display (or is hidden): after a display was unplugged it lands on a remaining one a moment later, and until
+    /// then the usable area of the displays does not yet make room for it.
+    var isDockSettled: Bool { get }
     /// The desktop currently shown on each display.
     func currentSpaceIDs() -> Set<UInt64>
     /// The desktops a window belongs to; empty once it has been closed.

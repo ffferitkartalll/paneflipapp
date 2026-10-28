@@ -57,16 +57,32 @@ final class ZoneEngine: ZoneRefreshing {
         }
         NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in
-                self?.displayHandler?.displaysDidChange()
-                self?.refreshZones()
-                self?.scheduleRestore()
+                self?.displaysChanged()
             }
         scheduleRestore()
     }
 
     // MARK: ZoneRefreshing
 
+    /// After a display was unplugged nothing is moved until the Dock has landed on a remaining display (however long that takes; it is looked at every 0.1 s, every 0.5 s after 3 s): then the windows of the display
+    /// that is gone spread over the usable area, once. The system itself moves them at once; that cannot be held back.
+    private var waitingForDock = false
+
+    private func displaysChanged(waited: Int = 0) {
+        guard waited > 0 || !waitingForDock else { return }   // a wait is already running
+        if !screens.isDockSettled {
+            waitingForDock = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + (waited < 30 ? 0.1 : 0.5)) { [weak self] in self?.displaysChanged(waited: waited + 1) }
+            return
+        }
+        waitingForDock = false
+        displayHandler?.displaysDidChange()
+        refreshZones()
+        scheduleRestore()
+    }
+
     func refreshZones() {
+        guard !waitingForDock else { return }
         let current = screens.screens()
         lastSignatures = current.map(\.layoutSignature)
         lastScreens = current
@@ -102,7 +118,7 @@ final class ZoneEngine: ZoneRefreshing {
     /// look asks every app with a zone for its windows (a stall of up to several hundred ms on the main thread), so while windows move it waits
     /// (a few seconds at most) and the look is made once, when they have come to rest.
     private func restore(burst: Int, key: pid_t, onlyApp pid: pid_t?, waited: Int = 0) {
-        guard restoreBursts[key] == burst else { return }
+        guard restoreBursts[key] == burst, !waitingForDock else { return }
         if coordinator.isMoving, waited < 40 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.restore(burst: burst, key: key, onlyApp: pid, waited: waited + 1) }
             return
@@ -112,7 +128,7 @@ final class ZoneEngine: ZoneRefreshing {
 
     private func tick() {
         guard windows.isTrusted else { return onPermissionLost?() ?? () }
-        guard !coordinator.isMoving else { return }   // the windows are being moved; asking them now only slows the scroll
+        guard !coordinator.isMoving, !waitingForDock else { return }   // the windows are being moved; asking them now only slows the scroll
         if screens.screens().map(\.layoutSignature) != lastSignatures { refreshZones() }
         coordinator.syncTitles()
         coordinator.followFocus()
