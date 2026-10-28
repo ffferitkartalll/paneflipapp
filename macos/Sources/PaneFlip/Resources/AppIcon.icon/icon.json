@@ -21,26 +21,56 @@
         {
           "glass": false,
           "hidden": false,
-          "image-name": "dots.svg",
-          "name": "dots"
+          "name": "panes",
+          "image-name-specializations": [
+            {
+              "value": "panes.svg"
+            },
+            {
+              "appearance": "dark",
+              "value": "panes-dark.svg"
+            },
+            {
+              "appearance": "tinted",
+              "value": "panes-mono.svg"
+            }
+          ]
         },
         {
           "glass": false,
           "hidden": false,
-          "image-name": "pill.svg",
-          "name": "pill"
+          "name": "sides",
+          "image-name-specializations": [
+            {
+              "value": "sides.svg"
+            },
+            {
+              "appearance": "dark",
+              "value": "sides-dark.svg"
+            },
+            {
+              "appearance": "tinted",
+              "value": "sides-mono.svg"
+            }
+          ]
         },
         {
           "glass": false,
           "hidden": false,
-          "image-name": "pane-bottom.svg",
-          "name": "pane-bottom"
-        },
-        {
-          "glass": false,
-          "hidden": false,
-          "image-name": "pane-top.svg",
-          "name": "pane-top"
+          "name": "base",
+          "image-name-specializations": [
+            {
+              "value": "base.svg"
+            },
+            {
+              "appearance": "dark",
+              "value": "base-dark.svg"
+            },
+            {
+              "appearance": "tinted",
+              "value": "base-mono.svg"
+            }
+          ]
         }
       ],
       "shadow": {
@@ -55,5 +85,44 @@
   ],
   "supported-platforms": {
     "squares": "shared"
-  }
+  },
+  "fill-specializations": [
+    {
+      "value": {
+        "linear-gradient": [
+          "srgb:0.25490,0.91373,0.74902,1.00000",
+          "srgb:0.00000,0.64706,0.49804,1.00000"
+        ],
+        "orientation": {
+          "start": {
+            "x": 0.5,
+            "y": 0
+          },
+          "stop": {
+            "x": 0.5,
+            "y": 1
+          }
+        }
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "linear-gradient": [
+          "srgb:0.05882,0.35294,0.27843,1.00000",
+          "srgb:0.01961,0.12549,0.09804,1.00000"
+        ],
+        "orientation": {
+          "start": {
+            "x": 0.5,
+            "y": 0
+          },
+          "stop": {
+            "x": 0.5,
+            "y": 1
+          }
+        }
+      }
+    }
+  ]
 }

@@ -14,13 +14,6 @@ struct PaneFlipApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra {
-            MenuContent(repository: container.layoutRepository, layouts: container.layouts, screens: container.screens,
-                        settings: container.settings, apps: container.layoutApps, editor: container.editor)
-        } label: {
-            MenuBarLabel(navigation: container.settingsNavigation)
-        }
-
         // Opened from the menu bar menu (Settings).
         Settings {
             SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor, apps: container.layoutApps,

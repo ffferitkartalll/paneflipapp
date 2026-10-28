@@ -10,6 +10,7 @@ struct MenuContent: View {
     @Bindable var settings: AppSettings
     let apps: LayoutAppsEditing
     let editor: LayoutEditing
+    let openSettings: () -> Void
 
     var body: some View {
         Button("PaneFlip") {}
@@ -22,7 +23,7 @@ struct MenuContent: View {
         Button("Open selected apps") { apps.open(apps: toStart) }
             .disabled(toStart.isEmpty)
         Divider()
-        SettingsLink { Text("Settings") }
+        Button("Settings", action: openSettings)
             .keyboardShortcut(",")
         Divider()
         Button("Quit") { NSApp.terminate(nil) }

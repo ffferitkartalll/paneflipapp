@@ -26,7 +26,7 @@ Sources/
 │   ├── Updates/             AppVersion
 │   └── Persistence/         DocumentStore (port)
 └── PaneFlip/                The macOS app.
-    ├── App/                 PaneFlipApp, AppContainer (composition root), AppLauncher (permission gate), AppAccent (the colour the app lights things with: its own green under Multicolor, else the system's accent), MenuContent, MenuLayouts (layout switcher in the menu), MenuBarLabel
+    ├── App/                 PaneFlipApp, AppContainer (composition root), AppLauncher (permission gate), AppAccent (the colour the app lights things with: its own green under Multicolor, else the system's accent), SettingsWindowOpener (opens the Settings window through the "Settings…" item the Settings scene puts in the main menu), MenuBarController (the menu bar icon: a left click switches PaneFlip on or off, a right click opens MenuContent as a menu; the icon is filled while on, outlined while off), MenuContent, MenuLayouts (layout switcher in the menu), MenuBarLabel
     ├── Permissions/         Permission, PermissionChecking (port) ← SystemPermissions, PermissionsModel,
     │                        PermissionsView, PermissionRow, PermissionsWindowController
     ├── Platform/            Ports, their value types and adapters:
