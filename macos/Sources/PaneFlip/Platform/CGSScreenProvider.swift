@@ -1,4 +1,5 @@
 import AppKit
+import PaneFlipCore
 
 // Undocumented CoreGraphics Services calls: which desktop (Space) a display or window is on.
 @_silgen_name("CGSMainConnectionID")
@@ -60,17 +61,35 @@ final class CGSScreenProvider: ScreenProviding {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
         let managed = CGSCopyManagedDisplaySpaces(conn) as? [[String: Any]] ?? []   // once for every display
+        dockHome.update(displays: Set(NSScreen.screens.map(displayUUID)),
+                        dockDisplay: dock.flatMap { dock in NSScreen.screens.first { flip($0.frame).intersects(dock) }.map(displayUUID) })
         return NSScreen.screens.map { s in
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
             let legacy = "\(uuid)|\(space)"
             let desktops = ordinaryDesktops(onDisplay: uuid, in: managed)
             let position = desktops.firstIndex(of: space).map { $0 + 1 }
-            let usable = DockArea.excluding(dock.map { reserved($0, on: s) }, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
+            let tray = uuid == dockHome.phantom ? missedDock(on: s) : dock
+            let usable = DockArea.excluding(tray.map { reserved($0, on: s) }, from: flip(s.visibleFrame), onDisplay: flip(s.frame))
             let notch = notch(of: s)
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
                               legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height)
+        }
+    }
+
+    private var dockHome = DockHome()
+
+    /// A display that was unplugged with the Dock on it and has come back while the Dock stayed on the other one is laid out as if the Dock still stood
+    /// there: a stand-in for the Dock, widened to the strip the system keeps free (see `reserved`). Nothing without such a strip (the Dock hides, or was
+    /// never seen on a display).
+    private func missedDock(on s: NSScreen) -> CGRect? {
+        guard lastStrip != nil, !(CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false) else { return nil }
+        let display = flip(s.frame)
+        switch CFPreferencesCopyAppValue("orientation" as CFString, "com.apple.dock" as CFString) as? String {
+        case "left": return CGRect(x: display.minX, y: display.midY, width: 1, height: 1)
+        case "right": return CGRect(x: display.maxX - 1, y: display.midY, width: 1, height: 1)
+        default: return CGRect(x: display.midX, y: display.maxY - 1, width: 1, height: 1)
         }
     }
 
