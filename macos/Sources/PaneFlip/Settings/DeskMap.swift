@@ -10,20 +10,22 @@ struct DeskMap: View {
     @State private var dragging: (id: String, origin: CGPoint)?
 
     var body: some View {
-        let frames = arrangement.frames(of: displays.map { (id: $0.displayID, size: $0.size) })
+        let frames = arrangement.frames(of: displays.map { (id: $0.displayID, size: $0.deskSize) })
         // The room to drag in is as wide as the displays side by side and as tall as they stacked: the most they can take. It is centred on the committed
         // places only, so that the picture stays still while a display is dragged.
         let union = frames.values.reduce(CGRect.null) { $0.union($1) }
-        let room = CGRect(x: union.midX - displays.map(\.size.width).reduce(0, +) / 2, y: union.midY - displays.map(\.size.height).reduce(0, +) / 2,
-                          width: displays.map(\.size.width).reduce(0, +), height: displays.map(\.size.height).reduce(0, +))
+        let room = CGRect(x: union.midX - displays.map(\.deskSize.width).reduce(0, +) / 2, y: union.midY - displays.map(\.deskSize.height).reduce(0, +) / 2,
+                          width: displays.map(\.deskSize.width).reduce(0, +), height: displays.map(\.deskSize.height).reduce(0, +))
         GeometryReader { proxy in
             let scale = min(proxy.size.width / room.width, proxy.size.height / room.height)
             let origin = CGPoint(x: (proxy.size.width - room.width * scale) / 2, y: (proxy.size.height - room.height * scale) / 2)
             ForEach(displays) { display in
                 let committed = frames[display.displayID] ?? .zero
                 let frame = dragging?.id == display.displayID ? CGRect(origin: dragging?.origin ?? committed.origin, size: committed.size) : committed
-                Text(verbatim: display.name)
-                    .font(.caption.weight(.medium))
+                VStack(spacing: 2) {
+                    Text(verbatim: display.name).font(.caption.weight(.medium))
+                    Text(verbatim: "\(Int(display.deskSize.width.rounded()))×\(Int(display.deskSize.height.rounded())) mm").font(.caption2).foregroundStyle(.secondary)
+                }
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
                     .padding(4)
