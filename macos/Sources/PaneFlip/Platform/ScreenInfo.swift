@@ -18,8 +18,16 @@ struct ScreenInfo: Identifiable, Equatable {
     /// The notch of the display (its width and its height, the height of the menu bar there); 0 on a display without one.
     var notchWidth: CGFloat = 0
     var notchHeight: CGFloat = 0
+    /// The size of the display itself in millimetres, as it tells; zero when it does not.
+    var physicalSize: CGSize = .zero
 
     var id: String { key }
+
+    /// The size the display has on the desk, in millimetres: its real size, or (a display that does not tell it) that of a screen with as many points as
+    /// this one, at about 110 points to the inch.
+    var deskSize: CGSize {
+        physicalSize.width > 0 && physicalSize.height > 0 ? physicalSize : CGSize(width: size.width * 25.4 / 110, height: size.height * 25.4 / 110)
+    }
 
     /// The place of the desktop among the display's desktops; nil for a full-screen space.
     var desktopNumber: Int? { key.split(separator: "|").last.flatMap { $0.first == "d" ? Int($0.dropFirst()) : nil } }

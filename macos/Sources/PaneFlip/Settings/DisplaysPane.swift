@@ -35,7 +35,7 @@ struct DisplaysPane: View {
                     DeskMap(displays: displays, arrangement: desk) { settings.values.deskArrangement = $0 }
                         .frame(maxHeight: 360)
                         .padding(.vertical, 6)
-                    if !desk.isSet(for: displays.map { (id: $0.displayID, size: $0.size) }) {
+                    if !desk.isSet(for: displays.map { (id: $0.displayID, size: $0.deskSize) }) {
                         Text("Not set yet. Until you move a display, PaneFlip uses the arrangement in macOS.")
                             .font(.callout)
                             .foregroundStyle(.secondary)

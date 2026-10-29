@@ -11,7 +11,7 @@ struct DeskSpace {
     func rect(_ rect: CGRect) -> CGRect {
         let displays = Self.distinct(screens.screens())
         let desk = arrangement()
-        let sizes = displays.map { (id: $0.displayID, size: $0.size) }
+        let sizes = displays.map { (id: $0.displayID, size: $0.deskSize) }
         guard desk.isSet(for: sizes), let owner = display(of: rect, among: displays), let deskFrame = desk.frames(of: sizes)[owner.screen.displayID] else { return rect }
         return DeskArrangement.map(rect, from: owner.frame, to: deskFrame)
     }

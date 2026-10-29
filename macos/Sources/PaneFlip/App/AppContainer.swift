@@ -140,6 +140,8 @@ final class AppContainer {
         }
         let placement = ZonePlacement(repository: repository, screens: screens, windows: windows, coordinator: coordinator, settings: settings, island: island,
                                       isBlocked: { [editor] in editor.isShown })
+        let deskPointer = DeskPointerRouter(screens: screens, arrangement: { [settings] in settings.values.deskArrangement }, isOn: { [settings] in settings.values.placementEnabled })
+        let pointerCrossing = EventTapPointerCrossing(crossing: { deskPointer.target(from: $0, delta: $1) })
         let placementKeys = EventTapPlacementKeys(modifiers: { [settings] in KeyChord.modifiers(of: settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing })
         // The tap asks this for every scroll event (momentum included): a window list each time would stall the main thread, so the answer is kept for a moment.
         var missionControlAsked = (at: Date.distantPast, active: false)
@@ -213,6 +215,7 @@ final class AppContainer {
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
+            pointerCrossing.start()
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

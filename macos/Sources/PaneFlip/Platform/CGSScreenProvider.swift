@@ -72,8 +72,15 @@ final class CGSScreenProvider: ScreenProviding {
             let notch = notch(of: s)
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
-                              legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height)
+                              legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height,
+                              physicalSize: physicalSize(of: s))
         }
+    }
+
+    /// The size of the display in millimetres, as the display tells the system (zero when it does not).
+    private func physicalSize(of s: NSScreen) -> CGSize {
+        guard let number = s.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else { return .zero }
+        return CGDisplayScreenSize(CGDirectDisplayID(number.uint32Value))
     }
 
     private var dockHome = DockHome()
