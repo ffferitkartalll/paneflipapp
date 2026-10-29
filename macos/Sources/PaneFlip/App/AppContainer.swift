@@ -94,6 +94,9 @@ final class AppContainer {
         coordinator.deskRect = { desk.rect($0) }
         coordinator.displayOf = { desk.display(of: $0) }
         coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
+        let motionEnded = coordinator.onMotionEnded
+        coordinator.onMotionEnded = { [weak island] in motionEnded?(); island?.motionEnded() }
+        coordinator.onWindowStep = { [weak island] zone in island?.peekWindows(of: zone) }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in

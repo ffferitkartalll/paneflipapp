@@ -25,22 +25,26 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.openSize, CGSize(width: 32 * 5 + 48, height: 24 + 16 * 5 + 24), "the picture and the height of the menu bar round it")
     }
 
-    func testTheIslandIsOnlyWidenedWhereAZoneHoldsSeveralCardsAndZonesDoNotWaitBeyondBothEdges() {
-        let model = model()
-        XCTAssertEqual(model.roomWidth, 32, "no zone with several cards: nothing to cramp")
-        model.crowded = true
-        XCTAssertEqual(model.roomWidth, 96, "as with a screen of zones beyond both edges")
+    private func cards(_ count: Int, front: Int) -> [IslandWindow] {
+        (0 ..< count).map { IslandWindow(windowID: CGWindowID($0 + 1), bundleID: "b", name: "w", glyph: nil, glyphRevision: 0, absence: nil, isActive: $0 == front) }
+    }
 
-        let beyond = CGRect(x: 1000, y: 0, width: 500, height: 500)
-        model.glyph = ZoneGlyph(zones: [(UUID(), CGRect(x: 0, y: 0, width: 1000, height: 500)), (UUID(), beyond)], screen: CGRect(x: 0, y: 0, width: 1000, height: 500),
-                                screenSize: CGSize(width: 32, height: 16))
-        XCTAssertEqual(model.glyph.size.width, 48)
-        XCTAssertEqual(model.roomWidth, 96, "zones beyond one edge only")
-        model.glyph = ZoneGlyph(zones: [(UUID(), CGRect(x: -500, y: 0, width: 500, height: 500)), (UUID(), CGRect(x: 0, y: 0, width: 1000, height: 500)), (UUID(), beyond)],
-                                screen: CGRect(x: 0, y: 0, width: 1000, height: 500), screenSize: CGSize(width: 32, height: 16))
-        XCTAssertEqual(model.roomWidth, 64, "zones beyond both edges: the picture itself")
-        model.crowded = false
-        XCTAssertEqual(model.roomWidth, 64)
+    func testTheIslandGrowsFromThePictureToTheWidthEveryCardNeedsAndNoFurtherThanTheDisplay() {
+        let model = model()
+        model.displayWidth = 1000
+        choose(model, rect: CGRect(x: 0, y: 0, width: 250, height: 250))   // the frame is 40 wide
+        XCTAssertEqual(model.windowsFrame.width, 40)
+        model.windows = cards(1, front: 0)
+        XCTAssertEqual(model.cardsFit, 160, "a card or two: the picture is wide enough")
+        model.windows = cards(7, front: 3)
+        XCTAssertEqual(model.cardsFit, 280, "seven cards: 7 × 40")
+        model.windows = cards(7, front: 0)
+        XCTAssertEqual(model.cardsFit, 280, "whichever is in front")
+        XCTAssertEqual(model.frameShift, -120, "the frame is on the first card: three cards left of the middle")
+        model.displayWidth = 200
+        XCTAssertEqual(model.cardsFit, 160, "never past the display, less the room beside the island; the picture is the least")
+        XCTAssertEqual(model.rowShift, 60, "the row is wider than its room by 120: it is moved to bring the first card into view, as far as its end allows")
+        XCTAssertEqual(model.frameShift, -60, "and the frame is on the first card: 80 from the left end of the room")
     }
 
     func testTheFrameIsAsLargeAsTheChosenZoneInThePicture() {

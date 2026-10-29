@@ -38,6 +38,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         /// The last offset the fingers told, and whether it is being drawn already: told as often as events come, drawn once per turn of the run loop.
         var following: CGFloat?
         var dragging: CGFloat?
+        /// Ends the showing of the windows alone (`peekWindows`).
+        var peekEnd: DispatchWorkItem?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel
@@ -64,6 +66,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private var localMonitor: Any?
     /// How long the island takes to shrink back, with some room.
     private static let shrinkAfter: TimeInterval = 0.7
+    /// The one motion of the island and its cards: it eases out and stops, with no spring.
+    private static let motion = Animation.easeOut(duration: 0.3)
+    /// How long the windows of a zone stay in sight if nothing is seen to move, with the pointer away from the island.
+    private static let peekTime: TimeInterval = 1
     private var dragging = false
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
@@ -111,7 +117,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
             for entry in entries.values {
                 refreshWindows(of: entry)   // a window that came, went or came to the front while the row is open
-                refreshCrowding(of: entry)
             }
             warmGlyph()
         }
@@ -206,10 +211,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                                 grow: CGFloat(layout.gap ?? settings.values.gap) / 2, screenShifts: reach)
         withTransaction(Transaction(animation: nil)) { model.outlineShift = 0 }   // the glyph stands where the glide ended
         model.barHeight = bar
+        model.displayWidth = screen.cocoaFrame.width
         model.notchWidth = screen.notchWidth
         model.scale = native?.backingScaleFactor ?? 2
         // The open island is as wide as its picture and the room beside it, and must fit the display.
-        model.crowded = isCrowded(entry)
         model.openZoom = model.fitZoom(toDisplayWidth: screen.cocoaFrame.width)
         let width = screen.cocoaFrame.width
         // Tall enough for the island at its largest, with a row of cards under its picture.
@@ -304,12 +309,13 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// The focus was moved by a shortcut: the lit zone follows at once, not at the next look.
     func focusDidMove() { followFocus() }
 
-    /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle with the spring of the pictures on the screen).
+    /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle).
     func windowsScrubbed(zone: UUID, by fraction: CGFloat) {
+        if fraction != 0 { peekWindows(of: zone) }
         for entry in entries.values where entry.model.windowsZone == zone {
             if fraction == 0 {
                 entry.dragging = nil
-                withAnimation(.interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping)) { entry.model.windowsDrag = 0 }
+                withAnimation(Self.motion) { entry.model.windowsDrag = 0 }
             } else {
                 // Not inside the handling of the finger event, and once for all the events that came meanwhile.
                 let queued = entry.dragging != nil
@@ -321,6 +327,54 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                     withTransaction(Transaction(animation: nil)) { entry.model.windowsDrag = fraction }
                 }
             }
+        }
+    }
+
+    /// A window of a zone is being stepped to (a shortcut, the wheel, the fingers) and the pointer is not on the island: the island grows to show that zone's windows
+    /// alone, as wide as the cards need, and goes back a moment after the last step.
+    func peekWindows(of zone: UUID) {
+        guard !covered, !dragging, coordinator.stacks[zone]?.isEmpty == false else { return }
+        for entry in entries.values where entry.zones.contains(zone) && !entry.hovered && picking !== entry {
+            let model = entry.model
+            if !model.peeking || model.windowsZone != zone {
+                withAnimation(Self.motion) {
+                    model.peeking = true
+                    model.windows = windows(of: zone, openOnly: true)
+                    model.windowsZone = zone
+                    model.contentOpacity = 1
+                }
+            }
+            armPeekEnd(of: entry)
+        }
+    }
+
+    /// The windows go out of sight when the pictures have come to rest, or, if nothing moves (a step past the first or the last window), after a moment.
+    private func armPeekEnd(of entry: Entry) {
+        entry.peekEnd?.cancel()
+        let work = DispatchWorkItem { [weak self, weak entry] in
+            guard let self, let entry else { return }
+            if coordinator.isMoving { armPeekEnd(of: entry) } else { endPeek(entry) }
+        }
+        entry.peekEnd = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.peekTime, execute: work)
+    }
+
+    /// The pictures of the windows have come to rest: the windows shown alone go away at once.
+    func motionEnded() {
+        guard !coordinator.isMoving else { return }
+        for entry in entries.values where entry.model.peeking { endPeek(entry) }
+    }
+
+    private func endPeek(_ entry: Entry) {
+        entry.peekEnd?.cancel()
+        entry.peekEnd = nil
+        guard entry.model.peeking, !entry.hovered else { return }
+        withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 }
+        withAnimation(Self.motion) {
+            entry.model.peeking = false
+            entry.model.windowsZone = nil
+            entry.dragging = nil
+            entry.model.windowsDrag = 0
         }
     }
 
@@ -370,7 +424,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         guard let zone else { return entry.dwell = nil }
         guard let dwell = entry.dwell, dwell.zone == zone else { return entry.dwell = (zone, Date()) }
         guard model.windowsZone != zone, Date().timeIntervalSince(dwell.since) >= Self.dwellTime else { return }
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+        withAnimation(Self.motion) {
             entry.dragging = nil
             model.windowsDrag = 0
             model.windows = windows(of: zone)
@@ -385,17 +439,18 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         guard placing?.zone != zone || placing?.index != index else { return }
         placing = zone.flatMap { zone in index.map { (zone, $0) } }
         guard let shown = entry.model.windowsZone else { return }
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { entry.model.windows = windows(of: shown) }
+        withAnimation(Self.motion) { entry.model.windows = windows(of: shown) }
     }
 
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
+        if open { entry.peekEnd?.cancel(); entry.peekEnd = nil }
         if !open { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
         // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, and the island grows to hold them.
         let zone = open && !dragging && picking !== entry ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+        withAnimation(Self.motion) {
             entry.model.expanded = open
-            if open { entry.model.contentOpacity = 1 }
+            if open { entry.model.contentOpacity = 1; entry.model.peeking = false }
             entry.model.zoom = open ? entry.model.openZoom : 1
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
             if let zone {
@@ -460,10 +515,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             withTransaction(Transaction(animation: nil)) {
                 model.carriedX = current.from.x - middle - current.grab
                 model.carriedCard = current.card
-                if model.windows.first(where: { $0.id == current.card })?.isActive == true { model.pinnedFront = model.windows.firstIndex { $0.isActive } }
             }
             (current.entry.shield.contentView as? IslandShieldView)?.cursor = .closedHand
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { model.liftedCard = current.card }
+            withAnimation(Self.motion) { model.liftedCard = current.card }
             current.moved = true
             pressed = current
         }
@@ -474,7 +528,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let to = model.windows.filter { $0.id != current.card }.filter { (current.centres[$0.id] ?? 0) < centre }.count
         guard to != from, let source = slot(of: model.windows[from], in: zone), let target = slot(of: model.windows[to], in: zone) else { return }
         coordinator.moveSlot(source, toPlaceOf: target, inZone: zone)
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) { model.windows = windows(of: zone) }
+        withAnimation(Self.motion) { model.windows = windows(of: zone) }
     }
 
     private func release(at point: CGPoint) {
@@ -487,8 +541,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         }
         // The card goes to its place and is put down.
         (current.entry.shield.contentView as? IslandShieldView)?.cursor = nil
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
-            model.pinnedFront = nil   // the front card, if it was carried, comes back to the middle with the row
+        withAnimation(Self.motion) {
             if let index = model.carried { model.carriedX = model.cardCentre(of: index) }
             model.liftedCard = nil
         }
@@ -499,7 +552,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// The slot of the memory that a card stands for: its window's, or the first of the app that is not open.
     private func slot(of card: IslandWindow, in zone: UUID) -> Int? {
-        memory.slots(inZones: [zone]).first { card.windowID != nil ? $0.windowID == card.windowID : $0.bundleID == card.bundleID }?.index
+        memory.slots(inZone: zone).first { card.windowID != nil ? $0.windowID == card.windowID : $0.bundleID == card.bundleID }?.index
     }
 
     /// A click on the shield: on a zone in the picture of the open island, a row of cards, one for each window of that zone, opens under the picture and the island
@@ -509,7 +562,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             guard let zone = cell(at: point, in: entry) else { continue }
             coordinator.focus(zone: zone)
             followFocus()   // the highlight goes to the zone at once
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
+            withAnimation(Self.motion) {
                 if entry.model.windowsZone == zone {
                     entry.model.windowsZone = nil
                 } else {
@@ -528,7 +581,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let model = entry.model, frame = islandFrame(of: entry, open: true), size = model.windowsFrame
         guard model.windowsZone != nil, size.width > 0 else { return (false, nil) }
         let top = model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap, fromTop = frame.maxY - point.y
-        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.cardsFit / 2 else { return (false, nil) }
+        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.windowsSpan / 2 else { return (false, nil) }
         return (true, model.card(atX: point.x - frame.midX))
     }
 
@@ -547,40 +600,15 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private func refreshWindows(of entry: Entry) {
         guard let zone = entry.model.windowsZone else { return }
         guard entry.zones.contains(zone) else {
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) { entry.model.windowsZone = nil }
+            withAnimation(Self.motion) { entry.model.windowsZone = nil }
             return placeShield(of: entry)
         }
-        let now = windows(of: zone)
+        let now = windows(of: zone, openOnly: entry.model.peeking)
         // Nothing changed (nearly every look): no animation, no shield to place.
         guard now != entry.model.windows else { return }
-        // Another window in front only moves the row: with the spring of the pictures on the screen. Windows that came or went grow or shrink the island.
-        let moves = now.map(\.id) == entry.model.windows.map(\.id)
-        let spring: Animation = moves ? .interpolatingSpring(mass: 1, stiffness: SlideSpring.stiffness, damping: SlideSpring.damping) : .spring(response: 0.4, dampingFraction: 0.78)
-        withAnimation(spring) { entry.model.windows = now }
+        // Another window in front only moves the row; windows that came or went grow or shrink the island.
+        withAnimation(Self.motion) { entry.model.windows = now }
         placeShield(of: entry)
-    }
-
-    /// A zone on the screen has several cards: the island is laid out for more room (`roomWidth`).
-    private func isCrowded(_ entry: Entry) -> Bool {
-        entry.model.glyph.cells.contains { $0.isOnScreen && cardCount(of: $0.id) > 1 }
-    }
-
-    private func refreshCrowding(of entry: Entry) {
-        let crowded = isCrowded(entry)
-        guard crowded != entry.model.crowded else { return }
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
-            entry.model.crowded = crowded
-            entry.model.openZoom = entry.model.fitZoom(toDisplayWidth: entry.panel.frame.width)
-        }
-        placeShield(of: entry)
-    }
-
-    /// How many cards `windows(of:)` makes for a zone, counted without the pictures: its windows and the apps of the zone that are not open.
-    private func cardCount(of zone: UUID) -> Int {
-        guard let stack = coordinator.stacks[zone] else { return 0 }
-        let open = Set(stack.tabs.map(\.bundleID))
-        let closed = Set(memory.slots(inZones: [zone]).map(\.bundleID)).subtracting(open)
-        return stack.tabs.count + closed.count
     }
 
     /// While the island rests, the picture of one more app is made at each look, so that the first click on a zone does not wait for it (the font that
@@ -609,12 +637,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         return made
     }
 
-    /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place.
-    private func windows(of zone: UUID) -> [IslandWindow] {
+    /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place (`openOnly`: the windows alone).
+    private func windows(of zone: UUID, openOnly: Bool = false) -> [IslandWindow] {
         guard let stack = coordinator.stacks[zone] else { return [] }
         let tabs = Dictionary(stack.tabs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let openApps = Set(stack.tabs.map(\.bundleID))
-        let slots = memory.slots(inZones: [zone])
+        let slots = memory.slots(inZone: zone)
         let running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {
@@ -634,6 +662,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             }
         }
         cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
+        if openOnly { return cards.filter { $0.windowID != nil } }   // the windows shown alone: those that are open
         if let placing, placing.zone == zone { cards.insert(.placeholder, at: min(placing.index, cards.count)) }
         return cards
     }

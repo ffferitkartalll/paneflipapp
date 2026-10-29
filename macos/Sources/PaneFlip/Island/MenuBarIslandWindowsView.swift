@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 /// The windows of the zone chosen in the picture, as a carousel like the one inside the zone: the window in front fills a frame as large as the zone, in
-/// the middle under the picture, drawn as the frame of the screen is in the picture; the other windows lie against it (narrower, all alike, when they would not fit in the island), side by side with no gap, outlined
+/// the middle under the picture, drawn as the frame of the screen is in the picture; the other windows lie against it, as wide as it, side by side with no gap and fading out toward the edges of the island, outlined
 /// as the zones beyond the screen's edge are, and slide through the frame as another comes to the front (or as the fingers lead them). The picture of each
 /// app stands in the middle of its window, dark where it is over the lit frame and light where it is not. The apps of the zone that are not open stand among them in the order of the zone (their pictures dimmer). The title of each is under it, and under that why an app is not open.
 /// The rows are moved, never redrawn, and the masks stand still: a step costs the main thread next to nothing, which fast repeated steps need.
@@ -55,7 +55,7 @@ struct MenuBarIslandWindowsView: View {
     }
 
     private func carousel(size: CGSize) -> some View {
-        let wide = model.cardsFit
+        let wide = model.windowsSpan
         let icon = min(32, max(14, min(size.width, size.height) * 0.4))
         let frame = RoundedRectangle(cornerRadius: 3)
         func row(height: CGFloat? = nil, _ cell: @escaping (IslandWindow) -> AnyView) -> some View {
@@ -71,8 +71,10 @@ struct MenuBarIslandWindowsView: View {
         }
         // The frame goes with the card in front when the mouse carries that.
         let shift = model.frameShift
+        // No window in front (the zone holds none that is open): no frame, and nothing is lit.
+        let lit = model.cardsAt == nil ? 0 : size.width
         return ZStack(alignment: .top) {
-            frame.fill(AppAccent.color).frame(width: size.width, height: size.height).offset(x: shift)
+            frame.fill(AppAccent.color).frame(width: lit, height: size.height).offset(x: shift)
             // A card the mouse carries is grey, its edge not dashed, whether it is over the frame or not (the front card has its frame).
             row { window in
                 AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity((window.id == model.liftedCard || window.isPlaceholder) && !window.isActive ? 0.22 : 0)))
@@ -89,12 +91,19 @@ struct MenuBarIslandWindowsView: View {
                     })
                 }
             }
-            .mask { ZStack(alignment: .top) { Rectangle(); frame.frame(width: size.width, height: size.height).offset(x: shift).blendMode(.destinationOut) }.compositingGroup() }
+            .mask { ZStack(alignment: .top) { Rectangle(); frame.frame(width: lit, height: size.height).offset(x: shift).blendMode(.destinationOut) }.compositingGroup() }
             // Inside it: the pictures, dark.
             row { picture($0, AppAccent.ink) }
-                .mask { frame.frame(width: size.width, height: size.height).offset(x: shift) }
-            frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: size.width, height: size.height).offset(x: shift)
+                .mask { frame.frame(width: lit, height: size.height).offset(x: shift) }
+            frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: lit, height: size.height).offset(x: shift)
         }
         .frame(width: wide, height: size.height, alignment: .top)
+        // The cards that go toward the edges of the island fade into it. The mask is as tall as the titles under the cards reach, which lie below the frame.
+        .mask(alignment: .top) {
+            LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: model.barHeight / wide),
+                                   .init(color: .black, location: 1 - model.barHeight / wide), .init(color: .clear, location: 1)],
+                           startPoint: .leading, endPoint: .trailing)
+                .frame(width: wide, height: size.height + model.windowsGap + model.captionHeight)
+        }
     }
 }

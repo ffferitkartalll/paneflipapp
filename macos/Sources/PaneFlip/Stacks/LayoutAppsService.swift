@@ -76,7 +76,7 @@ final class LayoutAppsService: LayoutAppsEditing {
 
     func addApp(bundleID: String, to zone: UUID) {
         // An app is listed once per zone.
-        guard !memory.slots(inZones: [zone]).contains(where: { $0.bundleID == bundleID }),
+        guard !memory.slots(inZone: zone).contains(where: { $0.bundleID == bundleID }),
               !settings.values.ignoredApps.contains(bundleID) else { return }
         memory.remember(zoneID: zone, bundleID: bundleID, title: "")
         changed([])
