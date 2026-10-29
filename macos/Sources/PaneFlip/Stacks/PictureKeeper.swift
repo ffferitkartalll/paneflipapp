@@ -66,7 +66,7 @@ final class PictureKeeper {
         var wanted: [WindowRef] = []
         for stack in coordinator.stacks.values where stack.tabs.count >= 2 && !stack.isParked {
                         // A window in front is live and photographed when it leaves the front (`windowLeftFocus`); a slide takes it fresh anyway.
-            for id in stack.tabs.map(\.id) where id != stack.activeID && id != stack.shownID {
+            for id in stack.tabs.map(\.id) where id != stack.activeID {
                 guard let ref = stack.refs[id], !cache.isFresh(id, zoneSize: stack.rect.size), failedAt[id].map({ at - $0 >= Self.retryAfter }) ?? true else { continue }
                 wanted.append(ref)
             }

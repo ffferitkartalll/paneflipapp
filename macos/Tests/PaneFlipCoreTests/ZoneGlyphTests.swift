@@ -23,12 +23,6 @@ struct ZoneGlyphTests {
         #expect(glyph.cells.first(where: { $0.id == beyond })?.isOnScreen == false)
     }
 
-    @Test func aZoneFloatingOverAnotherIsDrawnAfterIt() {
-        let glyph = ZoneGlyph(zones: [(b, CGRect(x: 250, y: 100, width: 500, height: 300)), (a, screen)],
-                              screen: screen, screenSize: CGSize(width: 100, height: 50))
-        #expect(glyph.cells.map(\.id) == [a, b])
-    }
-
     @Test func zonesGrownByHalfTheGapMeet() {
         let glyph = ZoneGlyph(zones: [(a, CGRect(x: 2, y: 2, width: 496, height: 496)), (b, CGRect(x: 502, y: 2, width: 496, height: 496))],
                               screen: screen, screenSize: CGSize(width: 100, height: 50), grow: 2)

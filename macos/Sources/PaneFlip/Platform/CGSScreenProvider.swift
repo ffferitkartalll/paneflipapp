@@ -18,6 +18,27 @@ final class CGSScreenProvider: ScreenProviding {
     /// The Dock, found once (looking for it costs Launch Services calls at every look) and again only after it quit.
     private var dockApp: NSRunningApplication?
 
+    /// The answers of `screens()` and `dockRect()` are kept for a moment: they cost calls to the window server and to the Dock (which answers over Accessibility,
+    /// slowly at times), and the zones, the island and the shortcuts ask for them several times a second. A change of the displays or of the desktop forgets them at once.
+    private static let freshFor: TimeInterval = 0.2
+    private let cacheLock = NSLock()
+    private var cachedScreens: (at: TimeInterval, screens: [ScreenInfo])?
+    private var cachedDock: (at: TimeInterval, rect: CGRect?)?
+    private var observers: [NSObjectProtocol] = []
+
+    init() {
+        let forget: (Notification) -> Void = { [weak self] _ in
+            self?.cacheLock.lock()
+            self?.cachedScreens = nil
+            self?.cachedDock = nil
+            self?.cacheLock.unlock()
+        }
+        observers = [NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil, using: forget),
+                     NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil, using: forget)]
+    }
+
+    deinit { observers.forEach { NotificationCenter.default.removeObserver($0); NSWorkspace.shared.notificationCenter.removeObserver($0) } }
+
     private var primaryHeight: CGFloat { NSScreen.screens.first?.frame.height ?? 0 }
 
     func flip(_ r: CGRect) -> CGRect {
@@ -56,6 +77,19 @@ final class CGSScreenProvider: ScreenProviding {
     }
 
     func screens() -> [ScreenInfo] {
+        let now = ProcessInfo.processInfo.systemUptime
+        cacheLock.lock()
+        let kept = cachedScreens.flatMap { now - $0.at < Self.freshFor ? $0.screens : nil }
+        cacheLock.unlock()
+        if let kept { return kept }
+        let made = makeScreens()
+        cacheLock.lock()
+        cachedScreens = (now, made)
+        cacheLock.unlock()
+        return made
+    }
+
+    private func makeScreens() -> [ScreenInfo] {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
         let managed = CGSCopyManagedDisplaySpaces(conn) as? [[String: Any]] ?? []   // once for every display
@@ -139,6 +173,19 @@ final class CGSScreenProvider: ScreenProviding {
     /// Dock lands on the remaining one before the system's usable area of that display has made room for it (it
     /// stayed unchanged for as long as the Dock was there), so the Dock is asked for itself.
     private func dockRect() -> CGRect? {
+        let now = ProcessInfo.processInfo.systemUptime
+        cacheLock.lock()
+        let kept = cachedDock.flatMap { now - $0.at < Self.freshFor ? $0 : nil }
+        cacheLock.unlock()
+        if let kept { return kept.rect }
+        let made = askDock()
+        cacheLock.lock()
+        cachedDock = (now, made)
+        cacheLock.unlock()
+        return made
+    }
+
+    private func askDock() -> CGRect? {
         let hides = CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false
         if dockApp?.isTerminated != false { dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first }
         guard !hides, let dock = dockApp else { return nil }

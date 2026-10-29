@@ -62,6 +62,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private var glyphsRevision = 0
     private var entries: [String: Entry] = [:]
     private var timer: Timer?
+    private var ticks = 0
+    private let startedAt = ProcessInfo.processInfo.systemUptime
     private var monitor: Any?
     private var localMonitor: Any?
     /// How long the island takes to shrink back, with some room.
@@ -112,13 +114,18 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             // The lit zone follows the focus also while windows move (a layout scrolls to a zone beyond the edge): it costs next to nothing, and the zone the
             // focus goes to must not wait for the scroll to be over.
             if followed != coordinator.focusedZoneID { followFocus() }
-            let covering = screens.isMissionControlActive || isSuppressed()
-            if covering != covered { cover(covering) }
+            // Mission Control is looked for every other tick: it asks the window server for every window, which costs several milliseconds on the main thread.
+            ticks += 1
+            if ticks % 2 == 0 || covered {
+                let covering = screens.isMissionControlActive || isSuppressed()
+                if covering != covered { cover(covering) }
+            }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
             for entry in entries.values {
                 refreshWindows(of: entry)   // a window that came, went or came to the front while the row is open
             }
-            warmGlyph()
+            // The pictures of the apps are made one by one while the island rests, but not in the first seconds: the app has enough to do then.
+            if ProcessInfo.processInfo.systemUptime - startedAt > 5 { warmGlyph() }
         }
     }
 
@@ -193,10 +200,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let height = bar - 2 * margin
         let model = entry.model
         entry.zoneNames = layout.zoneNames
-        entry.zones = Set(layout.zoneIDs)
+        entry.zones = Set(layout.strip.zoneIDs)
         entry.display = screen.cocoaFrame
-        defer { model.cellTexts = entry.zones.subtracting(layout.floatingZone.map { [$0.id] } ?? []).reduce(into: [:]) { $0[$1] = entry.zoneNames[$1] ?? entry.numbers[$1] } }
-        entry.numbers = Dictionary(uniqueKeysWithValues: layout.zoneIDs.map { ($0, ZoneLabel.text(of: $0, in: layout.strip)) })
+        defer { model.cellTexts = entry.zones.reduce(into: [:]) { $0[$1] = entry.zoneNames[$1] ?? entry.numbers[$1] } }
+        entry.numbers = Dictionary(uniqueKeysWithValues: layout.strip.zoneIDs.map { ($0, ZoneLabel.text(of: $0, in: layout.strip)) })
         // How far the layout can be scrolled either way: the picture holds the whole strip, whatever the scroll.
         var reach: ClosedRange<CGFloat> = 0 ... 0
         entry.builtOffset = 0
@@ -206,7 +213,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             entry.builtOffset = offset
         }
         // The frame is the area the zones lie in (not under the menu bar or the Dock), so that the zones fill it to its edges.
-        model.glyph = ZoneGlyph(zones: layout.zoneIDs.compactMap { id in coordinator.stacks[id].map { (id, $0.rect) } },
+        model.glyph = ZoneGlyph(zones: layout.strip.zoneIDs.compactMap { id in coordinator.stacks[id].map { (id, $0.rect) } },
                                 screen: screen.axVisible, screenSize: CGSize(width: height * screen.axVisible.width / max(screen.axVisible.height, 1), height: height),
                                 grow: CGFloat(layout.gap ?? settings.values.gap) / 2, screenShifts: reach)
         withTransaction(Transaction(animation: nil)) { model.outlineShift = 0 }   // the glyph stands where the glide ended
@@ -295,7 +302,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             let frame = islandFrame(of: entry, open: true), model = entry.model
             guard frame.contains(point) else { continue }
             guard let zone = model.windowsZone, frame.maxY - point.y > model.barHeight + model.glyph.size.height * model.openZoom + model.windowsGap / 2 else { return .strip }
-            guard let stack = coordinator.stacks[zone], stack.tabs.count > 1, !stack.isParked, !stack.isFloating else { return nil }
+            guard let stack = coordinator.stacks[zone], stack.tabs.count > 1, !stack.isParked else { return nil }
             return .zoneWindows(zone)
         }
         return nil
@@ -587,7 +594,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
     private func choose(_ card: IslandWindow, in zone: UUID) {
-        guard let stack = coordinator.stacks[zone], !stack.isParked, !stack.isFloating else { return }
+        guard let stack = coordinator.stacks[zone], !stack.isParked else { return }
         if let id = card.windowID {
             if card.isActive { coordinator.focus(zone: zone) } else { coordinator.slideSelect(id, in: stack) }
             followFocus()

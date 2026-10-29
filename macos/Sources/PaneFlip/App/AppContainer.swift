@@ -49,8 +49,8 @@ final class AppContainer {
         let pictures = WindowPictureCache(now: { ProcessInfo.processInfo.systemUptime })
         // A zone's windows are photographed ahead of time (PictureKeeper) and the pictures are reused; a window in front is live, so its picture counts only for a moment.
         let snapshots = CachedWindowSnapshots(inner: capture, cache: pictures,
-                                              zoneSize: { [unowned coordinator] id in coordinator.stack(containing: id).flatMap { $0.isFloating ? nil : $0.rect.size } },
-                                              isFront: { [unowned coordinator] id in coordinator.stack(containing: id).map { $0.activeID == id || $0.shownID == id } ?? false })
+                                              zoneSize: { [unowned coordinator] id in coordinator.stack(containing: id).map(\.rect.size) },
+                                              isFront: { [unowned coordinator] id in coordinator.stack(containing: id).map { $0.activeID == id } ?? false })
         coordinator.pictures = pictures
         let keeper = PictureKeeper(coordinator: coordinator, snapshots: capture, cache: pictures,
                                    canCapture: { CGPreflightScreenCaptureAccess() },
@@ -60,20 +60,23 @@ final class AppContainer {
         coordinator.onMotionEnded = { [weak keeper] in keeper?.motionEnded() }
         self.memoryPressure = MemoryPressureWatch { pictures.removeAll() }
         let slideStage = PanelSlideStage(screens: screens, panels: stagePanels)
+        // The swaps of the slides (windows brought forward) run one after another, in the order they were asked for.
+        let swapQueue = DispatchQueue(label: "PaneFlip.swap", qos: .userInteractive)
+        let placeQueues = PerAppQueues()
+        coordinator.placeQueue = { pid, work in placeQueues.queue(for: pid).async(execute: work) }
         coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                            background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
-        coordinator.snapshots = snapshots
+                                            background: { swapQueue.async(execute: $0) })
         let focusQueue = DispatchQueue(label: "PaneFlip.focus", qos: .userInteractive)
         coordinator.focusQueue = { focusQueue.async(execute: $0) }
-        coordinator.floatStage = PanelFloatStage(screens: screens, panels: stagePanels)
-        coordinator.reduceMotion = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
         coordinator.glide = WindowGlide(windows: windows, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                         background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let availability = WindowAvailability(windows: windows, screens: screens)
         let restorer = WindowRestorer(windows: windows, apps: apps, screens: screens, memory: memory, coordinator: coordinator,
                                       availability: availability, settings: settings)
-        restorer.background = { focusQueue.async(execute: $0) }
+        // Its own queue: a long look at every app's windows must not hold up the questions about the focus and the windows that come forward.
+        let restoreQueue = DispatchQueue(label: "PaneFlip.restore", qos: .userInitiated)
+        restorer.background = { restoreQueue.async(execute: $0) }
         let viewport = StripViewport()
         let planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
         let engine = ZoneEngine(planner: planner,
@@ -130,7 +133,8 @@ final class AppContainer {
         let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))
         self.menuBar = MenuBarController(settings: settings, menu: menu)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
-                                      keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island)
+                                      keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island,
+                                      background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),

@@ -34,13 +34,17 @@ final class WindowRestorer {
               memory.records.contains(where: { $0.bundleID == app.bundleID && coordinator.visibleZoneIDs.contains($0.zoneID) })
         else { return }
         guard let background else { return decide(from: windows.windows(ofApp: pid), of: pid) }
-        // The app's windows are asked off the main thread, one round at a time: an app that is slow to answer must not hold the app.
-        guard !asking else { return }
+        // The app's windows are asked off the main thread, one round at a time: an app that is slow to answer must not hold the app. And not again for a few seconds
+        // when it was slow: asking every half second keeps an app busy that has no time for it.
+        guard !asking, slowUntil[pid].map({ ProcessInfo.processInfo.systemUptime >= $0 }) ?? true else { return }
         asking = true
         background { [windows] in
+            let began = CFAbsoluteTimeGetCurrent()
             let list = windows.windows(ofApp: pid)
+            let slow = CFAbsoluteTimeGetCurrent() - began > 0.1
             DispatchQueue.main.async { [self] in
                 asking = false
+                if slow { slowUntil[pid] = ProcessInfo.processInfo.systemUptime + 3 }
                 decide(from: list, of: pid)
             }
         }
@@ -63,9 +67,25 @@ final class WindowRestorer {
         }
     }
 
+    /// `restore()` for every app: the windows of all of them are asked off the main thread first (one app that is slow to answer, a mail client, took a quarter of a second
+    /// of the main thread's time, and the apps are many).
+    func restoreAfterListingAll() {
+        guard let background else { return restore() }
+        let ignored = Set(settings.values.ignoredApps)
+        let bundleIDs = Set(memory.records.map(\.bundleID).filter { !$0.isEmpty && !ignored.contains($0) })
+        let pids = apps.regularApps(withBundleIDs: bundleIDs).map(\.pid)
+        background { [windows] in
+            var listed: [pid_t: [WindowRef]] = [:]
+            for pid in pids { listed[pid] = windows.windows(ofApp: pid) }
+            DispatchQueue.main.async { [self] in restore(listed: listed) }
+        }
+    }
+
     /// Runs the question to an app for its windows off the main thread (nil: where it is asked, in tests).
     var background: ((@escaping () -> Void) -> Void)?
     private var asking = false
+    /// Apps that were slow to list their windows, and until when they are left alone at the checks of every tick.
+    private var slowUntil: [pid_t: TimeInterval] = [:]
 
     /// Puts running windows into the zones their apps belong in: a window of an app with a waiting slot takes that
     /// slot (in the order of the memory), and any other window of such an app joins the zone of the app's first

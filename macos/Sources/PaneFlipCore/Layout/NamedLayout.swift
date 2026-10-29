@@ -13,8 +13,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var gap: Double?
     /// The names the user gave to zones, by zone; a zone without one is told by its number.
     public var zoneNames: [UUID: String] = [:]
-    /// The zone that floats over the middle of one of the screen's zones, if the user added one.
-    public var floating: FloatingZone?
     /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
     public var startApps: Set<String> = []
 
@@ -36,7 +34,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.gap = gap
-        copy.floating = floating.flatMap { float in ids[float.host].map { FloatingZone(host: $0, scale: float.scale) } }
         copy.zoneNames = Dictionary(uniqueKeysWithValues: zoneNames.compactMap { zone, name in ids[zone].map { ($0, name) } })
         return copy
     }
@@ -46,7 +43,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return try c.decodeIfPresent(Overflow.self, forKey: key).map { [$0] } ?? []
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps, zoneNames, floating }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps, zoneNames }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -61,7 +58,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         gap = try c.decodeIfPresent(Double.self, forKey: .gap)
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
         zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]
-        floating = try c.decodeIfPresent(FloatingZone.self, forKey: .floating)
     }
 
     /// The screen's layout with the areas beyond its edges.
@@ -69,12 +65,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         get { StripLayout(leading: leading, root: root, trailing: trailing) }
         set { leading = newValue.leading; root = newValue.root; trailing = newValue.trailing }
     }
-
-    /// Every zone of the layout: those of the screen and beyond its edges, and the floating one.
-    public var zoneIDs: [UUID] { strip.zoneIDs + (floatingZone.map { [$0.id] } ?? []) }
-
-    /// The floating zone while the zone it floats over is one of the screen's own (it goes with its host).
-    public var floatingZone: FloatingZone? { floating.flatMap { root.leafIDs.contains($0.host) ? $0 : nil } }
 
     /// The zone that receives apps whose zone is gone: the chosen one while it still exists, else the first.
     public var fallbackZoneID: UUID? {

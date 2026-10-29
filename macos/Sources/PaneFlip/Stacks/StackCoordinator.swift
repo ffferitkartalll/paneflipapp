@@ -20,6 +20,15 @@ final class StackCoordinator {
     func displacedSlot(of id: CGWindowID) -> UUID? { displaced[id]?.slot }
     /// The window that had the focus at the last look (see `followFocus`).
     private var lastFocusedID: CGWindowID?
+    /// The window that had the focus at the last look, as a handle (see `followFocus`).
+    private(set) var lastFocused: WindowRef?
+
+    /// The window in focus as the last look saw it: asking the app that has the focus on the main thread would hold the main thread for as long as the app takes to
+    /// answer (a mail client that is busy takes a quarter of a second, the limit). A new look is started at once, off the main thread.
+    func focusedWindowCached() -> WindowRef? {
+        followFocus()
+        return lastFocused
+    }
     /// Runs the question "which window has the focus" off the main thread (nil: where it is asked, in tests). The app that has just come to the front
     /// can be slow to answer it (a mail client busy bringing its window up held the whole app for about a second); asked here, the answer would
     /// hold up everything else, the island and the slides included.
@@ -48,17 +57,12 @@ final class StackCoordinator {
         } }
     }
     var glide: WindowGlide?
-    /// A window of a floating zone that leaves is photographed and its picture glides out from behind the window that took the focus, in front
-    /// of the others, never in front of it; without these (or with motion reduced) the window itself glides.
-    var floatStage: FloatStaging?
-    var snapshots: WindowSnapshotting?
     /// Pictures taken ahead of time: one is dropped when its window goes or its title changes (the content changed).
     var pictures: WindowPictureCache?
     /// A window lost the focus to another one.
     var onFocusLeft: ((CGWindowID) -> Void)?
     /// Something that moved windows may be over (a slide, a swipe, a new layout): the pictures may be taken again after a moment of rest.
     var onMotionEnded: (() -> Void)?
-    var reduceMotion: () -> Bool = { false }
     /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
     /// window is sized and placed by its zone. Nothing is held, remembered, stacked or followed, and nothing that was
     /// remembered before is changed.
@@ -101,6 +105,16 @@ final class StackCoordinator {
     }
 
     /// The same for a plan that may hold zones scrolled out of sight: their windows wait at the display's edge.
+    /// Runs a call that writes to an app's windows on the queue of that app, off the main thread (nil: where it is made, in tests).
+    var placeQueue: ((pid_t, @escaping () -> Void) -> Void)?
+
+    /// `place`, off the main thread: reading and writing a window waits for its app, and an app that is slow to answer (a mail client takes a quarter of a second for each
+    /// call) must not hold the main thread, which every zone change and every focus move would do.
+    private func placeLater(_ ref: WindowRef, at frame: CGRect) {
+        guard let placeQueue else { return place(ref, at: frame) }
+        placeQueue(ref.pid) { [weak self] in self?.place(ref, at: frame) }
+    }
+
     func apply(plan: [UUID: PlannedZone]) {
         visibleZoneIDs = Set(plan.keys)
         for (id, zone) in plan {
@@ -110,14 +124,12 @@ final class StackCoordinator {
             stack.isParked = zone.isParked
             stack.number = zone.number
             stack.order = zone.order
-            stack.isFloating = zone.isFloating
-            stack.awayFrame = zone.awayFrame
             stack.frame = zone.frame
             guard !placementOnly(), !isScrolling else { continue }   // a scroll is moving the windows
             for tab in stack.tabs {
                 guard let ref = stack.refs[tab.id] else { continue }
                 glide?.cancel(ref.id)
-                place(ref, at: standing(ref, in: stack))
+                placeLater(ref, at: stack.frame)
             }
         }
         onMotionEnded?()
@@ -133,28 +145,12 @@ final class StackCoordinator {
         if sameSize { windows.setPosition(frame.origin, of: ref) } else { windows.setFrame(frame, of: ref) }
     }
 
-    /// Where a window of the zone stands: the zone's frame. In a floating zone a window that cannot be resized keeps its own size and
-    /// stands in the middle of the zone; only the window in view stands there, the others wait at the zone's place at the screen's edge,
-    /// at the same height.
-    private func standing(_ ref: WindowRef, in stack: ZoneStack, away waiting: Bool? = nil) -> CGRect {
-        guard stack.isFloating, !stack.isParked else { return stack.frame }
-        let own = windows.isResizable(ref) ? nil : windows.frame(of: ref)?.size
-        let frame = own.map { FloatingZone.centred($0, in: stack.rect) } ?? stack.rect
-        guard let away = stack.awayFrame, waiting ?? (ref.id != stack.shownID) else { return frame }
-        return CGRect(x: away.minX, y: frame.minY, width: frame.width, height: frame.height)
-    }
+    /// The zones in view (not the ones scrolled away).
+    var visibleStacks: [ZoneStack] { visibleZoneIDs.compactMap { stacks[$0] }.filter { !$0.isParked } }
 
-    /// The zones in view and in use (not the ones scrolled away, nor a floating zone whose windows wait beyond the edge: it leaves its
-    /// host to the pointer).
-    var visibleStacks: [ZoneStack] { dropStacks.filter { !$0.isAway } }
-
-    /// The same, with the floating zone that waits beyond the edge: a window may be dropped in it.
-    var dropStacks: [ZoneStack] { visibleZoneIDs.compactMap { stacks[$0] }.filter { !$0.isParked } }
-
-    func zoneID(at point: CGPoint, forDrop: Bool = false) -> UUID? {
+    func zoneID(at point: CGPoint) -> UUID? {
         // The widened rectangles of neighbours overlap, so exact containment must win; the Set order is random.
-        // A floating zone lies over its host: the smaller zone under the pointer is the one meant.
-        let stacks = (forDrop ? dropStacks : visibleStacks).sorted { $0.rect.width * $0.rect.height < $1.rect.width * $1.rect.height }
+        let stacks = visibleStacks
         return (stacks.first { $0.rect.contains(point) } ?? stacks.first { $0.rect.insetBy(dx: -4, dy: -4).contains(point) })?.id
     }
 
@@ -216,21 +212,14 @@ final class StackCoordinator {
         stack.tabs.insert(.init(id: ref.id, title: title, appName: appName, bundleID: bundleID, icon: apps.icon(pid: ref.pid)), at: position)
         stack.refreshNames()
         if stack.activeID == nil { stack.activeID = ref.id }
-        // In a floating zone the window with the focus is in view, and the others wait beyond the edge. A window dropped there has the
-        // focus; one that comes back with its app (not one the user dropped) waits at once unless it has the focus: nothing glides out at the
-        // start of the app.
-        if stack.isFloating, glide || windows.focusedWindow()?.id == ref.id {
-            stack.shownID = ref.id
-            for other in stack.refs.values where other.id != ref.id { place(other, at: standing(other, in: stack)) }
-        }
         if glide, raise, !stack.isParked, let mover = self.glide {
             stack.activeID = ref.id
             windows.raise(ref)
-            mover.glide(ref, to: standing(ref, in: stack))
+            mover.glide(ref, to: stack.rect)
             onActivity?(stack.id)
             return
         }
-        windows.setFrame(standing(ref, in: stack), of: ref)
+        placeLater(ref, at: stack.frame)
         if raise { select(ref.id, in: stack) } else { onActivity?(stack.id) }
     }
 
@@ -256,9 +245,9 @@ final class StackCoordinator {
         stack.activeID = id
         onActivity?(stack.id)
         let rect = stack.rect
-        carousel.slide(leaving: leaving, entering: entering, in: rect, forward: forward ?? (to > from)) { [windows] in
-            windows.setFrame(rect, of: entering)
-            windows.raise(entering)
+        let zone = stack.tabs.map(\.id), generation = nextSwap()
+        carousel.slide(leaving: leaving, entering: entering, in: rect, forward: forward ?? (to > from)) { [self] in
+            bringForward(entering, among: zone, generation: generation)
         }
         return true
     }
@@ -274,9 +263,9 @@ final class StackCoordinator {
         guard carousel.canExtend(forward: forward, in: rect) else { return false }
         stack.activeID = id
         onActivity?(stack.id)
-        carousel.extend(entering: entering, forward: forward) { [windows] in
-            windows.setFrame(rect, of: entering)
-            windows.raise(entering)
+        let zone = stack.tabs.map(\.id), generation = nextSwap()
+        carousel.extend(entering: entering, forward: forward) { [self] in
+            bringForward(entering, among: zone, generation: generation)
         }
         return true
     }
@@ -310,7 +299,7 @@ final class StackCoordinator {
     /// turn of the wheel over its row of cards does, and not past the first and the last. A window outside any zone, or a zone with one window,
     /// does nothing.
     func cycleFocusedZone(reverse: Bool) {
-        guard !placementOnly(), let focused = windows.focusedWindow(), let stack = stack(containing: focused.id), stack.tabs.count > 1, !stack.isFloating else { return }
+        guard !placementOnly(), let focused = focusedWindowCached(), let stack = stack(containing: focused.id), stack.tabs.count > 1 else { return }
         // With nothing moving the window in front is the one in focus; while pictures glide it is the one they go to, and stays.
         if windowScrub == nil, !isSliding, stack.activeID != focused.id { stack.activeID = focused.id }
         stepWindowScrub(in: stack, by: reverse ? -1 : 1)
@@ -349,12 +338,26 @@ final class StackCoordinator {
     func focusZone(toward direction: ZoneDirection) {
         guard settings.values.zoneNavigationEnabled, !placementOnly(), windowScrub == nil, !isSliding else { return }
         let from = chosenFocus.flatMap { $0.until > Date() ? stacks[$0.zone] : nil } ?? focusedZoneID.flatMap { stacks[$0] }
-            ?? windows.focusedWindow().flatMap { stack(containing: $0.id) }
-        guard let current = from ?? windows.windowUnderPointer().flatMap({ stack(containing: $0.ref.id) }) else { return }
+            ?? focusedWindowCached().flatMap { stack(containing: $0.id) }
+        if let from { return moveFocus(from: from, toward: direction) }
+        // The window in focus is in no zone: the zone of the window under the pointer is the start. The app is asked off the main thread.
+        guard let focusQueue else {
+            guard let hit = windows.windowUnderPointer(), let stack = stack(containing: hit.ref.id) else { return }
+            return moveFocus(from: stack, toward: direction)
+        }
+        focusQueue { [self] in
+            let hit = windows.windowUnderPointer()
+            DispatchQueue.main.async { [self] in
+                if let hit, let stack = stack(containing: hit.ref.id) { moveFocus(from: stack, toward: direction) }
+            }
+        }
+    }
+
+    private func moveFocus(from current: ZoneStack, toward direction: ZoneDirection) {
         let horizontal = direction == .left || direction == .right
         let wide = horizontal && settings.values.zoneNavigationBeyondEdges && settings.values.overflowZonesEnabled
         func candidate(_ stack: ZoneStack) -> (id: UUID, rect: CGRect, number: Int, display: String?) { (stack.id, deskRect(stack.rect), stack.order, displayOf(stack.rect)) }
-        let visible = dropStacks.filter { $0.id != current.id && !$0.isEmpty }.map(candidate)
+        let visible = visibleStacks.filter { $0.id != current.id && !$0.isEmpty }.map(candidate)
         let beyond = wide ? stacks.values.filter { $0.isParked && !$0.isEmpty && $0.id != current.id }.map(candidate) : []
         let currentRect = deskRect(current.rect)
         let display = displayOf(current.rect)
@@ -458,7 +461,7 @@ final class StackCoordinator {
     /// instead, and a step that has to wait for the slide waits.
     @discardableResult
     func beginWindowScrub(at point: CGPoint) -> Bool {
-        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return false }
+        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? focusedWindowCached().flatMap({ stack(containing: $0.id) }) else { return false }
         return beginWindowScrub(in: stack)
     }
 
@@ -466,7 +469,7 @@ final class StackCoordinator {
     @discardableResult
     func beginWindowScrub(in stack: ZoneStack) -> Bool {
         guard windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
-              stack.tabs.count > 1, !stack.isFloating, let start = stack.activeID else { return false }
+              stack.tabs.count > 1, let start = stack.activeID else { return false }
         let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
         windowScrub = scrub
         // A swipe whose end never comes (a lost event) must not hold the windows for good.
@@ -505,7 +508,7 @@ final class StackCoordinator {
     /// if they are already on their way, so that turns follow one another as quickly as they come, in either direction. Without
     /// pictures to move (a slide that is not a swipe runs, motion is reduced) it is a step like those of the keys.
     func stepWindowScrub(in stack: ZoneStack, by step: Int) {
-        guard step != 0, !stack.isFloating else { return }
+        guard step != 0 else { return }
         if let scrub = windowScrub {
             // Turns that come while the pictures of an earlier one are still being taken add up to it.
             if scrub.stack === stack, scrub.ended, let forced = scrub.forced { scrub.forced = forced + step }
@@ -546,17 +549,16 @@ final class StackCoordinator {
         stack.activeID = entering.id
         onActivity?(stack.id)
         guard !scrub.failed else { return select(entering.id, in: stack) }
-        let rect = scrub.rect
-        carousel?.endScrub(shift: shift) { [windows] in
-            windows.setFrame(rect, of: entering)
-            windows.raise(entering)
+        let zone = stack.tabs.map(\.id), generation = nextSwap()
+        carousel?.endScrub(shift: shift) { [self] in
+            bringForward(entering, among: zone, generation: generation)
         }
     }
 
     /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point` (else the zone of the window in
     /// focus) goes `step` windows on or back, the way a turn of the wheel over its row of cards does (`stepWindowScrub(in:by:)`).
     func stepWindowScrub(at point: CGPoint, by step: Int) {
-        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? windows.focusedWindow().flatMap({ stack(containing: $0.id) }) else { return }
+        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? focusedWindowCached().flatMap({ stack(containing: $0.id) }) else { return }
         stepWindowScrub(in: stack, by: step)
     }
 
@@ -566,10 +568,43 @@ final class StackCoordinator {
         return slideSelect(stack.tabs[from + step].id, in: stack, forward: step > 0)
     }
 
+    private let swapLock = NSLock()
+    private var swapCount = 0
+
+    /// Counts the swaps asked for (on the main thread, when the slide is asked for): a swap that waits is given up when a later one has been asked for.
+    private func nextSwap() -> Int {
+        swapLock.lock()
+        defer { swapLock.unlock() }
+        swapCount += 1
+        return swapCount
+    }
+
+    private func isLatestSwap(_ generation: Int) -> Bool {
+        swapLock.lock()
+        defer { swapLock.unlock() }
+        return swapCount == generation
+    }
+
+    /// What a slide's `swap` does, off the main thread: the window is brought forward, and this waits until the system lists
+    /// it in front of the other windows of its zone (`among`), a moment at most, or until a later choice has been made (then this window is not to be in front any more).
+    /// The pictures give way to the real window only then: an app that is slow to bring a window forward (a mail client) would otherwise show the window that was in
+    /// front for a moment, between the end of the slide and the arrival of the next.
+    private func bringForward(_ ref: WindowRef, among zone: [CGWindowID], generation: Int) {
+        // The window stands in its zone already (the zones are put right at every refresh, `apply(plan:)`): reading its place would only wait for its app.
+        windows.raise(ref)
+        let ids = Set(zone)
+        let giveUp = CFAbsoluteTimeGetCurrent() + 0.6
+        while CFAbsoluteTimeGetCurrent() < giveUp {
+            if windows.windowIDsFrontToBack().first(where: { ids.contains($0) }) == ref.id { return }
+            guard isLatestSwap(generation) else { return }
+            Thread.sleep(forTimeInterval: 0.012)
+        }
+    }
+
     func select(_ id: CGWindowID, in stack: ZoneStack) {
         guard let ref = stack.refs[id] else { return }
         stack.activeID = id
-        windows.setFrame(standing(ref, in: stack), of: ref)
+        placeLater(ref, at: stack.frame)   // a window already there is not written to: an app that answers slowly would hold everything up
         if !stack.isParked { windows.raise(ref) }
         onActivity?(stack.id)
     }
@@ -661,7 +696,6 @@ final class StackCoordinator {
         glide?.cancel(id)
         pictures?.forget(id)
         for stack in stacks.values where stack.refs[id] != nil {
-            if stack.shownID == id { stack.shownID = nil }
             stack.refs[id] = nil
             stack.tabs.removeAll { $0.id == id }
             stack.refreshNames()
@@ -683,21 +717,32 @@ final class StackCoordinator {
     /// a hung app cannot stall the main thread for long. Other tabs catch up when they come to the front.
     func syncTitles() {
         guard !placementOnly() else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        // A window whose app was slow to give its title is left alone for a few seconds: asking every half second keeps an app busy that has no time for it.
         let asked = stacks.values.compactMap { stack in stack.activeID.flatMap { id in stack.refs[id].map { (stack: stack, id: id, ref: $0) } } }
+            .filter { slowTitles[$0.id].map { now >= $0 } ?? true }
         guard let focusQueue else { return apply(titles: asked.map { ($0.stack, $0.id, windows.title(of: $0.ref)) }) }
         // Off the main thread, one round at a time: an app that is slow to answer must not hold the app.
         guard !askingTitles else { return }
         askingTitles = true
         focusQueue { [self] in
-            let titles = asked.map { ($0.stack, $0.id, windows.title(of: $0.ref)) }
+            var slow: [CGWindowID] = []
+            let titles = asked.map { item -> (ZoneStack, CGWindowID, String?) in
+                let began = CFAbsoluteTimeGetCurrent()
+                let title = windows.title(of: item.ref)
+                if CFAbsoluteTimeGetCurrent() - began > 0.1 { slow.append(item.id) }
+                return (item.stack, item.id, title)
+            }
             DispatchQueue.main.async { [self] in
                 askingTitles = false
+                slow.forEach { slowTitles[$0] = ProcessInfo.processInfo.systemUptime + 5 }
                 if !placementOnly() { apply(titles: titles) }
             }
         }
     }
 
     private var askingTitles = false
+    private var slowTitles: [CGWindowID: TimeInterval] = [:]
 
     private func apply(titles: [(ZoneStack, CGWindowID, String?)]) {
         for (stack, id, answer) in titles {
@@ -709,63 +754,6 @@ final class StackCoordinator {
             stack.refreshNames()
             memory.updateTitle(ofWindow: tab.id, to: title)
         }
-    }
-
-    /// A floating zone shows the window that has the focus and sends the others, with the zone's windows all of them when the focus goes
-    /// elsewhere, out beyond the screen's right edge; the window that takes the focus glides in from there, the one it replaces glides out.
-    /// No focus (PaneFlip's own windows are in front) changes nothing.
-    private func updateFloatingZones(focus: WindowRef?) {
-        guard !holdsTheFocus(), !isScrolling else { return }
-        let focusedStack = focus.flatMap { stack(containing: $0.id) }
-        for stack in stacks.values where stack.isFloating && !stack.isParked && !stack.isEmpty && stack.awayFrame != nil {
-            let want = focusedStack === stack ? focus?.id : nil
-            guard want != stack.shownID else { continue }
-            let leaving = stack.shownID.flatMap { stack.refs[$0] }
-            stack.shownID = want
-            change(stack, leaving: leaving, entering: want.flatMap { stack.refs[$0] }, focus: focus)
-        }
-    }
-
-    /// The window in view in a floating zone changes. The one that goes glides out beyond the edge as a picture from behind the window that took the focus, in front
-    /// of the others (the real window would be hidden behind it at once), and goes itself under it; the one that comes glides in, itself, with the same spring as
-    /// the slides inside a zone: it is the real window all the way, with its own shadow. The picture is taken first; without a stage (or with
-    /// motion reduced, or a picture that could not be taken) the windows go and come themselves.
-    private func change(_ stack: ZoneStack, leaving: WindowRef?, entering: WindowRef?, focus: WindowRef?) {
-        stack.changes += 1
-        let change = stack.changes
-        leaving.map { glide?.cancel($0.id) }
-        entering.map { glide?.cancel($0.id) }
-        // A window already where it is to be (the change came back before it was carried out) has nothing to do.
-        func isThere(_ ref: WindowRef, _ target: CGRect) -> Bool {
-            guard let frame = windows.frame(of: ref) else { return false }
-            return abs(frame.minX - target.minX) < 3 && abs(frame.minY - target.minY) < 3
-        }
-        let waits = leaving.map { standing($0, in: stack) }.flatMap { target in leaving.map { isThere($0, target) } == true ? nil : target }
-        let arrives = entering.map { standing($0, in: stack) }.flatMap { target in entering.map { isThere($0, target) } == true ? nil : target }
-        func come() { if let entering, let arrives { move(entering, to: arrives) } }
-        guard let leaving, let waits else { return come() }
-        func plain() {
-            self.move(leaving, to: waits)
-            come()
-        }
-        guard let floatStage, let snapshots, !reduceMotion() else { return plain() }
-        snapshots.snapshots(of: [leaving]) { [weak self, weak stack] pictures in
-            guard let self, let stack, stack.changes == change else { return }   // another change came while the pictures were taken
-            guard let picture = pictures[leaving.id], let frame = self.windows.frame(of: leaving) else { return plain() }
-            // Always behind the window that has the focus, in front of the others: where that window stands over the picture, it is not seen.
-            let slide = FloatSlide(picture: picture, from: frame, to: CGRect(origin: waits.origin, size: frame.size),
-                                   raiseFocused: focus.map { focused in { [weak self] in self?.windows.raise(focused) } })
-            floatStage.slide(slide) { [weak self, weak stack] in
-                guard let self, let stack, stack.changes == change else { return }
-                self.place(leaving, at: waits)
-                come()
-            }
-        }
-    }
-
-    /// With a glide when there is one, else at once.
-    private func move(_ ref: WindowRef, to target: CGRect) {
-        if let glide { glide.glide(ref, to: target, spring: true) } else { place(ref, at: target) }
     }
 
     /// If the user switched to a stacked window some other way (Cmd-Tab, Dock), follow it.
@@ -795,8 +783,8 @@ final class StackCoordinator {
         let moved = focused?.id != lastFocusedID
         let previous = lastFocusedID
         lastFocusedID = focused?.id
+        lastFocused = focused
         if moved, let previous { onFocusLeft?(previous) }
-        updateFloatingZones(focus: focused)
         guard let focused, let stack = stack(containing: focused.id) else { return }
         if moved, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
         guard stack.activeID != focused.id else { return }

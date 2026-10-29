@@ -84,17 +84,28 @@ final class AXWindowSystem: WindowSystem {
         return s
     }
 
-    func isResizable(_ ref: WindowRef) -> Bool {
-        var settable = DarwinBoolean(false)
-        return AXUIElementIsAttributeSettable(ref.element, kAXSizeAttribute as CFString, &settable) != .success || settable.boolValue
-    }
-
     func isMinimized(_ ref: WindowRef) -> Bool { minimized(ref.element) }
+
+    /// Where the window server is asked to bring a window forward when that is asked on the main thread: it does not answer until the app does, and an app that is
+    /// slow to answer (a mail client bringing its window up) must not hold the main thread.
+    private static let focusQueue = DispatchQueue(label: "PaneFlip.raise", qos: .userInteractive)
 
     func raise(_ ref: WindowRef) {
         // Only this window comes forward, as when it is clicked: the app's windows on other displays stay behind.
+        if Thread.isMainThread {
+            Self.focusQueue.async { self.raiseOnly(ref) }
+        } else {
+            raiseOnly(ref)
+        }
+    }
+
+    /// The raise through Accessibility, after the window server has brought the window forward: an app that is slow to answer (a mail client) takes the whole
+    /// limit of a quarter of a second for it, and the slide that waits for the window must not wait for that.
+    private static let raiseQueue = DispatchQueue(label: "PaneFlip.axraise", qos: .utility, attributes: .concurrent)
+
+    private func raiseOnly(_ ref: WindowRef) {
         if WindowFocus.focus(ref) {
-            AXUIElementPerformAction(ref.element, kAXRaiseAction as CFString)
+            Self.raiseQueue.async { AXUIElementPerformAction(ref.element, kAXRaiseAction as CFString) }
             return
         }
         // The app comes forward first: coming forward, it puts its own last window in front again (the one on another display, when it has windows on

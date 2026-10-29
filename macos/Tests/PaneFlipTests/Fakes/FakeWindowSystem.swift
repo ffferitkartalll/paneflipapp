@@ -21,11 +21,7 @@ final class FakeWindowSystem: WindowSystem {
     var showingPIDs: Set<pid_t> = []
     func isShowingWindow(ofApp pid: pid_t) -> Bool { showingPIDs.contains(pid) }
     func frame(of ref: WindowRef) -> CGRect? { frames[ref.id] }
-    func setFrame(_ rect: CGRect, of ref: WindowRef) {
-        // A window with a fixed size takes the place but keeps its size.
-        frames[ref.id] = fixedSize.contains(ref.id) ? CGRect(origin: rect.origin, size: frames[ref.id]?.size ?? rect.size) : rect
-        setCalls += 1
-    }
+    func setFrame(_ rect: CGRect, of ref: WindowRef) { frames[ref.id] = rect; setCalls += 1 }
     /// A window changed by something else than the code under test.
     func setFrameDirectly(_ rect: CGRect, of id: CGWindowID) { frames[id] = rect }
 
@@ -33,9 +29,6 @@ final class FakeWindowSystem: WindowSystem {
         frames[ref.id] = CGRect(origin: point, size: frames[ref.id]?.size ?? .zero)
         positionCalls += 1
     }
-    /// Windows whose size cannot be set: they ignore the size they are given and keep their own.
-    var fixedSize: Set<CGWindowID> = []
-    func isResizable(_ ref: WindowRef) -> Bool { !fixedSize.contains(ref.id) }
     func title(of ref: WindowRef) -> String? { titles[ref.id] }
     func isMinimized(_ ref: WindowRef) -> Bool { minimized.contains(ref.id) }
     func raise(_ ref: WindowRef) { raised.append(ref.id) }
