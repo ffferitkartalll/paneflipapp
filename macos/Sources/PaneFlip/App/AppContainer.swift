@@ -135,6 +135,9 @@ final class AppContainer {
             }
             return all.compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
+        let placement = ZonePlacement(repository: repository, screens: screens, windows: windows, coordinator: coordinator, settings: settings, island: island,
+                                      isBlocked: { [editor] in editor.isShown })
+        let placementKeys = EventTapPlacementKeys(modifiers: { [settings] in KeyChord.modifiers(of: settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing })
         // The tap asks this for every scroll event (momentum included): a window list each time would stall the main thread, so the answer is kept for a moment.
         var missionControlAsked = (at: Date.distantPast, active: false)
         let missionControl: () -> Bool = { [screens] in
@@ -206,6 +209,7 @@ final class AppContainer {
             scroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
+            placementKeys.start(onEvent: placement.handle)
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

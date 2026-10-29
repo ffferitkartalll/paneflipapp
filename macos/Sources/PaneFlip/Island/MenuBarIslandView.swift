@@ -45,6 +45,15 @@ struct MenuBarIslandView: View {
                     .clipped()
                     .offset(x: 0, y: bar + gh + model.windowsGap)
                     .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
+                if model.pickedID != nil {
+                    Text(verbatim: model.pickingNote)
+                        .font(Font(MenuBarIslandModel.pickingNoteFont))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                        .frame(width: model.cardsFit, height: model.pickingNoteHeight, alignment: .top)
+                        .offset(x: 0, y: bar + gh + model.windowsGap)
+                        .opacity(model.contentOpacity)
+                }
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.78), value: model.glyph.size)
@@ -55,7 +64,7 @@ struct MenuBarIslandView: View {
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
 
     private var glyph: some View {
-        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
+        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
             .frame(width: px(model.glyph.size.width * model.zoom), height: px(model.glyph.size.height * model.zoom))
     }
 }
@@ -73,16 +82,26 @@ private struct GlyphCanvas: View, Animatable {
     var labels: CGFloat
     /// The zone whose windows are shown under the picture: outlined.
     let selectedID: UUID?
+    /// The zone a window is being sent to.
+    let pickedID: UUID?
+    let previousPickedID: UUID?
+    var pickBlend: CGFloat
     let activeID: UUID?
     let previousID: UUID?
     var blend: CGFloat
     var shift: CGFloat
     let scale: CGFloat
 
-    var animatableData: AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>> {
-        get { AnimatablePair(shift, AnimatablePair(blend, AnimatablePair(zoom, labels))) }
-        set { shift = newValue.first; blend = newValue.second.first; zoom = newValue.second.second.first; labels = newValue.second.second.second }
+    var animatableData: AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>> {
+        get { AnimatablePair(shift, AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))) }
+        set {
+            shift = newValue.first; blend = newValue.second.first; zoom = newValue.second.second.first
+            labels = newValue.second.second.second.first; pickBlend = newValue.second.second.second.second
+        }
     }
+
+    /// How much a zone is lit in the colour of the zone a window is sent to: fading in as it is chosen, out as another is.
+    private func picked(_ id: UUID) -> CGFloat { id == pickedID ? pickBlend : (id == previousPickedID ? 1 - pickBlend : 0) }
 
     /// The fill of a zone: grey, or the lit colour, or between the two while the focus moves from one zone to another.
     private func lit(_ id: UUID) -> CGFloat { id == activeID ? blend : (id == previousID ? 1 - blend : 0) }
@@ -132,6 +151,7 @@ private struct GlyphCanvas: View, Animatable {
                         layer.fill(shape, with: .color(AppAccent.color.opacity(lit(cell.id))))
                     }
                 }
+                if picked(cell.id) > 0 { context.fill(shape, with: .color(AppAccent.placement.opacity(picked(cell.id)))) }
                 if cell.id == selectedID {
                     context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(.white.opacity(0.9)), lineWidth: 1.5)
                 }
@@ -139,7 +159,7 @@ private struct GlyphCanvas: View, Animatable {
                     context.drawLayer { layer in
                         layer.clip(to: Path(rect))
                         // White on the grey zones, dark on the lit one (and between the two as the focus moves), as the date and the time of the menu bar are written.
-                        let ink = Color(white: 1 - 0.92 * lit(cell.id)).opacity(min(zoom - 1, 1) * labels)
+                        let ink = Color(white: 1 - 0.92 * max(picked(cell.id), lit(cell.id))).opacity(min(zoom - 1, 1) * labels)
                         layer.draw(Text(verbatim: text).font(Font(NSFont.menuBarFont(ofSize: 0))).foregroundStyle(ink), at: CGPoint(x: rect.midX, y: rect.midY))
                     }
                 }

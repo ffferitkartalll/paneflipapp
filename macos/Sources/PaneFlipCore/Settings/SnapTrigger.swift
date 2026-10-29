@@ -32,6 +32,8 @@ public struct SnapTrigger: Codable, Equatable {
     public static let previousWindow = SnapTrigger(keys: [leftOption, leftControl, leftArrow])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
+    /// Held while typing the number of a zone (or D) to send the focused window there.
+    public static let sendToZone = SnapTrigger(keys: [Key(code: 56, name: "Left Shift"), leftOption, leftControl])
 
     /// Move to the zone above, to the left, below or to the right: Control+Option and I, J, K or L (the four keys form an inverted T; they are named
     /// by their key codes, so the shortcuts stay on the same four keys in every layout).

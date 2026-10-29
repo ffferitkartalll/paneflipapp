@@ -4,7 +4,7 @@ import SwiftUI
 
 /// The island in the menu bar of every display: the zones of its layout, those beyond its edges too, with the zone of the window that has the focus lit up.
 /// It is as tall as the menu bar; where there is a notch it is not shown until the pointer comes.
-final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
+final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// One display's island.
     private final class Entry {
         let model = MenuBarIslandModel()
@@ -15,6 +15,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         var shrinking: DispatchWorkItem?
         var zoneNames: [UUID: String] = [:]
         var zones: Set<UUID> = []
+        /// The display, in Cocoa coordinates.
+        var display: CGRect = .zero
         /// How each zone is numbered: 1, 2 on the screen; -1 beyond the left edge; +1 beyond the right one.
         var numbers: [UUID: String] = [:]
         var hovered = false
@@ -66,6 +68,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
+    /// The island a zone is being chosen in (see `ZonePicking`): it stays open, with no row of windows, whatever the pointer does.
+    private var picking: Entry?
     /// Mission Control or App Exposé is open, or the layout editor is: the islands are out of sight until it is closed.
     private var covered = false
     /// True while something else owns the screen (the layout editor); set by `AppContainer`.
@@ -185,6 +189,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         let model = entry.model
         entry.zoneNames = layout.zoneNames
         entry.zones = Set(layout.zoneIDs)
+        entry.display = screen.cocoaFrame
         defer { model.cellTexts = entry.zones.subtracting(layout.floatingZone.map { [$0.id] } ?? []).reduce(into: [:]) { $0[$1] = entry.zoneNames[$1] ?? entry.numbers[$1] } }
         entry.numbers = Dictionary(uniqueKeysWithValues: layout.zoneIDs.map { ($0, ZoneLabel.text(of: $0, in: layout.strip)) })
         // How far the layout can be scrolled either way: the picture holds the whole strip, whatever the scroll.
@@ -323,7 +328,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
 
     private func hover(at point: CGPoint) {
         guard !covered else { return }
-        for entry in entries.values {
+        for entry in entries.values where entry !== picking {
             let model = entry.model, bar = entry.panel.frame
             let m = MenuBarIslandView.margin
             let hit: Bool
@@ -387,7 +392,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         entry.hovered = open
         if !open { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
         // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, and the island grows to hold them.
-        let zone = open && !dragging ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
+        let zone = open && !dragging && picking !== entry ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
         withAnimation(.spring(response: 0.4, dampingFraction: 0.78)) {
             entry.model.expanded = open
             if open { entry.model.contentOpacity = 1 }
@@ -683,7 +688,59 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget {
         }
     }
 
+    // MARK: ZonePicking
+
+    func startPicking(zone: UUID) -> Bool {
+        guard !covered, let entry = entries.values.first(where: { $0.zones.contains(zone) }) else { return false }
+        picking = entry
+        entry.model.pick(zone)
+        setOpen(true, for: entry)
+        return true
+    }
+
+    /// Lights another zone; one of another display's island moves the choice there: this island closes and that one opens.
+    func pick(_ zone: UUID) {
+        guard let target = entries.values.first(where: { $0.zones.contains(zone) }) else { return }
+        if let old = picking, old !== target {
+            old.model.endPick()
+            old.cooling = true
+            picking = target
+            setOpen(false, for: old)
+            target.model.pick(zone)
+            setOpen(true, for: target)
+        } else {
+            target.model.pick(zone)
+        }
+    }
+
+    func zone(toward direction: ZoneDirection, from zone: UUID) -> UUID? {
+        guard let entry = picking, let own = entry.model.glyph.cells.first(where: { $0.id == zone }) else { return nil }
+        func order(_ id: UUID) -> Int { coordinator.stacks[id]?.order ?? 0 }
+        let others = entry.model.glyph.cells.filter { coordinator.stacks[$0.id] != nil }.map { (id: $0.id, rect: $0.rect, number: order($0.id)) }
+        return ZoneNeighbour.nearest(to: own.rect, number: order(zone), among: others, toward: direction) ?? crossing(from: entry, zone: own, toward: direction)
+    }
+
+    /// No zone that way on this display: the zone of the display that lies that way which is entered at the same place along the edge, if there is a display.
+    private func crossing(from entry: Entry, zone: ZoneGlyph.Cell, toward direction: ZoneDirection) -> UUID? {
+        let displays = entries.values.filter { $0 !== entry }.map { (id: ObjectIdentifier($0), rect: screens.flip($0.display), number: 0) }
+        guard let id = ZoneNeighbour.nearest(to: screens.flip(entry.display), number: 0, among: displays, toward: direction),
+              let next = entries.values.first(where: { ObjectIdentifier($0) == id }) else { return nil }
+        let along = ZoneCrossing.along(zone.rect, onScreen: zone.isOnScreen, in: entry.model.glyph.screen, going: direction)
+        let glyph = next.model.glyph
+        let zones = glyph.cells.filter { $0.isOnScreen && coordinator.stacks[$0.id] != nil }.map { (id: $0.id, rect: $0.rect) }
+        return ZoneCrossing.entered(going: direction, along: along, among: zones, screen: glyph.screen)
+    }
+
+    func stopPicking() {
+        guard let entry = picking else { return }
+        picking = nil
+        entry.model.endPick()
+        entry.cooling = true   // closed, it stays closed until the pointer has left it
+        setOpen(false, for: entry)
+    }
+
     // MARK: Focus
+
 
     private func followFocus() {
         let id = coordinator.focusedZoneID

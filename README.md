@@ -63,8 +63,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 - A window dragged out of its zone glides back to the size it had before.
 
 **Everywhere**
-- Several displays and desktops. Unplug a display and its apps move to the default zone of the main screen; plug it in and
-  they go back.
+- Several displays and desktops. Unplug a display and its windows spread over the first display; plug it in and they go back to
+  their zones.
 - Closed, hidden and minimized windows leave their zone and return when they do.
 - Updates from inside the app, or with Homebrew. 46 languages.
 
@@ -75,6 +75,8 @@ https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
 | Snap a window into a zone | hold <kbd>⌘</kbd> (left) while dragging | changeable |
 | Next / previous window of the zone | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
 | Scroll to the zones beyond the right / left edge | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
+| Move the focus to the zone above / left / below / right | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | changeable |
+| Send the focused window to a zone, on any display | <kbd>⇧</kbd><kbd>⌃</kbd><kbd>⌥</kbd>, then the arrow keys, <kbd>↩</kbd> to place, <kbd>⌫</kbd> to take it out of its zone, <kbd>esc</kbd> to cancel | the modifier keys are changeable |
 
 All of them are set in `Settings ▸ Shortcuts`.
 

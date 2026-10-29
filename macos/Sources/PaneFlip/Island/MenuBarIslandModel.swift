@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 import SwiftUI
@@ -24,6 +25,11 @@ final class MenuBarIslandModel {
     /// when it begins to shrink, so that none of it is seen on the shrinking background.
     var contentOpacity: CGFloat = 0
     var cellTexts: [UUID: String] = [:]
+    /// The zone a window is being sent to: lit in a colour of its own.
+    private(set) var pickedID: UUID?
+    /// The zone that was lit before, and how far the change to the new one has come (0 to 1): the colour fades over, as the lit zone of the focus does.
+    private(set) var previousPickedID: UUID?
+    var pickBlend: CGFloat = 1
     /// The zone chosen in the picture by a click: its windows stand under the picture, in a frame while it is set.
     var windowsZone: UUID?
     /// The windows of that zone (they stay while the row closes, so that it fades instead of going at once).
@@ -94,7 +100,17 @@ extension MenuBarIslandModel {
     }
 
     /// The height of what stands under the picture: none while no zone is chosen.
-    var windowsHeight: CGFloat { windowsZone == nil ? 0 : windowsFrame.height + titleGap + captionHeight }
+    var windowsHeight: CGFloat { windowsZone == nil ? pickingNoteHeight : windowsFrame.height + titleGap + captionHeight }
+
+    /// The note under the picture that says a zone is being chosen for a window, in the type of the date and the time of the menu bar; it goes on to
+    /// another line when it does not fit the width of the room, and the island is as tall as its lines.
+    var pickingNote: String { String(localized: "Window placement shortcut is active") }
+    static var pickingNoteFont: NSFont { NSFont.menuBarFont(ofSize: 0) }
+    var pickingNoteHeight: CGFloat {
+        guard pickedID != nil else { return 0 }
+        let box = CGSize(width: max(cardsFit, 1), height: .greatestFiniteMagnitude)
+        return ceil(NSString(string: pickingNote).boundingRect(with: box, options: .usesLineFragmentOrigin, attributes: [.font: Self.pickingNoteFont]).height)
+    }
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize { CGSize(width: cardsFit + 2 * barHeight, height: openHeight(windows: windowsHeight)) }
@@ -105,6 +121,22 @@ extension MenuBarIslandModel {
     }
 
     private func openHeight(windows rowHeight: CGFloat) -> CGFloat { barHeight + glyph.size.height * openZoom + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
+
+    /// The zone a window is being sent to changes (nil: none): it lights up as the old one goes out.
+    func pick(_ id: UUID?) {
+        guard id != pickedID else { return }
+        previousPickedID = pickedID
+        pickedID = id
+        withTransaction(Transaction(animation: nil)) { pickBlend = 0 }
+        DispatchQueue.main.async { [self] in withAnimation(.easeOut(duration: 0.15)) { pickBlend = 1 } }
+    }
+
+    /// The choice is over: nothing is lit, at once (the island is closing).
+    func endPick() {
+        pickedID = nil
+        previousPickedID = nil
+        pickBlend = 1
+    }
 
     /// The focus went to another zone: it lights up as the old one goes out.
     func select(_ id: UUID?) {
