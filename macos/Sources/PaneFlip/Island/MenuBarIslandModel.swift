@@ -34,17 +34,17 @@ final class MenuBarIslandModel {
     var windowsZone: UUID?
     /// The windows of that zone (they stay while the row closes, so that it fades instead of going at once).
     var windows: [IslandWindow] = []
+    /// The island has grown only to show the windows of `windowsZone`, with no picture of the zones, because a window of the zone was stepped to (see `MenuBarIsland.peekWindows`).
+    var peeking = false
+    /// The width of the display, at most the width of the island.
+    var displayWidth: CGFloat = 0
     /// How far the fingers (or the wheel's turn) have led the windows from the one in front, in windows: positive brings the ones before it in.
     var windowsDrag: CGFloat = 0
     /// The card the mouse carries (`IslandWindow.id`), and where its middle is, from the middle of the row.
     var carriedCard: String?
     /// The card is held up: it is put down while it goes to its place.
     var liftedCard: String?
-    /// While the front card is carried, the row is held on the place that card had, not moved to wherever it is put among the others.
-    var pinnedFront: Int?
     var carriedX: CGFloat = 0
-    /// A zone on the screen has more than one card in its row: windows and apps that are not open count alike.
-    var crowded = false
     var barHeight: CGFloat = 24
     /// 0 on a display without a notch.
     var notchWidth: CGFloat = 0
@@ -62,32 +62,54 @@ extension MenuBarIslandModel {
 
     var windowsFrame: CGSize {
         guard let cell = glyph.cells.first(where: { $0.id == windowsZone }) else { return .zero }
-        return CGSize(width: min(cell.rect.width * openZoom, glyph.size.width * openZoom), height: cell.rect.height * openZoom)
+        return CGSize(width: min(cell.rect.width * windowsZoom, glyph.size.width * windowsZoom), height: cell.rect.height * windowsZoom)
     }
 
-    /// The room the row of cards has: as wide as the picture. The cards that are not in front share it when they do not fit with the width of the frame.
-    var cardsFit: CGFloat { roomWidth * openZoom }
-
-    /// The width the open island is laid out for, at rest size, with its picture in the middle: the picture itself, or, when a zone holds several cards and
-    /// zones do not wait beyond both edges of the screen, at least as wide as it would be with a screen's width of them on both sides (the row of cards
-    /// under the picture would be cramped in the width of the picture alone). With no zone holding several cards there is nothing to cramp.
-    var roomWidth: CGFloat {
-        let both = glyph.screen.minX > 1 && glyph.size.width - glyph.screen.maxX > 1
-        return crowded && !both ? max(glyph.size.width, 3 * glyph.screen.width) : glyph.size.width
+    /// The room the row of cards has: at least as wide as the picture, and wide enough for every card when the display has room; the cards that still do not fit
+    /// fade out toward the edges of the island. With the windows shown alone, no wider than the cards.
+    var cardsFit: CGFloat {
+        peeking ? min(cardsNeeded, displayWidth - 2 * barHeight) : max(glyph.size.width * openZoom, min(cardsNeeded, displayWidth - 2 * barHeight))
     }
 
-    /// The zoom of the open island: `MenuBarIslandView.hoverZoom`, or less when the room would not fit the display.
-    func fitZoom(toDisplayWidth width: CGFloat) -> CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (width - 2 * barHeight) / max(roomWidth, 1))) }
-    private var cardsGeometry: CarouselCards { CarouselCards(count: windows.count, wide: windowsFrame.width, fit: cardsFit) }
-    var cardsOther: CGFloat { cardsGeometry.other(front: windows.firstIndex(where: \.isActive)) }
+    /// The width that shows every card of the row: the island grows to this much, never past the display. Nothing without a row.
+    private var cardsNeeded: CGFloat { windowsFrame.width * CGFloat(windows.count) }
+
+    /// The room the cards are shown in: the island itself, the picture and the room beside it.
+    var windowsSpan: CGFloat { cardsFit + 2 * barHeight }
+
+    /// The zoom the windows shown alone are drawn at: the zoom of an open island with a picture of the screen alone.
+    var peekZoom: CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (displayWidth - 2 * barHeight) / max(glyph.screen.width, 1))) }
+
+    /// The zoom the frame of the windows is drawn at.
+    private var windowsZoom: CGFloat { peeking ? peekZoom : openZoom }
+
+    /// The zoom of the open island: `MenuBarIslandView.hoverZoom`, or less when the picture would not fit the display.
+    func fitZoom(toDisplayWidth width: CGFloat) -> CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (width - 2 * barHeight) / max(glyph.size.width, 1))) }
+    private var cardsGeometry: CarouselCards { CarouselCards(count: windows.count, wide: windowsFrame.width) }
+    var cardsOther: CGFloat { cardsGeometry.other }
     /// The middle of a card from the middle of the row, where it lies.
-    func cardCentre(of card: Int) -> CGFloat { cardsGeometry.centres(at: cardsAt, other: cardsOther, focus: pinnedFront.map { CGFloat($0) })[card] }
-    /// How far the frame of the window in front is from the middle: it goes with the card when the mouse carries that.
-    var frameShift: CGFloat { carried != nil && carried == windows.firstIndex(where: \.isActive) ? carriedX : 0 }
+    func cardCentre(of card: Int) -> CGFloat { cardsGeometry.centres(at: nil, other: cardsOther)[card] + rowShift }
+    /// How far the frame of the window in front is from the middle of the row: it goes along the row as another window comes to the front (or as the fingers
+    /// lead it), and with the card when the mouse carries that.
+    var frameShift: CGFloat {
+        if carried != nil, carried == windows.firstIndex(where: \.isActive) { return carriedX }
+        return activeCentre + rowShift
+    }
+
+    /// The middle of the card in front from the middle of the row (0 when none is in front).
+    private var activeCentre: CGFloat { cardsAt.map { ($0 - CGFloat(windows.count - 1) / 2) * windowsFrame.width } ?? 0 }
+
+    /// How far the row is moved from the middle: when it is wider than the room it has (the display is narrower than the cards need), it is moved so that the card
+    /// in front is in view, as far as the ends of the row allow.
+    var rowShift: CGFloat {
+        let extra = windowsFrame.width * CGFloat(windows.count) - cardsFit
+        guard extra > 0 else { return 0 }
+        return min(max(-activeCentre, -extra / 2), extra / 2)
+    }
     /// The card the mouse carries.
     var carried: Int? { carriedCard.flatMap { id in windows.firstIndex { $0.id == id } } }
     /// The card under a point `x` from the middle of the row.
-    func card(atX x: CGFloat) -> Int? { cardsGeometry.card(atX: x, at: cardsAt, other: cardsOther, focus: pinnedFront.map { CGFloat($0) }) }
+    func card(atX x: CGFloat) -> Int? { cardsGeometry.card(atX: x - rowShift, at: nil, other: cardsOther) }
 
     /// The place of the window in front among the cards, in cards: the fingers' drag moves it among the open windows, and the cards of apps that are not
     /// open lie between. Nil when no window is in front.
@@ -113,14 +135,18 @@ extension MenuBarIslandModel {
     }
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
-    var openSize: CGSize { CGSize(width: cardsFit + 2 * barHeight, height: openHeight(windows: windowsHeight)) }
+    var openSize: CGSize {
+        let width = windowsSpan
+        return CGSize(width: peeking ? max(width, glyph.size.width + 2 * MenuBarIslandView.margin) : width,
+                      height: openHeight(picture: peeking ? 0 : glyph.size.height * openZoom, windows: windowsHeight))
+    }
 
     /// The tallest the open island gets, with the largest zone chosen: the panel it grows in is as tall as that.
     var tallestOpenHeight: CGFloat {
-        openHeight(windows: (glyph.cells.map(\.rect.height).max() ?? 0) * openZoom + titleGap + captionHeight)
+        openHeight(picture: glyph.size.height * openZoom, windows: (glyph.cells.map(\.rect.height).max() ?? 0) * max(openZoom, peekZoom) + titleGap + captionHeight)
     }
 
-    private func openHeight(windows rowHeight: CGFloat) -> CGFloat { barHeight + glyph.size.height * openZoom + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
+    private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { barHeight + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
 
     /// The zone a window is being sent to changes (nil: none): it lights up as the old one goes out.
     func pick(_ id: UUID?) {

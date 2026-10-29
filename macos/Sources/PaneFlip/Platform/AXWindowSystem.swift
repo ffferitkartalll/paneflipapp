@@ -92,6 +92,11 @@ final class AXWindowSystem: WindowSystem {
     func isMinimized(_ ref: WindowRef) -> Bool { minimized(ref.element) }
 
     func raise(_ ref: WindowRef) {
+        // Only this window comes forward, as when it is clicked: the app's windows on other displays stay behind.
+        if WindowFocus.focus(ref) {
+            AXUIElementPerformAction(ref.element, kAXRaiseAction as CFString)
+            return
+        }
         // The app comes forward first: coming forward, it puts its own last window in front again (the one on another display, when it has windows on
         // several), so a window made main before that would lose the focus to it.
         // Making the owning app frontmost through AX works while PaneFlip itself is not the active app; while it is (one of its own

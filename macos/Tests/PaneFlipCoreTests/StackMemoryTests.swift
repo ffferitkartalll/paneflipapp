@@ -231,6 +231,18 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.title), ["2", "3", "1"])
     }
 
+    func testASlotThatOnlyRemembersAZoneIsNotInIt() {
+        let home = UUID(), beyond = UUID()
+        let memory = StackMemory(store: MemoryStore())
+        _ = memory.remember(zoneID: beyond, bundleID: "com.example.mail", title: "Inbox")
+        memory.remap([beyond: home])                      // the zones beyond the edges are switched off: the slot goes to the default zone
+        XCTAssertEqual(memory.slots(inZone: home).map(\.bundleID), ["com.example.mail"])
+        memory.remap([home: home], preferred: [beyond])   // and on again: it goes back, remembering the default zone
+        XCTAssertEqual(memory.slots(inZones: [home]).map(\.bundleID), ["com.example.mail"], "for a layout the slot still counts")
+        XCTAssertEqual(memory.slots(inZone: home).map(\.bundleID), [], "for the zone itself it is elsewhere")
+        XCTAssertEqual(memory.slots(inZone: beyond).map(\.bundleID), ["com.example.mail"])
+    }
+
     func testRemovingAnAppForgetsAllItsWindowsInThatZoneOnly() {
         let memory = StackMemory(store: MemoryStore())
         let a = UUID(), b = UUID()

@@ -38,6 +38,8 @@ final class StackCoordinator {
     var onActivity: ((UUID) -> Void)?
     /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The island's frame follows them.
     var onWindowScrub: ((UUID, CGFloat) -> Void)?
+    /// A window of a zone is being stepped to (a shortcut, the wheel): the island shows the zone's windows for a moment.
+    var onWindowStep: ((UUID) -> Void)?
     /// Slides windows when a card of the island is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
         didSet { carousel?.onFree = { [weak self] in
@@ -511,6 +513,7 @@ final class StackCoordinator {
         }
         // Not past the first and the last window: there is nothing to move to, and nothing is photographed for it.
         guard !placementOnly(), let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), stack.tabs.indices.contains(from + step) else { return }
+        onWindowStep?(stack.id)
         guard beginWindowScrub(in: stack) else {
             doOrWait { [weak self, weak stack] in stack.map { self?.stepStack($0, by: step) ?? true } ?? true }
             return

@@ -42,6 +42,12 @@ public final class StackMemory {
         }
     }
 
+    /// The slots that are in one zone now, not those that only remember it as a zone they were in (see `slots(inZones:)`, for which a zone of the layout is
+    /// enough).
+    public func slots(inZone zone: UUID) -> [LayoutSlot] {
+        slots(inZones: [zone]).filter { records[$0.index].zoneID == zone }
+    }
+
     /// The apps of one layout: the slots grouped by app and zone, in the order the apps first appear in memory.
     public func apps(inZones zones: [UUID]) -> [LayoutApp] {
         var result: [LayoutApp] = []

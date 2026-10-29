@@ -1,26 +1,19 @@
 import CoreGraphics
 
 /// The cards of a row of windows that slides through a frame: the card in front is `wide`, the others lie against it on both sides with no gap, as wide
-/// as the frame is, or narrower, all alike, when they would not fit in `fit` (the room the row has, the front card in the middle of it).
-/// `at` is the place of the card in front in cards (between two while it slides); nil when none is in front (the cards share the room and are centred).
+/// as the frame is; the row goes on past the room it is shown in.
+/// `at` is the place of the card in front in cards (between two while it slides); nil when none is in front (the cards are centred).
 public struct CarouselCards {
     public let count: Int
     public let wide: CGFloat
-    public let fit: CGFloat
 
-    public init(count: Int, wide: CGFloat, fit: CGFloat) {
+    public init(count: Int, wide: CGFloat) {
         self.count = count
         self.wide = wide
-        self.fit = max(fit, wide)
     }
 
-    /// The width of each card that is not in front, with `front` the card in front (nil: none).
-    public func other(front: Int?) -> CGFloat {
-        guard count > 0 else { return wide }
-        guard let front else { return min(wide, fit / CGFloat(count)) }
-        let most = max(front, count - 1 - front)
-        return most == 0 ? wide : min(wide, (fit - wide) / 2 / CGFloat(most))
-    }
+    /// The width of each card that is not in front: the width of the frame.
+    public var other: CGFloat { wide }
 
     /// A card widens as the front comes to it, and narrows as the front leaves it.
     public func width(of card: Int, at: CGFloat?, other: CGFloat) -> CGFloat {
