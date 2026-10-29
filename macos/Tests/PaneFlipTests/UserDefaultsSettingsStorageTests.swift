@@ -21,6 +21,13 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
         XCTAssertNil(defaults.object(forKey: "edgeScrollEnabled"))
     }
 
+    func testTheDeskArrangementIsKept() {
+        var values = SettingsValues()
+        values.deskArrangement = DeskArrangement(origins: ["a": CGPoint(x: 10, y: 20)])
+        storage.save(values)
+        XCTAssertEqual(storage.load().deskArrangement, values.deskArrangement)
+    }
+
     func testSavingOtherSettingsKeepsTheLanguageTheSystemHolds() {
         defaults.set(["tr"], forKey: "AppleLanguages")   // chosen in System Settings
         var values = SettingsValues()

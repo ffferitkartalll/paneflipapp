@@ -37,6 +37,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
         v.sendToZoneKeys = defaults.data(forKey: "sendToZoneKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.sendToZoneKeys
+        v.deskArrangement = defaults.data(forKey: "deskArrangement").flatMap { try? JSONDecoder().decode(DeskArrangement.self, from: $0) } ?? v.deskArrangement
         v.trackpadMethod = defaults.string(forKey: "trackpadMethod").flatMap(TrackpadMethod.init(rawValue:)) ?? v.trackpadMethod
         v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
         for (key, path) in Self.shortcuts {
@@ -64,6 +65,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(try? JSONEncoder().encode(v.stripScrollKeys), forKey: "stripScrollKeys")
         defaults.set(try? JSONEncoder().encode(v.sendToZoneKeys), forKey: "sendToZoneKeys")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
+        defaults.set(try? JSONEncoder().encode(v.deskArrangement), forKey: "deskArrangement")
         defaults.set(v.ignoredApps, forKey: "ignoredApps")
         defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")
         // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order

@@ -90,6 +90,9 @@ final class AppContainer {
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) })
         engine.add(presenter: island)
         coordinator.onActivity = { [weak island] _ in island?.windowsDidChange() }
+        let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
+        coordinator.deskRect = { desk.rect($0) }
+        coordinator.displayOf = { desk.display(of: $0) }
         coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 

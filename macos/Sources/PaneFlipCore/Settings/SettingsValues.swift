@@ -46,6 +46,9 @@ public struct SettingsValues: Equatable {
     /// Held while typing the number of a zone, or D, to send the focused window to that zone.
     public var sendToZoneKeys = SnapTrigger.sendToZone
 
+    /// Where the displays stand on the desk; the zone moves between displays follow it.
+    public var deskArrangement = DeskArrangement()
+
     /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
     /// off and the apps in them are moved to the screen's default zone.
     public var overflowZonesEnabled = true

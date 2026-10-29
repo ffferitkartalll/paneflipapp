@@ -30,6 +30,10 @@ final class StackCoordinator {
     private var originalSizes: [CGWindowID: CGSize] = [:]
     /// Called when the zone the focus goes to changed by a shortcut or a click, before the window has it: the island lights the zone at once.
     var onFocusMoved: (() -> Void)?
+    /// Moves a rectangle from where the system arranges the displays to where they stand on the desk (the moves from one display to the next follow the desk).
+    var deskRect: (CGRect) -> CGRect = { $0 }
+    /// The display a rectangle belongs to (nil when that is not known): the focus goes on to another display only after the zones of its own, beyond its edge included.
+    var displayOf: (CGRect) -> String? = { _ in nil }
     /// Called when a stack changed in a way the island should show (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
     /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The island's frame follows them.
@@ -347,16 +351,23 @@ final class StackCoordinator {
         guard let current = from ?? windows.windowUnderPointer().flatMap({ stack(containing: $0.ref.id) }) else { return }
         let horizontal = direction == .left || direction == .right
         let wide = horizontal && settings.values.zoneNavigationBeyondEdges && settings.values.overflowZonesEnabled
-        let visible = dropStacks.filter { $0.id != current.id && !$0.isEmpty }.map { (id: $0.id, rect: $0.rect, number: $0.order) }
-        let beyond = wide ? stacks.values.filter { $0.isParked && !$0.isEmpty && $0.id != current.id }.map { (id: $0.id, rect: $0.rect, number: $0.order) } : []
+        func candidate(_ stack: ZoneStack) -> (id: UUID, rect: CGRect, number: Int, display: String?) { (stack.id, deskRect(stack.rect), stack.order, displayOf(stack.rect)) }
+        let visible = dropStacks.filter { $0.id != current.id && !$0.isEmpty }.map(candidate)
+        let beyond = wide ? stacks.values.filter { $0.isParked && !$0.isEmpty && $0.id != current.id }.map(candidate) : []
+        let currentRect = deskRect(current.rect)
+        let display = displayOf(current.rect)
+        func nearest(_ zones: [(id: UUID, rect: CGRect, number: Int, display: String?)]) -> UUID? {
+            ZoneNeighbour.nearest(to: currentRect, number: current.order, among: zones.map { (id: $0.id, rect: $0.rect, number: $0.number) }, toward: direction)
+        }
+        let own = { (zone: (id: UUID, rect: CGRect, number: Int, display: String?)) in zone.display == display }
         let next: UUID?
         if current.isParked {
-            // From a zone out of sight the nearest of all, not the first one on the screen: the zones between are not skipped.
-            next = wide ? ZoneNeighbour.nearest(to: current.rect, number: current.order, among: visible + beyond, toward: direction) : nil
+            // From a zone out of sight the nearest of all of its display, not the first one on the screen: the zones between are not skipped.
+            next = wide ? nearest((visible + beyond).filter(own)) ?? nearest(visible.filter { !own($0) }) : nil
         } else {
-            // On the screen first; none that way: the nearest zone with windows beyond the edge, the one next to the screen first.
-            next = ZoneNeighbour.nearest(to: current.rect, number: current.order, among: visible, toward: direction)
-                ?? ZoneNeighbour.nearest(to: current.rect, number: current.order, among: beyond, toward: direction)
+            // On the screen first; none that way: the nearest zone with windows beyond the edge, the one next to the screen first; none there either: the
+            // zones of another display.
+            next = nearest(visible.filter(own)) ?? nearest(beyond.filter(own)) ?? nearest(visible.filter { !own($0) })
         }
         guard let id = next, let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
         chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
