@@ -722,8 +722,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// No zone that way on this display: the zone of the display that lies that way which is entered at the same place along the edge, if there is a display.
     private func crossing(from entry: Entry, zone: ZoneGlyph.Cell, toward direction: ZoneDirection) -> UUID? {
-        let displays = entries.values.filter { $0 !== entry }.map { (id: ObjectIdentifier($0), rect: screens.flip($0.display), number: 0) }
-        guard let id = ZoneNeighbour.nearest(to: screens.flip(entry.display), number: 0, among: displays, toward: direction),
+        let displays = entries.values.filter { $0 !== entry }.map { (id: ObjectIdentifier($0), rect: coordinator.deskRect(screens.flip($0.display)), number: 0) }
+        guard let id = ZoneNeighbour.nearest(to: coordinator.deskRect(screens.flip(entry.display)), number: 0, among: displays, toward: direction),
               let next = entries.values.first(where: { ObjectIdentifier($0) == id }) else { return nil }
         let along = ZoneCrossing.along(zone.rect, onScreen: zone.isOnScreen, in: entry.model.glyph.screen, going: direction)
         let glyph = next.model.glyph

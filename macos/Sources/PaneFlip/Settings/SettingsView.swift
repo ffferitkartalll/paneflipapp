@@ -42,10 +42,10 @@ struct SettingsView: View {
                 .tabItem { Label("General", systemImage: "gearshape") }
                 .tag(SettingsTab.general)
 
-            AppsPane(settings: settings, catalog: catalog, editor: apps)
-                .cappedHeight(contentHeight, natural: natural(.apps))
-                .tabItem { Label("Apps", systemImage: "app.dashed") }
-                .tag(SettingsTab.apps)
+            DisplaysPane(screens: screens, settings: settings)
+                .cappedHeight(contentHeight, natural: natural(.displays))
+                .tabItem { Label("Displays", systemImage: "display.2") }
+                .tag(SettingsTab.displays)
 
             LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
                         settings: settings, navigation: navigation)
@@ -72,6 +72,11 @@ struct SettingsView: View {
                 .cappedHeight(contentHeight, natural: natural(.shortcuts))
                 .tabItem { Label("Shortcuts", systemImage: "command") }
                 .tag(SettingsTab.shortcuts)
+
+            AppsPane(settings: settings, catalog: catalog, editor: apps)
+                .cappedHeight(contentHeight, natural: natural(.apps))
+                .tabItem { Label("Apps", systemImage: "app.dashed") }
+                .tag(SettingsTab.apps)
 
             UpdatesPane(model: updates)
                 .cappedHeight(contentHeight, natural: natural(.updates))

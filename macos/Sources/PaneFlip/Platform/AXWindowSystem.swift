@@ -92,12 +92,15 @@ final class AXWindowSystem: WindowSystem {
     func isMinimized(_ ref: WindowRef) -> Bool { minimized(ref.element) }
 
     func raise(_ ref: WindowRef) {
-        AXUIElementPerformAction(ref.element, kAXRaiseAction as CFString)
-        AXUIElementSetAttributeValue(ref.element, kAXMainAttribute as CFString, kCFBooleanTrue)
+        // The app comes forward first: coming forward, it puts its own last window in front again (the one on another display, when it has windows on
+        // several), so a window made main before that would lose the focus to it.
         // Making the owning app frontmost through AX works while PaneFlip itself is not the active app; while it is (one of its own
         // windows is in front), the app is asked to take the focus instead.
         if NSRunningApplication.current.isActive { NSRunningApplication(processIdentifier: ref.pid)?.activate() }   // not NSApp: this runs off the main thread too
         AXUIElementSetAttributeValue(AXUIElementCreateApplication(ref.pid), kAXFrontmostAttribute as CFString, kCFBooleanTrue)
+        AXUIElementPerformAction(ref.element, kAXRaiseAction as CFString)
+        AXUIElementSetAttributeValue(ref.element, kAXMainAttribute as CFString, kCFBooleanTrue)
+        AXUIElementSetAttributeValue(ref.element, kAXFocusedAttribute as CFString, kCFBooleanTrue)
     }
 
     // MARK: System window list

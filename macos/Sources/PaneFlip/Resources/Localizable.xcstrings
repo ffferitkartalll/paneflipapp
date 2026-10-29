@@ -4778,6 +4778,568 @@
         }
       }
     },
+    "Arrangement in macOS" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الترتيب في macOS"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подредба в macOS"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS-এ বিন্যাস"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposició a macOS"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uspořádání v macOS"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placering i macOS"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anordnung in macOS"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διάταξη στο macOS"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposición en macOS"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paigutus macOS-is"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چیدمان در macOS"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järjestys macOS:ssä"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagkakaayos sa macOS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposition dans macOS"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הסידור ב-macOS"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS में व्यवस्था"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raspored u macOS-u"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elrendezés a macOS-ben"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunan di macOS"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposizione in macOS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS での配置"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS에서의 배치"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Išdėstymas macOS"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izvietojums macOS"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS मधील मांडणी"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunan dalam macOS"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plassering i macOS"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opstelling in macOS"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Układ w macOS"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposição no macOS"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposição no macOS"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aranjarea în macOS"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расположение в macOS"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usporiadanie v macOS"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Razporeditev v macOS"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Распоред у macOS-у"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placering i macOS"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS-இல் அமைப்பு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS లో అమరిక"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การจัดวางใน macOS"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS’taki düzen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розташування в macOS"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS میں ترتیب"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách sắp xếp trong macOS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 中的排列"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 中的排列"
+          }
+        }
+      }
+    },
+    "Arrangement on your desk" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الترتيب على مكتبك"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подредба на бюрото ви"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "আপনার ডেস্কে বিন্যাস"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposició al teu escriptori"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uspořádání na vašem stole"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placering på dit skrivebord"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anordnung auf deinem Schreibtisch"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διάταξη στο γραφείο σας"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposición en tu escritorio"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paigutus sinu laual"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چیدمان روی میز شما"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järjestys työpöydälläsi"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagkakaayos sa iyong desk"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposition sur votre bureau"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הסידור על השולחן שלך"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके डेस्क पर व्यवस्था"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raspored na vašem stolu"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elrendezés az asztalodon"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunan di meja Anda"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposizione sulla tua scrivania"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "机の上での配置"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "책상 위 배치"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Išdėstymas jūsų stalo"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izvietojums uz jūsu galda"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "तुमच्या डेस्कवरील मांडणी"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunan di meja anda"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plassering på skrivebordet ditt"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opstelling op je bureau"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Układ na Twoim biurku"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposição na sua secretária"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disposição na sua mesa"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aranjarea pe biroul tău"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расположение на вашем столе"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usporiadanie na vašom stole"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Razporeditev na vaši mizi"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Распоред на вашем столу"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placering på ditt skrivbord"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "உங்கள் மேசையில் அமைப்பு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "మీ డెస్క్‌పై అమరిక"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การจัดวางบนโต๊ะของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masandaki düzen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розташування на вашому столі"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آپ کی میز پر ترتیب"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách sắp xếp trên bàn của bạn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "桌面上的排列"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "桌面上的排列"
+          }
+        }
+      }
+    },
     "Blank layout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8993,6 +9555,287 @@
         }
       }
     },
+    "Displays" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشاشات"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеи"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিসপ্লে"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalles"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærme"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displays"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οθόνες"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantallas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanid"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایشگرها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytöt"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga display"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écrans"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "צגים"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kijelzők"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranai"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeji"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paparan"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyświetlacze"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrãs"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrane"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеи"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärmar"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காட்சித்திரைகள்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిస్‌ప్లేలు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จอภาพ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranlar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеї"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈسپلے"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Màn hình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示器"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示器"
+          }
+        }
+      }
+    },
     "Done" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9270,6 +10113,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成"
+          }
+        }
+      }
+    },
+    "Drag the displays to where they stand on your desk. PaneFlip uses this arrangement for the moves from one display to the next." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسحب الشاشات إلى أماكنها على مكتبك. يستخدم PaneFlip هذا الترتيب عند الانتقال من شاشة إلى المجاورة لها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Плъзнете дисплеите там, където стоят на бюрото ви. PaneFlip използва тази подредба при преминаване от един дисплей към съседния."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিসপ্লেগুলো আপনার ডেস্কে যেখানে আছে সেখানে টেনে রাখুন। এক ডিসপ্লে থেকে পাশের ডিসপ্লেতে যেতে PaneFlip এই বিন্যাস ব্যবহার করে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrossega les pantalles al lloc on són al teu escriptori. PaneFlip fa servir aquesta disposició per passar d’una pantalla a la del costat."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přetáhněte displeje tam, kde stojí na vašem stole. PaneFlip toto uspořádání používá pro přechody z jednoho displeje na sousední."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Træk skærmene derhen, hvor de står på dit skrivebord. PaneFlip bruger denne placering, når der skiftes fra en skærm til den næste."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziehe die Displays dorthin, wo sie auf deinem Schreibtisch stehen. PaneFlip nutzt diese Anordnung für den Wechsel von einem Display zum nächsten."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύρετε τις οθόνες εκεί που βρίσκονται στο γραφείο σας. Το PaneFlip χρησιμοποιεί αυτή τη διάταξη για τις μετακινήσεις από μια οθόνη στη διπλανή της."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrastra las pantallas al lugar donde están en tu escritorio. PaneFlip usa esta disposición para pasar de una pantalla a la contigua."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lohista ekraanid sinna, kus need sinu laual asuvad. PaneFlip kasutab seda paigutust ühelt ekraanilt naaberekraanile liikumisel."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایشگرها را به جایی که روی میز شما قرار دارند بکشید. PaneFlip از این چیدمان برای جابه‌جایی از یک نمایشگر به نمایشگر کناری استفاده می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedä näytöt sinne, missä ne ovat työpöydälläsi. PaneFlip käyttää tätä järjestystä siirryttäessä näytöltä viereiselle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-drag ang mga display sa kinatatayuan nila sa iyong desk. Ginagamit ng PaneFlip ang pagkakaayos na ito sa paglipat mula sa isang display papunta sa katabi nito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites glisser les écrans là où ils se trouvent sur votre bureau. PaneFlip utilise cette disposition pour passer d’un écran à l’écran voisin."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גרור את הצגים למקום שבו הם עומדים על השולחן שלך. PaneFlip משתמש בסידור הזה למעבר מצג אחד לצג הסמוך אליו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले को वहाँ खींचकर रखें जहाँ वे आपके डेस्क पर हैं। एक डिस्प्ले से बगल वाले डिस्प्ले पर जाने के लिए PaneFlip इसी व्यवस्था का उपयोग करता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Povucite zaslone onamo gdje stoje na vašem stolu. PaneFlip koristi ovaj raspored za prelazak s jednog zaslona na susjedni."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Húzd a kijelzőket oda, ahol az asztalodon állnak. A PaneFlip ezt az elrendezést használja az egyik kijelzőről a szomszédosra lépésnél."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seret layar ke tempat layar itu berada di meja Anda. PaneFlip memakai susunan ini untuk berpindah dari satu layar ke layar di sebelahnya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trascina gli schermi dove si trovano sulla tua scrivania. PaneFlip usa questa disposizione per passare da uno schermo a quello accanto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイを机の上にある位置へドラッグしてください。PaneFlip は、あるディスプレイから隣のディスプレイへ移るときにこの配置を使います。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이를 책상 위에 놓인 위치로 드래그하세요. PaneFlip은 한 디스플레이에서 옆 디스플레이로 이동할 때 이 배치를 사용합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuvilkite ekranus ten, kur jie stovi ant jūsų stalo. „PaneFlip“ naudoja šį išdėstymą pereidama iš vieno ekrano į gretimą."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velciet displejus uz vietām, kur tie atrodas uz jūsu galda. PaneFlip izmanto šo izvietojumu, pārejot no viena displeja uz blakus esošo."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले तुमच्या डेस्कवर जिथे आहेत तिथे ओढून ठेवा. एका डिस्प्लेवरून शेजारच्या डिस्प्लेवर जाण्यासाठी PaneFlip ही मांडणी वापरते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seret paparan ke tempat ia berada di meja anda. PaneFlip menggunakan susunan ini untuk berpindah dari satu paparan ke paparan di sebelahnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dra skjermene dit de står på skrivebordet ditt. PaneFlip bruker denne plasseringen når du går fra én skjerm til den neste."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep de schermen naar waar ze op je bureau staan. PaneFlip gebruikt deze opstelling om van het ene scherm naar het naastgelegen scherm te gaan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeciągnij wyświetlacze tam, gdzie stoją na Twoim biurku. PaneFlip używa tego układu przy przechodzeniu z jednego wyświetlacza na sąsiedni."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arraste os ecrãs para o sítio onde estão na sua secretária. O PaneFlip usa esta disposição para passar de um ecrã para o seguinte."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arraste as telas para onde elas estão na sua mesa. O PaneFlip usa essa disposição para passar de uma tela para a seguinte."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trage ecranele acolo unde stau pe biroul tău. PaneFlip folosește această aranjare pentru trecerea de la un ecran la cel vecin."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перетащите дисплеи туда, где они стоят на вашем столе. PaneFlip использует это расположение при переходе с одного дисплея на соседний."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presuňte displeje tam, kde stoja na vašom stole. PaneFlip toto usporiadanie používa pri prechode z jedného displeja na susedný."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Povlecite zaslone tja, kjer stojijo na vaši mizi. PaneFlip uporablja to razporeditev pri prehodu z enega zaslona na sosednjega."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Превуците екране тамо где стоје на вашем столу. PaneFlip користи овај распоред за прелазак са једног екрана на суседни."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dra skärmarna dit de står på ditt skrivbord. PaneFlip använder den här placeringen när du går från en skärm till nästa."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காட்சித்திரைகளை உங்கள் மேசையில் அவை இருக்கும் இடத்துக்கு இழுத்து வையுங்கள். ஒரு காட்சித்திரையிலிருந்து அருகிலுள்ளதற்குச் செல்ல PaneFlip இந்த அமைப்பைப் பயன்படுத்துகிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిస్‌ప్లేలను మీ డెస్క్‌పై అవి ఉన్న చోటికి లాగండి. ఒక డిస్‌ప్లే నుండి పక్కనున్న దానికి వెళ్లడానికి PaneFlip ఈ అమరికను ఉపయోగిస్తుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ลากจอภาพไปยังตำแหน่งที่วางอยู่บนโต๊ะของคุณ PaneFlip ใช้การจัดวางนี้เมื่อย้ายจากจอภาพหนึ่งไปยังจอภาพข้างเคียง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranları masanda durdukları yere sürükle. PaneFlip, bir ekrandan yanındakine geçişlerde bu düzeni kullanır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перетягніть дисплеї туди, де вони стоять на вашому столі. PaneFlip використовує це розташування під час переходу з одного дисплея на сусідній."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈسپلے کو اس جگہ کھینچ کر رکھیں جہاں وہ آپ کی میز پر ہیں۔ ایک ڈسپلے سے ساتھ والے ڈسپلے پر جانے کے لیے PaneFlip یہی ترتیب استعمال کرتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kéo các màn hình đến vị trí chúng đang đặt trên bàn của bạn. PaneFlip dùng cách sắp xếp này khi chuyển từ màn hình này sang màn hình bên cạnh."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将显示器拖到它们在桌面上所处的位置。PaneFlip 在从一个显示器移到相邻显示器时使用这一排列。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將顯示器拖到它們在桌面上所在的位置。PaneFlip 從一個顯示器移到相鄰顯示器時會使用這個排列。"
           }
         }
       }
@@ -24729,6 +25853,568 @@
         }
       }
     },
+    "Not set yet. Until you move a display, PaneFlip uses the arrangement in macOS." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يُضبط بعد. إلى أن تنقل إحدى الشاشات، يستخدم PaneFlip الترتيب في macOS."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Още не е зададена. Докато не преместите дисплей, PaneFlip използва подредбата в macOS."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এখনও সেট করা হয়নি। কোনো ডিসপ্লে সরানো পর্যন্ত PaneFlip macOS-এর বিন্যাস ব্যবহার করে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encara no s’ha definit. Fins que moguis una pantalla, PaneFlip fa servir la disposició de macOS."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatím nenastaveno. Dokud displej nepřesunete, PaneFlip používá uspořádání v macOS."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke indstillet endnu. Indtil du flytter en skærm, bruger PaneFlip placeringen i macOS."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nicht festgelegt. Bis du ein Display bewegst, verwendet PaneFlip die Anordnung in macOS."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν έχει οριστεί ακόμη. Μέχρι να μετακινήσετε μια οθόνη, το PaneFlip χρησιμοποιεί τη διάταξη του macOS."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no está definida. Hasta que muevas una pantalla, PaneFlip usa la disposición de macOS."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veel seadistamata. Kuni sa ekraani ei liiguta, kasutab PaneFlip macOS-i paigutust."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هنوز تنظیم نشده است. تا وقتی نمایشگری را جابه‌جا نکنید، PaneFlip از چیدمان macOS استفاده می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ei vielä asetettu. Kunnes siirrät näyttöä, PaneFlip käyttää macOS:n järjestystä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi pa naitatakda. Hangga’t hindi ka naglilipat ng display, ginagamit ng PaneFlip ang pagkakaayos sa macOS."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore définie. Tant que vous ne déplacez pas un écran, PaneFlip utilise la disposition de macOS."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עדיין לא הוגדר. עד שתזיז צג, PaneFlip משתמש בסידור ב-macOS."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी सेट नहीं है। जब तक आप कोई डिस्प्ले नहीं हिलाते, PaneFlip macOS की व्यवस्था का उपयोग करता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Još nije postavljeno. Dok ne pomaknete zaslon, PaneFlip koristi raspored u macOS-u."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Még nincs beállítva. Amíg nem mozgatsz egy kijelzőt, a PaneFlip a macOS elrendezését használja."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum diatur. Sampai Anda memindahkan layar, PaneFlip memakai susunan di macOS."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non ancora impostata. Finché non sposti uno schermo, PaneFlip usa la disposizione di macOS."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ設定されていません。ディスプレイを動かすまで、PaneFlip は macOS の配置を使います。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 설정되지 않았습니다. 디스플레이를 움직이기 전까지 PaneFlip은 macOS의 배치를 사용합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dar nenustatyta. Kol nepajudinsite ekrano, „PaneFlip“ naudoja macOS išdėstymą."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vēl nav iestatīts. Kamēr nepārvietojat displeju, PaneFlip izmanto macOS izvietojumu."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अजून सेट केलेले नाही. तुम्ही एखादा डिस्प्ले हलवेपर्यंत PaneFlip macOS ची मांडणी वापरते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ditetapkan. Sehingga anda menggerakkan paparan, PaneFlip menggunakan susunan dalam macOS."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke angitt ennå. Helt til du flytter en skjerm, bruker PaneFlip plasseringen i macOS."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet ingesteld. Tot je een scherm verplaatst, gebruikt PaneFlip de opstelling in macOS."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeszcze nie ustawiono. Dopóki nie przesuniesz wyświetlacza, PaneFlip używa układu z macOS."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ainda não definida. Até mover um ecrã, o PaneFlip usa a disposição do macOS."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ainda não definida. Até você mover uma tela, o PaneFlip usa a disposição do macOS."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Încă nesetată. Până muți un ecran, PaneFlip folosește aranjarea din macOS."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ещё не задано. Пока вы не переместите дисплей, PaneFlip использует расположение из macOS."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatiaľ nenastavené. Kým displej nepresuniete, PaneFlip používa usporiadanie v macOS."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Še ni nastavljeno. Dokler ne premaknete zaslona, PaneFlip uporablja razporeditev v macOS."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Још није подешено. Док не померите екран, PaneFlip користи распоред у macOS-у."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inte inställd än. Tills du flyttar en skärm använder PaneFlip placeringen i macOS."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இன்னும் அமைக்கப்படவில்லை. நீங்கள் ஒரு காட்சித்திரையை நகர்த்தும் வரை PaneFlip macOS-இன் அமைப்பைப் பயன்படுத்துகிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఇంకా సెట్ చేయలేదు. మీరు డిస్‌ప్లేను కదిలించే వరకు PaneFlip macOS లోని అమరికను ఉపయోగిస్తుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยังไม่ได้ตั้งค่า จนกว่าคุณจะย้ายจอภาพ PaneFlip จะใช้การจัดวางใน macOS"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz ayarlanmadı. Bir ekranı hareket ettirene kadar PaneFlip macOS’taki düzeni kullanır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ще не задано. Доки ви не перемістите дисплей, PaneFlip використовує розташування з macOS."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابھی سیٹ نہیں کیا گیا۔ جب تک آپ کوئی ڈسپلے نہ ہلائیں، PaneFlip macOS کی ترتیب استعمال کرتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa được thiết lập. Cho đến khi bạn di chuyển một màn hình, PaneFlip dùng cách sắp xếp trong macOS."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未设置。在你移动显示器之前，PaneFlip 使用 macOS 中的排列。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未設定。在你移動顯示器之前，PaneFlip 會使用 macOS 中的排列。"
+          }
+        }
+      }
+    },
+    "Open Displays settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح إعدادات الشاشات"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отваряне на настройките на дисплеите"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিসপ্লে সেটিংস খুলুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obre els ajustos de pantalles"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otevřít nastavení displejů"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn skærmindstillinger"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display-Einstellungen öffnen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άνοιγμα ρυθμίσεων οθονών"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir los ajustes de pantallas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ava ekraanide seaded"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن تنظیمات نمایشگرها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa näyttöjen asetukset"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang mga setting ng display"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages des écrans"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתיחת הגדרות הצגים"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले सेटिंग खोलें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvori postavke zaslona"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kijelzőbeállítások megnyitása"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka pengaturan layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri le impostazioni degli schermi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイ設定を開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이 설정 열기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atidaryti ekranų nustatymus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atvērt displeju iestatījumus"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले सेटिंग्ज उघडा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka tetapan paparan"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne skjerminnstillinger"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermvoorkeuren openen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz ustawienia wyświetlaczy"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir as definições de ecrãs"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir os ajustes de telas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deschide setările ecranelor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть настройки дисплеев"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvoriť nastavenia displejov"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odpri nastavitve zaslonov"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отвори подешавања екрана"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna skärminställningar"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காட்சித்திரை அமைப்புகளைத் திற"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిస్‌ప్లే సెట్టింగ్‌లను తెరవండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เปิดการตั้งค่าจอภาพ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran ayarlarını aç"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити налаштування дисплеїв"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈسپلے کی ترتیبات کھولیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở cài đặt màn hình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开显示器设置"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開顯示器設定"
+          }
+        }
+      }
+    },
     "Open PaneFlip automatically when you log in to your Mac." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -35969,6 +37655,568 @@
         }
       }
     },
+    "Some displays are level with the one to their left, so a zone beyond the edge of one lands on the other." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعض الشاشات في مستوى الشاشة التي على يسارها، لذا تنتقل المنطقة التي تتجاوز حافة إحداها إلى الأخرى."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Някои дисплеи са на едно ниво с този отляво, затова зона отвъд ръба на единия попада върху другия."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কিছু ডিসপ্লে তাদের বাঁ দিকের ডিসপ্লের সমান উচ্চতায় আছে, তাই একটির প্রান্তের বাইরের জোন অন্যটিতে গিয়ে পড়ে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunes pantalles estan al mateix nivell que la que tenen a l’esquerra, de manera que una zona més enllà de la vora d’una cau a l’altra."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Některé displeje jsou ve stejné výšce jako displej vlevo od nich, takže zóna za okrajem jednoho dopadne na druhý."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nogle skærme er i niveau med skærmen til venstre, så en zone uden for kanten af den ene havner på den anden."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Displays liegen auf gleicher Höhe wie das Display links davon, sodass eine Zone jenseits des Rands des einen auf dem anderen landet."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ορισμένες οθόνες βρίσκονται στο ίδιο ύψος με την οθόνη στα αριστερά τους, οπότε μια ζώνη πέρα από την άκρη της μίας πέφτει στην άλλη."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunas pantallas están al mismo nivel que la que tienen a su izquierda, así que una zona más allá del borde de una cae en la otra."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mõned ekraanid on samal kõrgusel nende vasakpoolse ekraaniga, nii et ühe ekraani serva taha jääv tsoon satub teisele."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعضی نمایشگرها هم‌سطح نمایشگر سمت چپ خود هستند، بنابراین ناحیه‌ای که فراتر از لبهٔ یکی است روی دیگری می‌افتد."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jotkin näytöt ovat samalla korkeudella vasemmalla olevan näytön kanssa, joten toisen reunan ulkopuolella oleva alue osuu toiselle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "May mga display na magkapantay sa display sa kaliwa nila, kaya ang zone na lampas sa gilid ng isa ay napupunta sa isa pa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certains écrans sont au même niveau que celui à leur gauche : une zone au-delà du bord de l’un tombe donc sur l’autre."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חלק מהצגים נמצאים באותה גובה עם הצג משמאלם, ולכן אזור שמעבר לקצה של אחד מהם נוחת על האחר."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुछ डिस्प्ले अपने बाईं ओर वाले डिस्प्ले के बराबर ऊँचाई पर हैं, इसलिए एक के किनारे से आगे का ज़ोन दूसरे पर आ जाता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neki su zasloni u istoj visini kao zaslon lijevo od njih pa zona iza ruba jednoga završi na drugom."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Egyes kijelzők a tőlük balra lévővel azonos szinten vannak, ezért az egyik szélén túli zóna a másikra esik."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beberapa layar sejajar dengan layar di sebelah kirinya, sehingga zona di luar tepi salah satunya jatuh ke layar yang lain."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alcuni schermi sono allo stesso livello di quello alla loro sinistra, quindi una zona oltre il bordo di uno finisce sull’altro."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左隣のディスプレイと同じ高さにあるディスプレイがあるため、一方の端の外にあるゾーンがもう一方に重なります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 디스플레이가 왼쪽 디스플레이와 같은 높이에 있어서, 한쪽 가장자리 밖의 영역이 다른 쪽에 놓입니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kai kurie ekranai yra tame pačiame lygyje kaip jų kairėje esantis ekranas, todėl zona už vieno krašto patenka ant kito."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daži displeji atrodas vienā līmenī ar displeju to kreisajā pusē, tāpēc zona aiz viena malas nokļūst uz otra."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "काही डिस्प्ले त्यांच्या डावीकडील डिस्प्लेइतक्याच उंचीवर आहेत, त्यामुळे एकाच्या काठाच्या पलीकडील झोन दुसऱ्यावर येतो."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesetengah paparan sejajar dengan paparan di sebelah kirinya, jadi zon di luar tepi salah satunya jatuh pada yang lain."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noen skjermer er på samme nivå som skjermen til venstre for dem, så en sone utenfor kanten på den ene havner på den andre."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommige schermen staan op gelijke hoogte met het scherm links ervan, waardoor een zone voorbij de rand van het ene op het andere terechtkomt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niektóre wyświetlacze są na tym samym poziomie co wyświetlacz po ich lewej, więc strefa poza krawędzią jednego trafia na drugi."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguns ecrãs estão ao mesmo nível do ecrã à sua esquerda, pelo que uma zona além da margem de um cai no outro."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algumas telas estão no mesmo nível da tela à sua esquerda, então uma zona além da borda de uma cai na outra."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unele ecrane sunt la același nivel cu ecranul din stânga lor, așa că o zonă dincolo de marginea unuia ajunge pe celălalt."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некоторые дисплеи находятся на одном уровне с дисплеем слева, поэтому зона за краем одного попадает на другой."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niektoré displeje sú v rovnakej výške ako displej vľavo od nich, takže zóna za okrajom jedného dopadne na druhý."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nekateri zasloni so na isti višini kot zaslon levo od njih, zato območje onkraj roba enega pristane na drugem."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неки екрани су на истој висини као екран лево од њих, па зона иза ивице једног заврши на другом."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vissa skärmar står på samma nivå som skärmen till vänster om dem, så en zon bortom kanten på den ena hamnar på den andra."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சில காட்சித்திரைகள் தங்கள் இடப்பக்கத்திலுள்ளதற்கு சமமான உயரத்தில் உள்ளன, எனவே ஒன்றின் விளிம்பைத் தாண்டிய மண்டலம் மற்றதில் விழுகிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కొన్ని డిస్‌ప్లేలు వాటి ఎడమవైపున ఉన్న డిస్‌ప్లేతో సమాన ఎత్తులో ఉన్నాయి, కాబట్టి ఒకదాని అంచు దాటిన జోన్ మరొకదానిపై పడుతుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จอภาพบางจออยู่ระดับเดียวกับจอภาพทางซ้าย โซนที่อยู่นอกขอบของจอหนึ่งจึงไปตกอยู่บนอีกจอหนึ่ง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazı ekranlar solundaki ekranla aynı hizada, bu yüzden birinin kenarının ötesindeki bölge diğerine düşer."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деякі дисплеї розташовані на одному рівні з дисплеєм ліворуч, тому зона за краєм одного потрапляє на інший."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کچھ ڈسپلے اپنے بائیں طرف والے ڈسپلے کے برابر اونچائی پر ہیں، اس لیے ایک کے کنارے سے آگے کا زون دوسرے پر آ جاتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Một số màn hình ngang tầm với màn hình bên trái, nên vùng nằm ngoài mép của màn hình này rơi vào màn hình kia."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有些显示器与其左侧的显示器处于同一高度，因此一个显示器边缘之外的区域会落到另一个上。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有些顯示器與其左側的顯示器處於同一高度，因此一個顯示器邊緣之外的區域會落到另一個上。"
+          }
+        }
+      }
+    },
+    "Some displays lie lower than the one to their left. The staircase must go up to the right." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعض الشاشات أخفض من الشاشة التي على يسارها. يجب أن يصعد الدرج نحو اليمين."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Някои дисплеи са по-ниско от този отляво. Стълбата трябва да върви нагоре надясно."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কিছু ডিসপ্লে তাদের বাঁ দিকের ডিসপ্লের চেয়ে নিচে আছে। সিঁড়ি ডান দিকে উপরে উঠতে হবে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunes pantalles són més baixes que la que tenen a l’esquerra. L’escala ha de pujar cap a la dreta."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Některé displeje leží níže než displej vlevo od nich. Schody musí stoupat doprava."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nogle skærme ligger lavere end skærmen til venstre. Trappen skal gå opad mod højre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Displays liegen tiefer als das Display links davon. Die Treppe muss nach rechts hin ansteigen."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ορισμένες οθόνες βρίσκονται χαμηλότερα από την οθόνη στα αριστερά τους. Η σκάλα πρέπει να ανεβαίνει προς τα δεξιά."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunas pantallas están más abajo que la que tienen a su izquierda. La escalera debe subir hacia la derecha."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mõned ekraanid asuvad madalamal kui nende vasakpoolne ekraan. Trepp peab tõusma paremale."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعضی نمایشگرها پایین‌تر از نمایشگر سمت چپ خود قرار دارند. پله‌ها باید به سمت راست بالا بروند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jotkin näytöt ovat alempana kuin vasemmalla oleva näyttö. Portaiden on noustava oikealle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "May mga display na mas mababa kaysa sa display sa kaliwa nila. Dapat pataas pakanan ang hagdan."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certains écrans sont plus bas que celui à leur gauche. L’escalier doit monter vers la droite."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חלק מהצגים נמצאים נמוך יותר מהצג משמאלם. המדרגות צריכות לעלות ימינה."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुछ डिस्प्ले अपने बाईं ओर वाले डिस्प्ले से नीचे हैं। सीढ़ी दाईं ओर ऊपर जानी चाहिए।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neki zasloni leže niže od zaslona lijevo od njih. Stepenice moraju ići prema gore udesno."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Egyes kijelzők alacsonyabban vannak a tőlük balra lévőnél. A lépcsőnek jobbra felfelé kell haladnia."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beberapa layar lebih rendah daripada layar di sebelah kirinya. Tangga harus naik ke kanan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alcuni schermi sono più in basso di quello alla loro sinistra. La scala deve salire verso destra."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左隣のディスプレイより低い位置にあるディスプレイがあります。階段は右上がりにしてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 디스플레이가 왼쪽 디스플레이보다 낮게 있습니다. 계단은 오른쪽으로 올라가야 합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kai kurie ekranai yra žemiau nei jų kairėje esantis ekranas. Laiptai turi kilti į dešinę."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daži displeji atrodas zemāk nekā displejs to kreisajā pusē. Kāpnēm jāiet uz augšu pa labi."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "काही डिस्प्ले त्यांच्या डावीकडील डिस्प्लेपेक्षा खाली आहेत. जिना उजवीकडे वर गेला पाहिजे."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesetengah paparan lebih rendah daripada paparan di sebelah kirinya. Tangga mesti naik ke kanan."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noen skjermer ligger lavere enn skjermen til venstre for dem. Trappen må gå oppover mot høyre."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommige schermen liggen lager dan het scherm links ervan. De trap moet naar rechts omhoog gaan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niektóre wyświetlacze leżą niżej niż wyświetlacz po ich lewej. Schody muszą wznosić się w prawo."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguns ecrãs estão mais abaixo do que o ecrã à sua esquerda. A escada tem de subir para a direita."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algumas telas estão mais abaixo do que a tela à sua esquerda. A escada precisa subir para a direita."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unele ecrane sunt mai jos decât ecranul din stânga lor. Scara trebuie să urce spre dreapta."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некоторые дисплеи расположены ниже дисплея слева. Лестница должна подниматься вправо."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niektoré displeje ležia nižšie ako displej vľavo od nich. Schody musia stúpať doprava."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nekateri zasloni ležijo nižje od zaslona levo od njih. Stopnice morajo iti navzgor v desno."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неки екрани леже ниже од екрана лево од њих. Степенице морају ићи нагоре удесно."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vissa skärmar ligger lägre än skärmen till vänster om dem. Trappan måste gå uppåt åt höger."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சில காட்சித்திரைகள் தங்கள் இடப்பக்கத்திலுள்ளதை விடத் தாழ்வாக உள்ளன. படிக்கட்டு வலப்பக்கம் மேலே செல்ல வேண்டும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కొన్ని డిస్‌ప్లేలు వాటి ఎడమవైపున ఉన్న డిస్‌ప్లే కంటే కిందికి ఉన్నాయి. మెట్లు కుడివైపు పైకి వెళ్లాలి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จอภาพบางจออยู่ต่ำกว่าจอภาพทางซ้าย บันไดต้องขึ้นไปทางขวา"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazı ekranlar solundaki ekrandan daha aşağıda. Merdiven sağa doğru yükselmeli."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деякі дисплеї розташовані нижче за дисплей ліворуч. Сходи мають підніматися праворуч."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کچھ ڈسپلے اپنے بائیں طرف والے ڈسپلے سے نیچے ہیں۔ سیڑھی دائیں طرف اوپر جانی چاہیے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Một số màn hình nằm thấp hơn màn hình bên trái. Bậc thang phải đi lên về phía bên phải."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有些显示器比其左侧的显示器位置更低。阶梯必须向右上升。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有些顯示器比其左側的顯示器位置更低。階梯必須向右上升。"
+          }
+        }
+      }
+    },
     "Space" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37936,6 +40184,568 @@
         }
       }
     },
+    "The displays do not form a staircase yet." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشاشات لا تشكّل درجًا بعد."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеите още не образуват стълба."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিসপ্লেগুলো এখনও সিঁড়ি তৈরি করেনি।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pantalles encara no formen una escala."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje zatím netvoří schody."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærmene danner ikke en trappe endnu."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Displays bilden noch keine Treppe."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι οθόνες δεν σχηματίζουν ακόμη σκάλα."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pantallas aún no forman una escalera."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanid ei moodusta veel treppi."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایشگرها هنوز پله تشکیل نمی‌دهند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytöt eivät vielä muodosta portaita."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi pa bumubuo ng hagdan ang mga display."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les écrans ne forment pas encore un escalier."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצגים עדיין לא יוצרים מדרגות."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले अभी सीढ़ी नहीं बनाते।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni još ne tvore stepenice."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A kijelzők még nem alkotnak lépcsőt."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar belum membentuk tangga."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli schermi non formano ancora una scala."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイはまだ階段状になっていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이가 아직 계단 모양이 아닙니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranai dar nesudaro laiptų."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeji vēl neveido kāpnes."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले अजून जिना तयार करत नाहीत."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paparan belum membentuk tangga."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermene danner ikke en trapp ennå."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schermen vormen nog geen trap."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyświetlacze nie tworzą jeszcze schodów."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os ecrãs ainda não formam uma escada."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As telas ainda não formam uma escada."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecranele nu formează încă o scară."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеи пока не образуют лестницу."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje zatiaľ netvoria schody."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni še ne tvorijo stopnic."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани још не чине степенице."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärmarna bildar ingen trappa än."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காட்சித்திரைகள் இன்னும் படிக்கட்டை உருவாக்கவில்லை."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిస్‌ప్లేలు ఇంకా మెట్లను ఏర్పరచలేదు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จอภาพยังไม่เป็นรูปบันได"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranlar henüz merdiven oluşturmuyor."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеї поки не утворюють сходи."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈسپلے ابھی سیڑھی نہیں بناتے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các màn hình chưa tạo thành bậc thang."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示器尚未构成阶梯。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示器尚未構成階梯。"
+          }
+        }
+      }
+    },
+    "The displays form a staircase going up to the right." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشاشات تشكّل درجًا يصعد نحو اليمين."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеите образуват стълба, която върви нагоре надясно."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিসপ্লেগুলো ডান দিকে উপরে ওঠা সিঁড়ি তৈরি করেছে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pantalles formen una escala que puja cap a la dreta."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje tvoří schody stoupající doprava."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærmene danner en trappe, der går opad mod højre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Displays bilden eine Treppe, die nach rechts ansteigt."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι οθόνες σχηματίζουν σκάλα που ανεβαίνει προς τα δεξιά."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pantallas forman una escalera que sube hacia la derecha."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanid moodustavad paremale tõusva trepi."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایشگرها پله‌ای تشکیل می‌دهند که به سمت راست بالا می‌رود."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytöt muodostavat oikealle nousevat portaat."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bumubuo ang mga display ng hagdan na pataas pakanan."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les écrans forment un escalier qui monte vers la droite."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצגים יוצרים מדרגות שעולות ימינה."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले दाईं ओर ऊपर जाती सीढ़ी बनाते हैं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni tvore stepenice koje idu prema gore udesno."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A kijelzők jobbra felfelé haladó lépcsőt alkotnak."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar membentuk tangga yang naik ke kanan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli schermi formano una scala che sale verso destra."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイは右上がりの階段状になっています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이가 오른쪽으로 올라가는 계단 모양입니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranai sudaro į dešinę kylančius laiptus."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeji veido kāpnes, kas iet uz augšu pa labi."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिस्प्ले उजवीकडे वर जाणारा जिना तयार करतात."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paparan membentuk tangga yang naik ke kanan."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermene danner en trapp som går oppover mot høyre."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schermen vormen een trap die naar rechts omhoog gaat."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyświetlacze tworzą schody wznoszące się w prawo."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os ecrãs formam uma escada que sobe para a direita."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As telas formam uma escada que sobe para a direita."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecranele formează o scară care urcă spre dreapta."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеи образуют лестницу, поднимающуюся вправо."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Displeje tvoria schody stúpajúce doprava."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni tvorijo stopnice, ki gredo navzgor v desno."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани чине степенице које иду нагоре удесно."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärmarna bildar en trappa som går uppåt åt höger."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காட்சித்திரைகள் வலப்பக்கம் மேலே செல்லும் படிக்கட்டை உருவாக்குகின்றன."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిస్‌ప్లేలు కుడివైపు పైకి వెళ్లే మెట్లను ఏర్పరుస్తున్నాయి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จอภาพเป็นรูปบันไดที่ขึ้นไปทางขวา"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranlar sağa doğru yükselen bir merdiven oluşturuyor."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплеї утворюють сходи, що піднімаються праворуч."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈسپلے دائیں طرف اوپر جاتی سیڑھی بناتے ہیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các màn hình tạo thành bậc thang đi lên về phía bên phải."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示器构成了向右上升的阶梯。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示器構成了向右上升的階梯。"
+          }
+        }
+      }
+    },
     "The language of the app. The change applies the next time PaneFlip starts." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -39056,6 +41866,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法安裝更新。請改從發佈頁面下載。"
+          }
+        }
+      }
+    },
+    "There is only one display, so there is nothing to arrange." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توجد شاشة واحدة فقط، فلا شيء يحتاج إلى ترتيب."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Има само един дисплей, така че няма какво да се подрежда."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "মাত্র একটি ডিসপ্লে আছে, তাই সাজানোর কিছু নেই।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Només hi ha una pantalla, així que no hi ha res per disposar."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je jen jeden displej, takže není co uspořádat."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der er kun én skærm, så der er intet at placere."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt nur ein Display, also gibt es nichts anzuordnen."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Υπάρχει μόνο μία οθόνη, άρα δεν υπάρχει τίποτα να διαταχθεί."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo hay una pantalla, así que no hay nada que disponer."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraan on ainult üks, seega pole midagi paigutada."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فقط یک نمایشگر وجود دارد، پس چیزی برای چیدن نیست."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näyttöjä on vain yksi, joten ei ole mitään järjesteltävää."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isa lang ang display, kaya wala nang aayusin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il n’y a qu’un seul écran, donc rien à disposer."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יש רק צג אחד, ולכן אין מה לסדר."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "केवल एक डिस्प्ले है, इसलिए व्यवस्थित करने को कुछ नहीं है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postoji samo jedan zaslon, pa nema što rasporediti."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Csak egy kijelző van, így nincs mit elrendezni."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanya ada satu layar, jadi tidak ada yang perlu disusun."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’è un solo schermo, quindi non c’è nulla da disporre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスプレイは 1 台だけなので、配置するものはありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스플레이가 하나뿐이므로 배치할 것이 없습니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yra tik vienas ekranas, todėl nėra ką išdėstyti."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir tikai viens displejs, tāpēc nav ko izvietot."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फक्त एकच डिस्प्ले आहे, त्यामुळे मांडण्यासारखे काही नाही."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanya ada satu paparan, jadi tiada apa yang perlu disusun."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er bare én skjerm, så det er ingenting å ordne."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is maar één scherm, dus er valt niets te ordenen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jest tylko jeden wyświetlacz, więc nie ma czego układać."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Só há um ecrã, por isso não há nada para dispor."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há só uma tela, então não há nada para dispor."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Există un singur ecran, așa că nu este nimic de aranjat."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплей только один, так что упорядочивать нечего."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je len jeden displej, takže nie je čo usporiadať."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obstaja samo en zaslon, zato ni kaj razporediti."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Постоји само један екран, па нема шта да се распореди."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det finns bara en skärm, så det finns inget att ordna."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ஒரே ஒரு காட்சித்திரை மட்டுமே உள்ளது, எனவே அமைக்க எதுவும் இல்லை."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఒక్క డిస్‌ప్లే మాత్రమే ఉంది, కాబట్టి అమర్చాల్సింది ఏమీ లేదు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "มีจอภาพเพียงจอเดียว จึงไม่มีอะไรต้องจัดวาง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca bir ekran var, düzenlenecek bir şey yok."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дисплей лише один, тож упорядковувати нічого."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صرف ایک ڈسپلے ہے، اس لیے ترتیب دینے کو کچھ نہیں ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ có một màn hình nên không có gì để sắp xếp."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有一个显示器，无需排列。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有一個顯示器，無需排列。"
           }
         }
       }

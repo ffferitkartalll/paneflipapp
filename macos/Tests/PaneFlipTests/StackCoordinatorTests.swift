@@ -171,6 +171,26 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(asked, [first, second], "the second press goes on from the zone the first one asked for")
     }
 
+    func testTheFocusGoesThroughTheZonesBeyondTheEdgeBeforeItLeavesForAnotherDisplay() {
+        let here = UUID(), beyond = UUID(), otherDisplay = UUID()
+        let screen = CGRect(x: 0, y: 0, width: 1000, height: 800)
+        // The other display lies above the first one (a staircase); its zone starts at the first display's right edge.
+        coordinator.displayOf = { $0.midY < 0 ? "second" : "first" }
+        coordinator.apply(plan: [here: PlannedZone(rect: screen),
+                                 beyond: PlannedZone(rect: CGRect(x: 1000, y: 0, width: 1000, height: 800), frame: CGRect(x: 999, y: 0, width: 1000, height: 800), isParked: true),
+                                 otherDisplay: PlannedZone(rect: CGRect(x: 1000, y: -900, width: 1000, height: 800))])
+        coordinator.snap(.fake(1), into: here)
+        coordinator.snap(.fake(2), into: beyond)
+        coordinator.snap(.fake(3), into: otherDisplay)
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+        var asked: [UUID] = []
+        coordinator.onReachBeyondTheEdge = { zone, told in asked.append(zone); told(screen); return true }
+
+        coordinator.focusZone(toward: .right)
+        XCTAssertEqual(asked, [beyond], "the zone beyond the edge of this display comes before the zone of the display beside it")
+    }
+
     func testAClickOnAZoneBeyondTheEdgeAsksTheLayoutToBringItIntoView() {
         let here = UUID(), beyond = UUID()
         coordinator.apply(plan: [here: PlannedZone(rect: CGRect(x: 0, y: 0, width: 1000, height: 800)),
