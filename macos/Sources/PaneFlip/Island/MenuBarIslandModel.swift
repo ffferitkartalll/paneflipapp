@@ -137,7 +137,7 @@ extension MenuBarIslandModel {
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize {
         let width = windowsSpan
-        return CGSize(width: peeking ? max(width, glyph.size.width + 2 * MenuBarIslandView.margin) : width,
+        return CGSize(width: peeking ? max(width, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin) : width,
                       height: openHeight(picture: peeking ? 0 : glyph.size.height * openZoom, windows: windowsHeight))
     }
 

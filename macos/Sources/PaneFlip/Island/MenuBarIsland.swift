@@ -391,8 +391,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 let size = model.openSize
                 hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
             } else {
-                // The island itself; with a notch, the notch and the height of the menu bar beside it (the island is not shown at rest there).
-                let half = model.notchWidth > 0 ? model.notchWidth / 2 + model.barHeight : model.glyph.size.width / 2 + m
+                // The island itself; with a notch, its two halves and the notch between them.
+                let half = model.notchWidth / 2 + model.glyph.size.width / 2 + m
                 // Dragging a window, the pointer need not hit the island exactly: three times the height of the menu bar around it (left, right, below).
                 let reach = dragging ? 3 * model.barHeight : 0
                 hit = point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
@@ -466,7 +466,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
     private func islandFrame(of entry: Entry, open: Bool) -> CGRect {
         let model = entry.model, top = entry.panel.frame
-        let size = open ? model.openSize : CGSize(width: model.notchWidth > 0 ? model.notchWidth : model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
+        let size = open ? model.openSize : CGSize(width: model.notchWidth + model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
         return CGRect(x: top.midX - size.width / 2, y: top.maxY - size.height, width: size.width, height: size.height)
     }
 
