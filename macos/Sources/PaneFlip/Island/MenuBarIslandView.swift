@@ -16,7 +16,7 @@ struct MenuBarIslandView: View {
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
         let m = Self.margin, open = model.expanded, peek = model.peeking && !open, bar = model.barHeight, size = model.openSize
-        let hidden = model.notchWidth > 0 && !open
+        let split = model.notchWidth > 0 && !open   // at a notch the closed island lies in two halves, one each side of it
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
         let left: CGFloat, right: CGFloat, glyphLeft: CGFloat, glyphTop: CGFloat, height: CGFloat
@@ -28,8 +28,8 @@ struct MenuBarIslandView: View {
             // Only the windows of a zone: the picture stays as it is at rest, and the island is as wide as the cards need.
             left = -size.width / 2; right = size.width / 2
             glyphLeft = -gw / 2; glyphTop = m; height = size.height
-        } else if hidden {
-            left = -model.notchWidth / 2; right = model.notchWidth / 2   // no more than the notch itself; the picture is there, but not shown
+        } else if split {
+            left = -(gw / 2 + model.notchWidth / 2 + m); right = -left
             glyphLeft = -gw / 2; glyphTop = m; height = bar
         } else {
             left = -(gw / 2 + m); right = gw / 2 + m
@@ -39,9 +39,13 @@ struct MenuBarIslandView: View {
             UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10).fill(.black)
                 .frame(width: right - left, height: height)
                 .offset(x: (left + right) / 2)
-            glyph
-                .offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
-                .opacity(hidden ? 0 : 1)
+            if model.notchWidth > 0 {
+                // At a notch the picture is cut in the middle, the halves apart by the notch's width while the island is closed (the left half ends at the
+                // notch's left edge, the right half begins at its right edge, and the notch hides what is between); together once it is open.
+                glyph(gap: open ? 0 : model.notchWidth).offset(x: 0, y: glyphTop)
+            } else {
+                glyph(gap: 0).offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
+            }
             if open || peek {
                 // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades.
                 MenuBarIslandWindowsView(model: model)
@@ -67,9 +71,9 @@ struct MenuBarIslandView: View {
 
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
 
-    private var glyph: some View {
-        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, scale: model.scale)
-            .frame(width: px(model.glyph.size.width * model.zoom), height: px(model.glyph.size.height * model.zoom))
+    private func glyph(gap: CGFloat) -> some View {
+        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, gap: gap, scale: model.scale)
+            .frame(width: px(model.glyph.size.width * model.zoom) + gap, height: px(model.glyph.size.height * model.zoom))
     }
 }
 
@@ -94,12 +98,14 @@ private struct GlyphCanvas: View, Animatable {
     let previousID: UUID?
     var blend: CGFloat
     var shift: CGFloat
+    /// How far apart the two halves of the picture are drawn (the picture is cut in the middle, at a notch): the zones at the cut are stretched across.
+    var gap: CGFloat
     let scale: CGFloat
 
-    var animatableData: AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>> {
-        get { AnimatablePair(shift, AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))) }
+    var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>> {
+        get { AnimatablePair(AnimatablePair(shift, gap), AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))) }
         set {
-            shift = newValue.first; blend = newValue.second.first; zoom = newValue.second.second.first
+            shift = newValue.first.first; gap = newValue.first.second; blend = newValue.second.first; zoom = newValue.second.second.first
             labels = newValue.second.second.second.first; pickBlend = newValue.second.second.second.second
         }
     }
@@ -121,17 +127,42 @@ private struct GlyphCanvas: View, Animatable {
 
     /// A zone as it is drawn: the zones of the picture meet, so each is drawn a little inside (see `ZoneGlyph.inset`).
     private func inner(_ rect: CGRect) -> CGRect {
+        stretched(plainInner(rect))
+    }
+
+    private func plainInner(_ rect: CGRect) -> CGRect {
         let inset = glyph.inset(zoom: zoom, openZoom: openZoom)
         let x0 = px(rect.minX * zoom + inset), x1 = px(rect.maxX * zoom - inset), y0 = px(rect.minY * zoom + inset), y1 = px(rect.maxY * zoom - inset)
         return CGRect(x: x0, y: y0, width: max(x1 - x0, 1), height: max(y1 - y0, 1))
     }
 
     var body: some View {
-        Canvas { context, _ in
+        Canvas { context, _ in paint(&context) }
+    }
+
+    /// Where a rectangle is drawn when the picture is cut in the middle and its halves are `gap` apart (at a notch). A zone across the cut is made wider by the gap, and
+    /// one that ends or begins at the cut grows to the middle of the gap, as the other zone beyond it does: the notch hides the middle, and the picture
+    /// looks stretched there, not cut, while the island opens (with no gap nothing changes).
+    private func stretched(_ r: CGRect) -> CGRect {
+        guard gap > 0 else { return r }
+        let cut = px(sz(glyph.size.width) / 2), tolerance = 2 * glyph.inset(zoom: zoom, openZoom: openZoom) + 0.5, half = gap / 2
+        var minX = r.minX, maxX = r.maxX
+        if minX < cut - tolerance && maxX > cut + tolerance {
+            maxX += gap
+        } else if maxX <= cut + tolerance {
+            if maxX >= cut - tolerance { maxX += half }
+        } else {
+            minX += minX <= cut + tolerance ? gap - half : gap
+            maxX += gap
+        }
+        return CGRect(x: minX, y: r.minY, width: maxX - minX, height: r.height)
+    }
+
+    private func paint(_ context: inout GraphicsContext) {
             let screen = glyph.screen
             // Inside the picture whatever the rounding: at the far right end the frame would stand a fraction of a point past it.
             let width = sz(screen.width)
-            let window = CGRect(x: min(max(sz(screen.minX) + shift * zoom, 0), max(sz(glyph.size.width) - width, 0)), y: sz(screen.minY), width: width, height: sz(screen.height))
+            let window = stretched(CGRect(x: min(max(sz(screen.minX) + shift * zoom, 0), max(sz(glyph.size.width) - width, 0)), y: sz(screen.minY), width: width, height: sz(screen.height)))
             let windowPath = Path(roundedRect: window, cornerRadius: 3)
             for cell in glyph.cells {
                 let rect = inner(cell.rect)
@@ -169,6 +200,5 @@ private struct GlyphCanvas: View, Animatable {
                 }
             }
             context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(.white.opacity(0.5)), lineWidth: 1)
-        }
     }
 }
