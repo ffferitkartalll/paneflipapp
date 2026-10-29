@@ -43,7 +43,7 @@ final class ZoneEngine: ZoneRefreshing {
             self?.refreshZones()
             self?.scheduleRestore()
         }
-        // A floating zone follows the focus: look at once when another app comes to the front, not at the next tick.
+        // The window in focus is looked at (off the main thread) as soon as another app comes to the front: the shortcuts read what that look found.
         workspace.addObserver(forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] _ in
             self?.coordinator.followFocus()
         }
@@ -91,7 +91,9 @@ final class ZoneEngine: ZoneRefreshing {
         presenters.forEach { $0.zonesDidChange() }
     }
 
-    func restoreWindows() { restorer.restore() }
+    func restoreWindows() {
+        restorer.restoreAfterListingAll()
+    }
 
     // MARK: Feature switches
 
@@ -99,7 +101,7 @@ final class ZoneEngine: ZoneRefreshing {
     func placementChanged(enabled: Bool) {
         if !enabled { coordinator.releaseAll() }
         refreshZones()
-        if enabled { restorer.restore() }
+        if enabled { restorer.restoreAfterListingAll() }
     }
 
     // MARK: Housekeeping
@@ -123,7 +125,7 @@ final class ZoneEngine: ZoneRefreshing {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.restore(burst: burst, key: key, onlyApp: pid, waited: waited + 1) }
             return
         }
-        if let pid { restorer.restoreAfterListing(app: pid) } else { restorer.restore() }
+        if let pid { restorer.restoreAfterListing(app: pid) } else { restorer.restoreAfterListingAll() }
     }
 
     private func tick() {

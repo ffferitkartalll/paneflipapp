@@ -12,14 +12,8 @@ struct PlannedZone: Equatable {
     /// Its place in the order of all the zones of the strip, from the outermost on the left to the outermost on the right: the order the focus goes through the
     /// zones that lie side by side.
     let order: Int
-    /// The zone floats over another one. While the focus is elsewhere its windows wait at `awayFrame` (the screen's right edge);
-    /// nil: there is no such place (a display lies there), and they stay.
-    let isFloating: Bool
-    let awayFrame: CGRect?
 
-    init(rect: CGRect, frame: CGRect? = nil, isParked: Bool = false, number: Int = 0, order: Int = 0, isFloating: Bool = false, awayFrame: CGRect? = nil) {
-        self.isFloating = isFloating
-        self.awayFrame = awayFrame
+    init(rect: CGRect, frame: CGRect? = nil, isParked: Bool = false, number: Int = 0, order: Int = 0) {
         self.number = number
         self.order = order
         self.rect = rect

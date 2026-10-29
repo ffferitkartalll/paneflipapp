@@ -18,9 +18,14 @@ final class SnapDragController {
     private var pressedAt = Date.distantPast
     private var lastCheck = Date.distantPast
     private var timer: Timer?
+    /// Runs the question "which window is under the pointer" off the main thread: the app under the pointer may be slow to answer, and every press anywhere asks it.
+    private let background: (@escaping () -> Void) -> Void
+    private var presses = 0
 
     init(windows: WindowSystem, screens: ScreenProviding, coordinator: StackCoordinator,
-         settings: AppSettings, keys: KeyStateProviding, overlay: SnapZoneOverlay, island: ZoneDropTarget) {
+         settings: AppSettings, keys: KeyStateProviding, overlay: SnapZoneOverlay, island: ZoneDropTarget,
+         background: @escaping (@escaping () -> Void) -> Void = { $0() }) {
+        self.background = background
         self.windows = windows
         self.screens = screens
         self.coordinator = coordinator
@@ -43,10 +48,20 @@ final class SnapDragController {
     private var snapOn: Bool { settings.values.snapTrigger.isHeld(using: keys) }
 
     private func pressed() {
-        guard settings.values.placementEnabled, let hit = windows.windowUnderPointer() else { candidate = nil; return }
-        candidate = (hit.ref, hit.frame)
+        candidate = nil
+        guard settings.values.placementEnabled else { return }
+        presses += 1
+        let mine = presses
         pressedAt = Date()
         lastCheck = .distantPast
+        background { [self] in
+            let hit = windows.windowUnderPointer()
+            DispatchQueue.main.async { [self] in
+                // Another press came meanwhile, or the mouse is up already: the answer is not for this drag.
+                guard presses == mine, let hit else { return }
+                candidate = (hit.ref, hit.frame)
+            }
+        }
     }
 
     private func dragged() {
@@ -72,10 +87,10 @@ final class SnapDragController {
         island.dragMoved(to: NSEvent.mouseLocation)
         let held = snapOn
         if held && !overlay.isShown {
-            overlay.show(zones: coordinator.dropStacks.map { ($0.id, $0.rect) })
+            overlay.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) })
         }
         if !held && overlay.isShown { overlay.hide() }
-        if held { overlay.highlight(zone: coordinator.zoneID(at: screens.pointerAX, forDrop: true)) }
+        if held { overlay.highlight(zone: coordinator.zoneID(at: screens.pointerAX)) }
     }
 
     private func released() {
@@ -87,7 +102,7 @@ final class SnapDragController {
             island.drop(c.ref, at: pointer)
             return
         }
-        if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX, forDrop: true) {
+        if snapOn, let zone = coordinator.zoneID(at: screens.pointerAX) {
             coordinator.snap(c.ref, into: zone)
         } else {
             // Dragged out of its zone without snapping elsewhere: it just leaves the stack. Nothing else is brought

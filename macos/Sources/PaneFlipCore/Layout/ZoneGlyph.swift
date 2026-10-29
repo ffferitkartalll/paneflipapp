@@ -14,7 +14,6 @@ public struct ZoneGlyph: Equatable {
     public let size: CGSize
     /// Where the screen itself lies in the picture.
     public let screen: CGRect
-    /// Larger zones first, so that a zone floating over another is drawn after it.
     public let cells: [Cell]
     /// The gap between neighbouring zones as it really is, in the picture (the zones are grown by half of it on every side, so that they meet); 0 for none.
     public let gap: CGFloat
@@ -45,7 +44,7 @@ public struct ZoneGlyph: Equatable {
         }
         size = CGSize(width: all.width * sx, height: all.height * sy)
         self.screen = scaled(screen)
-        cells = zones.sorted { $0.rect.width * $0.rect.height > $1.rect.width * $1.rect.height }.map {
+        cells = zones.map {
             Cell(id: $0.id, rect: scaled($0.rect), isOnScreen: $0.rect.intersection(screen).width > 1)
         }
     }

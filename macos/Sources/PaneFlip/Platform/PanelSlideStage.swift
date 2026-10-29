@@ -8,8 +8,8 @@ import QuartzCore
 final class PanelSlideStage: SlideStaging {
     /// A spring, like the front card of the island: it starts quickly and lands softly, without the long standstill at the end
     /// of an ease-in-out curve. Critically damped: no overshoot.
-    static let stiffness = SlideSpring.stiffness
-    static let damping = SlideSpring.damping
+    static let stiffness: CGFloat = 320
+    static let damping: CGFloat = 36
     /// The hand-over to the real window starts this far into the slide (of its settling time), while the picture is
     /// all but at rest: the last part of a spring only creeps.
     static let handOver = 0.7
@@ -234,7 +234,9 @@ final class PanelSlideStage: SlideStaging {
     /// says the window was is not used: the list it comes from is kept for a few seconds and does not know that the window has
     /// been moved since (by a scroll, say).
     private func layer(_ picture: WindowPicture, in zone: CGRect, shiftedBy dx: CGFloat) -> CALayer {
-        let layer = WindowPictureLayer(picture)
+        let layer = CALayer()
+        layer.contents = picture.image
+        layer.contentsGravity = .resize
         let x = dx
         let y = zone.height - picture.frame.height   // the layer's origin is bottom-left
         layer.frame = CGRect(x: x, y: y, width: picture.frame.width, height: picture.frame.height)

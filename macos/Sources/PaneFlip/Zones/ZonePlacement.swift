@@ -39,7 +39,7 @@ final class ZonePlacement {
     }
 
     private func begin() {
-        guard choice == nil, !isBlocked(), settings.values.placementEnabled, !coordinator.placementOnly(), let window = windows.focusedWindow(),
+        guard choice == nil, !isBlocked(), settings.values.placementEnabled, !coordinator.placementOnly(), let window = coordinator.focusedWindowCached(),
               let layout = layout(of: window) else { return }
         let own = coordinator.stack(containing: window.id)?.id
         guard let start = own ?? layout.fallbackZoneID, coordinator.stacks[start] != nil, island.startPicking(zone: start) else { return }
@@ -80,7 +80,7 @@ final class ZonePlacement {
     private func place(of window: WindowRef) -> (screen: ScreenInfo, layout: NamedLayout)? {
         let all = screens.screens()
         if let held = coordinator.stack(containing: window.id) {
-            return all.lazy.compactMap { screen in self.repository.activeLayout(for: screen.key).map { (screen, $0) } }.first { $0.1.zoneIDs.contains(held.id) }
+            return all.lazy.compactMap { screen in self.repository.activeLayout(for: screen.key).map { (screen, $0) } }.first { $0.1.strip.zoneIDs.contains(held.id) }
         }
         guard let frame = windows.frame(of: window) else { return nil }
         let middle = CGPoint(x: frame.midX, y: frame.midY)

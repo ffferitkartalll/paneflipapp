@@ -50,7 +50,7 @@ public final class LayoutRepository {
 
     /// Every zone identifier of every layout (active or not).
     public var allZoneIDs: Set<UUID> {
-        Set(screens.values.flatMap { $0.layouts.flatMap(\.zoneIDs) })
+        Set(screens.values.flatMap { $0.layouts.flatMap { $0.strip.zoneIDs } })
     }
 
     @discardableResult
@@ -87,7 +87,6 @@ public final class LayoutRepository {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].strip = strip
         s.layouts[i].zoneNames = s.layouts[i].zoneNames.filter { strip.zoneIDs.contains($0.key) }
-        s.layouts[i].floating = s.layouts[i].floatingZone
         screens[Self.split(key).display] = s
     }
 
@@ -119,16 +118,6 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
-    /// Floats a zone over the middle of `host` (a zone of the screen), or takes it away with nil. A zone that floats already keeps its
-    /// identity, and with it its apps, when it moves to another host or changes its size.
-    public func setFloatingZone(over host: UUID?, scale: Double, ofLayout id: UUID, key: String) {
-        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
-        guard let host else { s.layouts[i].floating = nil; screens[Self.split(key).display] = s; return }
-        guard s.layouts[i].root.leafIDs.contains(host) else { return }
-        s.layouts[i].floating = FloatingZone(id: s.layouts[i].floating?.id ?? UUID(), host: host, scale: scale)
-        screens[Self.split(key).display] = s
-    }
-
     public func setDefaultZone(_ zone: UUID?, ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].defaultZoneID = zone
@@ -139,7 +128,7 @@ public final class LayoutRepository {
     public func zoneIDs(ofDisplaysNotIn displays: Set<String>) -> Set<UUID> {
         var zones: Set<UUID> = []
         for (key, layouts) in screens where !displays.contains(Self.display(of: key)) {
-            layouts.layouts.forEach { zones.formUnion($0.zoneIDs) }
+            layouts.layouts.forEach { zones.formUnion($0.strip.zoneIDs) }
         }
         return zones
     }
