@@ -596,7 +596,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private func choose(_ card: IslandWindow, in zone: UUID) {
         guard let stack = coordinator.stacks[zone], !stack.isParked else { return }
         if let id = card.windowID {
-            if card.isActive { coordinator.focus(zone: zone) } else { coordinator.slideSelect(id, in: stack) }
+            if card.isActive { coordinator.focus(zone: zone) } else { coordinator.clickSelect(id, in: stack) }
             followFocus()
         } else {
             openApp(card.bundleID)

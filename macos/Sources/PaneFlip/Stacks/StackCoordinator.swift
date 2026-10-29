@@ -555,6 +555,13 @@ final class StackCoordinator {
         }
     }
 
+    /// A click on a card: the zone goes to that window the way a turn of the wheel goes (as many windows on or back as lie between), so a click
+    /// while the pictures still glide takes them over where they are, in either direction, and waits for nothing.
+    func clickSelect(_ id: CGWindowID, in stack: ZoneStack) {
+        guard let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), let to = stack.tabs.firstIndex(where: { $0.id == id }) else { return }
+        stepWindowScrub(in: stack, by: to - from)
+    }
+
     /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point` (else the zone of the window in
     /// focus) goes `step` windows on or back, the way a turn of the wheel over its row of cards does (`stepWindowScrub(in:by:)`).
     func stepWindowScrub(at point: CGPoint, by step: Int) {
