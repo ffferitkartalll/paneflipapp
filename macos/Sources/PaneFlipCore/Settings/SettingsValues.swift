@@ -43,6 +43,9 @@ public struct SettingsValues: Equatable {
     public var zoneDownShortcut = SnapTrigger.zoneDown
     public var zoneRightShortcut = SnapTrigger.zoneRight
 
+    /// Held while typing the number of a zone, or D, to send the focused window to that zone.
+    public var sendToZoneKeys = SnapTrigger.sendToZone
+
     /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
     /// off and the apps in them are moved to the screen's default zone.
     public var overflowZonesEnabled = true

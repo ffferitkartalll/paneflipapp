@@ -36,6 +36,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
+        v.sendToZoneKeys = defaults.data(forKey: "sendToZoneKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.sendToZoneKeys
         v.trackpadMethod = defaults.string(forKey: "trackpadMethod").flatMap(TrackpadMethod.init(rawValue:)) ?? v.trackpadMethod
         v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
         for (key, path) in Self.shortcuts {
@@ -61,6 +62,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.trackpadSpeed, forKey: "trackpadSpeed")
         defaults.set(try? JSONEncoder().encode(v.windowScrollKeys), forKey: "windowScrollKeys")
         defaults.set(try? JSONEncoder().encode(v.stripScrollKeys), forKey: "stripScrollKeys")
+        defaults.set(try? JSONEncoder().encode(v.sendToZoneKeys), forKey: "sendToZoneKeys")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
         defaults.set(v.ignoredApps, forKey: "ignoredApps")
         defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")

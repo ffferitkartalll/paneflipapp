@@ -28101,6 +28101,287 @@
         }
       }
     },
+    "Press these keys to choose a zone for the focused window in the island: the arrow keys move the choice, Return puts the window there, Backspace takes it out of its zone, Escape cancels." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط هذه المفاتيح لاختيار منطقة للنافذة الحالية في الجزيرة: تحرّك مفاتيح الأسهم الاختيار، ويضع Return النافذة هناك، ويُخرجها Backspace من منطقتها، ويلغي Escape العملية."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натиснете тези клавиши, за да изберете зона за активния прозорец в острова: стрелките местят избора, Return поставя прозореца там, Backspace го изважда от зоната му, Escape отказва."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "দ্বীপে ফোকাস করা উইন্ডোর জন্য একটি জোন বেছে নিতে এই কিগুলো চাপুন: অ্যারো কি নির্বাচন সরায়, Return উইন্ডোটি সেখানে রাখে, Backspace এটিকে জোন থেকে বের করে, Escape বাতিল করে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prem aquestes tecles per triar una zona per a la finestra activa a l'illa: les fletxes mouen l'elecció, Retorn hi posa la finestra, Retrocés la treu de la seva zona i Esc ho cancel·la."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stiskněte tyto klávesy a vyberte v ostrůvku zónu pro aktivní okno: šipky posouvají výběr, Return okno do zóny umístí, Backspace ho ze zóny vyjme, Escape akci zruší."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk på disse taster for at vælge en zone til det aktive vindue i øen: piletasterne flytter valget, Retur placerer vinduet der, Slet tager det ud af dets zone, Esc annullerer."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücke diese Tasten, um in der Insel eine Zone für das aktive Fenster zu wählen: Die Pfeiltasten verschieben die Auswahl, Return legt das Fenster dort ab, Rückschritt nimmt es aus seiner Zone, Esc bricht ab."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πατήστε αυτά τα πλήκτρα για να επιλέξετε ζώνη για το ενεργό παράθυρο στο νησί: τα βέλη μετακινούν την επιλογή, το Return τοποθετεί εκεί το παράθυρο, το Backspace το βγάζει από τη ζώνη του και το Escape ακυρώνει."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsa estas teclas para elegir una zona para la ventana activa en la isla: las flechas mueven la selección, Retorno coloca allí la ventana, Retroceso la saca de su zona y Escape cancela."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vajuta neid klahve, et valida saarel aktiivsele aknale tsoon: nooleklahvid liigutavad valikut, Return paneb akna sinna, Backspace võtab selle tsoonist välja ja Escape tühistab."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این کلیدها را فشار دهید تا در جزیره ناحیه‌ای برای پنجرهٔ فعال انتخاب کنید: کلیدهای جهت‌دار انتخاب را جابه‌جا می‌کنند، Return پنجره را آنجا می‌گذارد، Backspace آن را از ناحیه‌اش بیرون می‌آورد و Escape لغو می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paina näitä näppäimiä valitaksesi saaressa alueen aktiiviselle ikkunalle: nuolinäppäimet siirtävät valintaa, Return sijoittaa ikkunan sinne, askelpalautin ottaa sen pois alueestaan ja Escape peruu."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindutin ang mga key na ito para pumili ng zone para sa naka-focus na window sa isla: inililipat ng mga arrow key ang pinili, inilalagay ng Return ang window doon, inaalis ito ng Backspace sa zone nito, at kinakansela ng Escape."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur ces touches pour choisir une zone pour la fenêtre active dans l'île : les flèches déplacent le choix, Retour y place la fenêtre, Suppr l'extrait de sa zone et Échap annule."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לחצו על המקשים האלה כדי לבחור באי אזור לחלון הפעיל: מקשי החצים מזיזים את הבחירה, Return מניח שם את החלון, Backspace מוציא אותו מהאזור שלו ו-Escape מבטל."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "द्वीप में सक्रिय विंडो के लिए ज़ोन चुनने हेतु इन कुंजियों को दबाएँ: ऐरो कुंजियाँ चयन को खिसकाती हैं, Return विंडो को वहाँ रखती है, Backspace उसे उसके ज़ोन से बाहर निकालती है और Escape रद्द करती है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pritisnite ove tipke da biste u otoku odabrali zonu za aktivni prozor: strelice pomiču odabir, Return stavlja prozor tamo, Backspace ga vadi iz njegove zone, a Escape odustaje."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyomd meg ezeket a billentyűket, hogy a szigeten zónát válassz az aktív ablaknak: a nyilak mozgatják a kijelölést, a Return oda helyezi az ablakot, a Backspace kiveszi a zónájából, az Escape megszakítja."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekan tombol-tombol ini untuk memilih zona bagi jendela aktif di pulau: tombol panah menggeser pilihan, Return menaruh jendela di sana, Backspace mengeluarkannya dari zonanya, Escape membatalkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premi questi tasti per scegliere nell'isola una zona per la finestra attiva: le frecce spostano la scelta, Invio vi colloca la finestra, Backspace la toglie dalla sua zona, Esc annulla."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらのキーを押すと、アイランドでフォーカス中のウインドウのゾーンを選べます。矢印キーで選択を動かし、Return でウインドウをそこへ置き、Backspace でゾーンから外し、Escape で取り消します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키를 누르면 아일랜드에서 활성 윈도우를 보낼 영역을 고를 수 있습니다. 화살표 키로 선택을 옮기고, Return으로 윈도우를 그곳에 두고, Backspace로 영역에서 빼내고, Escape로 취소합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paspauskite šiuos klavišus, kad saloje pasirinktumėte zoną aktyviam langui: rodyklės perkelia pasirinkimą, Return deda langą ten, Backspace išima jį iš zonos, Escape atšaukia."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nospiediet šos taustiņus, lai salā izvēlētos zonu aktīvajam logam: bultiņas pārvieto izvēli, Return novieto logu tur, Backspace izņem to no zonas, Escape atceļ."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बेटावर सक्रिय विंडोसाठी झोन निवडण्यासाठी या कळा दाबा: ॲरो कळा निवड हलवतात, Return विंडो तिथे ठेवते, Backspace ती तिच्या झोनमधून बाहेर काढते आणि Escape रद्द करते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekan kekunci ini untuk memilih zon bagi tetingkap aktif pada pulau: kekunci anak panah menggerakkan pilihan, Return meletakkan tetingkap di sana, Backspace mengeluarkannya dari zonnya, Escape membatalkan."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk på disse tastene for å velge en sone til det aktive vinduet i øya: piltastene flytter valget, Retur plasserer vinduet der, Slett tar det ut av sonen sin, Esc avbryter."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Druk op deze toetsen om op het eiland een zone voor het actieve venster te kiezen: de pijltjestoetsen verplaatsen de keuze, Return zet het venster daar neer, Backspace haalt het uit zijn zone, Esc annuleert."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij te klawisze, aby wybrać na wyspie strefę dla aktywnego okna: strzałki przesuwają wybór, Return umieszcza tam okno, Backspace wyjmuje je z jego strefy, a Escape anuluje."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prima estas teclas para escolher uma zona para a janela ativa na ilha: as setas movem a escolha, Return coloca lá a janela, Retrocesso tira-a da sua zona e Escape cancela."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione estas teclas para escolher uma zona para a janela ativa na ilha: as setas movem a escolha, Return coloca a janela lá, Delete a tira da zona dela e Esc cancela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apasă aceste taste pentru a alege în insulă o zonă pentru fereastra activă: săgețile mută alegerea, Return pune fereastra acolo, Backspace o scoate din zona ei, iar Escape anulează."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите эти клавиши, чтобы выбрать на острове зону для активного окна: стрелки перемещают выбор, Return помещает окно туда, Backspace убирает его из зоны, Escape отменяет."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stlačte tieto klávesy a vyberte na ostrove zónu pre aktívne okno: šípky posúvajú výber, Return tam okno umiestni, Backspace ho zo zóny vyberie, Escape akciu zruší."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pritisnite te tipke in na otoku izberite območje za dejavno okno: puščice premikajo izbiro, Return tja postavi okno, Backspace ga vzame iz njegovega območja, Escape prekliče."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Притисните ове тастере да бисте на острву изабрали зону за активни прозор: стрелице померају избор, Return ставља прозор тамо, Backspace га вади из његове зоне, а Escape отказује."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryck på de här tangenterna för att välja en zon åt det aktiva fönstret i ön: piltangenterna flyttar valet, Retur placerar fönstret där, Backsteg tar ut det ur dess zon och Esc avbryter."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "தீவில் செயலில் உள்ள சாளரத்திற்கான மண்டலத்தைத் தேர்ந்தெடுக்க இந்த விசைகளை அழுத்தவும்: அம்புக்குறி விசைகள் தேர்வை நகர்த்தும், Return சாளரத்தை அங்கே வைக்கும், Backspace அதை அதன் மண்டலத்திலிருந்து வெளியே எடுக்கும், Escape ரத்து செய்யும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ద్వీపంలో క్రియాశీల విండోకు జోన్‌ను ఎంచుకోవడానికి ఈ కీలను నొక్కండి: బాణం కీలు ఎంపికను కదిలిస్తాయి, Return విండోను అక్కడ ఉంచుతుంది, Backspace దాన్ని దాని జోన్ నుండి తీసివేస్తుంది, Escape రద్దు చేస్తుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กดปุ่มเหล่านี้เพื่อเลือกโซนให้หน้าต่างที่ใช้งานอยู่ในไอแลนด์: ปุ่มลูกศรเลื่อนตัวเลือก Return วางหน้าต่างไว้ที่นั่น Backspace นำหน้าต่างออกจากโซน และ Escape ยกเลิก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adada odaktaki pencere için bir bölge seçmek üzere bu tuşlara basın: yön tuşları seçimi taşır, Return pencereyi oraya yerleştirir, Backspace pencereyi bölgesinden çıkarır, Escape iptal eder."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натисніть ці клавіші, щоб вибрати на острові зону для активного вікна: стрілки переміщують вибір, Return розміщує вікно там, Backspace забирає його із зони, Escape скасовує."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزیرے میں فعال ونڈو کے لیے زون چننے کے لیے یہ کیز دبائیں: ایرو کیز انتخاب کو آگے بڑھاتی ہیں، Return ونڈو کو وہاں رکھتی ہے، Backspace اسے اس کے زون سے نکال دیتی ہے اور Escape منسوخ کرتی ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấn các phím này để chọn vùng cho cửa sổ đang hoạt động trong hòn đảo: phím mũi tên di chuyển lựa chọn, Return đặt cửa sổ vào đó, Backspace đưa nó ra khỏi vùng của nó, Escape hủy."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按下这些键,在岛中为当前窗口选择区域:方向键移动选择,Return 把窗口放到那里,Backspace 把它移出所在区域,Escape 取消。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按下這些鍵,在島中為目前視窗選擇區域:方向鍵移動選擇,Return 把視窗放到那裡,Backspace 把它移出所在區域,Escape 取消。"
+          }
+        }
+      }
+    },
     "Previous window" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -33998,6 +34279,568 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "用雙指或滑鼠滾輪捲動，即可在螢幕之間切換。"
+          }
+        }
+      }
+    },
+    "Send window to zone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إرسال النافذة إلى منطقة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изпращане на прозореца в зона"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো জোনে পাঠান"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envia la finestra a una zona"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odeslat okno do zóny"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send vindue til zone"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster an Zone senden"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποστολή παραθύρου σε ζώνη"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar ventana a zona"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saada aken tsooni"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ارسال پنجره به ناحیه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lähetä ikkuna alueelle"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipadala ang window sa zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer la fenêtre dans une zone"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שלח חלון לאזור"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो को ज़ोन में भेजें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pošalji prozor u zonu"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablak küldése zónába"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kirim jendela ke zona"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invia finestra a una zona"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウをゾーンへ送る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우를 영역으로 보내기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siųsti langą į zoną"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sūtīt logu uz zonu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो झोनमध्ये पाठवा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hantar tetingkap ke zon"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send vindu til sone"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster naar zone sturen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij okno do strefy"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar janela para zona"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar janela para zona"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trimite fereastra într-o zonă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отправить окно в зону"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odoslať okno do zóny"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pošlji okno v območje"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пошаљи прозор у зону"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skicka fönster till zon"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரத்தை மண்டலத்திற்கு அனுப்பு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోను జోన్‌కు పంపండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ส่งหน้าต่างไปยังโซน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereyi bölgeye gönder"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати вікно в зону"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈو کو زون میں بھیجیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gửi cửa sổ đến vùng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将窗口发送到区域"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將視窗傳送到區域"
+          }
+        }
+      }
+    },
+    "Sending a window to a zone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إرسال نافذة إلى منطقة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изпращане на прозорец в зона"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো একটি জোনে পাঠানো"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar una finestra a una zona"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odeslání okna do zóny"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send et vindue til en zone"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster an eine Zone senden"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποστολή παραθύρου σε ζώνη"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar una ventana a una zona"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akna saatmine tsooni"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ارسال پنجره به یک ناحیه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikkunan lähettäminen alueelle"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magpadala ng window sa isang zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer une fenêtre dans une zone"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שליחת חלון לאזור"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो को ज़ोन में भेजना"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slanje prozora u zonu"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablak küldése zónába"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mengirim jendela ke zona"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inviare una finestra a una zona"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウをゾーンへ送る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우를 영역으로 보내기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lango siuntimas į zoną"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loga sūtīšana uz zonu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो झोनमध्ये पाठवणे"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menghantar tetingkap ke zon"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sende et vindu til en sone"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een venster naar een zone sturen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wysyłanie okna do strefy"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar uma janela para uma zona"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar uma janela para uma zona"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trimiterea unei ferestre într-o zonă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отправка окна в зону"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odoslanie okna do zóny"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pošiljanje okna v območje"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слање прозора у зону"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skicka ett fönster till en zon"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரத்தை மண்டலத்திற்கு அனுப்புதல்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోను జోన్‌కు పంపడం"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ส่งหน้าต่างไปยังโซน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereyi bir bölgeye gönderme"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надсилання вікна в зону"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈو کو زون میں بھیجنا"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gửi cửa sổ đến một vùng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将窗口发送到区域"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將視窗傳送到區域"
           }
         }
       }
@@ -41585,6 +42428,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在等待你在「系統設定」▸「一般」▸「登入項目」中核准。"
+          }
+        }
+      }
+    },
+    "Window placement shortcut is active" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختصار وضع النافذة في منطقة مفعّل"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Клавишната комбинация за поставяне на прозорец в зона е активна"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো জোনে রাখার শর্টকাট সক্রিয়"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La drecera per col·locar la finestra en una zona està activa"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zkratka pro umístění okna do zóny je aktivní"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genvejen til at placere vinduet i en zone er aktiv"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurzbefehl zum Platzieren des Fensters in einer Zone ist aktiv"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η συντόμευση τοποθέτησης παραθύρου σε ζώνη είναι ενεργή"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El atajo para colocar la ventana en una zona está activo"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akna tsooni paigutamise kiirklahv on aktiivne"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "میان‌بر قرار دادن پنجره در ناحیه فعال است"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikkunan sijoittaminen alueelle -pikanäppäin on käytössä"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktibo ang shortcut sa paglalagay ng window sa zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le raccourci pour placer la fenêtre dans une zone est actif"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קיצור הדרך למיקום חלון באזור פעיל"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो को ज़ोन में रखने का शॉर्टकट सक्रिय है"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prečac za smještanje prozora u zonu je aktivan"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Az ablak zónába helyezésének billentyűparancsa aktív"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pintasan untuk menempatkan jendela di zona aktif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La scorciatoia per collocare la finestra in una zona è attiva"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウをゾーンに配置するショートカットが有効です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우를 영역에 배치하는 단축키가 켜져 있습니다"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lango talpinimo į zoną spartusis klavišas aktyvus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loga novietošanas zonā īsinājumtaustiņš ir aktīvs"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो झोनमध्ये ठेवण्याचा शॉर्टकट सक्रिय आहे"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pintasan untuk meletakkan tetingkap dalam zon aktif"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hurtigtasten for å plassere vinduet i en sone er aktiv"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De sneltoets om het venster in een zone te plaatsen is actief"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrót do umieszczania okna w strefie jest aktywny"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O atalho para colocar a janela numa zona está ativo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O atalho para colocar a janela em uma zona está ativo"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comanda rapidă pentru plasarea ferestrei într-o zonă este activă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетание для размещения окна в зоне активно"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skratka na umiestnenie okna do zóny je aktívna"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bližnjica za umestitev okna v območje je aktivna"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пречица за смештање прозора у зону је активна"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kortkommandot för att placera fönstret i en zon är aktivt"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரத்தை மண்டலத்தில் வைக்கும் குறுக்குவழி செயலில் உள்ளது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోను జోన్‌లో ఉంచే షార్ట్‌కట్ క్రియాశీలంగా ఉంది"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แป้นพิมพ์ลัดสำหรับวางหน้าต่างในโซนเปิดใช้งานอยู่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereyi bölgeye yerleştirme kısayolu etkin"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорочення для розміщення вікна в зоні активне"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈو کو زون میں رکھنے کا شارٹ کٹ فعال ہے"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phím tắt đặt cửa sổ vào vùng đang bật"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将窗口放入区域的快捷键已启用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將視窗放入區域的快速鍵已啟用"
           }
         }
       }

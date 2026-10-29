@@ -23,6 +23,16 @@ public struct KeyChord: Equatable {
         59: .control, 62: .control, 58: .option, 61: .option, 55: .command, 54: .command, 56: .shift, 60: .shift,
     ]
 
+    /// The modifier keys a recorded combination of modifier keys alone means; nil when it has any other key, or none.
+    public static func modifiers(of trigger: SnapTrigger) -> Modifiers? {
+        var result: Modifiers = []
+        for key in trigger.keys {
+            guard let m = modifierOfKey[key.code] else { return nil }
+            result.insert(m)
+        }
+        return result.isEmpty ? nil : result
+    }
+
     /// The chord a recorded key combination means: one key besides modifier keys, and at least one modifier key (a plain key
     /// would be taken from every app). Nil for anything else.
     public init?(_ trigger: SnapTrigger) {

@@ -7,7 +7,7 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, windowScroll, stripScroll, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
+    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
@@ -28,6 +28,16 @@ struct ShortcutsPane: View {
                 row(.windowScroll, title: "Hold while scrolling",
                     detail: "Hold these keys and scroll over a zone with the mouse wheel to move through its windows. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }
+            }
+            .disabled(!settings.values.placementEnabled)
+
+            Section("Sending a window to a zone") {
+                row(.sendToZone, title: "Send window to zone",
+                    detail: "Press these keys to choose a zone for the focused window in the island: the arrow keys move the choice, Return puts the window there, Backspace takes it out of its zone, Escape cancels.",
+                    value: settings.values.sendToZoneKeys, standard: .sendToZone) { trigger in
+                    // Modifier keys alone.
+                    if KeyChord.modifiers(of: trigger) != nil { settings.values.sendToZoneKeys = trigger }
+                }
             }
             .disabled(!settings.values.placementEnabled)
 

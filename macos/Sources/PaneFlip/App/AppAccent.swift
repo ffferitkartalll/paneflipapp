@@ -14,6 +14,8 @@ struct AppAccent {
         let c = nsColor.usingColorSpace(.sRGB) ?? green
         return (c.redComponent, c.greenComponent, c.blueComponent)
     }
+    /// The zone a window is being sent to, lit in the island while the choice is made.
+    static let placement = Color(red: 1, green: 0.62, blue: 0.04)
     /// What is written or drawn on the colour.
     static let ink = Color.black.opacity(0.75)
 }

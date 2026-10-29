@@ -178,7 +178,8 @@ final class StackCoordinator {
         displaced[ref.id] = nil
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
         memory.setHome(slot: slot, to: home)
-        attach(ref, toSlot: slot, raise: true, glide: true)
+        // A zone beyond the screen's edge keeps its windows out of sight: the window is put there without being brought forward.
+        attach(ref, toSlot: slot, raise: !zone.isParked, glide: true)
     }
 
     /// Whether the window belongs to an app the user asked PaneFlip to leave alone.
@@ -389,6 +390,18 @@ final class StackCoordinator {
         flashZone(zone.rect)
     }
 
+    /// A window was sent to a zone: the layout scrolls so that the zone is in view, as it does when the focus goes to a window there (to a zone beyond the screen's edge;
+    /// from beyond the edge to a zone of the screen itself, back, so that no zone beyond the edge is in view), and the window comes forward when the scroll is over,
+    /// without the frame that marks a zone the focus went to. Nothing happens where no scroll is needed.
+    func revealSent(_ ref: WindowRef, in zoneID: UUID) {
+        guard stacks[zoneID] != nil, onReachBeyondTheEdge?(zoneID, { _ in }) == true else { return }
+        chosenFocus = (zoneID, ref.id, Date().addingTimeInterval(4))
+        focusedZoneID = zoneID
+        onFocusMoved?()
+        // It counts as flashed from the start: the zone already shows where the window went.
+        focusPending = (zoneID, ref, Date().addingTimeInterval(4), true)
+    }
+
     /// The scroll is over: if the zone the shortcut asked for is in view now, its window comes forward and its frame shows.
     func finishFocusBeyondTheEdge() {
         guard let pending = focusPending else { return }
@@ -565,6 +578,18 @@ final class StackCoordinator {
         guard settings.values.restoreSizeOnLeave, wasHeld, let size, let frame else { return }
         let share = frame.width > 0 ? min(max((pointer.x - frame.minX) / frame.width, 0), 1) : 0
         let target = CGRect(x: pointer.x - share * size.width, y: frame.minY, width: size.width, height: size.height)
+        if let glide { glide.glide(ref, to: target) } else { windows.setFrame(target, of: ref) }
+    }
+
+    /// A window is taken out of its zone by a key: it goes to the middle of `area`, the usable area of its screen, at the size it had before the zone took
+    /// it in when the setting asks for it, else at the size it has (never larger than the area).
+    func remove(_ ref: WindowRef, centredIn area: CGRect) {
+        let before = originalSizes.removeValue(forKey: ref.id)
+        let current = windows.frame(of: ref)?.size
+        unsnap(window: ref.id)
+        let size = (settings.values.restoreSizeOnLeave ? before : nil) ?? current ?? area.size
+        let fitted = CGSize(width: min(size.width, area.width), height: min(size.height, area.height))
+        let target = CGRect(x: area.midX - fitted.width / 2, y: area.midY - fitted.height / 2, width: fitted.width, height: fitted.height)
         if let glide { glide.glide(ref, to: target) } else { windows.setFrame(target, of: ref) }
     }
 
