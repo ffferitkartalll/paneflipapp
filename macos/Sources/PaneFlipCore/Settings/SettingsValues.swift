@@ -32,6 +32,10 @@ public struct SettingsValues: Equatable {
     /// Scroll toward the zones beyond the right or left edge of the screen under the pointer.
     public var scrollRightShortcut = SnapTrigger.scrollRight
     public var scrollLeftShortcut = SnapTrigger.scrollLeft
+    /// Undo the last action on a window (added to a zone, taken out of one).
+    public var undoWindowShortcut = SnapTrigger.undoWindow
+    /// Close the message of the island that offers the undo.
+    public var closeWindowUndoNoticeShortcut = SnapTrigger.closeWindowUndoNotice
 
     /// The shortcuts that move the focus to the zone beside the one in focus work at all.
     public var zoneNavigationEnabled = true

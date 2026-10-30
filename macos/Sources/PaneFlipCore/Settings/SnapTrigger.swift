@@ -30,6 +30,11 @@ public struct SnapTrigger: Codable, Equatable {
     public static let stripScroll = SnapTrigger(keys: [commandKey, leftOption, leftControl])
     public static let nextWindow = SnapTrigger(keys: [leftOption, leftControl, rightArrow])
     public static let previousWindow = SnapTrigger(keys: [leftOption, leftControl, leftArrow])
+    /// Undo the last action on a window (a window added to a zone, or taken out of one, for now): Control+Option+Delete. The shortcuts that undo actions on
+    /// layouts will be this one with Command.
+    public static let undoWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 51, name: "Delete")])
+    /// Close the message that tells what was undone-able: Control+Option+Escape.
+    public static let closeWindowUndoNotice = SnapTrigger(keys: [leftOption, leftControl, Key(code: 53, name: "Escape")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
     /// Held while typing the number of a zone (or D) to send the focused window there.
@@ -59,7 +64,7 @@ public struct SnapTrigger: Codable, Equatable {
         let table: [Int: String] = [
             56: "Left Shift", 60: "Right Shift", 59: "Left Control", 62: "Right Control",
             58: "Left Option", 61: "Right Option", 55: "Left Command", 54: "Right Command",
-            49: "Space", 36: "Return", 48: "Tab", 51: "Delete", 123: "←", 124: "→", 125: "↓", 126: "↑",
+            49: "Space", 36: "Return", 48: "Tab", 51: "Delete", 53: "Escape", 123: "←", 124: "→", 125: "↓", 126: "↑",
         ]
         if let n = table[code] { return n }
         if let c = characters?.trimmingCharacters(in: .whitespacesAndNewlines), !c.isEmpty { return c.uppercased() }

@@ -7,11 +7,11 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight }
+    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight, undoWindow, closeWindowUndoNotice }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
-                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut]
+                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut]
 
     var body: some View {
         Form {
@@ -38,6 +38,12 @@ struct ShortcutsPane: View {
                     // Modifier keys alone.
                     if KeyChord.modifiers(of: trigger) != nil { settings.values.sendToZoneKeys = trigger }
                 }
+            }
+            .disabled(!settings.values.placementEnabled)
+
+            Section("Undo") {
+                chordRow(.undoWindow, title: "Undo the last window action", path: \.undoWindowShortcut, standard: .undoWindow)
+                chordRow(.closeWindowUndoNotice, title: "Close the window undo message", path: \.closeWindowUndoNoticeShortcut, standard: .closeWindowUndoNotice)
             }
             .disabled(!settings.values.placementEnabled)
 

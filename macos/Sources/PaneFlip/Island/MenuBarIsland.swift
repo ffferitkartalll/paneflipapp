@@ -40,6 +40,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         var dragging: CGFloat?
         /// Ends the showing of the windows alone (`peekWindows`).
         var peekEnd: DispatchWorkItem?
+        /// Ends the notice (`showNotice`).
+        var noticeEnd: DispatchWorkItem?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel
@@ -72,6 +74,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private static let motion = Animation.easeOut(duration: 0.3)
     /// How long the windows of a zone stay in sight if nothing is seen to move, with the pointer away from the island.
     private static let peekTime: TimeInterval = 1
+    /// How long a notice stays.
+    private static let noticeTime: TimeInterval = 10
     private var dragging = false
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
@@ -157,6 +161,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         covered = covering
         for entry in entries.values {
             if covering {
+                hideNotice(entry)
                 if entry.hovered { setOpen(false, for: entry) }
                 entry.shield.orderOut(nil)
                 slideAway(entry) { [weak self, weak entry] in if self?.covered == true { entry?.panel.orderOut(nil) } }
@@ -385,11 +390,69 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         }
     }
 
+    // MARK: The notice
+
+    /// A window was added to a zone or taken out of one: the island of that zone's display opens to one line that says so, with a button that undoes it,
+    /// and goes back after a few seconds. Not while the pointer is on the island, a window is dragged or a zone is being chosen.
+    func showNotice(_ change: WindowChange) {
+        DispatchQueue.main.async { [self] in   // after a drop has closed the island
+            guard !covered, !dragging, let entry = entries.values.first(where: { $0.zones.contains(change.zone) }), !entry.hovered, picking !== entry else { return }
+            for other in entries.values where other !== entry { hideNotice(other) }
+            let number = entry.numbers[change.zone] ?? ""
+            // The name as the card of the window carries it (a window added is in its zone by now).
+            let name = change.kind == .added ? coordinator.shownName(of: change.window.id) ?? change.title : change.title
+            entry.peekEnd?.cancel()
+            withAnimation(Self.motion) {
+                entry.model.peeking = false
+                entry.model.windowsZone = nil
+                entry.model.notice = MenuBarIslandModel.notice(change.kind == .added ? String(localized: "The window %@ was placed in zone %@.")
+                                                                                          : String(localized: "The window %@ was removed from zone %@."), name: name, number: number)
+                entry.model.contentOpacity = 1
+            }
+            withTransaction(Transaction(animation: nil)) { entry.model.noticeLeft = 1 }
+            DispatchQueue.main.async { withAnimation(.linear(duration: Self.noticeTime)) { entry.model.noticeLeft = 0 } }
+            placeShield(of: entry)
+            entry.noticeEnd?.cancel()
+            let work = DispatchWorkItem { [weak self, weak entry] in if let self, let entry { hideNotice(entry) } }
+            entry.noticeEnd = work
+            DispatchQueue.main.asyncAfter(deadline: .now() + Self.noticeTime, execute: work)
+        }
+    }
+
+    private func hideNotice(_ entry: Entry) {
+        entry.noticeEnd?.cancel()
+        entry.noticeEnd = nil
+        guard entry.model.notice != nil else { return }
+        withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 }
+        // The text stays while the island shrinks, so that it does not change on the way.
+        withAnimation(Self.motion) { entry.model.notice = nil }
+        placeShield(of: entry)
+    }
+
+    /// Whether a notice is on, on any display.
+    var hasNotice: Bool { entries.values.contains { $0.model.notice != nil } }
+
+    /// Closes the notice of every display.
+    func dismissWindowNotice() { entries.values.forEach(hideNotice) }
+
+    private enum NoticeButton { case undo, close }
+
+    /// The button of the notice under the point, if any.
+    private func noticeButton(at point: CGPoint, in entry: Entry) -> NoticeButton? {
+        let model = entry.model
+        guard model.notice != nil else { return nil }
+        let frame = islandFrame(of: entry, open: true), fromTop = frame.maxY - point.y, top = model.barHeight + model.windowsGap
+        let right = frame.midX + model.noticeRowWidth / 2, close = MenuBarIslandModel.noticeButtonHeight, gap = MenuBarIslandModel.noticeGap
+        guard fromTop >= top - 4, fromTop <= top + close + 4 else { return nil }
+        if point.x >= right - close - 4 && point.x <= right + 4 { return .close }
+        return point.x >= right - close - gap - model.noticeButtonWidth && point.x < right - close - 4 ? .undo : nil
+    }
+
     // MARK: Hover
 
     private func hover(at point: CGPoint) {
         guard !covered else { return }
-        for entry in entries.values where entry !== picking {
+        for entry in entries.values where entry !== picking && entry.model.notice == nil {
             let model = entry.model, bar = entry.panel.frame
             let m = MenuBarIslandView.margin
             let hit: Bool
@@ -473,7 +536,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
     private func islandFrame(of entry: Entry, open: Bool) -> CGRect {
         let model = entry.model, top = entry.panel.frame
-        let size = open ? model.openSize : CGSize(width: model.notchWidth + model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
+        let size = open || model.notice != nil ? model.openSize : CGSize(width: model.notchWidth + model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
         return CGRect(x: top.midX - size.width / 2, y: top.maxY - size.height, width: size.width, height: size.height)
     }
 
@@ -498,6 +561,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// The mouse went down on the shield: on a card of the open row it waits to see whether this is a click or a drag; on a zone in the picture it is a click.
     private func press(at point: CGPoint) {
         pressed = nil
+        if let entry = entries.values.first(where: { noticeButton(at: point, in: $0) != nil }) {
+            if noticeButton(at: point, in: entry) == .undo { coordinator.undoLast() }
+            hideNotice(entry)
+            return
+        }
         for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
             let row = rowHit(at: point, in: entry)
             guard row.onRow else { continue }

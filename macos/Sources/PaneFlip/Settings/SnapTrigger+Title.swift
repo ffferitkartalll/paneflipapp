@@ -34,6 +34,7 @@ extension SnapTrigger {
         case 36: String(localized: "Return")
         case 48: String(localized: "Tab")
         case 51: String(localized: "Delete")
+        case 53: String(localized: "Escape")
         default: Self.layoutCharacter(of: key.code) ?? key.name
         }
     }

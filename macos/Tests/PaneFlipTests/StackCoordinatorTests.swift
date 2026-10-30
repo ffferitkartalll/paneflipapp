@@ -321,6 +321,32 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(windows.raised.filter { $0 == 2 }.count, 1)
     }
 
+    func testUndoPutsAWindowBackWhereItWasBeforeItWasAddedOrTakenOut() {
+        let first = UUID(), second = UUID()
+        coordinator.apply(zones: [first: CGRect(x: 0, y: 0, width: 100, height: 100), second: CGRect(x: 100, y: 0, width: 100, height: 100)])
+        var told: [WindowChange.Kind] = []
+        coordinator.onWindowChange = { told.append($0.kind) }
+        let spot = CGRect(x: 300, y: 300, width: 50, height: 50)
+        windows.setFrame(spot, of: .fake(1))
+
+        coordinator.snap(.fake(1), into: first)
+        coordinator.snap(.fake(1), into: second)     // moved from one zone to the other
+        XCTAssertEqual(coordinator.stack(containing: 1)?.id, second)
+        XCTAssertTrue(coordinator.undoLast())
+        XCTAssertEqual(coordinator.stack(containing: 1)?.id, first, "back in the zone it came from")
+        XCTAssertTrue(coordinator.undoLast())
+        XCTAssertNil(coordinator.stack(containing: 1), "out of the zone it was added to")
+        XCTAssertEqual(windows.frames[1], spot, "and where it stood")
+        XCTAssertFalse(coordinator.undoLast(), "nothing is left to undo")
+
+        coordinator.snap(.fake(1), into: first)
+        coordinator.remove(.fake(1), centredIn: CGRect(x: 0, y: 0, width: 1000, height: 1000))
+        XCTAssertNil(coordinator.stack(containing: 1))
+        XCTAssertTrue(coordinator.undoLast())
+        XCTAssertEqual(coordinator.stack(containing: 1)?.id, first, "a window taken out returns to its zone")
+        XCTAssertEqual(told, [.added, .added, .added, .removed], "an undo is not a change to be told or undone again")
+    }
+
     func testSnapRemembersTheWindowAndUnsnapForgetsIt() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
