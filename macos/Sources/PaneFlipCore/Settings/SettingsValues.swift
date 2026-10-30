@@ -34,6 +34,8 @@ public struct SettingsValues: Equatable {
     public var scrollLeftShortcut = SnapTrigger.scrollLeft
     /// Undo the last action on a window (added to a zone, taken out of one).
     public var undoWindowShortcut = SnapTrigger.undoWindow
+    /// Enlarge the focused window of a zone for a while.
+    public var enlargeWindowShortcut = SnapTrigger.enlargeWindow
     /// Close the message of the island that offers the undo.
     public var closeWindowUndoNoticeShortcut = SnapTrigger.closeWindowUndoNotice
 

@@ -347,6 +347,32 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(told, [.added, .added, .added, .removed], "an undo is not a change to be told or undone again")
     }
 
+    func testAnEnlargedWindowStaysInItsZoneUntilAnotherIsEnlargedOrItIsUndone() {
+        let first = UUID(), second = UUID(), area = CGRect(x: 0, y: 0, width: 200, height: 100)
+        let zones = [first: CGRect(x: 0, y: 0, width: 100, height: 100), second: CGRect(x: 100, y: 0, width: 100, height: 100)]
+        coordinator.apply(zones: zones)
+        coordinator.usableAreaOf = { _ in area }
+        coordinator.snap(.fake(1), into: first)
+        coordinator.snap(.fake(2), into: second)
+        let home1 = coordinator.stacks[first]!.frame, home2 = coordinator.stacks[second]!.frame
+
+        windows.focused = .fake(1)
+        coordinator.enlargeFocused()
+        XCTAssertEqual(windows.frames[1], area)
+        XCTAssertEqual(coordinator.stack(containing: 1)?.id, first, "it is not taken out of its zone")
+        coordinator.apply(zones: zones)
+        XCTAssertEqual(windows.frames[1], area, "a refresh of the zones leaves it alone")
+
+        windows.focused = .fake(2)
+        coordinator.enlargeFocused()
+        XCTAssertEqual(windows.frames[1], home1, "the first goes back when another is enlarged")
+        XCTAssertEqual(windows.frames[2], area)
+        XCTAssertTrue(coordinator.undoLast())
+        XCTAssertEqual(windows.frames[2], home2)
+        XCTAssertTrue(coordinator.undoLast())
+        XCTAssertNil(coordinator.stack(containing: 2), "the enlargement is gone from the list: the next one is the adding of the window")
+    }
+
     func testSnapRemembersTheWindowAndUnsnapForgetsIt() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])

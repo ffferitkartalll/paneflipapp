@@ -51,6 +51,10 @@ final class StackCoordinator {
     var onWindowStep: ((UUID) -> Void)?
     /// A window was added to a zone or taken out of one by the person: the island tells it, with a button to undo it.
     var onWindowChange: ((WindowChange) -> Void)?
+    /// The window that was enlarged is back in its zone (or gone): the island closes its message.
+    var onEnlargementEnd: (() -> Void)?
+    /// The usable area of the screen that shows most of a rectangle (nil: none shows it).
+    var usableAreaOf: (CGRect) -> CGRect? = { _ in nil }
     /// Slides windows when a card of the island is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
         didSet { carousel?.onFree = { [weak self] in
@@ -113,6 +117,7 @@ final class StackCoordinator {
     /// `place`, off the main thread: reading and writing a window waits for its app, and an app that is slow to answer (a mail client takes a quarter of a second for each
     /// call) must not hold the main thread, which every zone change and every focus move would do.
     private func placeLater(_ ref: WindowRef, at frame: CGRect) {
+        guard ref.id != enlarged?.window.id else { return }   // an enlarged window is not put in its zone until its time is up
         guard let placeQueue else { return place(ref, at: frame) }
         placeQueue(ref.pid) { [weak self] in self?.place(ref, at: frame) }
     }
@@ -129,7 +134,7 @@ final class StackCoordinator {
             stack.frame = zone.frame
             guard !placementOnly(), !isScrolling else { continue }   // a scroll is moving the windows
             for tab in stack.tabs {
-                guard let ref = stack.refs[tab.id] else { continue }
+                guard let ref = stack.refs[tab.id], ref.id != enlarged?.window.id else { continue }
                 glide?.cancel(ref.id)
                 placeLater(ref, at: stack.frame)
             }
@@ -676,6 +681,49 @@ final class StackCoordinator {
         stack(containing: id)?.tabs.first { $0.id == id }.map { $0.displayName.isEmpty ? $0.appName : $0.displayName }
     }
 
+    // MARK: Enlarging
+
+    /// How long a window stays enlarged: it goes back to its zone then, whatever else happens.
+    static let enlargedTime: TimeInterval = 15
+    private var enlarged: (window: WindowRef, zone: UUID, end: DispatchWorkItem)?
+
+    /// The focused window of a zone grows to fill the usable area of its screen; it stays in its zone. Again for the same window, or for another one, the
+    /// enlarged window goes back to its zone first.
+    func enlargeFocused() {
+        guard let ref = focusedWindowCached() else { return }
+        enlarge(ref)
+    }
+
+    /// The same for a window of a zone that is known (a double click on its card in the island).
+    func enlarge(_ ref: WindowRef) {
+        guard !placementOnly(), let stack = stack(containing: ref.id), !stack.isParked, let area = usableAreaOf(stack.rect) else { return }
+        let again = enlarged?.window.id == ref.id
+        endEnlargement()
+        guard !again else { return }
+        let end = DispatchWorkItem { [weak self] in self?.endEnlargement() }
+        enlarged = (ref, stack.id, end)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.enlargedTime, execute: end)
+        windows.raise(ref)
+        if let glide { glide.glide(ref, to: area) } else { windows.setFrame(area, of: ref) }
+        record(.init(kind: .enlarged, window: ref, title: shownName(of: ref.id) ?? title(of: ref), zone: stack.id, zoneBefore: stack.id, frameBefore: nil))
+    }
+
+    /// The enlarged window goes back to the size and place of its zone.
+    func endEnlargement() {
+        guard let held = enlarged else { return }
+        forgetEnlargement()
+        onEnlargementEnd?()
+        guard let stack = stacks[held.zone], stack.refs[held.window.id] != nil else { return }
+        if let glide { glide.glide(held.window, to: stack.rect) } else { placeLater(held.window, at: stack.frame) }
+    }
+
+    private func forgetEnlargement() {
+        guard let held = enlarged else { return }
+        enlarged = nil
+        held.end.cancel()
+        changes.removeAll { $0.kind == .enlarged && $0.window.id == held.window.id }
+    }
+
     private func recordRemoval(of ref: WindowRef) {
         guard let zone = stack(containing: ref.id)?.id else { return }
         record(.init(kind: .removed, window: ref, title: shownName(of: ref.id) ?? title(of: ref), zone: zone, zoneBefore: zone, frameBefore: nil))
@@ -688,7 +736,10 @@ final class StackCoordinator {
             guard windows.frame(of: change.window) != nil else { continue }
             undoing = true
             defer { undoing = false }
-            if let zone = change.zoneBefore, stacks[zone] != nil {
+            if change.kind == .enlarged {
+                guard enlarged?.window.id == change.window.id else { continue }
+                endEnlargement()
+            } else if let zone = change.zoneBefore, stacks[zone] != nil {
                 snap(change.window, into: zone)
             } else if change.kind == .added, change.zoneBefore == nil {
                 unsnap(window: change.window.id)
@@ -754,6 +805,7 @@ final class StackCoordinator {
     /// Removes a window from the live stack only; the memory is the caller's business. Nothing is brought to the
     /// front: the system decides what is revealed, and the island's front card follows the focus.
     func removeFromStack(window id: CGWindowID) {
+        if enlarged?.window.id == id { forgetEnlargement() }   // it left its zone: nothing to go back to
         glide?.cancel(id)
         pictures?.forget(id)
         for stack in stacks.values where stack.refs[id] != nil {

@@ -61,14 +61,23 @@ struct MenuBarIslandView: View {
                         Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
                             .frame(width: model.noticeButtonWidth, height: height)
                             .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
-                        Image(systemName: "xmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white)
-                            .frame(width: height, height: height)
-                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(0.18)))
                             .overlay {
-                                // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
-                                Circle().inset(by: 1).trim(from: 1 - model.noticeLeft, to: 1).rotation(.degrees(-90))
-                                    .stroke(AppAccent.color, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                // The notice that cannot be closed: the ring runs round the button that undoes it.
+                                if !model.noticeCloses {
+                                    ClockwiseRing(radius: radius - 1.5).inset(by: 1.5).trim(from: 1 - model.noticeLeft, to: 1)
+                                        .stroke(Color(white: 0.08), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                }
                             }
+                        if model.noticeCloses {
+                            Image(systemName: "xmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white)
+                                .frame(width: height, height: height)
+                                .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(0.18)))
+                                .overlay {
+                                    // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
+                                    Circle().inset(by: 1).trim(from: 1 - model.noticeLeft, to: 1).rotation(.degrees(-90))
+                                        .stroke(AppAccent.color, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                }
+                        }
                     }
                     .offset(x: 0, y: bar + model.windowsGap)
                     .opacity(model.contentOpacity)
@@ -220,5 +229,25 @@ private struct GlyphCanvas: View, Animatable {
                 }
             }
             context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(.white.opacity(0.5)), lineWidth: 1)
+    }
+}
+
+/// A rounded rectangle drawn from the middle of its top edge, clockwise: trimmed, it runs down from twelve o'clock like a clock's hand.
+private struct ClockwiseRing: InsettableShape {
+    let radius: CGFloat
+    var inset: CGFloat = 0
+
+    func inset(by amount: CGFloat) -> ClockwiseRing { ClockwiseRing(radius: radius, inset: inset + amount) }
+
+    func path(in rect: CGRect) -> Path {
+        let r = rect.insetBy(dx: inset, dy: inset), corner = min(radius, r.height / 2)
+        var path = Path()
+        path.move(to: CGPoint(x: r.midX, y: r.minY))
+        path.addArc(tangent1End: CGPoint(x: r.maxX, y: r.minY), tangent2End: CGPoint(x: r.maxX, y: r.maxY), radius: corner)
+        path.addArc(tangent1End: CGPoint(x: r.maxX, y: r.maxY), tangent2End: CGPoint(x: r.minX, y: r.maxY), radius: corner)
+        path.addArc(tangent1End: CGPoint(x: r.minX, y: r.maxY), tangent2End: CGPoint(x: r.minX, y: r.minY), radius: corner)
+        path.addArc(tangent1End: CGPoint(x: r.minX, y: r.minY), tangent2End: CGPoint(x: r.midX, y: r.minY), radius: corner)
+        path.closeSubpath()
+        return path
     }
 }

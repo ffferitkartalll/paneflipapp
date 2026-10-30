@@ -7,7 +7,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     private static let shortcuts: [(String, WritableKeyPath<SettingsValues, SnapTrigger>)] = [
         ("nextWindowShortcut", \.nextWindowShortcut), ("previousWindowShortcut", \.previousWindowShortcut),
-        ("scrollRightShortcut", \.scrollRightShortcut), ("scrollLeftShortcut", \.scrollLeftShortcut), ("undoWindowShortcut", \.undoWindowShortcut), ("closeWindowUndoNoticeShortcut", \.closeWindowUndoNoticeShortcut),
+        ("scrollRightShortcut", \.scrollRightShortcut), ("scrollLeftShortcut", \.scrollLeftShortcut), ("undoWindowShortcut", \.undoWindowShortcut), ("enlargeWindowShortcut", \.enlargeWindowShortcut), ("closeWindowUndoNoticeShortcut", \.closeWindowUndoNoticeShortcut),
         ("zoneUpShortcut", \.zoneUpShortcut), ("zoneLeftShortcut", \.zoneLeftShortcut),
         ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut),
     ]

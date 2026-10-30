@@ -138,8 +138,8 @@ final class AppContainer {
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
-                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut)]
-            if island.hasNotice { all.append((.closeWindowUndoNotice, v.closeWindowUndoNoticeShortcut)) }
+                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut)]
+            if island.hasClosableNotice { all.append((.closeWindowUndoNotice, v.closeWindowUndoNoticeShortcut)) }
             if v.zoneNavigationEnabled {
                 all += [(.focusZone(.up), v.zoneUpShortcut), (.focusZone(.left), v.zoneLeftShortcut),
                         (.focusZone(.down), v.zoneDownShortcut), (.focusZone(.right), v.zoneRightShortcut)]
@@ -196,6 +196,16 @@ final class AppContainer {
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
         coordinator.onWindowChange = { [weak island] in island?.showNotice($0) }
+        coordinator.onEnlargementEnd = { [weak island] in island?.dismissWindowNotice() }
+        coordinator.usableAreaOf = { [screens] rect in
+            var best: (area: CGRect, overlap: CGFloat)?
+            for screen in screens.screens() {
+                let shared = screen.axVisible.intersection(rect)
+                let overlap = shared.isNull ? 0 : shared.width * shared.height
+                if overlap > (best?.overlap ?? 0) { best = (screen.axVisible, overlap) }
+            }
+            return best?.area
+        }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
@@ -231,7 +241,8 @@ final class AppContainer {
                 case .scroll(let edge): scroller.scroll(toward: edge)
                 case .focusZone(let direction): coordinator.focusZone(toward: direction)
                 case .undoWindow: coordinator.undoLast(); island.dismissWindowNotice()
-                case .closeWindowUndoNotice: island.dismissWindowNotice()
+                case .closeWindowUndoNotice: island.closeNotice()
+                case .enlargeWindow: coordinator.enlargeFocused()
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }

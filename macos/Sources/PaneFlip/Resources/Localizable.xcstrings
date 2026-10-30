@@ -12084,6 +12084,287 @@
         }
       }
     },
+    "Enlarge window" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تكبير النافذة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уголемяване на прозореца"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো বড় করুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amplia la finestra"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zvětšit okno"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forstør vindue"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster vergrößern"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μεγέθυνση παραθύρου"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ampliar ventana"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suurenda aken"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بزرگ‌کردن پنجره"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suurenna ikkuna"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palakihin ang window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrandir la fenêtre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדלת חלון"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो बड़ी करें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Povećaj prozor"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablak nagyítása"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perbesar jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingrandisci finestra"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウを拡大"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 확대"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padidinti langą"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palielināt logu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो मोठी करा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besarkan tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forstørr vindu"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster vergroten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powiększ okno"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ampliar janela"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ampliar janela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mărește fereastra"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить окно"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zväčšiť okno"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Povečaj okno"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увећај прозор"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Förstora fönster"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரத்தைப் பெரிதாக்கு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోను పెద్దది చేయి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ขยายหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereyi büyüt"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Збільшити вікно"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈو بڑی کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phóng to cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放大窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放大視窗"
+          }
+        }
+      }
+    },
     "Escape" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -41585,6 +41866,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法安裝更新。請改從發佈頁面下載。"
+          }
+        }
+      }
+    },
+    "The window %@ in zone %@ was enlarged to fill the screen." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم تكبير النافذة %@ في المنطقة %@ لتملأ الشاشة."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прозорецът %@ в зона %@ беше уголемен до целия екран."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোন %2$@-এর %1$@ উইন্ডোটি পুরো স্ক্রিনজুড়ে বড় করা হয়েছে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La finestra %@ de la zona %@ s’ha ampliat per omplir la pantalla."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno %@ v zóně %@ bylo zvětšeno na celou obrazovku."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vinduet %@ i zone %@ blev forstørret, så det fylder hele skærmen."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Fenster %@ in Zone %@ wurde auf den ganzen Bildschirm vergrößert."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το παράθυρο %@ στη ζώνη %@ μεγεθύνθηκε ώστε να γεμίσει την οθόνη."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ventana %@ de la zona %@ se amplió para llenar la pantalla."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aken %@ tsoonis %@ suurendati kogu ekraani suuruseks."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنجرهٔ %@ در ناحیهٔ %@ تمام صفحه بزرگ شد."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikkuna %@ alueella %@ suurennettiin täyttämään näyttö."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang window na %@ sa zone %@ ay pinalaki para punuin ang screen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fenêtre %@ de la zone %@ a été agrandie pour remplir l’écran."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "החלון %@ באזור %@ הוגדל כך שימלא את המסך."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ज़ोन %2$@ की विंडो %1$@ को पूरी स्क्रीन के आकार में बड़ा किया गया।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prozor %@ u zoni %@ povećan je tako da ispuni zaslon."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A(z) %@ ablak a(z) %@. zónában a teljes képernyőre nagyítva."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jendela %@ di zona %@ diperbesar memenuhi layar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La finestra %@ della zona %@ è stata ingrandita per riempire lo schermo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーン %2$@ のウインドウ%1$@を画面いっぱいに拡大しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ 영역의 %1$@ 윈도우를 화면 전체로 확대했습니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonos %2$@ langas %1$@ padidintas per visą ekraną."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonas %2$@ logs %1$@ palielināts līdz visam ekrānam."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोन %2$@ मधील %1$@ विंडो पूर्ण स्क्रीनवर मोठी केली."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tetingkap %@ dalam zon %@ dibesarkan untuk memenuhi skrin."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vinduet %@ i sone %@ ble forstørret til hele skjermen."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het venster %@ in zone %@ is vergroot tot het hele scherm."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno %@ w strefie %@ powiększono na cały ekran."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A janela %@ na zona %@ foi ampliada para ocupar o ecrã."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A janela %@ na zona %@ foi ampliada para preencher a tela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fereastra %@ din zona %@ a fost mărită pe tot ecranul."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Окно %@ в зоне %@ увеличено на весь экран."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno %@ v zóne %@ bolo zväčšené na celú obrazovku."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okno %@ v območju %@ je bilo povečano čez ves zaslon."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прозор %@ у зони %@ повећан је на цео екран."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fönstret %@ i zon %@ förstorades till hela skärmen."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலம் %2$@-ல் உள்ள %1$@ சாளரம் முழுத் திரைக்கும் பெரிதாக்கப்பட்டது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్ %2$@లోని %1$@ విండోను స్క్రీన్ మొత్తం నిండేలా పెద్దది చేశారు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ขยายหน้าต่าง %@ ในโซน %@ เต็มหน้าจอแล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ numaralı bölgedeki %1$@ penceresi ekranı kaplayacak şekilde büyütüldü."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вікно %@ в зоні %@ збільшено на весь екран."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زون %@ میں ونڈو %@ کو پوری اسکرین کے برابر بڑا کیا گیا۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cửa sổ %@ trong vùng %@ đã được phóng to toàn màn hình."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "区域 %2$@ 中的窗口%1$@已放大至整个屏幕。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "區域 %2$@ 中的視窗%1$@已放大至整個螢幕。"
           }
         }
       }

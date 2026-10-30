@@ -80,6 +80,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
+    /// The last click on the card in front, for the double click that enlarges its window.
+    private var lastFrontClick: (id: CGWindowID, at: Date)?
     /// The island a zone is being chosen in (see `ZonePicking`): it stays open, with no row of windows, whatever the pointer does.
     private var picking: Entry?
     /// Mission Control or App Exposé is open, or the layout editor is: the islands are out of sight until it is closed.
@@ -400,22 +402,29 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             for other in entries.values where other !== entry { hideNotice(other) }
             let number = entry.numbers[change.zone] ?? ""
             // The name as the card of the window carries it (a window added is in its zone by now).
-            let name = change.kind == .added ? coordinator.shownName(of: change.window.id) ?? change.title : change.title
+            let name = change.kind == .removed ? change.title : coordinator.shownName(of: change.window.id) ?? change.title
+            let seconds = change.kind == .enlarged ? StackCoordinator.enlargedTime : Self.noticeTime
             entry.peekEnd?.cancel()
             withAnimation(Self.motion) {
                 entry.model.peeking = false
                 entry.model.windowsZone = nil
-                entry.model.notice = MenuBarIslandModel.notice(change.kind == .added ? String(localized: "The window %@ was placed in zone %@.")
-                                                                                          : String(localized: "The window %@ was removed from zone %@."), name: name, number: number)
+                let format: String
+                switch change.kind {
+                case .added: format = String(localized: "The window %@ was placed in zone %@.")
+                case .removed: format = String(localized: "The window %@ was removed from zone %@.")
+                case .enlarged: format = String(localized: "The window %@ in zone %@ was enlarged to fill the screen.")
+                }
+                entry.model.noticeCloses = change.kind != .enlarged
+                entry.model.notice = MenuBarIslandModel.notice(format, name: name, number: number)
                 entry.model.contentOpacity = 1
             }
             withTransaction(Transaction(animation: nil)) { entry.model.noticeLeft = 1 }
-            DispatchQueue.main.async { withAnimation(.linear(duration: Self.noticeTime)) { entry.model.noticeLeft = 0 } }
+            DispatchQueue.main.async { withAnimation(.linear(duration: seconds)) { entry.model.noticeLeft = 0 } }
             placeShield(of: entry)
             entry.noticeEnd?.cancel()
             let work = DispatchWorkItem { [weak self, weak entry] in if let self, let entry { hideNotice(entry) } }
             entry.noticeEnd = work
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.noticeTime, execute: work)
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work)
         }
     }
 
@@ -429,11 +438,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         placeShield(of: entry)
     }
 
-    /// Whether a notice is on, on any display.
-    var hasNotice: Bool { entries.values.contains { $0.model.notice != nil } }
+    /// Whether a notice that can be closed is on, on any display.
+    var hasClosableNotice: Bool { entries.values.contains { $0.model.notice != nil && $0.model.noticeCloses } }
 
     /// Closes the notice of every display.
     func dismissWindowNotice() { entries.values.forEach(hideNotice) }
+
+    /// Closes the notices that can be closed (the one of an enlarged window cannot: the window goes back to its zone when its time is up).
+    func closeNotice() { entries.values.filter { $0.model.noticeCloses }.forEach(hideNotice) }
 
     private enum NoticeButton { case undo, close }
 
@@ -442,10 +454,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let model = entry.model
         guard model.notice != nil else { return nil }
         let frame = islandFrame(of: entry, open: true), fromTop = frame.maxY - point.y, top = model.barHeight + model.windowsGap
-        let right = frame.midX + model.noticeRowWidth / 2, close = MenuBarIslandModel.noticeButtonHeight, gap = MenuBarIslandModel.noticeGap
+        let right = frame.midX + model.noticeRowWidth / 2, close = MenuBarIslandModel.noticeButtonHeight
         guard fromTop >= top - 4, fromTop <= top + close + 4 else { return nil }
+        guard model.noticeCloses else { return point.x >= right - model.noticeButtonWidth - 4 && point.x <= right + 4 ? .undo : nil }
         if point.x >= right - close - 4 && point.x <= right + 4 { return .close }
-        return point.x >= right - close - gap - model.noticeButtonWidth && point.x < right - close - 4 ? .undo : nil
+        return point.x >= right - close - MenuBarIslandModel.noticeGap - model.noticeButtonWidth && point.x < right - close - 4 ? .undo : nil
     }
 
     // MARK: Hover
@@ -664,7 +677,20 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private func choose(_ card: IslandWindow, in zone: UUID) {
         guard let stack = coordinator.stacks[zone], !stack.isParked else { return }
         if let id = card.windowID {
-            if card.isActive { coordinator.focus(zone: zone) } else { coordinator.clickSelect(id, in: stack) }
+            if card.isActive {
+                coordinator.focus(zone: zone)
+                // Twice in a row on the card in front: its window is enlarged. The island closes, so that the notice of it can open.
+                if let last = lastFrontClick, last.id == id, Date().timeIntervalSince(last.at) <= NSEvent.doubleClickInterval, let ref = stack.refs[id] {
+                    lastFrontClick = nil
+                    coordinator.enlarge(ref)
+                    for entry in entries.values where entry.hovered { entry.cooling = true; setOpen(false, for: entry) }
+                } else {
+                    lastFrontClick = (id, Date())
+                }
+            } else {
+                lastFrontClick = nil
+                coordinator.clickSelect(id, in: stack)
+            }
             followFocus()
         } else {
             openApp(card.bundleID)
