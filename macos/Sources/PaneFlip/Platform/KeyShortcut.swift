@@ -8,4 +8,8 @@ enum KeyShortcut: Equatable {
     case focusZone(ZoneDirection)
     /// Scroll toward the zones beyond a screen's edge.
     case scroll(ScreenEdge)
+    /// Undo the last action on a window.
+    case undoWindow
+    /// Close the message of the island that offers the undo.
+    case closeWindowUndoNotice
 }

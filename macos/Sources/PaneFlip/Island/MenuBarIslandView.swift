@@ -15,7 +15,7 @@ struct MenuBarIslandView: View {
     /// One island that is always fixed to the top of the screen. With the pointer on it, the same black shape reaches down below the menu bar and the
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
-        let m = Self.margin, open = model.expanded, peek = model.peeking && !open, bar = model.barHeight, size = model.openSize
+        let m = Self.margin, open = model.expanded, peek = (model.peeking || model.notice != nil) && !open, bar = model.barHeight, size = model.openSize
         let split = model.notchWidth > 0 && !open   // at a notch the closed island lies in two halves, one each side of it
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
@@ -53,6 +53,26 @@ struct MenuBarIslandView: View {
                     .clipped()
                     .offset(x: 0, y: bar + (peek ? 0 : gh) + model.windowsGap)
                     .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
+                if let text = model.notice, peek {
+                    let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
+                    HStack(spacing: MenuBarIslandModel.noticeGap) {
+                        Text(text).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(.white).lineLimit(1).truncationMode(.tail)
+                            .frame(width: model.noticeTextWidth, alignment: .leading)
+                        Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
+                            .frame(width: model.noticeButtonWidth, height: height)
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
+                        Image(systemName: "xmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white)
+                            .frame(width: height, height: height)
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(0.18)))
+                            .overlay {
+                                // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
+                                Circle().inset(by: 1).trim(from: 1 - model.noticeLeft, to: 1).rotation(.degrees(-90))
+                                    .stroke(AppAccent.color, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                            }
+                    }
+                    .offset(x: 0, y: bar + model.windowsGap)
+                    .opacity(model.contentOpacity)
+                }
                 if model.pickedID != nil {
                     Text(verbatim: model.pickingNote)
                         .font(Font(MenuBarIslandModel.pickingNoteFont))

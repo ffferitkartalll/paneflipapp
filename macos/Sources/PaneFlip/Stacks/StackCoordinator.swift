@@ -49,6 +49,8 @@ final class StackCoordinator {
     var onWindowScrub: ((UUID, CGFloat) -> Void)?
     /// A window of a zone is being stepped to (a shortcut, the wheel): the island shows the zone's windows for a moment.
     var onWindowStep: ((UUID) -> Void)?
+    /// A window was added to a zone or taken out of one by the person: the island tells it, with a button to undo it.
+    var onWindowChange: ((WindowChange) -> Void)?
     /// Slides windows when a card of the island is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
         didSet { carousel?.onFree = { [weak self] in
@@ -175,6 +177,8 @@ final class StackCoordinator {
             return
         }
         let home = memory.home(ofWindow: ref.id)
+        let before = stack(containing: ref.id)?.id
+        if before != zoneID { record(.init(kind: .added, window: ref, title: title(of: ref), zone: zoneID, zoneBefore: before, frameBefore: before == nil ? windows.frame(of: ref) : nil)) }
         unsnap(window: ref.id)
         pulledOut.remove(ref.id)
         displaced[ref.id] = nil
@@ -630,6 +634,7 @@ final class StackCoordinator {
         let size = originalSizes.removeValue(forKey: ref.id)
         let wasHeld = stack(containing: ref.id) != nil
         let frame = windows.frame(of: ref)
+        recordRemoval(of: ref)
         unsnap(window: ref.id)   // lets go of the glide that brought the window in, so this comes after it
         guard settings.values.restoreSizeOnLeave, wasHeld, let size, let frame else { return }
         let share = frame.width > 0 ? min(max((pointer.x - frame.minX) / frame.width, 0), 1) : 0
@@ -642,11 +647,60 @@ final class StackCoordinator {
     func remove(_ ref: WindowRef, centredIn area: CGRect) {
         let before = originalSizes.removeValue(forKey: ref.id)
         let current = windows.frame(of: ref)?.size
+        recordRemoval(of: ref)
         unsnap(window: ref.id)
         let size = (settings.values.restoreSizeOnLeave ? before : nil) ?? current ?? area.size
         let fitted = CGSize(width: min(size.width, area.width), height: min(size.height, area.height))
         let target = CGRect(x: area.midX - fitted.width / 2, y: area.midY - fitted.height / 2, width: fitted.width, height: fitted.height)
         if let glide { glide.glide(ref, to: target) } else { windows.setFrame(target, of: ref) }
+    }
+
+    // MARK: Undo
+
+    /// The changes the person made, the last one at the end; a few are kept.
+    private var changes: [WindowChange] = []
+    private static let mostChanges = 20
+    private var undoing = false
+
+    private func record(_ change: WindowChange) {
+        guard !undoing, !placementOnly() else { return }
+        changes.append(change)
+        if changes.count > Self.mostChanges { changes.removeFirst() }
+        onWindowChange?(change)
+    }
+
+    private func title(of ref: WindowRef) -> String { windows.title(of: ref) ?? apps.app(pid: ref.pid)?.name ?? "" }
+
+    /// The name the island's card of a window in a zone carries: the app's name, plus the title when the zone holds several windows of the app.
+    func shownName(of id: CGWindowID) -> String? {
+        stack(containing: id)?.tabs.first { $0.id == id }.map { $0.displayName.isEmpty ? $0.appName : $0.displayName }
+    }
+
+    private func recordRemoval(of ref: WindowRef) {
+        guard let zone = stack(containing: ref.id)?.id else { return }
+        record(.init(kind: .removed, window: ref, title: shownName(of: ref.id) ?? title(of: ref), zone: zone, zoneBefore: zone, frameBefore: nil))
+    }
+
+    /// Undoes the last change that can still be undone (a window that is gone, or a zone that is, is skipped). False when there is none.
+    @discardableResult
+    func undoLast() -> Bool {
+        while let change = changes.popLast() {
+            guard windows.frame(of: change.window) != nil else { continue }
+            undoing = true
+            defer { undoing = false }
+            if let zone = change.zoneBefore, stacks[zone] != nil {
+                snap(change.window, into: zone)
+            } else if change.kind == .added, change.zoneBefore == nil {
+                unsnap(window: change.window.id)
+                if let frame = change.frameBefore {
+                    if let glide { glide.glide(change.window, to: frame) } else { windows.setFrame(frame, of: change.window) }
+                }
+            } else {
+                continue
+            }
+            return true
+        }
+        return false
     }
 
     /// Takes a window out of its zone for good (the window itself stays open).

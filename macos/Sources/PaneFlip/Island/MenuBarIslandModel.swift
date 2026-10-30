@@ -36,6 +36,10 @@ final class MenuBarIslandModel {
     var windows: [IslandWindow] = []
     /// The island has grown only to show the windows of `windowsZone`, with no picture of the zones, because a window of the zone was stepped to (see `MenuBarIsland.peekWindows`).
     var peeking = false
+    /// What was just done to a zone, told in one line under the bar with a button to undo it, the island otherwise at rest (see `MenuBarIsland.showNotice`).
+    var notice: AttributedString?
+    /// How much of the time of the notice is left (1 to 0): the ring round its close button.
+    var noticeLeft: CGFloat = 1
     /// The width of the display, at most the width of the island.
     var displayWidth: CGFloat = 0
     /// How far the fingers (or the wheel's turn) have led the windows from the one in front, in windows: positive brings the ones before it in.
@@ -134,8 +138,41 @@ extension MenuBarIslandModel {
         return ceil(NSString(string: pickingNote).boundingRect(with: box, options: .usesLineFragmentOrigin, attributes: [.font: Self.pickingNoteFont]).height)
     }
 
+    /// The line of the notice: its text, the button that undoes it and the one that closes it (a square with only an icon).
+    static var noticeFont: NSFont { NSFont.menuBarFont(ofSize: 0) }
+    static let noticeGap: CGFloat = 8, noticeButtonPadding: CGFloat = 10, noticeButtonHeight: CGFloat = 22, noticeRadius: CGFloat = 10
+    var noticeButtonTitle: String { String(localized: "Undo") }
+    var noticeButtonWidth: CGFloat { ceil(NSString(string: noticeButtonTitle).size(withAttributes: [.font: Self.noticeFont]).width) + 2 * Self.noticeButtonPadding }
+    /// The room the text has at most: the display less the side room and the two buttons.
+    private var noticeTextRoom: CGFloat { max(displayWidth - 2 * windowsGap - 2 * Self.noticeGap - noticeButtonWidth - Self.noticeButtonHeight, 1) }
+    var noticeTextWidth: CGFloat {
+        guard let notice else { return 0 }
+        // The name is in bold: each run is measured in its own type.
+        let bold = NSFontManager.shared.convert(Self.noticeFont, toHaveTrait: .boldFontMask)
+        let width = notice.runs.reduce(CGFloat(0)) { sum, run in
+            let font = run.inlinePresentationIntent == .stronglyEmphasized ? bold : Self.noticeFont
+            return sum + NSString(string: String(notice[run.range].characters)).size(withAttributes: [.font: font]).width
+        }
+        return min(ceil(width), noticeTextRoom)
+    }
+    /// The line of a notice: `format` with the name of the window in bold and the zone's number.
+    static func notice(_ format: String, name: String, number: String) -> AttributedString {
+        let mark = "\u{1}", text = String(format: format, mark, number)
+        guard let at = text.range(of: mark) else { return AttributedString(text) }
+        var line = AttributedString(String(text[..<at.lowerBound]))
+        var bold = AttributedString(name)
+        bold.inlinePresentationIntent = .stronglyEmphasized
+        return line + bold + AttributedString(String(text[at.upperBound...]))
+    }
+    var noticeRowWidth: CGFloat { noticeTextWidth + 2 * Self.noticeGap + noticeButtonWidth + Self.noticeButtonHeight }
+
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize {
+        // A notice: the picture stays as it is at rest, and the island holds one line under it; it is no wider than the closed island unless the line needs more.
+        if notice != nil {
+            return CGSize(width: max(noticeRowWidth + 2 * windowsGap, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin),
+                          height: openHeight(picture: 0, windows: Self.noticeButtonHeight))
+        }
         let width = windowsSpan
         return CGSize(width: peeking ? max(width, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin) : width,
                       height: openHeight(picture: peeking ? 0 : glyph.size.height * openZoom, windows: windowsHeight))

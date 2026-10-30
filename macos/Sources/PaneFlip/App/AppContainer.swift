@@ -138,7 +138,8 @@ final class AppContainer {
         let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
-                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut)]
+                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut)]
+            if island.hasNotice { all.append((.closeWindowUndoNotice, v.closeWindowUndoNoticeShortcut)) }
             if v.zoneNavigationEnabled {
                 all += [(.focusZone(.up), v.zoneUpShortcut), (.focusZone(.left), v.zoneLeftShortcut),
                         (.focusZone(.down), v.zoneDownShortcut), (.focusZone(.right), v.zoneRightShortcut)]
@@ -194,6 +195,7 @@ final class AppContainer {
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
+        coordinator.onWindowChange = { [weak island] in island?.showNotice($0) }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
@@ -228,6 +230,8 @@ final class AppContainer {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)
                 case .scroll(let edge): scroller.scroll(toward: edge)
                 case .focusZone(let direction): coordinator.focusZone(toward: direction)
+                case .undoWindow: coordinator.undoLast(); island.dismissWindowNotice()
+                case .closeWindowUndoNotice: island.dismissWindowNotice()
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
