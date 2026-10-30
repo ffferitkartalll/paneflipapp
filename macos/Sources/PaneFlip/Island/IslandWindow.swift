@@ -17,6 +17,13 @@ struct IslandWindow: Identifiable, Equatable {
     /// Not a window: the grey card with a plus that stands where a dragged window would be put down.
     var isPlaceholder = false
 
+    /// The buttons the card shows under the mouse: a window has them all; an app that has quit or has no window shows two (the first opens the app, the last takes it
+    /// out of the zone); one that is hidden or minimized, none.
+    var actions: [IslandCardAction] {
+        if windowID != nil { return IslandCardAction.allCases }
+        return absence == .notRunning || absence == .closed ? [.quit, .remove] : []
+    }
+
     var id: String { isPlaceholder ? "drop" : windowID.map { "w\($0)" } ?? "a\(bundleID)" }
 
     static let placeholder = IslandWindow(windowID: nil, bundleID: "", name: "",

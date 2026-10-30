@@ -21,6 +21,9 @@ protocol WindowSystem {
     func title(of ref: WindowRef) -> String?
     func isMinimized(_ ref: WindowRef) -> Bool
     func raise(_ ref: WindowRef)
+    /// Closes the window (as its red button does) or minimizes it into the Dock.
+    func close(_ ref: WindowRef)
+    func minimize(_ ref: WindowRef)
 
     /// Numbers of every window on the system (closed-but-hidden ones included) and of those on screen, from one system call.
     func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>)

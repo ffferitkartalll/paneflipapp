@@ -90,7 +90,7 @@ final class AppContainer {
         let navigation = SettingsNavigation()
         let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, iconFont: iconFont, settings: settings, windows: windows)
         let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
-                                   memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) })
+                                   memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })
         engine.add(presenter: island)
         coordinator.onActivity = { [weak island] _ in island?.windowsDidChange() }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })

@@ -14,4 +14,7 @@ final class FakeApps: AppCatalog {
     func icon(bundleID: String) -> NSImage? { nil }
     var launched: [String] = []
     func launch(bundleID: String) { launched.append(bundleID) }
+    private(set) var quitPIDs: [pid_t] = []
+    func hide(pid: pid_t) { hidden.insert(pid) }
+    func quit(pid: pid_t) { quitPIDs.append(pid) }
 }

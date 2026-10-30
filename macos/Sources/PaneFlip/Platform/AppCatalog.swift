@@ -17,4 +17,7 @@ protocol AppCatalog {
     /// Starts an app that is not running, or asks a running one to open a window again (as a click on its Dock icon does),
     /// without bringing it to the front.
     func launch(bundleID: String)
+    /// Hides the app (Command+H) or asks it to quit (Command+Q).
+    func hide(pid: pid_t)
+    func quit(pid: pid_t)
 }

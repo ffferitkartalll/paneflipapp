@@ -373,6 +373,25 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator.stack(containing: 2), "the enlargement is gone from the list: the next one is the adding of the window")
     }
 
+    func testTheButtonsOfACardCloseMinimizeHideAndQuit() {
+        let zone = UUID(), apps = FakeApps()
+        coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1), into: zone)
+        let ref = coordinator.stacks[zone]!.refs[1]!
+        coordinator.close(ref)
+        coordinator.minimize(ref)
+        coordinator.hide(ref)
+        coordinator.quit(ref)
+        XCTAssertEqual(windows.closed, [1])
+        XCTAssertTrue(windows.minimized.contains(1))
+        XCTAssertTrue(apps.hidden.contains(ref.pid))
+        XCTAssertEqual(apps.quitPIDs, [ref.pid])
+        coordinator.usableAreaOf = { _ in CGRect(x: 0, y: 0, width: 1000, height: 800) }
+        coordinator.removeFromZone(ref)
+        XCTAssertNil(coordinator.stack(containing: 1), "the delete button takes the window out of its zone")
+    }
+
     func testSnapRemembersTheWindowAndUnsnapForgetsIt() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
