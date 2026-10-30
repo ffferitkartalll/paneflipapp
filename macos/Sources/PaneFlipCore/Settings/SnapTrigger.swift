@@ -35,6 +35,8 @@ public struct SnapTrigger: Codable, Equatable {
     public static let undoWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 51, name: "Delete")])
     /// Close the message that tells what was undone-able: Control+Option+Escape.
     public static let closeWindowUndoNotice = SnapTrigger(keys: [leftOption, leftControl, Key(code: 53, name: "Escape")])
+    /// Enlarge the focused window of a zone to the usable area of its screen for fifteen seconds: Control+Option+Return.
+    public static let enlargeWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 36, name: "Return")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
     /// Held while typing the number of a zone (or D) to send the focused window there.

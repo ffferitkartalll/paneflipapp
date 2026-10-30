@@ -7,11 +7,11 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight, undoWindow, closeWindowUndoNotice }
+    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight, undoWindow, closeWindowUndoNotice, enlargeWindow }
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
-                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut]
+                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut]
 
     var body: some View {
         Form {
@@ -25,6 +25,7 @@ struct ShortcutsPane: View {
             Section("Windows in a zone") {
                 chordRow(.nextWindow, title: "Next window", path: \.nextWindowShortcut, standard: .nextWindow)
                 chordRow(.previousWindow, title: "Previous window", path: \.previousWindowShortcut, standard: .previousWindow)
+                chordRow(.enlargeWindow, title: "Enlarge window", path: \.enlargeWindowShortcut, standard: .enlargeWindow)
                 row(.windowScroll, title: "Hold while scrolling",
                     detail: "Hold these keys and scroll over a zone with the mouse wheel to move through its windows. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.windowScrollKeys, standard: .windowScroll) { settings.values.windowScrollKeys = $0 }

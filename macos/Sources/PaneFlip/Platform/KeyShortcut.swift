@@ -10,6 +10,8 @@ enum KeyShortcut: Equatable {
     case scroll(ScreenEdge)
     /// Undo the last action on a window.
     case undoWindow
+    /// Enlarge the focused window of a zone for a while.
+    case enlargeWindow
     /// Close the message of the island that offers the undo.
     case closeWindowUndoNotice
 }

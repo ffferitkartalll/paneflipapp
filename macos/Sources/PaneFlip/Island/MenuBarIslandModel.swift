@@ -40,6 +40,8 @@ final class MenuBarIslandModel {
     var notice: AttributedString?
     /// How much of the time of the notice is left (1 to 0): the ring round its close button.
     var noticeLeft: CGFloat = 1
+    /// The notice can be closed (it has a close button, and the ring runs round that); else the ring runs round the Undo button.
+    var noticeCloses = true
     /// The width of the display, at most the width of the island.
     var displayWidth: CGFloat = 0
     /// How far the fingers (or the wheel's turn) have led the windows from the one in front, in windows: positive brings the ones before it in.
@@ -144,7 +146,7 @@ extension MenuBarIslandModel {
     var noticeButtonTitle: String { String(localized: "Undo") }
     var noticeButtonWidth: CGFloat { ceil(NSString(string: noticeButtonTitle).size(withAttributes: [.font: Self.noticeFont]).width) + 2 * Self.noticeButtonPadding }
     /// The room the text has at most: the display less the side room and the two buttons.
-    private var noticeTextRoom: CGFloat { max(displayWidth - 2 * windowsGap - 2 * Self.noticeGap - noticeButtonWidth - Self.noticeButtonHeight, 1) }
+    private var noticeTextRoom: CGFloat { max(displayWidth - 2 * windowsGap - Self.noticeGap - noticeButtonWidth - noticeCloseWidth, 1) }
     var noticeTextWidth: CGFloat {
         guard let notice else { return 0 }
         // The name is in bold: each run is measured in its own type.
@@ -164,7 +166,9 @@ extension MenuBarIslandModel {
         bold.inlinePresentationIntent = .stronglyEmphasized
         return line + bold + AttributedString(String(text[at.upperBound...]))
     }
-    var noticeRowWidth: CGFloat { noticeTextWidth + 2 * Self.noticeGap + noticeButtonWidth + Self.noticeButtonHeight }
+    /// The room the close button takes, with the gap before it.
+    var noticeCloseWidth: CGFloat { noticeCloses ? Self.noticeButtonHeight + Self.noticeGap : 0 }
+    var noticeRowWidth: CGFloat { noticeTextWidth + Self.noticeGap + noticeButtonWidth + noticeCloseWidth }
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize {
