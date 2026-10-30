@@ -119,6 +119,21 @@ final class AXWindowSystem: WindowSystem {
         AXUIElementSetAttributeValue(ref.element, kAXFocusedAttribute as CFString, kCFBooleanTrue)
     }
 
+    /// Where the window's own buttons are pressed: an app that is slow to answer must not hold the main thread.
+    private static let actionQueue = DispatchQueue(label: "PaneFlip.windowAction", qos: .userInitiated, attributes: .concurrent)
+
+    func close(_ ref: WindowRef) {
+        Self.actionQueue.async {
+            var button: CFTypeRef?
+            guard AXUIElementCopyAttributeValue(ref.element, kAXCloseButtonAttribute as CFString, &button) == .success, let button else { return }
+            AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString)
+        }
+    }
+
+    func minimize(_ ref: WindowRef) {
+        Self.actionQueue.async { AXUIElementSetAttributeValue(ref.element, kAXMinimizedAttribute as CFString, kCFBooleanTrue) }
+    }
+
     // MARK: System window list
 
     func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>) {

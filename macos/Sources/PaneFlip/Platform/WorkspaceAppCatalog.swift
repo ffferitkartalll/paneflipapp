@@ -47,6 +47,10 @@ final class WorkspaceAppCatalog: AppCatalog {
         NSWorkspace.shared.openApplication(at: url, configuration: configuration)
     }
 
+    func hide(pid: pid_t) { NSRunningApplication(processIdentifier: pid)?.hide() }
+
+    func quit(pid: pid_t) { NSRunningApplication(processIdentifier: pid)?.terminate() }
+
     private func info(_ a: NSRunningApplication) -> AppInfo {
         AppInfo(pid: a.processIdentifier, bundleID: a.bundleIdentifier ?? "", name: a.localizedName ?? "?")
     }

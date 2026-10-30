@@ -681,6 +681,19 @@ final class StackCoordinator {
         stack(containing: id)?.tabs.first { $0.id == id }.map { $0.displayName.isEmpty ? $0.appName : $0.displayName }
     }
 
+    // MARK: Closing, hiding, minimizing and quitting (the buttons of a card in the island)
+
+    func close(_ ref: WindowRef) { windows.close(ref) }
+    func minimize(_ ref: WindowRef) { windows.minimize(ref) }
+    func hide(_ ref: WindowRef) { apps.hide(pid: ref.pid) }
+    func quit(_ ref: WindowRef) { apps.quit(pid: ref.pid) }
+
+    /// The card's window leaves its zone and stands in the middle of its screen (as by the key that takes a window out); the window itself stays open.
+    func removeFromZone(_ ref: WindowRef) {
+        guard let stack = stack(containing: ref.id), let area = usableAreaOf(stack.rect) else { return }
+        remove(ref, centredIn: area)
+    }
+
     // MARK: Enlarging
 
     /// How long a window stays enlarged: it goes back to its zone then, whatever else happens.

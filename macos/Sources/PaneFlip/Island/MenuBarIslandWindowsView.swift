@@ -49,6 +49,25 @@ struct MenuBarIslandWindowsView: View {
         .lineLimit(1)
     }
 
+    /// The buttons of the card the mouse is over (nothing on the others, and nothing while a card is carried). They are drawn in the cards' own pictures, in both layers
+    /// (`dark`: the layer inside the lit frame), so that they move exactly as the cards do and change from light to dark as the frame passes, as the app's picture does.
+    private func actions(of window: IslandWindow, in size: CGSize, dark: Bool) -> some View {
+        let shown = window.id == model.hoveredCard && !window.actions.isEmpty && model.carriedCard == nil
+        return ZStack(alignment: .topLeading) {
+            ForEach(IslandCardAction.rects(in: size, among: window.actions), id: \.action) { item in
+                // The symbol is fitted into a box in the middle of the button: the symbols differ in their own bearings, a font size would not centre them.
+                Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                    .frame(width: item.rect.width * 0.5, height: item.rect.height * 0.5)
+                    .frame(width: item.rect.width, height: item.rect.height)
+                    .background(Circle().fill(dark ? Color.black.opacity(0.6) : Color.white.opacity(0.28)))
+                    .offset(x: item.rect.minX, y: item.rect.minY)
+            }
+        }
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
+        .opacity(shown ? 1 : 0)
+        .animation(.easeOut(duration: 0.12), value: shown)   // only its own fade: the cards' motion is not touched
+    }
+
     /// The card the mouse carries lies above the others.
     private func lifted(_ card: some View, _ window: IslandWindow) -> some View {
         card.zIndex(model.liftedCard == window.id ? 1 : 0)
@@ -86,14 +105,14 @@ struct MenuBarIslandWindowsView: View {
                 // The title and the line under the picture are in the cell of the card, in the same row, so that they move exactly as the card does.
                 row(height: size.height + model.windowsGap + model.captionHeight) { window in
                     AnyView(VStack(spacing: model.windowsGap) {
-                        picture(window, .white.opacity(0.9)).frame(height: size.height)
+                        ZStack { picture(window, .white.opacity(0.9)); actions(of: window, in: size, dark: false) }.frame(height: size.height)
                         caption(window)
                     })
                 }
             }
             .mask { ZStack(alignment: .top) { Rectangle(); frame.frame(width: lit, height: size.height).offset(x: shift).blendMode(.destinationOut) }.compositingGroup() }
             // Inside it: the pictures, dark.
-            row { picture($0, AppAccent.ink) }
+            row { window in AnyView(ZStack { picture(window, AppAccent.ink); actions(of: window, in: size, dark: true) }) }
                 .mask { frame.frame(width: lit, height: size.height).offset(x: shift) }
             frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: lit, height: size.height).offset(x: shift)
         }

@@ -51,9 +51,9 @@ struct MenuBarIslandView: View {
                 MenuBarIslandWindowsView(model: model)
                     .frame(width: model.windowsSpan, height: model.windowsHeight, alignment: .top)
                     .clipped()
-                    .offset(x: 0, y: bar + (peek ? 0 : gh) + model.windowsGap)
+                    .offset(x: 0, y: model.windowsTop)
                     .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
-                if let text = model.notice, peek {
+                if let text = model.notice {
                     let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
                         Text(text).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(.white).lineLimit(1).truncationMode(.tail)
@@ -79,7 +79,7 @@ struct MenuBarIslandView: View {
                                 }
                         }
                     }
-                    .offset(x: 0, y: bar + model.windowsGap)
+                    .offset(x: 0, y: model.noticeTop)
                     .opacity(model.contentOpacity)
                 }
                 if model.pickedID != nil {

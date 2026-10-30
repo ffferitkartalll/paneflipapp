@@ -113,6 +113,7 @@ targets:
       - path: Sources/PaneFlip/Island/MenuBarIslandWindowsView.swift
       - path: Sources/PaneFlip/App/AppAccent.swift
       - path: Sources/PaneFlip/Island/IslandWindow.swift
+      - path: Sources/PaneFlip/Island/IslandCardAction.swift
       - path: Sources/PaneFlip/Island/IslandShiftedRow.swift
       - path: Sources/PaneFlip/Island/IslandCardsLayout.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift
