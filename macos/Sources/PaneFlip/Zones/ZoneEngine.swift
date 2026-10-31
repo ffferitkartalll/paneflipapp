@@ -14,6 +14,7 @@ final class ZoneEngine: ZoneRefreshing {
     private let restorer: WindowRestorer
     private let screens: ScreenProviding
     private let windows: WindowSystem
+    private let parking: ParkingDisplaying
     private var presenters: [ZonePresenting] = []
     private var lastSignatures: [String] = []
     /// The displays as seen at the last look (see `refreshZones`): for those who need them as often and must not ask the Dock again.
@@ -24,7 +25,8 @@ final class ZoneEngine: ZoneRefreshing {
     private var restoreBursts: [pid_t: Int] = [:]
 
     init(planner: ZonePlanner, coordinator: StackCoordinator, restorer: WindowRestorer,
-         screens: ScreenProviding, windows: WindowSystem) {
+         screens: ScreenProviding, windows: WindowSystem, parking: ParkingDisplaying) {
+        self.parking = parking
         self.planner = planner
         self.coordinator = coordinator
         self.restorer = restorer
@@ -84,6 +86,10 @@ final class ZoneEngine: ZoneRefreshing {
     func refreshZones() {
         guard !waitingForDock else { return }
         let current = screens.screens()
+        // The hidden displays the windows out of sight wait on: there while screens beyond the edges are wanted, one for each real display.
+        let values = planner.settings.values
+        parking.update(enabled: values.placementEnabled && values.overflowZonesEnabled,
+                       besides: current.map { (id: $0.directID, frame: screens.flip($0.cocoaFrame)) })
         lastSignatures = current.map(\.layoutSignature)
         lastScreens = current
         displayHandler?.desktopsDidChange(on: current)

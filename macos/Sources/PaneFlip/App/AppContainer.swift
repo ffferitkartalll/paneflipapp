@@ -35,7 +35,8 @@ final class AppContainer {
         let repository = LayoutRepository(store: documents)
         let memory = StackMemory(store: documents)
 
-        let screens = CGSScreenProvider()
+        let parking = VirtualParkingDisplay()
+        let screens = CGSScreenProvider(hiddenDisplays: { parking.displayIDs })
         let windows = AXWindowSystem(screens: screens)
         let apps = WorkspaceAppCatalog()
         let keys = HardwareKeyState()
@@ -78,9 +79,10 @@ final class AppContainer {
         let restoreQueue = DispatchQueue(label: "PaneFlip.restore", qos: .userInitiated)
         restorer.background = { restoreQueue.async(execute: $0) }
         let viewport = StripViewport()
-        let planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
+        var planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
+        planner.parkingArea = { parking.area(forDisplay: $0.directID) }
         let engine = ZoneEngine(planner: planner,
-                                coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)
+                                coordinator: coordinator, restorer: restorer, screens: screens, windows: windows, parking: parking)
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
         engine.displayHandler = layouts
