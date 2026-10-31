@@ -65,7 +65,7 @@ struct DisplaysPane: View {
                 Label("The displays do not form a staircase yet.", systemImage: "exclamationmark.triangle.fill")
                     .foregroundStyle(.orange)
                 if stairs.steps.contains(.level) {
-                    Text("Some displays are level with the one to their left, so a zone beyond the edge of one lands on the other.")
+                    Text("Some displays are level with the one to their left, so a screen beyond the edge of one lands on the other.")
                 }
                 if stairs.steps.contains(.down) {
                     Text("Some displays lie lower than the one to their left. The staircase must go up to the right.")

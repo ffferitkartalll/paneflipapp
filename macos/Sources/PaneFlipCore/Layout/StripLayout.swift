@@ -26,7 +26,7 @@ public struct StripLayout: Equatable {
     public var totalWidth: Double { 1 + leadingWidth + trailingWidth }
 
     /// The offsets (in screen widths, to the right of the screen's own place) where a view of one screen width rests at a screen: the
-    /// screen's own layout and the far edge of each area, on both sides, from the left to the right. What the layout editor goes by.
+    /// screen's own layout and the far edge of each area, on both sides, from the left to the right. What scrolling and the layout editor go by.
     public var areaRests: [Double] {
         var offsets: Set<Double> = [0]
         var reached = 0.0
@@ -40,36 +40,6 @@ public struct StripLayout: Equatable {
     public func nearestAreaRestIndex(to offset: Double) -> Int {
         let rests = areaRests
         return rests.indices.min { abs(rests[$0] - offset) < abs(rests[$1] - offset) } ?? 0
-    }
-
-    /// Every place across the strip where a zone ends and the next begins, or the strip ends, in screen widths from the screen's left
-    /// edge: the vertical lines between zones, on the screen and in all the areas.
-    public var zoneEdges: [Double] {
-        var edges: Set<Double> = []
-        func add(_ node: LayoutNode, from start: Double, width: Double) {
-            // Laid out in thousandths of a screen, so that the arithmetic of the splits stays far from rounding.
-            for zone in node.zones(in: CGRect(x: start * 1000, y: 0, width: width * 1000, height: 1000)) {
-                edges.insert((zone.rect.minX * 1000).rounded() / 1_000_000)
-                edges.insert((zone.rect.maxX * 1000).rounded() / 1_000_000)
-            }
-        }
-        var reached = 0.0
-        for area in leading { reached += area.width; add(area.root, from: -reached, width: area.width) }
-        add(root, from: 0, width: 1)
-        reached = 1
-        for area in trailing { add(area.root, from: reached, width: area.width); reached += area.width }
-        return edges.sorted()
-    }
-
-    /// The offsets where scrolling comes to rest: whenever a line between zones (or an end of the strip) is at the left or the right
-    /// edge of the screen, within how far the strip goes, from the left to the right. The screen's own layout is one of them.
-    public var rests: [Double] {
-        let range = -leadingWidth - 1e-9 ... trailingWidth + 1e-9
-        var offsets: Set<Double> = [0]
-        for edge in zoneEdges {
-            for offset in [edge, edge - 1] where range.contains(offset) { offsets.insert((offset * 1_000_000).rounded() / 1_000_000) }
-        }
-        return offsets.sorted()
     }
 
     /// The area that a view resting at `offset` is about: the one whose far edge it stands at; nil for the screen's own layout.

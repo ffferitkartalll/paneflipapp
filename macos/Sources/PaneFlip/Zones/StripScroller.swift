@@ -276,7 +276,7 @@ final class StripScroller {
         guard let placed = geometry.zones(offset: offset).first(where: { $0.id == id }), !placed.isOnScreen else { return nil }
         let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
         let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
-        // The nearest rest that shows the whole zone, else the nearest that shows any of it: a line between zones is a rest too now.
+        // The nearest rest that shows the whole zone, else the nearest that shows any of it.
         let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
         let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
         return (whole ?? shown.first).map { (edge, $0.0) }

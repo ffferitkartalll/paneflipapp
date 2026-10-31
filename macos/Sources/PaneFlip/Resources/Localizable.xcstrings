@@ -3092,287 +3092,6 @@
         }
       }
     },
-    "Also to zones beyond the screen's edges" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "وإلى المناطق خارج حواف الشاشة أيضًا"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "И към зони извън краищата на екрана"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "স্ক্রিনের প্রান্তের বাইরের জোনেও"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I també a zones fora de les vores de la pantalla"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I do zón za okraji obrazovky"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Også til zoner uden for skærmens kanter"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auch zu Zonen jenseits der Bildschirmränder"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Και σε ζώνες πέρα από τα άκρα της οθόνης"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "También a zonas más allá de los bordes de la pantalla"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ka ekraani servadest kaugemale jäävatesse tsoonidesse"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "به ناحیه‌های فراتر از لبه‌های صفحه‌نمایش هم"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Myös näytön reunojen taakse jääville alueille"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pati sa mga zone sa labas ng mga gilid ng screen"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aussi vers les zones au-delà des bords de l'écran"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "גם לאזורים מעבר לקצות המסך"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीन के किनारों के पार के ज़ोन में भी"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I na zone izvan rubova zaslona"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A képernyő szélein túli zónákra is"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Juga ke zona di luar tepi layar"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anche verso le zone oltre i bordi dello schermo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "画面の端の外にあるゾーンへも"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "화면 가장자리 밖의 영역으로도"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Taip pat į zonas už ekrano kraštų"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arī uz zonām aiz ekrāna malām"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीनच्या कडांपलीकडील झोनमध्येही"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Juga ke zon di luar tepi skrin"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Også til soner utenfor skjermens kanter"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ook naar zones voorbij de schermranden"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Także do stref poza krawędziami ekranu"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Também para zonas além das margens do ecrã"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Também para zonas além das bordas da tela"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Și spre zone dincolo de marginile ecranului"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "И в зоны за краями экрана"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aj do zón za okrajmi obrazovky"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tudi na območja zunaj robov zaslona"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "И на зоне изван ивица екрана"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Även till zoner utanför skärmens kanter"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "திரையின் விளிம்புகளுக்கு அப்பால் உள்ள மண்டலங்களுக்கும்"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "స్క్రీన్ అంచులకు ఆవల ఉన్న జోన్‌లకు కూడా"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ไปยังโซนที่อยู่นอกขอบหน้าจอด้วย"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ekran ötesindeki bölgelere de"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "І до зон за краями екрана"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اسکرین کے کناروں سے آگے کے زونز میں بھی"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cả sang các vùng ngoài mép màn hình"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "也可移到屏幕边缘之外的区域"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "也可移到螢幕邊緣之外的區域"
-          }
-        }
-      }
-    },
     "An app opens in the zone you choose for it. Apps of a zone appear in the island in the order shown here; drag them by the handle to change it." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15456,283 +15175,283 @@
         }
       }
     },
-    "Hold these keys and scroll over the screen with the mouse wheel to slide to the zones beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab." : {
+    "Hold these keys and scroll over the screen with the mouse wheel to slide to the screens beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "اضغط باستمرار على هذه المفاتيح ومرّر فوق الشاشة بعجلة الماوس للانتقال إلى المناطق خارج حدودها. يعمل الإصبعان أيضًا عند اختيار «المفاتيح وإصبعان» في علامة تبويب لوحة التتبع."
+            "value" : "اضغط مع الاستمرار على هذه المفاتيح ومرّر بعجلة الفأرة فوق الشاشة للانتقال إلى الشاشات الواقعة خارج حوافها. يعمل الإصبعان أيضًا عند اختيار «المفاتيح وإصبعان» في علامة تبويب لوحة التتبع."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Задръжте тези клавиши и превъртайте над екрана с колелцето на мишката, за да преминете към зоните извън краищата му. Това става и с два пръста, когато в раздел „Тракпад“ е избрано „Клавиши и два пръста“."
+            "value" : "Задръжте тези клавиши и превъртете с колелцето на мишката над екрана, за да преминете към екраните извън краищата му. Това става и с два пръста, когато в раздел „Тракпад“ е избрано „Клавиши и два пръста“."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "এই কীগুলো চেপে ধরে মাউসের চাকা দিয়ে স্ক্রিনের ওপর স্ক্রল করলে এর প্রান্তের বাইরের জোনগুলোতে স্লাইড করা যায়। ট্র্যাকপ্যাড ট্যাবে “কী ও দুই আঙুল” বেছে নিলে দুই আঙুলেও এটি হয়।"
+            "value" : "এই কীগুলো চেপে ধরে স্ক্রিনের ওপর মাউসের চাকা ঘুরিয়ে এর প্রান্তের বাইরের স্ক্রিনগুলোতে যান। ট্র্যাকপ্যাড ট্যাবে “কী ও দুই আঙুল” বেছে নিলে দুই আঙুলেও এটি হয়।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantén premudes aquestes tecles i desplaça't per sobre de la pantalla amb la roda del ratolí per anar a les zones més enllà dels seus límits. Amb dos dits també funciona si a la pestanya Trackpad està triat «Tecles i dos dits»."
+            "value" : "Manté premudes aquestes tecles i desplaça't amb la roda del ratolí sobre la pantalla per lliscar cap a les pantalles més enllà de les seves vores. Amb dos dits també funciona si a la pestanya Trackpad està triat «Tecles i dos dits»."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Podržte tyto klávesy a kolečkem myši posouvejte nad obrazovkou, abyste přešli do zón za jejími okraji. Dvěma prsty to funguje také, když je na kartě Trackpad zvoleno „Klávesy a dva prsty“."
+            "value" : "Podržte tyto klávesy a posouvejte kolečkem myši nad obrazovkou, abyste se přesunuli na obrazovky za jejími okraji. Dvěma prsty to funguje také, když je na kartě Trackpad zvoleno „Klávesy a dva prsty“."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hold disse taster nede, og rul over skærmen med musehjulet for at glide til zonerne uden for dens kanter. To fingre virker også, når „Taster og to fingre“ er valgt under Pegefelt."
+            "value" : "Hold disse taster nede og rul med musehjulet over skærmen for at glide til skærmene uden for dens kanter. To fingre virker også, når „Taster og to fingre“ er valgt under Pegefelt."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Halte diese Tasten gedrückt und scrolle mit dem Mausrad über dem Bildschirm, um zu den Zonen jenseits seiner Ränder zu gleiten. Zwei Finger funktionieren ebenfalls, wenn im Tab „Trackpad“ „Tasten und zwei Finger“ gewählt ist."
+            "value" : "Halte diese Tasten gedrückt und scrolle mit dem Mausrad über dem Bildschirm, um zu den Bildschirmen jenseits seiner Ränder zu gleiten. Zwei Finger funktionieren ebenfalls, wenn im Tab „Trackpad“ „Tasten und zwei Finger“ gewählt ist."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Κρατήστε πατημένα αυτά τα πλήκτρα και κάντε κύλιση πάνω από την οθόνη με τον τροχό του ποντικιού για να γλιστρήσετε στις ζώνες πέρα από τα άκρα της. Λειτουργεί και με δύο δάχτυλα όταν στην καρτέλα Trackpad είναι επιλεγμένο «Πλήκτρα και δύο δάχτυλα»."
+            "value" : "Κρατήστε πατημένα αυτά τα πλήκτρα και κυλήστε με τον τροχό του ποντικιού πάνω από την οθόνη για να γλιστρήσετε στις οθόνες πέρα από τις άκρες της. Λειτουργεί και με δύο δάχτυλα όταν στην καρτέλα Trackpad είναι επιλεγμένο «Πλήκτρα και δύο δάχτυλα»."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantén pulsadas estas teclas y desplázate sobre la pantalla con la rueda del ratón para ir a las zonas más allá de sus bordes. Con dos dedos también funciona si en la pestaña Trackpad está elegido «Teclas y dos dedos»."
+            "value" : "Mantén pulsadas estas teclas y desplázate con la rueda del ratón sobre la pantalla para deslizarte a las pantallas más allá de sus bordes. Con dos dedos también funciona si en la pestaña Trackpad está elegido «Teclas y dos dedos»."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hoia neid klahve all ja keri hiirerattaga ekraani kohal, et libiseda selle servadest kaugemale jäävatesse tsoonidesse. Kahe sõrmega töötab see samuti, kui vahekaardil Puuteplaat on valitud „Klahvid ja kaks sõrme“."
+            "value" : "Hoia neid klahve all ja keri hiirerattaga ekraani kohal, et libiseda ekraanidele selle servadest väljaspool. Kahe sõrmega töötab see samuti, kui vahekaardil Puuteplaat on valitud „Klahvid ja kaks sõrme“."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "این کلیدها را نگه دارید و با چرخ ماوس روی صفحه پیمایش کنید تا به ناحیه‌های فراتر از لبه‌هایش بلغزید. وقتی در زبانهٔ تاچ‌پد «کلیدها و دو انگشت» انتخاب شده باشد، دو انگشت هم همین کار را می‌کند."
+            "value" : "این کلیدها را نگه دارید و روی صفحه با چرخ ماوس اسکرول کنید تا به صفحه‌نمایش‌های بیرون از لبه‌های آن بلغزید. وقتی در زبانهٔ تاچ‌پد «کلیدها و دو انگشت» انتخاب شده باشد، دو انگشت هم همین کار را می‌کند."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pidä näitä näppäimiä painettuna ja vieritä näytön päällä hiiren rullalla liukuaksesi sen reunojen ulkopuolisille vyöhykkeille. Kaksi sormea toimii myös, kun Ohjauslevy-välilehdellä on valittuna ”Näppäimet ja kaksi sormea”."
+            "value" : "Pidä näitä näppäimiä painettuna ja vieritä hiiren rullalla näytön päällä liukuaksesi sen reunojen ulkopuolisiin näyttöihin. Kaksi sormea toimii myös, kun Ohjauslevy-välilehdellä on valittuna ”Näppäimet ja kaksi sormea”."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pindutin nang matagal ang mga key na ito at mag-scroll sa ibabaw ng screen gamit ang gulong ng mouse para mag-slide sa mga zone sa kabila ng mga gilid nito. Gumagana rin ito gamit ang dalawang daliri kapag napili ang “Mga key at dalawang daliri” sa tab na Trackpad."
+            "value" : "Pindutin nang matagal ang mga key na ito at mag-scroll gamit ang gulong ng mouse sa ibabaw ng screen para mag-slide sa mga screen sa labas ng mga gilid nito. Gumagana rin ito gamit ang dalawang daliri kapag napili ang “Mga key at dalawang daliri” sa tab na Trackpad."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Maintenez ces touches et faites défiler au-dessus de l'écran avec la molette de la souris pour glisser vers les zones au-delà de ses bords. Deux doigts le font aussi lorsque « Touches et deux doigts » est choisi dans l'onglet Trackpad."
+            "value" : "Maintenez ces touches et faites défiler au-dessus de l'écran avec la molette de la souris pour glisser vers les écrans au-delà de ses bords. Deux doigts le font aussi lorsque « Touches et deux doigts » est choisi dans l'onglet Trackpad."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "החזק את המקשים האלה וגלול מעל המסך בגלגלת העכבר כדי להחליק לאזורים שמעבר לקצוותיו. שתי אצבעות עושות זאת גם כאשר בלשונית משטח עקיבה נבחר ”מקשים ושתי אצבעות“."
+            "value" : "החזיקו את המקשים האלה וגללו בגלגלת העכבר מעל המסך כדי להחליק אל המסכים שמחוץ לקצוותיו. שתי אצבעות עושות זאת גם כאשר בלשונית משטח עקיבה נבחר ”מקשים ושתי אצבעות“."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "इन कुंजियों को दबाए रखें और माउस व्हील से स्क्रीन के ऊपर स्क्रोल करके उसके किनारों के पार वाले ज़ोन तक फिसलें। ट्रैकपैड टैब में “कुंजियाँ और दो उँगलियाँ” चुना हो तो दो उँगलियाँ भी यही करती हैं।"
+            "value" : "इन कुंजियों को दबाए रखें और माउस के पहिये से स्क्रीन के ऊपर स्क्रॉल करें, ताकि उसके किनारों के बाहर की स्क्रीन पर पहुँचें। ट्रैकपैड टैब में “कुंजियाँ और दो उँगलियाँ” चुना हो तो दो उँगलियाँ भी यही करती हैं।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Držite ove tipke i pomičite kotačićem miša iznad zaslona za klizanje do zona izvan njegovih rubova. S dva prsta to također radi kada je na kartici Trackpad odabrano „Tipke i dva prsta“."
+            "value" : "Držite ove tipke i kotačićem miša pomičite preko zaslona kako biste kliznuli na zaslone izvan njegovih rubova. S dva prsta to također radi kada je na kartici Trackpad odabrano „Tipke i dva prsta“."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tartsa lenyomva ezeket a billentyűket, és görgessen az egérkerékkel a képernyő fölött, hogy a szélein túli zónákra csússzon. Két ujjal is működik, ha a Trackpad lapon a „Billentyűk és két ujj” van kiválasztva."
+            "value" : "Tartsa lenyomva ezeket a billentyűket, és görgessen az egérkerékkel a képernyő felett, hogy a szélein túli képernyőkre csúszhasson. Két ujjal is működik, ha a Trackpad lapon a „Billentyűk és két ujj” van kiválasztva."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tahan tombol ini dan gulir di atas layar dengan roda mouse untuk meluncur ke zona di luar tepinya. Dua jari juga bisa saat “Tombol dan dua jari” dipilih di tab Trackpad."
+            "value" : "Tahan tombol ini dan gulir dengan roda mouse di atas layar untuk meluncur ke layar di luar tepinya. Dua jari juga bisa saat “Tombol dan dua jari” dipilih di tab Trackpad."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tieni premuti questi tasti e scorri sopra lo schermo con la rotellina del mouse per passare alle zone oltre i suoi bordi. Funziona anche con due dita quando nella scheda Trackpad è scelto «Tasti e due dita»."
+            "value" : "Tieni premuti questi tasti e scorri con la rotellina del mouse sopra lo schermo per passare agli schermi oltre i suoi bordi. Funziona anche con due dita quando nella scheda Trackpad è scelto «Tasti e due dita»."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "これらのキーを押したまま、画面の上でマウスホイールをスクロールすると、画面の端の外にあるゾーンへスライドします。「トラックパッド」タブで「キーと2本指」を選んでいる場合は、2本指でも同様に操作できます。"
+            "value" : "これらのキーを押したまま、画面の上でマウスホイールをスクロールすると、画面の端の外にある画面へスライドします。「トラックパッド」タブで「キーと2本指」を選んでいる場合は、2本指でも同様に操作できます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 키를 누른 채 화면 위에서 마우스 휠로 스크롤하면 가장자리 너머의 영역으로 미끄러지듯 이동합니다. 트랙패드 탭에서 “키와 두 손가락”를 선택하면 두 손가락으로도 할 수 있습니다."
+            "value" : "이 키를 누른 채 화면 위에서 마우스 휠로 스크롤하면 가장자리 밖의 화면으로 슬라이드합니다. 트랙패드 탭에서 “키와 두 손가락”를 선택하면 두 손가락으로도 할 수 있습니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laikykite nuspaudę šiuos klavišus ir pelės ratuku slinkite virš ekrano, kad slystumėte į zonas už jo kraštų. Dviem pirštais tai veikia, kai skirtuke „Jutiklinė planšetė“ pasirinkta „Klavišai ir du pirštai“."
+            "value" : "Laikykite šiuos klavišus ir pelės ratuku slinkite virš ekrano, kad nuslystumėte į ekranus už jo kraštų. Dviem pirštais tai veikia, kai skirtuke „Jutiklinė planšetė“ pasirinkta „Klavišai ir du pirštai“."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Turiet nospiestus šos taustiņus un ritiniet virs ekrāna ar peles ritenīti, lai slīdētu uz zonām aiz tā malām. Ar diviem pirkstiem tas darbojas arī tad, ja cilnē Skārienpaliktnis izvēlēts „Taustiņi un divi pirksti”."
+            "value" : "Turiet nospiestus šos taustiņus un ritiniet ar peles rullīti virs ekrāna, lai pārslīdētu uz ekrāniem aiz tā malām. Ar diviem pirkstiem tas darbojas arī tad, ja cilnē Skārienpaliktnis izvēlēts „Taustiņi un divi pirksti”."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "या कळा दाबून ठेवा आणि माउस व्हीलने स्क्रीनवर स्क्रोल करून तिच्या कडांच्या पलीकडील झोनकडे सरका. ट्रॅकपॅड टॅबमध्ये “कळा आणि दोन बोटे” निवडले असल्यास दोन बोटेही हेच करतात."
+            "value" : "हे कळ दाबून ठेवा आणि स्क्रीनवर माउसच्या चाकाने स्क्रोल करून तिच्या कडांबाहेरच्या स्क्रीनवर सरका. ट्रॅकपॅड टॅबमध्ये “कळा आणि दोन बोटे” निवडले असल्यास दोन बोटेही हेच करतात."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tahan kekunci ini dan tatal di atas skrin dengan roda tetikus untuk meluncur ke zon di luar tepinya. Dua jari juga boleh apabila “Kekunci dan dua jari” dipilih dalam tab Pad jejak."
+            "value" : "Tahan kekunci ini dan tatal dengan roda tetikus di atas skrin untuk meluncur ke skrin di luar tepinya. Dua jari juga boleh apabila “Kekunci dan dua jari” dipilih dalam tab Pad jejak."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hold disse tastene nede og rull over skjermen med musehjulet for å gli til sonene utenfor kantene. To fingre fungerer også når «Taster og to fingre» er valgt i fanen Styreflate."
+            "value" : "Hold inne disse tastene og rull med musehjulet over skjermen for å gli til skjermene utenfor kantene. To fingre fungerer også når «Taster og to fingre» er valgt i fanen Styreflate."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Houd deze toetsen ingedrukt en scrol met het muiswiel over het scherm om naar de zones voorbij de randen te glijden. Twee vingers werken ook als op het tabblad Trackpad ‘Toetsen en twee vingers’ is gekozen."
+            "value" : "Houd deze toetsen ingedrukt en scrol met het muiswiel over het scherm om naar de schermen voorbij de randen te glijden. Twee vingers werken ook als op het tabblad Trackpad ‘Toetsen en twee vingers’ is gekozen."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Przytrzymaj te klawisze i przewijaj kółkiem myszy nad ekranem, aby przesuwać się do stref poza jego krawędziami. Dwa palce też działają, gdy na karcie Gładzik wybrano „Klawisze i dwa palce”."
+            "value" : "Przytrzymaj te klawisze i przewijaj kółkiem myszy nad ekranem, aby przesunąć się do ekranów poza jego krawędziami. Dwa palce też działają, gdy na karcie Gładzik wybrano „Klawisze i dwa palce”."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantenha premidas estas teclas e desloque sobre o ecrã com a roda do rato para ir para as zonas além das suas margens. Com dois dedos também funciona quando está escolhido «Teclas e dois dedos» no separador Trackpad."
+            "value" : "Mantenha estas teclas premidas e desloque com a roda do rato sobre o ecrã para deslizar para os ecrãs para além das suas bordas. Com dois dedos também funciona quando está escolhido «Teclas e dois dedos» no separador Trackpad."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantenha pressionadas estas teclas e role sobre a tela com a roda do mouse para ir às zonas além das bordas dela. Com dois dedos também funciona quando “Teclas e dois dedos” está escolhido na aba Trackpad."
+            "value" : "Mantenha estas teclas pressionadas e role com a roda do mouse sobre a tela para deslizar até as telas além das suas bordas. Com dois dedos também funciona quando “Teclas e dois dedos” está escolhido na aba Trackpad."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ține apăsate aceste taste și derulează deasupra ecranului cu rotița mouse-ului pentru a aluneca spre zonele din afara marginilor lui. Merge și cu două degete când în fila Trackpad este aleasă opțiunea „Taste și două degete”."
+            "value" : "Ține apăsate aceste taste și derulează cu rotița mouse-ului deasupra ecranului pentru a aluneca spre ecranele de dincolo de marginile lui. Merge și cu două degete când în fila Trackpad este aleasă opțiunea „Taste și două degete”."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Удерживайте эти клавиши и прокручивайте колесиком мыши над экраном, чтобы скользить к зонам за его краями. Двумя пальцами это тоже работает, если на вкладке «Трекпад» выбрано «Клавиши и два пальца»."
+            "value" : "Удерживайте эти клавиши и прокручивайте колесом мыши над экраном, чтобы перейти к экранам за его краями. Двумя пальцами это тоже работает, если на вкладке «Трекпад» выбрано «Клавиши и два пальца»."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Podržte tieto klávesy a kolieskom myši posúvajte nad obrazovkou, aby ste sa presunuli do zón za jej okrajmi. Dvoma prstami to funguje aj vtedy, keď je na karte Trackpad zvolené „Klávesy a dva prsty“."
+            "value" : "Podržte tieto klávesy a posúvajte kolieskom myši nad obrazovkou, aby ste sa presunuli na obrazovky za jej okrajmi. Dvoma prstami to funguje aj vtedy, keď je na karte Trackpad zvolené „Klávesy a dva prsty“."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Držite te tipke in z miškinim kolescem drsite nad zaslonom, da zdrsnete na cone zunaj njegovih robov. Z dvema prstoma deluje tudi, ko je na zavihku Sledilna ploščica izbrano »Tipke in dva prsta«."
+            "value" : "Držite te tipke in z miškinim kolescem drsite nad zaslonom, da zdrsnete na zaslone zunaj njegovih robov. Z dvema prstoma deluje tudi, ko je na zavihku Sledilna ploščica izbrano »Tipke in dva prsta«."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Држите ове тастере и померајте точкићем миша изнад екрана да бисте клизили до зона изван његових ивица. Са два прста то такође ради када је на картици Трекпед изабрано „Тастери и два прста“."
+            "value" : "Држите ове тастере и точкићем миша померајте преко екрана да бисте склизнули на екране изван његових ивица. Са два прста то такође ради када је на картици Трекпед изабрано „Тастери и два прста“."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Håll ned de här tangenterna och rulla med mushjulet över skärmen för att glida till zonerna bortom dess kanter. Två fingrar fungerar också när ”Tangenter och två fingrar” är valt på fliken Styrplatta."
+            "value" : "Håll ned dessa tangenter och rulla med mushjulet över skärmen för att glida till skärmarna utanför dess kanter. Två fingrar fungerar också när ”Tangenter och två fingrar” är valt på fliken Styrplatta."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "இந்த விசைகளை அழுத்திப் பிடித்து, மவுஸ் சக்கரத்தால் திரையின் மேல் உருட்டினால் அதன் விளிம்புகளுக்கு அப்பால் உள்ள மண்டலங்களுக்கு நகரலாம். டிராக்பேட் தாவலில் “விசைகள் மற்றும் இரண்டு விரல்கள்” தேர்ந்தெடுக்கப்பட்டிருந்தால் இரண்டு விரல்களும் இதையே செய்யும்."
+            "value" : "இந்த விசைகளைப் பிடித்துக்கொண்டு திரையின் மேல் மவுஸ் சக்கரத்தால் உருட்டி, அதன் ஓரங்களுக்கு வெளியே உள்ள திரைகளுக்குச் செல்லுங்கள். டிராக்பேட் தாவலில் “விசைகள் மற்றும் இரண்டு விரல்கள்” தேர்ந்தெடுக்கப்பட்டிருந்தால் இரண்டு விரல்களும் இதையே செய்யும்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ఈ కీలను నొక్కి పట్టుకుని, మౌస్ వీల్‌తో స్క్రీన్ పైన స్క్రోల్ చేస్తే దాని అంచులకు అవతల ఉన్న జోన్‌లకు జారవచ్చు. ట్రాక్‌ప్యాడ్ ట్యాబ్‌లో “కీలు మరియు రెండు వేళ్లు” ఎంచుకుంటే రెండు వేళ్లు కూడా ఇదే చేస్తాయి."
+            "value" : "ఈ కీలను నొక్కి పట్టి, స్క్రీన్ పై మౌస్ చక్రంతో స్క్రోల్ చేస్తే దాని అంచుల వెలుపలి స్క్రీన్‌లకు జారుతుంది. ట్రాక్‌ప్యాడ్ ట్యాబ్‌లో “కీలు మరియు రెండు వేళ్లు” ఎంచుకుంటే రెండు వేళ్లు కూడా ఇదే చేస్తాయి."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "กดปุ่มเหล่านี้ค้างไว้แล้วเลื่อนลูกกลิ้งเมาส์เหนือหน้าจอเพื่อเลื่อนไปยังโซนที่อยู่นอกขอบจอ สองนิ้วก็ใช้ได้เช่นกันเมื่อเลือก “ปุ่มและสองนิ้ว” ในแท็บแทร็กแพด"
+            "value" : "กดปุ่มเหล่านี้ค้างไว้แล้วเลื่อนลูกกลิ้งเมาส์เหนือหน้าจอเพื่อเลื่อนไปยังหน้าจอที่อยู่นอกขอบจอ สองนิ้วก็ใช้ได้เช่นกันเมื่อเลือก “ปุ่มและสองนิ้ว” ในแท็บแทร็กแพด"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu tuşları basılı tutup fare tekerleğiyle ekranın üzerinde kaydırarak kenarlarının ötesindeki bölgelere geçin. İzleme dörtgeni sekmesinde “Tuşlar ve iki parmak” seçiliyse iki parmak da aynısını yapar."
+            "value" : "Bu tuşları basılı tutup fare tekerleğiyle ekranın üzerinde kaydırarak kenarlarının ötesindeki ekranlara geçin. İzleme dörtgeni sekmesinde “Tuşlar ve iki parmak” seçiliyse iki parmak da aynısını yapar."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Утримуйте ці клавіші та прокручуйте коліщатком миші над екраном, щоб ковзати до зон за його краями. Двома пальцями це теж працює, якщо на вкладці «Трекпад» вибрано «Клавіші та два пальці»."
+            "value" : "Утримуйте ці клавіші й прокручуйте колесом миші над екраном, щоб перейти до екранів за його краями. Двома пальцями це теж працює, якщо на вкладці «Трекпад» вибрано «Клавіші та два пальці»."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ان کیز کو دبائے رکھیں اور ماؤس وہیل سے اسکرین کے اوپر اسکرول کر کے اس کے کناروں سے پرے زونز تک پھسلیں۔ ٹریک پیڈ ٹیب میں “کیز اور دو انگلیاں” منتخب ہو تو دو انگلیاں بھی یہی کرتی ہیں۔"
+            "value" : "ان کلیدوں کو دبائے رکھیں اور اسکرین پر ماؤس کے پہیے سے اسکرول کریں تاکہ اس کے کناروں سے باہر کی اسکرینوں پر پھسلیں۔ ٹریک پیڈ ٹیب میں “کیز اور دو انگلیاں” منتخب ہو تو دو انگلیاں بھی یہی کرتی ہیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giữ các phím này và cuộn bằng con lăn chuột phía trên màn hình để trượt tới các vùng nằm ngoài các cạnh của nó. Hai ngón tay cũng làm được khi chọn “Phím và hai ngón tay” trong tab Bàn di chuột."
+            "value" : "Giữ các phím này và cuộn bằng con lăn chuột trên màn hình để trượt tới các màn hình nằm ngoài cạnh của nó. Hai ngón tay cũng làm được khi chọn “Phím và hai ngón tay” trong tab Bàn di chuột."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住这些按键，用鼠标滚轮在屏幕上方滚动，即可滑到屏幕边缘之外的区域。在“触控板”标签页中选择“按键和两指”时，两指也可以这样操作。"
+            "value" : "按住这些键，并在屏幕上用鼠标滚轮滚动，即可滑到其边缘之外的屏幕。在“触控板”标签页中选择“按键和两指”时，两指也可以这样操作。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住這些按鍵，用滑鼠滾輪在螢幕上方捲動，即可滑到螢幕邊緣之外的區域。在「觸控式軌跡板」標籤頁中選擇「按鍵和兩指」時，兩指也可以這樣操作。"
+            "value" : "按住這些鍵，並在螢幕上用滑鼠滾輪捲動，即可滑到其邊緣之外的螢幕。在「觸控式軌跡板」標籤頁中選擇「按鍵和兩指」時，兩指也可以這樣操作。"
           }
         }
       }
@@ -21919,283 +21638,283 @@
         }
       }
     },
-    "Lets a layout have zones beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen." : {
+    "Lets a layout have screens beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يتيح أن يحتوي التخطيط على مناطق خارج الحافتين اليمنى واليسرى للشاشة. يمكنك الوصول إليها باختصارات التمرير (راجع الاختصارات)، أو بالتمرير فوق الجزيرة في شريط القوائم. عند الإيقاف لا يعرضها المحرّر وتنتقل تطبيقاتها إلى المنطقة الافتراضية للشاشة."
+            "value" : "يتيح للتخطيط أن تكون له شاشات خارج الحافتين اليسرى واليمنى للشاشة. يمكنك الوصول إليها باختصارات التمرير (راجع الاختصارات)، أو بالتمرير فوق الجزيرة في شريط القوائم. عند الإيقاف لا يعرضها المحرّر وتنتقل تطبيقاتها إلى المنطقة الافتراضية للشاشة."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Позволява на оформлението да има зони извън левия и десния край на екрана. Стигате до тях с клавишните комбинации за превъртане (вижте Клавишни комбинации) или като превъртате над острова в лентата с менюта. Когато е изключено, редакторът не ги показва, а приложенията им преминават в зоната по подразбиране на екрана."
+            "value" : "Позволява на разположението да има екрани извън левия и десния край на екрана. Стигате до тях с клавишните комбинации за превъртане (вижте Клавишни комбинации) или като превъртате над острова в лентата с менюта. Когато е изключено, редакторът не ги показва, а приложенията им преминават в зоната по подразбиране на екрана."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "একটি লেআউটে স্ক্রিনের বাঁ ও ডান প্রান্তের বাইরে জোন রাখার সুযোগ দেয়। স্ক্রল শর্টকাট (শর্টকাট দেখুন) দিয়ে, অথবা মেনু বারের আইল্যান্ডের ওপর স্ক্রল করে সেগুলোতে পৌঁছানো যায়। বন্ধ থাকলে এডিটর সেগুলো দেখায় না এবং সেগুলোর অ্যাপ স্ক্রিনের ডিফল্ট জোনে চলে যায়।"
+            "value" : "একটি লেআউটে স্ক্রিনের বাঁ ও ডান প্রান্তের বাইরে আরও স্ক্রিন রাখতে দেয়। স্ক্রল শর্টকাট (শর্টকাট দেখুন) দিয়ে, অথবা মেনু বারের আইল্যান্ডের ওপর স্ক্রল করে সেগুলোতে পৌঁছানো যায়। বন্ধ থাকলে এডিটর সেগুলো দেখায় না এবং সেগুলোর অ্যাপ স্ক্রিনের ডিফল্ট জোনে চলে যায়।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permet que una disposició tingui zones més enllà de les vores esquerra i dreta de la pantalla. S'hi arriba amb les dreceres de desplaçament (vegeu Dreceres) o desplaçant-se sobre l'illa de la barra de menús. Si està desactivat, l'editor no les mostra i les seves apps passen a la zona predeterminada de la pantalla."
+            "value" : "Permet que una disposició tingui pantalles més enllà de les vores esquerra i dreta d'una pantalla. S'hi arriba amb les dreceres de desplaçament (vegeu Dreceres) o desplaçant-se sobre l'illa de la barra de menús. Si està desactivat, l'editor no les mostra i les seves apps passen a la zona predeterminada de la pantalla."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Umožní, aby rozložení mělo zóny za levým a pravým okrajem obrazovky. Dostanete se k nim zkratkami pro posouvání (viz Zkratky) nebo posouváním nad ostrovem v řádku nabídek. Když je vypnuto, editor je nezobrazuje a jejich aplikace přejdou do výchozí zóny obrazovky."
+            "value" : "Umožňuje rozložení mít obrazovky za levým a pravým okrajem obrazovky. Dostanete se k nim zkratkami pro posouvání (viz Zkratky) nebo posouváním nad ostrovem v řádku nabídek. Když je vypnuto, editor je nezobrazuje a jejich aplikace přejdou do výchozí zóny obrazovky."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lader et layout have zoner uden for skærmens venstre og højre kant. Du når dem med rullegenvejene (se Genveje) eller ved at rulle over øen i menulinjen. Når det er slået fra, viser editoren dem ikke, og deres apps flyttes til skærmens standardzone."
+            "value" : "Lader et layout have skærme uden for skærmens venstre og højre kant. Du når dem med rullegenvejene (se Genveje) eller ved at rulle over øen i menulinjen. Når det er slået fra, viser editoren dem ikke, og deres apps flyttes til skærmens standardzone."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erlaubt einem Layout Zonen jenseits des linken und rechten Bildschirmrands. Du erreichst sie mit den Scroll-Tastenkürzeln (siehe Tastenkürzel) oder durch Scrollen über der Insel in der Menüleiste. Ist die Option aus, zeigt der Editor sie nicht an, und ihre Apps wandern in die Standardzone des Bildschirms."
+            "value" : "Erlaubt einem Layout Bildschirme jenseits des linken und rechten Bildschirmrands. Du erreichst sie mit den Scroll-Tastenkürzeln (siehe Tastenkürzel) oder durch Scrollen über der Insel in der Menüleiste. Ist die Option aus, zeigt der Editor sie nicht an, und ihre Apps wandern in die Standardzone des Bildschirms."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Επιτρέπει σε μια διάταξη να έχει ζώνες πέρα από το αριστερό και το δεξί άκρο της οθόνης. Τις φτάνετε με τις συντομεύσεις κύλισης (βλ. Συντομεύσεις) ή κυλώντας πάνω από το νησί στη γραμμή μενού. Όταν είναι απενεργοποιημένο, ο επεξεργαστής δεν τις εμφανίζει και οι εφαρμογές τους μετακινούνται στην προεπιλεγμένη ζώνη της οθόνης."
+            "value" : "Επιτρέπει σε μια διάταξη να έχει οθόνες πέρα από την αριστερή και τη δεξιά άκρη μιας οθόνης. Τις φτάνετε με τις συντομεύσεις κύλισης (βλ. Συντομεύσεις) ή κυλώντας πάνω από το νησί στη γραμμή μενού. Όταν είναι απενεργοποιημένο, ο επεξεργαστής δεν τις εμφανίζει και οι εφαρμογές τους μετακινούνται στην προεπιλεγμένη ζώνη της οθόνης."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permite que una disposición tenga zonas más allá de los bordes izquierdo y derecho de la pantalla. Se llega a ellas con los atajos de desplazamiento (consulta Atajos) o desplazándote sobre la isla de la barra de menús. Si se desactiva, el editor no las muestra y sus apps pasan a la zona predeterminada de la pantalla."
+            "value" : "Permite que una disposición tenga pantallas más allá de los bordes izquierdo y derecho de una pantalla. Se llega a ellas con los atajos de desplazamiento (consulta Atajos) o desplazándote sobre la isla de la barra de menús. Si se desactiva, el editor no las muestra y sus apps pasan a la zona predeterminada de la pantalla."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lubab paigutusel olla tsoone ekraani vasaku ja parema serva taga. Nendeni jõuab kerimise kiirklahvidega (vt Kiirklahvid) või menüüribal oleva saare kohal kerides. Väljalülitatuna redaktor neid ei näita ja nende rakendused liiguvad ekraani vaiketsooni."
+            "value" : "Võimaldab paigutusel olla ekraanid ekraani vasakust ja paremast servast väljaspool. Nendeni jõuab kerimise kiirklahvidega (vt Kiirklahvid) või menüüribal oleva saare kohal kerides. Väljalülitatuna redaktor neid ei näita ja nende rakendused liiguvad ekraani vaiketsooni."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "به یک چیدمان اجازه می‌دهد ناحیه‌هایی فراتر از لبه‌های چپ و راست صفحه‌نمایش داشته باشد. با میان‌برهای پیمایش (به میان‌برها نگاه کنید) یا با پیمایش روی جزیره در نوار منو می‌توانید به آن‌ها برسید. اگر خاموش باشد، ویرایشگر آن‌ها را نشان نمی‌دهد و برنامه‌هایشان به ناحیهٔ پیش‌فرض صفحه‌نمایش منتقل می‌شوند."
+            "value" : "به یک چیدمان اجازه می‌دهد در بیرون از لبه‌های چپ و راست صفحه، صفحه‌نمایش‌های دیگری داشته باشد. با میان‌برهای پیمایش (به میان‌برها نگاه کنید) یا با پیمایش روی جزیره در نوار منو می‌توانید به آن‌ها برسید. اگر خاموش باشد، ویرایشگر آن‌ها را نشان نمی‌دهد و برنامه‌هایشان به ناحیهٔ پیش‌فرض صفحه‌نمایش منتقل می‌شوند."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sallii asettelulle alueita näytön vasemman ja oikean reunan takana. Niihin pääsee vierityspikanäppäimillä (katso Pikanäppäimet) tai vierittämällä valikkorivin saaren päällä. Kun asetus on pois päältä, editori ei näytä alueita ja niiden apit siirtyvät näytön oletusalueelle."
+            "value" : "Antaa asettelulle näyttöjä näytön vasemman ja oikean reunan ulkopuolella. Niihin pääsee vierityspikanäppäimillä (katso Pikanäppäimet) tai vierittämällä valikkorivin saaren päällä. Kun asetus on pois päältä, editori ei näytä niitä ja niiden apit siirtyvät näytön oletusalueelle."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pinapayagan ang isang layout na magkaroon ng mga zone lampas sa kaliwa at kanang gilid ng screen. Maaabot ang mga ito gamit ang mga scroll shortcut (tingnan ang Mga shortcut), o sa pag-scroll sa ibabaw ng island sa menu bar. Kapag naka-off, hindi ipinapakita ng editor ang mga ito at lilipat ang kanilang mga app sa default na zone ng screen."
+            "value" : "Hinahayaan ang isang layout na magkaroon ng mga screen sa labas ng kaliwa at kanang gilid ng isang screen. Maaabot ang mga ito gamit ang mga scroll shortcut (tingnan ang Mga shortcut), o sa pag-scroll sa ibabaw ng island sa menu bar. Kapag naka-off, hindi ipinapakita ng editor ang mga ito at lilipat ang kanilang mga app sa default na zone ng screen."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permet à une disposition d'avoir des zones au-delà des bords gauche et droit de l'écran. On y accède avec les raccourcis de défilement (voir Raccourcis) ou en faisant défiler au-dessus de l'îlot de la barre des menus. Désactivé, l'éditeur ne les affiche pas et leurs apps passent dans la zone par défaut de l'écran."
+            "value" : "Permet à une disposition d'avoir des écrans au-delà des bords gauche et droit d'un écran. On y accède avec les raccourcis de défilement (voir Raccourcis) ou en faisant défiler au-dessus de l'îlot de la barre des menus. Désactivé, l'éditeur ne les affiche pas et leurs apps passent dans la zone par défaut de l'écran."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "מאפשר לפריסה לכלול אזורים מעבר לקצה השמאלי והימני של המסך. אפשר להגיע אליהם בעזרת קיצורי הגלילה (ראה קיצורי דרך) או בגלילה מעל האי בשורת התפריטים. כשהאפשרות כבויה, העורך אינו מציג אותם והאפליקציות שלהם עוברות לאזור ברירת המחדל של המסך."
+            "value" : "מאפשר לפריסה להכיל מסכים מחוץ לקצה השמאלי והימני של מסך. אפשר להגיע אליהם בעזרת קיצורי הגלילה (ראה קיצורי דרך) או בגלילה מעל האי בשורת התפריטים. כשהאפשרות כבויה, העורך אינו מציג אותם והאפליקציות שלהם עוברות לאזור ברירת המחדל של המסך."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "किसी लेआउट को स्क्रीन के बाएँ और दाएँ किनारों से परे ज़ोन रखने देता है। उन तक स्क्रॉल शॉर्टकट (देखें शॉर्टकट) से, या मेनू बार के आइलैंड पर स्क्रॉल करके पहुँचा जा सकता है। बंद होने पर एडिटर उन्हें नहीं दिखाता और उनके ऐप स्क्रीन के डिफ़ॉल्ट ज़ोन में चले जाते हैं।"
+            "value" : "लेआउट को स्क्रीन के बाएँ और दाएँ किनारों के बाहर और स्क्रीन रखने देता है। उन तक स्क्रॉल शॉर्टकट (देखें शॉर्टकट) से, या मेनू बार के आइलैंड पर स्क्रॉल करके पहुँचा जा सकता है। बंद होने पर एडिटर उन्हें नहीं दिखाता और उनके ऐप स्क्रीन के डिफ़ॉल्ट ज़ोन में चले जाते हैं।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Omogućuje rasporedu zone izvan lijevog i desnog ruba zaslona. Do njih se dolazi prečacima za pomicanje (vidi Prečaci) ili pomicanjem iznad otoka u traci izbornika. Kad je isključeno, uređivač ih ne prikazuje, a njihove se aplikacije premještaju u zadanu zonu zaslona."
+            "value" : "Omogućuje rasporedu da ima zaslone izvan lijevog i desnog ruba zaslona. Do njih se dolazi prečacima za pomicanje (vidi Prečaci) ili pomicanjem iznad otoka u traci izbornika. Kad je isključeno, uređivač ih ne prikazuje, a njihove se aplikacije premještaju u zadanu zonu zaslona."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lehetővé teszi, hogy az elrendezésnek legyenek zónái a képernyő bal és jobb széle mögött. Ezeket a görgetési billentyűparancsokkal (lásd Billentyűparancsok) vagy a menüsor szigete fölötti görgetéssel éred el. Kikapcsolva a szerkesztő nem mutatja őket, az alkalmazásaik pedig a képernyő alapértelmezett zónájába kerülnek."
+            "value" : "Lehetővé teszi, hogy egy elrendezésnek legyenek képernyői a képernyő bal és jobb szélén túl. Ezeket a görgetési billentyűparancsokkal (lásd Billentyűparancsok) vagy a menüsor szigete fölötti görgetéssel éred el. Kikapcsolva a szerkesztő nem mutatja őket, az alkalmazásaik pedig a képernyő alapértelmezett zónájába kerülnek."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Memungkinkan tata letak memiliki zona di luar tepi kiri dan kanan layar. Zona itu dijangkau dengan pintasan gulir (lihat Pintasan), atau dengan menggulir di atas pulau di bilah menu. Jika dimatikan, editor tidak menampilkannya dan app di dalamnya pindah ke zona default layar."
+            "value" : "Memungkinkan tata letak memiliki layar di luar tepi kiri dan kanan sebuah layar. Zona itu dijangkau dengan pintasan gulir (lihat Pintasan), atau dengan menggulir di atas pulau di bilah menu. Jika dimatikan, editor tidak menampilkannya dan app di dalamnya pindah ke zona default layar."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permette a un layout di avere zone oltre i bordi sinistro e destro dello schermo. Si raggiungono con le scorciatoie di scorrimento (vedi Scorciatoie) o scorrendo sopra l'isola nella barra dei menu. Se disattivato, l'editor non le mostra e le loro app passano alla zona predefinita dello schermo."
+            "value" : "Permette a una disposizione di avere schermi oltre i bordi sinistro e destro di uno schermo. Si raggiungono con le scorciatoie di scorrimento (vedi Scorciatoie) o scorrendo sopra l'isola nella barra dei menu. Se disattivato, l'editor non li mostra e le loro app passano alla zona predefinita dello schermo."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "レイアウトに、画面の左右の端の外側にあるゾーンを持たせます。スクロールのショートカット（「ショートカット」を参照）や、メニューバーのアイランド上でのスクロールで移動できます。オフにすると、エディタにはそれらのゾーンが表示されず、そのアプリは画面のデフォルトのゾーンに移ります。"
+            "value" : "レイアウトに、画面の左右の端の外側にある画面を持たせます。スクロールのショートカット（「ショートカット」を参照）や、メニューバーのアイランド上でのスクロールで移動できます。オフにすると、エディタにはそれらの画面が表示されず、そのアプリは画面のデフォルトのゾーンに移ります。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "레이아웃이 화면의 왼쪽과 오른쪽 가장자리 밖에 영역을 가질 수 있게 합니다. 스크롤 단축키(단축키 참조)나 메뉴 막대의 아일랜드 위에서 스크롤하여 이동할 수 있습니다. 끄면 편집기에 해당 영역이 표시되지 않으며, 그 영역의 앱은 화면의 기본 영역으로 이동합니다."
+            "value" : "레이아웃이 화면의 왼쪽과 오른쪽 가장자리 밖에 화면을 가질 수 있게 합니다. 스크롤 단축키(단축키 참조)나 메뉴 막대의 아일랜드 위에서 스크롤하여 이동할 수 있습니다. 끄면 편집기에 해당 화면이 표시되지 않으며, 그 화면의 앱은 화면의 기본 영역으로 이동합니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Leidžia išdėstymui turėti zonų už kairiojo ir dešiniojo ekrano krašto. Jas pasiekiate slinkimo spartieji klavišais (žr. Spartieji klavišai) arba slinkdami virš salos meniu juostoje. Kai išjungta, redaktorius jų nerodo, o jų programos perkeliamos į numatytąją ekrano zoną."
+            "value" : "Leidžia išdėstymui turėti ekranų už kairiojo ir dešiniojo ekrano krašto. Jas pasiekiate slinkimo spartieji klavišais (žr. Spartieji klavišai) arba slinkdami virš salos meniu juostoje. Kai išjungta, redaktorius jų nerodo, o jų programos perkeliamos į numatytąją ekrano zoną."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ļauj izkārtojumam būt zonām aiz ekrāna kreisās un labās malas. Tām var piekļūt ar ritināšanas īsinājumtaustiņiem (skatiet Īsinājumtaustiņi) vai ritinot virs salas izvēlņu joslā. Ja izslēgts, redaktors tās nerāda, un to lietotnes pāriet uz ekrāna noklusējuma zonu."
+            "value" : "Ļauj izkārtojumam būt ekrāniem aiz ekrāna kreisās un labās malas. Tām var piekļūt ar ritināšanas īsinājumtaustiņiem (skatiet Īsinājumtaustiņi) vai ritinot virs salas izvēlņu joslā. Ja izslēgts, redaktors tās nerāda, un to lietotnes pāriet uz ekrāna noklusējuma zonu."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "लेआउटला स्क्रीनच्या डाव्या आणि उजव्या कडांच्या पलीकडे झोन ठेवू देते. स्क्रोल शॉर्टकटने (शॉर्टकट पहा) किंवा मेनू बारमधील आयलंडवर स्क्रोल करून त्यांपर्यंत पोहोचता येते. बंद केल्यास एडिटर ते दाखवत नाही आणि त्यांचे अ‍ॅप स्क्रीनच्या डीफॉल्ट झोनमध्ये जातात."
+            "value" : "लेआउटला स्क्रीनच्या डाव्या आणि उजव्या कडांच्या बाहेर आणखी स्क्रीन ठेवू देते. स्क्रोल शॉर्टकटने (शॉर्टकट पहा) किंवा मेनू बारमधील आयलंडवर स्क्रोल करून त्यांपर्यंत पोहोचता येते. बंद केल्यास एडिटर ते दाखवत नाही आणि त्यांचे अ‍ॅप स्क्रीनच्या डीफॉल्ट झोनमध्ये जातात."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Membolehkan reka letak mempunyai zon di luar tepi kiri dan kanan skrin. Zon itu boleh dicapai dengan pintasan tatal (lihat Pintasan), atau dengan menatal di atas pulau dalam bar menu. Jika dimatikan, editor tidak menunjukkannya dan apl di dalamnya berpindah ke zon lalai skrin."
+            "value" : "Membolehkan susun atur mempunyai skrin di luar tepi kiri dan kanan sebuah skrin. Zon itu boleh dicapai dengan pintasan tatal (lihat Pintasan), atau dengan menatal di atas pulau dalam bar menu. Jika dimatikan, editor tidak menunjukkannya dan apl di dalamnya berpindah ke zon lalai skrin."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lar et layout ha soner utenfor skjermens venstre og høyre kant. Du når dem med rullesnarveiene (se Snarveier) eller ved å rulle over øya i menylinjen. Når det er slått av, viser ikke editoren dem, og appene deres flyttes til skjermens standardsone."
+            "value" : "Lar et oppsett ha skjermer utenfor venstre og høyre kant av en skjerm. Du når dem med rullesnarveiene (se Snarveier) eller ved å rulle over øya i menylinjen. Når det er slått av, viser ikke editoren dem, og appene deres flyttes til skjermens standardsone."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laat een indeling zones hebben voorbij de linker- en rechterrand van het scherm. Je bereikt ze met de scrolltoetsen (zie Sneltoetsen) of door te scrollen boven het eiland in de menubalk. Als dit uit staat, toont de editor ze niet en gaan hun apps naar de standaardzone van het scherm."
+            "value" : "Laat een indeling schermen hebben voorbij de linker- en rechterrand van een scherm. Je bereikt ze met de scrolltoetsen (zie Sneltoetsen) of door te scrollen boven het eiland in de menubalk. Als dit uit staat, toont de editor ze niet en gaan hun apps naar de standaardzone van het scherm."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pozwala układowi mieć strefy poza lewą i prawą krawędzią ekranu. Dotrzesz do nich skrótami przewijania (zobacz Skróty) lub przewijając nad wyspą na pasku menu. Gdy opcja jest wyłączona, edytor ich nie pokazuje, a ich aplikacje przechodzą do domyślnej strefy ekranu."
+            "value" : "Pozwala układowi mieć ekrany poza lewą i prawą krawędzią ekranu. Dotrzesz do nich skrótami przewijania (zobacz Skróty) lub przewijając nad wyspą na pasku menu. Gdy opcja jest wyłączona, edytor ich nie pokazuje, a ich aplikacje przechodzą do domyślnej strefy ekranu."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permite que uma disposição tenha zonas para lá dos limites esquerdo e direito do ecrã. Chega-se a elas com os atalhos de deslocamento (consulte Atalhos) ou deslocando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e as suas apps passam para a zona predefinida do ecrã."
+            "value" : "Permite que uma disposição tenha ecrãs para além das bordas esquerda e direita de um ecrã. Chega-se a elas com os atalhos de deslocamento (consulte Atalhos) ou deslocando sobre a ilha na barra de menus. Se estiver desativado, o editor não os mostra e as suas apps passam para a zona predefinida do ecrã."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permite que um layout tenha zonas além das bordas esquerda e direita da tela. Você chega a elas com os atalhos de rolagem (veja Atalhos) ou rolando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e os apps delas vão para a zona padrão da tela."
+            "value" : "Permite que um layout tenha telas além das bordas esquerda e direita de uma tela. Você chega a elas com os atalhos de rolagem (veja Atalhos) ou rolando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e os apps delas vão para a zona padrão da tela."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permite unui aspect să aibă zone dincolo de marginile stângă și dreaptă ale ecranului. Le poți atinge cu comenzile rapide de derulare (vezi Comenzi rapide) sau derulând deasupra insulei din bara de meniu. Când este oprit, editorul nu le afișează, iar aplicațiile lor trec în zona implicită a ecranului."
+            "value" : "Permite unei dispuneri să aibă ecrane dincolo de marginile stângă și dreaptă ale unui ecran. Le poți atinge cu comenzile rapide de derulare (vezi Comenzi rapide) sau derulând deasupra insulei din bara de meniu. Când este oprit, editorul nu le afișează, iar aplicațiile lor trec în zona implicită a ecranului."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Позволяет раскладке иметь зоны за левым и правым краями экрана. До них можно добраться сочетаниями клавиш прокрутки (см. «Сочетания клавиш») или прокруткой над островом в строке меню. Если выключено, редактор их не показывает, а их приложения переходят в зону экрана по умолчанию."
+            "value" : "Позволяет раскладке иметь экраны за левым и правым краем экрана. До них можно добраться сочетаниями клавиш прокрутки (см. «Сочетания клавиш») или прокруткой над островом в строке меню. Если выключено, редактор их не показывает, а их приложения переходят в зону экрана по умолчанию."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Umožňuje, aby rozloženie malo zóny za ľavým a pravým okrajom obrazovky. K nim sa dostanete skratkami na posúvanie (pozri Skratky) alebo posúvaním nad ostrovom v paneli ponúk. Keď je vypnuté, editor ich nezobrazuje a ich aplikácie sa presunú do predvolenej zóny obrazovky."
+            "value" : "Umožňuje rozloženiu mať obrazovky za ľavým a pravým okrajom obrazovky. K nim sa dostanete skratkami na posúvanie (pozri Skratky) alebo posúvaním nad ostrovom v paneli ponúk. Keď je vypnuté, editor ich nezobrazuje a ich aplikácie sa presunú do predvolenej zóny obrazovky."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Postavitvi omogoča, da ima območja onkraj levega in desnega roba zaslona. Do njih pridete z bližnjicami za pomikanje (glejte Bližnjice) ali s pomikanjem nad otokom v menijski vrstici. Če je izklopljeno, jih urejevalnik ne prikazuje, njihove aplikacije pa se premaknejo v privzeto območje zaslona."
+            "value" : "Omogoča, da ima razporeditev zaslone zunaj levega in desnega roba zaslona. Do njih pridete z bližnjicami za pomikanje (glejte Bližnjice) ali s pomikanjem nad otokom v menijski vrstici. Če je izklopljeno, jih urejevalnik ne prikazuje, njihove aplikacije pa se premaknejo v privzeto območje zaslona."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Омогућава распореду да има зоне изван левог и десног руба екрана. До њих се стиже пречицама за померање (погледајте Пречице) или померањем изнад острва у траци менија. Када је искључено, уређивач их не приказује, а њихове апликације прелазе у подразумевану зону екрана."
+            "value" : "Омогућава распореду да има екране изван леве и десне ивице екрана. До њих се стиже пречицама за померање (погледајте Пречице) или померањем изнад острва у траци менија. Када је искључено, уређивач их не приказује, а њихове апликације прелазе у подразумевану зону екрана."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låter en layout ha zoner bortom skärmens vänstra och högra kant. Du når dem med rullningsgenvägarna (se Kortkommandon) eller genom att rulla över ön i menyraden. När det är av visar redigeraren dem inte, och deras appar flyttas till skärmens standardzon."
+            "value" : "Låter en layout ha skärmar utanför en skärms vänstra och högra kant. Du når dem med rullningsgenvägarna (se Kortkommandon) eller genom att rulla över ön i menyraden. När det är av visar redigeraren dem inte, och deras appar flyttas till skärmens standardzon."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ஒரு தளவமைப்பு திரையின் இடது, வலது விளிம்புகளுக்கு அப்பால் மண்டலங்களைக் கொண்டிருக்க அனுமதிக்கிறது. உருள் குறுக்குவழிகள் (குறுக்குவழிகளைப் பார்க்கவும்) மூலமாகவோ, மெனு பட்டியில் உள்ள தீவின் மேல் உருட்டியோ அவற்றை அடையலாம். அணைத்திருந்தால் எடிட்டர் அவற்றைக் காட்டாது, அவற்றின் பயன்பாடுகள் திரையின் இயல்புநிலை மண்டலத்துக்கு நகரும்."
+            "value" : "ஒரு தளவமைப்பு, திரையின் இடது மற்றும் வலது ஓரங்களுக்கு வெளியே திரைகளைக் கொண்டிருக்க அனுமதிக்கிறது. உருள் குறுக்குவழிகள் (குறுக்குவழிகளைப் பார்க்கவும்) மூலமாகவோ, மெனு பட்டியில் உள்ள தீவின் மேல் உருட்டியோ அவற்றை அடையலாம். அணைத்திருந்தால் எடிட்டர் அவற்றைக் காட்டாது, அவற்றின் பயன்பாடுகள் திரையின் இயல்புநிலை மண்டலத்துக்கு நகரும்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "లేఅవుట్‌కు స్క్రీన్ ఎడమ, కుడి అంచులకు ఆవల జోన్‌లు ఉండేలా అనుమతిస్తుంది. స్క్రోల్ షార్ట్‌కట్‌ల ద్వారా (షార్ట్‌కట్‌లు చూడండి) లేదా మెనూ బార్‌లోని ఐలాండ్ పైన స్క్రోల్ చేసి వాటిని చేరుకోవచ్చు. ఆఫ్ చేస్తే ఎడిటర్ వాటిని చూపదు, వాటి యాప్‌లు స్క్రీన్ డిఫాల్ట్ జోన్‌కు మారతాయి."
+            "value" : "లేఅవుట్‌కు స్క్రీన్ ఎడమ, కుడి అంచుల వెలుపల స్క్రీన్‌లు ఉండేందుకు అనుమతిస్తుంది. స్క్రోల్ షార్ట్‌కట్‌ల ద్వారా (షార్ట్‌కట్‌లు చూడండి) లేదా మెనూ బార్‌లోని ఐలాండ్ పైన స్క్రోల్ చేసి వాటిని చేరుకోవచ్చు. ఆఫ్ చేస్తే ఎడిటర్ వాటిని చూపదు, వాటి యాప్‌లు స్క్రీన్ డిఫాల్ట్ జోన్‌కు మారతాయి."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ให้เลย์เอาต์มีโซนอยู่เลยขอบซ้ายและขอบขวาของหน้าจอได้ เข้าถึงโซนเหล่านั้นด้วยทางลัดเลื่อน (ดูทางลัด) หรือเลื่อนบนไอส์แลนด์ในแถบเมนู เมื่อปิดอยู่ ตัวแก้ไขจะไม่แสดงโซนเหล่านั้น และแอปในโซนจะย้ายไปที่โซนเริ่มต้นของหน้าจอ"
+            "value" : "ให้เลย์เอาต์มีหน้าจอเพิ่มเติมอยู่เลยขอบซ้ายและขอบขวาของหน้าจอได้ เข้าถึงหน้าจอเหล่านั้นด้วยทางลัดเลื่อน (ดูทางลัด) หรือเลื่อนบนไอส์แลนด์ในแถบเมนู เมื่อปิดอยู่ ตัวแก้ไขจะไม่แสดงหน้าจอเหล่านั้น และแอปในหน้าจอเหล่านั้นจะย้ายไปที่โซนเริ่มต้นของหน้าจอ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir düzenin ekranın sol ve sağ kenarlarının ötesinde bölgeler içermesine izin verir. Bunlara kaydırma kısayollarıyla (bkz. Kısayollar) ya da menü çubuğundaki adanın üzerinde kaydırarak ulaşılır. Kapalıyken düzenleyici bunları göstermez ve uygulamaları ekranın varsayılan bölgesine taşınır."
+            "value" : "Bir düzenin ekranın sol ve sağ kenarlarının ötesinde ekranlar içermesine izin verir. Bunlara kaydırma kısayollarıyla (bkz. Kısayollar) ya da menü çubuğundaki adanın üzerinde kaydırarak ulaşılır. Kapalıyken düzenleyici bunları göstermez ve uygulamaları ekranın varsayılan bölgesine taşınır."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Дає змогу розкладці мати зони за лівим і правим краями екрана. До них можна дістатися скороченнями прокручування (див. «Скорочення») або прокручуванням над островом у рядку меню. Якщо вимкнено, редактор їх не показує, а їхні програми переходять у зону екрана за замовчуванням."
+            "value" : "Дозволяє розкладці мати екрани за лівим і правим краєм екрана. До них можна дістатися скороченнями прокручування (див. «Скорочення») або прокручуванням над островом у рядку меню. Якщо вимкнено, редактор їх не показує, а їхні програми переходять у зону екрана за замовчуванням."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "لے آؤٹ کو اسکرین کے بائیں اور دائیں کناروں سے آگے زونز رکھنے دیتا ہے۔ ان تک اسکرول شارٹ کٹس (شارٹ کٹس دیکھیں) سے، یا مینو بار میں جزیرے پر اسکرول کر کے پہنچا جا سکتا ہے۔ بند ہونے پر ایڈیٹر انہیں نہیں دکھاتا اور ان کی ایپس اسکرین کے ڈیفالٹ زون میں چلی جاتی ہیں۔"
+            "value" : "لے آؤٹ کو اسکرین کے بائیں اور دائیں کناروں سے باہر اسکرینیں رکھنے دیتا ہے۔ ان تک اسکرول شارٹ کٹس (شارٹ کٹس دیکھیں) سے، یا مینو بار میں جزیرے پر اسکرول کر کے پہنچا جا سکتا ہے۔ بند ہونے پر ایڈیٹر انہیں نہیں دکھاتا اور ان کی ایپس اسکرین کے ڈیفالٹ زون میں چلی جاتی ہیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cho phép một bố cục có các vùng nằm ngoài mép trái và mép phải của màn hình. Bạn đến các vùng đó bằng phím tắt cuộn (xem Phím tắt) hoặc bằng cách cuộn trên đảo trong thanh menu. Khi tắt, trình chỉnh sửa không hiển thị các vùng đó và ứng dụng của chúng chuyển sang vùng mặc định của màn hình."
+            "value" : "Cho phép một bố cục có các màn hình nằm ngoài cạnh trái và cạnh phải của màn hình. Bạn đến các màn hình đó bằng phím tắt cuộn (xem Phím tắt) hoặc bằng cách cuộn trên đảo trong thanh menu. Khi tắt, trình chỉnh sửa không hiển thị các màn hình đó và ứng dụng của chúng chuyển sang vùng mặc định của màn hình."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允许布局拥有位于屏幕左右边缘之外的区域。可以通过滚动快捷键（见“快捷键”）或在菜单栏的岛上滚动来到达这些区域。关闭后，编辑器不再显示它们，其中的应用会移到屏幕的默认区域。"
+            "value" : "允许布局在屏幕左右边缘之外拥有更多屏幕。可以通过滚动快捷键（见“快捷键”）或在菜单栏的岛上滚动来到达这些屏幕。关闭后，编辑器不再显示它们，其中的应用会移到屏幕的默认区域。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允許版面配置擁有位於螢幕左右邊緣之外的區域。可以透過捲動快速鍵（見「快速鍵」）或在選單列的島上捲動來到達這些區域。關閉後，編輯器不再顯示它們，其中的 App 會移到螢幕的預設區域。"
+            "value" : "允許版面在螢幕左右邊緣之外擁有更多螢幕。可以透過捲動快速鍵（見「快速鍵」）或在選單列的島上捲動來到達這些螢幕。關閉後，編輯器不再顯示它們，其中的 App 會移到螢幕的預設區域。"
           }
         }
       }
@@ -29787,287 +29506,6 @@
         }
       }
     },
-    "Past the last zone on the screen, the focus goes on to the zones beyond its edge, and the layout scrolls to them." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "بعد آخر منطقة على الشاشة ينتقل التركيز إلى المناطق خارج حافتها، ويتمرّر التخطيط إليها."
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "След последната зона на екрана фокусът продължава към зоните извън ръба му, а оформлението се превърта към тях."
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "স্ক্রিনের শেষ জোনের পরে ফোকাস প্রান্তের বাইরের জোনে যায়, আর লেআউট সেগুলোর দিকে স্ক্রল করে।"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Passada l'última zona de la pantalla, el focus continua cap a les zones fora de la seva vora, i la disposició es desplaça cap a elles."
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Za poslední zónou na obrazovce pokračuje fokus do zón za jejím okrajem a rozložení se k nim posune."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Efter den sidste zone på skærmen går fokus videre til zonerne uden for dens kant, og layoutet ruller hen til dem."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nach der letzten Zone auf dem Bildschirm geht der Fokus zu den Zonen jenseits des Rands, und das Layout scrollt zu ihnen."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Μετά την τελευταία ζώνη στην οθόνη, η εστίαση συνεχίζει στις ζώνες πέρα από το άκρο της και η διάταξη κυλά προς αυτές."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pasada la última zona de la pantalla, el foco sigue hacia las zonas más allá de su borde y la disposición se desplaza hacia ellas."
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pärast ekraani viimast tsooni liigub fookus servast kaugemale jäävatesse tsoonidesse ja paigutus kerib nende juurde."
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "پس از آخرین ناحیه روی صفحه‌نمایش، تمرکز به ناحیه‌های فراتر از لبهٔ آن می‌رود و چیدمان به سمت آن‌ها پیمایش می‌شود."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näytön viimeisen alueen jälkeen kohdistus jatkaa reunan taakse jääville alueille, ja asettelu vierittyy niiden luo."
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pagkatapos ng huling zone sa screen, nagpapatuloy ang focus sa mga zone sa labas ng gilid nito, at nag-i-scroll ang layout papunta sa mga ito."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Après la dernière zone de l'écran, le focus continue vers les zones au-delà de son bord, et la disposition défile jusqu'à elles."
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "אחרי האזור האחרון במסך המיקוד ממשיך לאזורים מעבר לקצה שלו, והפריסה גוללת אליהם."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीन के आख़िरी ज़ोन के बाद फ़ोकस उसके किनारे के पार के ज़ोन में जाता है और लेआउट उनकी ओर स्क्रोल होता है।"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nakon posljednje zone na zaslonu fokus ide dalje na zone izvan njegova ruba, a raspored se pomiče prema njima."
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A képernyő utolsó zónája után a fókusz a szélén túli zónákra megy tovább, és az elrendezés odagörög."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Setelah zona terakhir di layar, fokus berlanjut ke zona di luar tepinya, dan tata letak bergulir ke sana."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dopo l'ultima zona sullo schermo, il focus prosegue verso le zone oltre il suo bordo e il layout scorre fino a loro."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "画面上の最後のゾーンの先では、フォーカスが端の外にあるゾーンへ進み、レイアウトがそこへスクロールします。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "화면의 마지막 영역을 지나면 포커스가 가장자리 밖의 영역으로 이어지고, 레이아웃이 그쪽으로 스크롤됩니다."
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Po paskutinės ekrano zonos fokusas pereina į zonas už jo krašto, o išdėstymas slenka link jų."
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pēc pēdējās zonas ekrānā fokuss turpina uz zonām aiz tā malas, un izkārtojums ritinās uz tām."
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीनवरील शेवटच्या झोननंतर फोकस त्याच्या कडेपलीकडील झोनमध्ये जातो आणि लेआउट त्यांच्याकडे स्क्रोल होतो."
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selepas zon terakhir pada skrin, fokus diteruskan ke zon di luar tepinya, dan reka letak menatal ke sana."
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Etter den siste sonen på skjermen går fokus videre til sonene utenfor kanten, og oppsettet ruller til dem."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voorbij de laatste zone op het scherm gaat de focus verder naar de zones voorbij de rand, en de indeling scrolt ernaartoe."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Za ostatnią strefą na ekranie fokus przechodzi do stref poza jego krawędzią, a układ przewija się do nich."
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Depois da última zona do ecrã, o foco continua para as zonas além da sua margem e a disposição desloca-se até elas."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Depois da última zona da tela, o foco continua para as zonas além da sua borda e o layout rola até elas."
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "După ultima zonă de pe ecran, focalizarea merge mai departe spre zonele de dincolo de margine, iar aspectul derulează spre ele."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "После последней зоны на экране фокус переходит в зоны за его краем, а раскладка прокручивается к ним."
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Za poslednou zónou na obrazovke pokračuje fokus do zón za jej okrajom a rozloženie sa k nim posunie."
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Za zadnjim območjem na zaslonu gre fokus naprej na območja zunaj njegovega roba, postavitev pa se pomakne do njih."
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "После последње зоне на екрану фокус иде даље на зоне изван његове ивице, а распоред се помера ка њима."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Efter den sista zonen på skärmen går fokus vidare till zonerna utanför kanten, och layouten rullar till dem."
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "திரையின் கடைசி மண்டலத்துக்குப் பிறகு கவனம் அதன் விளிம்புக்கு அப்பால் உள்ள மண்டலங்களுக்குச் செல்லும், தளவமைப்பு அவற்றை நோக்கி உருளும்."
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "స్క్రీన్‌పై చివరి జోన్ తర్వాత ఫోకస్ దాని అంచుకు ఆవల ఉన్న జోన్‌లకు వెళ్తుంది, లేఅవుట్ వాటి వైపు స్క్రోల్ అవుతుంది."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "หลังโซนสุดท้ายบนหน้าจอ โฟกัสจะไปต่อยังโซนที่อยู่นอกขอบ และเลย์เอาต์จะเลื่อนไปหาโซนเหล่านั้น"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ekrandaki son bölgeden sonra odak, kenarın ötesindeki bölgelere geçer ve düzen onlara kayar."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Після останньої зони на екрані фокус переходить до зон за його краєм, а розкладка прокручується до них."
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اسکرین کے آخری زون کے بعد فوکس اس کے کنارے سے آگے کے زونز میں جاتا ہے اور لے آؤٹ ان کی طرف اسکرول ہوتا ہے۔"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sau vùng cuối cùng trên màn hình, tiêu điểm tiếp tục sang các vùng ngoài mép, và bố cục cuộn tới đó."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "越过屏幕上的最后一个区域后，焦点会继续移到边缘之外的区域，布局会滚动到那里。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "越過螢幕上的最後一個區域後，焦點會繼續移到邊緣之外的區域，版面配置會捲動到那裡。"
-          }
-        }
-      }
-    },
     "Press keys" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -35688,6 +35126,568 @@
         }
       }
     },
+    "Screens beyond the screen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شاشات خارج الشاشة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани извън екрана"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "স্ক্রিনের বাইরের স্ক্রিন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalles més enllà de la pantalla"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrazovky za obrazovkou"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærme uden for skærmen"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirme jenseits des Bildschirms"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οθόνες πέρα από την οθόνη"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantallas más allá de la pantalla"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanid ekraanist väljaspool"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صفحه‌نمایش‌های خارج از صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytön ulkopuoliset näytöt"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga screen sa labas ng screen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écrans au-delà de l'écran"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מסכים מחוץ למסך"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन के बाहर की स्क्रीन"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni izvan zaslona"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Képernyők a képernyőn túl"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar di luar layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermi oltre lo schermo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面の外の画面"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 밖의 화면"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranai už ekrano"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrāni aiz ekrāna"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीनबाहेरच्या स्क्रीन"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrin di luar skrin"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermer utenfor skjermen"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermen voorbij het scherm"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrany poza ekranem"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrãs para além do ecrã"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telas além da tela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrane dincolo de ecran"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экраны за пределами экрана"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrazovky za obrazovkou"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni zunaj zaslona"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани изван екрана"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärmar utanför skärmen"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "திரைக்கு வெளியே உள்ள திரைகள்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "స్క్రీన్ వెలుపలి స్క్రీన్‌లు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หน้าจอนอกหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranın ötesindeki ekranlar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани за межами екрана"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسکرین سے باہر کی اسکرینیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Màn hình ngoài màn hình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕之外的屏幕"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕之外的螢幕"
+          }
+        }
+      }
+    },
+    "Screens beyond the screen's edges" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شاشات خارج حواف الشاشة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани извън краищата на екрана"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "স্ক্রিনের প্রান্তের বাইরের স্ক্রিন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalles més enllà de les vores de la pantalla"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrazovky za okraji obrazovky"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skærme uden for skærmens kanter"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirme jenseits der Bildschirmränder"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οθόνες πέρα από τις άκρες της οθόνης"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantallas más allá de los bordes de la pantalla"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekraanid ekraani servadest väljaspool"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صفحه‌نمایش‌های خارج از لبه‌های صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytön reunojen ulkopuoliset näytöt"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga screen sa labas ng mga gilid ng screen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écrans au-delà des bords de l'écran"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מסכים מחוץ לקצוות המסך"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन के किनारों के बाहर की स्क्रीन"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni izvan rubova zaslona"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Képernyők a képernyő szélein túl"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar di luar tepi layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermi oltre i bordi dello schermo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面の端の外側の画面"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 가장자리 밖의 화면"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranai už ekrano kraštų"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrāni aiz ekrāna malām"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीनच्या कडांबाहेरच्या स्क्रीन"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrin di luar tepi skrin"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjermer utenfor skjermkantene"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermen voorbij de schermranden"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrany poza krawędziami ekranu"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrãs para além das bordas do ecrã"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telas além das bordas da tela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecrane dincolo de marginile ecranului"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экраны за краями экрана"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrazovky za okrajmi obrazovky"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasloni zunaj robov zaslona"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани изван ивица екрана"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skärmar utanför skärmkanterna"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "திரையின் ஓரங்களுக்கு வெளியே உள்ள திரைகள்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "స్క్రీన్ అంచుల వెలుపలి స్క్రీన్‌లు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หน้าจอนอกขอบหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran kenarlarının ötesindeki ekranlar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Екрани за краями екрана"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسکرین کے کناروں سے باہر کی اسکرینیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Màn hình ngoài các cạnh màn hình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕边缘之外的屏幕"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕邊緣之外的螢幕"
+          }
+        }
+      }
+    },
     "Scroll to the left" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37936,283 +37936,283 @@
         }
       }
     },
-    "Some displays are level with the one to their left, so a zone beyond the edge of one lands on the other." : {
+    "Some displays are level with the one to their left, so a screen beyond the edge of one lands on the other." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بعض الشاشات في مستوى الشاشة التي على يسارها، لذا تنتقل المنطقة التي تتجاوز حافة إحداها إلى الأخرى."
+            "value" : "بعض شاشات العرض في مستوى الشاشة التي على يسارها، فتقع شاشة خارج حافة إحداها على الأخرى."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Някои дисплеи са на едно ниво с този отляво, затова зона отвъд ръба на единия попада върху другия."
+            "value" : "Някои дисплеи са на едно ниво с този отляво, затова екран извън края на единия попада върху другия."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "কিছু ডিসপ্লে তাদের বাঁ দিকের ডিসপ্লের সমান উচ্চতায় আছে, তাই একটির প্রান্তের বাইরের জোন অন্যটিতে গিয়ে পড়ে।"
+            "value" : "কিছু ডিসপ্লে বাঁ পাশের ডিসপ্লের সমান উচ্চতায় থাকে, তাই একটির প্রান্তের বাইরের স্ক্রিন অন্যটিতে পড়ে।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Algunes pantalles estan al mateix nivell que la que tenen a l’esquerra, de manera que una zona més enllà de la vora d’una cau a l’altra."
+            "value" : "Alguns monitors estan al mateix nivell que el de la seva esquerra, de manera que una pantalla més enllà de la vora d'un cau sobre l'altre."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Některé displeje jsou ve stejné výšce jako displej vlevo od nich, takže zóna za okrajem jednoho dopadne na druhý."
+            "value" : "Některé displeje jsou ve stejné výšce jako ten nalevo, takže obrazovka za okrajem jednoho přistane na druhém."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nogle skærme er i niveau med skærmen til venstre, så en zone uden for kanten af den ene havner på den anden."
+            "value" : "Nogle displays er i niveau med det til venstre, så en skærm uden for kanten af det ene havner på det andet."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einige Displays liegen auf gleicher Höhe wie das Display links davon, sodass eine Zone jenseits des Rands des einen auf dem anderen landet."
+            "value" : "Einige Displays liegen auf gleicher Höhe wie das Display links davon, sodass ein Bildschirm jenseits des Rands des einen auf dem anderen landet."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ορισμένες οθόνες βρίσκονται στο ίδιο ύψος με την οθόνη στα αριστερά τους, οπότε μια ζώνη πέρα από την άκρη της μίας πέφτει στην άλλη."
+            "value" : "Ορισμένες οθόνες βρίσκονται στο ίδιο επίπεδο με αυτήν στα αριστερά τους, οπότε μια οθόνη πέρα από την άκρη της μίας πέφτει πάνω στην άλλη."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Algunas pantallas están al mismo nivel que la que tienen a su izquierda, así que una zona más allá del borde de una cae en la otra."
+            "value" : "Algunas pantallas están a la misma altura que la de su izquierda, así que una pantalla más allá del borde de una cae sobre la otra."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mõned ekraanid on samal kõrgusel nende vasakpoolse ekraaniga, nii et ühe ekraani serva taha jääv tsoon satub teisele."
+            "value" : "Mõned ekraanid on vasakpoolsega samal tasemel, nii et ühe serva taha jääv ekraan satub teisele."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بعضی نمایشگرها هم‌سطح نمایشگر سمت چپ خود هستند، بنابراین ناحیه‌ای که فراتر از لبهٔ یکی است روی دیگری می‌افتد."
+            "value" : "برخی نمایشگرها هم‌سطح نمایشگر سمت چپ خود هستند، پس صفحه‌نمایشی که بیرون از لبهٔ یکی است روی دیگری می‌افتد."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jotkin näytöt ovat samalla korkeudella vasemmalla olevan näytön kanssa, joten toisen reunan ulkopuolella oleva alue osuu toiselle."
+            "value" : "Jotkin näytöt ovat samalla tasolla vasemmalla olevan kanssa, joten toisen reunan ulkopuolinen näyttö osuu toiselle."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "May mga display na magkapantay sa display sa kaliwa nila, kaya ang zone na lampas sa gilid ng isa ay napupunta sa isa pa."
+            "value" : "Ang ilang display ay kapantay ng nasa kaliwa nila, kaya ang screen sa labas ng gilid ng isa ay napupunta sa isa pa."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Certains écrans sont au même niveau que celui à leur gauche : une zone au-delà du bord de l’un tombe donc sur l’autre."
+            "value" : "Certains écrans sont au même niveau que celui à leur gauche : un écran au-delà du bord de l’un tombe donc sur l’autre."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "חלק מהצגים נמצאים באותה גובה עם הצג משמאלם, ולכן אזור שמעבר לקצה של אחד מהם נוחת על האחר."
+            "value" : "חלק מהתצוגות נמצאות בגובה התצוגה שמשמאלן, ולכן מסך שמחוץ לקצה של אחת מהן נופל על האחרת."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कुछ डिस्प्ले अपने बाईं ओर वाले डिस्प्ले के बराबर ऊँचाई पर हैं, इसलिए एक के किनारे से आगे का ज़ोन दूसरे पर आ जाता है।"
+            "value" : "कुछ डिस्प्ले अपने बाईं ओर के डिस्प्ले के बराबर ऊँचाई पर हैं, इसलिए एक के किनारे के बाहर की स्क्रीन दूसरे पर आ जाती है।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neki su zasloni u istoj visini kao zaslon lijevo od njih pa zona iza ruba jednoga završi na drugom."
+            "value" : "Neki su displeji u razini s onim lijevo od njih, pa zaslon izvan ruba jednog pada na drugi."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Egyes kijelzők a tőlük balra lévővel azonos szinten vannak, ezért az egyik szélén túli zóna a másikra esik."
+            "value" : "Egyes kijelzők egy szinten vannak a tőlük balra lévővel, így az egyik szélén túli képernyő a másikra esik."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beberapa layar sejajar dengan layar di sebelah kirinya, sehingga zona di luar tepi salah satunya jatuh ke layar yang lain."
+            "value" : "Beberapa layar sejajar dengan layar di sebelah kirinya, sehingga layar di luar tepi salah satunya jatuh di layar lainnya."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alcuni schermi sono allo stesso livello di quello alla loro sinistra, quindi una zona oltre il bordo di uno finisce sull’altro."
+            "value" : "Alcuni display sono alla stessa altezza di quello alla loro sinistra, quindi uno schermo oltre il bordo dell'uno finisce sull'altro."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "左隣のディスプレイと同じ高さにあるディスプレイがあるため、一方の端の外にあるゾーンがもう一方に重なります。"
+            "value" : "左隣のディスプレイと同じ高さにあるディスプレイがあるため、一方の端の外にある画面がもう一方に重なります。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "일부 디스플레이가 왼쪽 디스플레이와 같은 높이에 있어서, 한쪽 가장자리 밖의 영역이 다른 쪽에 놓입니다."
+            "value" : "일부 디스플레이는 왼쪽 디스플레이와 높이가 같아서, 한쪽 가장자리 밖의 화면이 다른 쪽에 겹칩니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kai kurie ekranai yra tame pačiame lygyje kaip jų kairėje esantis ekranas, todėl zona už vieno krašto patenka ant kito."
+            "value" : "Kai kurie ekranai yra tame pačiame lygyje kaip kairėje esantis, todėl už vieno krašto esantis ekranas patenka ant kito."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daži displeji atrodas vienā līmenī ar displeju to kreisajā pusē, tāpēc zona aiz viena malas nokļūst uz otra."
+            "value" : "Daži displeji atrodas vienā līmenī ar kreisajā pusē esošo, tāpēc ekrāns aiz vienas malas nonāk uz otra."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "काही डिस्प्ले त्यांच्या डावीकडील डिस्प्लेइतक्याच उंचीवर आहेत, त्यामुळे एकाच्या काठाच्या पलीकडील झोन दुसऱ्यावर येतो."
+            "value" : "काही डिस्प्ले त्यांच्या डावीकडच्या डिस्प्लेच्या बरोबरीत असतात, म्हणून एकाच्या कडेबाहेरची स्क्रीन दुसऱ्यावर येते."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sesetengah paparan sejajar dengan paparan di sebelah kirinya, jadi zon di luar tepi salah satunya jatuh pada yang lain."
+            "value" : "Sesetengah paparan sama aras dengan yang di sebelah kirinya, jadi skrin di luar tepi satu jatuh pada yang lain."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noen skjermer er på samme nivå som skjermen til venstre for dem, så en sone utenfor kanten på den ene havner på den andre."
+            "value" : "Noen skjermer står på samme nivå som den til venstre for dem, så en skjerm utenfor kanten av den ene havner på den andre."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sommige schermen staan op gelijke hoogte met het scherm links ervan, waardoor een zone voorbij de rand van het ene op het andere terechtkomt."
+            "value" : "Sommige beeldschermen staan op gelijke hoogte met het scherm links ervan, zodat een scherm voorbij de rand van het ene op het andere terechtkomt."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Niektóre wyświetlacze są na tym samym poziomie co wyświetlacz po ich lewej, więc strefa poza krawędzią jednego trafia na drugi."
+            "value" : "Niektóre wyświetlacze są na tej samej wysokości co wyświetlacz po ich lewej, więc ekran poza krawędzią jednego trafia na drugi."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alguns ecrãs estão ao mesmo nível do ecrã à sua esquerda, pelo que uma zona além da margem de um cai no outro."
+            "value" : "Alguns ecrãs estão à mesma altura que o da sua esquerda, pelo que um ecrã para além da borda de um cai sobre o outro."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Algumas telas estão no mesmo nível da tela à sua esquerda, então uma zona além da borda de uma cai na outra."
+            "value" : "Algumas telas ficam no mesmo nível da que está à esquerda, então uma tela além da borda de uma cai sobre a outra."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unele ecrane sunt la același nivel cu ecranul din stânga lor, așa că o zonă dincolo de marginea unuia ajunge pe celălalt."
+            "value" : "Unele ecrane sunt la același nivel cu cel din stânga lor, așa că un ecran de dincolo de marginea unuia ajunge pe celălalt."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Некоторые дисплеи находятся на одном уровне с дисплеем слева, поэтому зона за краем одного попадает на другой."
+            "value" : "Некоторые дисплеи расположены на одном уровне с левым соседом, поэтому экран за краем одного попадает на другой."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Niektoré displeje sú v rovnakej výške ako displej vľavo od nich, takže zóna za okrajom jedného dopadne na druhý."
+            "value" : "Niektoré displeje sú v rovnakej výške ako ten naľavo, takže obrazovka za okrajom jedného pristane na druhom."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nekateri zasloni so na isti višini kot zaslon levo od njih, zato območje onkraj roba enega pristane na drugem."
+            "value" : "Nekateri zasloni so v isti višini kot tisti levo od njih, zato zaslon zunaj roba enega pristane na drugem."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Неки екрани су на истој висини као екран лево од њих, па зона иза ивице једног заврши на другом."
+            "value" : "Неки дисплеји су у истом нивоу као онај лево од њих, па екран изван ивице једног доспева на други."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vissa skärmar står på samma nivå som skärmen till vänster om dem, så en zon bortom kanten på den ena hamnar på den andra."
+            "value" : "Vissa displayer står i nivå med den till vänster, så en skärm utanför kanten på den ena hamnar på den andra."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "சில காட்சித்திரைகள் தங்கள் இடப்பக்கத்திலுள்ளதற்கு சமமான உயரத்தில் உள்ளன, எனவே ஒன்றின் விளிம்பைத் தாண்டிய மண்டலம் மற்றதில் விழுகிறது."
+            "value" : "சில டிஸ்ப்ளேக்கள் தங்கள் இடப்புறமுள்ளதற்கு சமமான மட்டத்தில் இருக்கும்; அதனால் ஒன்றின் ஓரத்துக்கு வெளியே உள்ள திரை மற்றொன்றில் விழும்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "కొన్ని డిస్‌ప్లేలు వాటి ఎడమవైపున ఉన్న డిస్‌ప్లేతో సమాన ఎత్తులో ఉన్నాయి, కాబట్టి ఒకదాని అంచు దాటిన జోన్ మరొకదానిపై పడుతుంది."
+            "value" : "కొన్ని డిస్‌ప్లేలు వాటి ఎడమవైపు ఉన్నదానితో సమాన స్థాయిలో ఉంటాయి, కాబట్టి ఒకదాని అంచు వెలుపలి స్క్రీన్ మరొకదానిపై పడుతుంది."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "จอภาพบางจออยู่ระดับเดียวกับจอภาพทางซ้าย โซนที่อยู่นอกขอบของจอหนึ่งจึงไปตกอยู่บนอีกจอหนึ่ง"
+            "value" : "จอแสดงผลบางจออยู่ระดับเดียวกับจอทางซ้าย ดังนั้นหน้าจอนอกขอบของจอหนึ่งจึงตกลงบนอีกจอหนึ่ง"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bazı ekranlar solundaki ekranla aynı hizada, bu yüzden birinin kenarının ötesindeki bölge diğerine düşer."
+            "value" : "Bazı ekranlar solundaki ekranla aynı hizada, bu yüzden birinin kenarının ötesindeki ekran diğerine düşer."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Деякі дисплеї розташовані на одному рівні з дисплеєм ліворуч, тому зона за краєм одного потрапляє на інший."
+            "value" : "Деякі дисплеї розташовані на одному рівні з лівим сусідом, тож екран за краєм одного потрапляє на інший."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "کچھ ڈسپلے اپنے بائیں طرف والے ڈسپلے کے برابر اونچائی پر ہیں، اس لیے ایک کے کنارے سے آگے کا زون دوسرے پر آ جاتا ہے۔"
+            "value" : "کچھ ڈسپلے اپنے بائیں والے کے برابر اونچائی پر ہوتے ہیں، اس لیے ایک کے کنارے سے باہر کی اسکرین دوسرے پر آ جاتی ہے۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Một số màn hình ngang tầm với màn hình bên trái, nên vùng nằm ngoài mép của màn hình này rơi vào màn hình kia."
+            "value" : "Một số màn hình cùng mức với màn hình bên trái, nên màn hình ngoài cạnh của màn hình này rơi vào màn hình kia."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "有些显示器与其左侧的显示器处于同一高度，因此一个显示器边缘之外的区域会落到另一个上。"
+            "value" : "有些显示器与其左侧的显示器等高，因此一个显示器边缘之外的屏幕会落到另一个上。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "有些顯示器與其左側的顯示器處於同一高度，因此一個顯示器邊緣之外的區域會落到另一個上。"
+            "value" : "有些顯示器與其左側的顯示器等高，因此一個顯示器邊緣之外的螢幕會落到另一個上。"
           }
         }
       }
@@ -39622,283 +39622,283 @@
         }
       }
     },
-    "Swipe sideways with three fingers to move through a zone's windows, and with four fingers to slide to the zones beyond the screen. No keys are needed." : {
+    "Swipe sideways with three fingers to move through a zone's windows, and with four fingers to slide to the screens beyond the screen. No keys are needed." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "اسحب جانبيًا بثلاثة أصابع للتنقل بين نوافذ المنطقة، وبأربعة أصابع للانتقال إلى المناطق خارج الشاشة. لا حاجة إلى أي مفاتيح."
+            "value" : "اسحب جانبيًا بثلاثة أصابع للتنقل بين نوافذ منطقة، وبأربعة أصابع للانتقال إلى الشاشات الواقعة خارج الشاشة. لا حاجة إلى أي مفاتيح."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Плъзнете настрани с три пръста, за да се движите между прозорците на зона, и с четири пръста, за да преминете към зоните извън екрана. Не са нужни клавиши."
+            "value" : "Плъзнете настрани с три пръста, за да се движите през прозорците на зона, и с четири пръста, за да преминете към екраните извън екрана. Не са нужни клавиши."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "একটি জোনের উইন্ডোগুলোর মধ্যে যেতে তিন আঙুলে পাশে সোয়াইপ করুন, আর স্ক্রিনের বাইরের জোনগুলোতে স্লাইড করতে চার আঙুলে। কোনো কী লাগবে না।"
+            "value" : "একটি জোনের উইন্ডোগুলোর মধ্যে যেতে তিন আঙুলে পাশে সোয়াইপ করুন, আর স্ক্রিনের বাইরের স্ক্রিনগুলোতে যেতে চার আঙুলে সোয়াইপ করুন। কোনো কী লাগবে না।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Llisca cap als costats amb tres dits per moure't entre les finestres d'una zona, i amb quatre dits per desplaçar-te a les zones més enllà de la pantalla. No calen tecles."
+            "value" : "Llisca lateralment amb tres dits per moure't entre les finestres d'una zona, i amb quatre dits per lliscar cap a les pantalles més enllà de la pantalla. No calen tecles."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Přejetím do strany třemi prsty se pohybujete mezi okny zóny a čtyřmi prsty přejdete do zón za okrajem obrazovky. Žádné klávesy nejsou potřeba."
+            "value" : "Přejetím do strany třemi prsty procházíte okny zóny a čtyřmi prsty se přesunete na obrazovky za obrazovkou. Žádné klávesy nejsou potřeba."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stryg sidelæns med tre fingre for at gå gennem en zones vinduer, og med fire fingre for at glide til zonerne uden for skærmen. Der skal ikke bruges taster."
+            "value" : "Stryg sidelæns med tre fingre for at gå gennem vinduerne i en zone, og med fire fingre for at glide til skærmene uden for skærmen. Der skal ikke bruges taster."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wische mit drei Fingern zur Seite, um durch die Fenster einer Zone zu gehen, und mit vier Fingern, um zu den Zonen jenseits des Bildschirms zu gleiten. Es sind keine Tasten nötig."
+            "value" : "Wische mit drei Fingern zur Seite, um durch die Fenster einer Zone zu gehen, und mit vier Fingern, um zu den Bildschirmen jenseits des Bildschirms zu gleiten. Es sind keine Tasten nötig."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Σύρετε πλευρικά με τρία δάχτυλα για να περάσετε μέσα από τα παράθυρα μιας ζώνης και με τέσσερα δάχτυλα για να γλιστρήσετε στις ζώνες πέρα από την οθόνη. Δεν χρειάζονται πλήκτρα."
+            "value" : "Σύρετε πλάγια με τρία δάχτυλα για να περιηγηθείτε στα παράθυρα μιας ζώνης και με τέσσερα δάχτυλα για να γλιστρήσετε στις οθόνες πέρα από την οθόνη. Δεν χρειάζονται πλήκτρα."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Desliza hacia los lados con tres dedos para moverte entre las ventanas de una zona, y con cuatro dedos para ir a las zonas más allá de la pantalla. No hacen falta teclas."
+            "value" : "Desliza hacia un lado con tres dedos para moverte por las ventanas de una zona, y con cuatro dedos para deslizarte a las pantallas más allá de la pantalla. No hacen falta teclas."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pühi kolme sõrmega küljele, et liikuda tsooni akende vahel, ja nelja sõrmega, et libiseda ekraanist kaugemale jäävatesse tsoonidesse. Klahve pole vaja."
+            "value" : "Pühi kolme sõrmega küljele, et liikuda tsooni akende vahel, ja nelja sõrmega, et libiseda ekraanidele ekraanist väljaspool. Klahve pole vaja."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "با سه انگشت به پهلو بکشید تا میان پنجره‌های یک ناحیه حرکت کنید و با چهار انگشت تا به ناحیه‌های فراتر از صفحه بلغزید. به هیچ کلیدی نیاز نیست."
+            "value" : "با سه انگشت به کنار بکشید تا میان پنجره‌های یک ناحیه بروید و با چهار انگشت تا به صفحه‌نمایش‌های بیرون از صفحه بلغزید. به هیچ کلیدی نیاز نیست."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pyyhkäise sivulle kolmella sormella siirtyäksesi vyöhykkeen ikkunoiden välillä ja neljällä sormella liukuaksesi näytön ulkopuolisille vyöhykkeille. Näppäimiä ei tarvita."
+            "value" : "Pyyhkäise sivulle kolmella sormella siirtyäksesi vyöhykkeen ikkunoiden läpi ja neljällä sormella liukuaksesi näytön ulkopuolisiin näyttöihin. Näppäimiä ei tarvita."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mag-swipe patagilid gamit ang tatlong daliri para lumipat sa mga window ng isang zone, at gamit ang apat na daliri para mag-slide sa mga zone sa kabila ng screen. Hindi kailangan ng mga key."
+            "value" : "Mag-swipe patagilid gamit ang tatlong daliri para dumaan sa mga window ng isang zone, at gamit ang apat na daliri para mag-slide sa mga screen sa labas ng screen. Hindi kailangan ng mga key."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Balayez latéralement avec trois doigts pour parcourir les fenêtres d'une zone, et avec quatre doigts pour glisser vers les zones au-delà de l'écran. Aucune touche n'est nécessaire."
+            "value" : "Balayez latéralement avec trois doigts pour parcourir les fenêtres d'une zone, et avec quatre doigts pour glisser vers les écrans au-delà de l'écran. Aucune touche n'est nécessaire."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "החלק הצידה בשלוש אצבעות כדי לעבור בין חלונות של אזור, ובארבע אצבעות כדי להחליק לאזורים שמעבר למסך. אין צורך במקשים."
+            "value" : "החליקו הצידה בשלוש אצבעות כדי לעבור בין החלונות של אזור, ובארבע אצבעות כדי להחליק אל המסכים שמחוץ למסך. אין צורך במקשים."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ज़ोन की विंडो के बीच जाने के लिए तीन उँगलियों से बग़ल में स्वाइप करें, और स्क्रीन के पार वाले ज़ोन तक फिसलने के लिए चार उँगलियों से। किसी कुंजी की ज़रूरत नहीं।"
+            "value" : "ज़ोन की विंडो के बीच जाने के लिए तीन उँगलियों से बग़ल में स्वाइप करें, और स्क्रीन के बाहर की स्क्रीन पर जाने के लिए चार उँगलियों से। किसी कुंजी की ज़रूरत नहीं।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prijeđite u stranu s tri prsta za kretanje kroz prozore zone, a s četiri prsta za klizanje do zona izvan zaslona. Tipke nisu potrebne."
+            "value" : "Prijeđite u stranu s tri prsta za kretanje kroz prozore zone, a s četiri prsta za klizanje na zaslone izvan zaslona. Tipke nisu potrebne."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Húzza oldalra három ujjal, hogy végigmenjen egy zóna ablakain, négy ujjal pedig, hogy a képernyőn túli zónákra csússzon. Billentyűkre nincs szükség."
+            "value" : "Húzza oldalra három ujjal egy zóna ablakai közötti lépkedéshez, négy ujjal pedig a képernyőn túli képernyőkre csúszáshoz. Billentyűkre nincs szükség."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geser ke samping dengan tiga jari untuk berpindah antar jendela dalam zona, dan dengan empat jari untuk meluncur ke zona di luar layar. Tidak perlu tombol."
+            "value" : "Geser ke samping dengan tiga jari untuk berpindah antar jendela sebuah zona, dan dengan empat jari untuk meluncur ke layar di luar layar. Tidak perlu tombol."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scorri di lato con tre dita per spostarti tra le finestre di una zona e con quattro dita per passare alle zone oltre lo schermo. Non servono tasti."
+            "value" : "Scorri di lato con tre dita per spostarti tra le finestre di una zona, e con quattro dita per passare agli schermi oltre lo schermo. Non servono tasti."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3本指で横にスワイプするとゾーン内のウインドウを移動し、4本指では画面の外にあるゾーンへスライドします。キーは不要です。"
+            "value" : "3本指で横にスワイプするとゾーン内のウインドウを移動し、4本指では画面の外にある画面へスライドします。キーは不要です。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "세 손가락으로 옆으로 쓸어 넘기면 영역의 윈도우 사이를 이동하고, 네 손가락으로 쓸면 화면 밖의 영역으로 미끄러지듯 이동합니다. 키는 필요 없습니다."
+            "value" : "세 손가락으로 옆으로 쓸어 영역 안의 윈도우를 이동하고, 네 손가락으로는 화면 밖의 화면으로 슬라이드합니다. 키는 필요 없습니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Perbraukite į šalį trimis pirštais, kad judėtumėte tarp zonos langų, o keturiais – kad slystumėte į zonas už ekrano. Klavišų nereikia."
+            "value" : "Perbraukite į šoną trimis pirštais, kad judėtumėte per zonos langus, o keturiais – kad nuslystumėte į ekranus už ekrano. Klavišų nereikia."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velciet uz sāniem ar trim pirkstiem, lai pārvietotos starp zonas logiem, un ar četriem pirkstiem, lai slīdētu uz zonām aiz ekrāna. Taustiņi nav vajadzīgi."
+            "value" : "Velciet uz sāniem ar trim pirkstiem, lai pārvietotos pa zonas logiem, un ar četriem pirkstiem, lai pārslīdētu uz ekrāniem aiz ekrāna. Taustiņi nav vajadzīgi."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "झोनच्या विंडोंमध्ये फिरण्यासाठी तीन बोटांनी बाजूला स्वाइप करा आणि स्क्रीनच्या पलीकडील झोनकडे सरकण्यासाठी चार बोटांनी. कोणत्याही कळेची गरज नाही."
+            "value" : "झोनच्या विंडोंमधून जाण्यासाठी तीन बोटांनी बाजूला स्वाइप करा आणि स्क्रीनबाहेरच्या स्क्रीनवर जाण्यासाठी चार बोटांनी. कोणत्याही कळेची गरज नाही."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Leret ke tepi dengan tiga jari untuk bergerak antara tetingkap zon, dan dengan empat jari untuk meluncur ke zon di luar skrin. Tiada kekunci diperlukan."
+            "value" : "Leret ke tepi dengan tiga jari untuk bergerak antara tetingkap sebuah zon, dan dengan empat jari untuk meluncur ke skrin di luar skrin. Tiada kekunci diperlukan."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sveip sidelengs med tre fingre for å gå gjennom vinduene i en sone, og med fire fingre for å gli til sonene utenfor skjermen. Du trenger ingen taster."
+            "value" : "Sveip sidelengs med tre fingre for å gå gjennom vinduene i en sone, og med fire fingre for å gli til skjermene utenfor skjermen. Du trenger ingen taster."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veeg met drie vingers opzij om door de vensters van een zone te gaan, en met vier vingers om naar de zones voorbij het scherm te glijden. Toetsen zijn niet nodig."
+            "value" : "Veeg zijwaarts met drie vingers om door de vensters van een zone te gaan, en met vier vingers om naar de schermen voorbij het scherm te glijden. Toetsen zijn niet nodig."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Przesuń trzema palcami w bok, aby przechodzić między oknami strefy, a czterema palcami, aby przesunąć się do stref poza ekranem. Klawisze nie są potrzebne."
+            "value" : "Przesuń trzema palcami w bok, aby przechodzić między oknami strefy, a czterema, aby przesunąć się do ekranów poza ekranem. Klawisze nie są potrzebne."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deslize para o lado com três dedos para percorrer as janelas de uma zona e com quatro dedos para ir para as zonas além do ecrã. Não são precisas teclas."
+            "value" : "Deslize para o lado com três dedos para percorrer as janelas de uma zona e com quatro dedos para deslizar para os ecrãs para além do ecrã. Não são precisas teclas."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deslize para o lado com três dedos para percorrer as janelas de uma zona e com quatro dedos para ir às zonas além da tela. Não são necessárias teclas."
+            "value" : "Deslize para o lado com três dedos para percorrer as janelas de uma zona e com quatro dedos para deslizar até as telas além da tela. Não são necessárias teclas."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Glisează lateral cu trei degete pentru a trece prin ferestrele unei zone și cu patru degete pentru a aluneca spre zonele din afara ecranului. Nu sunt necesare taste."
+            "value" : "Glisează lateral cu trei degete pentru a trece prin ferestrele unei zone și cu patru degete pentru a aluneca spre ecranele de dincolo de ecran. Nu sunt necesare taste."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проведите тремя пальцами в сторону, чтобы переходить между окнами зоны, и четырьмя пальцами, чтобы скользить к зонам за пределами экрана. Клавиши не нужны."
+            "value" : "Проведите тремя пальцами в сторону, чтобы переходить между окнами зоны, и четырьмя — чтобы перейти к экранам за пределами экрана. Клавиши не нужны."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Potiahnutím do strany tromi prstami sa pohybujete medzi oknami zóny a štyrmi prstami sa presuniete do zón za okrajom obrazovky. Klávesy nie sú potrebné."
+            "value" : "Potiahnutím troma prstami do strany prechádzate oknami zóny a štyrmi prstami sa presuniete na obrazovky za obrazovkou. Klávesy nie sú potrebné."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "S tremi prsti podrsnite vstran, da se premikate med okni cone, s štirimi prsti pa, da zdrsnete na cone zunaj zaslona. Tipke niso potrebne."
+            "value" : "Podrsnite vstran s tremi prsti za premikanje po oknih območja in s štirimi prsti za drsenje na zaslone zunaj zaslona. Tipke niso potrebne."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Превуците бочно са три прста да бисте прелазили између прозора зоне, а са четири прста да бисте клизили до зона изван екрана. Тастери нису потребни."
+            "value" : "Превуците у страну са три прста да бисте прелазили кроз прозоре зоне, а са четири прста да бисте склизнули на екране изван екрана. Тастери нису потребни."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Svep åt sidan med tre fingrar för att gå igenom fönstren i en zon, och med fyra fingrar för att glida till zonerna bortom skärmen. Inga tangenter behövs."
+            "value" : "Svep i sidled med tre fingrar för att gå genom en zons fönster, och med fyra fingrar för att glida till skärmarna utanför skärmen. Inga tangenter behövs."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "மண்டலத்தின் சாளரங்களுக்கிடையே செல்ல மூன்று விரல்களால் பக்கவாட்டில் ஸ்வைப் செய்யவும்; திரைக்கு அப்பால் உள்ள மண்டலங்களுக்கு நகர நான்கு விரல்களால் செய்யவும். விசைகள் தேவையில்லை."
+            "value" : "ஒரு மண்டலத்தின் சாளரங்களுக்கிடையே செல்ல மூன்று விரல்களால் பக்கவாட்டில் ஸ்வைப் செய்யுங்கள்; திரைக்கு வெளியே உள்ள திரைகளுக்குச் செல்ல நான்கு விரல்களால். விசைகள் தேவையில்லை."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "జోన్‌లోని విండోల మధ్య వెళ్లడానికి మూడు వేళ్లతో పక్కకు స్వైప్ చేయండి, స్క్రీన్ అవతల ఉన్న జోన్‌లకు జారడానికి నాలుగు వేళ్లతో చేయండి. కీలు అవసరం లేదు."
+            "value" : "జోన్ విండోల మధ్య వెళ్లడానికి మూడు వేళ్లతో పక్కకు స్వైప్ చేయండి, స్క్రీన్ వెలుపలి స్క్రీన్‌లకు జారడానికి నాలుగు వేళ్లతో. కీలు అవసరం లేదు."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ปัดไปด้านข้างด้วยสามนิ้วเพื่อเลื่อนผ่านหน้าต่างของโซน และด้วยสี่นิ้วเพื่อเลื่อนไปยังโซนที่อยู่นอกหน้าจอ ไม่ต้องใช้ปุ่มใด ๆ"
+            "value" : "ปัดไปด้านข้างด้วยสามนิ้วเพื่อเลื่อนผ่านหน้าต่างของโซน และด้วยสี่นิ้วเพื่อเลื่อนไปยังหน้าจอที่อยู่นอกหน้าจอ ไม่ต้องใช้ปุ่มใด ๆ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir bölgenin pencereleri arasında gezinmek için üç parmakla yana kaydırın, ekranın ötesindeki bölgelere geçmek için dört parmakla kaydırın. Tuşlara gerek yoktur."
+            "value" : "Bir bölgenin pencereleri arasında gezinmek için üç parmakla yana kaydırın, ekranın ötesindeki ekranlara geçmek için dört parmakla kaydırın. Tuşlara gerek yoktur."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проведіть трьома пальцями вбік, щоб переходити між вікнами зони, і чотирма пальцями, щоб ковзати до зон за межами екрана. Клавіші не потрібні."
+            "value" : "Проведіть трьома пальцями вбік, щоб переходити між вікнами зони, і чотирма — щоб перейти до екранів за межами екрана. Клавіші не потрібні."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "زون کی ونڈوز کے درمیان جانے کے لیے تین انگلیوں سے پہلو کی طرف سوائپ کریں، اور اسکرین سے پرے زونز تک پھسلنے کے لیے چار انگلیوں سے۔ کسی کی کی ضرورت نہیں۔"
+            "value" : "زون کی ونڈوز میں جانے کے لیے تین انگلیوں سے ایک طرف سوائپ کریں، اور اسکرین سے باہر کی اسکرینوں پر پھسلنے کے لیے چار انگلیوں سے۔ کسی کی کی ضرورت نہیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vuốt ngang bằng ba ngón tay để chuyển giữa các cửa sổ của vùng, và bằng bốn ngón tay để trượt tới các vùng nằm ngoài màn hình. Không cần phím."
+            "value" : "Vuốt ngang bằng ba ngón tay để đi qua các cửa sổ của một vùng, và bằng bốn ngón tay để trượt tới các màn hình ngoài màn hình. Không cần phím."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "用三指向侧面轻扫，可在区域的窗口之间切换；用四指轻扫，可滑到屏幕之外的区域。无需按键。"
+            "value" : "用三根手指横向滑动可在区域的窗口之间移动，用四根手指则滑到屏幕之外的屏幕。无需按键。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "用三指向側面輕掃，可在區域的視窗之間切換；用四指輕掃，可滑到螢幕之外的區域。無需按鍵。"
+            "value" : "用三指橫向滑動可在區域的視窗之間移動，用四指則滑到螢幕之外的螢幕。無需按鍵。"
           }
         }
       }
@@ -50296,568 +50296,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "區域"
-          }
-        }
-      }
-    },
-    "Zones beyond the screen" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مناطق خارج الشاشة"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зони извън екрана"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "স্ক্রিনের বাইরের জোন"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones més enllà de la pantalla"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zóny za obrazovkou"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoner uden for skærmen"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonen jenseits des Bildschirms"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ζώνες πέρα από την οθόνη"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas más allá de la pantalla"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tsoonid ekraanist väljaspool"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ناحیه‌های خارج از صفحه"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näytön ulkopuoliset alueet"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mga zone sa labas ng screen"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones au-delà de l'écran"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "אזורים מחוץ למסך"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीन के बाहर के ज़ोन"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone izvan zaslona"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zónák a képernyőn túl"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zona di luar layar"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone oltre lo schermo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "画面の外のゾーン"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "화면 밖의 영역"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonos už ekrano"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas aiz ekrāna"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीनबाहेरचे झोन"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zon di luar skrin"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Soner utenfor skjermen"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones voorbij het scherm"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Strefy poza ekranem"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas para além do ecrã"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas além da tela"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone dincolo de ecran"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зоны за пределами экрана"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zóny za obrazovkou"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Območja zunaj zaslona"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зоне изван екрана"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoner utanför skärmen"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "திரைக்கு வெளியே உள்ள மண்டலங்கள்"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "స్క్రీన్ వెలుపలి జోన్‌లు"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "โซนนอกหน้าจอ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ekranın ötesindeki bölgeler"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зони за межами екрана"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اسکرین سے باہر کے زونز"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vùng ngoài màn hình"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕之外的区域"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "螢幕之外的區域"
-          }
-        }
-      }
-    },
-    "Zones beyond the screen's edges" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مناطق خارج حواف الشاشة"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зони извън краищата на екрана"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "স্ক্রিনের প্রান্তের বাইরের জোন"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones més enllà de les vores de la pantalla"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zóny za okraji obrazovky"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoner uden for skærmens kanter"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonen jenseits der Bildschirmränder"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ζώνες πέρα από τις άκρες της οθόνης"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas más allá de los bordes de la pantalla"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tsoonid ekraani servadest väljaspool"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ناحیه‌های خارج از لبه‌های صفحه"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näytön reunojen ulkopuoliset alueet"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mga zone sa labas ng mga gilid ng screen"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones au-delà des bords de l'écran"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "אזורים מחוץ לקצוות המסך"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीन के किनारों के बाहर के ज़ोन"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone izvan rubova zaslona"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zónák a képernyő szélein túl"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zona di luar tepi layar"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone oltre i bordi dello schermo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "画面の端の外側のゾーン"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "화면 가장자리 밖의 영역"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonos už ekrano kraštų"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas aiz ekrāna malām"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्क्रीनच्या कडांबाहेरचे झोन"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zon di luar tepi skrin"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Soner utenfor skjermkantene"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zones voorbij de schermranden"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Strefy poza krawędziami ekranu"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas para além das bordas do ecrã"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonas além das bordas da tela"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zone dincolo de marginile ecranului"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зоны за краями экрана"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zóny za okrajmi obrazovky"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Območja zunaj robov zaslona"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зоне изван ивица екрана"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoner utanför skärmkanterna"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "திரையின் ஓரங்களுக்கு வெளியே உள்ள மண்டலங்கள்"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "స్క్రీన్ అంచుల వెలుపలి జోన్‌లు"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "โซนนอกขอบหน้าจอ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ekran kenarlarının ötesindeki bölgeler"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Зони за краями екрана"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اسکرین کے کناروں سے باہر کے زونز"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vùng ngoài các cạnh màn hình"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕边缘之外的区域"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "螢幕邊緣之外的區域"
           }
         }
       }

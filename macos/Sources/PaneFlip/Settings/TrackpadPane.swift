@@ -15,7 +15,7 @@ struct TrackpadPane: View {
                 SettingRow(title: "Move with",
                            detail: settings.values.trackpadMethod == .keysAndTwoFingers
                                ? "Hold the scroll keys (set in the Shortcuts tab) and scroll with two fingers."
-                               : "Swipe sideways with three fingers to move through a zone's windows, and with four fingers to slide to the zones beyond the screen. No keys are needed.",
+                               : "Swipe sideways with three fingers to move through a zone's windows, and with four fingers to slide to the screens beyond the screen. No keys are needed.",
                            controlBelow: true) {
                     VStack(alignment: .leading, spacing: 10) {
                         FullWidthSegments(selection: $settings.values.trackpadMethod,

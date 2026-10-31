@@ -21,7 +21,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     /// Settings that earlier versions had and this one does not: loading forgets them.
     // "deskArrangement" held the places in points; the places are in millimetres now (the displays are set again).
-    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement"]
+    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement", "zoneNavigationBeyondEdges"]
 
     func load() -> SettingsValues {
         Self.removedKeys.forEach(defaults.removeObject(forKey:))
@@ -32,7 +32,6 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.edgeMargin = defaults.object(forKey: "edgeMargin") as? Double ?? v.edgeMargin
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.zoneNavigationEnabled = defaults.object(forKey: "zoneNavigationEnabled") as? Bool ?? v.zoneNavigationEnabled
-        v.zoneNavigationBeyondEdges = defaults.object(forKey: "zoneNavigationBeyondEdges") as? Bool ?? v.zoneNavigationBeyondEdges
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
@@ -57,7 +56,6 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.edgeMargin, forKey: "edgeMargin")
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.zoneNavigationEnabled, forKey: "zoneNavigationEnabled")
-        defaults.set(v.zoneNavigationBeyondEdges, forKey: "zoneNavigationBeyondEdges")
         defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")

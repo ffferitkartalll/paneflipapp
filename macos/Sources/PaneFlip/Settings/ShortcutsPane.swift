@@ -56,11 +56,11 @@ struct ShortcutsPane: View {
             }
             .disabled(!settings.values.placementEnabled || !settings.values.zoneNavigationEnabled)
 
-            Section("Zones beyond the screen") {
+            Section("Screens beyond the screen") {
                 chordRow(.scrollRight, title: "Scroll to the right", path: \.scrollRightShortcut, standard: .scrollRight)
                 chordRow(.scrollLeft, title: "Scroll to the left", path: \.scrollLeftShortcut, standard: .scrollLeft)
                 row(.stripScroll, title: "Hold while scrolling",
-                    detail: "Hold these keys and scroll over the screen with the mouse wheel to slide to the zones beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
+                    detail: "Hold these keys and scroll over the screen with the mouse wheel to slide to the screens beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.stripScrollKeys, standard: .stripScroll) { settings.values.stripScrollKeys = $0 }
             }
             .disabled(!settings.values.placementEnabled || !settings.values.overflowZonesEnabled)

@@ -157,30 +157,31 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertTrue(scroller.reveal(zone: areaZone), "it stands in view where the scroll goes: a scroll runs, and the frame is told at once")
     }
 
-    /// A screen of two zones (the line at 40 %) with a whole screen beyond its right edge, also of two zones (the line in the middle).
+    /// A screen of two zones (the line at 40 %) with three whole screens beyond its right edge, the first of two zones (the line in the middle): the scroll
+    /// stops at 0, 1000, 2000 and 3000, the screens, and not at the lines between zones.
     private func setUpZoneLines() -> UUID {
         let rightOfScreen = UUID(), rightOfArea = UUID()
         var strip = repository.activeLayout(for: key)!.strip
         strip.root = .split(id: UUID(), sideBySide: true, ratio: 0.4, first: .leaf(screenZone), second: .leaf(rightOfScreen))
-        strip.trailing = [Overflow(width: 1, root: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(areaZone), second: .leaf(rightOfArea)))]
+        strip.trailing = [Overflow(width: 1, root: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(areaZone), second: .leaf(rightOfArea))),
+                          Overflow(width: 1, root: .leaf(UUID())), Overflow(width: 1, root: .leaf(UUID()))]
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         refresher.onRefresh()
         return rightOfArea
     }
 
-    func testEachLineBetweenZonesIsAStopOfTheScroll() {
+    func testTheScrollGoesFromOneScreenToTheNextAndNotToTheLinesBetweenZones() {
         _ = setUpZoneLines()
         let scroller = scroller()
         scroller.start()
 
         var stops: [CGFloat] = []
-        for _ in 0 ..< 5 {
+        for _ in 0 ..< 4 {
             scroller.scroll(toward: .right)
             for _ in 0 ..< 4 { run(60); settle() }
             stops.append(viewport.offset(for: key))
         }
-        XCTAssertEqual(stops, [400, 500, 1000, 1000, 1000],
-                       "the second zone of the screen first, then the first zone of the area in whole, then the area; not past the end")
+        XCTAssertEqual(stops, [1000, 2000, 3000, 3000], "a whole screen at a time, however the zones are split; not past the end")
 
         var back: [CGFloat] = []
         for _ in 0 ..< 4 {
@@ -188,7 +189,7 @@ final class StripScrollingTests: XCTestCase {
             for _ in 0 ..< 4 { run(60); settle() }
             back.append(viewport.offset(for: key))
         }
-        XCTAssertEqual(back, [500, 400, 0, 0], "and the same stops on the way back")
+        XCTAssertEqual(back, [2000, 1000, 0, 0], "and the same stops on the way back")
     }
 
     func testPressesWhileAScrollLandsAreNotLostAndGoOnWhenItIsOver() {
@@ -200,10 +201,10 @@ final class StripScrollingTests: XCTestCase {
         run(60)   // the pictures have glided to the first stop: the windows land, the pictures have not given way yet
         XCTAssertTrue(scroller.scroll(toward: .right), "a press while it lands waits for the landing, it is not dropped")
         XCTAssertTrue(scroller.scroll(toward: .right))
-        XCTAssertEqual(viewport.offset(for: key), 400)
+        XCTAssertEqual(viewport.offset(for: key), 1000)
 
         for _ in 0 ..< 4 { settle(); run(60) }
-        XCTAssertEqual(viewport.offset(for: key), 1000, "both went on from there, one stop each")
+        XCTAssertEqual(viewport.offset(for: key), 3000, "both went on from there, one stop each")
     }
 
     func testFingersTakeOverAScrollThatAKeyStartedWhileItGlides() {
@@ -224,7 +225,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(stage.shifts.last ?? 0, glidingAt - 30, accuracy: 0.001, "the layout follows them from where it was")
         scroller.endLed()
         for _ in 0 ..< 4 { settle(); run(60) }
-        let nearest = ([0, 400, 500, 1000] as [CGFloat]).min { abs($0 - (30 - glidingAt)) < abs($1 - (30 - glidingAt)) }
+        let nearest = ([0, 1000, 2000, 3000] as [CGFloat]).min { abs($0 - (30 - glidingAt)) < abs($1 - (30 - glidingAt)) }
         XCTAssertEqual(viewport.offset(for: key), nearest, "and comes to rest at the stop nearest to where they let go")
     }
 
@@ -235,16 +236,16 @@ final class StripScrollingTests: XCTestCase {
 
         XCTAssertTrue(scroller.scroll(toward: .right))
         run(60)   // the glide is over: the windows are being put in their places
-        XCTAssertEqual(viewport.offset(for: key), 400)
+        XCTAssertEqual(viewport.offset(for: key), 1000)
         let finished = stage.finished
 
         XCTAssertTrue(scroller.beginLed(), "two fingers come down while it lands: no waiting for the pictures to give way")
         XCTAssertEqual(stage.kept, 1, "the pictures stay on the stage")
         scroller.moveLed(by: -60, at: 0)
-        XCTAssertEqual(stage.shifts.last, -460, "they follow the fingers from the stop it came to (400), 60 points on")
+        XCTAssertEqual(stage.shifts.last, -1060, "they follow the fingers from the stop it came to (1000), 60 points on")
         scroller.endLed()
         for _ in 0 ..< 4 { settle(); run(60) }
-        XCTAssertEqual(viewport.offset(for: key), 500, "and come to rest at the nearest stop")
+        XCTAssertEqual(viewport.offset(for: key), 1000, "and come to rest at the nearest stop")
         XCTAssertEqual(stage.finished, finished + 1, "the pictures gave way once, after the second scroll")
     }
 
@@ -261,26 +262,26 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertGreaterThan(stage.shifts.count, shifts, "the pictures are on their way to the next stop already")
         XCTAssertEqual(stage.kept, 1)
         for _ in 0 ..< 4 { settle(); run(60) }
-        XCTAssertEqual(viewport.offset(for: key), 500)
+        XCTAssertEqual(viewport.offset(for: key), 2000)
     }
 
     func testKeysAndWheelStepOneStopEachInEitherDirectionWhateverTheScrollIsDoing() {
-        _ = setUpZoneLines()   // stops at 0, 400, 500 and 1000
+        _ = setUpZoneLines()   // stops at 0, 1000, 2000 and 3000
         let scroller = scroller()
         scroller.start()
 
         // Before the pictures are there, while they glide, while it lands (the glide over, the windows being written): none is lost.
-        XCTAssertTrue(scroller.scroll(toward: .right))        // 400
-        XCTAssertTrue(scroller.scroll(toward: .right))        // 500
-        XCTAssertTrue(scroller.scroll(toward: .left))         // back to 400, turned round before anything has moved
-        run(8)
-        XCTAssertTrue(scroller.scroll(toward: .right))        // 500 again, from where the pictures are
         XCTAssertTrue(scroller.scroll(toward: .right))        // 1000
-        run(80)                                               // it lands at 1000
+        XCTAssertTrue(scroller.scroll(toward: .right))        // 2000
+        XCTAssertTrue(scroller.scroll(toward: .left))         // back to 1000, turned round before anything has moved
+        run(8)
+        XCTAssertTrue(scroller.scroll(toward: .right))        // 2000 again, from where the pictures are
+        XCTAssertTrue(scroller.scroll(toward: .right))        // 3000
+        run(80)                                               // it lands at 3000
         XCTAssertTrue(scroller.scroll(toward: .left), "while it lands: the next scroll starts at once, back one stop")
         XCTAssertTrue(scroller.scroll(toward: .left))
         for _ in 0 ..< 5 { settle(); run(60) }
-        XCTAssertEqual(viewport.offset(for: key), 400, "1000, one stop back, one more: 400")
+        XCTAssertEqual(viewport.offset(for: key), 1000, "3000, one stop back, one more: 1000")
     }
 
     func testAPressWithNoStopBeyondIsNotKeptForLater() {
@@ -293,14 +294,14 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 250)
     }
 
-    func testRevealingAZoneBringsInAllOfItNotASliverOfIt() {
+    func testRevealingAZoneBringsItsWholeScreenIn() {
         _ = setUpZoneLines()
         let scroller = scroller()
         scroller.start()
 
         XCTAssertTrue(scroller.reveal(zone: areaZone))
         for _ in 0 ..< 4 { run(60); settle() }
-        XCTAssertEqual(viewport.offset(for: key), 500, "at 400 only 40 % of it would show: the first stop that shows all of it")
+        XCTAssertEqual(viewport.offset(for: key), 1000, "the screen that holds it, whatever the lines between zones")
     }
 
     func testRevealingAFarAreaScrollsStraightToIt() {
