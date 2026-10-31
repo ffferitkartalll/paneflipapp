@@ -338,8 +338,8 @@ final class StackCoordinator {
     private var chosenFocus: (zone: UUID, window: CGWindowID, until: Date)?
 
     /// Control+Option+O/K/L/;: the focus goes to the front window of the zone beside the zone of the window in focus (the zone of the window
-    /// under the pointer when that one is in none). Past the last zone on the screen to the left or to the right it goes on to the zones
-    /// beyond the screen's edge, which the layout scrolls into view. Nothing happens where there is no such zone.
+    /// under the pointer when that one is in none). Past the last zone on the screen it goes on to the zones of another display, never to the zones
+    /// beyond the screen's edge. Nothing happens where there is no such zone.
     ///
     /// A press only moves the place the focus is going to (`chosenFocus`) and asks the layout to bring that zone into view; the window comes forward
     /// once the zone is in view and nothing scrolls. Presses that follow quickly, with scrolls and landings in between, start from the place the
@@ -363,26 +363,16 @@ final class StackCoordinator {
     }
 
     private func moveFocus(from current: ZoneStack, toward direction: ZoneDirection) {
-        let horizontal = direction == .left || direction == .right
-        let wide = horizontal && settings.values.zoneNavigationBeyondEdges && settings.values.overflowZonesEnabled
         func candidate(_ stack: ZoneStack) -> (id: UUID, rect: CGRect, number: Int, display: String?) { (stack.id, deskRect(stack.rect), stack.order, displayOf(stack.rect)) }
         let visible = visibleStacks.filter { $0.id != current.id && !$0.isEmpty }.map(candidate)
-        let beyond = wide ? stacks.values.filter { $0.isParked && !$0.isEmpty && $0.id != current.id }.map(candidate) : []
         let currentRect = deskRect(current.rect)
         let display = displayOf(current.rect)
         func nearest(_ zones: [(id: UUID, rect: CGRect, number: Int, display: String?)]) -> UUID? {
             ZoneNeighbour.nearest(to: currentRect, number: current.order, among: zones.map { (id: $0.id, rect: $0.rect, number: $0.number) }, toward: direction)
         }
         let own = { (zone: (id: UUID, rect: CGRect, number: Int, display: String?)) in zone.display == display }
-        let next: UUID?
-        if current.isParked {
-            // From a zone out of sight the nearest of all of its display, not the first one on the screen: the zones between are not skipped.
-            next = wide ? nearest((visible + beyond).filter(own)) ?? nearest(visible.filter { !own($0) }) : nil
-        } else {
-            // On the screen first; none that way: the nearest zone with windows beyond the edge, the one next to the screen first; none there either: the
-            // zones of another display.
-            next = nearest(visible.filter(own)) ?? nearest(beyond.filter(own)) ?? nearest(visible.filter { !own($0) })
-        }
+        // On the screen first; none that way: the zones of another display.
+        let next = nearest(visible.filter(own)) ?? nearest(visible.filter { !own($0) })
         guard let id = next, let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
         chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
         focusedZoneID = id

@@ -41,8 +41,6 @@ public struct SettingsValues: Equatable {
 
     /// The shortcuts that move the focus to the zone beside the one in focus work at all.
     public var zoneNavigationEnabled = true
-    /// Past the last zone on the screen they go on to the zones beyond its edge (the layout scrolls to them).
-    public var zoneNavigationBeyondEdges = true
     /// Move the focus to the zone above, to the left, below or to the right of the zone of the focused window.
     public var zoneUpShortcut = SnapTrigger.zoneUp
     public var zoneLeftShortcut = SnapTrigger.zoneLeft

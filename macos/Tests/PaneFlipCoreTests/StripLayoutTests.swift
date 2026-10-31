@@ -145,28 +145,17 @@ final class StripLayoutTests: XCTestCase {
         XCTAssertNil(s.area(at: 0.7), "between two rests")
     }
 
-    func testEveryLineBetweenZonesIsARestPositionOnTheScreenAndInTheAreas() {
+    func testScrollingRestsOnlyAtScreensNotAtTheLinesBetweenZones() {
         let main = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.4, first: .leaf(UUID()), second: .leaf(UUID()))
         let area = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(UUID()), second: .leaf(UUID()))
         let s = StripLayout(root: main, trailing: [Overflow(width: 1, root: area), Overflow(width: 1, root: .leaf(UUID()))])
-
-        XCTAssertEqual(s.zoneEdges, [0, 0.4, 1, 1.5, 2, 3])
-        // A line at the left edge of the screen (the screen's own, the start of an area, the middle of the first area, ...) or at its
-        // right edge (...), and no further than the strip goes.
-        XCTAssertEqual(s.rests, [0, 0.4, 0.5, 1, 1.5, 2])
-        XCTAssertEqual(StripLayout(root: .leaf(screen)).rests, [0])
+        XCTAssertEqual(s.areaRests, [0, 1, 2], "the screen's own layout and the far edge of each area: no rest at the line of a split")
+        XCTAssertEqual(StripGeometry(strip: s, screen: CGRect(x: 0, y: 0, width: 1000, height: 400)).rests, [0, 1000, 2000])
+        XCTAssertEqual(StripLayout(root: .leaf(screen)).areaRests, [0])
     }
 
     func testAnAreaThatIsAWholeZoneStillRestsAtItsFarEdge() {
         // The layouts of before: every area one zone, a quarter of a screen wide.
-        XCTAssertEqual(strip(leading: 0.25, trailing: 0.25).rests, [-0.25, 0, 0.25])
-    }
-
-    func testZonesThatDoNotShareTheirLinesGiveALineEach() {
-        // A column split into two rows has no line of its own, but the column beside it is split at another place.
-        let left = LayoutNode.split(id: UUID(), sideBySide: false, ratio: 0.5, first: .leaf(UUID()), second: .leaf(UUID()))
-        let right = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.3, first: .leaf(UUID()), second: .leaf(UUID()))
-        let main = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: left, second: right)
-        XCTAssertEqual(StripLayout(root: main).zoneEdges, [0, 0.5, 0.65, 1])
+        XCTAssertEqual(strip(leading: 0.25, trailing: 0.25).areaRests, [-0.25, 0, 0.25])
     }
 }

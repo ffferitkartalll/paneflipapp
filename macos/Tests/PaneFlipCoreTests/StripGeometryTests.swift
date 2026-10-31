@@ -72,7 +72,7 @@ final class StripGeometryTests: XCTestCase {
         XCTAssertEqual(peek.first { $0.id == middle }!.rect.maxX, 750, "and nothing lies between the two")
     }
 
-    func testAreasFollowOneAnotherAndTheLinesBetweenThemAreRestPositions() {
+    func testAreasFollowOneAnotherAndTheirFarEdgesAreRestPositions() {
         let near = UUID(), far = UUID(), leftNear = UUID(), leftFar = UUID()
         let g = StripGeometry(strip: StripLayout(leading: [Overflow(width: 0.5, root: .leaf(leftNear)), Overflow(width: 1, root: .leaf(leftFar))],
                                                  root: .leaf(middle),
@@ -80,8 +80,7 @@ final class StripGeometryTests: XCTestCase {
                               screen: screenRect)
 
         XCTAssertEqual(g.range, -1500 ... 2250)
-        XCTAssertEqual(g.rests, [-1500, -1000, -500, 0, 250, 1000, 1250, 2250],
-                       "a line between zones at either edge of the screen: the far edges, and the places the areas begin")
+        XCTAssertEqual(g.rests, [-1500, -500, 0, 250, 2250], "the screen's own layout and the far edge of each area: screens, not the lines between zones")
 
         let at = g.zones(offset: 0)
         XCTAssertEqual(at.map(\.id), [leftFar, leftNear, middle, near, far], "in order across the strip")

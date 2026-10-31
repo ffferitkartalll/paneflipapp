@@ -28,8 +28,8 @@ public struct StripGeometry: Equatable {
     /// The offsets the screen may have.
     public var range: ClosedRange<CGFloat> { -leadingWidth ... trailingWidth }
 
-    /// The offsets where scrolling comes to rest: the screen's own layout and each area's far edge, on both sides.
-    public var rests: [CGFloat] { strip.rests.map { screen.width * CGFloat($0) } }
+    /// The offsets where scrolling comes to rest: the screen's own layout and each area's far edge, on both sides. Scrolling goes from one screen to the next, never to a line between zones.
+    public var rests: [CGFloat] { strip.areaRests.map { screen.width * CGFloat($0) } }
 
     public func clamped(_ offset: CGFloat) -> CGFloat { min(max(offset, range.lowerBound), range.upperBound) }
 
