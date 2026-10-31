@@ -11,6 +11,8 @@ final class StripScrollingTests: XCTestCase {
     private var settings: AppSettings!
     private var viewport: StripViewport!
     private var planner: ZonePlanner!
+    /// The hidden display the windows out of sight wait on, at the lower left of the screen.
+    private var hiddenDisplay: CGRect? = CGRect(x: -1000, y: 500, width: 1000, height: 500)
     private var screens: FakeScreens!
     private var windows: FakeWindowSystem!
     private var coordinator: StackCoordinator!
@@ -50,6 +52,7 @@ final class StripScrollingTests: XCTestCase {
         settings = AppSettings(storage: storage)
         viewport = StripViewport()
         planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
+        planner.parkingArea = { [unowned self] _ in hiddenDisplay }
         screens = FakeScreens()
         screens.infos = [screen(key)]
         screens.pointerCocoa = CGPoint(x: 500, y: 250)
@@ -98,7 +101,7 @@ final class StripScrollingTests: XCTestCase {
         let plan = planner.plan(on: screens.infos)
         XCTAssertEqual(plan[screenZone], PlannedZone(rect: CGRect(x: 0, y: 0, width: 1000, height: 500), number: 1))
         XCTAssertEqual(plan[areaZone]?.rect, CGRect(x: 1000, y: 0, width: 250, height: 500))
-        XCTAssertEqual(plan[areaZone]?.frame, CGRect(x: 999, y: 0, width: 250, height: 500))
+        XCTAssertEqual(plan[areaZone]?.frame, CGRect(x: -1000, y: 500, width: 250, height: 500), "at the corner of the hidden display")
         XCTAssertEqual(plan[areaZone]?.isParked, true)
         XCTAssertEqual(plan[areaZone]?.number, 1, "numbered from the screen outwards, as the zone is shown")
     }
@@ -130,6 +133,14 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(found?.0.range.lowerBound, found?.0.range.upperBound)
     }
 
+    func testTheWaitingWindowsStandOnTheHiddenDisplayWhateverLiesBesideTheScreen() {
+        screens.infos = [screen(key), screen("other|d1", x: 1000), screen("third|d1", x: -1000)]
+        XCTAssertEqual(planner.plan(on: screens.infos)[areaZone]?.frame, CGRect(x: -1000, y: 500, width: 250, height: 500))
+        XCTAssertEqual(planner.plan(on: screens.infos)[areaZone]?.isParked, true)
+        hiddenDisplay = nil
+        XCTAssertNil(planner.plan(on: screens.infos)[areaZone], "without a hidden display there is no place for the screens beyond the edges")
+    }
+
     func testScrollingBringsTheAreaInAndTakesTheScreensZoneToTheLeft() {
         viewport.set(250, for: key)
         let plan = planner.plan(on: screens.infos)
@@ -137,13 +148,6 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(plan[areaZone]?.isParked, false)
         XCTAssertEqual(plan[screenZone]?.rect.minX, -250)
         XCTAssertEqual(plan[screenZone]?.isParked, false, "still partly on the screen")
-    }
-
-    func testADisplayOnTheRightSendsWaitingWindowsToTheLeftAndBothSidesTakeTheAreaAway() {
-        screens.infos = [screen(key), screen("other|d1", x: 1000)]
-        XCTAssertEqual(planner.plan(on: screens.infos)[areaZone]?.frame.maxX, 1)
-        screens.infos = [screen(key), screen("other|d1", x: 1000), screen("third|d1", x: -1000)]
-        XCTAssertNil(planner.plan(on: screens.infos)[areaZone], "no place to wait: the area does not exist on this screen")
     }
 
     func testTheFocusGoingToAWindowBeyondTheEdgeScrollsToIt() {

@@ -8,6 +8,8 @@ struct ZonePlanner {
     let layouts: LayoutRepository
     let settings: AppSettings
     let viewport: StripViewport
+    /// The area of the hidden display of a screen, on which its windows out of sight wait (nil while there is none: then the areas beyond its edges do not exist).
+    var parkingArea: (ScreenInfo) -> CGRect? = { _ in nil }
 
     /// Zones in view stand where they are; zones scrolled out of sight wait at a display's edge (see `Parking`). A screen
     /// with a display on each side has no such place, so the zones beyond its edges do not exist there.
@@ -15,7 +17,7 @@ struct ZonePlanner {
         guard settings.values.placementEnabled else { return [:] }
         var zones: [UUID: PlannedZone] = [:]
         for screen in screens {
-            guard let (geometry, side) = strip(of: screen, among: screens) else { continue }
+            guard let (geometry, place) = strip(of: screen, among: screens) else { continue }
             let layout = layouts.activeLayout(for: screen.key)
             let offset = geometry.clamped(viewport.offset(for: screen.key))
             for zone in geometry.zones(offset: offset, gap: CGFloat(layouts.activeLayout(for: screen.key)?.gap ?? settings.values.gap),
@@ -24,8 +26,8 @@ struct ZonePlanner {
                 let order = layout?.strip.zoneIDs.firstIndex(of: zone.id) ?? 0
                 if zone.isOnScreen {
                     zones[zone.id] = PlannedZone(rect: zone.rect, number: number, order: order)
-                } else if let side {
-                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, side: side), isParked: true, number: number, order: order)
+                } else if let place {
+                    zones[zone.id] = PlannedZone(rect: zone.rect, frame: Parking.frame(for: zone.rect, on: screen.cocoaFrame, place: place), isParked: true, number: number, order: order)
                 }
             }
         }
@@ -39,13 +41,12 @@ struct ZonePlanner {
                               margin: CGFloat(settings.values.edgeMargin)).first { $0.id == zone }?.rect
     }
 
-    /// The strip of a screen's active layout and the side its out-of-sight windows wait at (nil: nowhere, so the areas
+    /// The strip of a screen's active layout and the place its out-of-sight windows wait at (nil: nowhere, so the areas
     /// beyond its edges are left out).
-    func strip(of screen: ScreenInfo, among screens: [ScreenInfo]) -> (StripGeometry, Parking.Side?)? {
+    func strip(of screen: ScreenInfo, among screens: [ScreenInfo]) -> (StripGeometry, Parking.Place?)? {
         guard let layout = layouts.activeLayout(for: screen.key) else { return nil }
-        let others = screens.filter { $0.displayID != screen.displayID }.map(\.cocoaFrame)
-        let side = Parking.side(of: screen.cocoaFrame, others: others)
-        return (StripGeometry(strip: side == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip,
-                                       screen: screen.axVisible), side)
+        let place = parkingArea(screen).map(Parking.Place.display)
+        return (StripGeometry(strip: place == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip,
+                                       screen: screen.axVisible), place)
     }
 }

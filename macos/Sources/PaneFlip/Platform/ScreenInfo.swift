@@ -18,6 +18,8 @@ struct ScreenInfo: Identifiable, Equatable {
     /// The notch of the display (its width and its height, the height of the menu bar there); 0 on a display without one.
     var notchWidth: CGFloat = 0
     var notchHeight: CGFloat = 0
+    /// The number the system gives the display (the hidden display of the screen is told by it).
+    var directID: CGDirectDisplayID = 0
     /// The size of the display itself in millimetres, as it tells; zero when it does not.
     var physicalSize: CGSize = .zero
 

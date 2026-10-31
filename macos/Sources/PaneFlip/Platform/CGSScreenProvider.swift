@@ -25,8 +25,11 @@ final class CGSScreenProvider: ScreenProviding {
     private var cachedScreens: (at: TimeInterval, screens: [ScreenInfo])?
     private var cachedDock: (at: TimeInterval, rect: CGRect?)?
     private var observers: [NSObjectProtocol] = []
+    /// The numbers of the hidden displays (see `ParkingDisplaying`), which are no displays for anyone: they are left out of everything here.
+    private let hiddenDisplays: () -> Set<CGDirectDisplayID>
 
-    init() {
+    init(hiddenDisplays: @escaping () -> Set<CGDirectDisplayID> = { [] }) {
+        self.hiddenDisplays = hiddenDisplays
         let forget: (Notification) -> Void = { [weak self] _ in
             self?.cacheLock.lock()
             self?.cachedScreens = nil
@@ -40,6 +43,14 @@ final class CGSScreenProvider: ScreenProviding {
     deinit { observers.forEach { NotificationCenter.default.removeObserver($0); NSWorkspace.shared.notificationCenter.removeObserver($0) } }
 
     private var primaryHeight: CGFloat { NSScreen.screens.first?.frame.height ?? 0 }
+
+    /// The displays there are to the app: those of the system less the hidden one.
+    private var realScreens: [NSScreen] {
+        let hidden = hiddenDisplays()
+        return NSScreen.screens.filter { screen in
+            !hidden.contains((screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0)
+        }
+    }
 
     func flip(_ r: CGRect) -> CGRect {
         CGRect(x: r.minX, y: primaryHeight - r.maxY, width: r.width, height: r.height)
@@ -73,7 +84,7 @@ final class CGSScreenProvider: ScreenProviding {
     /// lands, and a missing answer from the Dock (it does not answer while it moves) means it has not landed.
     var isDockSettled: Bool {
         if CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false { return true }
-        return dockRect().map { dock in NSScreen.screens.contains { flip($0.frame).intersects(dock) } } ?? false
+        return dockRect().map { dock in realScreens.contains { flip($0.frame).intersects(dock) } } ?? false
     }
 
     func screens() -> [ScreenInfo] {
@@ -93,9 +104,9 @@ final class CGSScreenProvider: ScreenProviding {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
         let managed = CGSCopyManagedDisplaySpaces(conn) as? [[String: Any]] ?? []   // once for every display
-        dockHome.update(displays: Set(NSScreen.screens.map(displayUUID)),
-                        dockDisplay: dock.flatMap { dock in NSScreen.screens.first { flip($0.frame).intersects(dock) }.map(displayUUID) })
-        return NSScreen.screens.map { s in
+        dockHome.update(displays: Set(realScreens.map(displayUUID)),
+                        dockDisplay: dock.flatMap { dock in realScreens.first { flip($0.frame).intersects(dock) }.map(displayUUID) })
+        return realScreens.map { s in
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
             let legacy = "\(uuid)|\(space)"
@@ -107,7 +118,7 @@ final class CGSScreenProvider: ScreenProviding {
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
                               legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height,
-                              physicalSize: physicalSize(of: s))
+                              directID: (s.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0, physicalSize: physicalSize(of: s))
         }
     }
 
@@ -217,7 +228,7 @@ final class CGSScreenProvider: ScreenProviding {
 
     func currentSpaceIDs() -> Set<UInt64> {
         let conn = CGSMainConnectionID()
-        return Set(NSScreen.screens.map { CGSManagedDisplayGetCurrentSpace(conn, displayUUID($0) as CFString) })
+        return Set(realScreens.map { CGSManagedDisplayGetCurrentSpace(conn, displayUUID($0) as CFString) })
     }
 
     func spaces(ofWindow id: CGWindowID) -> Set<UInt64> {
