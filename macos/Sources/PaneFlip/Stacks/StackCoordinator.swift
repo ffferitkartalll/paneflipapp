@@ -545,6 +545,7 @@ final class StackCoordinator {
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
             ?? (scrub.liftedEarly ? min(max(index + early, 0), scrub.windows.count - 1) - index : nil)
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
+        if scrub.liftedEarly, shift != 0 { onWindowStep?(stack.id) }   // the fingers moved nothing the island could show: it shows the step
         guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else {
             // Back on the window it began on: a swipe that took the focus gives it to this window.
             let staying = stack.refs[scrub.start]
