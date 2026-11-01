@@ -63,11 +63,7 @@ final class StackCoordinator {
         } }
     }
     var glide: WindowGlide?
-    /// Pictures taken ahead of time: one is dropped when its window goes or its title changes (the content changed).
-    var pictures: WindowPictureCache?
-    /// A window lost the focus to another one.
-    var onFocusLeft: ((CGWindowID) -> Void)?
-    /// Something that moved windows may be over (a slide, a swipe, a new layout): the pictures may be taken again after a moment of rest.
+    /// Something that moved windows may be over (a slide, a swipe, a new layout).
     var onMotionEnded: (() -> Void)?
     /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
     /// window is sized and placed by its zone. Nothing is held, remembered, stacked or followed, and nothing that was
@@ -445,6 +441,9 @@ final class StackCoordinator {
         /// There are no pictures (motion is reduced, or the capture failed): the window just comes forward at the end.
         var failed = false
         var ended = false
+        /// How far the fingers went before the pictures were on the stage (the gesture does not count it), and whether they lifted before that.
+        var early: CGFloat = 0
+        var liftedEarly = false
 
         init(stack: ZoneStack, start: CGWindowID, rect: CGRect) {
             self.stack = stack
@@ -454,6 +453,7 @@ final class StackCoordinator {
         }
     }
     private var windowScrub: WindowScrub?
+    private static let earlyStepDistance: CGFloat = 80
 
     /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through. False
     /// when the pictures cannot follow the fingers (a slide that is not a swipe runs, there is nothing to swipe through): the caller steps
@@ -496,6 +496,8 @@ final class StackCoordinator {
     /// The fingers moved by `delta` points (to the right is positive: the content follows them).
     func moveWindowScrub(by delta: CGFloat, at time: TimeInterval) {
         guard let scrub = windowScrub, !scrub.ended else { return }
+        // Before the pictures are there the fingers lead nothing: the swipe begins from where they are when the pictures come.
+        guard scrub.ready || scrub.failed else { return scrub.early += delta }
         scrub.gesture.add(delta, at: time)
         if scrub.ready {
             carousel?.scrub(to: scrub.gesture.offset)
@@ -528,6 +530,7 @@ final class StackCoordinator {
     func endWindowScrub() {
         guard let scrub = windowScrub, !scrub.ended else { return }
         scrub.ended = true
+        scrub.liftedEarly = !(scrub.ready || scrub.failed)
         if scrub.ready || scrub.failed { finishWindowScrub(scrub) }   // else it waits for the pictures
     }
 
@@ -537,7 +540,10 @@ final class StackCoordinator {
         let stack = scrub.stack
         onWindowScrub?(stack.id, 0)
         guard let index = scrub.windows.firstIndex(of: scrub.start) else { return carousel?.endScrub(shift: 0) { } ?? () }
+        // Fingers that lifted before the pictures were there, having gone far enough, want one window.
+        let early = abs(scrub.early) >= Self.earlyStepDistance ? (scrub.early < 0 ? 1 : -1) : 0
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
+            ?? (scrub.liftedEarly ? min(max(index + early, 0), scrub.windows.count - 1) - index : nil)
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
         guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else {
             // Back on the window it began on: a swipe that took the focus gives it to this window.
@@ -810,7 +816,6 @@ final class StackCoordinator {
     func removeFromStack(window id: CGWindowID) {
         if enlarged?.window.id == id { forgetEnlargement() }   // it left its zone: nothing to go back to
         glide?.cancel(id)
-        pictures?.forget(id)
         for stack in stacks.values where stack.refs[id] != nil {
             stack.refs[id] = nil
             stack.tabs.removeAll { $0.id == id }
@@ -866,7 +871,6 @@ final class StackCoordinator {
             let tab = stack.tabs[i], title = answer ?? tab.appName
             guard title != tab.title else { continue }
             stack.tabs[i].title = title
-            pictures?.forget(tab.id)
             stack.refreshNames()
             memory.updateTitle(ofWindow: tab.id, to: title)
         }
@@ -897,10 +901,8 @@ final class StackCoordinator {
         // Only a focus that has just moved there asks for the scroll: a window the user scrolled away from keeps the focus without
         // the layout scrolling back to it.
         let moved = focused?.id != lastFocusedID
-        let previous = lastFocusedID
         lastFocusedID = focused?.id
         lastFocused = focused
-        if moved, let previous { onFocusLeft?(previous) }
         guard let focused, let stack = stack(containing: focused.id) else { return }
         if moved, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
         guard stack.activeID != focused.id else { return }

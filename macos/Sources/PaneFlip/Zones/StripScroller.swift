@@ -11,10 +11,8 @@ final class StripScroller {
     private static let glide: TimeInterval = 0.3
     /// Pictures that have not come after this long are given up on: the windows then move at the end, without pictures.
     private static let giveUpAfter: TimeInterval = 1.5
-    /// Pictures from an earlier scroll stand in for new ones this long, so the glide can begin at once.
-    private static let keepPicturesFor: TimeInterval = 120
-    /// A photograph this young is not taken again.
-    private static let freshFor: TimeInterval = 10
+    /// Fingers that lifted before the photographs were there, having gone this far, want one step.
+    private static let stepDistance: CGFloat = 80
     /// A frame or two for the windows to be drawn where they now stand, before the pictures go.
     private static let drawTime: TimeInterval = 0.05
     /// A layout this close to a rest is at it, for fingers that catch it on its way.
@@ -56,6 +54,8 @@ final class StripScroller {
         var led = false
         var released = false
         var gesture = ScrubGesture()
+        /// How far the fingers went before the photographs were on the stage (not counted by the gesture).
+        var early: CGFloat = 0
         /// The layout offset the pictures on the stage stand for: where this scroll began, or, for one that took over from another while it
         /// landed, where that one began (the pictures were not laid out again).
         var origin: CGFloat = 0
@@ -98,9 +98,6 @@ final class StripScroller {
     private static let mostQueued = 3
     private var ticking = false
     private var count = 0
-    private var isRunning = false
-    /// The latest photograph of each window, with when it was taken.
-    private var kept: [CGWindowID: (picture: WindowPicture, at: TimeInterval)] = [:]
 
     /// `isBusy`: something else holds the windows (Stage Manager, Mission Control): no scrolling then.
     init(screens: ScreenProviding, planner: ZonePlanner, viewport: StripViewport,
@@ -121,37 +118,6 @@ final class StripScroller {
         self.reduceMotion = reduceMotion
         self.isBusy = isBusy
         self.now = now
-    }
-
-    /// The app is up.
-    func start() {
-        isRunning = true
-        // After the windows have settled in their zones.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in self?.warm() }
-    }
-
-    /// The zones beyond the screens' edges were switched on or off.
-    func settingDidChange() { warm() }
-
-    /// Photographs the windows in front in every zone of the screens that can scroll, so the first scroll already has
-    /// pictures to show.
-    func warm() {
-        guard isRunning, settings.values.overflowZonesEnabled, settings.values.placementEnabled, !isBusy(), !reduceMotion(), !coordinator.isMoving else { return }
-        let all = screens.screens()
-        for screen in all {
-            guard let (geometry, place) = planner.strip(of: screen, among: all), place != nil,
-                  geometry.range.lowerBound < geometry.range.upperBound else { continue }
-            // A picture taken a moment ago is as good: going back and forth does not photograph the windows at every stop.
-            let fronts = held(of: geometry, at: geometry.clamped(viewport.offset(for: screen.key))).filter(\.isFront)
-                .filter { front in kept[front.ref.id].map { now() - $0.at >= Self.freshFor } ?? true }
-            guard !fronts.isEmpty else { continue }
-            snapshots.snapshots(of: fronts.map(\.ref)) { [weak self] images in
-                guard let self else { return }
-                let at = now()
-                for (id, picture) in images { kept[id] = (picture, at) }
-                self.forgetOldPictures(at: at)
-            }
-        }
     }
 
     // MARK: Scrolling
@@ -215,19 +181,16 @@ final class StripScroller {
             beginGliding(current)
             return true
         }
-        for front in fronts { current.pictures[front.ref.id] = keptPicture(of: front) }
         scrolling = current
         let id = current.id
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.giveUpAfter) { [weak self] in self?.giveUp(id) }
-        // Photographing seven windows while the pictures glide takes the machine's time and makes the glide stutter, and the new
-        // photographs have to be put on the layers in the middle of it. With a picture for every window already, the glide
-        // runs on them alone; fresh ones are taken afterwards (`warm`), for the next scroll.
-        if fronts.allSatisfy({ current.pictures[$0.ref.id] != nil }) {
-            scrolling?.photographed = true
-            coverIfReady()
-        } else {
-            snapshots.snapshots(of: fronts.map(\.ref)) { [weak self] images in self?.captured(images, id: id) }
-        }
+        // Every scroll shows the windows as they are now: they are photographed first, and the glide runs on those photographs alone.
+        // The windows the scroll shows first (in view now, and in view at the rests next to it) are photographed before the rest, which join the glide when they come.
+        let near = Set([offset, target, nextRest(from: offset, toward: .right, in: geometry), nextRest(from: offset, toward: .left, in: geometry)]
+            .compactMap { $0 }.flatMap { geometry.zones(offset: $0).filter(\.isOnScreen).map(\.id) })
+        let first = fronts.filter { near.contains($0.zone) }, later = fronts.filter { !near.contains($0.zone) }
+        snapshots.snapshots(of: (first.isEmpty ? fronts : first).map(\.ref)) { [weak self] images in self?.captured(images, id: id) }
+        if !first.isEmpty, !later.isEmpty { snapshots.snapshots(of: later.map(\.ref)) { [weak self] images in self?.captured(images, id: id, covers: false) } }
         return true
     }
 
@@ -352,33 +315,20 @@ final class StripScroller {
                       cornerRadius: photograph.cornerRadius)
     }
 
-    /// Photographs of windows that were closed would otherwise stay for good.
-    private func forgetOldPictures(at time: TimeInterval) {
-        kept = kept.filter { time - $0.value.at < Self.keepPicturesFor }
-    }
-
-    /// An earlier photograph of the window, if it is recent.
-    private func keptPicture(of front: Held) -> WindowPicture? {
-        guard let entry = kept[front.ref.id], now() - entry.at < Self.keepPicturesFor else { return nil }
-        return placed(entry.picture, in: front)
-    }
-
-    private func captured(_ images: [CGWindowID: WindowPicture], id: Int) {
+    /// `covers`: these are the photographs the cover waits for (the others only join a scroll that has begun).
+    private func captured(_ images: [CGWindowID: WindowPicture], id: Int, covers: Bool = true) {
         guard var current = scrolling, current.id == id else { return }
-        let at = now()
         var fresh: [ScrollPicture] = []
-        current.photographed = true
+        if covers { current.photographed = true }
         for front in current.held where front.isFront {
             guard let image = images[front.ref.id] else { continue }
-            kept[front.ref.id] = (image, at)
             let picture = placed(image, in: front)
             current.pictures[front.ref.id] = picture
             fresh.append(ScrollPicture(id: front.ref.id, picture: picture))
         }
-        forgetOldPictures(at: at)
         scrolling = current
         switch current.phase {
-        case .waiting: coverIfReady()
+        case .waiting: if covers { coverIfReady() }
         case .covering, .gliding: stage.update(pictures: fresh)
         case .landing: break
         }
@@ -387,10 +337,9 @@ final class StripScroller {
     /// Covers the screen with the pictures as soon as there are some for every zone in view.
     private func coverIfReady() {
         guard var current = scrolling, current.phase == .waiting else { return }
-        // Zones in view need their pictures; zones beyond the edge too, unless the photographs have come without them (then that
-        // window only shows once the scroll is over).
+        // The photographs come in one answer. A window that could not be photographed only shows once the scroll is over.
+        guard current.photographed else { return }
         let fronts = current.held.filter(\.isFront)
-        guard fronts.allSatisfy({ current.pictures[$0.ref.id] != nil || ($0.isParked && current.photographed) }) else { return }
         let pictures = fronts.compactMap { front in current.pictures[front.ref.id].map { ScrollPicture(id: front.ref.id, picture: $0) } }
         guard !pictures.isEmpty else { return }
         current.phase = .covering
@@ -401,6 +350,11 @@ final class StripScroller {
 
     private func giveUp(_ id: Int) {
         guard let current = scrolling, current.id == id, current.phase == .waiting else { return }
+        // Fingers that are still down wait for the photographs as long as it takes: a scroll given up on now would ignore the whole swipe.
+        if current.led, !current.released {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Self.giveUpAfter) { [weak self] in self?.giveUp(id) }
+            return
+        }
         land(current, at: current.target)
     }
 
@@ -507,18 +461,32 @@ final class StripScroller {
 
     /// The fingers moved by `delta` points (to the right is positive: the content follows them, the zones beyond the left edge come in).
     func moveLed(by delta: CGFloat, at time: TimeInterval) {
+        // Fingers move before the photographs are on the stage: what they did is not counted, the scroll begins from where they are then.
         guard var current = scrolling, current.led, !current.released else { return }
+        guard current.phase == .gliding else {
+            current.early += delta
+            scrolling = current
+            return
+        }
         current.gesture.add(delta, at: time)
         scrolling = current
-        if current.phase == .gliding { followFingers() }
+        followFingers()
     }
 
     /// The fingers lifted: the pictures glide on to the rest position the swipe chose.
     func endLed() {
         guard var current = scrolling, current.led, !current.released else { return }
         current.released = true
+        guard current.phase == .gliding else {
+            // Lifted before the photographs came: the fingers went somewhere, so the scroll takes the one step they asked for, once they are there.
+            current.led = false
+            if abs(current.early) >= Self.stepDistance,
+               let rest = nextRest(from: current.start, toward: current.early < 0 ? .right : .left, in: current.geometry) { current.target = rest }
+            scrolling = current
+            return
+        }
         scrolling = current
-        if current.phase == .gliding { glideOn() }
+        glideOn()
     }
 
     /// Where the layout stands for the fingers' work so far: the start less what the content was taken (the gesture keeps that inside the range).
@@ -616,8 +584,6 @@ final class StripScroller {
                 self?.rested()
                 // Apps that settle late (a window that fits itself to its new place) are looked at once more.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self?.refresher?.refreshZones() }
-                // Fresh photographs for the next scroll, once the machine is quiet again.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { self?.warm() }
             }
         }
     }

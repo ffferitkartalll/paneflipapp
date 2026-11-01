@@ -564,6 +564,30 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertFalse(coordinator.isSliding)
     }
 
+    func testWhatTheFingersDoBeforeThePicturesAreThereIsNotCounted() {
+        let (stage, snapshots, _) = scrubSetUp()
+        snapshots.answersAtOnce = false
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: -300, at: 0)
+        snapshots.answer()
+        coordinator.moveWindowScrub(by: -50, at: 0.5)
+        XCTAssertEqual(stage.scrubOffsets.last, -50, "the pictures do not jump to where the fingers went meanwhile")
+    }
+
+    func testFingersThatLiftBeforeThePicturesAreThereWantOneWindow() {
+        let (stage, snapshots, zone) = scrubSetUp()
+        snapshots.answersAtOnce = false
+
+        coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        coordinator.moveWindowScrub(by: -200, at: 0)
+        coordinator.endWindowScrub()
+        snapshots.answer()
+
+        XCTAssertEqual(stage.scrubEnded, [1])
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+    }
+
     func testAShortSlowSwipeGoesBackToTheWindowItCameFrom() {
         let (stage, _, zone) = scrubSetUp()
 
@@ -680,7 +704,7 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3, "three of the six were kept, one window back for each, not all six")
     }
 
-        func testTheEndMayComeBeforeThePicturesAndIsActedOnWhenTheyArrive() {
+    func testTheEndMayComeBeforeThePicturesAndIsActedOnWhenTheyArrive() {
         let (stage, snapshots, zone) = scrubSetUp()
         snapshots.answersAtOnce = false
 
@@ -690,7 +714,7 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertTrue(stage.scrubEnded.isEmpty, "the pictures are not there yet")
 
         snapshots.answer()
-        XCTAssertEqual(stage.scrubOffsets.last, 150, "they start where the fingers already are")
+        XCTAssertEqual(stage.scrubOffsets.last, 0, "they start from where the fingers are then, not from where they went meanwhile")
         XCTAssertEqual(stage.scrubEnded, [-1])
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1)
     }

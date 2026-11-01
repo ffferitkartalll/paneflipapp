@@ -152,7 +152,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheFocusGoingToAWindowBeyondTheEdgeScrollsToIt() {
         let scroller = scroller()
-        scroller.start()
         XCTAssertFalse(scroller.reveal(zone: screenZone), "a zone in view needs no scroll")
         XCTAssertFalse(scroller.reveal(zone: UUID()), "nor one that is not there")
 
@@ -177,7 +176,6 @@ final class StripScrollingTests: XCTestCase {
     func testTheScrollGoesFromOneScreenToTheNextAndNotToTheLinesBetweenZones() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         var stops: [CGFloat] = []
         for _ in 0 ..< 4 {
@@ -199,7 +197,6 @@ final class StripScrollingTests: XCTestCase {
     func testPressesWhileAScrollLandsAreNotLostAndGoOnWhenItIsOver() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.scroll(toward: .right))
         run(60)   // the pictures have glided to the first stop: the windows land, the pictures have not given way yet
@@ -214,7 +211,6 @@ final class StripScrollingTests: XCTestCase {
     func testFingersTakeOverAScrollThatAKeyStartedWhileItGlides() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.scroll(toward: .right))   // a key: the next stop, a glide of its own
         run(12)
@@ -236,7 +232,6 @@ final class StripScrollingTests: XCTestCase {
     func testFingersTakeOverAScrollWhileItLandsAndGoOnFromWhereItCameToRest() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.scroll(toward: .right))
         run(60)   // the glide is over: the windows are being put in their places
@@ -256,7 +251,6 @@ final class StripScrollingTests: XCTestCase {
     func testAPressWhileAScrollLandsStartsTheNextScrollAtOnce() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.scroll(toward: .right))
         run(60)
@@ -272,7 +266,6 @@ final class StripScrollingTests: XCTestCase {
     func testKeysAndWheelStepOneStopEachInEitherDirectionWhateverTheScrollIsDoing() {
         _ = setUpZoneLines()   // stops at 0, 1000, 2000 and 3000
         let scroller = scroller()
-        scroller.start()
 
         // Before the pictures are there, while they glide, while it lands (the glide over, the windows being written): none is lost.
         XCTAssertTrue(scroller.scroll(toward: .right))        // 1000
@@ -290,7 +283,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testAPressWithNoStopBeyondIsNotKeptForLater() {
         let scroller = scroller()
-        scroller.start()
         XCTAssertTrue(scroller.scroll(toward: .right))   // the only stop beyond the screen
         run(60)
         XCTAssertFalse(scroller.scroll(toward: .right), "nothing further that way, nothing to wait for")
@@ -301,7 +293,6 @@ final class StripScrollingTests: XCTestCase {
     func testRevealingAZoneBringsItsWholeScreenIn() {
         _ = setUpZoneLines()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.reveal(zone: areaZone))
         for _ in 0 ..< 4 { run(60); settle() }
@@ -315,7 +306,6 @@ final class StripScrollingTests: XCTestCase {
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         refresher.onRefresh()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.reveal(zone: far))
         run(60); settle()
@@ -331,7 +321,6 @@ final class StripScrollingTests: XCTestCase {
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         refresher.onRefresh()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.reveal(zone: areaZone))
         XCTAssertTrue(scroller.reveal(zone: far), "the scroll that runs heads for the next zone at once, it does not wait for the landing")
@@ -342,7 +331,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testAShortcutBackToAZoneOfTheScreenGivesTheRunningScrollANewAimToo() {
         let scroller = scroller()
-        scroller.start()
 
         var stands: [CGRect] = []
         XCTAssertTrue(scroller.reveal(zone: areaZone))
@@ -367,7 +355,6 @@ final class StripScrollingTests: XCTestCase {
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         refresher.onRefresh()
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.reveal(zone: far))
         scroller.scroll(toward: .left)   // the user turns it round while it runs
@@ -378,7 +365,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheFingersLeadTheLayoutAndItComesToRestAtTheNearestRestPosition() {
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed())
         for _ in 0 ..< 3 { run(30); settle() }   // the pictures cover the screen
@@ -392,9 +378,56 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 250, "the rest position beyond: the area is in view")
     }
 
+    func testWhatTheFingersDoBeforeThePicturesAreThereIsNotCounted() {
+        let scroller = scroller()
+        snapshots.answersAtOnce = false
+
+        XCTAssertTrue(scroller.beginLed())
+        scroller.moveLed(by: -400, at: 0)   // the photographs are not taken yet
+        snapshots.answer()
+        for _ in 0 ..< 3 { run(30); settle() }
+        scroller.moveLed(by: -100, at: 0.5)
+        XCTAssertEqual(stage.shifts.last, -100, "the layout does not jump to where the fingers went meanwhile: it begins from where they are then")
+    }
+
+    func testFingersThatLiftBeforeThePhotographsAreThereWantOneStep() {
+        let scroller = scroller()
+        snapshots.answersAtOnce = false
+
+        XCTAssertTrue(scroller.beginLed())
+        scroller.moveLed(by: -200, at: 0)
+        scroller.endLed()
+        snapshots.answer()
+        for _ in 0 ..< 4 { run(60); settle() }
+        XCTAssertEqual(viewport.offset(for: key), 250, "the next rest position beyond: one step toward where the fingers went")
+    }
+
+    func testFingersThatLiftBeforeThePhotographsAreThereAfterAShortMoveWantNothing() {
+        let scroller = scroller()
+        snapshots.answersAtOnce = false
+
+        XCTAssertTrue(scroller.beginLed())
+        scroller.moveLed(by: -20, at: 0)
+        scroller.endLed()
+        snapshots.answer()
+        for _ in 0 ..< 4 { run(60); settle() }
+        XCTAssertEqual(viewport.offset(for: key), 0)
+    }
+
+    func testFingersThatWaitLongForThePhotographsAreNotGivenUpOn() {
+        let scroller = scroller()
+        snapshots.answersAtOnce = false
+
+        XCTAssertTrue(scroller.beginLed())
+        run(400)   // well past the time a scroll without fingers waits
+        snapshots.answer()
+        for _ in 0 ..< 3 { run(30); settle() }
+        scroller.moveLed(by: -100, at: 0.5)
+        XCTAssertEqual(stage.shifts.last, -100, "the swipe still leads the scroll")
+    }
+
     func testTheFingersCannotTakeTheLayoutPastItsFirstOrItsLastPosition() {
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed())
         for _ in 0 ..< 3 { run(30); settle() }
@@ -409,7 +442,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testNewFingersTakeTheLayoutOverWhileItStillGlidesToItsRest() {
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed())
         for _ in 0 ..< 3 { run(30); settle() }
@@ -435,7 +467,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testAShortSwipeGoesBackToWhereTheLayoutWas() {
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed())
         for _ in 0 ..< 3 { run(30); settle() }
@@ -449,7 +480,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheFingersMayLiftBeforeThePicturesAreOnTheStage() {
         let scroller = scroller()
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed())
         scroller.moveLed(by: -200, at: 0)
@@ -484,7 +514,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheFocusGoingToAZoneOfTheScreenScrollsBackSoNoZoneBeyondTheEdgeIsInView() {
         let scroller = scroller()
-        scroller.start()
         XCTAssertTrue(scroller.reveal(zone: areaZone))
         run(60); settle()
         XCTAssertEqual(viewport.offset(for: key), 250)
@@ -503,7 +532,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testThePicturesGlideWhileTheRealWindowsWaitAtTheEdge() {
         let scroller = scroller()
-        scroller.start()
         XCTAssertTrue(scroller.scroll(toward: .right))
         XCTAssertEqual(stage.begun.count, 1)
         XCTAssertEqual(Set(stage.begun.first?.map(\.id) ?? []), [3, 2], "the front window of each zone, the one waiting beyond the edge too")
@@ -521,7 +549,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheWindowsLandExactlyWhereTheyBelongAndThePicturesGoAway() {
         let scroller = scroller()
-        scroller.start()
         scroller.scroll(toward: .right)
         XCTAssertTrue(coordinator.isScrolling, "gliding")
         run(60)
@@ -536,7 +563,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testAWindowThatChangedSizeWhileWaitingIsSetRightAtTheEnd() {
         let scroller = scroller()
-        scroller.start()
         scroller.scroll(toward: .right)
         run(10)
         windows.setFrameDirectly(CGRect(x: 999, y: 0, width: 600, height: 300), of: 3)   // the system shrank it at the edge
@@ -545,56 +571,8 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(windows.frames[3], CGRect(x: -250, y: 0, width: 1000, height: 500), "back at its size and place")
     }
 
-    func testPicturesFromAnEarlierScrollAreUsedAndNoneAreTakenWhileTheLayoutGlides() {
-        let scroller = scroller()
-        scroller.start()
-        scroller.scroll(toward: .right)
-        run(60); settle()
-        XCTAssertEqual(stage.begun.count, 1)
-        scroller.scroll(toward: .left)   // back again
-        run(60); settle()
-        snapshots.answersAtOnce = false
-        scroller.scroll(toward: .right)
-        XCTAssertEqual(stage.begun.count, 3, "the glide begins without waiting for new photographs")
-        snapshots.answer()
-        XCTAssertEqual(stage.updates.count, 0, "no photographs are taken in the middle of the glide")
-        run(60)
-        settle()
-    }
-
-    func testAPictureStandsAtItsZonesCornerWhateverPlaceThePhotographSays() {
-        // The list the photographs come from is old: it says the window is still where it was before it was moved.
-        snapshots.images = [3: picture(CGRect(x: 640, y: 90, width: 1000, height: 500)), 2: picture(CGRect(x: 4000, y: 90, width: 250, height: 500))]
-        let scroller = scroller()
-        scroller.start()
-        scroller.scroll(toward: .right)
-        let frames = Dictionary(uniqueKeysWithValues: (stage.begun.first ?? []).map { ($0.id, $0.picture.frame) })
-        XCTAssertEqual(frames[3], CGRect(x: 0, y: 0, width: 1000, height: 500), "at the corner of its zone, with the size it has")
-        XCTAssertEqual(frames[2], CGRect(x: 1000, y: 0, width: 250, height: 500))
-        run(60)
-        settle()
-    }
-
-    func testFreshPicturesAreNotTakenAgain() {
-        let scroller = scroller()
-        scroller.start()
-        scroller.scroll(toward: .right)
-        run(60); settle()
-        let before = snapshots.requests
-        scroller.warm()
-        XCTAssertEqual(snapshots.requests, before, "the pictures of a moment ago are good enough")
-        run(1300)   // more than ten seconds of frames
-        scroller.warm()
-        XCTAssertEqual(snapshots.requests, before + 1, "older ones are taken again")
-    }
-
     func testTheCoverWaitsForThePicturesOfZonesBeyondTheEdgeToo() {
-        let both = snapshots.images
-        snapshots.images = [3: both[3]!]   // only the window in view has been photographed so far
         let scroller = scroller()
-        scroller.start()
-        scroller.warm()
-        snapshots.images = both
         snapshots.answersAtOnce = false
         scroller.scroll(toward: .right)
         XCTAssertTrue(stage.begun.isEmpty, "the window beyond the edge has no picture yet: the cover waits for the photographs")
@@ -607,7 +585,6 @@ final class StripScrollingTests: XCTestCase {
     func testWithoutPicturesTheWindowsMoveAtTheEnd() {
         snapshots.images = [:]
         let scroller = scroller()
-        scroller.start()
         scroller.scroll(toward: .right)
         XCTAssertEqual(viewport.offset(for: key), 0, "waiting for pictures that do not come")
         RunLoop.current.run(until: Date().addingTimeInterval(1.7))
@@ -619,7 +596,6 @@ final class StripScrollingTests: XCTestCase {
     func testReducedMotionPutsTheWindowsWithoutPicturesOrGliding() {
         reduceMotion = true
         let scroller = scroller()
-        scroller.start()
         scroller.scroll(toward: .right)
         settle()
         XCTAssertTrue(stage.begun.isEmpty)
@@ -631,7 +607,6 @@ final class StripScrollingTests: XCTestCase {
         let scroller = scroller()
         var froms: [CGFloat?] = [], tos: [CGFloat] = []
         scroller.onGlide = { _, from, to in froms.append(from); tos.append(to) }
-        scroller.start()
 
         XCTAssertTrue(scroller.scroll(toward: .right))
 
@@ -651,7 +626,6 @@ final class StripScrollingTests: XCTestCase {
         var follows: [CGFloat] = [], tos: [CGFloat] = []
         scroller.onFollow = { _, offset in follows.append(offset) }
         scroller.onGlide = { _, _, to in tos.append(to) }
-        scroller.start()
 
         XCTAssertTrue(scroller.beginLed(), "nothing to photograph: the fingers lead at once")
         scroller.moveLed(by: -100, at: 0)
@@ -672,7 +646,6 @@ final class StripScrollingTests: XCTestCase {
         let scroller = scroller()
         var glides = 0
         scroller.onGlide = { _, _, _ in glides += 1 }
-        scroller.start()
         XCTAssertFalse(scroller.beginLed(), "motion is reduced: the caller steps on lifting")
         scroller.scroll(toward: .right)
         settle()
@@ -682,7 +655,6 @@ final class StripScrollingTests: XCTestCase {
 
     func testTheShortcutScrollsTheScreenUnderThePointerAndBackAgain() {
         let scroller = scroller()
-        scroller.start()
         scroller.scroll(toward: .left)   // nothing beyond the left edge
         run(60); settle()
         XCTAssertEqual(viewport.offset(for: key), 0)
@@ -704,7 +676,6 @@ final class StripScrollingTests: XCTestCase {
     func testAShortcutPressedWhileTheScrollGlidesCarriesItOnToTheNextRestPosition() {
         addAreaOnTheLeft()
         let scroller = scroller()
-        scroller.start()
         XCTAssertTrue(scroller.scroll(toward: .left))
         run(60); settle()
         XCTAssertEqual(viewport.offset(for: key), -250)
@@ -721,7 +692,6 @@ final class StripScrollingTests: XCTestCase {
     func testAShortcutThePassingWayTurnsAGlidingScrollBack() {
         addAreaOnTheLeft()
         let scroller = scroller()
-        scroller.start()
         XCTAssertTrue(scroller.scroll(toward: .right))
         run(8)
         XCTAssertTrue(scroller.scroll(toward: .left), "back toward where it came from")
@@ -741,7 +711,6 @@ final class StripScrollingTests: XCTestCase {
         _ = repository.addLayout(for: "plain|d1")
         screens.infos = [screen("plain|d1")]
         let scroller = scroller()
-        scroller.start()
         XCTAssertFalse(scroller.scroll(toward: .right, on: screens.infos[0]))
         XCTAssertEqual(viewport.offset(for: "plain|d1"), 0)
         XCTAssertTrue(stage.begun.isEmpty)
@@ -764,7 +733,6 @@ final class StripScrollingTests: XCTestCase {
         strip.trailing.append(Overflow(width: 0.5, root: .leaf(UUID())))
         repository.setStrip(strip, ofLayout: repository.activeLayout(for: key)!.id, key: key)
         let scroller = scroller()
-        scroller.start()
 
         for expected in [250.0, 750.0] {
             XCTAssertTrue(scroller.scroll(toward: .right))
