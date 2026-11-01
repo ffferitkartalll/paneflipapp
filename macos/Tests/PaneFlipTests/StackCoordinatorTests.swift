@@ -580,10 +580,13 @@ final class StackCoordinatorTests: XCTestCase {
         snapshots.answersAtOnce = false
 
         coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
+        var stepped: [UUID] = []
+        coordinator.onWindowStep = { stepped.append($0) }
         coordinator.moveWindowScrub(by: -200, at: 0)
         coordinator.endWindowScrub()
         snapshots.answer()
 
+        XCTAssertEqual(stepped, [zone], "the island shows the step, since the fingers showed it nothing")
         XCTAssertEqual(stage.scrubEnded, [1])
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
     }
