@@ -27,7 +27,6 @@ final class AppContainer {
     let menuBar: MenuBarController
 
     private let launcher: AppLauncher
-    private let memoryPressure: MemoryPressureWatch
 
     init() {
         let documents = JSONFileStore()
@@ -47,25 +46,12 @@ final class AppContainer {
         coordinator.placementOnly = { windowManagerDefaults?.bool(forKey: "GloballyEnabled") ?? false }
         let stagePanels = StagePanels()
         let capture = ScreenCaptureWindowSnapshots()
-        let pictures = WindowPictureCache(now: { ProcessInfo.processInfo.systemUptime })
-        // A zone's windows are photographed ahead of time (PictureKeeper) and the pictures are reused; a window in front is live, so its picture counts only for a moment.
-        let snapshots = CachedWindowSnapshots(inner: capture, cache: pictures,
-                                              zoneSize: { [unowned coordinator] id in coordinator.stack(containing: id).map(\.rect.size) },
-                                              isFront: { [unowned coordinator] id in coordinator.stack(containing: id).map { $0.activeID == id } ?? false })
-        coordinator.pictures = pictures
-        let keeper = PictureKeeper(coordinator: coordinator, snapshots: capture, cache: pictures,
-                                   canCapture: { CGPreflightScreenCaptureAccess() },
-                                   reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                   now: { ProcessInfo.processInfo.systemUptime })
-        coordinator.onFocusLeft = { [weak keeper] in keeper?.windowLeftFocus($0) }
-        coordinator.onMotionEnded = { [weak keeper] in keeper?.motionEnded() }
-        self.memoryPressure = MemoryPressureWatch { pictures.removeAll() }
         let slideStage = PanelSlideStage(screens: screens, panels: stagePanels)
         // The swaps of the slides (windows brought forward) run one after another, in the order they were asked for.
         let swapQueue = DispatchQueue(label: "PaneFlip.swap", qos: .userInteractive)
         let placeQueues = PerAppQueues()
         coordinator.placeQueue = { pid, work in placeQueues.queue(for: pid).async(execute: work) }
-        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: slideStage,
+        coordinator.carousel = ZoneCarousel(snapshots: capture, stage: slideStage,
                                             reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
                                             background: { swapQueue.async(execute: $0) })
         let focusQueue = DispatchQueue(label: "PaneFlip.focus", qos: .userInteractive)
@@ -100,7 +86,11 @@ final class AppContainer {
         coordinator.displayOf = { desk.display(of: $0) }
         coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
         let motionEnded = coordinator.onMotionEnded
-        coordinator.onMotionEnded = { [weak island] in motionEnded?(); island?.motionEnded() }
+        coordinator.onMotionEnded = { [weak island] in
+            motionEnded?(); island?.motionEnded()
+            // The list of windows the photographs are taken from is read again once the windows are at rest, not in the wait of the next swipe.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { capture.prepare() }
+        }
         coordinator.onWindowStep = { [weak island] zone in island?.peekWindows(of: zone) }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
@@ -182,7 +172,7 @@ final class AppContainer {
         }
         let mover = WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let scroller = StripScroller(screens: screens, planner: planner, viewport: viewport,
-                                     settings: settings, coordinator: coordinator, mover: mover, snapshots: snapshots,
+                                     settings: settings, coordinator: coordinator, mover: mover, snapshots: capture,
                                      stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
@@ -218,7 +208,6 @@ final class AppContainer {
             coordinator.onMotionEnded?()
         }
         settings.onOverflowZonesChanged = { [weak scroller, weak layouts, weak engine, viewport, settings] in
-            scroller?.settingDidChange()
             guard !settings.values.overflowZonesEnabled else {
                 layouts?.returnOverflowAppsToTheirZones()
                 return
@@ -232,7 +221,6 @@ final class AppContainer {
             closedMonitor.start()
             island.start()
             snap.start()
-            scroller.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
@@ -248,7 +236,6 @@ final class AppContainer {
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4) { keeper.motionEnded() }   // the first pictures, once the windows have settled in their zones
         }
         engine.onPermissionLost = { [weak launcher] in launcher?.recoverPermissions() }
         self.launcher = launcher
