@@ -38,9 +38,14 @@ final class ZonePlacement {
         }
     }
 
+    /// Whether the shortcut would open the choice now: the key is taken from the app in front only then.
+    var canBegin: Bool {
+        choice == nil && !isBlocked() && settings.values.placementEnabled && !coordinator.placementOnly()
+            && coordinator.focusedWindowCached().flatMap(layout(of:)) != nil
+    }
+
     private func begin() {
-        guard choice == nil, !isBlocked(), settings.values.placementEnabled, !coordinator.placementOnly(), let window = coordinator.focusedWindowCached(),
-              let layout = layout(of: window) else { return }
+        guard canBegin, let window = coordinator.focusedWindowCached(), let layout = layout(of: window) else { return }
         let own = coordinator.stack(containing: window.id)?.id
         guard let start = own ?? layout.fallbackZoneID, coordinator.stacks[start] != nil, island.startPicking(zone: start) else { return }
         choice = (window, own, start)

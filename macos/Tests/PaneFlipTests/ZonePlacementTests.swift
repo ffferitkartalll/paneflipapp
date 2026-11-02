@@ -50,6 +50,18 @@ final class ZonePlacementTests: XCTestCase {
         XCTAssertFalse(placement.isChoosing)
     }
 
+    func testTheShortcutIsOnlyTakenWhereItWouldBeginAChoice() {
+        XCTAssertTrue(placement.canBegin)
+        settings.values.placementEnabled = false
+        XCTAssertFalse(placement.canBegin, "placement is off: the app in front keeps the key")
+        settings.values.placementEnabled = true
+        blocked = true
+        XCTAssertFalse(placement.canBegin, "the layout editor is open")
+        blocked = false
+        windows.focused = nil
+        XCTAssertFalse(placement.canBegin, "no window in focus")
+    }
+
     func testAWindowInAZoneStartsOnItsOwnZone() {
         coordinator.snap(.fake(1), into: a)
         placement.handle(.chord)

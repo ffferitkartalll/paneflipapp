@@ -12,11 +12,14 @@ final class EventTapPlacementKeys: PlacementKeyListening {
     private let chord: () -> KeyChord?
     /// Whether a choice is being made: only then are keys taken.
     private let isChoosing: () -> Bool
+    /// Whether the shortcut would begin a choice now: when it would not, the app in front keeps the key.
+    private let canBegin: () -> Bool
 
-    init(capsLock: CapsLockKeyState, chord: @escaping () -> KeyChord?, isChoosing: @escaping () -> Bool) {
+    init(capsLock: CapsLockKeyState, chord: @escaping () -> KeyChord?, isChoosing: @escaping () -> Bool, canBegin: @escaping () -> Bool) {
         self.capsLock = capsLock
         self.chord = chord
         self.isChoosing = isChoosing
+        self.canBegin = canBegin
     }
 
     func start(onEvent: @escaping (PlacementEvent) -> Void) {
@@ -43,7 +46,7 @@ final class EventTapPlacementKeys: PlacementKeyListening {
         guard isChoosing() else {
             // The shortcut begins the choice; the app in front never sees it (a held key repeats: swallowed, acts once).
             guard type == .keyDown, let chord = chord(),
-                  KeyChord(modifiers: event.flags.chordModifiers(capsLock), keyCode: code) == chord else { return Unmanaged.passUnretained(event) }
+                  KeyChord(modifiers: event.flags.chordModifiers(capsLock), keyCode: code) == chord, canBegin() else { return Unmanaged.passUnretained(event) }
             if event.getIntegerValueField(.keyboardEventAutorepeat) == 0 { DispatchQueue.main.async { [weak self] in self?.onEvent?(.chord) } }
             return nil
         }
