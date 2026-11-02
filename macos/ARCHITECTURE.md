@@ -60,7 +60,7 @@ Sources/
     └── Settings/            SettingsView (tabs), SettingsTab, SettingsNavigation, OrderingTarget, DisplaysPane (the displays as macOS arranges them and whether they form a staircase going up to the right), DisplayMap, DeskMap (the displays to drag to where they stand on the desk), LayoutsPane, ZonesPane, StackingPane, TrackpadPane, ShortcutsPane, UpdatesPane, UpdatesModel, SettingRow,
                              SliderSettingRow, ScreenLayoutsSection, AppsPane, IgnoredAppsSection, LayoutCard, LayoutFile, LayoutGapRow, LayoutMiniature, LayoutPresetSheet, KeyRecorder, GeneralPane, LaunchAtLoginModel,
                              FixedWindowTitle, TitleLockingView,
-                             WindowPresenceReporter, WindowPresenceView,
+                             WindowPresenceReporter, WindowPresenceView, SettingsContentKeeper (lets go of the content of the closed Settings window and gives it back when the window opens again: a closed window keeps its content and SwiftUI goes on working on it),
                              TrackpadMethod+Title, View+CappedHeight (the modifier is CappedHeight, its measure NaturalHeightKey), LayoutAppsView (its parts: ZoneAppsList, ReorderableStack, LayoutAppRow), SnapTrigger+Title, AppLanguages
 ```
 
