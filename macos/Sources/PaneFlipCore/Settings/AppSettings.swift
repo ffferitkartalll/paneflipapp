@@ -18,10 +18,14 @@ public final class AppSettings {
     public var values: SettingsValues {
         didSet {
             guard values != oldValue else { return }
+            if values.capsLockAsModifier != oldValue.capsLockAsModifier {
+                values = values.switchingStandardShortcuts(wasCapsLock: oldValue.capsLockAsModifier)
+            }
             storage.save(values)
             if values.placementEnabled != oldValue.placementEnabled { onPlacementChanged?() }
             if values.overflowZonesEnabled != oldValue.overflowZonesEnabled { onOverflowZonesChanged?() }
             if values.ignoredApps != oldValue.ignoredApps { onIgnoredAppsChanged?() }
+            if values.capsLockAsModifier != oldValue.capsLockAsModifier { onCapsLockChanged?() }
         }
     }
 
@@ -30,6 +34,7 @@ public final class AppSettings {
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
     @ObservationIgnored public var onOverflowZonesChanged: (() -> Void)?
     @ObservationIgnored public var onIgnoredAppsChanged: (() -> Void)?
+    @ObservationIgnored public var onCapsLockChanged: (() -> Void)?
     @ObservationIgnored private let storage: SettingsStorage
 
     public init(storage: SettingsStorage) {

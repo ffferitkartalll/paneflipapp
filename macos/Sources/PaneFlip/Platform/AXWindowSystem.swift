@@ -43,6 +43,8 @@ final class AXWindowSystem: WindowSystem {
     }
 
     func windows(ofApp pid: pid_t) -> [WindowRef] {
+        // Asking this app about itself runs AppKit's accessibility in-process, which must stay on the main thread (this is called off it).
+        guard pid != getpid() else { return [] }
         var v: CFTypeRef?
         guard AXUIElementCopyAttributeValue(AXUIElementCreateApplication(pid), kAXWindowsAttribute as CFString, &v) == .success,
               let list = v as? [AXUIElement] else { return [] }

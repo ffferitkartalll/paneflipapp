@@ -16,7 +16,8 @@ final class PlacementKeyTests: XCTestCase {
     }
 
     func testTheModifierKeysOfTheShortcutAreTakenFromItsKeys() {
-        XCTAssertEqual(KeyChord.modifiers(of: .sendToZone), [.shift, .option, .control])
+        XCTAssertEqual(KeyChord.modifiers(of: .formerSendToZone), [.shift, .option, .control])
+        XCTAssertEqual(KeyChord(.sendToZone), KeyChord(modifiers: [.option, .control], keyCode: 46))
         XCTAssertNil(KeyChord.modifiers(of: .nextWindow), "an arrow key is not a modifier")
         XCTAssertNil(KeyChord.modifiers(of: SnapTrigger(keys: [])))
     }

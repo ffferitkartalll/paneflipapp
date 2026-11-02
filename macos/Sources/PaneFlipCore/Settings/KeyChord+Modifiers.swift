@@ -8,5 +8,7 @@ extension KeyChord {
         public static let option = Modifiers(rawValue: 2)
         public static let command = Modifiers(rawValue: 4)
         public static let shift = Modifiers(rawValue: 8)
+        /// The Caps Lock key held down as a modifier key (see `capsLockKeyCode`).
+        public static let capsLock = Modifiers(rawValue: 16)
     }
 }

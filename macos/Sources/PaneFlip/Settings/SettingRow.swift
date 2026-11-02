@@ -7,10 +7,21 @@ struct SettingRow<Control: View>: View {
     let title: LocalizedStringKey
     var detail: LocalizedStringKey?
     var controlBelow = false
+    /// The title and the control on one line, the explanation under them at the full width.
+    var explanationLast = false
     @ViewBuilder let control: Control
 
     var body: some View {
-        if controlBelow {
+        if explanationLast {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .center, spacing: 20) {
+                    Text(title).frame(maxWidth: .infinity, alignment: .leading)
+                    control.fixedSize()
+                }
+                explanation
+            }
+            .padding(.vertical, 4)
+        } else if controlBelow {
             VStack(alignment: .leading, spacing: 8) {
                 texts
                 control
@@ -28,13 +39,17 @@ struct SettingRow<Control: View>: View {
     private var texts: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title)
-            if let detail {
-                Text(detail)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)   // wrap, never truncate
-            }
+            explanation
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder private var explanation: some View {
+        if let detail {
+            Text(detail)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)   // wrap, never truncate
+        }
     }
 }

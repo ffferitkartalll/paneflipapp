@@ -30,8 +30,11 @@ public struct SnapTrigger: Codable, Equatable {
     public static let enlargeWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 36, name: "Return")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
-    /// Held while typing the number of a zone (or D) to send the focused window there.
-    public static let sendToZone = SnapTrigger(keys: [Key(code: 56, name: "Left Shift"), leftOption, leftControl])
+    /// Send the focused window to another zone through the island: Control+Option+M.
+    public static let sendToZone = SnapTrigger(keys: [Key(code: 46, name: "M"), leftOption, leftControl])
+    /// What the shortcut was before it became a key with modifier keys: the modifier keys alone, held. A stored shortcut that still equals it
+    /// was never changed by the person, and takes the new default.
+    public static let formerSendToZone = SnapTrigger(keys: [Key(code: 56, name: "Left Shift"), leftOption, leftControl])
 
     /// Move to the zone above, to the left, below or to the right: Control+Option and I, J, K or L (the four keys form an inverted T; they are named
     /// by their key codes, so the shortcuts stay on the same four keys in every layout).
@@ -57,7 +60,7 @@ public struct SnapTrigger: Codable, Equatable {
         let table: [Int: String] = [
             56: "Left Shift", 60: "Right Shift", 59: "Left Control", 62: "Right Control",
             58: "Left Option", 61: "Right Option", 55: "Left Command", 54: "Right Command",
-            49: "Space", 36: "Return", 48: "Tab", 51: "Delete", 53: "Escape", 123: "←", 124: "→", 125: "↓", 126: "↑",
+            49: "Space", 79: "Caps Lock", 36: "Return", 48: "Tab", 51: "Delete", 53: "Escape", 123: "←", 124: "→", 125: "↓", 126: "↑",
         ]
         if let n = table[code] { return n }
         if let c = characters?.trimmingCharacters(in: .whitespacesAndNewlines), !c.isEmpty { return c.uppercased() }

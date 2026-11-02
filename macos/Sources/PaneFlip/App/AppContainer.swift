@@ -37,9 +37,9 @@ final class AppContainer {
         let screens = CGSScreenProvider()
         let windows = AXWindowSystem(screens: screens)
         let apps = WorkspaceAppCatalog()
-        let keys = HardwareKeyState()
+        let capsLockState = CapsLockKeyState()
+        let keys = HardwareKeyState(capsLock: capsLockState)
         let activation = AppKitActivationPolicyController()
-        let settingsContent = SettingsContentKeeper()
 
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
@@ -126,7 +126,7 @@ final class AppContainer {
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island,
                                       background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
-        let shortcut: KeyShortcutListening = EventTapKeyShortcut { [settings] in
+        let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
                                                      (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut)]
@@ -137,11 +137,14 @@ final class AppContainer {
             }
             return all.compactMap { press, trigger in KeyChord(trigger).map { (press, $0) } }
         }
+        let capsLock: CapsLockControlling = HIDCapsLockControl()
+        let capsLockKey = EventTapCapsLockKey(state: capsLockState, isOn: { [settings] in settings.values.capsLockAsModifier }, toggle: capsLock.toggleLock)
+        settings.onCapsLockChanged = { [settings] in capsLock.remap(settings.values.capsLockAsModifier) }
         let placement = ZonePlacement(repository: repository, screens: screens, windows: windows, coordinator: coordinator, settings: settings, island: island,
                                       isBlocked: { [editor] in editor.isShown })
         let deskPointer = DeskPointerRouter(screens: screens, arrangement: { [settings] in settings.values.deskArrangement }, isOn: { [settings] in settings.values.placementEnabled })
         let pointerCrossing = EventTapPointerCrossing(crossing: { deskPointer.target(from: $0, delta: $1) })
-        let placementKeys = EventTapPlacementKeys(modifiers: { [settings] in KeyChord.modifiers(of: settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing })
+        let placementKeys = EventTapPlacementKeys(capsLock: capsLockState, chord: { [settings] in KeyChord(settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing })
         // The tap asks this for every scroll event (momentum included): a window list each time would stall the main thread, so the answer is kept for a moment.
         var missionControlAsked = (at: Date.distantPast, active: false)
         let missionControl: () -> Bool = { [screens] in
@@ -218,13 +221,14 @@ final class AppContainer {
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
-            settingsContent.start()
             island.start()
             snap.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
             pointerCrossing.start()
+            capsLock.remap(settings.values.capsLockAsModifier)
+            capsLockKey.start()
             shortcut.start { press in
                 switch press {
                 case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)

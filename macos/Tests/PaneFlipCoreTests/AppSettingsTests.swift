@@ -72,4 +72,23 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(AppSettings.snapped(250, to: 240...320, step: 4), 252)
         XCTAssertEqual(AppSettings.snapped(321, to: 240...320, step: 4), 320)
     }
+
+    func testSwitchingCapsLockMovesTheStandardShortcutsAndKeepsTheChosenOnes() {
+        let settings = AppSettings(storage: Storage())
+        let chosen = SnapTrigger(keys: [.init(code: 5, name: "G"), .init(code: 58, name: "Left Option")])
+        settings.values.zoneUpShortcut = chosen
+
+        settings.values.capsLockAsModifier = true
+        XCTAssertEqual(KeyChord(settings.values.nextWindowShortcut), KeyChord(modifiers: [.capsLock], keyCode: 124))
+        XCTAssertEqual(KeyChord(settings.values.sendToZoneKeys), KeyChord(modifiers: [.capsLock], keyCode: 46))
+        XCTAssertEqual(settings.values.snapTrigger.keys.map(\.code), [KeyChord.capsLockKeyCode])
+        XCTAssertEqual(settings.values.zoneUpShortcut, chosen)
+
+        settings.values.nextWindowShortcut = SnapTrigger(keys: [.init(code: 79, name: "Caps Lock"), .init(code: 0, name: "A")])
+        settings.values.capsLockAsModifier = false
+        XCTAssertEqual(settings.values.nextWindowShortcut, .nextWindow, "a shortcut on Caps Lock is no use without it")
+        XCTAssertEqual(settings.values.sendToZoneKeys, .sendToZone)
+        XCTAssertEqual(settings.values.snapTrigger, .leftCommand)
+        XCTAssertEqual(settings.values.zoneUpShortcut, chosen)
+    }
 }

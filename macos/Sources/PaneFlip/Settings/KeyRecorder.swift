@@ -31,16 +31,19 @@ final class KeyRecorder {
         peak = [:]
     }
 
+    /// Caps Lock first, then the keys in key-code order.
+    private static func order(_ code: Int) -> Int { code == KeyChord.capsLockKeyCode ? -1 : code }
+
     private func press(_ code: Int, _ name: String) {
         down[code] = name
         peak[code] = name
-        preview = peak.sorted { $0.key < $1.key }.map(\.value).joined(separator: " + ")
+        preview = SnapTrigger(keys: peak.sorted { Self.order($0.key) < Self.order($1.key) }.map { .init(code: $0.key, name: $0.value) }).displayTitle
     }
 
     private func release(_ code: Int) {
         down[code] = nil
         guard down.isEmpty, !peak.isEmpty else { return }
-        let trigger = SnapTrigger(keys: peak.sorted { $0.key < $1.key }.map { .init(code: $0.key, name: $0.value) })
+        let trigger = SnapTrigger(keys: peak.sorted { Self.order($0.key) < Self.order($1.key) }.map { .init(code: $0.key, name: $0.value) })
         let finish = onFinish
         stop()
         finish?(trigger)

@@ -19,4 +19,11 @@ final class KeyChordTests: XCTestCase {
         XCTAssertNil(KeyChord(.leftCommand))
         XCTAssertNil(KeyChord(SnapTrigger(keys: [.init(code: 59, name: "Left Control"), .init(code: 0, name: "A"), .init(code: 11, name: "B")])))
     }
+
+    func testCapsLockIsAModifierKeyOfAChord() {
+        let caps = SnapTrigger.Key(code: KeyChord.capsLockKeyCode, name: "Caps Lock")
+        XCTAssertEqual(KeyChord(SnapTrigger(keys: [caps, .init(code: 124, name: "→")])), KeyChord(modifiers: [.capsLock], keyCode: 124))
+        XCTAssertEqual(KeyChord.modifiers(of: SnapTrigger(keys: [caps, .init(code: 58, name: "Left Option")])), [.capsLock, .option])
+        XCTAssertNil(KeyChord(SnapTrigger(keys: [caps])), "the modifier key alone is no shortcut")
+    }
 }

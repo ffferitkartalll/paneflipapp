@@ -4,7 +4,6 @@ import AppKit
 final class WindowPresenceView: NSView {
     var onOpen: ((NSWindow) -> Void)?
     var onClose: ((NSWindow) -> Void)?
-    var onResign: ((NSWindow) -> Void)?
     private var observers: [NSObjectProtocol] = []
 
     override func viewDidMoveToWindow() {
@@ -18,10 +17,6 @@ final class WindowPresenceView: NSView {
         observers.append(NotificationCenter.default.addObserver(
             forName: NSWindow.didBecomeKeyNotification, object: window, queue: .main) { [weak self, weak window] _ in
                 if let window { self?.onOpen?(window) }
-            })
-        observers.append(NotificationCenter.default.addObserver(
-            forName: NSWindow.didResignKeyNotification, object: window, queue: .main) { [weak self, weak window] _ in
-                if let window { self?.onResign?(window) }
             })
         observers.append(NotificationCenter.default.addObserver(
             forName: NSWindow.willCloseNotification, object: window, queue: .main) { [weak self, weak window] _ in

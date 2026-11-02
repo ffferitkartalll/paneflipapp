@@ -11,8 +11,12 @@ public struct KeyChord: Equatable {
         self.keyCode = keyCode
     }
 
+    /// The key code the Caps Lock key has once the app maps it to F18, which it does while Caps Lock is the app's modifier key.
+    public static let capsLockKeyCode = 79
+
     private static let modifierOfKey: [Int: Modifiers] = [
         59: .control, 62: .control, 58: .option, 61: .option, 55: .command, 54: .command, 56: .shift, 60: .shift,
+        capsLockKeyCode: .capsLock,
     ]
 
     /// The modifier keys a recorded combination of modifier keys alone means; nil when it has any other key, or none.

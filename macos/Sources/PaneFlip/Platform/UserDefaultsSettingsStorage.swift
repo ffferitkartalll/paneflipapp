@@ -9,12 +9,13 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         ("nextWindowShortcut", \.nextWindowShortcut), ("previousWindowShortcut", \.previousWindowShortcut),
         ("scrollRightShortcut", \.scrollRightShortcut), ("scrollLeftShortcut", \.scrollLeftShortcut), ("undoWindowShortcut", \.undoWindowShortcut), ("enlargeWindowShortcut", \.enlargeWindowShortcut), ("closeWindowUndoNoticeShortcut", \.closeWindowUndoNoticeShortcut),
         ("zoneUpShortcut", \.zoneUpShortcut), ("zoneLeftShortcut", \.zoneLeftShortcut),
-        ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut),
+        ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut), ("sendToZoneKeys", \.sendToZoneKeys),
     ]
 
     /// The defaults some shortcuts had in earlier versions: a stored one that equals its former default was never changed, and is not kept.
     private static let formerDefaults: [String: SnapTrigger] = [
         "zoneUpShortcut": .formerZoneUp, "zoneLeftShortcut": .formerZoneLeft, "zoneDownShortcut": .formerZoneDown, "zoneRightShortcut": .formerZoneRight,
+        "sendToZoneKeys": .formerSendToZone,
     ]
 
     init(defaults: UserDefaults = .standard) { self.defaults = defaults }
@@ -32,11 +33,11 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.edgeMargin = defaults.object(forKey: "edgeMargin") as? Double ?? v.edgeMargin
         v.minZoneSize = defaults.object(forKey: "minZoneSize") as? Double ?? v.minZoneSize
         v.zoneNavigationEnabled = defaults.object(forKey: "zoneNavigationEnabled") as? Bool ?? v.zoneNavigationEnabled
+        v.capsLockAsModifier = defaults.object(forKey: "capsLockAsModifier") as? Bool ?? v.capsLockAsModifier
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
-        v.sendToZoneKeys = defaults.data(forKey: "sendToZoneKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.sendToZoneKeys
         v.deskArrangement = defaults.data(forKey: "deskArrangementMillimetres").flatMap { try? JSONDecoder().decode(DeskArrangement.self, from: $0) } ?? v.deskArrangement
         v.trackpadMethod = defaults.string(forKey: "trackpadMethod").flatMap(TrackpadMethod.init(rawValue:)) ?? v.trackpadMethod
         v.trackpadSpeed = defaults.object(forKey: "trackpadSpeed") as? Double ?? v.trackpadSpeed
@@ -56,13 +57,13 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.edgeMargin, forKey: "edgeMargin")
         defaults.set(v.minZoneSize, forKey: "minZoneSize")
         defaults.set(v.zoneNavigationEnabled, forKey: "zoneNavigationEnabled")
+        defaults.set(v.capsLockAsModifier, forKey: "capsLockAsModifier")
         defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(v.trackpadSpeed, forKey: "trackpadSpeed")
         defaults.set(try? JSONEncoder().encode(v.windowScrollKeys), forKey: "windowScrollKeys")
         defaults.set(try? JSONEncoder().encode(v.stripScrollKeys), forKey: "stripScrollKeys")
-        defaults.set(try? JSONEncoder().encode(v.sendToZoneKeys), forKey: "sendToZoneKeys")
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
         defaults.set(try? JSONEncoder().encode(v.deskArrangement), forKey: "deskArrangementMillimetres")
         defaults.set(v.ignoredApps, forKey: "ignoredApps")
