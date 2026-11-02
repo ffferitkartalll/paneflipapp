@@ -21,7 +21,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     /// Settings that earlier versions had and this one does not: loading forgets them.
     // "deskArrangement" held the places in points; the places are in millimetres now (the displays are set again).
-    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement", "zoneNavigationBeyondEdges", "parkOnHiddenDisplay"]
+    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement", "zoneNavigationBeyondEdges"]
 
     func load() -> SettingsValues {
         Self.removedKeys.forEach(defaults.removeObject(forKey:))

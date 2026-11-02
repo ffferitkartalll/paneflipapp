@@ -33,10 +33,7 @@ final class StripScroller {
         let id: Int
         let screen: ScreenInfo
         let geometry: StripGeometry
-        /// Where windows out of sight wait for good (the hidden display of the screen), and where they wait while a scroll runs: at the lower right corner of the display,
-        /// next to its hidden display (a window that changes displays holds up the frames of the slide, so the move to the hidden display is made when the slide is over).
-        let place: Parking.Place
-        let transit: Parking.Place
+        let side: Parking.Side
         let start: CGFloat
         let held: [Held]
         /// The rest position the scroll is heading to.
@@ -158,11 +155,11 @@ final class StripScroller {
             return true
         }
         let all = screens.screens()
-        guard let (geometry, found) = planner.strip(of: screen, among: all), let place = found else { return false }
+        guard let (geometry, found) = planner.strip(of: screen, among: all), let side = found else { return false }
         let offset = geometry.clamped(viewport.offset(for: screen.key))
         guard let target = led ? offset : wanted ?? nextRest(from: offset, toward: edge, in: geometry) else { return false }
         count += 1
-        var current = Scrolling(id: count, screen: screen, geometry: geometry, place: place, transit: .edge(.right), start: offset,
+        var current = Scrolling(id: count, screen: screen, geometry: geometry, side: side, start: offset,
                                 held: held(of: geometry, at: offset), target: target, shown: offset)
         current.led = led
         current.origin = offset
@@ -223,7 +220,7 @@ final class StripScroller {
         }
         let all = screens.screens()
         for screen in all {
-            guard let (geometry, place) = planner.strip(of: screen, among: all), place != nil else { continue }
+            guard let (geometry, side) = planner.strip(of: screen, among: all), side != nil else { continue }
             let offset = geometry.clamped(viewport.offset(for: screen.key))
             guard geometry.zones(offset: offset).contains(where: { $0.id == id }) else { continue }
             guard let aim = rest(showing: id, from: offset, on: screen, geometry: geometry) else { return false }
@@ -361,9 +358,8 @@ final class StripScroller {
     /// The pictures are on screen: the real windows wait at the display's edge, and the pictures glide on to the target.
     private func covered(_ id: Int) {
         guard let current = scrolling, current.id == id, current.phase == .covering else { return }
-        // The windows in view wait at the edge for the slide; those that wait out of sight already stay where they are (on the hidden display), until the slide is over.
-        for held in current.held where !held.isParked {
-            mover.move(held.ref, to: Parking.transitOrigin(for: held.rect, on: screens.flip(current.screen.cocoaFrame), place: current.transit))
+        for held in current.held {
+            mover.move(held.ref, to: Parking.frame(for: held.rect, on: current.screen.cocoaFrame, side: current.side).origin)
         }
         beginGliding(current)
     }
@@ -422,7 +418,7 @@ final class StripScroller {
         guard scrolling == nil else { return false }
         let all = screens.screens()
         guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first,
-              let (geometry, place) = planner.strip(of: screen, among: all), place != nil,
+              let (geometry, side) = planner.strip(of: screen, among: all), side != nil,
               geometry.range.lowerBound < geometry.range.upperBound else { return false }
         return scroll(toward: .right, on: screen, to: nil, led: true)
     }
@@ -435,7 +431,7 @@ final class StripScroller {
         let rest = current.glideTo
         stage.keep()
         count += 1
-        var next = Scrolling(id: count, screen: current.screen, geometry: current.geometry, place: current.place, transit: current.transit, start: rest,
+        var next = Scrolling(id: count, screen: current.screen, geometry: current.geometry, side: current.side, start: rest,
                              held: current.held, target: rest, shown: rest)
         next.origin = current.origin
         next.pictures = current.pictures
@@ -450,7 +446,7 @@ final class StripScroller {
             next.gesture.limit(to: rest - current.geometry.range.upperBound ... rest - current.geometry.range.lowerBound)
         }
         for held in next.held {
-            mover.move(held.ref, to: Parking.transitOrigin(for: held.rect, on: screens.flip(next.screen.cocoaFrame), place: next.transit))
+            mover.move(held.ref, to: Parking.frame(for: held.rect, on: next.screen.cocoaFrame, side: next.side).origin)
         }
         coordinator.isScrolling = true
         refresher?.refreshZones()   // the island follows

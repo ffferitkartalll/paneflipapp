@@ -15,7 +15,7 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
             if let loading { return await loading.value }
             guard Date().timeIntervalSince(loadedAt) > age else { return }
             let task = Task {
-                guard let content = try? await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: false) else { return }
+                guard let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false) else { return }
                 self.store(content.windows)
             }
             loading = task
