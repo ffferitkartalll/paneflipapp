@@ -21,6 +21,7 @@ struct LayoutCard: View {
     @State private var isRenaming = false
     @State private var draftName = ""
     @State private var exporting = false
+    @State private var confirmingRemoval = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -93,8 +94,12 @@ struct LayoutCard: View {
             }
             Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }
                 .buttonStyle(.bordered)
-            Button { layouts.removeLayout(key: screen.key, id: layout.id) } label: { stretched("Remove") }
+            Button { confirmingRemoval = true } label: { stretched("Remove") }
                 .buttonStyle(.bordered)
+                .confirmationDialog("Remove this layout?", isPresented: $confirmingRemoval, titleVisibility: .visible) {
+                    Button("Remove") { layouts.removeLayout(key: screen.key, id: layout.id) }
+                    Button("Cancel", role: .cancel) {}
+                }
         }
         .controlSize(.small)
         .frame(width: Self.width)
