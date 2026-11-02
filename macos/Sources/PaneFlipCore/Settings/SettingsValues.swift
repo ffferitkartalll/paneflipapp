@@ -39,6 +39,9 @@ public struct SettingsValues: Equatable {
     /// Close the message of the island that offers the undo.
     public var closeWindowUndoNoticeShortcut = SnapTrigger.closeWindowUndoNotice
 
+    /// The Caps Lock key is a modifier key of the app's shortcuts; the lock itself is Command and Caps Lock together.
+    public var capsLockAsModifier = false
+
     /// The shortcuts that move the focus to the zone beside the one in focus work at all.
     public var zoneNavigationEnabled = true
     /// Move the focus to the zone above, to the left, below or to the right of the zone of the focused window.
@@ -47,7 +50,7 @@ public struct SettingsValues: Equatable {
     public var zoneDownShortcut = SnapTrigger.zoneDown
     public var zoneRightShortcut = SnapTrigger.zoneRight
 
-    /// Held while typing the number of a zone, or D, to send the focused window to that zone.
+    /// Send the focused window to a zone through the island: the arrow keys choose the zone, Return puts the window there.
     public var sendToZoneKeys = SnapTrigger.sendToZone
 
     /// Where the displays stand on the desk; the zone moves between displays follow it.

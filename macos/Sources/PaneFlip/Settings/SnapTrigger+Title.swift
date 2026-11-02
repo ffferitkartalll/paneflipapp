@@ -5,13 +5,19 @@ import PaneFlipCore
 extension SnapTrigger {
     /// The trigger as shown to the user.
     var displayTitle: String {
-        keys.enumerated().sorted { (Self.rank(of: $0.element), $0.offset) < (Self.rank(of: $1.element), $1.offset) }
-            .map { Self.localizedName(of: $0.element) }.joined(separator: " + ")
+        // The system does not tell the left modifier key from the right one: neither does the title.
+        var titles: [String] = []
+        for key in keys.enumerated().sorted(by: { (Self.rank(of: $0.element), $0.offset) < (Self.rank(of: $1.element), $1.offset) }).map(\.element) {
+            let title = Self.localizedName(of: key)
+            if !titles.contains(title) { titles.append(title) }
+        }
+        return titles.joined(separator: " + ")
     }
 
-    /// Always Control, Option, Shift, Command, and the key after them, whatever order the keys were pressed in.
+    /// Always Caps Lock, Control, Option, Shift, Command, and the key after them, whatever order the keys were pressed in.
     private static func rank(of key: Key) -> Int {
         switch key.code {
+        case KeyChord.capsLockKeyCode: -1
         case 59, 62: 0
         case 58, 61: 1
         case 56, 60: 2
@@ -22,18 +28,15 @@ extension SnapTrigger {
 
     private static func localizedName(of key: Key) -> String {
         switch key.code {
-        case 56: String(localized: "Left Shift")
-        case 60: String(localized: "Right Shift")
-        case 59: String(localized: "Left Control")
-        case 62: String(localized: "Right Control")
-        case 58: String(localized: "Left Option")
-        case 61: String(localized: "Right Option")
-        case 55: String(localized: "Left Command")
-        case 54: String(localized: "Right Command")
+        case KeyChord.capsLockKeyCode: String(localized: "Caps Lock") + " (⇪)"
+        case 59, 62: String(localized: "Control") + " (⌃)"
+        case 58, 61: String(localized: "Option") + " (⌥)"
+        case 56, 60: String(localized: "Shift") + " (⇧)"
+        case 55, 54: String(localized: "Command") + " (⌘)"
         case 49: String(localized: "Space")
-        case 36: String(localized: "Return")
+        case 36: String(localized: "Return") + " (↩)"
         case 48: String(localized: "Tab")
-        case 51: String(localized: "Delete")
+        case 51: String(localized: "Delete") + " (⌫)"
         case 53: String(localized: "Escape")
         default: Self.layoutCharacter(of: key.code) ?? key.name
         }

@@ -5621,6 +5621,568 @@
         }
       }
     },
+    "Caps Lock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قفل الأحرف الكبيرة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloq Maj"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feststelltaste"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloq Mayús"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verr. maj"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloc Maiusc"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Büyük Harf Kilidi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大写锁定"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大寫鎖定"
+          }
+        }
+      }
+    },
+    "Caps Lock (⇪) can be one of the keys of a shortcut below. The capital letters are then turned on and off with Command (⌘) and Caps Lock (⇪) together." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكن أن يكون قفل الأحرف الكبيرة (⇪) أحد مفاتيح الاختصارات أدناه. وعندها يتم تشغيل الأحرف الكبيرة وإيقافها بالضغط على Command (⌘) وقفل الأحرف الكبيرة (⇪) معًا."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) може да е един от клавишите на дадена клавишна комбинация по-долу. Тогава главните букви се включват и изключват с Command (⌘) и Caps Lock (⇪) заедно."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "নিচের যেকোনো শর্টকাটের একটি কী হতে পারে Caps Lock (⇪)। তখন বড় হাতের অক্ষর চালু ও বন্ধ হবে Command (⌘) ও Caps Lock (⇪) একসাথে চেপে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloq Maj (⇪) pot ser una de les tecles d'una drecera de sota. Aleshores, les majúscules s'activen i es desactiven amb Comandament (⌘) i Bloq Maj (⇪) alhora."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) může být jednou z kláves níže uvedených zkratek. Velká písmena se pak zapínají a vypínají současným stisknutím Command (⌘) a Caps Lock (⇪)."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) kan være en af tasterne i en genvej nedenfor. Store bogstaver slås så til og fra med Command (⌘) og Caps Lock (⇪) sammen."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Feststelltaste (⇪) kann eine der Tasten eines Kurzbefehls unten sein. Die Großschreibung wird dann mit Command (⌘) und Feststelltaste (⇪) zusammen ein- und ausgeschaltet."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Caps Lock (⇪) μπορεί να είναι ένα από τα πλήκτρα μιας συντόμευσης παρακάτω. Τα κεφαλαία γράμματα ενεργοποιούνται και απενεργοποιούνται τότε με Command (⌘) και Caps Lock (⇪) μαζί."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloq Mayús (⇪) puede ser una de las teclas de un atajo de abajo. Las mayúsculas se activan y desactivan entonces con Comando (⌘) y Bloq Mayús (⇪) a la vez."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) võib olla üks allolevate kiirklahvide klahvidest. Suurtähed lülitatakse siis sisse ja välja klahvidega Command (⌘) ja Caps Lock (⇪) koos."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) می‌تواند یکی از کلیدهای میان‌برهای زیر باشد. در این حالت حروف بزرگ با فشردن هم‌زمان Command (⌘) و Caps Lock (⇪) روشن و خاموش می‌شوند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) voi olla yksi alla olevan pikanäppäimen näppäimistä. Isot kirjaimet kytketään silloin päälle ja pois Komento (⌘)- ja Caps Lock (⇪) -näppäimillä yhdessä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang Caps Lock (⇪) ay maaaring maging isa sa mga key ng isang shortcut sa ibaba. Ang mga malalaking titik ay io-on at io-off na sa pamamagitan ng Command (⌘) at Caps Lock (⇪) nang magkasabay."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verr. maj (⇪) peut être l'une des touches d'un raccourci ci-dessous. Les majuscules s'activent et se désactivent alors avec Commande (⌘) et Verr. maj (⇪) ensemble."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) יכול להיות אחד ממקשי הקיצורים שלהלן. האותיות הגדולות מופעלות וכבות אז באמצעות Command (⌘) ו-Caps Lock (⇪) יחד."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) नीचे दिए गए किसी शॉर्टकट की कुंजियों में से एक हो सकता है। तब बड़े अक्षर Command (⌘) और Caps Lock (⇪) को एक साथ दबाने से चालू और बंद होते हैं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) može biti jedna od tipki donjih prečaca. Velika slova tada se uključuju i isključuju tipkama Command (⌘) i Caps Lock (⇪) zajedno."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Caps Lock (⇪) lehet az alábbi billentyűparancsok egyik billentyűje. A nagybetűs írást ilyenkor a Command (⌘) és a Caps Lock (⇪) együtt kapcsolja be és ki."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) dapat menjadi salah satu tombol pada pintasan di bawah. Huruf kapital kemudian dinyalakan dan dimatikan dengan Command (⌘) dan Caps Lock (⇪) bersamaan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloc Maiusc (⇪) può essere uno dei tasti di una scorciatoia qui sotto. Le maiuscole si attivano e disattivano allora con Comando (⌘) e Bloc Maiusc (⇪) insieme."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪)は、下のショートカットのキーの1つにできます。その場合、大文字入力のオン/オフはcommand (⌘)とCaps Lock (⇪)を同時に押して切り替えます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪)을 아래 단축키의 키 중 하나로 사용할 수 있습니다. 이때 대문자 입력은 Command (⌘)와 Caps Lock (⇪)을 함께 눌러 켜고 끕니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) gali būti vienas iš toliau pateiktų spartųjų klavišų. Didžiosios raidės tada įjungiamos ir išjungiamos kartu paspaudus Command (⌘) ir Caps Lock (⇪)."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) var būt viens no tālāk norādīto īsinājumtaustiņu taustiņiem. Lielie burti tad tiek ieslēgti un izslēgti, vienlaikus nospiežot Command (⌘) un Caps Lock (⇪)."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) खालील शॉर्टकटमधील एक की असू शकते. तेव्हा कॅपिटल अक्षरे Command (⌘) आणि Caps Lock (⇪) एकत्र दाबून चालू-बंद होतात."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) boleh menjadi salah satu kekunci pintasan di bawah. Huruf besar kemudian dihidupkan dan dimatikan dengan Command (⌘) dan Caps Lock (⇪) bersama-sama."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) kan være en av tastene i en snarvei nedenfor. Store bokstaver slås da av og på med Kommando (⌘) og Caps Lock (⇪) sammen."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) kan een van de toetsen van een onderstaande sneltoets zijn. Hoofdletters worden dan in- en uitgeschakeld met Command (⌘) en Caps Lock (⇪) samen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) może być jednym z klawiszy skrótu poniżej. Wielkie litery włącza się i wyłącza wtedy klawiszami Command (⌘) i Caps Lock (⇪) naciśniętymi razem."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Caps Lock (⇪) pode ser uma das teclas de um atalho abaixo. As maiúsculas são então ativadas e desativadas com Comando (⌘) e Caps Lock (⇪) em conjunto."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Caps Lock (⇪) pode ser uma das teclas de um atalho abaixo. As letras maiúsculas são então ativadas e desativadas com Comando (⌘) e Caps Lock (⇪) juntos."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) poate fi una dintre tastele unei comenzi rapide de mai jos. Literele mari se activează și se dezactivează atunci cu Command (⌘) și Caps Lock (⇪) împreună."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) может быть одной из клавиш любого из сочетаний ниже. Тогда заглавные буквы включаются и выключаются сочетанием Command (⌘) и Caps Lock (⇪)."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) môže byť jedným z klávesov nižšie uvedených skratiek. Veľké písmená sa potom zapínajú a vypínajú súčasným stlačením Command (⌘) a Caps Lock (⇪)."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) je lahko ena od tipk spodnjih bližnjic. Velike črke se nato vklopijo in izklopijo s hkratnim pritiskom tipk Command (⌘) in Caps Lock (⇪)."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) може бити један од тастера неке од пречица испод. Велика слова се тада укључују и искључују тастерима Command (⌘) и Caps Lock (⇪) заједно."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) kan vara en av tangenterna i en genväg nedan. Stora bokstäver slås då på och av med Kommando (⌘) och Caps Lock (⇪) tillsammans."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "கீழே உள்ள குறுக்குவழிகளின் விசைகளில் Caps Lock (⇪) ஒன்றாக இருக்கலாம். அப்போது பெரிய எழுத்துகள் Command (⌘) மற்றும் Caps Lock (⇪) ஐ ஒன்றாக அழுத்தி இயக்கப்படும், அணைக்கப்படும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "దిగువన ఉన్న షార్ట్‌కట్‌ల కీలలో Caps Lock (⇪) ఒకటి కావచ్చు. అప్పుడు పెద్ద అక్షరాలు Command (⌘) మరియు Caps Lock (⇪) కలిపి నొక్కడం ద్వారా ఆన్ మరియు ఆఫ్ అవుతాయి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) สามารถเป็นหนึ่งในปุ่มของคีย์ลัดด้านล่างได้ จากนั้นจะเปิดและปิดตัวพิมพ์ใหญ่ด้วยการกด Command (⌘) และ Caps Lock (⇪) พร้อมกัน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Büyük Harf Kilidi (⇪), aşağıdaki kısayolların tuşlarından biri olabilir. Büyük harfler o zaman Komut (⌘) ve Büyük Harf Kilidi (⇪) birlikte basılarak açılıp kapatılır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) може бути однією з клавіш будь-якої зі скорочень нижче. Тоді великі літери вмикаються й вимикаються поєднанням Command (⌘) і Caps Lock (⇪)."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) نیچے دی گئی کسی شارٹ کٹ کی کلیدوں میں سے ایک ہو سکتی ہے۔ تب بڑے حروف Command (⌘) اور Caps Lock (⇪) کو ایک ساتھ دبانے سے آن اور آف ہوتے ہیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock (⇪) có thể là một trong các phím của phím tắt bên dưới. Khi đó, chữ hoa được bật và tắt bằng cách nhấn Command (⌘) và Caps Lock (⇪) cùng lúc."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大写锁定 (⇪)键可以作为下方快捷键的按键之一。此时,大写字母将通过同时按下 Command (⌘) 和大写锁定 (⇪)键来开启和关闭。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大寫鎖定 (⇪)鍵可以作為下方快速鍵的按鍵之一。此時,大寫字母將透過同時按下 Command (⌘) 和大寫鎖定 (⇪)鍵來開啟和關閉。"
+          }
+        }
+      }
+    },
     "Check for updates" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7308,6 +7870,7 @@
       }
     },
     "Closed" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -7585,8 +8148,288 @@
             "value" : "已關閉"
           }
         }
-      },
-      "extractionState" : "manual"
+      }
+    },
+    "Command" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comandament"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komento"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "command"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommando"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommando"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komut"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command"
+          }
+        }
+      }
     },
     "Continue" : {
       "extractionState" : "manual",
@@ -7865,6 +8708,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "繼續"
+          }
+        }
+      }
+    },
+    "Control" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contrôle"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controllo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "control"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controle"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontrol"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control"
           }
         }
       }
@@ -14333,6 +15457,7 @@
       }
     },
     "Hidden" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -14610,8 +15735,7 @@
             "value" : "已隱藏"
           }
         }
-      },
-      "extractionState" : "manual"
+      }
     },
     "Hold the scroll keys (set in the Shortcuts tab) and scroll with two fingers." : {
       "extractionState" : "manual",
@@ -19952,1126 +21076,283 @@
         }
       }
     },
-    "Left Command" : {
+    "Lets a layout have screens beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen." : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command الأيسر"
+            "value" : "يتيح للتخطيط أن تكون له شاشات خارج الحافتين اليسرى واليمنى للشاشة. يمكنك الوصول إليها باختصارات التمرير (راجع الاختصارات)، أو بالتمرير فوق الجزيرة في شريط القوائم. عند الإيقاف لا يعرضها المحرّر وتنتقل تطبيقاتها إلى المنطقة الافتراضية للشاشة."
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ляв Command"
+            "value" : "Позволява на разположението да има екрани извън левия и десния край на екрана. Стигате до тях с клавишните комбинации за превъртане (вижте Клавишни комбинации) или като превъртате над острова в лентата с менюта. Когато е изключено, редакторът не ги показва, а приложенията им преминават в зоната по подразбиране на екрана."
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "বাম Command"
+            "value" : "একটি লেআউটে স্ক্রিনের বাঁ ও ডান প্রান্তের বাইরে আরও স্ক্রিন রাখতে দেয়। স্ক্রল শর্টকাট (শর্টকাট দেখুন) দিয়ে, অথবা মেনু বারের আইল্যান্ডের ওপর স্ক্রল করে সেগুলোতে পৌঁছানো যায়। বন্ধ থাকলে এডিটর সেগুলো দেখায় না এবং সেগুলোর অ্যাপ স্ক্রিনের ডিফল্ট জোনে চলে যায়।"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comandament esquerre"
+            "value" : "Permet que una disposició tingui pantalles més enllà de les vores esquerra i dreta d'una pantalla. S'hi arriba amb les dreceres de desplaçament (vegeu Dreceres) o desplaçant-se sobre l'illa de la barra de menús. Si està desactivat, l'editor no les mostra i les seves apps passen a la zona predeterminada de la pantalla."
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Levý Command"
+            "value" : "Umožňuje rozložení mít obrazovky za levým a pravým okrajem obrazovky. Dostanete se k nim zkratkami pro posouvání (viz Zkratky) nebo posouváním nad ostrovem v řádku nabídek. Když je vypnuto, editor je nezobrazuje a jejich aplikace přejdou do výchozí zóny obrazovky."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Venstre Command"
+            "value" : "Lader et layout have skærme uden for skærmens venstre og højre kant. Du når dem med rullegenvejene (se Genveje) eller ved at rulle over øen i menulinjen. Når det er slået fra, viser editoren dem ikke, og deres apps flyttes til skærmens standardzone."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Linke Command-Taste"
+            "value" : "Erlaubt einem Layout Bildschirme jenseits des linken und rechten Bildschirmrands. Du erreichst sie mit den Scroll-Tastenkürzeln (siehe Tastenkürzel) oder durch Scrollen über der Insel in der Menüleiste. Ist die Option aus, zeigt der Editor sie nicht an, und ihre Apps wandern in die Standardzone des Bildschirms."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Αριστερό Command"
+            "value" : "Επιτρέπει σε μια διάταξη να έχει οθόνες πέρα από την αριστερή και τη δεξιά άκρη μιας οθόνης. Τις φτάνετε με τις συντομεύσεις κύλισης (βλ. Συντομεύσεις) ή κυλώντας πάνω από το νησί στη γραμμή μενού. Όταν είναι απενεργοποιημένο, ο επεξεργαστής δεν τις εμφανίζει και οι εφαρμογές τους μετακινούνται στην προεπιλεγμένη ζώνη της οθόνης."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comando izquierdo"
+            "value" : "Permite que una disposición tenga pantallas más allá de los bordes izquierdo y derecho de una pantalla. Se llega a ellas con los atajos de desplazamiento (consulta Atajos) o desplazándote sobre la isla de la barra de menús. Si se desactiva, el editor no las muestra y sus apps pasan a la zona predeterminada de la pantalla."
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vasak Command"
+            "value" : "Võimaldab paigutusel olla ekraanid ekraani vasakust ja paremast servast väljaspool. Nendeni jõuab kerimise kiirklahvidega (vt Kiirklahvid) või menüüribal oleva saare kohal kerides. Väljalülitatuna redaktor neid ei näita ja nende rakendused liiguvad ekraani vaiketsooni."
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command چپ"
+            "value" : "به یک چیدمان اجازه می‌دهد در بیرون از لبه‌های چپ و راست صفحه، صفحه‌نمایش‌های دیگری داشته باشد. با میان‌برهای پیمایش (به میان‌برها نگاه کنید) یا با پیمایش روی جزیره در نوار منو می‌توانید به آن‌ها برسید. اگر خاموش باشد، ویرایشگر آن‌ها را نشان نمی‌دهد و برنامه‌هایشان به ناحیهٔ پیش‌فرض صفحه‌نمایش منتقل می‌شوند."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vasen Komento"
+            "value" : "Antaa asettelulle näyttöjä näytön vasemman ja oikean reunan ulkopuolella. Niihin pääsee vierityspikanäppäimillä (katso Pikanäppäimet) tai vierittämällä valikkorivin saaren päällä. Kun asetus on pois päältä, editori ei näytä niitä ja niiden apit siirtyvät näytön oletusalueelle."
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaliwang Command"
+            "value" : "Hinahayaan ang isang layout na magkaroon ng mga screen sa labas ng kaliwa at kanang gilid ng isang screen. Maaabot ang mga ito gamit ang mga scroll shortcut (tingnan ang Mga shortcut), o sa pag-scroll sa ibabaw ng island sa menu bar. Kapag naka-off, hindi ipinapakita ng editor ang mga ito at lilipat ang kanilang mga app sa default na zone ng screen."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Commande gauche"
+            "value" : "Permet à une disposition d'avoir des écrans au-delà des bords gauche et droit d'un écran. On y accède avec les raccourcis de défilement (voir Raccourcis) ou en faisant défiler au-dessus de l'îlot de la barre des menus. Désactivé, l'éditeur ne les affiche pas et leurs apps passent dans la zone par défaut de l'écran."
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command שמאלי"
+            "value" : "מאפשר לפריסה להכיל מסכים מחוץ לקצה השמאלי והימני של מסך. אפשר להגיע אליהם בעזרת קיצורי הגלילה (ראה קיצורי דרך) או בגלילה מעל האי בשורת התפריטים. כשהאפשרות כבויה, העורך אינו מציג אותם והאפליקציות שלהם עוברות לאזור ברירת המחדל של המסך."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "बायाँ Command"
+            "value" : "लेआउट को स्क्रीन के बाएँ और दाएँ किनारों के बाहर और स्क्रीन रखने देता है। उन तक स्क्रॉल शॉर्टकट (देखें शॉर्टकट) से, या मेनू बार के आइलैंड पर स्क्रॉल करके पहुँचा जा सकता है। बंद होने पर एडिटर उन्हें नहीं दिखाता और उनके ऐप स्क्रीन के डिफ़ॉल्ट ज़ोन में चले जाते हैं।"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lijevi Command"
+            "value" : "Omogućuje rasporedu da ima zaslone izvan lijevog i desnog ruba zaslona. Do njih se dolazi prečacima za pomicanje (vidi Prečaci) ili pomicanjem iznad otoka u traci izbornika. Kad je isključeno, uređivač ih ne prikazuje, a njihove se aplikacije premještaju u zadanu zonu zaslona."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bal Command"
+            "value" : "Lehetővé teszi, hogy egy elrendezésnek legyenek képernyői a képernyő bal és jobb szélén túl. Ezeket a görgetési billentyűparancsokkal (lásd Billentyűparancsok) vagy a menüsor szigete fölötti görgetéssel éred el. Kikapcsolva a szerkesztő nem mutatja őket, az alkalmazásaik pedig a képernyő alapértelmezett zónájába kerülnek."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command Kiri"
+            "value" : "Memungkinkan tata letak memiliki layar di luar tepi kiri dan kanan sebuah layar. Zona itu dijangkau dengan pintasan gulir (lihat Pintasan), atau dengan menggulir di atas pulau di bilah menu. Jika dimatikan, editor tidak menampilkannya dan app di dalamnya pindah ke zona default layar."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comando sinistro"
+            "value" : "Permette a una disposizione di avere schermi oltre i bordi sinistro e destro di uno schermo. Si raggiungono con le scorciatoie di scorrimento (vedi Scorciatoie) o scorrendo sopra l'isola nella barra dei menu. Se disattivato, l'editor non li mostra e le loro app passano alla zona predefinita dello schermo."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "左Command"
+            "value" : "レイアウトに、画面の左右の端の外側にある画面を持たせます。スクロールのショートカット（「ショートカット」を参照）や、メニューバーのアイランド上でのスクロールで移動できます。オフにすると、エディタにはそれらの画面が表示されず、そのアプリは画面のデフォルトのゾーンに移ります。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "왼쪽 Command"
+            "value" : "레이아웃이 화면의 왼쪽과 오른쪽 가장자리 밖에 화면을 가질 수 있게 합니다. 스크롤 단축키(단축키 참조)나 메뉴 막대의 아일랜드 위에서 스크롤하여 이동할 수 있습니다. 끄면 편집기에 해당 화면이 표시되지 않으며, 그 화면의 앱은 화면의 기본 영역으로 이동합니다."
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kairysis Command"
+            "value" : "Leidžia išdėstymui turėti ekranų už kairiojo ir dešiniojo ekrano krašto. Jas pasiekiate slinkimo spartieji klavišais (žr. Spartieji klavišai) arba slinkdami virš salos meniu juostoje. Kai išjungta, redaktorius jų nerodo, o jų programos perkeliamos į numatytąją ekrano zoną."
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kreisais Command"
+            "value" : "Ļauj izkārtojumam būt ekrāniem aiz ekrāna kreisās un labās malas. Tām var piekļūt ar ritināšanas īsinājumtaustiņiem (skatiet Īsinājumtaustiņi) vai ritinot virs salas izvēlņu joslā. Ja izslēgts, redaktors tās nerāda, un to lietotnes pāriet uz ekrāna noklusējuma zonu."
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "डावा Command"
+            "value" : "लेआउटला स्क्रीनच्या डाव्या आणि उजव्या कडांच्या बाहेर आणखी स्क्रीन ठेवू देते. स्क्रोल शॉर्टकटने (शॉर्टकट पहा) किंवा मेनू बारमधील आयलंडवर स्क्रोल करून त्यांपर्यंत पोहोचता येते. बंद केल्यास एडिटर ते दाखवत नाही आणि त्यांचे अ‍ॅप स्क्रीनच्या डीफॉल्ट झोनमध्ये जातात."
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command Kiri"
+            "value" : "Membolehkan susun atur mempunyai skrin di luar tepi kiri dan kanan sebuah skrin. Zon itu boleh dicapai dengan pintasan tatal (lihat Pintasan), atau dengan menatal di atas pulau dalam bar menu. Jika dimatikan, editor tidak menunjukkannya dan apl di dalamnya berpindah ke zon lalai skrin."
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Venstre Kommando"
+            "value" : "Lar et oppsett ha skjermer utenfor venstre og høyre kant av en skjerm. Du når dem med rullesnarveiene (se Snarveier) eller ved å rulle over øya i menylinjen. Når det er slått av, viser ikke editoren dem, og appene deres flyttes til skjermens standardsone."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Linker Command"
+            "value" : "Laat een indeling schermen hebben voorbij de linker- en rechterrand van een scherm. Je bereikt ze met de scrolltoetsen (zie Sneltoetsen) of door te scrollen boven het eiland in de menubalk. Als dit uit staat, toont de editor ze niet en gaan hun apps naar de standaardzone van het scherm."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lewy Command"
+            "value" : "Pozwala układowi mieć ekrany poza lewą i prawą krawędzią ekranu. Dotrzesz do nich skrótami przewijania (zobacz Skróty) lub przewijając nad wyspą na pasku menu. Gdy opcja jest wyłączona, edytor ich nie pokazuje, a ich aplikacje przechodzą do domyślnej strefy ekranu."
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command esquerdo"
+            "value" : "Permite que uma disposição tenha ecrãs para além das bordas esquerda e direita de um ecrã. Chega-se a elas com os atalhos de deslocamento (consulte Atalhos) ou deslocando sobre a ilha na barra de menus. Se estiver desativado, o editor não os mostra e as suas apps passam para a zona predefinida do ecrã."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command esquerdo"
+            "value" : "Permite que um layout tenha telas além das bordas esquerda e direita de uma tela. Você chega a elas com os atalhos de rolagem (veja Atalhos) ou rolando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e os apps delas vão para a zona padrão da tela."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command stânga"
+            "value" : "Permite unei dispuneri să aibă ecrane dincolo de marginile stângă și dreaptă ale unui ecran. Le poți atinge cu comenzile rapide de derulare (vezi Comenzi rapide) sau derulând deasupra insulei din bara de meniu. Când este oprit, editorul nu le afișează, iar aplicațiile lor trec în zona implicită a ecranului."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Левый Command"
+            "value" : "Позволяет раскладке иметь экраны за левым и правым краем экрана. До них можно добраться сочетаниями клавиш прокрутки (см. «Сочетания клавиш») или прокруткой над островом в строке меню. Если выключено, редактор их не показывает, а их приложения переходят в зону экрана по умолчанию."
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ľavý Command"
+            "value" : "Umožňuje rozloženiu mať obrazovky za ľavým a pravým okrajom obrazovky. K nim sa dostanete skratkami na posúvanie (pozri Skratky) alebo posúvaním nad ostrovom v paneli ponúk. Keď je vypnuté, editor ich nezobrazuje a ich aplikácie sa presunú do predvolenej zóny obrazovky."
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Levi Command"
+            "value" : "Omogoča, da ima razporeditev zaslone zunaj levega in desnega roba zaslona. Do njih pridete z bližnjicami za pomikanje (glejte Bližnjice) ali s pomikanjem nad otokom v menijski vrstici. Če je izklopljeno, jih urejevalnik ne prikazuje, njihove aplikacije pa se premaknejo v privzeto območje zaslona."
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Леви Command"
+            "value" : "Омогућава распореду да има екране изван леве и десне ивице екрана. До њих се стиже пречицама за померање (погледајте Пречице) или померањем изнад острва у траци менија. Када је искључено, уређивач их не приказује, а њихове апликације прелазе у подразумевану зону екрана."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vänster Kommando"
+            "value" : "Låter en layout ha skärmar utanför en skärms vänstra och högra kant. Du når dem med rullningsgenvägarna (se Kortkommandon) eller genom att rulla över ön i menyraden. När det är av visar redigeraren dem inte, och deras appar flyttas till skärmens standardzon."
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "இடது Command"
+            "value" : "ஒரு தளவமைப்பு, திரையின் இடது மற்றும் வலது ஓரங்களுக்கு வெளியே திரைகளைக் கொண்டிருக்க அனுமதிக்கிறது. உருள் குறுக்குவழிகள் (குறுக்குவழிகளைப் பார்க்கவும்) மூலமாகவோ, மெனு பட்டியில் உள்ள தீவின் மேல் உருட்டியோ அவற்றை அடையலாம். அணைத்திருந்தால் எடிட்டர் அவற்றைக் காட்டாது, அவற்றின் பயன்பாடுகள் திரையின் இயல்புநிலை மண்டலத்துக்கு நகரும்."
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ఎడమ Command"
+            "value" : "లేఅవుట్‌కు స్క్రీన్ ఎడమ, కుడి అంచుల వెలుపల స్క్రీన్‌లు ఉండేందుకు అనుమతిస్తుంది. స్క్రోల్ షార్ట్‌కట్‌ల ద్వారా (షార్ట్‌కట్‌లు చూడండి) లేదా మెనూ బార్‌లోని ఐలాండ్ పైన స్క్రోల్ చేసి వాటిని చేరుకోవచ్చు. ఆఫ్ చేస్తే ఎడిటర్ వాటిని చూపదు, వాటి యాప్‌లు స్క్రీన్ డిఫాల్ట్ జోన్‌కు మారతాయి."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command ซ้าย"
+            "value" : "ให้เลย์เอาต์มีหน้าจอเพิ่มเติมอยู่เลยขอบซ้ายและขอบขวาของหน้าจอได้ เข้าถึงหน้าจอเหล่านั้นด้วยทางลัดเลื่อน (ดูทางลัด) หรือเลื่อนบนไอส์แลนด์ในแถบเมนู เมื่อปิดอยู่ ตัวแก้ไขจะไม่แสดงหน้าจอเหล่านั้น และแอปในหน้าจอเหล่านั้นจะย้ายไปที่โซนเริ่มต้นของหน้าจอ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sol Command"
+            "value" : "Bir düzenin ekranın sol ve sağ kenarlarının ötesinde ekranlar içermesine izin verir. Bunlara kaydırma kısayollarıyla (bkz. Kısayollar) ya da menü çubuğundaki adanın üzerinde kaydırarak ulaşılır. Kapalıyken düzenleyici bunları göstermez ve uygulamaları ekranın varsayılan bölgesine taşınır."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Лівий Command"
+            "value" : "Дозволяє розкладці мати екрани за лівим і правим краєм екрана. До них можна дістатися скороченнями прокручування (див. «Скорочення») або прокручуванням над островом у рядку меню. Якщо вимкнено, редактор їх не показує, а їхні програми переходять у зону екрана за замовчуванням."
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بایاں Command"
+            "value" : "لے آؤٹ کو اسکرین کے بائیں اور دائیں کناروں سے باہر اسکرینیں رکھنے دیتا ہے۔ ان تک اسکرول شارٹ کٹس (شارٹ کٹس دیکھیں) سے، یا مینو بار میں جزیرے پر اسکرول کر کے پہنچا جا سکتا ہے۔ بند ہونے پر ایڈیٹر انہیں نہیں دکھاتا اور ان کی ایپس اسکرین کے ڈیفالٹ زون میں چلی جاتی ہیں۔"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command trái"
+            "value" : "Cho phép một bố cục có các màn hình nằm ngoài cạnh trái và cạnh phải của màn hình. Bạn đến các màn hình đó bằng phím tắt cuộn (xem Phím tắt) hoặc bằng cách cuộn trên đảo trong thanh menu. Khi tắt, trình chỉnh sửa không hiển thị các màn hình đó và ứng dụng của chúng chuyển sang vùng mặc định của màn hình."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "左 Command"
+            "value" : "允许布局在屏幕左右边缘之外拥有更多屏幕。可以通过滚动快捷键（见“快捷键”）或在菜单栏的岛上滚动来到达这些屏幕。关闭后，编辑器不再显示它们，其中的应用会移到屏幕的默认区域。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "左 Command"
-          }
-        }
-      }
-    },
-    "Left Control" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control الأيسر"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ляв Control"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "বাম Control"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control esquerre"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levý Control"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Control"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linke Control-Taste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Αριστερό Control"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control izquierdo"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasak Control"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control چپ"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasen Control"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kaliwang Control"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contrôle gauche"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control שמאלי"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "बायाँ Control"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lijevi Control"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bal Control"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control Kiri"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Controllo sinistro"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左Control"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "왼쪽 Control"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kairysis Control"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kreisais Control"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "डावा Control"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control Kiri"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Control"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linker Control"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lewy Control"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control esquerdo"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control esquerdo"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control stânga"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Левый Control"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ľavý Control"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levi Control"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Леви Control"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vänster Control"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "இடது Control"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ఎడమ Control"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control ซ้าย"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sol Control"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Лівий Control"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "بایاں Control"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control trái"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Control"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Control"
-          }
-        }
-      }
-    },
-    "Left Option" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option الأيسر"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ляв Option"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "বাম Option"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opció esquerra"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levý Option"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Alternativ"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linke Option-Taste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Αριστερό Option"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opción izquierda"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasak Option"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option چپ"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasen Optio"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kaliwang Option"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option gauche"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option שמאלי"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "बायाँ Option"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lijevi Option"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bal Option"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option Kiri"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opzione sinistra"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左Option"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "왼쪽 Option"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kairysis Option"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kreisais Option"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "डावा Option"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option Kiri"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Alternativ"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linker Option"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lewy Option"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option esquerdo"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option esquerdo"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option stânga"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Левый Option"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ľavý Option"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levi Option"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Леви Option"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vänster Alternativ"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "இடது Option"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ఎడమ Option"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option ซ้าย"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sol Option"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Лівий Option"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "بایاں Option"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option trái"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Option"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Option"
-          }
-        }
-      }
-    },
-    "Left Shift" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift الأيسر"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ляв Shift"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "বাম Shift"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Majúscules esquerra"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levý Shift"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Skift"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linke Umschalttaste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Αριστερό Shift"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mayús izquierda"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasak Shift"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift چپ"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vasen Vaihto"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kaliwang Shift"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maj gauche"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift שמאלי"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "बायाँ Shift"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lijevi Shift"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bal Shift"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift Kiri"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maiusc sinistro"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左Shift"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "왼쪽 Shift"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kairysis Shift"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kreisais Shift"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "डावा Shift"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift Kiri"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venstre Skift"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Linker Shift"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lewy Shift"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift esquerdo"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift esquerdo"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift stânga"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Левый Shift"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ľavý Shift"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Levi Shift"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Леви Shift"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vänster Skift"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "இடது Shift"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ఎడమ Shift"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift ซ้าย"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sol Shift"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Лівий Shift"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "بایاں Shift"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift trái"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Shift"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左 Shift"
+            "value" : "允許版面在螢幕左右邊緣之外擁有更多螢幕。可以透過捲動快速鍵（見「快速鍵」）或在選單列的島上捲動來到達這些螢幕。關閉後，編輯器不再顯示它們，其中的 App 會移到螢幕的預設區域。"
           }
         }
       }
@@ -21634,287 +21915,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "允許 PaneFlip 取得視窗的影像，以便該視窗在其區域內滑入另一個視窗旁邊。"
-          }
-        }
-      }
-    },
-    "Lets a layout have screens beyond the left and right edges of a screen. Reach them with the scroll shortcuts (see Shortcuts), or by scrolling over the island in the menu bar. Switched off, the editor does not show them and their apps move to the default zone of the screen." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "يتيح للتخطيط أن تكون له شاشات خارج الحافتين اليسرى واليمنى للشاشة. يمكنك الوصول إليها باختصارات التمرير (راجع الاختصارات)، أو بالتمرير فوق الجزيرة في شريط القوائم. عند الإيقاف لا يعرضها المحرّر وتنتقل تطبيقاتها إلى المنطقة الافتراضية للشاشة."
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Позволява на разположението да има екрани извън левия и десния край на екрана. Стигате до тях с клавишните комбинации за превъртане (вижте Клавишни комбинации) или като превъртате над острова в лентата с менюта. Когато е изключено, редакторът не ги показва, а приложенията им преминават в зоната по подразбиране на екрана."
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "একটি লেআউটে স্ক্রিনের বাঁ ও ডান প্রান্তের বাইরে আরও স্ক্রিন রাখতে দেয়। স্ক্রল শর্টকাট (শর্টকাট দেখুন) দিয়ে, অথবা মেনু বারের আইল্যান্ডের ওপর স্ক্রল করে সেগুলোতে পৌঁছানো যায়। বন্ধ থাকলে এডিটর সেগুলো দেখায় না এবং সেগুলোর অ্যাপ স্ক্রিনের ডিফল্ট জোনে চলে যায়।"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permet que una disposició tingui pantalles més enllà de les vores esquerra i dreta d'una pantalla. S'hi arriba amb les dreceres de desplaçament (vegeu Dreceres) o desplaçant-se sobre l'illa de la barra de menús. Si està desactivat, l'editor no les mostra i les seves apps passen a la zona predeterminada de la pantalla."
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Umožňuje rozložení mít obrazovky za levým a pravým okrajem obrazovky. Dostanete se k nim zkratkami pro posouvání (viz Zkratky) nebo posouváním nad ostrovem v řádku nabídek. Když je vypnuto, editor je nezobrazuje a jejich aplikace přejdou do výchozí zóny obrazovky."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lader et layout have skærme uden for skærmens venstre og højre kant. Du når dem med rullegenvejene (se Genveje) eller ved at rulle over øen i menulinjen. Når det er slået fra, viser editoren dem ikke, og deres apps flyttes til skærmens standardzone."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erlaubt einem Layout Bildschirme jenseits des linken und rechten Bildschirmrands. Du erreichst sie mit den Scroll-Tastenkürzeln (siehe Tastenkürzel) oder durch Scrollen über der Insel in der Menüleiste. Ist die Option aus, zeigt der Editor sie nicht an, und ihre Apps wandern in die Standardzone des Bildschirms."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Επιτρέπει σε μια διάταξη να έχει οθόνες πέρα από την αριστερή και τη δεξιά άκρη μιας οθόνης. Τις φτάνετε με τις συντομεύσεις κύλισης (βλ. Συντομεύσεις) ή κυλώντας πάνω από το νησί στη γραμμή μενού. Όταν είναι απενεργοποιημένο, ο επεξεργαστής δεν τις εμφανίζει και οι εφαρμογές τους μετακινούνται στην προεπιλεγμένη ζώνη της οθόνης."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permite que una disposición tenga pantallas más allá de los bordes izquierdo y derecho de una pantalla. Se llega a ellas con los atajos de desplazamiento (consulta Atajos) o desplazándote sobre la isla de la barra de menús. Si se desactiva, el editor no las muestra y sus apps pasan a la zona predeterminada de la pantalla."
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Võimaldab paigutusel olla ekraanid ekraani vasakust ja paremast servast väljaspool. Nendeni jõuab kerimise kiirklahvidega (vt Kiirklahvid) või menüüribal oleva saare kohal kerides. Väljalülitatuna redaktor neid ei näita ja nende rakendused liiguvad ekraani vaiketsooni."
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "به یک چیدمان اجازه می‌دهد در بیرون از لبه‌های چپ و راست صفحه، صفحه‌نمایش‌های دیگری داشته باشد. با میان‌برهای پیمایش (به میان‌برها نگاه کنید) یا با پیمایش روی جزیره در نوار منو می‌توانید به آن‌ها برسید. اگر خاموش باشد، ویرایشگر آن‌ها را نشان نمی‌دهد و برنامه‌هایشان به ناحیهٔ پیش‌فرض صفحه‌نمایش منتقل می‌شوند."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Antaa asettelulle näyttöjä näytön vasemman ja oikean reunan ulkopuolella. Niihin pääsee vierityspikanäppäimillä (katso Pikanäppäimet) tai vierittämällä valikkorivin saaren päällä. Kun asetus on pois päältä, editori ei näytä niitä ja niiden apit siirtyvät näytön oletusalueelle."
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hinahayaan ang isang layout na magkaroon ng mga screen sa labas ng kaliwa at kanang gilid ng isang screen. Maaabot ang mga ito gamit ang mga scroll shortcut (tingnan ang Mga shortcut), o sa pag-scroll sa ibabaw ng island sa menu bar. Kapag naka-off, hindi ipinapakita ng editor ang mga ito at lilipat ang kanilang mga app sa default na zone ng screen."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permet à une disposition d'avoir des écrans au-delà des bords gauche et droit d'un écran. On y accède avec les raccourcis de défilement (voir Raccourcis) ou en faisant défiler au-dessus de l'îlot de la barre des menus. Désactivé, l'éditeur ne les affiche pas et leurs apps passent dans la zone par défaut de l'écran."
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "מאפשר לפריסה להכיל מסכים מחוץ לקצה השמאלי והימני של מסך. אפשר להגיע אליהם בעזרת קיצורי הגלילה (ראה קיצורי דרך) או בגלילה מעל האי בשורת התפריטים. כשהאפשרות כבויה, העורך אינו מציג אותם והאפליקציות שלהם עוברות לאזור ברירת המחדל של המסך."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउट को स्क्रीन के बाएँ और दाएँ किनारों के बाहर और स्क्रीन रखने देता है। उन तक स्क्रॉल शॉर्टकट (देखें शॉर्टकट) से, या मेनू बार के आइलैंड पर स्क्रॉल करके पहुँचा जा सकता है। बंद होने पर एडिटर उन्हें नहीं दिखाता और उनके ऐप स्क्रीन के डिफ़ॉल्ट ज़ोन में चले जाते हैं।"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Omogućuje rasporedu da ima zaslone izvan lijevog i desnog ruba zaslona. Do njih se dolazi prečacima za pomicanje (vidi Prečaci) ili pomicanjem iznad otoka u traci izbornika. Kad je isključeno, uređivač ih ne prikazuje, a njihove se aplikacije premještaju u zadanu zonu zaslona."
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lehetővé teszi, hogy egy elrendezésnek legyenek képernyői a képernyő bal és jobb szélén túl. Ezeket a görgetési billentyűparancsokkal (lásd Billentyűparancsok) vagy a menüsor szigete fölötti görgetéssel éred el. Kikapcsolva a szerkesztő nem mutatja őket, az alkalmazásaik pedig a képernyő alapértelmezett zónájába kerülnek."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Memungkinkan tata letak memiliki layar di luar tepi kiri dan kanan sebuah layar. Zona itu dijangkau dengan pintasan gulir (lihat Pintasan), atau dengan menggulir di atas pulau di bilah menu. Jika dimatikan, editor tidak menampilkannya dan app di dalamnya pindah ke zona default layar."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permette a una disposizione di avere schermi oltre i bordi sinistro e destro di uno schermo. Si raggiungono con le scorciatoie di scorrimento (vedi Scorciatoie) o scorrendo sopra l'isola nella barra dei menu. Se disattivato, l'editor non li mostra e le loro app passano alla zona predefinita dello schermo."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "レイアウトに、画面の左右の端の外側にある画面を持たせます。スクロールのショートカット（「ショートカット」を参照）や、メニューバーのアイランド上でのスクロールで移動できます。オフにすると、エディタにはそれらの画面が表示されず、そのアプリは画面のデフォルトのゾーンに移ります。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "레이아웃이 화면의 왼쪽과 오른쪽 가장자리 밖에 화면을 가질 수 있게 합니다. 스크롤 단축키(단축키 참조)나 메뉴 막대의 아일랜드 위에서 스크롤하여 이동할 수 있습니다. 끄면 편집기에 해당 화면이 표시되지 않으며, 그 화면의 앱은 화면의 기본 영역으로 이동합니다."
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leidžia išdėstymui turėti ekranų už kairiojo ir dešiniojo ekrano krašto. Jas pasiekiate slinkimo spartieji klavišais (žr. Spartieji klavišai) arba slinkdami virš salos meniu juostoje. Kai išjungta, redaktorius jų nerodo, o jų programos perkeliamos į numatytąją ekrano zoną."
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ļauj izkārtojumam būt ekrāniem aiz ekrāna kreisās un labās malas. Tām var piekļūt ar ritināšanas īsinājumtaustiņiem (skatiet Īsinājumtaustiņi) vai ritinot virs salas izvēlņu joslā. Ja izslēgts, redaktors tās nerāda, un to lietotnes pāriet uz ekrāna noklusējuma zonu."
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउटला स्क्रीनच्या डाव्या आणि उजव्या कडांच्या बाहेर आणखी स्क्रीन ठेवू देते. स्क्रोल शॉर्टकटने (शॉर्टकट पहा) किंवा मेनू बारमधील आयलंडवर स्क्रोल करून त्यांपर्यंत पोहोचता येते. बंद केल्यास एडिटर ते दाखवत नाही आणि त्यांचे अ‍ॅप स्क्रीनच्या डीफॉल्ट झोनमध्ये जातात."
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Membolehkan susun atur mempunyai skrin di luar tepi kiri dan kanan sebuah skrin. Zon itu boleh dicapai dengan pintasan tatal (lihat Pintasan), atau dengan menatal di atas pulau dalam bar menu. Jika dimatikan, editor tidak menunjukkannya dan apl di dalamnya berpindah ke zon lalai skrin."
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lar et oppsett ha skjermer utenfor venstre og høyre kant av en skjerm. Du når dem med rullesnarveiene (se Snarveier) eller ved å rulle over øya i menylinjen. Når det er slått av, viser ikke editoren dem, og appene deres flyttes til skjermens standardsone."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laat een indeling schermen hebben voorbij de linker- en rechterrand van een scherm. Je bereikt ze met de scrolltoetsen (zie Sneltoetsen) of door te scrollen boven het eiland in de menubalk. Als dit uit staat, toont de editor ze niet en gaan hun apps naar de standaardzone van het scherm."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pozwala układowi mieć ekrany poza lewą i prawą krawędzią ekranu. Dotrzesz do nich skrótami przewijania (zobacz Skróty) lub przewijając nad wyspą na pasku menu. Gdy opcja jest wyłączona, edytor ich nie pokazuje, a ich aplikacje przechodzą do domyślnej strefy ekranu."
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permite que uma disposição tenha ecrãs para além das bordas esquerda e direita de um ecrã. Chega-se a elas com os atalhos de deslocamento (consulte Atalhos) ou deslocando sobre a ilha na barra de menus. Se estiver desativado, o editor não os mostra e as suas apps passam para a zona predefinida do ecrã."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permite que um layout tenha telas além das bordas esquerda e direita de uma tela. Você chega a elas com os atalhos de rolagem (veja Atalhos) ou rolando sobre a ilha na barra de menus. Se estiver desativado, o editor não as mostra e os apps delas vão para a zona padrão da tela."
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permite unei dispuneri să aibă ecrane dincolo de marginile stângă și dreaptă ale unui ecran. Le poți atinge cu comenzile rapide de derulare (vezi Comenzi rapide) sau derulând deasupra insulei din bara de meniu. Când este oprit, editorul nu le afișează, iar aplicațiile lor trec în zona implicită a ecranului."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Позволяет раскладке иметь экраны за левым и правым краем экрана. До них можно добраться сочетаниями клавиш прокрутки (см. «Сочетания клавиш») или прокруткой над островом в строке меню. Если выключено, редактор их не показывает, а их приложения переходят в зону экрана по умолчанию."
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Umožňuje rozloženiu mať obrazovky za ľavým a pravým okrajom obrazovky. K nim sa dostanete skratkami na posúvanie (pozri Skratky) alebo posúvaním nad ostrovom v paneli ponúk. Keď je vypnuté, editor ich nezobrazuje a ich aplikácie sa presunú do predvolenej zóny obrazovky."
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Omogoča, da ima razporeditev zaslone zunaj levega in desnega roba zaslona. Do njih pridete z bližnjicami za pomikanje (glejte Bližnjice) ali s pomikanjem nad otokom v menijski vrstici. Če je izklopljeno, jih urejevalnik ne prikazuje, njihove aplikacije pa se premaknejo v privzeto območje zaslona."
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Омогућава распореду да има екране изван леве и десне ивице екрана. До њих се стиже пречицама за померање (погледајте Пречице) или померањем изнад острва у траци менија. Када је искључено, уређивач их не приказује, а њихове апликације прелазе у подразумевану зону екрана."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Låter en layout ha skärmar utanför en skärms vänstra och högra kant. Du når dem med rullningsgenvägarna (se Kortkommandon) eller genom att rulla över ön i menyraden. När det är av visar redigeraren dem inte, och deras appar flyttas till skärmens standardzon."
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ஒரு தளவமைப்பு, திரையின் இடது மற்றும் வலது ஓரங்களுக்கு வெளியே திரைகளைக் கொண்டிருக்க அனுமதிக்கிறது. உருள் குறுக்குவழிகள் (குறுக்குவழிகளைப் பார்க்கவும்) மூலமாகவோ, மெனு பட்டியில் உள்ள தீவின் மேல் உருட்டியோ அவற்றை அடையலாம். அணைத்திருந்தால் எடிட்டர் அவற்றைக் காட்டாது, அவற்றின் பயன்பாடுகள் திரையின் இயல்புநிலை மண்டலத்துக்கு நகரும்."
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "లేఅవుట్‌కు స్క్రీన్ ఎడమ, కుడి అంచుల వెలుపల స్క్రీన్‌లు ఉండేందుకు అనుమతిస్తుంది. స్క్రోల్ షార్ట్‌కట్‌ల ద్వారా (షార్ట్‌కట్‌లు చూడండి) లేదా మెనూ బార్‌లోని ఐలాండ్ పైన స్క్రోల్ చేసి వాటిని చేరుకోవచ్చు. ఆఫ్ చేస్తే ఎడిటర్ వాటిని చూపదు, వాటి యాప్‌లు స్క్రీన్ డిఫాల్ట్ జోన్‌కు మారతాయి."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ให้เลย์เอาต์มีหน้าจอเพิ่มเติมอยู่เลยขอบซ้ายและขอบขวาของหน้าจอได้ เข้าถึงหน้าจอเหล่านั้นด้วยทางลัดเลื่อน (ดูทางลัด) หรือเลื่อนบนไอส์แลนด์ในแถบเมนู เมื่อปิดอยู่ ตัวแก้ไขจะไม่แสดงหน้าจอเหล่านั้น และแอปในหน้าจอเหล่านั้นจะย้ายไปที่โซนเริ่มต้นของหน้าจอ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bir düzenin ekranın sol ve sağ kenarlarının ötesinde ekranlar içermesine izin verir. Bunlara kaydırma kısayollarıyla (bkz. Kısayollar) ya da menü çubuğundaki adanın üzerinde kaydırarak ulaşılır. Kapalıyken düzenleyici bunları göstermez ve uygulamaları ekranın varsayılan bölgesine taşınır."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дозволяє розкладці мати екрани за лівим і правим краєм екрана. До них можна дістатися скороченнями прокручування (див. «Скорочення») або прокручуванням над островом у рядку меню. Якщо вимкнено, редактор їх не показує, а їхні програми переходять у зону екрана за замовчуванням."
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "لے آؤٹ کو اسکرین کے بائیں اور دائیں کناروں سے باہر اسکرینیں رکھنے دیتا ہے۔ ان تک اسکرول شارٹ کٹس (شارٹ کٹس دیکھیں) سے، یا مینو بار میں جزیرے پر اسکرول کر کے پہنچا جا سکتا ہے۔ بند ہونے پر ایڈیٹر انہیں نہیں دکھاتا اور ان کی ایپس اسکرین کے ڈیفالٹ زون میں چلی جاتی ہیں۔"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cho phép một bố cục có các màn hình nằm ngoài cạnh trái và cạnh phải của màn hình. Bạn đến các màn hình đó bằng phím tắt cuộn (xem Phím tắt) hoặc bằng cách cuộn trên đảo trong thanh menu. Khi tắt, trình chỉnh sửa không hiển thị các màn hình đó và ứng dụng của chúng chuyển sang vùng mặc định của màn hình."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "允许布局在屏幕左右边缘之外拥有更多屏幕。可以通过滚动快捷键（见“快捷键”）或在菜单栏的岛上滚动来到达这些屏幕。关闭后，编辑器不再显示它们，其中的应用会移到屏幕的默认区域。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "允許版面在螢幕左右邊緣之外擁有更多螢幕。可以透過捲動快速鍵（見「快速鍵」）或在選單列的島上捲動來到達這些螢幕。關閉後，編輯器不再顯示它們，其中的 App 會移到螢幕的預設區域。"
           }
         }
       }
@@ -23044,6 +23044,7 @@
       }
     },
     "Minimized" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -23321,8 +23322,7 @@
             "value" : "已最小化"
           }
         }
-      },
-      "extractionState" : "manual"
+      }
     },
     "Minimum zone size" : {
       "extractionState" : "manual",
@@ -26977,287 +26977,6 @@
         }
       }
     },
-    "Open System Settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "فتح إعدادات النظام"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Отваряне на Системни настройки"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "সিস্টেম সেটিংস খুলুন"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Obre Configuració del Sistema"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otevřít Nastavení systému"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åbn Systemindstillinger"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Systemeinstellungen öffnen"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Άνοιγμα Ρυθμίσεων συστήματος"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir Ajustes del Sistema"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ava süsteemiseaded"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "باز کردن تنظیمات سیستم"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avaa Järjestelmäasetukset"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buksan ang System Settings"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrir Réglages Système"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "פתח את הגדרות המערכת"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सिस्टम सेटिंग्ज़ खोलें"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otvori Postavke sustava"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rendszerbeállítások megnyitása"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buka Pengaturan Sistem"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apri Impostazioni di Sistema"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "システム設定を開く"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시스템 설정 열기"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Atidaryti Sistemos nustatymus"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Atvērt sistēmas iestatījumus"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सिस्टम सेटिंग्ज उघडा"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buka Tetapan Sistem"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åpne Systeminnstillinger"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Systeeminstellingen"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otwórz Ustawienia systemowe"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir Definições do Sistema"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir Ajustes do Sistema"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deschide Setări de sistem"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Открыть Системные настройки"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otvoriť Nastavenia systému"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Odpri Sistemske nastavitve"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Отвори Системска подешавања"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öppna Systeminställningar"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "கணினி அமைப்புகளைத் திற"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "సిస్టమ్ సెట్టింగ్‌లను తెరవండి"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "เปิดการตั้งค่าระบบ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sistem Ayarları'nı aç"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Відкрити Системні параметри"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "سسٹم سیٹنگز کھولیں"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mở Cài đặt Hệ thống"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开“系统设置”"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打開「系統設定」"
-          }
-        }
-      }
-    },
     "Open release page" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27816,6 +27535,568 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打開所選 App"
+          }
+        }
+      }
+    },
+    "Open System Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح إعدادات النظام"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отваряне на Системни настройки"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "সিস্টেম সেটিংস খুলুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obre Configuració del Sistema"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otevřít Nastavení systému"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn Systemindstillinger"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systemeinstellungen öffnen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άνοιγμα Ρυθμίσεων συστήματος"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes del Sistema"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ava süsteemiseaded"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن تنظیمات سیستم"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa Järjestelmäasetukset"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang System Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Réglages Système"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתח את הגדרות המערכת"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिस्टम सेटिंग्ज़ खोलें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvori Postavke sustava"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rendszerbeállítások megnyitása"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka Pengaturan Sistem"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri Impostazioni di Sistema"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム設定を開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템 설정 열기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atidaryti Sistemos nustatymus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atvērt sistēmas iestatījumus"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिस्टम सेटिंग्ज उघडा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka Tetapan Sistem"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne Systeminnstillinger"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Systeeminstellingen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Ustawienia systemowe"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Definições do Sistema"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes do Sistema"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deschide Setări de sistem"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть Системные настройки"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvoriť Nastavenia systému"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odpri Sistemske nastavitve"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отвори Системска подешавања"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna Systeminställningar"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "கணினி அமைப்புகளைத் திற"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "సిస్టమ్ సెట్టింగ్‌లను తెరవండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เปิดการตั้งค่าระบบ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları'nı aç"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити Системні параметри"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سسٹم سیٹنگز کھولیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở Cài đặt Hệ thống"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开“系统设置”"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開「系統設定」"
+          }
+        }
+      }
+    },
+    "Option" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opció"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternativ"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opción"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optio"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opzione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "option"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternativ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opção"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opção"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternativ"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
           }
         }
       }
@@ -33440,1130 +33721,6 @@
         }
       }
     },
-    "Right Command" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command الأيمن"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десен Command"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ডান Command"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comandament dret"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Command"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højre Command"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechte Command-Taste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Δεξί Command"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comando derecho"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parem Command"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command راست"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oikea Komento"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kanang Command"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Commande droite"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command ימני"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "दायाँ Command"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Command"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jobb Command"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command Kanan"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comando destro"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右Command"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오른쪽 Command"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dešinysis Command"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Labais Command"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "उजवा Command"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command Kanan"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Høyre Kommando"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechter Command"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prawy Command"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command direito"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command direito"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command dreapta"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правый Command"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Command"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Command"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десни Command"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Höger Kommando"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "வலது Command"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "కుడి Command"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command ขวา"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sağ Command"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правий Command"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "دایاں Command"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command phải"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Command"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Command"
-          }
-        }
-      }
-    },
-    "Right Control" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control الأيمن"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десен Control"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ডান Control"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control dret"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Control"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højre Control"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechte Control-Taste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Δεξί Control"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control derecho"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parem Control"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control راست"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oikea Control"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kanang Control"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contrôle droite"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control ימני"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "दायाँ Control"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Control"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jobb Control"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control Kanan"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Controllo destro"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右Control"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오른쪽 Control"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dešinysis Control"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Labais Control"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "उजवा Control"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control Kanan"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Høyre Control"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechter Control"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prawy Control"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control direito"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control direito"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control dreapta"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правый Control"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Control"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Control"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десни Control"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Höger Control"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "வலது Control"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "కుడి Control"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control ขวา"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sağ Control"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правий Control"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "دایاں Control"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Control phải"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Control"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Control"
-          }
-        }
-      }
-    },
-    "Right Option" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option الأيمن"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десен Option"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ডান Option"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opció dreta"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Option"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højre Alternativ"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechte Option-Taste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Δεξί Option"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opción derecha"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parem Option"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option راست"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oikea Optio"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kanang Option"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option droite"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option ימני"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "दायाँ Option"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Option"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jobb Option"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option Kanan"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opzione destra"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右Option"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오른쪽 Option"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dešinysis Option"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Labais Option"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "उजवा Option"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option Kanan"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Høyre Alternativ"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechter Option"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prawy Option"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option direito"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option direito"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option dreapta"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правый Option"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Option"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Option"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десни Option"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Höger Alternativ"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "வலது Option"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "కుడి Option"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option ขวา"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sağ Option"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правий Option"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "دایاں Option"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option phải"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Option"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Option"
-          }
-        }
-      }
-    },
-    "Right Shift" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift الأيمن"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десен Shift"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ডান Shift"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Majúscules dreta"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Shift"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højre Skift"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechte Umschalttaste"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Δεξί Shift"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mayús derecha"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parem Shift"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift راست"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oikea Vaihto"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kanang Shift"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maj droite"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift ימני"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "दायाँ Shift"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Shift"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jobb Shift"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift Kanan"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maiusc destro"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右Shift"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오른쪽 Shift"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dešinysis Shift"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Labais Shift"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "उजवा Shift"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift Kanan"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Høyre Skift"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechter Shift"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prawy Shift"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift direito"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift direito"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift dreapta"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правый Shift"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pravý Shift"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desni Shift"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Десни Shift"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Höger Skift"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "வலது Shift"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "కుడి Shift"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift ขวา"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sağ Shift"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Правий Shift"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "دایاں Shift"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shift phải"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Shift"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右 Shift"
-          }
-        }
-      }
-    },
     "Screen %lld of %lld" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37370,6 +36527,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "設定"
+          }
+        }
+      }
+    },
+    "Shift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Majúscules"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skift"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umschalt"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mayús"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaihto"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maj"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maiusc"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "shift"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skift"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skift"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift"
           }
         }
       }
@@ -46081,6 +45519,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新"
+          }
+        }
+      }
+    },
+    "Use Caps Lock as a modifier key" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام قفل الأحرف الكبيرة كمفتاح تعديل"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Използване на Caps Lock като клавиш-модификатор"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock-কে মডিফায়ার কী হিসেবে ব্যবহার করুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fes servir Bloq Maj com a tecla modificadora"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Používat Caps Lock jako klávesu modifikátoru"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug Caps Lock som en modifikatortast"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feststelltaste als Sondertaste verwenden"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χρήση του Caps Lock ως πλήκτρου τροποποίησης"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar Bloq Mayús como tecla modificadora"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasuta Caps Locki muutjaklahvina"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استفاده از Caps Lock به‌عنوان کلید تغییردهنده"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käytä Caps Lockia muokkausnäppäimenä"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gamitin ang Caps Lock bilang modifier key"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser Verr. maj comme touche de modification"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "השתמש ב-Caps Lock כמקש שינוי"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock को मॉडिफ़ायर कुंजी के रूप में उपयोग करें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koristi Caps Lock kao modifikatorsku tipku"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Caps Lock használata módosítóbillentyűként"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan Caps Lock sebagai tombol pengubah"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa Bloc Maiusc come tasto modificatore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lockを修飾キーとして使用"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock을 보조 키로 사용"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naudoti Caps Lock kaip modifikavimo klavišą"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izmantot Caps Lock kā modifikatortaustiņu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock ला मॉडिफायर की म्हणून वापरा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan Caps Lock sebagai kekunci pengubah suai"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk Caps Lock som modifikatortast"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik Caps Lock als aanpassingstoets"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używaj Caps Lock jako klawisza modyfikującego"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar o Caps Lock como tecla modificadora"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar o Caps Lock como tecla modificadora"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folosește Caps Lock ca tastă de modificare"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать Caps Lock как клавишу-модификатор"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Používať Caps Lock ako modifikačný kláves"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uporabi Caps Lock kot tipko za spreminjanje"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Користи Caps Lock као тастер модификатор"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Använd Caps Lock som modifieringstangent"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock-ஐ மாற்றி விசையாகப் பயன்படுத்து"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock‌ను మాడిఫైయర్ కీగా ఉపయోగించండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ใช้ Caps Lock เป็นปุ่มปรับแต่ง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Büyük Harf Kilidi'ni değiştirici tuş olarak kullan"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовувати Caps Lock як клавішу-модифікатор"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caps Lock کو موڈیفائر کلید کے طور پر استعمال کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng Caps Lock làm phím bổ trợ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将大写锁定键用作修饰键"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將大寫鎖定鍵用作修飾鍵"
           }
         }
       }
