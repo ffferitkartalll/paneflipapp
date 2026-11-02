@@ -93,7 +93,7 @@ struct LayoutCard: View {
             }
             Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }
                 .buttonStyle(.bordered)
-            Button(role: .destructive) { layouts.removeLayout(key: screen.key, id: layout.id) } label: { stretched("Remove") }
+            Button { layouts.removeLayout(key: screen.key, id: layout.id) } label: { stretched("Remove") }
                 .buttonStyle(.bordered)
         }
         .controlSize(.small)

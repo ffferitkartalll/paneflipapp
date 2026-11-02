@@ -51,7 +51,7 @@ struct LayoutAppRow: View {
                     .menuIndicator(.hidden)
                     .fixedSize()
                     .help("Move to another zone")
-                Button(role: .destructive) { editor.remove(app: entry.bundleID, in: entry.zoneID, inZones: zones) } label: {
+                Button { editor.remove(app: entry.bundleID, in: entry.zoneID, inZones: zones) } label: {
                     Image(systemName: "minus.circle")
                 }
                 .help("Remove")

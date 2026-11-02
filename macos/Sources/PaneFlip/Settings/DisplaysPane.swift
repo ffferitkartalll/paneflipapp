@@ -17,7 +17,7 @@ struct DisplaysPane: View {
         let desk = settings.values.deskArrangement
         Form {
             Section("Arrangement in macOS") {
-                DisplayMap(displays: displays, stairs: stairs)
+                DisplayMap(displays: displays)
                     .frame(height: 200)
                     .padding(.vertical, 6)
                 status(of: stairs, count: displays.count)
@@ -59,11 +59,10 @@ struct DisplaysPane: View {
                 .foregroundStyle(.secondary)
         } else if stairs.isStaircase {
             Label("The displays form a staircase going up to the right.", systemImage: "checkmark.circle.fill")
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.accentColor)
         } else {
             VStack(alignment: .leading, spacing: 4) {
                 Label("The displays do not form a staircase yet.", systemImage: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.orange)
                 if stairs.steps.contains(.level) {
                     Text("Some displays are level with the one to their left, so a screen beyond the edge of one lands on the other.")
                 }
