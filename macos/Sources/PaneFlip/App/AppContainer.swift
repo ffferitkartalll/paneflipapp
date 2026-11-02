@@ -205,7 +205,7 @@ final class AppContainer {
             coordinator.finishFocusBeyondTheEdge()
             coordinator.onMotionEnded?()
         }
-        settings.onOverflowZonesChanged = { [weak scroller, weak layouts, weak engine, viewport, settings] in
+        settings.onOverflowZonesChanged = { [weak layouts, weak engine, viewport, settings] in
             guard !settings.values.overflowZonesEnabled else {
                 layouts?.returnOverflowAppsToTheirZones()
                 return
