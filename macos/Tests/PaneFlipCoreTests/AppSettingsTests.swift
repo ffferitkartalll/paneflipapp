@@ -2,11 +2,6 @@ import XCTest
 @testable import PaneFlipCore
 
 final class AppSettingsTests: XCTestCase {
-    final class Storage: SettingsStorage {
-        var saved: SettingsValues?
-        func load() -> SettingsValues { saved ?? SettingsValues() }
-        func save(_ values: SettingsValues) { saved = values }
-    }
 
     func testChangesPersistAndFeatureSwitchesNotify() {
         let storage = Storage()

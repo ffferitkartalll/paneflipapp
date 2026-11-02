@@ -4,7 +4,6 @@ import Security
 /// Installs a release from its disk image on GitHub: downloads it, takes the app out of it, checks that it is signed by the same
 /// certificate as the running app, and swaps the two once the running one has quit.
 final class DiskImageUpdateInstaller: UpdateInstalling {
-    enum Failure: Error { case notWritable, download, mount, missingApp, notSignedByUs }
 
     private let session: URLSession
 

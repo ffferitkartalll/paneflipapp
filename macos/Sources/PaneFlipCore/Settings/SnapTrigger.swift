@@ -2,15 +2,6 @@ import Foundation
 
 /// The key or key combination that, held while dragging a window, highlights the zones and snaps the window into one.
 public struct SnapTrigger: Codable, Equatable {
-    public struct Key: Codable, Equatable {
-        public let code: Int
-        public let name: String
-
-        public init(code: Int, name: String) {
-            self.code = code
-            self.name = name
-        }
-    }
 
     public var keys: [Key]
 

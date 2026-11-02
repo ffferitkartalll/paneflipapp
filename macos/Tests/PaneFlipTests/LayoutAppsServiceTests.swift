@@ -8,16 +8,6 @@ final class LayoutAppsServiceTests: XCTestCase {
     private var service: LayoutAppsService!
     private let zone = UUID(), other = UUID()
 
-    private final class NoBrands: BrandGlyphSource {
-        var version = 0
-        func glyph(forApp name: String) -> NSImage? { nil }
-    }
-
-    private final class Refresher: ZoneRefreshing {
-        var restores = 0
-        func refreshZones() {}
-        func restoreWindows() { restores += 1 }
-    }
     private var refresher: Refresher!
     private var settings: AppSettings!
     private let windows = FakeWindowSystem()

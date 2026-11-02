@@ -11,7 +11,7 @@ final class StripScroller {
     private static let glide: TimeInterval = 0.3
     /// Pictures that have not come after this long are given up on: the windows then move at the end, without pictures.
     /// The longest the pictures wait for the windows to have moved.
-    private static let waitForWindows: TimeInterval = 0.1
+    private static let waitForWindows: TimeInterval = 0.3
     private static let giveUpAfter: TimeInterval = 1.5
     /// Fingers that lifted before the photographs were there, having gone this far, want one step.
     private static let stepDistance: CGFloat = 80
@@ -19,53 +19,6 @@ final class StripScroller {
     private static let drawTime: TimeInterval = 0.05
     /// A layout this close to a rest is at it, for fingers that catch it on its way.
     private static let arrived: CGFloat = 80
-
-    private enum Phase { case waiting, covering, gliding, landing }
-
-    /// A window of the screen's zones, with where its zone stood when the scroll began.
-    private struct Held {
-        let ref: WindowRef
-        let zone: UUID
-        let rect: CGRect
-        let isFront: Bool
-        let isParked: Bool
-    }
-
-    private struct Scrolling {
-        let id: Int
-        let screen: ScreenInfo
-        let geometry: StripGeometry
-        let side: Parking.Side
-        let start: CGFloat
-        let held: [Held]
-        /// The rest position the scroll is heading to.
-        var target: CGFloat
-        var pictures: [CGWindowID: WindowPicture] = [:]
-        /// The photographs of this scroll have come (some window may be missing from them).
-        var photographed = false
-        var phase = Phase.waiting
-        /// Where the pictures are now, between the start and the target.
-        var shown: CGFloat
-        var glideFrom: CGFloat = 0
-        var glideTo: CGFloat = 0
-        var glideBegan: TimeInterval = 0
-        /// Two fingers lead this scroll: the pictures follow `gesture` until the fingers lift (`released`), then glide on to a rest position.
-        var led = false
-        var released = false
-        var gesture = ScrubGesture()
-        /// How far the fingers went before the photographs were on the stage (not counted by the gesture).
-        var early: CGFloat = 0
-        /// The layout offset the pictures on the stage stand for: where this scroll began, or, for one that took over from another while it
-        /// landed, where that one began (the pictures were not laid out again).
-        var origin: CGFloat = 0
-        /// How far the pictures have moved from where they stand on the stage.
-        var shift: CGFloat { origin - shown }
-        /// The pictures were on the stage when it landed: it can be taken over.
-        var staged = false
-        /// Fingers caught a glide on its way: the rest it was heading to, and where the pictures stood when they were caught.
-        var heading: CGFloat?
-        var caughtAt: CGFloat = 0
-    }
 
     /// Calls `tick` on every frame until it returns false.
     typealias Metronome = (_ tick: @escaping () -> Bool) -> Void

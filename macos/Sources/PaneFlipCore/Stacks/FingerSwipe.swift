@@ -5,12 +5,6 @@ import Foundation
 /// that goes to the side: it begins when the fingers have settled and move to the side, and ends when they lift or their number changes.
 /// Fingers land one after another, so a swipe with four does not begin as one with three. Value type; pure.
 public struct FingerSwipe {
-    public enum Output: Equatable {
-        case began(fingers: Int)
-        /// The fingers moved by this much (to the right is positive), at this time in seconds.
-        case moved(CGFloat, at: TimeInterval)
-        case ended
-    }
 
     /// How far a swipe across the whole trackpad goes, in points of scrolling (what two fingers scroll for the same stroke).
     public static let travel: CGFloat = 800

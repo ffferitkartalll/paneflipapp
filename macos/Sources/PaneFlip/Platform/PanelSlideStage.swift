@@ -33,43 +33,8 @@ final class PanelSlideStage: SlideStaging {
     /// not when the island opens (a window made at that moment can upset it while it lays itself out).
     func prepare() { NSScreen.screens.forEach { _ = panels.panel(for: $0) } }
 
-    /// The slide that runs: the clip layer with its pictures, and where each of them comes to rest (the left edge, in the zone).
-    private final class Running {
-        struct Item {
-            let layer: CALayer
-            var restLeft: CGFloat
-        }
-
-        let clip: CALayer
-        let zone: CGRect
-        let forward: Bool
-        var completion: () -> Void
-        var items: [Item] = []
-        /// Counts the starts and the extensions: a timer of an earlier one must not act on a later one.
-        var generation = 0
-        var fading = false
-        /// The first start has happened (the pictures had their few frames on screen): an extension before it would start it twice.
-        var started = false
-        /// The slide is the glide of a swipe the fingers led: its pictures, the window they glide to (an index) and the zone's width.
-        var swipe: (layers: [CALayer], current: Int, width: CGFloat)?
-
-        init(clip: CALayer, zone: CGRect, forward: Bool, completion: @escaping () -> Void) {
-            self.clip = clip
-            self.zone = zone
-            self.forward = forward
-            self.completion = completion
-        }
-    }
-
     private var running: Running?
 
-    /// The slide the fingers lead: the pictures of the zone's windows side by side, and which of them is in front.
-    private struct Scrubbing {
-        let slide: Running
-        let layers: [CALayer]
-        let current: Int
-        let width: CGFloat
-    }
     private var scrubbing: Scrubbing?
 
     func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool {

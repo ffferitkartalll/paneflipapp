@@ -3,7 +3,6 @@ import CoreGraphics
 /// Where a window stands that belongs to a zone outside the screen: macOS lets a window rest with a single pixel on a
 /// display and the rest beyond its left or right edge, so the window is out of sight unless another display lies there.
 public enum Parking {
-    public enum Side: Equatable { case left, right }
 
     /// A side of `display` with no other display beside it (in the same band of height): a parked window reaches over
     /// nothing there. Nil when both sides have one, and parking is not possible. All frames in the same coordinates.

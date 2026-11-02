@@ -25,11 +25,6 @@ final class EditorModel {
     /// The line being dragged: the moves of one drag are one change.
     @ObservationIgnored private var resizing: UUID?
 
-    struct Snapshot {
-        let strip: StripLayout
-        let offset: Double
-    }
-
     @ObservationIgnored private let onApply: (StripLayout) -> Void
     @ObservationIgnored private let onClose: () -> Void
 

@@ -4,7 +4,6 @@ import Foundation
 /// The layout of one screen with the areas that lie beyond its left and right edges: one strip, as wide as the screen
 /// plus all the areas. There may be as many areas on a side as the user adds, one after the other. Value type.
 public struct StripLayout: Equatable {
-    public enum Part: Equatable { case leading, screen, trailing }
 
     /// The areas beyond the left edge, the one next to the screen first.
     public var leading: [Overflow]

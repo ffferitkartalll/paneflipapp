@@ -3,7 +3,6 @@ import CoreGraphics
 /// Decides at the start of a two-finger swipe whether it is a horizontal one, and keeps to that for the whole swipe: a swipe that
 /// starts up or down never moves anything, and one that starts to the side ignores the fingers' drift up and down. Value type; pure.
 public struct AxisLock: Equatable {
-    public enum Decision: Equatable { case undecided, horizontal, vertical }
 
     public private(set) var decision = Decision.undecided
     private var sideways: CGFloat = 0
