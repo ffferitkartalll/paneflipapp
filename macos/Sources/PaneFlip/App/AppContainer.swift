@@ -144,7 +144,7 @@ final class AppContainer {
                                       isBlocked: { [editor] in editor.isShown })
         let deskPointer = DeskPointerRouter(screens: screens, arrangement: { [settings] in settings.values.deskArrangement }, isOn: { [settings] in settings.values.placementEnabled })
         let pointerCrossing = EventTapPointerCrossing(crossing: { deskPointer.target(from: $0, delta: $1) })
-        let placementKeys = EventTapPlacementKeys(capsLock: capsLockState, chord: { [settings] in KeyChord(settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing })
+        let placementKeys = EventTapPlacementKeys(capsLock: capsLockState, chord: { [settings] in KeyChord(settings.values.sendToZoneKeys) }, isChoosing: { placement.isChoosing }, canBegin: { placement.canBegin })
         // The tap asks this for every scroll event (momentum included): a window list each time would stall the main thread, so the answer is kept for a moment.
         var missionControlAsked = (at: Date.distantPast, active: false)
         let missionControl: () -> Bool = { [screens] in
