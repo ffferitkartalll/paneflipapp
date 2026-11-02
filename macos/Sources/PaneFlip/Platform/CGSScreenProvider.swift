@@ -24,16 +24,18 @@ final class CGSScreenProvider: ScreenProviding {
     private let cacheLock = NSLock()
     private var cachedScreens: (at: TimeInterval, screens: [ScreenInfo])?
     private var cachedDock: (at: TimeInterval, rect: CGRect?)?
+    /// The UUID of each display, made once (the monitor asks four times a second); forgotten with the rest when the displays change.
+    private var uuids: [CGDirectDisplayID: String] = [:]
+    /// Whether Mission Control showed at the last look, for the windows the system listed then: the same list gives the same answer.
+    private var missionControl: (windows: [CGWindowID], active: Bool)?
     private var observers: [NSObjectProtocol] = []
-    /// The numbers of the hidden displays (see `ParkingDisplaying`), which are no displays for anyone: they are left out of everything here.
-    private let hiddenDisplays: () -> Set<CGDirectDisplayID>
 
-    init(hiddenDisplays: @escaping () -> Set<CGDirectDisplayID> = { [] }) {
-        self.hiddenDisplays = hiddenDisplays
+    init() {
         let forget: (Notification) -> Void = { [weak self] _ in
             self?.cacheLock.lock()
             self?.cachedScreens = nil
             self?.cachedDock = nil
+            self?.uuids = [:]
             self?.cacheLock.unlock()
         }
         observers = [NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil, using: forget),
@@ -43,14 +45,6 @@ final class CGSScreenProvider: ScreenProviding {
     deinit { observers.forEach { NotificationCenter.default.removeObserver($0); NSWorkspace.shared.notificationCenter.removeObserver($0) } }
 
     private var primaryHeight: CGFloat { NSScreen.screens.first?.frame.height ?? 0 }
-
-    /// The displays there are to the app: those of the system less the hidden one.
-    private var realScreens: [NSScreen] {
-        let hidden = hiddenDisplays()
-        return NSScreen.screens.filter { screen in
-            !hidden.contains((screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0)
-        }
-    }
 
     func flip(_ r: CGRect) -> CGRect {
         CGRect(x: r.minX, y: primaryHeight - r.maxY, width: r.width, height: r.height)
@@ -69,6 +63,19 @@ final class CGSScreenProvider: ScreenProviding {
     /// not used: other apps' window names are only readable with the Screen Recording permission. The size check
     /// keeps the window manager's smaller windows (Stage Manager's strip, for one) from counting.
     var isMissionControlActive: Bool {
+        let windows = CGWindowNumbers.ids(.optionOnScreenOnly)
+        cacheLock.lock()
+        let kept = missionControl.flatMap { $0.windows == windows ? $0.active : nil }
+        cacheLock.unlock()
+        if let kept { return kept }
+        let active = lookForMissionControl()
+        cacheLock.lock()
+        missionControl = (windows, active)
+        cacheLock.unlock()
+        return active
+    }
+
+    private func lookForMissionControl() -> Bool {
         guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] else { return false }
         let displays = NSScreen.screens.map(\.frame.size)
         return list.contains {
@@ -84,7 +91,7 @@ final class CGSScreenProvider: ScreenProviding {
     /// lands, and a missing answer from the Dock (it does not answer while it moves) means it has not landed.
     var isDockSettled: Bool {
         if CFPreferencesCopyAppValue("autohide" as CFString, "com.apple.dock" as CFString) as? Bool ?? false { return true }
-        return dockRect().map { dock in realScreens.contains { flip($0.frame).intersects(dock) } } ?? false
+        return dockRect().map { dock in NSScreen.screens.contains { flip($0.frame).intersects(dock) } } ?? false
     }
 
     func screens() -> [ScreenInfo] {
@@ -104,9 +111,9 @@ final class CGSScreenProvider: ScreenProviding {
         let conn = CGSMainConnectionID()
         let dock = dockRect()
         let managed = CGSCopyManagedDisplaySpaces(conn) as? [[String: Any]] ?? []   // once for every display
-        dockHome.update(displays: Set(realScreens.map(displayUUID)),
-                        dockDisplay: dock.flatMap { dock in realScreens.first { flip($0.frame).intersects(dock) }.map(displayUUID) })
-        return realScreens.map { s in
+        dockHome.update(displays: Set(NSScreen.screens.map(displayUUID)),
+                        dockDisplay: dock.flatMap { dock in NSScreen.screens.first { flip($0.frame).intersects(dock) }.map(displayUUID) })
+        return NSScreen.screens.map { s in
             let uuid = displayUUID(s)
             let space = CGSManagedDisplayGetCurrentSpace(conn, uuid as CFString)
             let legacy = "\(uuid)|\(space)"
@@ -118,7 +125,7 @@ final class CGSScreenProvider: ScreenProviding {
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
                               legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height,
-                              directID: (s.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0, physicalSize: physicalSize(of: s))
+                              physicalSize: physicalSize(of: s))
         }
     }
 
@@ -228,7 +235,7 @@ final class CGSScreenProvider: ScreenProviding {
 
     func currentSpaceIDs() -> Set<UInt64> {
         let conn = CGSMainConnectionID()
-        return Set(realScreens.map { CGSManagedDisplayGetCurrentSpace(conn, displayUUID($0) as CFString) })
+        return Set(NSScreen.screens.map { CGSManagedDisplayGetCurrentSpace(conn, displayUUID($0) as CFString) })
     }
 
     func spaces(ofWindow id: CGWindowID) -> Set<UInt64> {
@@ -237,8 +244,23 @@ final class CGSScreenProvider: ScreenProviding {
     }
 
     private func displayUUID(_ s: NSScreen) -> String {
-        guard let num = s.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber,
-              let cfUUID = CGDisplayCreateUUIDFromDisplayID(CGDirectDisplayID(num.uint32Value))?.takeRetainedValue(),
+        guard let num = s.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else { return "unknown" }
+        let number = CGDirectDisplayID(num.uint32Value)
+        cacheLock.lock()
+        let kept = uuids[number]
+        cacheLock.unlock()
+        if let kept { return kept }
+        let made = makeUUID(number)
+        if made != "unknown" {
+            cacheLock.lock()
+            uuids[number] = made
+            cacheLock.unlock()
+        }
+        return made
+    }
+
+    private func makeUUID(_ number: CGDirectDisplayID) -> String {
+        guard let cfUUID = CGDisplayCreateUUIDFromDisplayID(number)?.takeRetainedValue(),
               let str = CFUUIDCreateString(nil, cfUUID) as String?
         else { return "unknown" }
         return str

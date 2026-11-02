@@ -137,13 +137,7 @@ final class AXWindowSystem: WindowSystem {
     // MARK: System window list
 
     func windowSets() -> (all: Set<CGWindowID>, onScreen: Set<CGWindowID>) {
-        var all = Set<CGWindowID>(), onScreen = Set<CGWindowID>()
-        for info in windowList(.optionAll) {
-            guard let id = (info[kCGWindowNumber as String] as? NSNumber)?.uint32Value else { continue }
-            all.insert(id)
-            if (info[kCGWindowIsOnscreen as String] as? Bool) == true { onScreen.insert(id) }
-        }
-        return (all, onScreen)
+        (Set(CGWindowNumbers.ids(.optionAll)), Set(CGWindowNumbers.ids(.optionOnScreenOnly)))
     }
 
     func isShowingWindow(ofApp pid: pid_t) -> Bool {
@@ -156,9 +150,7 @@ final class AXWindowSystem: WindowSystem {
     }
 
     /// The system lists windows front to back.
-    func windowIDsFrontToBack() -> [CGWindowID] {
-        windowList(.optionOnScreenOnly).compactMap { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value }
-    }
+    func windowIDsFrontToBack() -> [CGWindowID] { CGWindowNumbers.ids(.optionOnScreenOnly) }
 
     private func windowList(_ option: CGWindowListOption) -> [[String: Any]] {
         CGWindowListCopyWindowInfo([option], kCGNullWindowID) as? [[String: Any]] ?? []

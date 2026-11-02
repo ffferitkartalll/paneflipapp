@@ -13,6 +13,8 @@ final class PanelSlideStage: SlideStaging {
     /// The hand-over to the real window starts this far into the slide (of its settling time), while the picture is
     /// all but at rest: the last part of a spring only creeps.
     static let handOver = 0.7
+    /// When, as a part of the slide's duration, the real window is brought forward.
+    static let bringForwardAt = 0.4
     /// The pictures give way to the real windows with a short fade: the real window is active and has its own
     /// shadow, the picture does not.
     static let fade: CFTimeInterval = 0.22
@@ -217,11 +219,16 @@ final class PanelSlideStage: SlideStaging {
                 slide.completion()
             }
         }
-        covered {
-            // A frame or two for the window server to draw it.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) { windowReady = true; handOverWhenBoth() }
-        }
         let duration = slide.items.map { move($0.layer, toLeft: $0.restLeft) }.max() ?? 0
+        // The real window comes forward once the pictures have gone most of their way (still well before they give way to it): the
+        // app and the window server redraw for it, and doing that as the pictures start to move drops frames where the motion is fastest.
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * Self.bringForwardAt) {
+            guard slide.generation == generation else { return }   // carried on meanwhile: the later call brings its window forward
+            covered {
+                // A frame or two for the window server to draw it.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) { windowReady = true; handOverWhenBoth() }
+            }
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * Self.handOver) { atRest = true; handOverWhenBoth() }
     }
 
