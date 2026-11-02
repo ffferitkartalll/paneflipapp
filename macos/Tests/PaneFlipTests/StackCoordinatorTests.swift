@@ -412,6 +412,24 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(stage.scrubEnded, [1, 1, -1])
     }
 
+    func testAShortcutAfterTheGlideGoesOnFromTheWindowItWentToEvenIfTheFocusStillReadsTheOldOne() {
+        let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
+        snapshots.images = Dictionary(uniqueKeysWithValues: (1...3).map { (CGWindowID($0), FakeWindowSnapshots.picture()) })
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
+        let stack = coordinator.stacks[zone]!
+        stage.end()
+
+        windows.focused = .fake(3)
+        stack.activeID = 3
+        coordinator.cycleFocusedZone(reverse: true)
+        XCTAssertEqual(stack.activeID, 2)
+        coordinator.cycleFocusedZone(reverse: true)   // the glide is over, the focus still reads window 3
+        XCTAssertEqual(stack.activeID, 1, "not 3 to 2 again")
+    }
+
     func testWithStageManagerADroppedWindowIsOnlyPlacedAndNothingElseHappens() {
         let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100)
         coordinator.apply(zones: [zone: rect])

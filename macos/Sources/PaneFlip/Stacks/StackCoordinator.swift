@@ -247,6 +247,7 @@ final class StackCoordinator {
             return true
         }
         // The island moves to the new window now, together with the slide, not once the slide is over.
+        leftFront = (frontID, Date().addingTimeInterval(2))
         stack.activeID = id
         onActivity?(stack.id)
         let rect = stack.rect
@@ -306,8 +307,18 @@ final class StackCoordinator {
     func cycleFocusedZone(reverse: Bool) {
         guard !placementOnly(), let focused = focusedWindowCached(), let stack = stack(containing: focused.id), stack.tabs.count > 1 else { return }
         // With nothing moving the window in front is the one in focus; while pictures glide it is the one they go to, and stays.
-        if windowScrub == nil, !isSliding, stack.activeID != focused.id { stack.activeID = focused.id }
+        if windowScrub == nil, !isSliding, stack.activeID != focused.id, !focusIsStale(focused.id, in: stack) { stack.activeID = focused.id }
         stepWindowScrub(in: stack, by: reverse ? -1 : 1)
+    }
+
+    /// The window a move of ours (a step, a slide) took the front from, until the focus has been seen to leave it (2 s at most).
+    private var leftFront: (id: CGWindowID, until: Date)?
+
+    /// A focus that still reads the window we left is not believed: it has not caught up with the move yet.
+    private func focusIsStale(_ id: CGWindowID, in stack: ZoneStack) -> Bool {
+        guard let left = leftFront else { return false }
+        if id != left.id || id == stack.activeID || left.until < Date() { leftFront = nil; return false }
+        return true
     }
 
     /// A click on a zone of the island: the focus goes to the front window of that zone, unless the focus is in the zone already (or it
@@ -552,6 +563,7 @@ final class StackCoordinator {
             return carousel?.endScrub(shift: 0) { [windows, weak self] in if self?.holdsTheFocus() == true, let staying { windows.raise(staying) } } ?? ()
         }
         // The island moves to the chosen window as the pictures settle.
+        leftFront = (scrub.start, Date().addingTimeInterval(2))
         stack.activeID = entering.id
         onActivity?(stack.id)
         guard !scrub.failed else { return select(entering.id, in: stack) }
@@ -906,7 +918,7 @@ final class StackCoordinator {
         lastFocused = focused
         guard let focused, let stack = stack(containing: focused.id) else { return }
         if moved, !isScrolling { onFocusBeyondTheEdge?(stack.id) }
-        guard stack.activeID != focused.id else { return }
+        guard stack.activeID != focused.id, !focusIsStale(focused.id, in: stack) else { return }
         stack.activeID = focused.id
         onActivity?(stack.id)
     }
