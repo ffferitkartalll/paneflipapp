@@ -86,7 +86,7 @@ struct SettingsView: View {
         .scenePadding()
         .frame(width: 640)
         .background(FixedWindowTitle(title: String(localized: "Settings")))
-        .background(WindowPresenceReporter(activation: activation, minimizable: true))
+        .background(WindowPresenceReporter(activation: activation, minimizable: true, identifier: SettingsContentKeeper.windowIdentifier))
         .onAppear { NSApp.activate(ignoringOtherApps: true) }
     }
 }

@@ -12,7 +12,8 @@ final class WindowPresenceView: NSView {
         observers = []
         guard let window else { return }
 
-        onOpen?(window)
+        // Content put back into a closed window (`SettingsContentKeeper`) is no opening: the window is shown, and reported as key, when it opens.
+        if window.isVisible { onOpen?(window) }
         // A closed window keeps its content; it comes back as "became key", so opening is reported again.
         observers.append(NotificationCenter.default.addObserver(
             forName: NSWindow.didBecomeKeyNotification, object: window, queue: .main) { [weak self, weak window] _ in
