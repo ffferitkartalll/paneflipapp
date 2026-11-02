@@ -36,10 +36,10 @@ struct TrackpadPane: View {
                 .font(.callout.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true)
         } icon: {
-            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+            Image(systemName: "exclamationmark.triangle.fill")
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.orange.opacity(0.15), in: .rect(cornerRadius: 10))
+        .background(.quaternary, in: .rect(cornerRadius: 10))
     }
 }

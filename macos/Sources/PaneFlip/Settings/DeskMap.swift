@@ -31,7 +31,7 @@ struct DeskMap: View {
                     .padding(4)
                     .frame(width: frame.width * scale, height: frame.height * scale)
                     .background(.quaternary, in: .rect(cornerRadius: 4))
-                    .overlay { RoundedRectangle(cornerRadius: 4).stroke(Color.accentColor, lineWidth: dragging?.id == display.displayID ? 2 : 1) }
+                    .overlay { RoundedRectangle(cornerRadius: 4).stroke(.secondary, lineWidth: 2) }
                     .position(x: origin.x + (frame.midX - room.minX) * scale, y: origin.y + (frame.midY - room.minY) * scale)
                     .gesture(DragGesture(coordinateSpace: .named("desk"))
                         .onChanged { dragging = (display.displayID, snapped(committed, by: $0.translation, scale: scale, among: frames, besides: display.displayID)) }

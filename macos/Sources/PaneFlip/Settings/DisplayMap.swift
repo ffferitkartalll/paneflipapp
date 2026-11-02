@@ -1,11 +1,9 @@
 import PaneFlipCore
 import SwiftUI
 
-/// The displays drawn where the system arranges them. Each display after the first is outlined green when it lies a step above the one to its left,
-/// orange when it does not.
+/// The displays drawn where the system arranges them.
 struct DisplayMap: View {
     let displays: [ScreenInfo]
-    let stairs: DisplayStairs
 
     var body: some View {
         GeometryReader { proxy in
@@ -23,14 +21,9 @@ struct DisplayMap: View {
                 .padding(4)
                 .frame(width: frame.width * scale, height: frame.height * scale)
                 .background(.quaternary, in: .rect(cornerRadius: 4))
-                .overlay { RoundedRectangle(cornerRadius: 4).stroke(outline(of: display), lineWidth: 2) }
+                .overlay { RoundedRectangle(cornerRadius: 4).stroke(.secondary, lineWidth: 2) }
                 .position(x: origin.x + (frame.midX - bounds.minX) * scale, y: origin.y + (bounds.maxY - frame.midY) * scale)
             }
         }
-    }
-
-    private func outline(of display: ScreenInfo) -> Color {
-        guard let index = stairs.order.firstIndex(of: display.displayID), index > 0 else { return .secondary }
-        return stairs.steps[index - 1] == .up ? .green : .orange
     }
 }

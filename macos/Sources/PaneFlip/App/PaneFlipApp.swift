@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct PaneFlipApp: App {
+    @NSApplicationDelegateAdaptor(AppReopenDelegate.self) private var reopen
     private let container = AppContainer()
 
     init() {

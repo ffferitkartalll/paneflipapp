@@ -26,7 +26,7 @@ struct SettingsView: View {
     }
 
     /// The tallest the window may be, in points.
-    private static let tallestWindow: CGFloat = 800
+    private static let tallestWindow: CGFloat = 960
     /// What the window has besides a tab's content: its title bar, the tabs in the toolbar and the padding.
     private static let chrome: CGFloat = 128
 
@@ -86,7 +86,7 @@ struct SettingsView: View {
         .scenePadding()
         .frame(width: 640)
         .background(FixedWindowTitle(title: String(localized: "Settings")))
-        .background(WindowPresenceReporter(activation: activation, level: .floating, minimizable: true))
+        .background(WindowPresenceReporter(activation: activation, minimizable: true))
         .onAppear { NSApp.activate(ignoringOtherApps: true) }
     }
 }
