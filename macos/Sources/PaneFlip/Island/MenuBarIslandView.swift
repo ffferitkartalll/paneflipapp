@@ -42,9 +42,9 @@ struct MenuBarIslandView: View {
             if model.notchWidth > 0 {
                 // At a notch the picture is cut in the middle, the halves apart by the notch's width while the island is closed (the left half ends at the
                 // notch's left edge, the right half begins at its right edge, and the notch hides what is between); together once it is open.
-                glyph(gap: open ? 0 : model.notchWidth).offset(x: 0, y: glyphTop)
+                IslandGlyph(model: model, gap: open ? 0 : model.notchWidth).offset(x: 0, y: glyphTop)
             } else {
-                glyph(gap: 0).offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
+                IslandGlyph(model: model, gap: 0).offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
             }
             if open || peek {
                 // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades.
@@ -99,8 +99,17 @@ struct MenuBarIslandView: View {
     }
 
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
+}
 
-    private func glyph(gap: CGFloat) -> some View {
+/// The picture of the zones, a view of its own: the shift of the frame animates (a redraw for every step of the glide), and only this view reads it, so the rest of
+/// the island is not worked out again for every step.
+private struct IslandGlyph: View {
+    let model: MenuBarIslandModel
+    let gap: CGFloat
+
+    private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
+
+    var body: some View {
         GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, gap: gap, scale: model.scale)
             .frame(width: px(model.glyph.size.width * model.zoom) + gap, height: px(model.glyph.size.height * model.zoom))
     }

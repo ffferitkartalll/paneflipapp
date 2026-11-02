@@ -10,6 +10,8 @@ final class StripScroller {
     /// How long the pictures glide on to the rest position.
     private static let glide: TimeInterval = 0.3
     /// Pictures that have not come after this long are given up on: the windows then move at the end, without pictures.
+    /// The longest the pictures wait for the windows to have moved.
+    private static let waitForWindows: TimeInterval = 0.1
     private static let giveUpAfter: TimeInterval = 1.5
     /// Fingers that lifted before the photographs were there, having gone this far, want one step.
     private static let stepDistance: CGFloat = 80
@@ -361,7 +363,17 @@ final class StripScroller {
         for held in current.held {
             mover.move(held.ref, to: Parking.frame(for: held.rect, on: current.screen.cocoaFrame, side: current.side).origin)
         }
-        beginGliding(current)
+        // The pictures start to move once the windows have gone (those behind in a stack too): a window whose app is slow to move it would show where the pictures
+        // have left. An app that does not answer in time does not hold the glide back for good.
+        coordinator.isScrolling = true
+        var began = false
+        let begin = { [weak self] in
+            guard !began, let self, let now = scrolling, now.id == id, now.phase == .covering else { return }
+            began = true
+            beginGliding(now)
+        }
+        mover.flush(then: begin)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.waitForWindows, execute: begin)
     }
 
     /// The layout glides from where it stands to the target, or follows the fingers that lead it. The pictures, when there are any, are on the stage.
