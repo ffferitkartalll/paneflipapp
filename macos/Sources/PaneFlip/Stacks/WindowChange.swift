@@ -3,7 +3,6 @@ import Foundation
 
 /// One action on a window that can be undone (for now: added to a zone, taken out of one, enlarged), and what undoing it needs.
 struct WindowChange {
-    enum Kind { case added, removed, enlarged }
 
     let kind: Kind
     let window: WindowRef

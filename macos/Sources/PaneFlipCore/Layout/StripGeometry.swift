@@ -4,11 +4,6 @@ import Foundation
 /// Where the zones of a strip stand on a screen, and the scrolling arithmetic. `offset` is how far the screen has moved
 /// to the right along the strip: 0 shows the screen's own layout, `trailing` brings the right overflow into view.
 public struct StripGeometry: Equatable {
-    public struct Placed: Equatable {
-        public let id: UUID
-        public let rect: CGRect
-        public let isOnScreen: Bool
-    }
 
     /// A zone with less than this much of its width on the screen is out of sight: macOS does not let a window rest with a
     /// few pixels showing (it pulls it back to show about forty), so such a zone waits at the edge like the ones further out.

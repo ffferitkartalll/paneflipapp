@@ -26,13 +26,4 @@ struct FullWidthSegments<Value: Hashable>: NSViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
-    final class Coordinator: NSObject {
-        var parent: FullWidthSegments
-        init(_ parent: FullWidthSegments) { self.parent = parent }
-
-        @objc func changed(_ sender: NSSegmentedControl) {
-            guard parent.options.indices.contains(sender.selectedSegment) else { return }
-            parent.selection = parent.options[sender.selectedSegment].value
-        }
-    }
 }

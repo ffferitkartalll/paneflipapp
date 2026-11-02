@@ -25,6 +25,23 @@ struct SettingsView: View {
         Binding(get: { naturalHeights[tab] ?? 0 }, set: { naturalHeights[tab] = $0 })
     }
 
+    /// Whether the window is the key window. While it is not, what a tab shows is a picture of it: a live form in a window that no one works in costs the scrolls beyond the
+    /// screen's edge frames (the app is busy with it at every frame), and the picture looks the same. The live form comes back as the window becomes key again.
+    @State private var isKey = true
+    @State private var frozen: NSImage?
+    @State private var snapshots = PaneSnapshots()
+
+    private func pane<Content: View>(_ tab: SettingsTab, @ViewBuilder _ content: () -> Content) -> some View {
+        Group {
+            if let frozen {
+                Image(nsImage: frozen).frame(width: frozen.size.width, height: frozen.size.height)
+            } else {
+                content().background(PaneSnapshotAnchor(snapshots: snapshots))
+            }
+        }
+        .cappedHeight(contentHeight, natural: natural(tab))
+    }
+
     /// The tallest the window may be, in points.
     private static let tallestWindow: CGFloat = 800
     /// What the window has besides a tab's content: its title bar, the tabs in the toolbar and the padding.
@@ -37,56 +54,48 @@ struct SettingsView: View {
 
     var body: some View {
         TabView(selection: $navigation.tab) {
-            GeneralPane(settings: settings, launchAtLogin: launchAtLogin, relauncher: relauncher)
-                .cappedHeight(contentHeight, natural: natural(.general))
+            pane(.general) { GeneralPane(settings: settings, launchAtLogin: launchAtLogin, relauncher: relauncher) }
                 .tabItem { Label("General", systemImage: "gearshape") }
                 .tag(SettingsTab.general)
 
-            DisplaysPane(screens: screens, settings: settings)
-                .cappedHeight(contentHeight, natural: natural(.displays))
+            pane(.displays) { DisplaysPane(screens: screens, settings: settings) }
                 .tabItem { Label("Displays", systemImage: "display.2") }
                 .tag(SettingsTab.displays)
 
-            LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
-                        settings: settings, navigation: navigation)
-                .cappedHeight(contentHeight, natural: natural(.layouts))
+            pane(.layouts) { LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
+                        settings: settings, navigation: navigation) }
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
                 .tag(SettingsTab.layouts)
 
-            ZonesPane(settings: settings, refresh: refresh)
-                .cappedHeight(contentHeight, natural: natural(.zones))
+            pane(.zones) { ZonesPane(settings: settings, refresh: refresh) }
                 .tabItem { Label("Zones", systemImage: "rectangle.split.3x1") }
                 .tag(SettingsTab.zones)
 
-            StackingPane(settings: settings)
-                .cappedHeight(contentHeight, natural: natural(.stacking))
+            pane(.stacking) { StackingPane(settings: settings) }
                 .tabItem { Label("Stacking", systemImage: "interface.window.stack") }
                 .tag(SettingsTab.stacking)
 
-            TrackpadPane(settings: settings)
-                .cappedHeight(contentHeight, natural: natural(.trackpad))
+            pane(.trackpad) { TrackpadPane(settings: settings) }
                 .tabItem { Label("Moving", systemImage: "appwindow.swipe.rectangle") }
                 .tag(SettingsTab.trackpad)
 
-            ShortcutsPane(settings: settings)
-                .cappedHeight(contentHeight, natural: natural(.shortcuts))
+            pane(.shortcuts) { ShortcutsPane(settings: settings) }
                 .tabItem { Label("Shortcuts", systemImage: "command") }
                 .tag(SettingsTab.shortcuts)
 
-            AppsPane(settings: settings, catalog: catalog, editor: apps)
-                .cappedHeight(contentHeight, natural: natural(.apps))
+            pane(.apps) { AppsPane(settings: settings, catalog: catalog, editor: apps) }
                 .tabItem { Label("Apps", systemImage: "app.dashed") }
                 .tag(SettingsTab.apps)
 
-            UpdatesPane(model: updates)
-                .cappedHeight(contentHeight, natural: natural(.updates))
+            pane(.updates) { UpdatesPane(model: updates) }
                 .tabItem { Label("Updates", systemImage: "arrow.triangle.2.circlepath") }
                 .tag(SettingsTab.updates)
         }
         .scenePadding()
         .frame(width: 640)
         .background(FixedWindowTitle(title: String(localized: "Settings")))
-        .background(WindowPresenceReporter(activation: activation, level: .floating, minimizable: true))
+        .background(WindowPresenceReporter(activation: activation, level: .floating, minimizable: true, isKey: $isKey, identifier: SettingsContentKeeper.windowIdentifier))
+        .onChange(of: isKey) { _, key in frozen = key ? nil : snapshots.image() }
         .onAppear { NSApp.activate(ignoringOtherApps: true) }
     }
 }

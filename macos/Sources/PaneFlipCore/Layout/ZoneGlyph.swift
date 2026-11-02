@@ -3,13 +3,6 @@ import Foundation
 
 /// A screen's zones, those beyond its edges too, drawn small in a row: the little picture of the layout that the island shows in the menu bar.
 public struct ZoneGlyph: Equatable {
-    public struct Cell: Identifiable, Equatable {
-        public let id: UUID
-        /// In the picture, from its top left corner.
-        public let rect: CGRect
-        /// The zone lies on the screen; else it waits beyond an edge.
-        public let isOnScreen: Bool
-    }
 
     public let size: CGSize
     /// Where the screen itself lies in the picture.

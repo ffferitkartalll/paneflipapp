@@ -32,8 +32,9 @@ final class WindowMover {
         background { [self] in write(for: ref.pid) }
     }
 
-    /// Calls `then` once every place asked for has been written (so nothing lands after the caller has worked
-    /// out the zones), or after a second if an app does not answer. The main thread is never held up.
+    /// Calls `then` on the main thread once every place asked for has been written (so nothing lands after the caller has worked
+    /// out the zones), or after a second if an app does not answer; at once, when asked on the main thread with nothing being written.
+    /// The main thread is never held up.
     func flush(then: @escaping () -> Void) {
         var done = false
         let finish = { [self] in
@@ -47,7 +48,7 @@ final class WindowMover {
         lock.lock()
         let busy = !writing.isEmpty
         lock.unlock()
-        guard busy else { return finish() }   // nothing is being written: at once
+        guard busy else { return Thread.isMainThread ? finish() : DispatchQueue.main.async(execute: finish) }   // nothing is being written: at once
         idle.notify(queue: .main, execute: finish)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: finish)
     }

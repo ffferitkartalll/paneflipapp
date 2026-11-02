@@ -5,12 +5,6 @@ import PaneFlipCore
 /// The state behind the Updates tab: whether a newer release exists, found out when the user asks.
 @Observable
 final class UpdatesModel {
-    enum State: Equatable {
-        case idle, checking, upToDate, failed
-        case available(ReleaseInfo)
-        case installing(ReleaseInfo)
-        case installFailed(ReleaseInfo)
-    }
 
     private(set) var state = State.idle
     /// The version of this app, as shown to the user.

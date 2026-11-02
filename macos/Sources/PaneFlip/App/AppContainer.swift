@@ -39,6 +39,7 @@ final class AppContainer {
         let apps = WorkspaceAppCatalog()
         let keys = HardwareKeyState()
         let activation = AppKitActivationPolicyController()
+        let settingsContent = SettingsContentKeeper()
 
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
@@ -217,6 +218,7 @@ final class AppContainer {
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()
             closedMonitor.start()
+            settingsContent.start()
             island.start()
             snap.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)

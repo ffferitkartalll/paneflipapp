@@ -7,8 +7,6 @@ struct ShortcutsPane: View {
     @State private var recorder = KeyRecorder()
     @State private var recording: Shortcut?
 
-    private enum Shortcut { case snap, windowScroll, stripScroll, sendToZone, nextWindow, previousWindow, scrollRight, scrollLeft, zoneUp, zoneLeft, zoneDown, zoneRight, undoWindow, closeWindowUndoNotice, enlargeWindow }
-
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
                                               \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut]

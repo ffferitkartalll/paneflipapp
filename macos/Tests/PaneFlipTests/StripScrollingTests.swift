@@ -20,11 +20,6 @@ final class StripScrollingTests: XCTestCase {
     private var clock = 0.0
     private var frames: [() -> Bool] = []
 
-    private final class Refresher: ZoneRefreshing {
-        var onRefresh: () -> Void = {}
-        func refreshZones() { onRefresh() }
-        func restoreWindows() {}
-    }
     private var refresher: Refresher!
 
     private func screen(_ key: String, x: CGFloat = 0) -> ScreenInfo {

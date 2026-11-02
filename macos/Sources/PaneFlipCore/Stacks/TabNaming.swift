@@ -2,15 +2,6 @@ import Foundation
 
 /// How stacked windows are labelled in the island.
 public enum TabNaming {
-    public struct Entry {
-        public let appName: String
-        public let title: String
-
-        public init(appName: String, title: String) {
-            self.appName = appName
-            self.title = title
-        }
-    }
 
     /// The app name alone when the app has one window in the zone; "App | Window title" when it has several.
     /// Many apps end every window title with their own name ("Page - App"); that part is left out.

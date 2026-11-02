@@ -5,11 +5,6 @@ import Observation
 /// Polls while visible, because the user grants permissions in System Settings, outside the app.
 @Observable
 final class PermissionsModel {
-    struct Item: Identifiable {
-        let permission: Permission
-        var granted: Bool
-        var id: Permission { permission }
-    }
 
     private(set) var items: [Item]
     @ObservationIgnored private let checker: PermissionChecking

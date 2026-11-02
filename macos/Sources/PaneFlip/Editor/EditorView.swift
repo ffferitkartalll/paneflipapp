@@ -210,13 +210,6 @@ struct EditorView: View {
 
     // MARK: Merge
 
-    private struct MergePreview {
-        let source: ZoneRect
-        let target: ZoneRect?
-        let result: StripLayout?
-        var valid: Bool { result != nil }
-    }
-
     private func mergePreview(zones: [ZoneRect], area: CGRect) -> MergePreview? {
         guard let sid = model.mergeSource, let src = zones.first(where: { $0.id == sid }) else { return nil }
         guard let p = model.dragPoint, let tgt = zones.first(where: { $0.rect.contains(p) && $0.id != sid }) else {

@@ -3,19 +3,6 @@ import CoreGraphics
 /// Where the pointer goes when it is pushed against the edge of a display, with the displays as they stand on the desk: the system's arrangement of them is a
 /// staircase and only lets the pointer through where the displays touch in it.
 public struct DeskPointer {
-    public struct Display {
-        public let id: String
-        /// The display in the system's arrangement, in top-left-origin coordinates (the pointer's).
-        public let frame: CGRect
-        /// The display on the desk.
-        public let desk: CGRect
-
-        public init(id: String, frame: CGRect, desk: CGRect) {
-            self.id = id
-            self.frame = frame
-            self.desk = desk
-        }
-    }
 
     private let displays: [Display]
 
