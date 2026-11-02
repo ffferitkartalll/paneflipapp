@@ -122,9 +122,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             // The lit zone follows the focus also while windows move (a layout scrolls to a zone beyond the edge): it costs next to nothing, and the zone the
             // focus goes to must not wait for the scroll to be over.
             if followed != coordinator.focusedZoneID { followFocus() }
-            // Mission Control is looked for every other tick: it asks the window server for every window, which costs several milliseconds on the main thread.
+            // Mission Control is looked for every other tick, and not while windows move: it asks the window server for the windows, which waits for it (several
+            // milliseconds on the main thread) and costs the glide a frame.
             ticks += 1
-            if ticks % 2 == 0 || covered {
+            if ticks % 2 == 0 && !coordinator.isMoving || covered {
                 let covering = screens.isMissionControlActive || isSuppressed()
                 if covering != covered { cover(covering) }
             }
