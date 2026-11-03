@@ -35,6 +35,21 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// How long a notice stays.
     private static let noticeTime: TimeInterval = 10
     private var dragging = false
+    private let lighting: ZoneLighting
+    /// Where the card carried out of the row would go if let go now: onto the island (as a dragged window would: a zone of the picture, or a place in the open row of
+    /// another zone), onto a zone of the screen (the zones light up), or out of its zone (reverse snap).
+    private enum CarryTarget: Equatable { case island, screen(UUID), takeOut }
+    private var carryTarget: CarryTarget?
+    /// The window of the card being carried, and the zone it lay in when the mouse went down on it (the row shown may change meanwhile).
+    private var carrying: (ref: WindowRef, zone: UUID)?
+    /// The card being carried (its row may be another one by now).
+    private var lastCard: IslandWindow?
+    private var returningUntil = Date.distantPast
+    private var lastReturnWrite = Date.distantPast
+    /// While the carried card waits over the picture, the island is told where the pointer is, though the mouse does not move: a zone it waits on opens its row.
+    private var carryTimer: Timer?
+    /// The card carried out of the row, following the pointer over the screen.
+    private let ghost = CardGhost()
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
     private var pressed: (entry: Entry, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     private var followed: UUID?
@@ -51,8 +66,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// How long a dragged window waits on a zone before its row of cards opens.
     private static let dwellTime: TimeInterval = 1
 
-    init(coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
+    init(lighting: ZoneLighting, coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
          memory: StackMemory, apps: AppCatalog, openApp: @escaping (String) -> Void, removeApp: @escaping (String, UUID, [UUID]) -> Void) {
+        self.lighting = lighting
         self.iconFont = iconFont
         self.memory = memory
         self.apps = apps
@@ -542,6 +558,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// The mouse went down on the shield: on a card of the open row it waits to see whether this is a click or a drag; on a zone in the picture it is a click.
     private func press(at point: CGPoint) {
         pressed = nil
+        carrying = nil
+        lastCard = nil
+        ghost.end()
         for entry in entries.values where entry.hovered {
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
         }
@@ -579,8 +598,33 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             withAnimation(Self.motion) { model.liftedCard = current.card }
             current.moved = true
             pressed = current
+            ghost.begin()
         }
-        withTransaction(Transaction(animation: nil)) { model.carriedX = centre }
+        // Out of the row, the card is on its way to a zone: of the island's picture, or of the screen (the zones light up).
+        if carrying == nil, let zone = model.windowsZone, let id = model.windows.first(where: { $0.id == current.card })?.windowID,
+           let ref = coordinator.stacks[zone]?.refs[id] { carrying = (ref, zone) }
+        let target = carryTarget(at: point, in: current.entry)
+        if carryTarget != nil, target == nil { returningUntil = Date().addingTimeInterval(0.4) }
+        setCarryTarget(target, at: point, in: current.entry)
+        // Away from the row (on the picture, or out of the island) the card lies in its own place in the row and does not move; on it the hand has it.
+        if target != nil {
+            if let index = model.carried { withAnimation(Self.motion) { model.carriedX = model.cardCentre(of: index) } }
+        } else if Date() < returningUntil {
+            // Back from away: the card comes to the hand, not at once.
+            if Date().timeIntervalSince(lastReturnWrite) > 0.03 {
+                lastReturnWrite = Date()
+                withAnimation(Self.motion) { model.carriedX = centre }
+            }
+        } else {
+            withTransaction(Transaction(animation: nil)) { model.carriedX = centre }
+        }
+        if target != nil, let card = model.windows.first(where: { $0.id == current.card }) ?? lastCard {
+            lastCard = card
+            ghost.show(card, cardSize: model.windowsFrame, at: point)
+        } else {
+            ghost.hideCard()
+        }
+        guard target == nil, model.windowsZone == carrying?.zone || carrying == nil else { return }
         // Where the card goes among the others: after the cards whose middle, as the row lay when the mouse went down, is left of the card's middle. The row
         // moves as the cards change places, so what it lay like then is what is measured.
         guard let zone = model.windowsZone, let from = model.windows.firstIndex(where: { $0.id == current.card }) else { return }
@@ -594,6 +638,22 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         guard let current = pressed else { return }
         pressed = nil
         let model = current.entry.model
+        carryTimer?.invalidate()
+        carryTimer = nil
+        let target = carryTarget, carried = carrying
+        carrying = nil
+        lastCard = nil
+        ghost.end()
+        if let target, let carried {
+            switch target {
+            case .island: drop(carried.ref, at: point)
+            case .screen(let zone): if zone != carried.zone { coordinator.snap(carried.ref, into: zone) }
+            case .takeOut: coordinator.takeOut(carried.ref, grabbedAt: screens.pointerAX)
+            }
+            setCarryTarget(nil, at: point, in: current.entry)
+            dragEnded()
+            if let shown = model.windowsZone { withAnimation(Self.motion) { model.windows = windows(of: shown) } }
+        }
         guard current.moved else {
             if let zone = model.windowsZone, let card = model.windows.first(where: { $0.id == current.card }) { choose(card, in: zone) }
             return
@@ -607,6 +667,37 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if model.liftedCard == nil, model.carriedCard == current.card { model.carriedCard = nil }   // in its place: it is laid out with the others again
         }
+    }
+
+    /// Where the carried card would go. Over a zone of the picture, or the open row of another zone, it is a window dragged onto the island. On or near its own row
+    /// it only changes place. Away from the island it goes to the zone under the pointer, and out of its zone over none.
+    private func carryTarget(at point: CGPoint, in entry: Entry) -> CarryTarget? {
+        guard let carrying else { return nil }
+        if cell(at: point, in: entry) != nil || (entry.model.windowsZone != carrying.zone && rowHit(at: point, in: entry).onRow) { return .island }
+        if islandFrame(of: entry, open: true).contains(point) || rowHit(at: point, in: entry, slack: 24).onRow { return nil }
+        return coordinator.zoneID(at: screens.pointerAX).map { .screen($0) } ?? .takeOut
+    }
+
+    private func setCarryTarget(_ target: CarryTarget?, at point: CGPoint, in entry: Entry) {
+        if target == .island {
+            if carryTarget != .island { dragging = true; hover(at: point) }
+            if carryTimer == nil { carryTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in self?.hover(at: NSEvent.mouseLocation) } }
+        } else if carryTarget == .island {
+            carryTimer?.invalidate()
+            carryTimer = nil
+            // Away from the island again: what the drag showed there goes.
+            dragging = false
+            setPlacing(nil, in: nil, entry)
+            entry.dwell = nil
+            if entry.dropZone != nil { entry.dropZone = nil; entry.model.select(focused(in: entry)) }
+        }
+        if case .screen(let zone) = target {
+            if !lighting.isShown { lighting.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) }) }
+            lighting.highlight(zone: zone)
+        } else if lighting.isShown {
+            lighting.hide()
+        }
+        carryTarget = target
     }
 
     /// The card the pointer is over shows its buttons; none when it is over no card (or over a card of an app that is not open).
@@ -677,11 +768,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     /// Whether the point is on the open row of cards, and the card under it, if any.
-    private func rowHit(at point: CGPoint, in entry: Entry) -> (onRow: Bool, card: Int?) {
+    private func rowHit(at point: CGPoint, in entry: Entry, slack: CGFloat = 0) -> (onRow: Bool, card: Int?) {
         let model = entry.model, frame = islandFrame(of: entry, open: true), size = model.windowsFrame
         guard model.windowsZone != nil, size.width > 0 else { return (false, nil) }
         let top = model.windowsTop, fromTop = frame.maxY - point.y
-        guard fromTop >= top, fromTop <= top + size.height, abs(point.x - frame.midX) <= model.windowsSpan / 2 else { return (false, nil) }
+        guard fromTop >= top - slack, fromTop <= top + size.height + slack, abs(point.x - frame.midX) <= model.windowsSpan / 2 + slack else { return (false, nil) }
         return (true, model.card(atX: point.x - frame.midX))
     }
 
