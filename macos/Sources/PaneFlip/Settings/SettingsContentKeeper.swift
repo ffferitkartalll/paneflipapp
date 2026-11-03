@@ -15,7 +15,7 @@ final class SettingsContentKeeper {
             center.addObserver(forName: NSWindow.didBecomeKeyNotification, object: nil, queue: .main) { [weak self] in self?.bringBack($0.object as? NSWindow) },
             // Before the window is shown, when the app opens it itself: no empty window for a moment.
             center.addObserver(forName: NSApplication.willBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-                self?.kept.keys.forEach { id in NSApp.windows.filter { ObjectIdentifier($0) == id }.forEach { self?.bringBack($0) } }
+                NSApp.windows.forEach { self?.bringBack($0) }
             },
         ]
     }
