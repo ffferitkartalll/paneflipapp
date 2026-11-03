@@ -37,6 +37,9 @@ final class StripScroller {
     private let reduceMotion: () -> Bool
     private let isBusy: () -> Bool
     private var scrolling: Scrolling?
+    /// The last photograph of each window, taken while it was in view. A window out of view is not photographed again: its last picture stands in,
+    /// so nothing is read from a window nobody sees.
+    private var kept: [CGWindowID: WindowPicture] = [:]
     /// Called when a scroll is over and the windows are in their places.
     var onRest: (() -> Void)?
     /// A glide of the layout begins or is given a new aim: the screen, how far it goes (from, to: layout offsets; from is nil when it goes on from where it is).
@@ -133,6 +136,15 @@ final class StripScroller {
             beginGliding(current)
             return true
         }
+        // Windows out of view keep the picture they had; only windows in view (and those never photographed) are photographed.
+        let inView = Set(geometry.zones(offset: offset).filter(\.isOnScreen).map(\.id))
+        let live = Set(coordinator.stacks.values.flatMap { $0.refs.values.map(\.id) })
+        kept = kept.filter { live.contains($0.key) }
+        for front in fronts where !inView.contains(front.zone) {
+            if let old = kept[front.ref.id], abs(old.frame.width - front.rect.width) < 2, abs(old.frame.height - front.rect.height) < 2 {
+                current.pictures[front.ref.id] = placed(old, in: front)
+            }
+        }
         scrolling = current
         let id = current.id
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.giveUpAfter) { [weak self] in self?.giveUp(id) }
@@ -140,8 +152,13 @@ final class StripScroller {
         // The windows the scroll shows first (in view now, and in view at the rests next to it) are photographed before the rest, which join the glide when they come.
         let near = Set([offset, target, nextRest(from: offset, toward: .right, in: geometry), nextRest(from: offset, toward: .left, in: geometry)]
             .compactMap { $0 }.flatMap { geometry.zones(offset: $0).filter(\.isOnScreen).map(\.id) })
-        let first = fronts.filter { near.contains($0.zone) }, later = fronts.filter { !near.contains($0.zone) }
-        snapshots.snapshots(of: (first.isEmpty ? fronts : first).map(\.ref)) { [weak self] images in self?.captured(images, id: id) }
+        let toPhotograph = fronts.filter { current.pictures[$0.ref.id] == nil }
+        guard !toPhotograph.isEmpty else {
+            captured([:], id: id)
+            return true
+        }
+        let first = toPhotograph.filter { near.contains($0.zone) }, later = toPhotograph.filter { !near.contains($0.zone) }
+        snapshots.snapshots(of: (first.isEmpty ? toPhotograph : first).map(\.ref)) { [weak self] images in self?.captured(images, id: id) }
         if !first.isEmpty, !later.isEmpty { snapshots.snapshots(of: later.map(\.ref)) { [weak self] images in self?.captured(images, id: id, covers: false) } }
         return true
     }
@@ -274,6 +291,7 @@ final class StripScroller {
         if covers { current.photographed = true }
         for front in current.held where front.isFront {
             guard let image = images[front.ref.id] else { continue }
+            kept[front.ref.id] = image
             let picture = placed(image, in: front)
             current.pictures[front.ref.id] = picture
             fresh.append(ScrollPicture(id: front.ref.id, picture: picture))
