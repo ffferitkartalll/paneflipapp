@@ -3,7 +3,7 @@ import Observation
 import SwiftUI
 
 /// Lights up every zone on every screen while a window is being dragged with the snap trigger held.
-final class SnapZoneOverlay {
+final class SnapZoneOverlay: ZoneLighting {
     private let model = SnapOverlayModel()
     private let screens: ScreenProviding
     private var panels: [NSPanel] = []

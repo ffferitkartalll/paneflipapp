@@ -77,7 +77,8 @@ final class AppContainer {
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
         let navigation = SettingsNavigation()
         let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, iconFont: iconFont, settings: settings, windows: windows)
-        let island = MenuBarIsland(coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
+        let overlay = SnapZoneOverlay(screens: screens)
+        let island = MenuBarIsland(lighting: overlay, coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })
         engine.add(presenter: island)
         coordinator.onActivity = { [weak island] _ in island?.windowsDidChange() }
@@ -125,7 +126,7 @@ final class AppContainer {
         let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))
         self.menuBar = MenuBarController(settings: settings, menu: menu)
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
-                                      keys: keys, overlay: SnapZoneOverlay(screens: screens), island: island,
+                                      keys: keys, overlay: overlay, island: island,
                                       background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
         let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values
