@@ -562,6 +562,23 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(windows.frames[3], CGRect(x: -250, y: 0, width: 1000, height: 500), "back at its size and place")
     }
 
+    func testAWindowOutOfViewIsNotPhotographedAgain() {
+        let scroller = scroller()
+        scroller.scroll(toward: .right)   // 2 is photographed once: it was never seen
+        run(60)
+        settle()
+        scroller.scroll(toward: .left)    // 2 is in view now: photographed again
+        run(60)
+        settle()
+        snapshots.images[2] = picture(CGRect(x: 999, y: 0, width: 300, height: 500))   // what the window looks like now, out of view
+        let asked = snapshots.requests
+        scroller.scroll(toward: .right)   // 2 is out of view at the start: its last picture stands in
+        XCTAssertEqual(stage.begun.last?.first { $0.id == 2 }?.picture.frame.width, 250, "the picture from when it was in view")
+        XCTAssertEqual(snapshots.requests, asked + 1, "only the window in view was photographed")
+        run(60)
+        settle()
+    }
+
     func testTheCoverWaitsForThePicturesOfZonesBeyondTheEdgeToo() {
         let scroller = scroller()
         snapshots.answersAtOnce = false
