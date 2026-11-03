@@ -4,8 +4,9 @@ import IOKit.hidsystem
 
 /// Maps the key with `hidutil`, which holds until the next restart. The app gives it back when it quits; a small shell process waits for the app
 /// and gives it back when the app is killed (a stop from Xcode, a crash), and the next start with the setting off clears a mapping left when
-/// even that did not run, if it is exactly ours. shortcut: while the setting is on it
-/// replaces any other `hidutil` key mapping. `hidutil` runs off the main thread and is given two seconds.
+/// even that did not run, if it is exactly ours. While the setting is on it replaces any other `hidutil` key mapping.
+/// `hidutil` runs off the main thread and is given two seconds; when it fails, the next `remap` tries again.
+// shortcut: the watcher of a killed copy clears the mapping for every copy, a second copy running at once loses it; upgrade if two copies must run together.
 final class HIDCapsLockControl: CapsLockControlling {
     private static let capsLock = 0x700000039, f18 = 0x70000006D
     private let queue = DispatchQueue(label: "hidutil")
@@ -15,27 +16,30 @@ final class HIDCapsLockControl: CapsLockControlling {
     init() {
         NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: .main) { [weak self] _ in
             guard let self, wanted == true else { return }
-            queue.sync { self.apply(false) }
+            _ = queue.sync { self.apply(false) }
         }
     }
 
     func remap(_ enabled: Bool) {
         guard enabled != wanted else { return }
         wanted = enabled
-        queue.async { [self] in apply(enabled) }
+        queue.async { [self] in
+            if !apply(enabled) { DispatchQueue.main.async { [self] in wanted = nil } }
+        }
     }
 
-    private func apply(_ enabled: Bool) {
+    /// False when `hidutil` failed to set the mapping.
+    private func apply(_ enabled: Bool) -> Bool {
         watcher?.terminate()
         watcher = nil
         if enabled { watcher = Self.watch(ProcessInfo.processInfo.processIdentifier) } else {
             // Only our own mapping is taken away.
             // `--get` answers once for every keyboard service, so the keys of all the mappings are read, and none but ours may be among them.
-            guard let current = Self.hidutil(["property", "--get", "UserKeyMapping"]) else { return }
+            guard let current = Self.hidutil(["property", "--get", "UserKeyMapping"]) else { return false }
             let keys = Set(current.matches(of: /HIDKeyboardModifierMapping(?:Src|Dst) = (\d+)/).compactMap { Int($0.output.1) })
-            guard !keys.isEmpty, keys.isSubset(of: [Self.capsLock, Self.f18]) else { return }
+            guard !keys.isEmpty, keys.isSubset(of: [Self.capsLock, Self.f18]) else { return true }
         }
-        _ = Self.hidutil(["property", "--set", Self.mapping(enabled)])
+        return Self.hidutil(["property", "--set", Self.mapping(enabled)]) != nil
     }
 
     private static func mapping(_ enabled: Bool) -> String {

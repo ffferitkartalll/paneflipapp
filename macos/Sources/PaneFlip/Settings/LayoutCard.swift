@@ -97,7 +97,7 @@ struct LayoutCard: View {
             Button { confirmingRemoval = true } label: { stretched("Remove") }
                 .buttonStyle(.bordered)
                 .confirmationDialog("Remove this layout?", isPresented: $confirmingRemoval, titleVisibility: .visible) {
-                    Button("Remove") { layouts.removeLayout(key: screen.key, id: layout.id) }
+                    Button("Remove", role: .destructive) { layouts.removeLayout(key: screen.key, id: layout.id) }
                     Button("Cancel", role: .cancel) {}
                 }
         }

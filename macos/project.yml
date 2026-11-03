@@ -143,6 +143,7 @@ targets:
       - path: Sources/PaneFlip/Settings/AppLanguages.swift
       - path: Sources/PaneFlip/Platform/CGEventFlags+Chord.swift
       - path: Sources/PaneFlip/Platform/CapsLockKeyState.swift
+      - path: Sources/PaneFlip/Settings/SettingsContentKeeper.swift
     dependencies:
       - package: PaneFlip
         product: PaneFlipCore
