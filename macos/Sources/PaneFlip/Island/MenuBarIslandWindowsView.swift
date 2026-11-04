@@ -70,16 +70,20 @@ struct MenuBarIslandWindowsView: View {
 
     private func badge(of window: IslandWindow, in size: CGSize) -> some View {
         let shown = window.badgeText != nil && !(window.id == model.hoveredCard && !window.actions.isEmpty && model.carriedCard == nil)
-        return ZStack(alignment: .topTrailing) {
+        // Where the remove button stands, as large as it.
+        let rect = IslandCardAction.rects(in: size, among: [.remove]).first?.rect ?? .zero
+        return ZStack(alignment: .topLeading) {
             if let text = window.badgeText {
                 Text(verbatim: text)
-                    .font(.system(size: 10, weight: .bold)).foregroundStyle(.white)
-                    .padding(.horizontal, 5).frame(minWidth: 16, minHeight: 16)
-                    .background(Capsule().fill(Color.red))
-                    .padding(4)
+                    .font(.system(size: rect.width * 0.5, weight: .bold)).foregroundStyle(.white)
+                    .minimumScaleFactor(0.5).lineLimit(1)
+                    .padding(.horizontal, 1)
+                    .frame(width: rect.width, height: rect.height)
+                    .background(Circle().fill(Color.red))
+                    .offset(x: rect.minX, y: rect.minY)
             }
         }
-        .frame(width: size.width, height: size.height, alignment: .topTrailing)
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
         .opacity(shown ? 1 : 0)
     }
 
