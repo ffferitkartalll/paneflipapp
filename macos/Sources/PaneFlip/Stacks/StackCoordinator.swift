@@ -63,6 +63,8 @@ final class StackCoordinator {
         } }
     }
     var glide: WindowGlide?
+    /// While set, `apply(plan:)` glides the windows in front to their zones instead of putting them there at once.
+    var glidesPlacement = false
     /// Something that moved windows may be over (a slide, a swipe, a new layout).
     var onMotionEnded: (() -> Void)?
     /// With Stage Manager on, the window server decides which windows are shown, and the app does one thing: a dropped
@@ -132,7 +134,7 @@ final class StackCoordinator {
             for tab in stack.tabs {
                 guard let ref = stack.refs[tab.id], ref.id != enlarged?.window.id else { continue }
                 glide?.cancel(ref.id)
-                placeLater(ref, at: stack.frame)
+                if glidesPlacement, let glide, tab.id == stack.activeID, !stack.isParked { glide.glide(ref, to: stack.frame) } else { placeLater(ref, at: stack.frame) }
             }
         }
         onMotionEnded?()

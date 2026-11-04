@@ -19,4 +19,11 @@ public struct SplitDivider: Identifiable, Equatable {
     /// Length of the divided rectangle along the axis the line moves on.
     public var extent: CGFloat { sideBySide ? parent.width : parent.height }
     public var position: CGFloat { sideBySide ? parent.minX + parent.width * ratio : parent.minY + parent.height * ratio }
+
+    /// The ratio for a line dragged to `position` (on the axis it moves on): no zone smaller than `least` of the rectangle, and the line sticks to
+    /// a step of `SplitSnap` that lies within `snapDistance` points.
+    public func ratio(forPosition position: CGFloat, snapDistance: Double = 12, least: Double = 0.1) -> Double {
+        let raw = min(max(Double((position - (sideBySide ? parent.minX : parent.minY)) / extent), least), 1 - least)
+        return SplitSnap.step(near: raw, extent: Double(extent), distance: snapDistance) ?? raw
+    }
 }

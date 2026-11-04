@@ -26,6 +26,8 @@ struct GlyphCanvas: View, Animatable {
     /// How far apart the two halves of the picture are drawn (the picture is cut in the middle, at a notch): the zones at the cut are stretched across.
     var gap: CGFloat
     let scale: CGFloat
+    /// The round button that turns the editing of the zones' edges on is drawn at the top right corner of the screen's frame, in the picture, so that its colours follow the zone under it.
+    let editButton: Bool
 
     var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>> {
         get { AnimatablePair(AnimatablePair(shift, gap), AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))) }
@@ -41,8 +43,8 @@ struct GlyphCanvas: View, Animatable {
     /// The fill of a zone: grey, or the lit colour, or between the two while the focus moves from one zone to another.
     private func lit(_ id: UUID) -> CGFloat { id == activeID ? blend : (id == previousID ? 1 - blend : 0) }
 
-    private func fill(of id: UUID) -> Color {
-        let lit = lit(id), accent = AppAccent.rgb
+    private func fill(of id: UUID, accent: (red: CGFloat, green: CGFloat, blue: CGFloat)) -> Color {
+        let lit = lit(id)
         return Color(red: 1 + (accent.red - 1) * lit, green: 1 + (accent.green - 1) * lit, blue: 1 + (accent.blue - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
     }
 
@@ -62,7 +64,10 @@ struct GlyphCanvas: View, Animatable {
     }
 
     var body: some View {
-        Canvas { context, _ in paint(&context) }
+        // The symbol of the button is made once by the canvas, not resolved at every redraw (the picture is redrawn for every step of a scroll).
+        Canvas { context, _ in paint(&context) } symbols: {
+            Image(systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill").foregroundStyle(.white).tag(0)
+        }
     }
 
     /// Where a rectangle is drawn when the picture is cut in the middle and its halves are `gap` apart (at a notch). A zone across the cut is made wider by the gap, and
@@ -83,7 +88,30 @@ struct GlyphCanvas: View, Animatable {
         return CGRect(x: minX, y: r.minY, width: maxX - minX, height: r.height)
     }
 
+    /// The button: as the buttons of a card, light on a grey zone and dark on a lit one (and between the two as the focus moves), shown once the picture has almost grown.
+    private func paintEditButton(_ context: inout GraphicsContext, in window: CGRect) {
+        let grown = openZoom > 1 ? min(max((zoom - 1) / (openZoom - 1), 0), 1) : 1
+        let opacity = labels * min(max((grown - 0.8) / 0.2, 0), 1)
+        guard opacity > 0 else { return }
+        let side = MenuBarIslandModel.editButtonSide, margin = MenuBarIslandModel.editButtonMargin
+        let rect = CGRect(x: window.maxX - margin - side, y: window.minY + margin, width: side, height: side)
+        let under = glyph.cells.first { inner($0.rect).contains(CGPoint(x: rect.midX, y: rect.midY)) }
+        let dark = under.map { max(picked($0.id), lit($0.id)) } ?? 0
+        let fill = Color(white: 1 - dark).opacity(0.28 + (0.6 - 0.28) * dark)
+        context.drawLayer { layer in
+            layer.opacity = opacity
+            layer.fill(Path(ellipseIn: rect), with: .color(fill))
+            if let symbol = layer.resolveSymbol(id: 0) {
+                let box = side * 0.5, fit = min(box / symbol.size.width, box / symbol.size.height)
+                let size = CGSize(width: symbol.size.width * fit, height: symbol.size.height * fit)
+                layer.draw(symbol, in: CGRect(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2, width: size.width, height: size.height))
+            }
+        }
+    }
+
     private func paint(_ context: inout GraphicsContext) {
+            // The accent is asked once for the whole picture: asking for it (a defaults lookup and a colour conversion) for every zone made the redraw slow.
+            let accent = AppAccent.rgb, accentColor = AppAccent.color
             let screen = glyph.screen
             // Inside the picture whatever the rounding: at the far right end the frame would stand a fraction of a point past it.
             let width = sz(screen.width)
@@ -102,13 +130,13 @@ struct GlyphCanvas: View, Animatable {
                 let shape = Path(roundedRect: rect, cornerRadius: 2)
                 context.drawLayer { layer in
                     layer.clip(to: windowPath)
-                    layer.fill(shape, with: .color(fill(of: cell.id)))
+                    layer.fill(shape, with: .color(fill(of: cell.id, accent: accent)))
                 }
                 // The zone with the focus is lit beyond the frame too (the zone it left fades out there); a zone without the focus is not filled out of view.
                 if lit(cell.id) > 0 {
                     context.drawLayer { layer in
                         layer.clip(to: windowPath, options: .inverse)
-                        layer.fill(shape, with: .color(AppAccent.color.opacity(lit(cell.id))))
+                        layer.fill(shape, with: .color(accentColor.opacity(lit(cell.id))))
                     }
                 }
                 if picked(cell.id) > 0 { context.fill(shape, with: .color(AppAccent.placement.opacity(picked(cell.id)))) }
@@ -125,5 +153,6 @@ struct GlyphCanvas: View, Animatable {
                 }
             }
             context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(.white.opacity(0.5)), lineWidth: 1)
+            if editButton { paintEditButton(&context, in: window) }
     }
 }

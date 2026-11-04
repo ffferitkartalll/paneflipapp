@@ -10,6 +10,11 @@ struct EditorView: View {
     @State private var showShapes = false
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
     private let snapDistance: CGFloat = 20
+    @Environment(\.displayScale) private var displayScale
+    /// How far from the middle of the line being dragged it was taken, along its axis.
+    @State private var grab: (line: UUID, offset: CGFloat)?
+    /// The line being dragged is on a step.
+    @State private var snappedLine = false
 
     var body: some View {
         GeometryReader { geo in
@@ -17,8 +22,10 @@ struct EditorView: View {
             let total = CGFloat(model.strip.totalWidth)
             let rect = CGRect(x: -CGFloat(model.strip.leadingWidth + model.offset) * geo.size.width, y: 0,
                               width: total * geo.size.width, height: geo.size.height)
-            let zones = model.root.zones(in: rect).enumerated().map { ZoneRect(id: $1.id, index: $0, rect: $1.rect) }
-            let dividers = model.root.dividers(in: rect)
+            let screenRect = CGRect(x: rect.minX + CGFloat(model.strip.leadingWidth) * geo.size.width, y: 0, width: geo.size.width, height: geo.size.height)
+            let laid = model.laid(in: rect, screen: screenRect)
+            let zones = laid.zones.enumerated().map { ZoneRect(id: $1.id, index: $0, rect: $1.rect) }
+            let dividers = laid.dividers
             let target = splitTarget(zones: zones, dividers: dividers, size: geo.size)
 
             ZStack(alignment: .topLeading) {
@@ -34,7 +41,9 @@ struct EditorView: View {
                         .overlay {
                             // Under the pointer the zone shows what a split there would leave (see `splitLabels`), not its whole size.
                             if target?.zone.id != z.id {
-                                Text(verbatim: EditorModel.size(of: z.rect, in: geo.size, area: area)).font(.title3.monospacedDigit()).foregroundStyle(.white.opacity(0.4))
+                                // The line being dragged, on a step: the zone beside it that is one whole side of it says its share under its size.
+                                let step = draggedShare(of: z.id, dividers: dividers)
+                                ZoneSizeLabel(size: EditorModel.size(of: z.rect, in: geo.size, area: area), share: step)
                             }
                         }
                         .offset(x: z.rect.minX + 3, y: z.rect.minY + 3)
@@ -75,8 +84,8 @@ struct EditorView: View {
                 // The edge of an area is not a line to drag: a screen has the width of the screen.
                 // All lines first, then all handles: another divider's line must not run over a handle.
                 let lines = dividers.filter { !model.isAreaLine($0.id) }
-                ForEach(lines) { d in lineView(d) }
-                ForEach(lines) { d in handleView(d) }
+                ForEach(lines) { d in lineView(d, in: rect) }
+                ForEach(lines) { d in handleView(d, in: rect) }
 
                 controls
                 overflowButtons(size: geo.size)
@@ -295,44 +304,67 @@ struct EditorView: View {
         return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped)
     }
 
-    /// What each side of the split under the pointer would be: its size in points, or, on a step, its share of the zone.
+    /// What each side of the split under the pointer would be: its size in points, and, on a step, its share of the zone under it. The two lines are one block, centred in the side.
     private func splitLabels(_ t: SplitTarget, view: CGSize) -> some View {
         let sides = [(t.halves.0, t.ratio), (t.halves.1, 1 - t.ratio)]
         return ZStack {
             ForEach(sides.indices, id: \.self) { i in
                 let (rect, share) = sides[i]
                 let step = t.snapped ? SplitSnap.share(of: share) : nil
-                Text(verbatim: step.map { "\($0.numerator)/\($0.denominator)" } ?? EditorModel.size(of: rect, in: view, area: area))
-                    .font(.title3.monospacedDigit())
-                    .foregroundStyle(.white.opacity(step == nil ? 0.4 : 0.9))
-                    .position(x: rect.midX, y: rect.midY)
+                ZoneSizeLabel(size: EditorModel.size(of: rect, in: view, area: area), share: step)
+                .position(x: rect.midX, y: rect.midY)
             }
         }
         .allowsHitTesting(false)
     }
 
+    /// The share (a half, a third and the like) of `zone` in the line being dragged, when that line stands on a step and the zone is a whole side of it.
+    private func draggedShare(of zone: UUID, dividers: [SplitDivider]) -> (numerator: Int, denominator: Int)? {
+        guard let line = grab?.line, let d = dividers.first(where: { $0.id == line }), snappedLine, let sides = model.strip.root.sides(ofSplit: line) ?? model.root.sides(ofSplit: line) else { return nil }
+        if case .leaf(let id) = sides.first, id == zone { return SplitSnap.share(of: d.ratio) }
+        if case .leaf(let id) = sides.second, id == zone { return SplitSnap.share(of: 1 - d.ratio) }
+        return nil
+    }
+
     // MARK: Dividers
 
-    private func resize(_ d: SplitDivider, to p: CGPoint) {
+    private func resize(_ d: SplitDivider, to p: CGPoint, in rect: CGRect) {
         let origin = d.sideBySide ? d.parent.minX : d.parent.minY
         var r = Double(((d.sideBySide ? p.x : p.y) - origin) / d.extent)
-        if let step = SplitSnap.step(near: r, extent: Double(d.extent), distance: Double(snapDistance)) { r = step }
+        let step = SplitSnap.step(near: r, extent: Double(d.extent), distance: Double(snapDistance))
+        if let step { r = step }
         let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
-        model.setRatio(d.id, r)
+        snappedLine = step != nil
+        model.setRatio(d.id, r, in: rect, least: CGFloat(settings.values.minZoneSize))
     }
 
-    private func drag(_ d: SplitDivider) -> some Gesture {
+    /// The line goes with the pointer from where its handle (or the line) was taken, not from the line's middle.
+    private func drag(_ d: SplitDivider, in rect: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 1, coordinateSpace: .named("editor"))
-            .onChanged { resize(d, to: $0.location) }
-            .onEnded { _ in model.endResize() }
+            .onChanged { value in
+                if grab?.line != d.id { grab = (d.id, (d.sideBySide ? value.startLocation.x : value.startLocation.y) - d.position) }
+                let offset = grab?.offset ?? 0
+                resize(d, to: CGPoint(x: value.location.x - (d.sideBySide ? offset : 0), y: value.location.y - (d.sideBySide ? 0 : offset)), in: rect)
+            }
+            .onEnded { _ in
+                grab = nil
+                snappedLine = false
+                model.endResize()
+            }
     }
 
+    /// On whole device pixels: a handle or a line between two pixels is drawn blurred.
+    private func pixel(_ point: CGPoint) -> CGPoint {
+        CGPoint(x: (point.x * displayScale).rounded() / displayScale, y: (point.y * displayScale).rounded() / displayScale)
+    }
+
+    /// Where the handle of a line stands: in the middle of the rectangle the line divides.
     private func middle(of d: SplitDivider) -> CGPoint {
-        d.sideBySide ? CGPoint(x: d.position, y: d.parent.midY) : CGPoint(x: d.parent.midX, y: d.position)
+        pixel(d.sideBySide ? CGPoint(x: d.position, y: d.parent.midY) : CGPoint(x: d.parent.midX, y: d.position))
     }
 
-    private func lineView(_ d: SplitDivider) -> some View {
+    private func lineView(_ d: SplitDivider, in rect: CGRect) -> some View {
         let centered = SplitSnap.isStep(d.ratio)
         return ZStack {
             Rectangle().fill(centered ? Color.white : AppAccent.color)
@@ -340,23 +372,19 @@ struct EditorView: View {
             Rectangle().fill(.clear)
                 .frame(width: d.sideBySide ? 14 : d.parent.width, height: d.sideBySide ? d.parent.height : 14)
                 .contentShape(Rectangle())
-                .gesture(drag(d))
+                .gesture(drag(d, in: rect))
                 .onHover { inside in
                     if inside { (d.sideBySide ? NSCursor.resizeLeftRight : NSCursor.resizeUpDown).push() } else { NSCursor.pop() }
                 }
         }
-        .position(middle(of: d))
+        .position(pixel(d.sideBySide ? CGPoint(x: d.position, y: d.parent.midY) : CGPoint(x: d.parent.midX, y: d.position)))
     }
 
-    private func handleView(_ d: SplitDivider) -> some View {
-        let centered = SplitSnap.isStep(d.ratio)
-        return Image(systemName: d.sideBySide ? "pause" : "equal")
-            .font(.system(size: 11, weight: .bold))
-            .foregroundStyle(centered ? Color.black : Color.white)
-            .frame(width: 24, height: 24)
-            .background(Circle().fill(centered ? Color.white : AppAccent.color))
+    private func handleView(_ d: SplitDivider, in rect: CGRect) -> some View {
+        Image(nsImage: DividerKnobView.image(sideBySide: d.sideBySide, atStep: SplitSnap.isStep(d.ratio)))
+            .frame(width: DividerKnobView.side, height: DividerKnobView.side)
             .contentShape(Circle())
-            .gesture(drag(d))
+            .gesture(drag(d, in: rect))
             .onTapGesture(count: 2) { model.collapse(d.id) }
             .position(middle(of: d))
     }

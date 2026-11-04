@@ -42,6 +42,10 @@ final class MenuBarIslandModel {
     var noticeLeft: CGFloat = 1
     /// The notice can be closed (it has a close button, and the ring runs round that); else the ring runs round the Undo button.
     var noticeCloses = true
+    /// The notice is the one that tells the editing of the zones' edges is on: it stays until that is over, and its button (Done) ends that.
+    var noticeEditing = false
+    /// Under the editing notice a second line says that a zone edge was moved, with a button that undoes it.
+    var noticeUndo = false
     /// The width of the display, at most the width of the island.
     var displayWidth: CGFloat = 0
     /// How far the fingers (or the wheel's turn) have led the windows from the one in front, in windows: positive brings the ones before it in.

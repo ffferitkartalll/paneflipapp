@@ -8,12 +8,16 @@ public struct SnapTrigger: Codable, Equatable {
     public init(keys: [Key]) { self.keys = keys }
 
     public static let leftCommand = SnapTrigger(keys: [Key(code: 55, name: "Left Command")])
+    /// What the snap trigger was at first: a stored one that still equals it was never changed, and takes the new default.
+    public static let formerSnapTrigger = leftCommand
 
     // The shortcuts that bring the next or previous window of a zone forward, and scroll toward the zones beyond a screen's edge
     // (keys in key-code order, as the recorder makes them).
     private static let leftOption = Key(code: 58, name: "Left Option"), leftControl = Key(code: 59, name: "Left Control")
     private static let commandKey = Key(code: 55, name: "Left Command")
     private static let leftArrow = Key(code: 123, name: "←"), rightArrow = Key(code: 124, name: "→")
+    /// Held while dragging a window, to light the zones and snap the window into one: Control and Option (with Caps Lock as a modifier key, Caps Lock alone).
+    public static let windowSnap = SnapTrigger(keys: [leftOption, leftControl])
     /// Held while scrolling over a zone (two fingers or the wheel), to move through its windows.
     public static let windowScroll = SnapTrigger(keys: [leftOption, leftControl])
     /// Held while scrolling, with two fingers or the wheel, to slide to the zones beyond the screen's edges: the modifier keys of the
@@ -30,6 +34,10 @@ public struct SnapTrigger: Codable, Equatable {
     public static let enlargeWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 36, name: "Return")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
+    /// Pressed twice quickly, turns on the editing of the zone edges, without Caps Lock as a modifier key: Control and Option together.
+    public static let zoneEdgeEdit = SnapTrigger(keys: [leftOption, leftControl])
+    /// What it was at first (Caps Lock, Control and Option): a stored one that still equals it was never changed, and takes the new default.
+    public static let formerZoneEdgeEdit = SnapTrigger(keys: [Key(code: KeyChord.capsLockKeyCode, name: "Caps Lock"), leftOption, leftControl])
     /// Send the focused window to another zone through the island: Control+Option+M.
     public static let sendToZone = SnapTrigger(keys: [Key(code: 46, name: "M"), leftOption, leftControl])
     /// What the shortcut was before it became a key with modifier keys: the modifier keys alone, held. A stored shortcut that still equals it

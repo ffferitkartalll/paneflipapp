@@ -136,9 +136,10 @@ final class EditorModelTests: XCTestCase {
         let editor = model(StripLayout(root: .leaf(a)))
         editor.split(a, sideBySide: true, ratio: 0.5)
         guard case .split(let line, _, _, _, _) = editor.root else { return XCTFail("a split") }
-        for ratio in [0.45, 0.4, 0.35, 0.3] { editor.setRatio(line, ratio) }
+        let rect = CGRect(x: 0, y: 0, width: 1000, height: 600)
+        for ratio in [0.45, 0.4, 0.35, 0.3] { editor.setRatio(line, ratio, in: rect, least: 10) }
         editor.endResize()
-        editor.setRatio(line, 0.6)   // a second drag
+        editor.setRatio(line, 0.6, in: rect, least: 10)   // a second drag
         editor.undo()
         guard case .split(_, _, let afterOne, _, _) = editor.root else { return XCTFail("a split") }
         XCTAssertEqual(afterOne, 0.3, accuracy: 1e-9, "the second drag is undone as a whole")
@@ -158,5 +159,19 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(editor.offset, 0)
         editor.undo()
         XCTAssertEqual(editor.strip.root.leafIDs, [a])
+    }
+
+    func testTheEditorPutsTheLinesWhereTheDesktopDoes() {
+        let a = UUID(), b = UUID(), c = UUID(), outer = UUID(), inner = UUID()
+        let root = LayoutNode.split(id: outer, sideBySide: true, ratio: 0.25, first: .leaf(a),
+                                    second: .split(id: inner, sideBySide: true, ratio: 0.5, first: .leaf(b), second: .leaf(c)))
+        let editor = EditorModel(strip: StripLayout(root: root), gap: 80, onApply: { _ in }, onClose: {})
+        let screen = CGRect(x: 0, y: 0, width: 1000, height: 600)
+        let laid = editor.laid(in: screen, screen: screen)
+        let desktop = StripGeometry(strip: editor.strip, screen: screen).zones(offset: 0, gap: 80).map { ($0.id, $0.rect) }
+        for (id, rect) in desktop { XCTAssertEqual(laid.zones.first { $0.id == id }?.rect, rect, "the zones are laid as on the desktop") }
+        let lines = Dictionary(uniqueKeysWithValues: laid.dividers.map { ($0.id, $0.position) })
+        let zones = Dictionary(uniqueKeysWithValues: desktop)
+        XCTAssertEqual(lines[inner] ?? 0, (zones[b]!.maxX + zones[c]!.minX) / 2, accuracy: 0.001, "in the middle of the gap, also inside a shrunk zone")
     }
 }

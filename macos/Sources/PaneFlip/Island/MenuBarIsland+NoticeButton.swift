@@ -3,5 +3,5 @@ import PaneFlipCore
 import SwiftUI
 
 extension MenuBarIsland {
-    enum NoticeButton { case undo, close }
+    enum NoticeButton { case undo, close, revert }
 }

@@ -84,6 +84,20 @@ public struct StripLayout: Equatable {
         return nil
     }
 
+    /// How a zone is named: the screen's zones 1, 2, 3 in tree order; the zones of the area `screens` screens beyond an edge (1 for the nearest) numbered from 1 in that area,
+    /// from the screen outwards. The name carries a sign for each screen out: -1 and +1 in the nearest area, --1 and ++1 in the next.
+    public func labelPosition(of zone: UUID) -> (part: Part, screens: Int, number: Int)? {
+        if let i = root.leafIDs.firstIndex(of: zone) { return (.screen, 0, i + 1) }
+        for (k, area) in leading.enumerated() {
+            let ids = area.root.leafIDs
+            if let i = ids.firstIndex(of: zone) { return (.leading, k + 1, ids.count - i) }
+        }
+        for (k, area) in trailing.enumerated() {
+            if let i = area.root.leafIDs.firstIndex(of: zone) { return (.trailing, k + 1, i + 1) }
+        }
+        return nil
+    }
+
     // MARK: One tree
 
     /// The whole strip as one split tree, so the editor can treat it like any layout: the lines between the screen and

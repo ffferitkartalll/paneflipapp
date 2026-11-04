@@ -71,7 +71,37 @@ final class MenuBarIslandModelTests: XCTestCase {
     func testThePanelIsTallEnoughForTheLargestZone() {
         let model = model()
         choose(model, rect: CGRect(x: 0, y: 0, width: 1000, height: 500))
-        XCTAssertEqual(model.tallestOpenHeight, model.openSize.height + MenuBarIslandModel.noticeButtonHeight + model.windowsGap, "and for the line of a notice at its foot")
+        XCTAssertEqual(model.tallestOpenHeight, model.openSize.height + 2 * MenuBarIslandModel.noticeButtonHeight + 2 * model.windowsGap, "and for the two lines of a notice at its foot")
+    }
+
+    func testTheEditButtonStandsAtTheTopRightOfTheOpenPictureAndGivesWayToTheEditingNotice() {
+        let model = model()
+        XCTAssertFalse(model.showsEditButton, "not while the island is closed")
+        model.expanded = true
+        model.zoom = model.openZoom
+        model.contentOpacity = 1
+        XCTAssertTrue(model.showsEditButton)
+        XCTAssertEqual(model.editButtonOpacity, 1, accuracy: 1e-9)
+        model.zoom = 1
+        XCTAssertEqual(model.editButtonOpacity, 0, "not while the island is still small")
+        model.zoom = model.openZoom
+        let side = MenuBarIslandModel.editButtonSide, margin = MenuBarIslandModel.editButtonMargin
+        XCTAssertEqual(model.editButtonCentre.x, (model.glyph.screen.maxX - model.glyph.size.width / 2) * model.zoom - margin - side / 2)
+        XCTAssertEqual(model.editButtonCentre.y, model.barHeight + margin + side / 2, "just under the bar, at the picture's top edge")
+        model.noticeEditing = true
+        model.notice = AttributedString("Zone edge editing is on.")
+        XCTAssertFalse(model.showsEditButton, "the mode is on already")
+    }
+
+    func testTheEditingNoticeGrowsByALineWhenAZoneEdgeWasMoved() {
+        let model = model()
+        model.notice = AttributedString("Zone edge editing is on.")
+        model.noticeEditing = true
+        let one = model.openSize.height
+        model.noticeUndo = true
+        XCTAssertEqual(model.openSize.height, one + MenuBarIslandModel.noticeButtonHeight + model.windowsGap)
+        model.noticeEditing = false
+        XCTAssertEqual(model.openSize.height, one, "only the editing notice has the second line")
     }
 
     func testANoticeIsOneLineUnderTheBarAndAtTheFootOfTheIslandOnceThePointerOpensIt() {

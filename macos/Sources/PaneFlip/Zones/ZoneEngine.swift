@@ -16,6 +16,8 @@ final class ZoneEngine: ZoneRefreshing {
     private let windows: WindowSystem
     private var presenters: [ZonePresenting] = []
     private var lastSignatures: [String] = []
+    /// The gap and the margin each display's layout had at the last look: a screen of the strip that is in view stays in view when they change.
+    private var spacings: [String: (gap: CGFloat, margin: CGFloat)] = [:]
     /// The displays as seen at the last look (see `refreshZones`): for those who need them as often and must not ask the Dock again.
     private(set) var lastScreens: [ScreenInfo] = []
     private var timer: Timer?
@@ -87,8 +89,22 @@ final class ZoneEngine: ZoneRefreshing {
         lastSignatures = current.map(\.layoutSignature)
         lastScreens = current
         displayHandler?.desktopsDidChange(on: current)
+        keepScreensInView(on: current)
         coordinator.apply(plan: planner.plan(on: current))
         presenters.forEach { $0.zonesDidChange() }
+    }
+
+    /// The gap or the margin changed: the screens of a strip stand elsewhere, and a view that rested at one of them is moved to where that one now is, so that it does not
+    /// come to stand between two.
+    private func keepScreensInView(on current: [ScreenInfo]) {
+        for screen in current {
+            let now = planner.spacing(for: screen.key)
+            defer { spacings[screen.key] = now }
+            guard let before = spacings[screen.key], before != now, let (geometry, _) = planner.strip(of: screen, among: current) else { continue }
+            if let offset = geometry.offset(keepingScreenOf: planner.viewport.offset(for: screen.key), whenGapWas: before.gap, marginWas: before.margin) {
+                planner.viewport.set(offset, for: screen.key)
+            }
+        }
     }
 
     func restoreWindows() {

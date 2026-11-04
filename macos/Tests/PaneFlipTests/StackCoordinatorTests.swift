@@ -33,6 +33,22 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator.zoneID(at: CGPoint(x: 120, y: 50)))
     }
 
+    func testAZoneThatChangedByHandGlidesItsWindowAndOneChangedOtherwiseJumps() {
+        let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100), wider = CGRect(x: 0, y: 0, width: 160, height: 100)
+        coordinator.glide = WindowGlide(windows: windows, reduceMotion: { false }, background: { _ in })
+        coordinator.apply(zones: [zone: rect])
+        coordinator.snap(.fake(1), into: zone)
+        windows.setFrame(rect, of: .fake(1))
+
+        coordinator.glidesPlacement = true
+        coordinator.apply(zones: [zone: wider])
+        XCTAssertEqual(windows.frames[1], rect, "left to the glide, which has not run yet")
+
+        coordinator.glidesPlacement = false
+        coordinator.apply(zones: [zone: rect])
+        XCTAssertEqual(windows.frames[1], rect, "an ordinary change puts the window at once")
+    }
+
     func testADroppedWindowGlidesToItsZoneButARestoredOneJumps() {
         let zone = UUID(), rect = CGRect(x: 0, y: 0, width: 100, height: 100)
         coordinator.glide = WindowGlide(windows: windows, reduceMotion: { false }, background: { _ in })

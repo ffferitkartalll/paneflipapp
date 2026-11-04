@@ -15,7 +15,7 @@ public struct SettingsValues: Equatable {
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).
     public var fetchBrandIcons = true
     /// Held while dragging a window to highlight zones and snap into one.
-    public var snapTrigger = SnapTrigger.leftCommand
+    public var snapTrigger = SnapTrigger.windowSnap
     /// Held while scrolling over a zone, with the mouse wheel or two fingers, to move through its windows.
     public var windowScrollKeys = SnapTrigger.windowScroll
     /// What the trackpad moves through the windows and the zones beyond the screen with.
@@ -52,6 +52,9 @@ public struct SettingsValues: Equatable {
 
     /// Send the focused window to a zone through the island: the arrow keys choose the zone, Return puts the window there.
     public var sendToZoneKeys = SnapTrigger.sendToZone
+
+    /// Pressed twice quickly: turns the editing of the zone edges on (and off).
+    public var zoneEdgeEditKeys = SnapTrigger.zoneEdgeEdit
 
     /// Where the displays stand on the desk; the zone moves between displays follow it.
     public var deskArrangement = DeskArrangement()

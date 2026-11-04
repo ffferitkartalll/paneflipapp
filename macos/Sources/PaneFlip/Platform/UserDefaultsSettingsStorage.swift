@@ -9,13 +9,13 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         ("nextWindowShortcut", \.nextWindowShortcut), ("previousWindowShortcut", \.previousWindowShortcut),
         ("scrollRightShortcut", \.scrollRightShortcut), ("scrollLeftShortcut", \.scrollLeftShortcut), ("undoWindowShortcut", \.undoWindowShortcut), ("enlargeWindowShortcut", \.enlargeWindowShortcut), ("closeWindowUndoNoticeShortcut", \.closeWindowUndoNoticeShortcut),
         ("zoneUpShortcut", \.zoneUpShortcut), ("zoneLeftShortcut", \.zoneLeftShortcut),
-        ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut), ("sendToZoneKeys", \.sendToZoneKeys),
+        ("zoneDownShortcut", \.zoneDownShortcut), ("zoneRightShortcut", \.zoneRightShortcut), ("sendToZoneKeys", \.sendToZoneKeys), ("zoneEdgeEditKeys", \.zoneEdgeEditKeys),
     ]
 
     /// The defaults some shortcuts had in earlier versions: a stored one that equals its former default was never changed, and is not kept.
     private static let formerDefaults: [String: SnapTrigger] = [
         "zoneUpShortcut": .formerZoneUp, "zoneLeftShortcut": .formerZoneLeft, "zoneDownShortcut": .formerZoneDown, "zoneRightShortcut": .formerZoneRight,
-        "sendToZoneKeys": .formerSendToZone,
+        "sendToZoneKeys": .formerSendToZone, "zoneEdgeEditKeys": .formerZoneEdgeEdit,
     ]
 
     init(defaults: UserDefaults = .standard) { self.defaults = defaults }
@@ -35,7 +35,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.zoneNavigationEnabled = defaults.object(forKey: "zoneNavigationEnabled") as? Bool ?? v.zoneNavigationEnabled
         v.capsLockAsModifier = defaults.object(forKey: "capsLockAsModifier") as? Bool ?? v.capsLockAsModifier
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
-        v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.snapTrigger
+        v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) }.flatMap { $0 == .formerSnapTrigger ? nil : $0 } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
         v.deskArrangement = defaults.data(forKey: "deskArrangementMillimetres").flatMap { try? JSONDecoder().decode(DeskArrangement.self, from: $0) } ?? v.deskArrangement
@@ -44,6 +44,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         for (key, path) in Self.shortcuts {
             if let trigger = defaults.data(forKey: key).flatMap({ try? JSONDecoder().decode(SnapTrigger.self, from: $0) }), trigger != Self.formerDefaults[key] { v[keyPath: path] = trigger }
         }
+        // Not stored yet (an earlier version): the standard shortcut of the state Caps Lock is in.
+        if defaults.data(forKey: "zoneEdgeEditKeys") == nil, v.capsLockAsModifier, let standard = StandardShortcuts.values(capsLock: true)[\.zoneEdgeEditKeys] { v.zoneEdgeEditKeys = standard }
         v.ignoredApps = defaults.stringArray(forKey: "ignoredApps") ?? v.ignoredApps
         v.overflowZonesEnabled = defaults.object(forKey: "overflowZonesEnabled") as? Bool ?? v.overflowZonesEnabled
         v.language = defaults.string(forKey: "appLanguage") ?? v.language

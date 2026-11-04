@@ -83,10 +83,25 @@ extension MenuBarIslandModel {
         return ceil(NSString(string: pickingNote).boundingRect(with: box, options: .usesLineFragmentOrigin, attributes: [.font: Self.pickingNoteFont]).height)
     }
 
+    /// The button at the top right corner of the open island's picture that turns the editing of the zones' edges on (a round button like those of a card).
+    static let editButtonSide: CGFloat = 20, editButtonMargin: CGFloat = 4
+    var showsEditButton: Bool { expanded && !(noticeEditing && notice != nil) }
+    /// Its middle, from the middle of the island's top edge: x to the right, y down.
+    var editButtonCentre: CGPoint {
+        // At the corner of the screen itself, not of the whole picture, which is wider where zones lie beyond the screen's edges.
+        CGPoint(x: (glyph.screen.maxX - glyph.size.width / 2) * zoom - Self.editButtonMargin - Self.editButtonSide / 2,
+                y: barHeight + glyph.screen.minY * zoom + Self.editButtonMargin + Self.editButtonSide / 2)
+    }
+    /// How visible the button is: it follows the island as it opens (the picture grows with `zoom`) and shows only when the picture has almost reached its size.
+    var editButtonOpacity: CGFloat {
+        let grown = openZoom > 1 ? min(max((zoom - 1) / (openZoom - 1), 0), 1) : 1
+        return showsEditButton ? contentOpacity * min(max((grown - 0.8) / 0.2, 0), 1) : 0
+    }
+
     /// The line of the notice: its text, the button that undoes it and the one that closes it (a square with only an icon).
     static var noticeFont: NSFont { NSFont.menuBarFont(ofSize: 0) }
     static let noticeGap: CGFloat = 8, noticeButtonPadding: CGFloat = 10, noticeButtonHeight: CGFloat = 22, noticeRadius: CGFloat = 10
-    var noticeButtonTitle: String { String(localized: "Undo") }
+    var noticeButtonTitle: String { noticeEditing ? String(localized: "Done") : String(localized: "Undo") }
     var noticeButtonWidth: CGFloat { ceil(NSString(string: noticeButtonTitle).size(withAttributes: [.font: Self.noticeFont]).width) + 2 * Self.noticeButtonPadding }
     /// The room the text has at most: the display less the side room and the two buttons.
     private var noticeTextRoom: CGFloat { max(displayWidth - 2 * windowsGap - Self.noticeGap - noticeButtonWidth - noticeCloseWidth, 1) }
@@ -111,6 +126,16 @@ extension MenuBarIslandModel {
     }
     /// The room the close button takes, with the gap before it.
     var noticeCloseWidth: CGFloat { noticeCloses ? Self.noticeButtonHeight + Self.noticeGap : 0 }
+    /// The second line, while the editing notice has one: the zone edge that was moved and the button that undoes it.
+    var hasEditUndo: Bool { notice != nil && noticeEditing && noticeUndo }
+    static var editUndoText: String { String(localized: "The zone edge was moved.") }
+    static var editUndoButtonWidth: CGFloat { ceil(NSString(string: String(localized: "Undo")).size(withAttributes: [.font: noticeFont]).width) + 2 * noticeButtonPadding }
+    var editUndoTextWidth: CGFloat { ceil(NSString(string: Self.editUndoText).size(withAttributes: [.font: Self.noticeFont]).width) }
+    var noticeEditUndoWidth: CGFloat { hasEditUndo ? editUndoTextWidth + Self.noticeGap + Self.editUndoButtonWidth : 0 }
+    /// Where the second line begins, from the top of the island.
+    var noticeEditUndoTop: CGFloat { noticeTop + Self.noticeButtonHeight + windowsGap }
+    /// The height of the lines of the notice together.
+    var noticeBlockHeight: CGFloat { hasEditUndo ? 2 * Self.noticeButtonHeight + windowsGap : Self.noticeButtonHeight }
     var noticeRowWidth: CGFloat { noticeTextWidth + Self.noticeGap + noticeButtonWidth + noticeCloseWidth }
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
@@ -118,7 +143,7 @@ extension MenuBarIslandModel {
         guard notice != nil else { return plainOpenSize }
         // A notice: with the pointer away the picture stays as it is at rest and the island holds one line under it, no wider than the closed island unless the line needs
         // more; with the pointer on the island it is the open island with the line at its foot.
-        let line = noticeRowWidth + 2 * windowsGap, height = noticeTop + Self.noticeButtonHeight + windowsGap
+        let line = max(noticeRowWidth, noticeEditUndoWidth) + 2 * windowsGap, height = noticeTop + noticeBlockHeight + windowsGap
         // The windows of a zone shown alone (stepping through them) lie under the line too.
         guard expanded || peeking else { return CGSize(width: max(line, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin), height: height) }
         return CGSize(width: max(plainOpenSize.width, line), height: height + (windowsHeight > 0 ? windowsHeight + windowsGap : 0))
@@ -128,7 +153,7 @@ extension MenuBarIslandModel {
     var noticeTop: CGFloat { expanded ? barHeight + glyph.size.height * openZoom + windowsGap : barHeight + windowsGap }
 
     /// Where the row of cards begins: under the picture, and under the line of a notice if there is one (with the windows shown alone, under the bar).
-    var windowsTop: CGFloat { noticeTop + (notice != nil ? Self.noticeButtonHeight + windowsGap : 0) }
+    var windowsTop: CGFloat { noticeTop + (notice != nil ? noticeBlockHeight + windowsGap : 0) }
 
     private var plainOpenSize: CGSize {
         let width = windowsSpan
@@ -139,7 +164,7 @@ extension MenuBarIslandModel {
     /// The tallest the open island gets, with the largest zone chosen: the panel it grows in is as tall as that.
     var tallestOpenHeight: CGFloat {
         openHeight(picture: glyph.size.height * openZoom, windows: Self.cardSize(screenHeight: glyph.screen.height * openZoom).height + titleGap + captionHeight)
-            + Self.noticeButtonHeight + windowsGap   // the line of a notice at the foot
+            + 2 * Self.noticeButtonHeight + 2 * windowsGap   // the lines of a notice at the foot
     }
 
     private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { barHeight + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }

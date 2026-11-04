@@ -112,8 +112,8 @@ final class StripScrollingTests: XCTestCase {
 
         let rect = planner.plan(on: screens.infos)[screenZone]?.rect
 
-        // The area lies on the right: the margin runs round the strip, so the zone keeps the right edge and has it on the others.
-        XCTAssertEqual(rect, bare.map { CGRect(x: $0.minX + 20, y: $0.minY + 20, width: $0.width - 20, height: $0.height - 40) })
+        // Every screen of the strip has its margin on all four sides, the screen's own too, an area lying beyond it or not.
+        XCTAssertEqual(rect, bare.map { CGRect(x: $0.minX + 20, y: $0.minY + 20, width: $0.width - 40, height: $0.height - 40) })
     }
 
     func testSwitchedOffTheAreaHasNoZoneAndNothingScrolls() {
@@ -732,6 +732,16 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(ZoneLabel.text(of: areaZone, in: strip), "+1")
         XCTAssertEqual(ZoneLabel.text(of: left, in: strip), "-1")
         XCTAssertEqual(ZoneLabel.text(of: UUID(), in: strip), "?")
+    }
+
+    func testAZoneFurtherOutHasASignMoreForEachScreenAndIsNumberedInItsOwnScreen() {
+        let screen = UUID(), a = UUID(), b = UUID(), c = UUID(), d = UUID(), l1 = UUID(), l2 = UUID(), l3 = UUID()
+        let two = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(a), second: .leaf(b))
+        let leftTwo = LayoutNode.split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(l2), second: .leaf(l3))
+        let strip = StripLayout(leading: [Overflow(root: .leaf(l1)), Overflow(root: leftTwo)], root: .leaf(screen),
+                                trailing: [Overflow(root: two), Overflow(root: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(c), second: .leaf(d)))])
+        XCTAssertEqual([a, b, c, d].map { ZoneLabel.text(of: $0, in: strip) }, ["+1", "+2", "++1", "++2"])
+        XCTAssertEqual([l1, l3, l2].map { ZoneLabel.text(of: $0, in: strip) }, ["-1", "--1", "--2"], "from the screen outwards, in each screen")
     }
 
     // MARK: Scrolling through many areas

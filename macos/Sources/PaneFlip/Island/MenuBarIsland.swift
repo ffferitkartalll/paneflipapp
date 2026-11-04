@@ -53,6 +53,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private var lastReturnWrite = Date.distantPast
     /// While the carried card waits over the picture, the island is told where the pointer is, though the mouse does not move: a zone it waits on opens its row.
     private var carryTimer: Timer?
+    /// The button of the notice that tells the editing of the zones' edges is on was pressed.
+    var onFinishEditing: (() -> Void)?
+    /// The button at the corner of the open island's picture was pressed.
+    var onEditEdges: (() -> Void)?
+    /// The Undo button under the editing notice was pressed.
+    var onUndoEdit: (() -> Void)?
     /// The card carried out of the row, following the pointer over the screen.
     private let ghost = CardGhost()
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
@@ -381,7 +387,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// and goes back after a few seconds. Not while the pointer is on the island, a window is dragged or a zone is being chosen.
     func showNotice(_ change: WindowChange) {
         DispatchQueue.main.async { [self] in   // after a drop has closed the island
-            guard !covered, !dragging, let entry = entries.values.first(where: { $0.zones.contains(change.zone) }), picking !== entry else { return }
+            guard !covered, !dragging, let entry = entries.values.first(where: { $0.zones.contains(change.zone) }), picking !== entry,
+                  !entries.values.contains(where: { $0.model.noticeEditing && $0.model.notice != nil }) else { return }
             for other in entries.values where other !== entry { hideNotice(other) }
             let number = entry.numbers[change.zone] ?? ""
             // The name as the card of the window carries it (a window added is in its zone by now).
@@ -400,6 +407,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 case .removed: format = String(localized: "The window %@ was removed from zone %@.")
                 case .enlarged: format = String(localized: "The window %@ in zone %@ was enlarged to fill the screen.")
                 }
+                entry.model.noticeEditing = false
                 entry.model.noticeCloses = change.kind != .enlarged
                 entry.model.notice = MenuBarIslandModel.notice(format, name: name, number: number)
                 entry.model.contentOpacity = 1
@@ -411,6 +419,47 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             let work = DispatchWorkItem { [weak self, weak entry] in if let self, let entry { hideNotice(entry) } }
             entry.noticeEnd = work
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work)
+        }
+    }
+
+    /// The editing of the zones' edges is turned on or off: while it is on, the island of the display the pointer is on holds a line that says so, with a button
+    /// that ends it, and keeps it (no time runs out).
+    func setEditingNotice(_ on: Bool) {
+        DispatchQueue.main.async { [self] in
+            guard on else {
+                for entry in entries.values where entry.model.noticeEditing {
+                    hideNotice(entry)
+                    // The button keeps its name while the island shrinks; then the notice is no longer the editing one.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak entry] in if entry?.model.notice == nil { entry?.model.noticeEditing = false; entry?.model.noticeUndo = false } }
+                }
+                return
+            }
+            guard !covered, let entry = entries.values.first(where: { $0.display.contains(NSEvent.mouseLocation) }) ?? entries.values.first else { return }
+            for other in entries.values where other !== entry { hideNotice(other) }
+            entry.peekEnd?.cancel()
+            entry.noticeEnd?.cancel()
+            entry.noticeEnd = nil
+            withAnimation(Self.motion) {
+                if !entry.hovered {
+                    entry.model.peeking = false
+                    entry.model.windowsZone = nil
+                }
+                entry.model.noticeEditing = true
+                entry.model.noticeCloses = false
+                entry.model.notice = AttributedString(String(localized: "Zone edge editing is on."))
+                entry.model.contentOpacity = 1
+            }
+            placeShield(of: entry)
+        }
+    }
+
+    /// A zone edge was moved (or the moves were all undone): the editing notice gets, or loses, the line that undoes it.
+    func setEditUndo(_ on: Bool) {
+        DispatchQueue.main.async { [self] in
+            for entry in entries.values where entry.model.noticeEditing && entry.model.notice != nil {
+                withAnimation(Self.motion) { entry.model.noticeUndo = on }
+                placeShield(of: entry)
+            }
         }
     }
 
@@ -429,7 +478,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     var hasClosableNotice: Bool { entries.values.contains { $0.model.notice != nil && $0.model.noticeCloses } }
 
     /// Closes the notice of every display.
-    func dismissWindowNotice() { entries.values.forEach(hideNotice) }
+    func dismissWindowNotice() { entries.values.filter { !$0.model.noticeEditing }.forEach(hideNotice) }
 
     /// Closes the notices that can be closed (the one of an enlarged window cannot: the window goes back to its zone when its time is up).
     func closeNotice() { entries.values.filter { $0.model.noticeCloses }.forEach(hideNotice) }
@@ -439,6 +488,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let model = entry.model
         guard model.notice != nil else { return nil }
         let frame = islandFrame(of: entry, open: true), fromTop = frame.maxY - point.y, top = model.noticeTop
+        if model.hasEditUndo, fromTop >= model.noticeEditUndoTop - 4, fromTop <= model.noticeEditUndoTop + MenuBarIslandModel.noticeButtonHeight + 4 {
+            let edge = frame.midX + model.noticeEditUndoWidth / 2
+            return point.x >= edge - MenuBarIslandModel.editUndoButtonWidth - 4 && point.x <= edge + 4 ? .revert : nil
+        }
         let right = frame.midX + model.noticeRowWidth / 2, close = MenuBarIslandModel.noticeButtonHeight
         guard fromTop >= top - 4, fromTop <= top + close + 4 else { return nil }
         guard model.noticeCloses else { return point.x >= right - model.noticeButtonWidth - 4 && point.x <= right + 4 ? .undo : nil }
@@ -458,8 +511,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
                 let size = model.openSize
                 hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
-            } else if model.peeking || model.notice != nil {
-                // The windows are shown alone, or a notice, the island grown only for them: the pointer coming onto it opens it fully.
+            } else if model.peeking {
+                // The windows are shown alone, the island grown only for them: the pointer coming onto it opens it fully. A notice does not do that: only the island itself does.
                 let size = model.openSize
                 hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
             } else {
@@ -569,10 +622,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         lastCard = nil
         ghost.end()
         for entry in entries.values where entry.hovered {
+            if editButtonHit(at: point, in: entry) { onEditEdges?(); return }
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
         }
         if let entry = entries.values.first(where: { noticeButton(at: point, in: $0) != nil }) {
-            if noticeButton(at: point, in: entry) == .undo { coordinator.undoLast() }
+            if noticeButton(at: point, in: entry) == .revert { onUndoEdit?(); return }
+            if noticeButton(at: point, in: entry) == .undo { if entry.model.noticeEditing { onFinishEditing?() } else { coordinator.undoLast() } }
             hideNotice(entry)
             return
         }
@@ -718,6 +773,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     /// The button of the card under the pointer that the point is on.
+    /// Whether the point is on the button that turns the editing of the zones' edges on.
+    private func editButtonHit(at point: CGPoint, in entry: Entry) -> Bool {
+        let model = entry.model
+        guard model.editButtonOpacity > 0.5 else { return false }
+        let frame = islandFrame(of: entry, open: true), centre = model.editButtonCentre, reach = MenuBarIslandModel.editButtonSide / 2 + 3
+        return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
+    }
+
     private func cardAction(at point: CGPoint, in entry: Entry) -> (IslandCardAction, IslandWindow)? {
         let model = entry.model
         guard model.carriedCard == nil, let id = model.hoveredCard, let index = model.windows.firstIndex(where: { $0.id == id }) else { return nil }

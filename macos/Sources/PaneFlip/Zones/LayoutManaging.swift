@@ -6,7 +6,8 @@ protocol LayoutManaging: AnyObject {
     @discardableResult func addLayout(for key: String, preset: LayoutPreset) -> NamedLayout
     func duplicate(key: String, id: UUID)
     func importLayout(for key: String, _ layout: NamedLayout)
-    func updateLayout(key: String, id: UUID, strip: StripLayout)
+    /// `animated`: the windows glide to their new places (a line between zones was moved by hand) instead of jumping.
+    func updateLayout(key: String, id: UUID, strip: StripLayout, animated: Bool)
     func removeLayout(key: String, id: UUID)
     func activate(key: String, id: UUID)
     /// The key's desktop gets no layout, so no zones.
@@ -18,4 +19,8 @@ protocol LayoutManaging: AnyObject {
     func rename(key: String, id: UUID, to name: String)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.
     func setDefaultZone(key: String, id: UUID, to zone: UUID?)
+}
+
+extension LayoutManaging {
+    func updateLayout(key: String, id: UUID, strip: StripLayout) { updateLayout(key: key, id: id, strip: strip, animated: false) }
 }
