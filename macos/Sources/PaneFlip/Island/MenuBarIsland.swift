@@ -36,6 +36,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private static let noticeTime: TimeInterval = 10
     private var dragging = false
     private let lighting: ZoneLighting
+    private let badging: AppBadging
+    /// The Dock's badges by app, as of the last look (taken off the main thread, while a row of windows is open).
+    private var badges: [String: String] = [:]
+    private let badgeQueue = DispatchQueue(label: "island.badges", qos: .utility)
+    private var badgeAsking = false
     /// Where the card carried out of the row would go if let go now: onto the island (as a dragged window would: a zone of the picture, or a place in the open row of
     /// another zone), onto a zone of the screen (the zones light up), or out of its zone (reverse snap).
     private enum CarryTarget: Equatable { case island, screen(UUID), takeOut }
@@ -66,9 +71,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// How long a dragged window waits on a zone before its row of cards opens.
     private static let dwellTime: TimeInterval = 1
 
-    init(lighting: ZoneLighting, coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
+    init(lighting: ZoneLighting, badging: AppBadging, coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
          memory: StackMemory, apps: AppCatalog, openApp: @escaping (String) -> Void, removeApp: @escaping (String, UUID, [UUID]) -> Void) {
         self.lighting = lighting
+        self.badging = badging
         self.iconFont = iconFont
         self.memory = memory
         self.apps = apps
@@ -103,6 +109,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 if covering != covered { cover(covering) }
             }
             guard !coordinator.isMoving else { return }   // the row moves with the fingers; the next tick catches up
+            if ticks % 6 == 0 { refreshBadges() }
             for entry in entries.values {
                 refreshWindows(of: entry)   // a window that came, went or came to the front while the row is open
             }
@@ -800,6 +807,19 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     /// The windows of the open row: as they are now (one that came, went or came to the front is shown), or, if the zone is gone, no row.
+    /// Asks the Dock for the badges while a row of windows is open, off the main thread; the cards change when they have.
+    private func refreshBadges() {
+        guard !badgeAsking, entries.values.contains(where: { $0.model.windowsZone != nil }) else { return }
+        badgeAsking = true
+        badgeQueue.async { [badging] in
+            let fresh = badging.badges()
+            DispatchQueue.main.async { [self] in
+                badgeAsking = false
+                if fresh != badges { badges = fresh }
+            }
+        }
+    }
+
     private func refreshWindows(of entry: Entry) {
         guard let zone = entry.model.windowsZone else { return }
         guard entry.zones.contains(zone) else {
@@ -850,7 +870,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {
             IslandWindow(windowID: tab.id, bundleID: tab.bundleID, name: tab.displayName.isEmpty ? tab.appName : tab.displayName, glyph: glyph(of: tab),
-                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID)
+                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID])
         }
         for slot in slots {
             if let id = slot.windowID, let tab = tabs[id] {
@@ -861,7 +881,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 // An app that is not running has quit, whatever became of its last window.
                 let absence: WindowAbsence = running.contains(slot.bundleID) ? coordinator.absences[slot.bundleID] ?? .closed : .notRunning
                 cards.append(IslandWindow(windowID: nil, bundleID: slot.bundleID, name: name, glyph: glyph(bundleID: slot.bundleID, appName: name, icon: apps.icon(bundleID: slot.bundleID)),
-                                          glyphRevision: iconFont.revision, absence: absence, isActive: false))
+                                          glyphRevision: iconFont.revision, absence: absence, isActive: false, badge: badges[slot.bundleID]))
             }
         }
         cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
