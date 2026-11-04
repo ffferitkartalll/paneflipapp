@@ -36,7 +36,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.importLayout(layout, key: key)
     }
 
-    func updateLayout(key: String, id: UUID, strip: StripLayout) {
+    func updateLayout(key: String, id: UUID, strip: StripLayout, animated: Bool) {
         guard let old = repository.layout(id: id, key: key) else { return }
         let isActive = repository.activeLayout(for: key)?.id == id
         // The layout is saved first: if the app quits between the two writes, memory never names zones that the
@@ -46,7 +46,11 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
             release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: area)))
         }
         prune()
-        if isActive { refresher?.refreshZones() }
+        if isActive {
+            coordinator.glidesPlacement = animated
+            refresher?.refreshZones()
+            coordinator.glidesPlacement = false
+        }
         refresher?.restoreWindows()
     }
 

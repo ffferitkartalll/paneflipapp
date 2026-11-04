@@ -9,6 +9,9 @@ final class EditorModel {
     private(set) var strip: StripLayout
     /// False when the areas beyond the screen are switched off: they are neither shown nor added.
     let allowsOverflow: Bool
+    /// The gap between the zones and the margin round the layout, in points, as the desktop lays the zones out.
+    let gap: CGFloat
+    let margin: CGFloat
     var hover: CGPoint?
     var shift = false
     /// Zone being dragged onto a neighbour to merge, and where the pointer is.
@@ -28,15 +31,28 @@ final class EditorModel {
     @ObservationIgnored private let onApply: (StripLayout) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
-    init(strip: StripLayout, allowsOverflow: Bool = true, onApply: @escaping (StripLayout) -> Void, onClose: @escaping () -> Void) {
+    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, onApply: @escaping (StripLayout) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
         self.allowsOverflow = allowsOverflow
+        self.gap = gap
+        self.margin = margin
         self.onApply = onApply
         self.onClose = onClose
     }
 
     /// The screen and both overflows as one tree: what the editor draws and the lines it lets the user drag.
     var root: LayoutNode { strip.composite }
+
+    /// The zones and the lines to draw in `rect` (the whole strip; `screen` is the part of it that is the screen). The screen's own layout stands where the desktop puts it,
+    /// with the gap and the margin, so that a line is where it is on the desktop; the areas beyond the edges are drawn as they are.
+    func laid(in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) {
+        let zones = root.zones(in: rect), dividers = root.dividers(in: rect)
+        guard gap > 0 || margin > 0 else { return (zones, dividers) }
+        let area = StripGeometry(strip: strip, screen: screen).rootArea(margin: margin)
+        let ownZones = Dictionary(uniqueKeysWithValues: strip.root.zones(in: area, gap: gap).map { ($0.id, $0.rect) })
+        let ownLines = Dictionary(uniqueKeysWithValues: strip.root.dividers(in: area).map { ($0.id, $0) })
+        return (zones.map { zone in ownZones[zone.id].map { (id: zone.id, rect: $0) } ?? zone }, dividers.map { ownLines[$0.id] ?? $0 })
+    }
 
     func apply() {
         onApply(strip)
@@ -137,13 +153,14 @@ final class EditorModel {
         edit { $0.splitting(zone, sideBySide: sideBySide, ratio: ratio) }
     }
 
-    /// Moves a line; the moves of one drag (until `endResize`) are one change to undo.
-    func setRatio(_ line: UUID, _ ratio: Double) {
+    /// Moves a line in the strip as drawn in `rect`; no other line moves, and the line stops where it would pass the next one (zones of at least `least` points are left).
+    /// The moves of one drag (until `endResize`) are one change to undo.
+    func setRatio(_ line: UUID, _ ratio: Double, in rect: CGRect, least: CGFloat) {
         if resizing != line {
             checkpoint()
             resizing = line
         }
-        edit { $0.settingRatio(line, ratio) }
+        edit { $0.movingLine(line, to: ratio, in: rect, least: least)?.node ?? $0 }
     }
 
     func endResize() { resizing = nil }

@@ -36,6 +36,8 @@ final class EditorController: LayoutEditing {
         let model = EditorModel(
             strip: showsOverflow ? layout.strip : StripLayout(root: layout.root),
             allowsOverflow: showsOverflow,
+            gap: CGFloat(layout.gap ?? settings.values.gap),
+            margin: CGFloat(settings.values.edgeMargin),
             onApply: { [layouts, repository] strip in
                 // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
                 let result = showsOverflow ? strip : repository.layout(id: layoutID, key: screen.key).map { strip.keepingAreas(of: $0.strip) } ?? strip

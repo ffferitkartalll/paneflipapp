@@ -88,7 +88,18 @@ final class AppSettingsTests: XCTestCase {
         settings.values.capsLockAsModifier = false
         XCTAssertEqual(settings.values.nextWindowShortcut, .nextWindow, "a shortcut on Caps Lock is no use without it")
         XCTAssertEqual(settings.values.sendToZoneKeys, .sendToZone)
-        XCTAssertEqual(settings.values.snapTrigger, .leftCommand)
+        XCTAssertEqual(settings.values.snapTrigger, .windowSnap)
         XCTAssertEqual(settings.values.zoneUpShortcut, chosen)
+    }
+
+    func testTheShortcutThatEditsTheZoneEdgesIsCapsLockAloneOrControlAndOption() {
+        let settings = AppSettings(storage: Storage())
+        XCTAssertEqual(settings.values.zoneEdgeEditKeys.keys.map(\.code), [58, 59], "without Caps Lock as a modifier key")
+        settings.values.capsLockAsModifier = true
+        XCTAssertEqual(settings.values.zoneEdgeEditKeys.keys.map(\.code), [KeyChord.capsLockKeyCode], "with it, the key alone")
+        let chosen = SnapTrigger(keys: [.init(code: 55, name: "Left Command"), .init(code: 58, name: "Left Option")])
+        settings.values.zoneEdgeEditKeys = chosen
+        settings.values.capsLockAsModifier = false
+        XCTAssertEqual(settings.values.zoneEdgeEditKeys, chosen, "a shortcut the person chose stays")
     }
 }

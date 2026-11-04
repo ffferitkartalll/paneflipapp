@@ -20,6 +20,13 @@ struct ShortcutsPane: View {
                 }
             }
 
+            Section("Zone edges") {
+                row(.zoneEdgeEdit, title: "Edit the zone edges",
+                    detail: "Press these keys twice quickly to show a handle on each line between the zones. A line moves by its handle. Done or Escape ends it.",
+                    value: settings.values.zoneEdgeEditKeys, standard: standard(\.zoneEdgeEditKeys)) { settings.values.zoneEdgeEditKeys = $0 }
+            }
+            .disabled(!settings.values.placementEnabled)
+
             Section("Window snapping") {
                 row(.snap, title: "Hold while dragging a window",
                     detail: "Zones light up while the keys are held during the drag; release the mouse over a zone to add the window.",

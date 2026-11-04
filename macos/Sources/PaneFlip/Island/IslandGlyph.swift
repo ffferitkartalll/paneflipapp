@@ -11,7 +11,7 @@ struct IslandGlyph: View {
     private func px(_ value: CGFloat) -> CGFloat { (value * model.scale).rounded() / model.scale }
 
     var body: some View {
-        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, gap: gap, scale: model.scale)
+        GlyphCanvas(glyph: model.glyph, texts: model.cellTexts, zoom: model.zoom, openZoom: model.openZoom, labels: model.contentOpacity, selectedID: model.windowsZone, pickedID: model.pickedID, previousPickedID: model.previousPickedID, pickBlend: model.pickBlend, activeID: model.activeID, previousID: model.previousID, blend: model.blend, shift: model.outlineShift, gap: gap, scale: model.scale, editButton: model.showsEditButton)
             .frame(width: px(model.glyph.size.width * model.zoom) + gap, height: px(model.glyph.size.height * model.zoom))
     }
 }

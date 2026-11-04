@@ -105,6 +105,14 @@ targets:
       - path: Sources/PaneFlip/Zones/PlannedZone.swift
       - path: Sources/PaneFlip/Zones/StripViewport.swift
       - path: Sources/PaneFlip/Zones/ZoneLabel.swift
+      - path: Sources/PaneFlip/Snap/DividerResizer.swift
+      - path: Sources/PaneFlip/Snap/DividerHandle.swift
+      - path: Sources/PaneFlip/Snap/DividerLineView.swift
+      - path: Sources/PaneFlip/Snap/DividerKnobView.swift
+      - path: Sources/PaneFlip/Snap/DividerMouseView.swift
+      - path: Sources/PaneFlip/Platform/KeyStateProviding.swift
+      - path: Sources/PaneFlip/Platform/SnapTrigger+KeyState.swift
+      - path: Sources/PaneFlip/Platform/CapsLockKeyState.swift
       - path: Sources/PaneFlip/Zones/ZonePlacement.swift
       - path: Sources/PaneFlip/Zones/ZonePicking.swift
       - path: Sources/PaneFlip/Platform/PlacementKeyListening.swift

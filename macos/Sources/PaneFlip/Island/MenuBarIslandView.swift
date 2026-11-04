@@ -63,7 +63,7 @@ struct MenuBarIslandView: View {
                             .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
                             .overlay {
                                 // The notice that cannot be closed: the ring runs round the button that undoes it.
-                                if !model.noticeCloses {
+                                if !model.noticeCloses && !model.noticeEditing {
                                     ClockwiseRing(radius: radius - 1.5).inset(by: 1.5).trim(from: 1 - model.noticeLeft, to: 1)
                                         .stroke(Color(white: 0.08), style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                 }
@@ -80,6 +80,18 @@ struct MenuBarIslandView: View {
                         }
                     }
                     .offset(x: 0, y: model.noticeTop)
+                    .opacity(model.contentOpacity)
+                }
+                if model.hasEditUndo {
+                    let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
+                    HStack(spacing: MenuBarIslandModel.noticeGap) {
+                        Text(verbatim: MenuBarIslandModel.editUndoText).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(.white).lineLimit(1)
+                            .frame(width: model.editUndoTextWidth, alignment: .leading)
+                        Text("Undo").font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
+                            .frame(width: MenuBarIslandModel.editUndoButtonWidth, height: height)
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
+                    }
+                    .offset(x: 0, y: model.noticeEditUndoTop)
                     .opacity(model.contentOpacity)
                 }
                 if model.pickedID != nil {

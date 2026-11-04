@@ -128,6 +128,14 @@ final class AppContainer {
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: overlay, island: island,
                                       background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
+        let resizer = DividerResizer(layouts: layouts, repository: repository, planner: planner, screens: screens, settings: settings, viewport: viewport, keys: keys, capsLock: capsLockState, screensNow: { [unowned engine] in engine.lastScreens },
+                                     isBlocked: { [editor] in editor.isShown })
+        engine.add(presenter: resizer)
+        resizer.onChange = { [weak island] in island?.setEditingNotice($0) }
+        island.onFinishEditing = { [weak resizer] in resizer?.finish() }
+        island.onEditEdges = { [weak resizer] in resizer?.toggle() }
+        island.onUndoEdit = { [weak resizer] in resizer?.undo() }
+        resizer.onUndoChange = { [weak island] in island?.setEditUndo($0) }
         let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
@@ -226,6 +234,7 @@ final class AppContainer {
             settingsContent.start()
             island.start()
             snap.start()
+            resizer.start()
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)

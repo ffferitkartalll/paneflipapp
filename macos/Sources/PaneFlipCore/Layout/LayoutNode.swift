@@ -52,17 +52,25 @@ public indirect enum LayoutNode: Codable, Equatable {
                 CGRect(x: rect.minX, y: rect.minY + h, width: rect.width, height: rect.height - h))
     }
 
-    /// Splits a top-left-origin rectangle into zones. `gap` applies between zones only, never at the outer edges.
+    /// Splits a top-left-origin rectangle into zones. The lines lie where the ratios put them in `rect`, whatever the gap; `gap` is then taken from the zones: half of it on
+    /// each side of a line, never at the outer edges of `rect`. So a layout of a quarter, a half and a quarter of 5120 points with a gap of 80 gives zones of 1240, 2480 and 1240.
     public func zones(in rect: CGRect, gap: CGFloat = 0) -> [(id: UUID, rect: CGRect)] {
+        let half = gap / 2, tolerance: CGFloat = 0.5
+        return plainZones(in: rect).map { id, r in
+            guard half > 0 else { return (id, r) }
+            let left = r.minX > rect.minX + tolerance ? half : 0, right = r.maxX < rect.maxX - tolerance ? half : 0
+            let top = r.minY > rect.minY + tolerance ? half : 0, bottom = r.maxY < rect.maxY - tolerance ? half : 0
+            return (id, CGRect(x: r.minX + left, y: r.minY + top, width: r.width - left - right, height: r.height - top - bottom))
+        }
+    }
+
+    private func plainZones(in rect: CGRect) -> [(id: UUID, rect: CGRect)] {
         switch self {
         case .leaf(let id):
             return [(id, rect)]
         case .split(_, let side, let r, let a, let b):
-            var (ra, rb) = Self.childRects(rect, sideBySide: side, ratio: r)
-            let h = gap / 2
-            if side { ra.size.width -= h; rb.origin.x += h; rb.size.width -= h }
-            else { ra.size.height -= h; rb.origin.y += h; rb.size.height -= h }
-            return a.zones(in: ra, gap: gap) + b.zones(in: rb, gap: gap)
+            let (ra, rb) = Self.childRects(rect, sideBySide: side, ratio: r)
+            return a.plainZones(in: ra) + b.plainZones(in: rb)
         }
     }
 
@@ -74,6 +82,60 @@ public indirect enum LayoutNode: Codable, Equatable {
             let (ra, rb) = Self.childRects(rect, sideBySide: side, ratio: r)
             return [SplitDivider(id: id, sideBySide: side, parent: rect, ratio: r)]
                 + a.dividers(in: ra) + b.dividers(in: rb)
+        }
+    }
+
+    /// The ratio of the split line `splitID`, if the tree has it.
+    public func ratio(ofSplit splitID: UUID) -> Double? {
+        switch self {
+        case .leaf: return nil
+        case .split(let id, _, let r, let a, let b): return id == splitID ? r : a.ratio(ofSplit: splitID) ?? b.ratio(ofSplit: splitID)
+        }
+    }
+
+    /// Moves the line `splitID` to `ratio` in `rect`, and no other line moves: a line inside the zones beside it keeps its place (its ratio changes, as the zone it divides
+    /// grows or shrinks). No zone along a line's axis gets shorter than `least`: the line stops where the next one would be passed. Returns the tree and the ratio the line has.
+    public func movingLine(_ splitID: UUID, to ratio: Double, in rect: CGRect, least: CGFloat) -> (node: LayoutNode, ratio: Double)? {
+        guard let current = self.ratio(ofSplit: splitID) else { return nil }
+        if let node = rebuilt(old: rect, new: rect, target: splitID, ratio: ratio, least: least) { return (node, ratio) }
+        // Stops where it still fits: the last ratio between where it is and where it is asked to go.
+        var good = current, bad = ratio
+        for _ in 0 ..< 30 {
+            let middle = (good + bad) / 2
+            if rebuilt(old: rect, new: rect, target: splitID, ratio: middle, least: least) != nil { good = middle } else { bad = middle }
+        }
+        return rebuilt(old: rect, new: rect, target: splitID, ratio: good, least: least).map { ($0, good) }
+    }
+
+    private func rebuilt(old: CGRect, new: CGRect, target: UUID, ratio: Double, least: CGFloat) -> LayoutNode? {
+        switch self {
+        case .leaf:
+            return self
+        case .split(let id, let side, let r, let a, let b):
+            let (oldA, oldB) = Self.childRects(old, sideBySide: side, ratio: r)
+            var newRatio = r
+            if id == target {
+                newRatio = ratio
+            } else {
+                let oldMin = side ? old.minX : old.minY, oldExtent = side ? old.width : old.height
+                let newMin = side ? new.minX : new.minY, newExtent = side ? new.width : new.height
+                if abs(oldMin - newMin) > 1e-9 || abs(oldExtent - newExtent) > 1e-9 {
+                    newRatio = Double((oldMin + oldExtent * CGFloat(r) - newMin) / newExtent)
+                }
+            }
+            let (newA, newB) = Self.childRects(new, sideBySide: side, ratio: newRatio)
+            guard (side ? newA.size.width : newA.size.height) >= least, (side ? newB.size.width : newB.size.height) >= least,
+                  let first = a.rebuilt(old: oldA, new: newA, target: target, ratio: ratio, least: least),
+                  let second = b.rebuilt(old: oldB, new: newB, target: target, ratio: ratio, least: least) else { return nil }
+            return .split(id: id, sideBySide: side, ratio: newRatio, first: first, second: second)
+        }
+    }
+
+    /// The two sides of the split line `splitID`, if the tree has it.
+    public func sides(ofSplit splitID: UUID) -> (first: LayoutNode, second: LayoutNode)? {
+        switch self {
+        case .leaf: return nil
+        case .split(let id, _, _, let a, let b): return id == splitID ? (a, b) : a.sides(ofSplit: splitID) ?? b.sides(ofSplit: splitID)
         }
     }
 
