@@ -16,6 +16,14 @@ struct IslandWindow: Identifiable, Equatable {
     let isActive: Bool
     /// Not a window: the grey card with a plus that stands where a dragged window would be put down.
     var isPlaceholder = false
+    /// What the Dock shows on the app's icon (a number, or a mark), if anything.
+    var badge: String?
+
+    /// The badge as the card draws it: a number above 99 is "99+".
+    var badgeText: String? {
+        guard let badge, !badge.isEmpty else { return nil }
+        return Int(badge).map { $0 > 99 ? "99+" : badge } ?? badge
+    }
 
     /// The buttons the card shows under the mouse: a window has them all; an app that has quit or has no window shows two (the first opens the app, the last takes it
     /// out of the zone); one that is hidden or minimized, none.
@@ -31,6 +39,6 @@ struct IslandWindow: Identifiable, Equatable {
                                           glyphRevision: 0, absence: nil, isActive: false, isPlaceholder: true)
 
     static func == (a: IslandWindow, b: IslandWindow) -> Bool {
-        a.id == b.id && a.absence == b.absence && a.name == b.name && a.glyphRevision == b.glyphRevision && a.isActive == b.isActive
+        a.id == b.id && a.badge == b.badge && a.absence == b.absence && a.name == b.name && a.glyphRevision == b.glyphRevision && a.isActive == b.isActive
     }
 }

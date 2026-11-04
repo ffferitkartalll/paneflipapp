@@ -68,6 +68,21 @@ struct MenuBarIslandWindowsView: View {
         .animation(.easeOut(duration: 0.12), value: shown)   // only its own fade: the cards' motion is not touched
     }
 
+    private func badge(of window: IslandWindow, in size: CGSize) -> some View {
+        let shown = window.badgeText != nil && !(window.id == model.hoveredCard && !window.actions.isEmpty && model.carriedCard == nil)
+        return ZStack(alignment: .topTrailing) {
+            if let text = window.badgeText {
+                Text(verbatim: text)
+                    .font(.system(size: 10, weight: .bold)).foregroundStyle(.white)
+                    .padding(.horizontal, 5).frame(minWidth: 16, minHeight: 16)
+                    .background(Capsule().fill(Color.red))
+                    .padding(4)
+            }
+        }
+        .frame(width: size.width, height: size.height, alignment: .topTrailing)
+        .opacity(shown ? 1 : 0)
+    }
+
     /// The card the mouse carries lies above the others.
     private func lifted(_ card: some View, _ window: IslandWindow) -> some View {
         card.zIndex(model.liftedCard == window.id ? 1 : 0)
@@ -115,6 +130,8 @@ struct MenuBarIslandWindowsView: View {
             row { window in AnyView(ZStack { picture(window, AppAccent.ink); actions(of: window, in: size, dark: true) }) }
                 .mask { frame.frame(width: lit, height: size.height).offset(x: shift) }
             frame.strokeBorder(.white.opacity(0.5), lineWidth: 1).frame(width: lit, height: size.height).offset(x: shift)
+            // The badges of the apps, on the top right of the cards, as the Dock has them; the buttons of the card under the mouse take their place.
+            row { window in AnyView(badge(of: window, in: size)) }
         }
         .frame(width: wide, height: size.height, alignment: .top)
         // The cards that go toward the edges of the island fade into it. The mask is as tall as the titles under the cards reach, which lie below the frame.
