@@ -12,6 +12,8 @@ final class EditorModel {
     /// The gap between the zones and the margin round the layout, in points, as the desktop lays the zones out.
     var gap: CGFloat
     var margin: CGFloat
+    /// The least a zone may be, in points: the editor does not split or resize a zone below it.
+    var minZoneSize: Double
     var hover: CGPoint?
     var shift = false
     /// Zone being dragged onto a neighbour to merge, and where the pointer is.
@@ -31,15 +33,16 @@ final class EditorModel {
     /// The zone that takes the apps whose zone is gone; nil while the layout keeps the first one.
     private(set) var defaultZone: UUID?
 
-    @ObservationIgnored private let onApply: (StripLayout, UUID?) -> Void
+    @ObservationIgnored private let onApply: (EditorModel) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
-    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, defaultZone: UUID? = nil,
-         onApply: @escaping (StripLayout, UUID?) -> Void, onClose: @escaping () -> Void) {
+    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, minZoneSize: Double = AppSettings.minZoneSizeRange.lowerBound,
+         defaultZone: UUID? = nil, onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
         self.allowsOverflow = allowsOverflow
         self.gap = gap
         self.margin = margin
+        self.minZoneSize = minZoneSize
         self.defaultZone = defaultZone
         self.onApply = onApply
         self.onClose = onClose
@@ -60,7 +63,7 @@ final class EditorModel {
     }
 
     func apply() {
-        onApply(strip, defaultZone)
+        onApply(self)
         onClose()
     }
 

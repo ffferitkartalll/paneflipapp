@@ -117,8 +117,7 @@ final class AppContainer {
         self.updates = UpdatesModel(
             currentVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
             checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
-        let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings,
-                                       refresh: { [unowned engine] in engine.refreshZones() })
+        let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
         island.isSuppressed = { [unowned editor] in editor.isShown }
         let menuContent = MenuContent(repository: repository, layouts: layouts, screens: screens, settings: settings, apps: layoutApps, editor: editor,

@@ -7,18 +7,15 @@ final class EditorController: LayoutEditing {
     private let layouts: LayoutManaging
     private let screens: ScreenProviding
     private let settings: AppSettings
-    /// Lays the zones out again on the desktop, after the gap or the margin changed.
-    private let refresh: () -> Void
 
     private var panel: NSPanel?
     private var monitor: Any?
 
-    init(repository: LayoutRepository, layouts: LayoutManaging, screens: ScreenProviding, settings: AppSettings, refresh: @escaping () -> Void) {
+    init(repository: LayoutRepository, layouts: LayoutManaging, screens: ScreenProviding, settings: AppSettings) {
         self.repository = repository
         self.layouts = layouts
         self.screens = screens
         self.settings = settings
-        self.refresh = refresh
     }
 
     var isShown: Bool { panel != nil }
@@ -39,14 +36,17 @@ final class EditorController: LayoutEditing {
         let model = EditorModel(
             strip: showsOverflow ? layout.strip : StripLayout(root: layout.root),
             allowsOverflow: showsOverflow,
-            gap: CGFloat(settings.values.gap),
-            margin: CGFloat(settings.values.edgeMargin),
+            gap: CGFloat(layout.gap(in: settings.values)),
+            margin: CGFloat(layout.edgeMargin(in: settings.values)),
+            minZoneSize: layout.minZoneSize(in: settings.values),
             defaultZone: layout.fallbackZoneID,
-            onApply: { [layouts, repository] strip, defaultZone in
+            onApply: { [layouts, repository] model in
+                let strip = model.strip
                 // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
                 let result = showsOverflow ? strip : repository.layout(id: layoutID, key: screen.key).map { strip.keepingAreas(of: $0.strip) } ?? strip
-                layouts.updateLayout(key: screen.key, id: layoutID, strip: result)
-                layouts.setDefaultZone(key: screen.key, id: layoutID, to: defaultZone)
+                layouts.setSpacing(key: screen.key, id: layoutID, gap: Double(model.gap), edgeMargin: Double(model.margin), minZoneSize: model.minZoneSize)
+                layouts.updateLayout(key: screen.key, id: layoutID, strip: result)   // lays the zones out again, with the new spacing
+                layouts.setDefaultZone(key: screen.key, id: layoutID, to: model.defaultZone)
             },
             onClose: { [weak self] in self?.hide() })
 
@@ -55,7 +55,7 @@ final class EditorController: LayoutEditing {
         p.level = .statusBar
         p.backgroundColor = .black
         p.setFrame(frame, display: true)
-        p.contentView = NSHostingView(rootView: EditorView(model: model, settings: settings, area: frame.size, refresh: refresh))
+        p.contentView = NSHostingView(rootView: EditorView(model: model, area: frame.size))
         p.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         panel = p

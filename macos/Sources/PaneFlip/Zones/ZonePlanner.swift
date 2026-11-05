@@ -9,9 +9,10 @@ struct ZonePlanner {
     let settings: AppSettings
     let viewport: StripViewport
 
-    /// The gap between zones and the margin of the screens, of the settings.
+    /// The gap between zones and the margin of a screen, as its layout has them.
     func spacing(for key: String) -> (gap: CGFloat, margin: CGFloat) {
-        (CGFloat(settings.values.gap), CGFloat(settings.values.edgeMargin))
+        let layout = layouts.activeLayout(for: key)
+        return (CGFloat(layout?.gap(in: settings.values) ?? settings.values.gap), CGFloat(layout?.edgeMargin(in: settings.values) ?? settings.values.edgeMargin))
     }
 
     /// Zones in view stand where they are; zones scrolled out of sight wait at a display's edge (see `Parking`). A screen

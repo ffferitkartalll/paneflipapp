@@ -4,10 +4,8 @@ import SwiftUI
 
 struct EditorView: View {
     let model: EditorModel
-    let settings: AppSettings
     /// The area zones are laid out in, in points: one screen's width of the editor stands for it.
     let area: CGSize
-    let refresh: () -> Void
     @State private var showShapes = false
     @State private var showSpacing = false
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
@@ -173,18 +171,18 @@ struct EditorView: View {
         .frame(width: 440, height: 380)
     }
 
-    /// The gap, the margin and the least zone size: settings of the app, shown here where their effect is seen.
+    /// The gap, the margin and the least zone size of this layout of this screen, shown here where their effect is seen; they are kept with Apply.
     private var spacing: some View {
-        @Bindable var settings = settings
+        @Bindable var model = model
         return VStack(alignment: .leading, spacing: 6) {
             SliderSettingRow(title: "Gap between zones", detail: "Applies between zones only, never at screen edges.",
-                             value: Binding(get: { settings.values.gap }, set: { settings.values.gap = $0; model.gap = CGFloat($0) }),
-                             range: AppSettings.gapRange, step: AppSettings.gapStep) { if !$0 { refresh() } }
+                             value: Binding(get: { Double(model.gap) }, set: { model.gap = CGFloat($0) }),
+                             range: AppSettings.gapRange, step: AppSettings.gapStep)
             SliderSettingRow(title: "Margin at screen edges", detail: "Space between the zones and the edges of the screen.",
-                             value: Binding(get: { settings.values.edgeMargin }, set: { settings.values.edgeMargin = $0; model.margin = CGFloat($0) }),
-                             range: AppSettings.gapRange, step: AppSettings.gapStep) { if !$0 { refresh() } }
+                             value: Binding(get: { Double(model.margin) }, set: { model.margin = CGFloat($0) }),
+                             range: AppSettings.gapRange, step: AppSettings.gapStep)
             SliderSettingRow(title: "Minimum zone size", detail: "The layout editor won't split or resize a zone below this.",
-                             value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange, step: AppSettings.minZoneSizeStep)
+                             value: $model.minZoneSize, range: AppSettings.minZoneSizeRange, step: AppSettings.minZoneSizeStep)
         }
         .padding(14)
         .frame(width: 340)
@@ -328,7 +326,7 @@ struct EditorView: View {
         let side = !model.shift
         let extent = side ? z.rect.width : z.rect.height
         let origin = side ? z.rect.minX : z.rect.minY
-        let minSize = settings.values.minZoneSize
+        let minSize = model.minZoneSize
         let valid = extent >= 2 * minSize
 
         let pos = side ? p.x : p.y
@@ -368,10 +366,10 @@ struct EditorView: View {
         var r = Double(((d.sideBySide ? p.x : p.y) - origin) / d.extent)
         let step = SplitSnap.step(near: r, extent: Double(d.extent), distance: Double(snapDistance))
         if let step { r = step }
-        let lo = min(settings.values.minZoneSize / Double(d.extent), 0.5)
+        let lo = min(model.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         snappedLine = step != nil
-        model.setRatio(d.id, r, in: rect, least: CGFloat(settings.values.minZoneSize))
+        model.setRatio(d.id, r, in: rect, least: CGFloat(model.minZoneSize))
     }
 
     /// The line goes with the pointer from where its handle (or the line) was taken, not from the line's middle.
