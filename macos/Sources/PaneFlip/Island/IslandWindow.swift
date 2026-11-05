@@ -18,6 +18,8 @@ struct IslandWindow: Identifiable, Equatable {
     var isPlaceholder = false
     /// What the Dock shows on the app's icon (a number, or a mark), if anything.
     var badge: String?
+    /// The app is ticked to be started with the layout (`Open selected apps`).
+    var selected = false
 
     /// The badge as the card draws it: a number above 99 is "99+".
     var badgeText: String? {
@@ -32,6 +34,9 @@ struct IslandWindow: Identifiable, Equatable {
         return absence == .notRunning || absence == .closed ? [.quit, .remove] : []
     }
 
+    /// The card shows its buttons under the mouse: every card but the placeholder has the one that ticks its app.
+    var hasButtons: Bool { !isPlaceholder }
+
     var id: String { isPlaceholder ? "drop" : windowID.map { "w\($0)" } ?? "a\(bundleID)" }
 
     static let placeholder = IslandWindow(windowID: nil, bundleID: "", name: "",
@@ -39,6 +44,6 @@ struct IslandWindow: Identifiable, Equatable {
                                           glyphRevision: 0, absence: nil, isActive: false, isPlaceholder: true)
 
     static func == (a: IslandWindow, b: IslandWindow) -> Bool {
-        a.id == b.id && a.badge == b.badge && a.absence == b.absence && a.name == b.name && a.glyphRevision == b.glyphRevision && a.isActive == b.isActive
+        a.id == b.id && a.badge == b.badge && a.absence == b.absence && a.name == b.name && a.glyphRevision == b.glyphRevision && a.isActive == b.isActive && a.selected == b.selected
     }
 }

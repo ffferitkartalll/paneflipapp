@@ -12,11 +12,6 @@ struct LayoutCard: View {
     var isTaken = false
     let layouts: LayoutManaging
     let editor: LayoutEditing
-    let apps: LayoutAppsEditing
-    let navigation: SettingsNavigation
-    let showsOverflow: Bool
-    /// The gap of the settings, for a layout that has none of its own.
-    let defaultGap: Double
 
     @State private var isRenaming = false
     @State private var draftName = ""
@@ -28,26 +23,14 @@ struct LayoutCard: View {
             miniature
             nameRow
             actionRow
-            LayoutGapRow(layout: layout, defaultGap: defaultGap) { layouts.setGap(key: screen.key, id: layout.id, to: $0) }
             HStack(spacing: 6) {
-                Button { navigation.ordering = OrderingTarget(layoutID: layout.id, zoneID: nil) } label: { stretched("Apps…") }
                 Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }
-                Button { exporting = true } label: { Image(systemName: "square.and.arrow.up") }
-                    .help("Export…")
-                    .accessibilityLabel("Export…")
+                Button { exporting = true } label: { stretched("Export…") }
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
         }
         .frame(width: Self.width)
-        .sheet(isPresented: Binding(
-            get: { navigation.ordering?.layoutID == layout.id },
-            set: { if !$0 && navigation.ordering?.layoutID == layout.id { navigation.ordering = nil } })) {
-            LayoutAppsView(layout: layout, editor: apps, focus: navigation.ordering, showsOverflow: showsOverflow, defaultZone: layout.fallbackZoneID,
-                           setDefaultZone: { layouts.setDefaultZone(key: screen.key, id: layout.id, to: $0) },
-                           setStartApp: { layouts.setStartApp(key: screen.key, id: layout.id, bundleID: $0, chosen: $1) },
-                           setZoneName: { layouts.setZoneName(key: screen.key, id: layout.id, zone: $0, to: $1) })
-        }
         .fileExporter(isPresented: $exporting, document: LayoutFile(data: (try? layout.exported()) ?? Data()),
                       contentType: .json, defaultFilename: layout.name) { _ in }
         .alert("Rename Layout", isPresented: $isRenaming) {
@@ -70,11 +53,13 @@ struct LayoutCard: View {
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)   // a long name wraps, never truncates
-            Button("Rename") {
+            Button {
                 draftName = layout.name
                 isRenaming = true
-            }
-            .controlSize(.small)
+            } label: { Image(systemName: "pencil") }
+                .controlSize(.small)
+                .help("Rename")
+                .accessibilityLabel("Rename")
         }
     }
 

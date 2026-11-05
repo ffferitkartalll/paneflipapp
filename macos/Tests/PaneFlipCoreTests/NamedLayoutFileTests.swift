@@ -6,14 +6,12 @@ final class NamedLayoutFileTests: XCTestCase {
         var layout = NamedLayout(name: "Work", root: LayoutPreset.all[1].root)
         layout.zoneNames[layout.root.leafIDs[0]] = "Mail"
         layout.startApps = ["com.example.app"]
-        layout.gap = 8
 
         let data = try layout.exported()
         let first = try NamedLayout.imported(from: data)
         let second = try NamedLayout.imported(from: data)
 
         XCTAssertEqual(first.name, "Work")
-        XCTAssertEqual(first.gap, 8)
         XCTAssertEqual(first.startApps, ["com.example.app"])
         XCTAssertEqual(first.root.leafIDs.count, 3)
         XCTAssertEqual(first.zoneNames.values.sorted(), ["Mail"])

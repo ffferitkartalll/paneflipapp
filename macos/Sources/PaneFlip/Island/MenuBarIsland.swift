@@ -57,6 +57,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     var onFinishEditing: (() -> Void)?
     /// The button at the corner of the open island's picture was pressed.
     var onEditEdges: (() -> Void)?
+    /// The button of a card that ticks its app to be started with the layout was pressed: the display's key, the layout, the app, whether it is ticked now.
+    var onSetStartApp: ((_ key: String, _ layout: UUID, _ bundleID: String, _ chosen: Bool) -> Void)?
     /// A button in the top right corner of the open island was pressed.
     var onCornerAction: ((IslandCornerAction) -> Void)?
     /// The Undo button under the editing notice was pressed.
@@ -213,7 +215,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         // The frame is the area the zones lie in (not under the menu bar or the Dock), so that the zones fill it to its edges.
         model.glyph = ZoneGlyph(zones: layout.strip.zoneIDs.compactMap { id in coordinator.stacks[id].map { (id, $0.rect) } },
                                 screen: screen.axVisible, screenSize: CGSize(width: height * screen.axVisible.width / max(screen.axVisible.height, 1), height: height),
-                                grow: CGFloat(layout.gap ?? settings.values.gap) / 2, screenShifts: reach)
+                                grow: CGFloat(settings.values.gap) / 2, screenShifts: reach)
         withTransaction(Transaction(animation: nil)) { model.outlineShift = 0 }   // the glyph stands where the glide ended
         model.barHeight = bar
         model.displayWidth = screen.cocoaFrame.width
@@ -626,6 +628,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         for entry in entries.values where entry.hovered {
             if editButtonHit(at: point, in: entry) { onEditEdges?(); return }
             if let action = cornerAction(at: point, in: entry) { onCornerAction?(action); return }
+            if let window = selectButtonHit(at: point, in: entry) { toggleStart(window, in: entry); return }
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
         }
         if let entry = entries.values.first(where: { noticeButton(at: point, in: $0) != nil }) {
@@ -769,7 +772,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private func hoverCard(at point: CGPoint, in entry: Entry) {
         let model = entry.model
         let card = dragging || model.windowsZone == nil ? nil : rowHit(at: point, in: entry).card
-        let id = card.flatMap { model.windows[$0].actions.isEmpty ? nil : model.windows[$0].id }
+        let id = card.flatMap { model.windows[$0].hasButtons ? model.windows[$0].id : nil }
         guard id != model.hoveredCard else { return }
         // No animation of its own: the cards may be moving (the island growing), and a second animation must not touch that.
         withTransaction(Transaction(animation: nil)) { model.hoveredCard = id }
@@ -793,6 +796,30 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             let centre = model.cornerButtonCentre($0)
             return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
         }
+    }
+
+    /// The card whose button that ticks its app the point is on (the card under the pointer; its buttons are in sight).
+    private func selectButtonHit(at point: CGPoint, in entry: Entry) -> IslandWindow? {
+        let model = entry.model
+        guard model.carriedCard == nil, let id = model.hoveredCard, let index = model.windows.firstIndex(where: { $0.id == id }) else { return nil }
+        let frame = islandFrame(of: entry, open: true), size = model.windowsFrame
+        let top = frame.maxY - model.windowsTop
+        let left = frame.midX + model.cardCentre(of: index) - size.width / 2
+        let rect = IslandCardAction.selectRect(in: size)
+        return CGRect(x: left + rect.minX, y: top - rect.maxY, width: rect.width, height: rect.height).contains(point) ? model.windows[index] : nil
+    }
+
+    /// The active layout that has the zone, with the key of its display.
+    private func layout(of zone: UUID) -> (key: String, layout: NamedLayout)? {
+        screens.screens().lazy.compactMap { screen in
+            self.repository.activeLayout(for: screen.key).flatMap { $0.strip.zoneIDs.contains(zone) ? (screen.key, $0) : nil }
+        }.first
+    }
+
+    private func toggleStart(_ window: IslandWindow, in entry: Entry) {
+        guard let zone = entry.model.windowsZone, let (key, layout) = layout(of: zone) else { return }
+        onSetStartApp?(key, layout.id, window.bundleID, !layout.startApps.contains(window.bundleID))
+        withAnimation(Self.motion) { entry.model.windows = windows(of: zone) }
     }
 
     private func cardAction(at point: CGPoint, in entry: Entry) -> (IslandCardAction, IslandWindow)? {
@@ -945,9 +972,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         let slots = memory.slots(inZone: zone)
         let running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
+        let starting = layout(of: zone)?.layout.startApps ?? []
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {
             IslandWindow(windowID: tab.id, bundleID: tab.bundleID, name: tab.displayName.isEmpty ? tab.appName : tab.displayName, glyph: glyph(of: tab),
-                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID])
+                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID], selected: starting.contains(tab.bundleID))
         }
         for slot in slots {
             if let id = slot.windowID, let tab = tabs[id] {
@@ -958,7 +986,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
                 // An app that is not running has quit, whatever became of its last window.
                 let absence: WindowAbsence = running.contains(slot.bundleID) ? coordinator.absences[slot.bundleID] ?? .closed : .notRunning
                 cards.append(IslandWindow(windowID: nil, bundleID: slot.bundleID, name: name, glyph: glyph(bundleID: slot.bundleID, appName: name, icon: apps.icon(bundleID: slot.bundleID)),
-                                          glyphRevision: iconFont.revision, absence: absence, isActive: false, badge: badges[slot.bundleID]))
+                                          glyphRevision: iconFont.revision, absence: absence, isActive: false, badge: badges[slot.bundleID], selected: starting.contains(slot.bundleID)))
             }
         }
         cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last

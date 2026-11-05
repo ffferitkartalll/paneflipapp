@@ -84,12 +84,6 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         refresher?.restoreWindows()
     }
 
-    func setGap(key: String, id: UUID, to gap: Double?) {
-        repository.setGap(gap, ofLayout: id, key: key)
-        refresher?.refreshZones()
-        refresher?.restoreWindows()
-    }
-
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {
         repository.setStartApp(bundleID, chosen: chosen, ofLayout: id, key: key)
     }

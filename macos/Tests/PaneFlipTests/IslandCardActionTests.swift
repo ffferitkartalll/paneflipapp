@@ -33,4 +33,19 @@ final class IslandCardActionTests: XCTestCase {
         XCTAssertEqual(card(window: nil, absence: .hidden).actions, [])
         XCTAssertEqual(card(window: nil, absence: .minimized).actions, [])
     }
+
+    func testTheSelectButtonStandsInTheBottomRightCornerAsLargeAsTheOthers() {
+        for width in [60, 142, 400] as [CGFloat] {
+            let card = CGSize(width: width, height: 90)
+            let select = IslandCardAction.selectRect(in: card), remove = IslandCardAction.rects(in: card)[4].rect
+            XCTAssertEqual(select.size, remove.size)
+            XCTAssertEqual(select.maxX, remove.maxX, "under the remove button, in the same column")
+            XCTAssertEqual(select.maxY, card.height - remove.minY, "as far from the foot as the others are from the top")
+        }
+    }
+
+    func testEveryCardButThePlaceholderShowsTheButtons() {
+        XCTAssertTrue(IslandWindow(windowID: nil, bundleID: "b", name: "n", glyph: nil, glyphRevision: 0, absence: .hidden, isActive: false).hasButtons)
+        XCTAssertFalse(IslandWindow.placeholder.hasButtons)
+    }
 }

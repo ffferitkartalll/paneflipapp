@@ -8,25 +8,19 @@ struct ScreenLayoutsSection: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
-    let apps: LayoutAppsEditing
-    let navigation: SettingsNavigation
-    let showsOverflow: Bool
-    let defaultGap: Double
     @State private var choosesShape = false
     @State private var importing = false
     @State private var importFailed = false
 
     var body: some View {
         Section {
-            ScrollViewReader { proxy in
             ScrollView(.horizontal) {
                 HStack(alignment: .top, spacing: 14) {
                     let activeID = repository.activeLayout(for: screen.key)?.id
                     ForEach(repository.layouts(for: screen.key)) { layout in
                         LayoutCard(screen: screen, layout: layout, isActive: layout.id == activeID,
                                    isTaken: repository.isTaken(layout: layout.id, key: screen.key),
-                                   layouts: layouts, editor: editor, apps: apps, navigation: navigation, showsOverflow: showsOverflow, defaultGap: defaultGap)
-                            .id(layout.id)
+                                   layouts: layouts, editor: editor)
                     }
                     addCard
                 }
@@ -34,10 +28,6 @@ struct ScreenLayoutsSection: View {
                 .padding(.vertical, 6)
             }
             .scrollIndicators(.hidden)
-            .task(id: navigation.ordering) {
-                if let id = navigation.ordering?.layoutID { proxy.scrollTo(id, anchor: .center) }
-            }
-            }
             if screen.desktopCount > 1 { desktopPickers }
         } header: {
             HStack {
@@ -98,7 +88,7 @@ struct ScreenLayoutsSection: View {
     private var addCard: some View {
         ZStack {
             LayoutCard(screen: screen, layout: NamedLayout(name: "Layout", root: .leaf(UUID())), isActive: false,
-                       layouts: layouts, editor: editor, apps: apps, navigation: navigation, showsOverflow: showsOverflow, defaultGap: defaultGap)
+                       layouts: layouts, editor: editor)
                 .hidden()
 
             // The card in two halves: Add on top, Import below.

@@ -4,29 +4,14 @@ import SwiftUI
 /// Tab: how zones are laid out, and the screens beyond the screen's edges with the ways to scroll to them.
 struct ZonesPane: View {
     @Bindable var settings: AppSettings
-    let refresh: () -> Void
 
     var body: some View {
         Form {
             Section("Zones") {
-                SliderSettingRow(title: "Gap between zones",
-                                 detail: "Applies between zones only, never at screen edges.",
-                                 value: $settings.values.gap, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
-                    if !editing { refresh() }
-                }
-                SliderSettingRow(title: "Margin at screen edges",
-                                 detail: "Space between the zones and the edges of the screen.",
-                                 value: $settings.values.edgeMargin, range: AppSettings.gapRange, step: AppSettings.gapStep) { editing in
-                    if !editing { refresh() }
-                }
                 SettingRow(title: "Restore window size",
                            detail: "A window you drag out of its zone returns to the size it had before the zone took it in.") {
                     Toggle("Restore window size", isOn: $settings.values.restoreSizeOnLeave).labelsHidden()
                 }
-                SliderSettingRow(title: "Minimum zone size",
-                                 detail: "The layout editor won't split or resize a zone below this.",
-                                 value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange,
-                                 step: AppSettings.minZoneSizeStep)
             }
             .disabled(!settings.values.placementEnabled)
 

@@ -7,15 +7,18 @@ final class EditorController: LayoutEditing {
     private let layouts: LayoutManaging
     private let screens: ScreenProviding
     private let settings: AppSettings
+    /// Lays the zones out again on the desktop, after the gap or the margin changed.
+    private let refresh: () -> Void
 
     private var panel: NSPanel?
     private var monitor: Any?
 
-    init(repository: LayoutRepository, layouts: LayoutManaging, screens: ScreenProviding, settings: AppSettings) {
+    init(repository: LayoutRepository, layouts: LayoutManaging, screens: ScreenProviding, settings: AppSettings, refresh: @escaping () -> Void) {
         self.repository = repository
         self.layouts = layouts
         self.screens = screens
         self.settings = settings
+        self.refresh = refresh
     }
 
     var isShown: Bool { panel != nil }
@@ -36,12 +39,14 @@ final class EditorController: LayoutEditing {
         let model = EditorModel(
             strip: showsOverflow ? layout.strip : StripLayout(root: layout.root),
             allowsOverflow: showsOverflow,
-            gap: CGFloat(layout.gap ?? settings.values.gap),
+            gap: CGFloat(settings.values.gap),
             margin: CGFloat(settings.values.edgeMargin),
-            onApply: { [layouts, repository] strip in
+            defaultZone: layout.fallbackZoneID,
+            onApply: { [layouts, repository] strip, defaultZone in
                 // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
                 let result = showsOverflow ? strip : repository.layout(id: layoutID, key: screen.key).map { strip.keepingAreas(of: $0.strip) } ?? strip
                 layouts.updateLayout(key: screen.key, id: layoutID, strip: result)
+                layouts.setDefaultZone(key: screen.key, id: layoutID, to: defaultZone)
             },
             onClose: { [weak self] in self?.hide() })
 
@@ -50,7 +55,7 @@ final class EditorController: LayoutEditing {
         p.level = .statusBar
         p.backgroundColor = .black
         p.setFrame(frame, display: true)
-        p.contentView = NSHostingView(rootView: EditorView(model: model, settings: settings, area: frame.size))
+        p.contentView = NSHostingView(rootView: EditorView(model: model, settings: settings, area: frame.size, refresh: refresh))
         p.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         panel = p

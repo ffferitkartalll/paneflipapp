@@ -9,7 +9,6 @@ struct SettingsView: View {
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
     let screens: ScreenProviding
-    let refresh: () -> Void
     let settings: AppSettings
     let launchAtLogin: LaunchAtLoginModel
     let relauncher: AppRelaunching
@@ -47,13 +46,12 @@ struct SettingsView: View {
                 .tabItem { Label("Displays", systemImage: "display.2") }
                 .tag(SettingsTab.displays)
 
-            LayoutsPane(repository: repository, layouts: layouts, editor: editor, apps: apps, screens: screens,
-                        settings: settings, navigation: navigation)
+            LayoutsPane(repository: repository, layouts: layouts, editor: editor, screens: screens, settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.layouts))
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
                 .tag(SettingsTab.layouts)
 
-            ZonesPane(settings: settings, refresh: refresh)
+            ZonesPane(settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.zones))
                 .tabItem { Label("Zones", systemImage: "rectangle.split.3x1") }
                 .tag(SettingsTab.zones)

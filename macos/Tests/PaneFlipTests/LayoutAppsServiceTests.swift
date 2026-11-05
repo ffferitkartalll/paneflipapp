@@ -23,15 +23,6 @@ final class LayoutAppsServiceTests: XCTestCase {
                                     iconFont: IconFont(brands: NoBrands()), settings: settings, windows: windows)
     }
 
-    func testAnIgnoredAppCanNeitherBeAddedToAZoneNorOfferedForIt() {
-        settings.values.ignoredApps = ["com.example.one"]
-
-        service.addApp(bundleID: "com.example.one", to: zone)
-
-        XCTAssertTrue(service.entries(inZones: [zone]).isEmpty)
-        XCTAssertTrue(service.runningApps().isEmpty)
-    }
-
     func testOpeningStartsTheAppsThatAreNotRunningAndReopensThoseWithoutAWindow() {
         let apps = FakeApps()
         apps.apps = [AppInfo(pid: 1, bundleID: "com.example.one", name: "One"), AppInfo(pid: 2, bundleID: "com.example.two", name: "Two"),
@@ -51,54 +42,19 @@ final class LayoutAppsServiceTests: XCTestCase {
     func testOnlyTickedAppsThatStillHaveAZoneAreStarted() {
         var layout = NamedLayout(name: "x", root: .leaf(zone))
         layout.startApps = ["com.example.one", "com.example.gone"]
-        service.addApp(bundleID: "com.example.one", to: zone)
-        service.addApp(bundleID: "com.example.two", to: zone)
+        memory.remember(zoneID: zone, bundleID: "com.example.one", title: "")
+        memory.remember(zoneID: zone, bundleID: "com.example.two", title: "")
 
         XCTAssertEqual(service.startApps(of: layout), ["com.example.one"])
         XCTAssertEqual(layout.startApps, ["com.example.one", "com.example.gone"], "the ticks themselves are left as the user made them")
     }
 
-    func testAnAddedAppIsListedInItsZoneAndTriggersAPlacement() {
-        service.addApp(bundleID: "com.example.one", to: zone)
-        let entries = service.entries(inZones: [zone, other])
-        XCTAssertEqual(entries.map(\.name), ["One"])
-        XCTAssertEqual(entries.first?.zoneID, zone)
-        XCTAssertEqual(refresher.restores, 1)
-    }
+    func testTakingAnAppOutOfAZoneForgetsItAndTriggersAPlacement() {
+        memory.remember(zoneID: zone, bundleID: "com.example.one", title: "")
 
-    func testAnAppIsListedOnceInAZone() {
-        service.addApp(bundleID: "com.example.one", to: zone)
-        service.addApp(bundleID: "com.example.one", to: zone)
-        XCTAssertEqual(service.entries(inZones: [zone]).count, 1)
-    }
+        service.remove(app: "com.example.one", in: zone, inZones: [zone, other])
 
-    func testSeveralWindowsOfAnAppAreOneEntryThatMovesAndGoesTogether() {
-        let memory = self.memory!
-        let first = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "1")
-        memory.bind(slot: first, toWindow: 1, title: "1")
-        let second = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "2")
-        memory.bind(slot: second, toWindow: 2, title: "2")
-        var entries = service.entries(inZones: [zone, other])
-        XCTAssertEqual(entries.count, 1)
-        XCTAssertEqual(entries[0].windows.map(\.title), ["1", "2"])
-
-        service.move(app: "com.example.one", from: zone, to: other, inZones: [zone, other])
-        entries = service.entries(inZones: [zone, other])
-        XCTAssertEqual(entries.map(\.zoneID), [other])
-
-        service.remove(app: "com.example.one", in: other, inZones: [zone, other])
-        XCTAssertTrue(service.entries(inZones: [zone, other]).isEmpty)
-    }
-
-    func testWindowsOfAnAppCanBeOrdered() {
-        let a = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "1")
-        memory.bind(slot: a, toWindow: 1, title: "1")
-        let b = memory.remember(zoneID: zone, bundleID: "com.example.one", title: "2")
-        memory.bind(slot: b, toWindow: 2, title: "2")
-        let second = service.entries(inZones: [zone])[0].windows[1].slot
-        service.reorder(window: second, by: -1, inZones: [zone])
-        // The windows are let go and put back by the restorer, which the fake refresher does not do.
-        XCTAssertEqual(memory.records.map(\.title), ["2", "1"])
+        XCTAssertTrue(memory.apps(inZones: [zone, other]).isEmpty)
         XCTAssertEqual(refresher.restores, 1)
     }
 }

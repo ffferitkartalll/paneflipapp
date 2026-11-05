@@ -9,22 +9,19 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     /// Zones beyond the left and right edges of the screen, reached by scrolling.
     public var leading: [Overflow]
     public var trailing: [Overflow]
-    /// The gap between its zones; nil takes the one of the settings.
-    public var gap: Double?
     /// The names the user gave to zones, by zone; a zone without one is told by its number.
     public var zoneNames: [UUID: String] = [:]
     /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
     public var startApps: Set<String> = []
 
     public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,
-                leading: [Overflow] = [], trailing: [Overflow] = [], gap: Double? = nil) {
+                leading: [Overflow] = [], trailing: [Overflow] = []) {
         self.id = id
         self.name = name
         self.root = root
         self.defaultZoneID = defaultZoneID
         self.leading = leading
         self.trailing = trailing
-        self.gap = gap
     }
 
     /// A copy whose zones and dividers have identities of their own, so the apps and edits of the two stay apart.
@@ -33,7 +30,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         var copy = NamedLayout(name: name, root: root.renewed(&ids), defaultZoneID: defaultZoneID.flatMap { ids[$0] })
         copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
-        copy.gap = gap
         copy.zoneNames = Dictionary(uniqueKeysWithValues: zoneNames.compactMap { zone, name in ids[zone].map { ($0, name) } })
         return copy
     }
@@ -43,7 +39,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return try c.decodeIfPresent(Overflow.self, forKey: key).map { [$0] } ?? []
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, startApps, zoneNames }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, startApps, zoneNames }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -55,7 +51,6 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         // Files from before a side could hold several areas have one area, not a list.
         leading = try Self.areas(c, .leading)
         trailing = try Self.areas(c, .trailing)
-        gap = try c.decodeIfPresent(Double.self, forKey: .gap)
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
         zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]
     }

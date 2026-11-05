@@ -52,7 +52,7 @@ struct MenuBarIslandWindowsView: View {
     /// The buttons of the card the mouse is over (nothing on the others, and nothing while a card is carried). They are drawn in the cards' own pictures, in both layers
     /// (`dark`: the layer inside the lit frame), so that they move exactly as the cards do and change from light to dark as the frame passes, as the app's picture does.
     private func actions(of window: IslandWindow, in size: CGSize, dark: Bool) -> some View {
-        let shown = window.id == model.hoveredCard && !window.actions.isEmpty && model.carriedCard == nil
+        let shown = window.id == model.hoveredCard && window.hasButtons && model.carriedCard == nil
         return ZStack(alignment: .topLeading) {
             ForEach(IslandCardAction.rects(in: size, among: window.actions), id: \.action) { item in
                 // The symbol is fitted into a box in the middle of the button: the symbols differ in their own bearings, a font size would not centre them.
@@ -62,14 +62,29 @@ struct MenuBarIslandWindowsView: View {
                     .background(Circle().fill(dark ? Color.black.opacity(0.6) : Color.white.opacity(0.28)))
                     .offset(x: item.rect.minX, y: item.rect.minY)
             }
+            selectButton(of: window, in: size, dark: dark)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .opacity(shown ? 1 : 0)
         .animation(.easeOut(duration: 0.12), value: shown)   // only its own fade: the cards' motion is not touched
     }
 
+    /// The button that ticks the card's app to be started with the layout: a circle like the others, which shows a check mark when the app is ticked.
+    private func selectButton(of window: IslandWindow, in size: CGSize, dark: Bool) -> some View {
+        let rect = IslandCardAction.selectRect(in: size), on = window.selected
+        return ZStack {
+            Circle().fill(dark ? Color.black.opacity(0.6) : Color.white.opacity(0.28))
+            Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                .frame(width: rect.width * 0.5, height: rect.height * 0.5)
+                .scaleEffect(on ? 1 : 0.3).opacity(on ? 1 : 0)
+        }
+        .frame(width: rect.width, height: rect.height)
+        .offset(x: rect.minX, y: rect.minY)
+        .animation(.easeOut(duration: 0.18), value: on)
+    }
+
     private func badge(of window: IslandWindow, in size: CGSize) -> some View {
-        let shown = window.badgeText != nil && !(window.id == model.hoveredCard && !window.actions.isEmpty && model.carriedCard == nil)
+        let shown = window.badgeText != nil && !(window.id == model.hoveredCard && window.hasButtons && model.carriedCard == nil)
         // Where the remove button stands, as large as it.
         let rect = IslandCardAction.rects(in: size, among: [.remove]).first?.rect ?? .zero
         return ZStack(alignment: .topLeading) {
