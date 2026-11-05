@@ -93,9 +93,22 @@ extension MenuBarIslandModel {
                 y: barHeight + glyph.screen.minY * zoom + Self.editButtonMargin + Self.editButtonSide / 2)
     }
     /// How visible the button is: it follows the island as it opens (the picture grows with `zoom`) and shows only when the picture has almost reached its size.
-    var editButtonOpacity: CGFloat {
+    var editButtonOpacity: CGFloat { showsEditButton ? grownOpacity : 0 }
+    private var grownOpacity: CGFloat {
         let grown = openZoom > 1 ? min(max((zoom - 1) / (openZoom - 1), 0), 1) : 1
-        return showsEditButton ? contentOpacity * min(max((grown - 0.8) / 0.2, 0), 1) : 0
+        return contentOpacity * min(max((grown - 0.8) / 0.2, 0), 1)
+    }
+
+    /// The buttons of the open island, in the strip of the menu bar's height above the picture: bare symbols, two at its left edge and two at its right one.
+    static let cornerSide: CGFloat = 20, cornerGap: CGFloat = 4
+    var cornerButtonsOpacity: CGFloat { expanded ? contentOpacity : 0 }
+    /// The middle of a button, from the middle of the island's top edge: x to the right, y down. The left ones begin where the picture begins, the right ones
+    /// end where it ends.
+    func cornerButtonCentre(_ action: IslandCornerAction) -> CGPoint {
+        let side = Self.cornerSide, step = side + Self.cornerGap, half = glyph.size.width * openZoom / 2
+        let same = IslandCornerAction.allCases.filter { $0.isOnLeft == action.isOnLeft }
+        let at = CGFloat(same.firstIndex(of: action) ?? 0)
+        return CGPoint(x: action.isOnLeft ? -half + side / 2 + at * step : half - side / 2 - (CGFloat(same.count) - 1 - at) * step, y: barHeight / 2)
     }
 
     /// The line of the notice: its text, the button that undoes it and the one that closes it (a square with only an icon).

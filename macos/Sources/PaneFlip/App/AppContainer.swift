@@ -135,6 +135,14 @@ final class AppContainer {
         island.onFinishEditing = { [weak resizer] in resizer?.finish() }
         island.onEditEdges = { [weak resizer] in resizer?.toggle() }
         island.onUndoEdit = { [weak resizer] in resizer?.undo() }
+        island.onCornerAction = { [editor, layoutApps, repository, screens] action in
+            switch action {
+            case .editLayout: editor.toggleAtPointer()
+            case .openApps: layoutApps.open(apps: layoutApps.startApps(on: screens, in: repository))
+            case .settings: SettingsWindowOpener.open()
+            case .quit: NSApp.terminate(nil)
+            }
+        }
         resizer.onUndoChange = { [weak island] in island?.setEditUndo($0) }
         let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values

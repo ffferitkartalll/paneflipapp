@@ -57,6 +57,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     var onFinishEditing: (() -> Void)?
     /// The button at the corner of the open island's picture was pressed.
     var onEditEdges: (() -> Void)?
+    /// A button in the top right corner of the open island was pressed.
+    var onCornerAction: ((IslandCornerAction) -> Void)?
     /// The Undo button under the editing notice was pressed.
     var onUndoEdit: (() -> Void)?
     /// The card carried out of the row, following the pointer over the screen.
@@ -623,6 +625,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         ghost.end()
         for entry in entries.values where entry.hovered {
             if editButtonHit(at: point, in: entry) { onEditEdges?(); return }
+            if let action = cornerAction(at: point, in: entry) { onCornerAction?(action); return }
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
         }
         if let entry = entries.values.first(where: { noticeButton(at: point, in: $0) != nil }) {
@@ -779,6 +782,17 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         guard model.editButtonOpacity > 0.5 else { return false }
         let frame = islandFrame(of: entry, open: true), centre = model.editButtonCentre, reach = MenuBarIslandModel.editButtonSide / 2 + 3
         return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
+    }
+
+    /// The button of the top right corner that the point is on.
+    private func cornerAction(at point: CGPoint, in entry: Entry) -> IslandCornerAction? {
+        let model = entry.model
+        guard model.cornerButtonsOpacity > 0.5 else { return nil }
+        let frame = islandFrame(of: entry, open: true), reach = MenuBarIslandModel.cornerSide / 2 + 2
+        return IslandCornerAction.allCases.first {
+            let centre = model.cornerButtonCentre($0)
+            return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
+        }
     }
 
     private func cardAction(at point: CGPoint, in entry: Entry) -> (IslandCardAction, IslandWindow)? {
