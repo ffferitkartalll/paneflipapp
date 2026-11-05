@@ -4,14 +4,14 @@ import PaneFlipCore
 /// The layout editor's model: the strip as screens, the view that rests at one of them, and what moves it.
 final class EditorModelTests: XCTestCase {
     private func model(_ strip: StripLayout = StripLayout(root: .leaf(UUID())), overflow: Bool = true) -> EditorModel {
-        EditorModel(strip: strip, allowsOverflow: overflow, onApply: { _, _ in }, onClose: {})
+        EditorModel(strip: strip, allowsOverflow: overflow, onApply: { _ in }, onClose: {})
     }
 
     func testTheDefaultZoneIsChosenUndoneAndFallsBackToTheFirstWhenItsZoneGoes() {
         let a = UUID(), b = UUID()
         var applied: UUID?
         let editor = EditorModel(strip: StripLayout(root: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(a), second: .leaf(b))),
-                                 onApply: { _, zone in applied = zone }, onClose: {})
+                                 onApply: { applied = $0.defaultZone }, onClose: {})
         XCTAssertEqual(editor.effectiveDefaultZone, a)
         editor.setDefaultZone(b)
         XCTAssertEqual(editor.effectiveDefaultZone, b)
@@ -182,7 +182,7 @@ final class EditorModelTests: XCTestCase {
         let a = UUID(), b = UUID(), c = UUID(), outer = UUID(), inner = UUID()
         let root = LayoutNode.split(id: outer, sideBySide: true, ratio: 0.25, first: .leaf(a),
                                     second: .split(id: inner, sideBySide: true, ratio: 0.5, first: .leaf(b), second: .leaf(c)))
-        let editor = EditorModel(strip: StripLayout(root: root), gap: 80, onApply: { _, _ in }, onClose: {})
+        let editor = EditorModel(strip: StripLayout(root: root), gap: 80, onApply: { _ in }, onClose: {})
         let screen = CGRect(x: 0, y: 0, width: 1000, height: 600)
         let laid = editor.laid(in: screen, screen: screen)
         let desktop = StripGeometry(strip: editor.strip, screen: screen).zones(offset: 0, gap: 80).map { ($0.id, $0.rect) }

@@ -215,7 +215,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         // The frame is the area the zones lie in (not under the menu bar or the Dock), so that the zones fill it to its edges.
         model.glyph = ZoneGlyph(zones: layout.strip.zoneIDs.compactMap { id in coordinator.stacks[id].map { (id, $0.rect) } },
                                 screen: screen.axVisible, screenSize: CGSize(width: height * screen.axVisible.width / max(screen.axVisible.height, 1), height: height),
-                                grow: CGFloat(settings.values.gap) / 2, screenShifts: reach)
+                                grow: CGFloat(layout.gap(in: settings.values)) / 2, screenShifts: reach)
         withTransaction(Transaction(animation: nil)) { model.outlineShift = 0 }   // the glyph stands where the glide ended
         model.barHeight = bar
         model.displayWidth = screen.cocoaFrame.width

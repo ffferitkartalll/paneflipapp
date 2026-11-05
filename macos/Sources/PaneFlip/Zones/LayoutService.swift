@@ -84,6 +84,10 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         refresher?.restoreWindows()
     }
 
+    func setSpacing(key: String, id: UUID, gap: Double, edgeMargin: Double, minZoneSize: Double) {
+        repository.setSpacing(gap: gap, edgeMargin: edgeMargin, minZoneSize: minZoneSize, ofLayout: id, key: key)
+    }
+
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {
         repository.setStartApp(bundleID, chosen: chosen, ofLayout: id, key: key)
     }

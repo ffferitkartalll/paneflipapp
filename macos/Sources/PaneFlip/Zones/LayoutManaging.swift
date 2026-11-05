@@ -14,6 +14,8 @@ protocol LayoutManaging: AnyObject {
     func deactivate(key: String)
     /// The gap between the zones of the layout; nil takes the one of the settings.
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool)
+    /// Takes effect with the next `updateLayout`, which lays the zones out again.
+    func setSpacing(key: String, id: UUID, gap: Double, edgeMargin: Double, minZoneSize: Double)
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String)
     func rename(key: String, id: UUID, to name: String)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.

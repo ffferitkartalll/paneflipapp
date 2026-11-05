@@ -101,6 +101,20 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         XCTAssertEqual(Set(layouts.flatMap(\.root.leafIDs)).count, layouts.map { $0.root.leafIDs.count }.reduce(0, +))
     }
 
+    func testALayoutKeepsItsOwnSpacingOfItsScreenAndCopiesItAndOthersTakeTheSettings() {
+        let repository = LayoutRepository(store: MemoryStore())
+        let layout = repository.addLayout(for: "A|d1"), other = repository.addLayout(for: "A|d1")
+        let settings = SettingsValues()
+        XCTAssertEqual(layout.gap(in: settings), settings.gap, "none of its own: the settings apply")
+
+        repository.setSpacing(gap: 16, edgeMargin: 8, minZoneSize: 300, ofLayout: layout.id, key: "A|d1")
+        let changed = repository.layout(id: layout.id, key: "A|d1")!, copy = repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!
+
+        XCTAssertEqual([changed.gap(in: settings), changed.edgeMargin(in: settings), changed.minZoneSize(in: settings)], [16, 8, 300])
+        XCTAssertEqual([copy.gap, copy.edgeMargin, copy.minZoneSize], [16, 8, 300])
+        XCTAssertEqual(repository.layout(id: other.id, key: "A|d1")!.gap(in: settings), settings.gap, "another layout is not touched")
+    }
+
     func testTheTickedAppsAreKeptWithTheLayoutAndNotCopied() {
         let store = MemoryStore()
         let repository = LayoutRepository(store: store)
