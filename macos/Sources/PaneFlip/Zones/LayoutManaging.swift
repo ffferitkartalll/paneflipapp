@@ -13,7 +13,6 @@ protocol LayoutManaging: AnyObject {
     /// The key's desktop gets no layout, so no zones.
     func deactivate(key: String)
     /// The gap between the zones of the layout; nil takes the one of the settings.
-    func setGap(key: String, id: UUID, to gap: Double?)
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool)
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String)
     func rename(key: String, id: UUID, to name: String)

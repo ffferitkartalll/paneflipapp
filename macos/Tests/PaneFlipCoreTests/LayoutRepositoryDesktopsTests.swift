@@ -101,21 +101,6 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         XCTAssertEqual(Set(layouts.flatMap(\.root.leafIDs)).count, layouts.map { $0.root.leafIDs.count }.reduce(0, +))
     }
 
-    func testALayoutKeepsItsOwnGapUntilItIsResetAndCopiesIt() {
-        let repository = LayoutRepository(store: MemoryStore())
-        let layout = repository.addLayout(for: "A|d1")
-        XCTAssertNil(layout.gap, "the gap of the settings applies")
-
-        repository.setGap(16, ofLayout: layout.id, key: "A|d1")
-        let copy = repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!
-
-        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.gap, 16)
-        XCTAssertEqual(copy.gap, 16)
-
-        repository.setGap(nil, ofLayout: layout.id, key: "A|d1")
-        XCTAssertNil(repository.activeLayout(for: "A|d1")?.gap)
-    }
-
     func testTheTickedAppsAreKeptWithTheLayoutAndNotCopied() {
         let store = MemoryStore()
         let repository = LayoutRepository(store: store)

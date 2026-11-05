@@ -20,7 +20,6 @@ final class FakeLayouts: LayoutManaging {
     func removeLayout(key: String, id: UUID) {}
     func activate(key: String, id: UUID) {}
     func deactivate(key: String) {}
-    func setGap(key: String, id: UUID, to gap: Double?) {}
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {}
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String) {}
     func rename(key: String, id: UUID, to name: String) {}

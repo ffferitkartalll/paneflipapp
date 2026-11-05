@@ -7,10 +7,8 @@ struct LayoutsPane: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
-    let apps: LayoutAppsEditing
     let screens: ScreenProviding
     @Bindable var settings: AppSettings
-    let navigation: SettingsNavigation
     /// Bumped when displays are plugged in or out or desktops change, so the list of screens is read again.
     @State private var displaysChanged = 0
 
@@ -18,8 +16,7 @@ struct LayoutsPane: View {
         let _ = displaysChanged
         Form {
             ForEach(screens.screens()) { screen in
-                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor, apps: apps,
-                                     navigation: navigation, showsOverflow: settings.values.overflowZonesEnabled, defaultGap: settings.values.gap)
+                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor)
             }
         }
         .formStyle(.grouped)

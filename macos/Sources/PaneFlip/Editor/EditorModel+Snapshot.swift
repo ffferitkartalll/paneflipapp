@@ -7,5 +7,6 @@ extension EditorModel {
     struct Snapshot {
         let strip: StripLayout
         let offset: Double
+        let defaultZone: UUID?
     }
 }

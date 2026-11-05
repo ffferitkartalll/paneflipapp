@@ -63,51 +63,6 @@ public final class StackMemory {
 
     // MARK: Commands
 
-    /// Puts a slot into another zone of the same layout. Returns the live window that was bound to it (now
-    /// unbound), which the caller must release so it is attached to its new zone.
-    @discardableResult
-    public func assign(slot i: Int, toZone zone: UUID, among zones: Set<UUID>) -> CGWindowID? {
-        guard records.indices.contains(i), zones.contains(zone),
-              let current = self.zone(of: records[i], in: zones), current != zone else { return nil }
-        var copy = records
-        var released: CGWindowID?
-        if zones.contains(copy[i].zoneID) {
-            copy[i].zoneID = zone
-            released = copy[i].windowID
-            copy[i].windowID = nil
-        } else if let k = copy[i].otherZones.firstIndex(where: zones.contains) {
-            copy[i].otherZones[k] = zone
-        }
-        records = copy
-        return released
-    }
-
-    /// Moves a window of an app `offset` places among the windows of that app in its zone (negative earlier,
-    /// positive later); the windows in between each move one place the other way. Returns the live windows whose
-    /// slot changed (now unbound), which the caller must release so they are attached again in the new order.
-    @discardableResult
-    public func moveWindow(_ i: Int, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
-        guard records.indices.contains(i), let zone = self.zone(of: records[i], in: zones) else { return [] }
-        let same = records.indices.filter {
-            records[$0].bundleID == records[i].bundleID && self.zone(of: records[$0], in: zones) == zone
-        }
-        guard let position = same.firstIndex(of: i), same.indices.contains(position + offset), offset != 0 else { return [] }
-        var order = same.map { records[$0] }
-        order.insert(order.remove(at: position), at: position + offset)
-        var copy = records
-        var released: [CGWindowID] = []
-        for (place, record) in zip(same, order) {
-            let old = records[place]
-            copy[place] = record
-            if old.id != record.id {
-                if let window = record.windowID { released.append(window) }
-                copy[place].windowID = nil
-            }
-        }
-        records = copy
-        return released
-    }
-
     /// Puts the slot `i` in the place of the slot `j`: moved down it comes after it, moved up before it. Its window stays bound to it; the slots in between
     /// each move one place the other way.
     public func moveSlot(_ i: Int, toPlaceOf j: Int) {
@@ -120,41 +75,6 @@ public final class StackMemory {
     /// Where slot `i` has to be moved to (`moveSlot(_:toPlaceOf:)`) to end up just before slot `j`, or just after it.
     public static func place(of i: Int, beside j: Int, after: Bool) -> Int {
         after ? (i < j ? j : j + 1) : (i < j ? j - 1 : j)
-    }
-
-    /// Moves an app `offset` places among the apps of its zone in that layout, all its windows together; the apps
-    /// in between each move one place the other way. Returns the live windows whose slot moved (now
-    /// unbound), which the caller must release so they are attached again in the new order.
-    @discardableResult
-    public func moveApp(_ bundleID: String, inZone zone: UUID, by offset: Int, among zones: Set<UUID>) -> [CGWindowID] {
-        let positions = records.indices.filter {
-            !records[$0].bundleID.isEmpty && self.zone(of: records[$0], in: zones) == zone
-        }
-        var order: [String] = []
-        for p in positions where !order.contains(records[p].bundleID) { order.append(records[p].bundleID) }
-        guard let g = order.firstIndex(of: bundleID), order.indices.contains(g + offset) else { return [] }
-        order.insert(order.remove(at: g), at: g + offset)
-        let sequence = order.flatMap { b in positions.filter { records[$0].bundleID == b } }
-        var copy = records
-        var released: [CGWindowID] = []
-        for (position, source) in zip(positions, sequence) {
-            copy[position] = records[source]
-            if position != source {
-                if let window = records[source].windowID { released.append(window) }
-                copy[position].windowID = nil
-            }
-        }
-        records = copy
-        return released
-    }
-
-    /// Puts all windows of an app in one zone into another zone of the same layout. Returns the live windows that
-    /// were bound (now unbound), which the caller must release.
-    @discardableResult
-    public func assignApp(_ bundleID: String, inZone zone: UUID, toZone target: UUID, among zones: Set<UUID>) -> [CGWindowID] {
-        records.indices
-            .filter { records[$0].bundleID == bundleID && self.zone(of: records[$0], in: zones) == zone }
-            .compactMap { assign(slot: $0, toZone: target, among: zones) }
     }
 
     /// Forgets an app of one zone with all its windows. Returns the live windows, which the caller must release.

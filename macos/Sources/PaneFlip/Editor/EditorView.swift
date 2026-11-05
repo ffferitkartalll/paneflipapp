@@ -7,7 +7,9 @@ struct EditorView: View {
     let settings: AppSettings
     /// The area zones are laid out in, in points: one screen's width of the editor stands for it.
     let area: CGSize
+    let refresh: () -> Void
     @State private var showShapes = false
+    @State private var showSpacing = false
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
     private let snapDistance: CGFloat = 20
     @Environment(\.displayScale) private var displayScale
@@ -33,7 +35,7 @@ struct EditorView: View {
 
                 ForEach(zones) { z in
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(model.strip.part(of: z.id) == .screen ? Color.white.opacity(0.05) : Color.orange.opacity(0.18))
+                        .fill(Color.white.opacity(0.05))
                         .frame(width: max(z.rect.width - 6, 0), height: max(z.rect.height - 6, 0))
                         .overlay(alignment: .topLeading) {
                             Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
@@ -50,7 +52,7 @@ struct EditorView: View {
                         .allowsHitTesting(false)
                 }
 
-                if total > 1 { screenFrame(rect, total: total) }
+                if total > 1 { screenFrames(rect, total: total) }
 
                 // Empty space: hovering previews a split, clicking performs it.
                 Color.clear.contentShape(Rectangle())
@@ -87,13 +89,27 @@ struct EditorView: View {
                 ForEach(lines) { d in lineView(d, in: rect) }
                 ForEach(lines) { d in handleView(d, in: rect) }
 
+                ForEach(zones.filter { model.strip.part(of: $0.id) == .screen }) { z in defaultButton(z) }
+
                 controls
                 overflowButtons(size: geo.size)
             }
             .animation(.smooth(duration: 0.4), value: model.offset)
-            .overlay(alignment: .bottomTrailing) { if total > 1 { preview.padding(24) } }
             .coordinateSpace(name: "editor")
         }
+    }
+
+    /// A star in the bottom left corner of each zone of the screen, as far from the left edge as from the bottom one: the filled one is the default zone, which takes the apps whose zone is gone.
+    private func defaultButton(_ z: ZoneRect) -> some View {
+        let on = model.effectiveDefaultZone == z.id
+        let side: CGFloat = 32, gap: CGFloat = 12
+        return Button { model.setDefaultZone(z.id) } label: { Image(systemName: on ? "star.fill" : "star") }
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .frame(width: side, height: side)
+            .help("Default zone")
+            // The zone is drawn 3 points inside its rectangle; the button is a square, so both gaps are `gap`.
+            .position(x: z.rect.minX + 3 + gap + side / 2, y: z.rect.maxY - 3 - gap - side / 2)
     }
 
     // MARK: Areas beyond the screen
@@ -101,14 +117,22 @@ struct EditorView: View {
     /// Zones are named as everywhere else: 1, 2, 3 on the screen, -1, -2 beyond the left edge, +1, +2 beyond the right one.
     private func label(of zone: UUID) -> String { ZoneLabel.text(of: zone, in: model.strip) }
 
-    /// Where the screen itself lies within the strip.
-    private func screenFrame(_ rect: CGRect, total: CGFloat) -> some View {
-        let before = CGFloat(model.strip.leadingWidth) / total * rect.width
-        return RoundedRectangle(cornerRadius: 12)
-            .strokeBorder(.white.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
-            .frame(width: rect.width / total, height: rect.height)
-            .offset(x: rect.minX + before, y: rect.minY)
-            .allowsHitTesting(false)
+    /// Every screen of the strip, the screen itself and each one beyond its edges, has the same dashed frame.
+    private func screenFrames(_ rect: CGRect, total: CGFloat) -> some View {
+        var spans = [(start: Double, width: Double)(model.strip.leadingWidth, 1)]
+        var reached = model.strip.leadingWidth
+        for area in model.strip.leading { spans.append((reached - area.width, area.width)); reached -= area.width }
+        reached = model.strip.leadingWidth + 1
+        for area in model.strip.trailing { spans.append((reached, area.width)); reached += area.width }
+        return ZStack(alignment: .topLeading) {
+            ForEach(spans.indices, id: \.self) { i in
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(.white.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
+                    .frame(width: CGFloat(spans[i].width) / total * rect.width, height: rect.height)
+                    .offset(x: rect.minX + CGFloat(spans[i].start) / total * rect.width, y: rect.minY)
+            }
+        }
+        .allowsHitTesting(false)
     }
 
     /// A plus button stands at an edge only where there is no screen beyond it: the view is at the outermost screen on that side.
@@ -127,15 +151,6 @@ struct EditorView: View {
         }
         .buttonStyle(.glass)
         .controlSize(.large)
-    }
-
-    // MARK: Preview of the strip
-
-    /// The whole strip in small, with the screen the editor shows marked, and which screen it is.
-    private var preview: some View {
-        let here = model.strip.nearestAreaRestIndex(to: model.offset)
-        return StripPreview(strip: model.strip, offset: model.offset, caption: Text("Screen \(here + 1) of \(model.strip.areaRests.count)"))
-            .allowsHitTesting(false)
     }
 
     // MARK: Controls
@@ -158,6 +173,23 @@ struct EditorView: View {
         .frame(width: 440, height: 380)
     }
 
+    /// The gap, the margin and the least zone size: settings of the app, shown here where their effect is seen.
+    private var spacing: some View {
+        @Bindable var settings = settings
+        return VStack(alignment: .leading, spacing: 6) {
+            SliderSettingRow(title: "Gap between zones", detail: "Applies between zones only, never at screen edges.",
+                             value: Binding(get: { settings.values.gap }, set: { settings.values.gap = $0; model.gap = CGFloat($0) }),
+                             range: AppSettings.gapRange, step: AppSettings.gapStep) { if !$0 { refresh() } }
+            SliderSettingRow(title: "Margin at screen edges", detail: "Space between the zones and the edges of the screen.",
+                             value: Binding(get: { settings.values.edgeMargin }, set: { settings.values.edgeMargin = $0; model.margin = CGFloat($0) }),
+                             range: AppSettings.gapRange, step: AppSettings.gapStep) { if !$0 { refresh() } }
+            SliderSettingRow(title: "Minimum zone size", detail: "The layout editor won't split or resize a zone below this.",
+                             value: $settings.values.minZoneSize, range: AppSettings.minZoneSizeRange, step: AppSettings.minZoneSizeStep)
+        }
+        .padding(14)
+        .frame(width: 340)
+    }
+
     private var controls: some View {
         VStack(spacing: 12) {
             GlassEffectContainer(spacing: 12) {
@@ -175,6 +207,9 @@ struct EditorView: View {
                     Button { showShapes = true } label: { Label("Layouts", systemImage: "square.grid.2x2") }
                         .buttonStyle(.glass)
                         .popover(isPresented: $showShapes) { shapes }
+                    Button { showSpacing = true } label: { Label("Spacing", systemImage: "slider.horizontal.3") }
+                        .buttonStyle(.glass)
+                        .popover(isPresented: $showSpacing) { spacing }
                     Button { model.reset() } label: { Label("Reset", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.glass)
                     if model.editedArea != nil {

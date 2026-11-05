@@ -10,8 +10,8 @@ final class EditorModel {
     /// False when the areas beyond the screen are switched off: they are neither shown nor added.
     let allowsOverflow: Bool
     /// The gap between the zones and the margin round the layout, in points, as the desktop lays the zones out.
-    let gap: CGFloat
-    let margin: CGFloat
+    var gap: CGFloat
+    var margin: CGFloat
     var hover: CGPoint?
     var shift = false
     /// Zone being dragged onto a neighbour to merge, and where the pointer is.
@@ -28,14 +28,19 @@ final class EditorModel {
     /// The line being dragged: the moves of one drag are one change.
     @ObservationIgnored private var resizing: UUID?
 
-    @ObservationIgnored private let onApply: (StripLayout) -> Void
+    /// The zone that takes the apps whose zone is gone; nil while the layout keeps the first one.
+    private(set) var defaultZone: UUID?
+
+    @ObservationIgnored private let onApply: (StripLayout, UUID?) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
-    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, onApply: @escaping (StripLayout) -> Void, onClose: @escaping () -> Void) {
+    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, defaultZone: UUID? = nil,
+         onApply: @escaping (StripLayout, UUID?) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
         self.allowsOverflow = allowsOverflow
         self.gap = gap
         self.margin = margin
+        self.defaultZone = defaultZone
         self.onApply = onApply
         self.onClose = onClose
     }
@@ -55,7 +60,7 @@ final class EditorModel {
     }
 
     func apply() {
-        onApply(strip)
+        onApply(strip, defaultZone)
         onClose()
     }
 
@@ -66,25 +71,39 @@ final class EditorModel {
 
     /// Call before a change: what is now becomes the thing undo goes back to.
     private func checkpoint() {
-        past.append(Snapshot(strip: strip, offset: offset))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
         future = []
         resizing = nil
     }
 
     func undo() {
         guard let before = past.popLast() else { return }
-        future.append(Snapshot(strip: strip, offset: offset))
+        future.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
         strip = before.strip
         offset = before.offset
+        defaultZone = before.defaultZone
         resizing = nil
     }
 
     func redo() {
         guard let after = future.popLast() else { return }
-        past.append(Snapshot(strip: strip, offset: offset))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
         strip = after.strip
         offset = after.offset
+        defaultZone = after.defaultZone
         resizing = nil
+    }
+
+    /// The screen's zone that receives apps whose zone is gone: the chosen one while it still exists, else the first.
+    var effectiveDefaultZone: UUID? {
+        let zones = strip.root.leafIDs
+        return defaultZone.flatMap { zones.contains($0) ? $0 : nil } ?? zones.first
+    }
+
+    func setDefaultZone(_ zone: UUID) {
+        guard zone != effectiveDefaultZone, strip.root.leafIDs.contains(zone) else { return }
+        checkpoint()
+        defaultZone = zone
     }
 
     func reset() {

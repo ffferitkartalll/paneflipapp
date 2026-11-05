@@ -151,26 +151,6 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(memory.slots(inZones: [other]).map(\.bundleID), ["two"])
     }
 
-    func testAssigningMovesASlotAndReleasesItsWindow() {
-        let memory = StackMemory(store: MemoryStore())
-        let a = UUID(), b = UUID()
-        let slot = memory.remember(zoneID: a, bundleID: "one", title: "")
-        memory.bind(slot: slot, toWindow: 7, title: "x")
-        XCTAssertEqual(memory.assign(slot: slot, toZone: b, among: [a, b]), 7)
-        XCTAssertEqual(memory.records[slot].zoneID, b)
-        XCTAssertNil(memory.records[slot].windowID)
-    }
-
-    func testAssigningInAnotherLayoutChangesOnlyThatLayoutsZone() {
-        let memory = StackMemory(store: MemoryStore())
-        let x = UUID(), x2 = UUID(), y = UUID()
-        let slot = memory.remember(zoneID: x, bundleID: "one", title: "")
-        memory.remap([x: y])   // the slot now lives in layout B's zone y and remembers x
-        memory.assign(slot: slot, toZone: x2, among: [x, x2])
-        XCTAssertEqual(memory.records[slot].zoneID, y)
-        XCTAssertEqual(memory.records[slot].otherZones, [x2])
-    }
-
     func testANewWindowOfAnAppStandsNextToItsOthers() {
         let memory = StackMemory(store: MemoryStore())
         let a = UUID(), b = UUID()
@@ -191,44 +171,6 @@ final class StackMemoryTests: XCTestCase {
         let apps = memory.apps(inZones: [a])
         XCTAssertEqual(apps.map(\.bundleID), ["one", "two"])
         XCTAssertEqual(apps[0].slots.map(\.title), ["1", "2"])
-    }
-
-    func testMovingAnAppMovesAllItsWindowsPastTheNextApp() {
-        let memory = StackMemory(store: MemoryStore())
-        let a = UUID()
-        memory.remember(zoneID: a, bundleID: "one", title: "1")
-        memory.remember(zoneID: a, bundleID: "one", title: "2")
-        memory.remember(zoneID: a, bundleID: "two", title: "")
-        memory.moveApp("one", inZone: a, by: 1, among: [a])
-        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "one", "one"])
-        XCTAssertTrue(memory.moveApp("one", inZone: a, by: 1, among: [a]).isEmpty)
-    }
-
-    func testMovingAnAppSeveralPlacesShiftsTheOnesInBetween() {
-        let memory = StackMemory(store: MemoryStore())
-        let a = UUID()
-        for app in ["one", "two", "three"] { memory.remember(zoneID: a, bundleID: app, title: "") }
-        memory.moveApp("one", inZone: a, by: 2, among: [a])
-        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"])
-    }
-
-    func testMovingAWindowStaysAmongTheWindowsOfItsApp() {
-        let memory = StackMemory(store: MemoryStore())
-        let a = UUID()
-        memory.remember(zoneID: a, bundleID: "one", title: "1")
-        memory.remember(zoneID: a, bundleID: "one", title: "2")
-        memory.remember(zoneID: a, bundleID: "two", title: "")
-        memory.moveWindow(1, by: -1, among: [a])
-        XCTAssertEqual(memory.records.map(\.title), ["2", "1", ""])
-        XCTAssertTrue(memory.moveWindow(1, by: 1, among: [a]).isEmpty)   // the last window of its app
-    }
-
-    func testMovingAWindowSeveralPlacesShiftsTheOnesInBetween() {
-        let memory = StackMemory(store: MemoryStore())
-        let a = UUID()
-        for title in ["1", "2", "3"] { memory.remember(zoneID: a, bundleID: "one", title: title) }
-        memory.moveWindow(0, by: 2, among: [a])
-        XCTAssertEqual(memory.records.map(\.title), ["2", "3", "1"])
     }
 
     func testASlotThatOnlyRemembersAZoneIsNotInIt() {

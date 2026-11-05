@@ -117,7 +117,8 @@ final class AppContainer {
         self.updates = UpdatesModel(
             currentVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
             checker: GitHubReleaseChecker(repository: "ffferitkartalll/paneflipapp"), installer: DiskImageUpdateInstaller())
-        let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
+        let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings,
+                                       refresh: { [unowned engine] in engine.refreshZones() })
         self.editor = editor
         island.isSuppressed = { [unowned editor] in editor.isShown }
         let menuContent = MenuContent(repository: repository, layouts: layouts, screens: screens, settings: settings, apps: layoutApps, editor: editor,
@@ -135,6 +136,7 @@ final class AppContainer {
         island.onFinishEditing = { [weak resizer] in resizer?.finish() }
         island.onEditEdges = { [weak resizer] in resizer?.toggle() }
         island.onUndoEdit = { [weak resizer] in resizer?.undo() }
+        island.onSetStartApp = { [layouts] in layouts.setStartApp(key: $0, id: $1, bundleID: $2, chosen: $3) }
         island.onCornerAction = { [editor, layoutApps, repository, screens] action in
             switch action {
             case .editLayout: editor.toggleAtPointer()

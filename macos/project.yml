@@ -98,8 +98,6 @@ targets:
       - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
       - path: Sources/PaneFlip/Settings/SnapTrigger+Title.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
-      - path: Sources/PaneFlip/Zones/LayoutAppEntry.swift
-      - path: Sources/PaneFlip/Zones/LayoutWindowEntry.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift
       - path: Sources/PaneFlip/Zones/ZonePlanner.swift
       - path: Sources/PaneFlip/Zones/PlannedZone.swift
@@ -147,7 +145,6 @@ targets:
       - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
       - path: Sources/PaneFlip/Island/IconFont.swift
-      - path: Sources/PaneFlip/Settings/ReorderPlace.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
       - path: Sources/PaneFlip/Settings/AppLanguages.swift
       - path: Sources/PaneFlip/Platform/CGEventFlags+Chord.swift
