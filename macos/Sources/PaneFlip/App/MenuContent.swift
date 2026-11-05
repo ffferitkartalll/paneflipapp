@@ -18,7 +18,7 @@ struct MenuContent: View {
         Toggle("Enable", isOn: $settings.values.placementEnabled)
         Divider()
         MenuLayouts(repository: repository, layouts: layouts, screens: screens)
-        let toStart = screens.screens().compactMap { repository.activeLayout(for: $0.key) }.flatMap { apps.startApps(of: $0) }
+        let toStart = apps.startApps(on: screens, in: repository)
         Button("Edit layout") { editor.toggleAtPointer() }
         Button("Open selected apps") { apps.open(apps: toStart) }
             .disabled(toStart.isEmpty)

@@ -74,6 +74,21 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.tallestOpenHeight, model.openSize.height + 2 * MenuBarIslandModel.noticeButtonHeight + 2 * model.windowsGap, "and for the two lines of a notice at its foot")
     }
 
+    func testTheCornerButtonsStandAtTheTwoEdgesOfThePictureInTheBarAboveIt() {
+        let model = model()
+        XCTAssertEqual(model.cornerButtonsOpacity, 0, "not while the island is closed")
+        model.expanded = true
+        model.contentOpacity = 1
+        XCTAssertEqual(model.cornerButtonsOpacity, 1)
+        let side = MenuBarIslandModel.cornerSide, half = model.glyph.size.width * model.openZoom / 2
+        XCTAssertEqual(model.cornerButtonCentre(.quit).x, half - side / 2, "the last ends where the picture ends, not at the island's edge")
+        XCTAssertEqual(model.cornerButtonCentre(.editLayout).x, -half + side / 2, "the first begins where the picture begins")
+        XCTAssertEqual(model.cornerButtonCentre(.quit).y, model.barHeight / 2, "in the bar, above the picture")
+        let step = side + MenuBarIslandModel.cornerGap
+        XCTAssertEqual(model.cornerButtonCentre(.openApps).x - model.cornerButtonCentre(.editLayout).x, step)
+        XCTAssertEqual(model.cornerButtonCentre(.quit).x - model.cornerButtonCentre(.settings).x, step)
+    }
+
     func testTheEditButtonStandsAtTheTopRightOfTheOpenPictureAndGivesWayToTheEditingNotice() {
         let model = model()
         XCTAssertFalse(model.showsEditButton, "not while the island is closed")

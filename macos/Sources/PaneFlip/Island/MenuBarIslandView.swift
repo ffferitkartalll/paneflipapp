@@ -38,6 +38,27 @@ struct MenuBarIslandView: View {
         return ZStack(alignment: .top) {
             UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10).fill(.black)
                 .frame(width: right - left, height: height)
+                .overlay(alignment: .top) {
+                    // Part of the shape, so they grow with it: as far from its edges as the picture is, and they appear once it has nearly grown.
+                    if open {
+                        let side = MenuBarIslandModel.cornerSide
+                        HStack(spacing: MenuBarIslandModel.cornerGap) {
+                            ForEach(IslandCornerAction.allCases, id: \.self) { action in
+                                // Fitted into a box by its own shape (a font size would centre the line of text, not the symbol).
+                                Image(systemName: action.symbol).resizable().scaledToFit().fontWeight(.semibold).foregroundStyle(.white)
+                                    .frame(width: side * 0.7, height: side * 0.7)
+                                    .frame(width: side, height: side)
+                                    .accessibilityLabel(action.title)
+                                if action == .openApps { Spacer(minLength: 0) }
+                            }
+                        }
+                        .padding(.top, (bar - side) / 2)
+                        .padding(.horizontal, (right - left - gw) / 2)
+                        .opacity(model.cornerButtonsOpacity)
+                        .animation(.easeOut(duration: 0.1).delay(0.2), value: open)
+                    }
+                }
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10))
                 .offset(x: (left + right) / 2)
             if model.notchWidth > 0 {
                 // At a notch the picture is cut in the middle, the halves apart by the notch's width while the island is closed (the left half ends at the
