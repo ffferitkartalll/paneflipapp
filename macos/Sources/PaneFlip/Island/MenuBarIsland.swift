@@ -784,9 +784,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             entry.dwell = nil
             if entry.dropZone != nil { entry.dropZone = nil; entry.model.select(focused(in: entry)) }
         }
-        if case .screen(let zone) = target {
+        // Like a window dragged with the snap trigger held: every zone stays lit while the card is over the screen, and the one under the pointer is marked (none in a gap).
+        var over: UUID?, onScreen = target == .takeOut
+        if case .screen(let zone) = target { over = zone; onScreen = true }
+        if onScreen {
             if !lighting.isShown { lighting.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) }) }
-            lighting.highlight(zone: zone)
+            lighting.highlight(zone: over)
         } else if lighting.isShown {
             lighting.hide()
         }

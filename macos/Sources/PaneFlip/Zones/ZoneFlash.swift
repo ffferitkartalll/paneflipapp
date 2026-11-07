@@ -17,7 +17,8 @@ final class ZoneFlash {
         p.collectionBehavior = [.canJoinAllSpaces, .stationary]
         let view = NSView()
         view.wantsLayer = true
-        outline.cornerRadius = 10
+        outline.cornerRadius = ZoneCorner.radius
+        outline.cornerCurve = .continuous
         outline.borderWidth = 1
         outline.opacity = 0
         view.layer?.addSublayer(outline)

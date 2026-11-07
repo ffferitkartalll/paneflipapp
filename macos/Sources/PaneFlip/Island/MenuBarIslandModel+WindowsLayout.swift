@@ -94,7 +94,7 @@ extension MenuBarIslandModel {
     }
 
     /// The buttons of the open island, in the row above the picture: a symbol and the words, two at its left edge and two at its right one.
-    static let cornerHeight: CGFloat = 22, cornerPadding: CGFloat = 8, cornerSymbol: CGFloat = 12, cornerSymbolGap: CGFloat = 5
+    static let cornerHeight: CGFloat = 28, cornerPadding: CGFloat = 14, cornerSymbol: CGFloat = 17, cornerSymbolGap: CGFloat = 6
     var cornerGap: CGFloat { sideRoom }
     var cornerButtonsOpacity: CGFloat { expanded && showsButtons ? contentOpacity : 0 }
     func cornerButtonWidth(_ action: IslandCornerAction) -> CGFloat {

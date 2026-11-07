@@ -70,6 +70,7 @@ struct IgnoredAppsSection: View {
                 Image(systemName: "plus").frame(width: 30, height: 26)
             }
             .menuStyle(.borderlessButton)
+            .hoverHighlight()
             .menuIndicator(.hidden)
             .fixedSize()
             .help("Add app")
@@ -79,6 +80,7 @@ struct IgnoredAppsSection: View {
 
             Button(action: removeSelected) { Image(systemName: "minus").frame(width: 30, height: 26) }
                 .buttonStyle(.borderless)
+                .hoverHighlight()
                 .disabled(selected == nil)
                 .help("Remove")
                 .accessibilityLabel("Remove")

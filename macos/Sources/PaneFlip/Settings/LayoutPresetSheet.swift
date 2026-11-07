@@ -24,6 +24,7 @@ struct LayoutPresetSheet: View {
                             LayoutMiniature(root: preset.root, screenSize: screen.size, width: Self.width)
                         }
                         .buttonStyle(.plain)
+                        .hoverHighlight(radius: 8)
                         .accessibilityLabel(Text(verbatim: "\(preset.root.leafIDs.count)"))
                     }
                 }
@@ -60,5 +61,6 @@ struct LayoutPresetSheet: View {
                 .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(.secondary, style: StrokeStyle(lineWidth: 1, dash: [4])) }
         }
         .buttonStyle(.plain)
+        .hoverHighlight(radius: 8)
     }
 }

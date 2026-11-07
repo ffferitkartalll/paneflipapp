@@ -10,7 +10,7 @@ struct SnapOverlayView: View {
                 let r = zone.cocoaRect
                 if r.intersects(screenFrame) {
                     let hot = zone.id == model.hoverID
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: ZoneCorner.radius, style: .continuous)
                         .fill(AppAccent.color.opacity(hot ? 0.4 : 0.15))
                         .strokeBorder(AppAccent.color.opacity(hot ? 1 : 0.6), lineWidth: hot ? 3 : 2)
                         .frame(width: r.width, height: r.height)

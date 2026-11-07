@@ -45,13 +45,13 @@ struct MenuBarIslandView: View {
                             ForEach(IslandCornerAction.allCases, id: \.self) { action in
                                 // The symbol is fitted into a box by its own shape (a font size would centre the line of text, not the symbol).
                                 HStack(spacing: MenuBarIslandModel.cornerSymbolGap) {
-                                    Image(systemName: action.symbol).resizable().scaledToFit().fontWeight(.semibold)
+                                    Image(systemName: action.symbol).font(.system(size: 13))
                                         .frame(width: MenuBarIslandModel.cornerSymbol, height: MenuBarIslandModel.cornerSymbol)
                                     Text(verbatim: action.title).font(Font(MenuBarIslandModel.noticeFont)).lineLimit(1)
                                 }
                                 .foregroundStyle(.white)
                                 .frame(width: model.cornerButtonWidth(action), height: MenuBarIslandModel.cornerHeight)
-                                .background(RoundedRectangle(cornerRadius: MenuBarIslandModel.noticeRadius, style: .continuous).fill(.white.opacity(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
+                                .background(Capsule().fill(.white.opacity(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
                                 .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                                 if action == .openApps { Spacer(minLength: model.notchWidth) }
                             }
@@ -63,6 +63,7 @@ struct MenuBarIslandView: View {
                     }
                 }
                 .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10))
+                .shadow(color: .black.opacity(0.4), radius: 8, y: 3)
                 .offset(x: (left + right) / 2)
             if model.notchWidth > 0 {
                 // At a notch the picture is cut in the middle, the halves apart by the notch's width while the island is closed (the left half ends at the
