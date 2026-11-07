@@ -36,7 +36,7 @@ struct MenuBarIslandView: View {
             glyphLeft = -gw / 2; glyphTop = m; height = bar
         }
         return ZStack(alignment: .top) {
-            UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10).fill(.black)
+            UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius).fill(.black)
                 .frame(width: right - left, height: height)
                 .overlay(alignment: .top) {
                     // Part of the shape, so they grow with it: as far from its edges as the picture is, and they appear once it has nearly grown.
@@ -62,7 +62,9 @@ struct MenuBarIslandView: View {
                         .animation(.easeOut(duration: 0.1).delay(0.2), value: open)
                     }
                 }
-                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10))
+                // A faint rim (sides and bottom), so the island shows against a black window behind it.
+                .overlay { IslandRim().stroke(.white.opacity(0.18), lineWidth: 1) }
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius))
                 .shadow(color: .black.opacity(0.4), radius: 8, y: 3)
                 .offset(x: (left + right) / 2)
             if model.notchWidth > 0 {
