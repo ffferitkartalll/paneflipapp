@@ -13,6 +13,7 @@ struct LayoutCard: View {
     let layouts: LayoutManaging
     let editor: LayoutEditing
 
+    @Environment(\.controlActiveState) private var activeState
     @State private var isRenaming = false
     @State private var draftName = ""
     @State private var exporting = false
@@ -24,8 +25,8 @@ struct LayoutCard: View {
             nameRow
             actionRow
             HStack(spacing: 6) {
-                Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }
-                Button { exporting = true } label: { stretched("Export…") }
+                Button { layouts.duplicate(key: screen.key, id: layout.id) } label: { stretched("Duplicate") }.hoverHighlight()
+                Button { exporting = true } label: { stretched("Export…") }.hoverHighlight()
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -44,7 +45,7 @@ struct LayoutCard: View {
 
     private var miniature: some View {
         LayoutMiniature(root: layout.root, screenSize: screen.size, width: Self.width)
-            .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? AppAccent.color : .clear, lineWidth: 2) }
+            .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? (activeState == .inactive ? Color.secondary : AppAccent.color) : .clear, lineWidth: 2) }
     }
 
     private var nameRow: some View {
@@ -58,6 +59,7 @@ struct LayoutCard: View {
                 isRenaming = true
             } label: { Image(systemName: "pencil") }
                 .controlSize(.small)
+                .hoverHighlight()
                 .help("Rename")
                 .accessibilityLabel("Rename")
         }
@@ -73,13 +75,13 @@ struct LayoutCard: View {
                     .buttonStyle(.borderedProminent)
                     .allowsHitTesting(false)
             } else {
-                Button { layouts.activate(key: screen.key, id: layout.id) } label: { stretched("Activate") }
+                Button { layouts.activate(key: screen.key, id: layout.id) } label: { stretched("Activate") }.hoverHighlight()
                     .buttonStyle(.bordered)
                     .disabled(isTaken)
             }
-            Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }
+            Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }.hoverHighlight()
                 .buttonStyle(.bordered)
-            Button { confirmingRemoval = true } label: { stretched("Remove") }
+            Button { confirmingRemoval = true } label: { stretched("Remove") }.hoverHighlight()
                 .buttonStyle(.bordered)
                 .confirmationDialog("Remove this layout?", isPresented: $confirmingRemoval, titleVisibility: .visible) {
                     Button("Remove", role: .destructive) { layouts.removeLayout(key: screen.key, id: layout.id) }

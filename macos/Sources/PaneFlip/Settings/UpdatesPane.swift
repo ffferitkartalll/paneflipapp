@@ -11,6 +11,7 @@ struct UpdatesPane: View {
                 SettingRow(title: "Installed version") { Text(verbatim: model.currentVersion).foregroundStyle(.secondary) }
                 SettingRow(title: "Check for updates", detail: status) {
                     Button("Check now") { Task { await model.check() } }
+                        .hoverHighlight()
                         .disabled(model.state == .checking)
                 }
             }
@@ -18,7 +19,7 @@ struct UpdatesPane: View {
             case .available:
                 Section("Update") {
                     SettingRow(title: "Install the update", detail: "PaneFlip downloads the new version, replaces itself with it and starts again.") {
-                        Button("Install") { Task { await model.install() } }
+                        Button("Install") { Task { await model.install() } }.hoverHighlight()
                     }
                 }
             case .installing:
@@ -28,7 +29,7 @@ struct UpdatesPane: View {
             case .installFailed(let release):
                 Section("Update") {
                     SettingRow(title: "Install the update", detail: "The update could not be installed. Download it from the release page instead.") {
-                        Button("Open release page") { openURL(release.page) }
+                        Button("Open release page") { openURL(release.page) }.hoverHighlight()
                     }
                 }
             default:

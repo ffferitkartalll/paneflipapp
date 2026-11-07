@@ -66,6 +66,7 @@ struct ScreenLayoutsSection: View {
             .contentShape(.rect(cornerRadius: 8))
         }
         .buttonStyle(.plain)
+        .hoverHighlight(radius: 8)
     }
 
     /// Which layout each desktop of the display uses; a layout is offered to one desktop at a time.

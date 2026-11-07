@@ -99,7 +99,8 @@ struct ShortcutsPane: View {
                 Button { toggleRecording(shortcut, set: set) } label: {
                     Text(verbatim: recording == shortcut && recorder.isRecording ? recordingTitle : value.displayTitle).frame(minWidth: 110)
                 }
-                Button("Reset") { set(standard) }.disabled(value == standard)
+                .hoverHighlight()
+                Button("Reset") { set(standard) }.disabled(value == standard).hoverHighlight()
             }
         }
     }

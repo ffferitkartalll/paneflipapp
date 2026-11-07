@@ -5,6 +5,7 @@ import SwiftUI
 /// Tab: how macOS arranges the displays (a staircase going up to the right keeps the zones beyond a display's edge off the others) and where the
 /// displays really stand on the desk, which the moves from one display to the next follow.
 struct DisplaysPane: View {
+    @Environment(\.controlActiveState) private var activeState
     let screens: ScreenProviding
     @Bindable var settings: AppSettings
     /// Bumped when displays are plugged in or out or arranged again, so the list of screens is read again.
@@ -24,6 +25,7 @@ struct DisplaysPane: View {
                 Button("Open Displays settings") {
                     if let url = URL(string: "x-apple.systempreferences:com.apple.Displays-Settings.extension") { NSWorkspace.shared.open(url) }
                 }
+                .hoverHighlight()
             }
 
             if displays.count > 1 {
@@ -59,7 +61,7 @@ struct DisplaysPane: View {
                 .foregroundStyle(.secondary)
         } else if stairs.isStaircase {
             Label("The displays form a staircase going up to the right.", systemImage: "checkmark.circle.fill")
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(activeState == .inactive ? Color.secondary : Color.accentColor)
         } else {
             VStack(alignment: .leading, spacing: 4) {
                 Label("The displays do not form a staircase yet.", systemImage: "exclamationmark.triangle.fill")

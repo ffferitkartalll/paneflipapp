@@ -43,7 +43,7 @@ struct GeneralPane: View {
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .fixedSize(horizontal: false, vertical: true)
-                        Button("Restart now") { relauncher.relaunch() }
+                        Button("Restart now") { relauncher.relaunch() }.hoverHighlight()
                     }
                     .padding(.vertical, 4)
                 }
