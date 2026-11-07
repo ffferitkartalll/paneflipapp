@@ -23,7 +23,7 @@ struct MenuBarIslandView: View {
         if open {
             // The height of the menu bar again as room right, left and below.
             left = -size.width / 2; right = size.width / 2
-            glyphLeft = -gw / 2; glyphTop = bar; height = size.height   // in the middle: the island is wider than it when no zone waits beyond the edges
+            glyphLeft = -gw / 2; glyphTop = model.topHeight; height = size.height   // in the middle: the island is wider than it when no zone waits beyond the edges
         } else if peek {
             // Only the windows of a zone: the picture stays as it is at rest, and the island is as wide as the cards need.
             left = -size.width / 2; right = size.width / 2
@@ -41,19 +41,23 @@ struct MenuBarIslandView: View {
                 .overlay(alignment: .top) {
                     // Part of the shape, so they grow with it: as far from its edges as the picture is, and they appear once it has nearly grown.
                     if open {
-                        let side = MenuBarIslandModel.cornerSide
-                        HStack(spacing: MenuBarIslandModel.cornerGap) {
+                        HStack(spacing: model.cornerGap) {
                             ForEach(IslandCornerAction.allCases, id: \.self) { action in
-                                // Fitted into a box by its own shape (a font size would centre the line of text, not the symbol).
-                                Image(systemName: action.symbol).resizable().scaledToFit().fontWeight(.semibold).foregroundStyle(.white)
-                                    .frame(width: side * 0.7, height: side * 0.7)
-                                    .frame(width: side, height: side)
-                                    .accessibilityLabel(action.title)
-                                if action == .openApps { Spacer(minLength: 0) }
+                                // The symbol is fitted into a box by its own shape (a font size would centre the line of text, not the symbol).
+                                HStack(spacing: MenuBarIslandModel.cornerSymbolGap) {
+                                    Image(systemName: action.symbol).resizable().scaledToFit().fontWeight(.semibold)
+                                        .frame(width: MenuBarIslandModel.cornerSymbol, height: MenuBarIslandModel.cornerSymbol)
+                                    Text(verbatim: action.title).font(Font(MenuBarIslandModel.noticeFont)).lineLimit(1)
+                                }
+                                .foregroundStyle(.white)
+                                .frame(width: model.cornerButtonWidth(action), height: MenuBarIslandModel.cornerHeight)
+                                .background(RoundedRectangle(cornerRadius: MenuBarIslandModel.noticeRadius, style: .continuous).fill(.white.opacity(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
+                                .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
+                                if action == .openApps { Spacer(minLength: model.notchWidth) }
                             }
                         }
-                        .padding(.top, (bar - side) / 2)
-                        .padding(.horizontal, (right - left - gw) / 2)
+                        .padding(.top, (model.topHeight - MenuBarIslandModel.cornerHeight) / 2)
+                        .padding(.horizontal, model.sideRoom)
                         .opacity(model.cornerButtonsOpacity)
                         .animation(.easeOut(duration: 0.1).delay(0.2), value: open)
                     }
@@ -81,7 +85,8 @@ struct MenuBarIslandView: View {
                             .frame(width: model.noticeTextWidth, alignment: .leading)
                         Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
                             .frame(width: model.noticeButtonWidth, height: height)
-                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color).brightness(model.hoveredButton == .noticeUndo ? 0.15 : 0))
+                            .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                             .overlay {
                                 // The notice that cannot be closed: the ring runs round the button that undoes it.
                                 if !model.noticeCloses && !model.noticeEditing {
@@ -92,7 +97,8 @@ struct MenuBarIslandView: View {
                         if model.noticeCloses {
                             Image(systemName: "xmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white)
                                 .frame(width: height, height: height)
-                                .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(0.18)))
+                                .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(model.hoveredButton == .noticeClose ? 0.32 : 0.18)))
+                                .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                                 .overlay {
                                     // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
                                     Circle().inset(by: 1).trim(from: 1 - model.noticeLeft, to: 1).rotation(.degrees(-90))
@@ -110,7 +116,8 @@ struct MenuBarIslandView: View {
                             .frame(width: model.editUndoTextWidth, alignment: .leading)
                         Text("Undo").font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
                             .frame(width: MenuBarIslandModel.editUndoButtonWidth, height: height)
-                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color))
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color).brightness(model.hoveredButton == .noticeRevert ? 0.15 : 0))
+                            .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                     }
                     .offset(x: 0, y: model.noticeEditUndoTop)
                     .opacity(model.contentOpacity)
@@ -121,7 +128,7 @@ struct MenuBarIslandView: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
                         .frame(width: model.cardsFit, height: model.pickingNoteHeight, alignment: .top)
-                        .offset(x: 0, y: bar + gh + model.windowsGap)
+                        .offset(x: 0, y: model.topHeight + gh + model.windowsGap)
                         .opacity(model.contentOpacity)
                 }
             }

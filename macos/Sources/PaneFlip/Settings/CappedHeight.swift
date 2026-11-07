@@ -9,7 +9,15 @@ struct CappedHeight: ViewModifier {
         let tab = content.fixedSize(horizontal: false, vertical: true)
             .background(GeometryReader { Color.clear.preference(key: NaturalHeightKey.self, value: $0.size.height) })
         Group {
-            if natural > cap { ScrollView { tab }.frame(height: cap) } else { tab }
+            if natural > cap {
+                ScrollView { tab }.frame(height: cap)
+            } else if natural == 0 {
+                // Not measured yet (the tab is shown for the first time): it is cut off at the cap meanwhile, so that the window never grows to the whole tab for the moment
+                // the measuring takes, and then stays that tall.
+                tab.frame(maxHeight: cap, alignment: .top).clipped()
+            } else {
+                tab
+            }
         }
         .onPreferenceChange(NaturalHeightKey.self) { natural = $0 }
     }

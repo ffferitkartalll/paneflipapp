@@ -8,8 +8,18 @@ extension MenuBarIslandModel {
     /// The frame of the chosen zone's windows under the picture (a card, see `windowsFrame`), and the line
     /// with the title of the window in front under it. The gap between the picture and the frame.
     var windowsGap: CGFloat { barHeight / 2 }
+    /// The room at the sides and at the foot of the open island (the one between the title of a card and the foot), and the same room above the buttons of the top row, between them, and between that row and the picture.
+    var sideRoom: CGFloat { windowsGap }
+    /// The row of buttons at the top of the open island: as tall as its buttons and the room above and below them.
+    var topHeight: CGFloat { hasButtonRow ? Self.cornerHeight + 2 * sideRoom : sideRoom }
+    /// The island that is opened to choose the zone a window is sent to (with the shortcut, or by dragging the window onto it) shows no buttons. Where the display has no
+    /// notch it has no row for them either, only the room above the picture; with a notch the row stays, empty.
+    var showsButtons: Bool { !choosing }
+    var hasButtonRow: Bool { !choosing || notchWidth > 0 }
+    /// Where the picture of the zones ends when the island is at rest, from the top.
+    var restBottom: CGFloat { barHeight - MenuBarIslandView.margin }
     /// The title under a card, and the line under that.
-    var captionHeight: CGFloat { 30 }
+    var captionHeight: CGFloat { 16 }
     private var titleGap: CGFloat { windowsGap }   // the title stands as far from the frame as from the island's lower edge
 
     /// The size of a card: as tall as the screen the island is on is drawn in the open island's picture (when the windows are shown alone too), 16:9, whatever the zone is.
@@ -21,19 +31,19 @@ extension MenuBarIslandModel {
     private static func cardSize(screenHeight: CGFloat) -> CGSize { CGSize(width: screenHeight * 16 / 9, height: screenHeight) }
 
     /// The room the row of cards has: at least as wide as the picture, and wide enough for every card when the display has room; the cards that still do not fit
-    /// fade out toward the edges of the island. With the windows shown alone, no wider than the cards.
+    /// are cut by the edges of the island. With the windows shown alone, no wider than the cards.
     var cardsFit: CGFloat {
-        peeking ? min(cardsNeeded, displayWidth - 2 * barHeight) : max(glyph.size.width * openZoom, min(cardsNeeded, displayWidth - 2 * barHeight))
+        peeking ? min(cardsNeeded, displayWidth - 2 * sideRoom) : max(glyph.size.width * openZoom, min(cardsNeeded, displayWidth - 2 * sideRoom))
     }
 
     /// The width that shows every card of the row: the island grows to this much, never past the display. Nothing without a row.
     private var cardsNeeded: CGFloat { windowsFrame.width * CGFloat(windows.count) }
 
     /// The room the cards are shown in: the island itself, the picture and the room beside it.
-    var windowsSpan: CGFloat { cardsFit + 2 * barHeight }
+    var windowsSpan: CGFloat { cardsFit + 2 * sideRoom }
 
     /// The zoom of the open island: `MenuBarIslandView.hoverZoom`, or less when the picture would not fit the display.
-    func fitZoom(toDisplayWidth width: CGFloat) -> CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (width - 2 * barHeight) / max(glyph.size.width, 1))) }
+    func fitZoom(toDisplayWidth width: CGFloat) -> CGFloat { max(1, min(MenuBarIslandView.hoverZoom, (width - 2 * sideRoom) / max(glyph.size.width, 1))) }
     private var cardsGeometry: CarouselCards { CarouselCards(count: windows.count, wide: windowsFrame.width) }
     var cardsOther: CGFloat { cardsGeometry.other }
     /// The middle of a card from the middle of the row, where it lies.
@@ -71,7 +81,7 @@ extension MenuBarIslandModel {
     }
 
     /// The height of what stands under the picture: none while no zone is chosen.
-    var windowsHeight: CGFloat { windowsZone == nil ? pickingNoteHeight : windowsFrame.height + titleGap + captionHeight }
+    var windowsHeight: CGFloat { windowsZone == nil ? pickingNoteHeight : windowsFrame.height + (windows.isEmpty ? 0 : titleGap + captionHeight) }   // no windows: no title under the card
 
     /// The note under the picture that says a zone is being chosen for a window, in the type of the date and the time of the menu bar; it goes on to
     /// another line when it does not fit the width of the room, and the island is as tall as its lines.
@@ -83,32 +93,34 @@ extension MenuBarIslandModel {
         return ceil(NSString(string: pickingNote).boundingRect(with: box, options: .usesLineFragmentOrigin, attributes: [.font: Self.pickingNoteFont]).height)
     }
 
-    /// The button at the top right corner of the open island's picture that turns the editing of the zones' edges on (a round button like those of a card).
-    static let editButtonSide: CGFloat = 20, editButtonMargin: CGFloat = 4
-    var showsEditButton: Bool { expanded && !(noticeEditing && notice != nil) }
-    /// Its middle, from the middle of the island's top edge: x to the right, y down.
-    var editButtonCentre: CGPoint {
-        // At the corner of the screen itself, not of the whole picture, which is wider where zones lie beyond the screen's edges.
-        CGPoint(x: (glyph.screen.maxX - glyph.size.width / 2) * zoom - Self.editButtonMargin - Self.editButtonSide / 2,
-                y: barHeight + glyph.screen.minY * zoom + Self.editButtonMargin + Self.editButtonSide / 2)
+    /// The buttons of the open island, in the row above the picture: a symbol and the words, two at its left edge and two at its right one.
+    static let cornerHeight: CGFloat = 22, cornerPadding: CGFloat = 8, cornerSymbol: CGFloat = 12, cornerSymbolGap: CGFloat = 5
+    var cornerGap: CGFloat { sideRoom }
+    var cornerButtonsOpacity: CGFloat { expanded && showsButtons ? contentOpacity : 0 }
+    func cornerButtonWidth(_ action: IslandCornerAction) -> CGFloat {
+        ceil(NSString(string: action.title).size(withAttributes: [.font: Self.noticeFont]).width) + Self.cornerSymbol + Self.cornerSymbolGap + 2 * Self.cornerPadding
     }
-    /// How visible the button is: it follows the island as it opens (the picture grows with `zoom`) and shows only when the picture has almost reached its size.
-    var editButtonOpacity: CGFloat { showsEditButton ? grownOpacity : 0 }
-    private var grownOpacity: CGFloat {
-        let grown = openZoom > 1 ? min(max((zoom - 1) / (openZoom - 1), 0), 1) : 1
-        return contentOpacity * min(max((grown - 0.8) / 0.2, 0), 1)
+    /// The width of the buttons on one side of the row, with the gaps between them.
+    private func cornerGroupWidth(onLeft: Bool) -> CGFloat {
+        let group = IslandCornerAction.allCases.filter { $0.isOnLeft == onLeft }
+        return group.reduce(0) { $0 + cornerButtonWidth($1) } + CGFloat(group.count - 1) * cornerGap
     }
-
-    /// The buttons of the open island, in the strip of the menu bar's height above the picture: bare symbols, two at its left edge and two at its right one.
-    static let cornerSide: CGFloat = 20, cornerGap: CGFloat = 4
-    var cornerButtonsOpacity: CGFloat { expanded ? contentOpacity : 0 }
-    /// The middle of a button, from the middle of the island's top edge: x to the right, y down. The left ones begin where the picture begins, the right ones
-    /// end where it ends.
+    /// The width the row of buttons needs, with the room at its sides. With a notch the notch lies between the two groups, the room from it to each as large as that round
+    /// the island, and the groups are as wide on both sides of the middle (the notch is in the middle of the island).
+    var cornerRowWidth: CGFloat {
+        let left = cornerGroupWidth(onLeft: true), right = cornerGroupWidth(onLeft: false)
+        let inside = notchWidth > 0 ? 2 * max(left, right) + notchWidth + 2 * sideRoom : left + right + 2 * cornerGap
+        return inside + 2 * sideRoom
+    }
+    /// The middle of a button, from the middle of the island's top edge: x to the right, y down. The left ones begin at the island's left room, the right ones
+    /// end at its right room.
     func cornerButtonCentre(_ action: IslandCornerAction) -> CGPoint {
-        let side = Self.cornerSide, step = side + Self.cornerGap, half = glyph.size.width * openZoom / 2
         let same = IslandCornerAction.allCases.filter { $0.isOnLeft == action.isOnLeft }
-        let at = CGFloat(same.firstIndex(of: action) ?? 0)
-        return CGPoint(x: action.isOnLeft ? -half + side / 2 + at * step : half - side / 2 - (CGFloat(same.count) - 1 - at) * step, y: barHeight / 2)
+        let at = same.firstIndex(of: action) ?? 0
+        let before = same[..<at].reduce(CGFloat(0)) { $0 + cornerButtonWidth($1) + cornerGap }
+        let after = same[(at + 1)...].reduce(CGFloat(0)) { $0 + cornerButtonWidth($1) + cornerGap }
+        let half = openSize.width / 2 - sideRoom, width = cornerButtonWidth(action)
+        return CGPoint(x: action.isOnLeft ? -half + before + width / 2 : half - after - width / 2, y: topHeight / 2)
     }
 
     /// The line of the notice: its text, the button that undoes it and the one that closes it (a square with only an icon).
@@ -163,14 +175,14 @@ extension MenuBarIslandModel {
     }
 
     /// Where the line of the notice begins, from the top of the island: under the bar, or, with the island open, under the picture of the zones (above the row of cards).
-    var noticeTop: CGFloat { expanded ? barHeight + glyph.size.height * openZoom + windowsGap : barHeight + windowsGap }
+    var noticeTop: CGFloat { expanded ? topHeight + glyph.size.height * openZoom + windowsGap : restBottom + windowsGap }
 
     /// Where the row of cards begins: under the picture, and under the line of a notice if there is one (with the windows shown alone, under the bar).
     var windowsTop: CGFloat { noticeTop + (notice != nil ? noticeBlockHeight + windowsGap : 0) }
 
     private var plainOpenSize: CGSize {
         let width = windowsSpan
-        return CGSize(width: peeking ? max(width, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin) : width,
+        return CGSize(width: peeking ? max(width, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin) : max(width, cornerRowWidth),
                       height: openHeight(picture: peeking ? 0 : glyph.size.height * openZoom, windows: windowsHeight))
     }
 
@@ -180,5 +192,5 @@ extension MenuBarIslandModel {
             + 2 * Self.noticeButtonHeight + 2 * windowsGap   // the lines of a notice at the foot
     }
 
-    private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { barHeight + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : barHeight) }
+    private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { (peeking ? restBottom : topHeight) + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : sideRoom) }
 }

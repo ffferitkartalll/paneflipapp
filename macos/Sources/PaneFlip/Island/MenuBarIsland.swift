@@ -242,7 +242,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     #if DEBUG
     /// With a fake notch (see `CGSScreenProvider.fakeNotch`) a black notch is drawn too, to see how the island sits around it.
     private func showMockNotch(of entry: Entry, on screen: ScreenInfo, bar: CGFloat) {
-        guard CGSScreenProvider.fakeNotch != nil, screen.notchWidth > 0, NSScreen.screens.first?.safeAreaInsets.top == 0 else { return }
+        guard screen.notchWidth > 0, let native = NSScreen.screens.first(where: { $0.frame == screen.cocoaFrame }), CGSScreenProvider.hostsFakeNotch(native) else { return }
         let frame = CGRect(x: screen.cocoaFrame.midX - screen.notchWidth / 2, y: screen.cocoaFrame.maxY - screen.notchHeight, width: screen.notchWidth, height: screen.notchHeight)
         if entry.mockNotch == nil {
             let p = NSPanel(contentRect: frame, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
@@ -535,6 +535,31 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             guard hit != entry.hovered else { continue }
             setOpen(hit, for: entry)
         }
+        for entry in entries.values {
+            let button = buttonHover(at: point, in: entry)
+            if button != entry.model.hoveredButton { entry.model.hoveredButton = button }
+            // Over no button, a zone of the picture or a card of the row: a click there does something too.
+            // The buttons of a card belong to it: it stays lit while the pointer is on them.
+            let over = entry.hovered && !dragging
+            entry.model.hover(zone: over ? cell(at: point, in: entry) : nil)
+            let window = over ? rowHit(at: point, in: entry).card.map { entry.model.windows[$0].id } : nil
+            if window != entry.model.hoveredWindow { entry.model.hoveredWindow = window }
+        }
+    }
+
+    /// The button of the island under the pointer, if any (the same tests as a click uses).
+    private func buttonHover(at point: CGPoint, in entry: Entry) -> IslandButton? {
+        if entry.hovered {
+            if let action = cornerAction(at: point, in: entry) { return .corner(action) }
+            if let window = selectButtonHit(at: point, in: entry) { return .select(window.id) }
+            if let (action, window) = cardAction(at: point, in: entry) { return .card(action, window.id) }
+        }
+        switch noticeButton(at: point, in: entry) {
+        case .undo: return .noticeUndo
+        case .close: return .noticeClose
+        case .revert: return .noticeRevert
+        case nil: return nil
+        }
     }
 
     /// A dragged window is over the island: over the row of cards it shows where it would be put down; waiting on a zone of the picture opens that zone's row.
@@ -574,9 +599,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
+        if open { if picking === entry || dragging { entry.model.startChoosing() } else { entry.model.openedByPointer() } }
         if open { entry.peekEnd?.cancel(); entry.peekEnd = nil }
         // A notice goes on showing when the island shrinks back to it: its line is drawn with the content's opacity, which stays.
-        if !open { if entry.model.notice == nil { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }; entry.model.hoveredCard = nil }
+        if !open { if entry.model.notice == nil { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }; entry.model.hoveredCard = nil; entry.model.hoveredButton = nil; entry.model.hover(zone: nil); entry.model.hoveredWindow = nil }
         // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, and the island grows to hold them.
         let zone = open && !dragging && picking !== entry ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
         withAnimation(Self.motion) {
@@ -626,7 +652,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         lastCard = nil
         ghost.end()
         for entry in entries.values where entry.hovered {
-            if editButtonHit(at: point, in: entry) { onEditEdges?(); return }
             if let action = cornerAction(at: point, in: entry) { onCornerAction?(action); return }
             if let window = selectButtonHit(at: point, in: entry) { toggleStart(window, in: entry); return }
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
@@ -778,23 +803,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         withTransaction(Transaction(animation: nil)) { model.hoveredCard = id }
     }
 
-    /// The button of the card under the pointer that the point is on.
-    /// Whether the point is on the button that turns the editing of the zones' edges on.
-    private func editButtonHit(at point: CGPoint, in entry: Entry) -> Bool {
-        let model = entry.model
-        guard model.editButtonOpacity > 0.5 else { return false }
-        let frame = islandFrame(of: entry, open: true), centre = model.editButtonCentre, reach = MenuBarIslandModel.editButtonSide / 2 + 3
-        return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
-    }
-
     /// The button of the top right corner that the point is on.
     private func cornerAction(at point: CGPoint, in entry: Entry) -> IslandCornerAction? {
         let model = entry.model
         guard model.cornerButtonsOpacity > 0.5 else { return nil }
-        let frame = islandFrame(of: entry, open: true), reach = MenuBarIslandModel.cornerSide / 2 + 2
+        let frame = islandFrame(of: entry, open: true)
         return IslandCornerAction.allCases.first {
             let centre = model.cornerButtonCentre($0)
-            return abs(point.x - (frame.midX + centre.x)) <= reach && abs(point.y - (frame.maxY - centre.y)) <= reach
+            return abs(point.x - (frame.midX + centre.x)) <= model.cornerButtonWidth($0) / 2 + 2 && abs(point.y - (frame.maxY - centre.y)) <= MenuBarIslandModel.cornerHeight / 2 + 2
         }
     }
 
@@ -858,12 +874,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     /// A click on the shield: on a zone in the picture of the open island, a row of cards, one for each window of that zone, opens under the picture and the island
-    /// grows to hold it; on the same zone again, the row closes and the island shrinks back.
+    /// grows to hold it; on the same zone again, the row closes and the island shrinks back. The focus does not move: a click on a card does that.
     private func click(at point: CGPoint) {
         for entry in entries.values where entry.hovered && islandFrame(of: entry, open: true).contains(point) {
             guard let zone = cell(at: point, in: entry) else { continue }
-            coordinator.focus(zone: zone)
-            followFocus()   // the highlight goes to the zone at once
             withAnimation(Self.motion) {
                 if entry.model.windowsZone == zone {
                     entry.model.windowsZone = nil
@@ -999,7 +1013,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
     private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
-        let model = entry.model, bar = model.barHeight, frame = entry.panel.frame
+        let model = entry.model, bar = model.topHeight, frame = entry.panel.frame
         let x = (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
         guard entry.hovered else { return nil }
         return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
@@ -1009,6 +1023,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     func dragMoved(to point: CGPoint) {
         dragging = true
+        for entry in entries.values where entry.hovered { entry.model.startChoosing() }
         hover(at: point)
     }
 
@@ -1126,6 +1141,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         // Not quite clear: the window server lets the mouse through the pixels of a window that are fully clear. A hundredth of black cannot be seen.
         let cover = IslandShieldView(frame: .zero)
         cover.onPress = { [weak self] point in self?.press(at: point) }
+        // A right click on the button that edits the layout turns the editing of the zones' edges on.
+        cover.onSecondaryPress = { [weak self] point in
+            guard let self, let entry = entries.values.first(where: { $0.hovered }), cornerAction(at: point, in: entry) == .editLayout else { return }
+            onEditEdges?()
+        }
         cover.onDrag = { [weak self] point in self?.drag(to: point) }
         cover.onRelease = { [weak self] point in self?.release(at: point) }
         cover.wantsLayer = true

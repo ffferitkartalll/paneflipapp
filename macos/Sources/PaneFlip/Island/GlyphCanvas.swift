@@ -26,16 +26,22 @@ struct GlyphCanvas: View, Animatable {
     /// How far apart the two halves of the picture are drawn (the picture is cut in the middle, at a notch): the zones at the cut are stretched across.
     var gap: CGFloat
     let scale: CGFloat
-    /// The round button that turns the editing of the zones' edges on is drawn at the top right corner of the screen's frame, in the picture, so that its colours follow the zone under it.
-    let editButton: Bool
+    /// The zone the pointer is over, the one it left and how far the change has come: the lighter fill fades over.
+    var hoveredID: UUID? = nil
+    var previousHoveredID: UUID? = nil
+    var hoverBlend: CGFloat = 1
 
-    var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>> {
-        get { AnimatablePair(AnimatablePair(shift, gap), AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))) }
+    var animatableData: AnimatablePair<AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, AnimatablePair<CGFloat, AnimatablePair<CGFloat, CGFloat>>>>, CGFloat> {
+        get { AnimatablePair(AnimatablePair(AnimatablePair(shift, gap), AnimatablePair(blend, AnimatablePair(zoom, AnimatablePair(labels, pickBlend)))), hoverBlend) }
         set {
-            shift = newValue.first.first; gap = newValue.first.second; blend = newValue.second.first; zoom = newValue.second.second.first
-            labels = newValue.second.second.second.first; pickBlend = newValue.second.second.second.second
+            shift = newValue.first.first.first; gap = newValue.first.first.second; blend = newValue.first.second.first; zoom = newValue.first.second.second.first
+            labels = newValue.first.second.second.second.first; pickBlend = newValue.first.second.second.second.second
+            hoverBlend = newValue.second
         }
     }
+
+    /// How much a zone is lit by the pointer: fading in as the pointer comes onto it, out as it leaves.
+    private func hovered(_ id: UUID) -> CGFloat { id == hoveredID ? hoverBlend : (id == previousHoveredID ? 1 - hoverBlend : 0) }
 
     /// How much a zone is lit in the colour of the zone a window is sent to: fading in as it is chosen, out as another is.
     private func picked(_ id: UUID) -> CGFloat { id == pickedID ? pickBlend : (id == previousPickedID ? 1 - pickBlend : 0) }
@@ -64,10 +70,7 @@ struct GlyphCanvas: View, Animatable {
     }
 
     var body: some View {
-        // The symbol of the button is made once by the canvas, not resolved at every redraw (the picture is redrawn for every step of a scroll).
-        Canvas { context, _ in paint(&context) } symbols: {
-            Image(systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill").foregroundStyle(.white).tag(0)
-        }
+        Canvas { context, _ in paint(&context) }
     }
 
     /// Where a rectangle is drawn when the picture is cut in the middle and its halves are `gap` apart (at a notch). A zone across the cut is made wider by the gap, and
@@ -86,27 +89,6 @@ struct GlyphCanvas: View, Animatable {
             maxX += gap
         }
         return CGRect(x: minX, y: r.minY, width: maxX - minX, height: r.height)
-    }
-
-    /// The button: as the buttons of a card, light on a grey zone and dark on a lit one (and between the two as the focus moves), shown once the picture has almost grown.
-    private func paintEditButton(_ context: inout GraphicsContext, in window: CGRect) {
-        let grown = openZoom > 1 ? min(max((zoom - 1) / (openZoom - 1), 0), 1) : 1
-        let opacity = labels * min(max((grown - 0.8) / 0.2, 0), 1)
-        guard opacity > 0 else { return }
-        let side = MenuBarIslandModel.editButtonSide, margin = MenuBarIslandModel.editButtonMargin
-        let rect = CGRect(x: window.maxX - margin - side, y: window.minY + margin, width: side, height: side)
-        let under = glyph.cells.first { inner($0.rect).contains(CGPoint(x: rect.midX, y: rect.midY)) }
-        let dark = under.map { max(picked($0.id), lit($0.id)) } ?? 0
-        let fill = Color(white: 1 - dark).opacity(0.28 + (0.6 - 0.28) * dark)
-        context.drawLayer { layer in
-            layer.opacity = opacity
-            layer.fill(Path(ellipseIn: rect), with: .color(fill))
-            if let symbol = layer.resolveSymbol(id: 0) {
-                let box = side * 0.5, fit = min(box / symbol.size.width, box / symbol.size.height)
-                let size = CGSize(width: symbol.size.width * fit, height: symbol.size.height * fit)
-                layer.draw(symbol, in: CGRect(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2, width: size.width, height: size.height))
-            }
-        }
     }
 
     private func paint(_ context: inout GraphicsContext) {
@@ -139,6 +121,19 @@ struct GlyphCanvas: View, Animatable {
                         layer.fill(shape, with: .color(accentColor.opacity(lit(cell.id))))
                     }
                 }
+                if hovered(cell.id) > 0 {
+                    let hover = hovered(cell.id)
+                    // Lighter on a grey zone, darker on a lit one (white would hardly show on it); a zone beyond the screen's edge is outlined, and lit the same way.
+                    let on = max(lit(cell.id), picked(cell.id))
+                    context.drawLayer { layer in
+                        layer.clip(to: windowPath)
+                        layer.fill(shape, with: .color(Color(white: 1 - on).opacity((0.2 + 0.1 * on) * hover)))
+                    }
+                    context.drawLayer { layer in
+                        layer.clip(to: windowPath, options: .inverse)
+                        layer.fill(shape, with: .color(.white.opacity(0.18 * hover)))
+                    }
+                }
                 if picked(cell.id) > 0 { context.fill(shape, with: .color(AppAccent.placement.opacity(picked(cell.id)))) }
                 if cell.id == selectedID {
                     context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(.white.opacity(0.9)), lineWidth: 1.5)
@@ -153,6 +148,5 @@ struct GlyphCanvas: View, Animatable {
                 }
             }
             context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(.white.opacity(0.5)), lineWidth: 1)
-            if editButton { paintEditButton(&context, in: window) }
     }
 }
