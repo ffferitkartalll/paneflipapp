@@ -210,15 +210,18 @@ final class AppContainer {
         coordinator.flashZone = { zoneFlash.flash($0) }
         coordinator.onWindowChange = { [weak island] in island?.showNotice($0) }
         coordinator.onEnlargementEnd = { [weak island] in island?.dismissWindowNotice() }
-        coordinator.usableAreaOf = { [screens] rect in
-            var best: (area: CGRect, overlap: CGFloat)?
+        // The screen that holds most of a zone.
+        let screenOf: (CGRect) -> ScreenInfo? = { [screens] rect in
+            var best: (screen: ScreenInfo, overlap: CGFloat)?
             for screen in screens.screens() {
                 let shared = screen.axVisible.intersection(rect)
                 let overlap = shared.isNull ? 0 : shared.width * shared.height
-                if overlap > (best?.overlap ?? 0) { best = (screen.axVisible, overlap) }
+                if overlap > (best?.overlap ?? 0) { best = (screen, overlap) }
             }
-            return best?.area
+            return best?.screen
         }
+        coordinator.usableAreaOf = { screenOf($0)?.axVisible }
+        coordinator.edgeMarginOf = { [planner] rect in screenOf(rect).map { planner.spacing(for: $0.key).margin } ?? 0 }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }

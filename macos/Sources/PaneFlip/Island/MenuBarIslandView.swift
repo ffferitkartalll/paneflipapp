@@ -98,7 +98,7 @@ struct MenuBarIslandView: View {
                                 }
                             }
                         if model.noticeCloses {
-                            Image(systemName: "xmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white)
+                            Image(systemName: "xmark").font(.system(size: 13)).foregroundStyle(.white)
                                 .frame(width: height, height: height)
                                 .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(model.hoveredButton == .noticeClose ? 0.32 : 0.18)))
                                 .animation(.easeOut(duration: 0.1), value: model.hoveredButton)

@@ -119,14 +119,14 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.notice = AttributedString("Done")
         let line = model.noticeRowWidth + 2 * model.windowsGap
         XCTAssertEqual(model.openSize.width, max(line, 32 + 48), "no wider than the closed island unless the line needs more")
-        XCTAssertEqual(model.openSize.height, 20 + 12 + 22 + 12, "the picture, a gap, the line and a gap")
+        XCTAssertEqual(model.openSize.height, 20 + 12 + 28 + 12, "the picture, a gap, the line and a gap")
         model.expanded = true
         XCTAssertEqual(model.noticeTop, 52 + 16 * 5 + 12, "under the picture")
-        XCTAssertEqual(model.openSize.height, model.noticeTop + 22 + 12)
+        XCTAssertEqual(model.openSize.height, model.noticeTop + 28 + 12)
         choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
         model.windows = cards(1, front: 0)
         XCTAssertEqual(model.noticeTop, 52 + 80 + 12, "and still there with a row of cards, which lies under it")
-        XCTAssertEqual(model.windowsTop, model.noticeTop + 22 + 12)
+        XCTAssertEqual(model.windowsTop, model.noticeTop + 28 + 12)
         XCTAssertEqual(model.openSize.height, model.windowsTop + 108 + 12)    }
 
     func testWindowsShownAloneLieUnderTheLineOfANotice() {
@@ -137,7 +137,7 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.windows = cards(2, front: 0)
         let noticeOnly = model.openSize.height
         model.peeking = true
-        XCTAssertEqual(model.windowsTop, 20 + 12 + 22 + 12)
+        XCTAssertEqual(model.windowsTop, 20 + 12 + 28 + 12)
         XCTAssertEqual(model.openSize.height, noticeOnly + 108 + 12, "the row of cards under the line")
     }
 

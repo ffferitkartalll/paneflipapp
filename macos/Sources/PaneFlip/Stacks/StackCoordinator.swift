@@ -55,6 +55,8 @@ final class StackCoordinator {
     var onEnlargementEnd: (() -> Void)?
     /// The usable area of the screen that shows most of a rectangle (nil: none shows it).
     var usableAreaOf: (CGRect) -> CGRect? = { _ in nil }
+    /// The margin the layout of the screen that holds a zone keeps round the screen's edges.
+    var edgeMarginOf: (CGRect) -> CGFloat = { _ in 0 }
     /// Slides windows when a card of the island is clicked; without one the chosen window just comes to the front.
     var carousel: ZoneCarousel? {
         didSet { carousel?.onFree = { [weak self] in
@@ -684,7 +686,7 @@ final class StackCoordinator {
     static let enlargedTime: TimeInterval = 15
     private var enlarged: (window: WindowRef, zone: UUID, end: DispatchWorkItem)?
 
-    /// The focused window of a zone grows to fill the usable area of its screen; it stays in its zone. Again for the same window, or for another one, the
+    /// The focused window of a zone grows to fill the usable area of its screen less the layout's margin round its edges; it stays in its zone. Again for the same window, or for another one, the
     /// enlarged window goes back to its zone first.
     func enlargeFocused() {
         guard let ref = focusedWindowCached() else { return }
@@ -693,7 +695,8 @@ final class StackCoordinator {
 
     /// The same for a window of a zone that is known (a double click on its card in the island).
     func enlarge(_ ref: WindowRef) {
-        guard !placementOnly(), let stack = stack(containing: ref.id), !stack.isParked, let area = usableAreaOf(stack.rect) else { return }
+        guard !placementOnly(), let stack = stack(containing: ref.id), !stack.isParked, let usable = usableAreaOf(stack.rect) else { return }
+        let margin = edgeMarginOf(stack.rect), area = usable.insetBy(dx: margin, dy: margin)
         let again = enlarged?.window.id == ref.id
         endEnlargement()
         guard !again else { return }

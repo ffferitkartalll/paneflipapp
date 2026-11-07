@@ -276,6 +276,17 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(told, [.added, .added, .added, .removed], "an undo is not a change to be told or undone again")
     }
 
+    func testAnEnlargedWindowKeepsTheMarginOfTheLayoutRoundTheScreensEdges() {
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 10, y: 10, width: 100, height: 80)])
+        coordinator.usableAreaOf = { _ in CGRect(x: 0, y: 0, width: 200, height: 100) }
+        coordinator.edgeMarginOf = { _ in 10 }
+        coordinator.snap(.fake(1), into: zone)
+        windows.focused = .fake(1)
+        coordinator.enlargeFocused()
+        XCTAssertEqual(windows.frames[1], CGRect(x: 10, y: 10, width: 180, height: 80))
+    }
+
     func testAnEnlargedWindowStaysInItsZoneUntilAnotherIsEnlargedOrItIsUndone() {
         let first = UUID(), second = UUID(), area = CGRect(x: 0, y: 0, width: 200, height: 100)
         let zones = [first: CGRect(x: 0, y: 0, width: 100, height: 100), second: CGRect(x: 100, y: 0, width: 100, height: 100)]

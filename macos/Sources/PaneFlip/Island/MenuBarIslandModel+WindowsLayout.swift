@@ -125,7 +125,7 @@ extension MenuBarIslandModel {
 
     /// The line of the notice: its text, the button that undoes it and the one that closes it (a square with only an icon).
     static var noticeFont: NSFont { NSFont.menuBarFont(ofSize: 0) }
-    static let noticeGap: CGFloat = 8, noticeButtonPadding: CGFloat = 10, noticeButtonHeight: CGFloat = 22, noticeRadius: CGFloat = 10
+    static let noticeGap: CGFloat = 8, noticeButtonPadding = cornerPadding, noticeButtonHeight = cornerHeight, noticeRadius = cornerHeight / 2
     var noticeButtonTitle: String { noticeEditing ? String(localized: "Done") : String(localized: "Undo") }
     var noticeButtonWidth: CGFloat { ceil(NSString(string: noticeButtonTitle).size(withAttributes: [.font: Self.noticeFont]).width) + 2 * Self.noticeButtonPadding }
     /// The room the text has at most: the display less the side room and the two buttons.
