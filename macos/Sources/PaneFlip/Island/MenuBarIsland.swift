@@ -252,7 +252,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             p.hasShadow = false
             p.ignoresMouseEvents = true
             p.collectionBehavior = [.canJoinAllSpaces, .stationary]
-            p.contentView = NSHostingView(rootView: UnevenRoundedRectangle(bottomLeadingRadius: 10, bottomTrailingRadius: 10).fill(.black).ignoresSafeArea())
+            p.contentView = NSHostingView(rootView: UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius).fill(.black).ignoresSafeArea())
             entry.mockNotch = p
         }
         entry.mockNotch?.setFrame(frame, display: true)
