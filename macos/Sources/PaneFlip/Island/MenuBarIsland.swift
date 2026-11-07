@@ -41,10 +41,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private var badges: [String: String] = [:]
     private let badgeQueue = DispatchQueue(label: "island.badges", qos: .utility)
     private var badgeAsking = false
-    /// Where the card carried out of the row would go if let go now: onto the island (as a dragged window would: a zone of the picture, or a place in the open row of
-    /// another zone), onto a zone of the screen (the zones light up), or out of its zone (reverse snap).
-    private enum CarryTarget: Equatable { case island, screen(UUID), takeOut }
-    private var carryTarget: CarryTarget?
+    private var carryTarget: IslandCarryTarget?
     /// The window of the card being carried, and the zone it lay in when the mouse went down on it (the row shown may change meanwhile).
     private var carrying: (ref: WindowRef, zone: UUID)?
     /// The card being carried (its row may be another one by now).
@@ -764,14 +761,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// Where the carried card would go. Over a zone of the picture, or the open row of another zone, it is a window dragged onto the island. On or near its own row
     /// it only changes place. Away from the island it goes to the zone under the pointer, and out of its zone over none.
-    private func carryTarget(at point: CGPoint, in entry: Entry) -> CarryTarget? {
+    private func carryTarget(at point: CGPoint, in entry: Entry) -> IslandCarryTarget? {
         guard let carrying else { return nil }
         if cell(at: point, in: entry) != nil || (entry.model.windowsZone != carrying.zone && rowHit(at: point, in: entry).onRow) { return .island }
         if islandFrame(of: entry, open: true).contains(point) || rowHit(at: point, in: entry, slack: 24).onRow { return nil }
         return coordinator.zoneID(at: screens.pointerAX).map { .screen($0) } ?? .takeOut
     }
 
-    private func setCarryTarget(_ target: CarryTarget?, at point: CGPoint, in entry: Entry) {
+    private func setCarryTarget(_ target: IslandCarryTarget?, at point: CGPoint, in entry: Entry) {
         if target == .island {
             if carryTarget != .island { dragging = true; hover(at: point) }
             if carryTimer == nil { carryTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in self?.hover(at: NSEvent.mouseLocation) } }
@@ -784,10 +781,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             entry.dwell = nil
             if entry.dropZone != nil { entry.dropZone = nil; entry.model.select(focused(in: entry)) }
         }
-        // Like a window dragged with the snap trigger held: every zone stays lit while the card is over the screen, and the one under the pointer is marked (none in a gap).
-        var over: UUID?, onScreen = target == .takeOut
-        if case .screen(let zone) = target { over = zone; onScreen = true }
-        if onScreen {
+        let (lit, over) = target?.lighting ?? (false, nil)
+        if lit {
             if !lighting.isShown { lighting.show(zones: coordinator.visibleStacks.map { ($0.id, $0.rect) }) }
             lighting.highlight(zone: over)
         } else if lighting.isShown {
