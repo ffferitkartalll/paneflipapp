@@ -21,32 +21,23 @@ struct MenuBarIslandWindowsView: View {
             } else {
                 carousel(size: size)
             }
-            // The room under the cards: their titles are drawn in it, in the cells of the cards.
-            Color.clear.frame(width: 1, height: model.captionHeight)
+            // The room under the cards: their titles are drawn in it, in the cells of the cards (no windows, no titles).
+            if !model.windows.isEmpty { Color.clear.frame(width: 1, height: model.captionHeight) }
         }
         .id(model.windowsZone)   // another zone: its windows fade in as the old ones fade out
         .transition(.opacity)
     }
 
-    /// What stands under a card: its title, and under that why an app is not open. Both are in the cell of the card, so they move with it.
+    /// What stands under a card: its title, and why an app is not open in brackets after it. It is in the cell of the card, so they move with it.
     private func caption(_ window: IslandWindow) -> some View {
         let font = Font(NSFont.menuBarFont(ofSize: 0))   // as the date and the time of the menu bar
-        return VStack(spacing: 0) {
-            Text(verbatim: window.name)
-                .font(font)
-                .foregroundStyle(.white.opacity(window.isActive ? 1 : 0.55))
-                .frame(maxWidth: .infinity)   // the text is centred in the width of its card, whatever that is while the card widens or narrows
-                .frame(height: 16)
-            Group {
-                if let absence = window.absence { Text(absence.title) } else { Text(verbatim: " ") }
-            }
-            .font(.system(size: 11))
-            .foregroundStyle(.white.opacity(0.5))
-            .frame(maxWidth: .infinity)
-            .frame(height: 14)
-        }
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
+        return (window.absence.map { Text(verbatim: window.name + " (") + Text($0.title) + Text(verbatim: ")") } ?? Text(verbatim: window.name))
+            .font(font)
+            .foregroundStyle(.white.opacity(window.isActive ? 1 : 0.55))
+            .frame(maxWidth: .infinity)   // the text is centred in the width of its card, whatever that is while the card widens or narrows
+            .frame(height: model.captionHeight)
+            .multilineTextAlignment(.center)
+            .lineLimit(1)
     }
 
     /// The buttons of the card the mouse is over (nothing on the others, and nothing while a card is carried). They are drawn in the cards' own pictures, in both layers
@@ -59,7 +50,8 @@ struct MenuBarIslandWindowsView: View {
                 Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
                     .frame(width: item.rect.width * 0.5, height: item.rect.height * 0.5)
                     .frame(width: item.rect.width, height: item.rect.height)
-                    .background(Circle().fill(dark ? Color.black.opacity(0.6) : Color.white.opacity(0.28)))
+                    .background(Circle().fill(Self.buttonFill(dark: dark, hover: model.hoveredButton == .card(item.action, window.id))))
+                    .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                     .offset(x: item.rect.minX, y: item.rect.minY)
             }
             selectButton(of: window, in: size, dark: dark)
@@ -69,11 +61,15 @@ struct MenuBarIslandWindowsView: View {
         .animation(.easeOut(duration: 0.12), value: shown)   // only its own fade: the cards' motion is not touched
     }
 
+    /// The fill of a card's round button: dark inside the lit frame, light outside it, and stronger while the pointer is on it.
+    private static func buttonFill(dark: Bool, hover: Bool) -> Color { dark ? .black.opacity(hover ? 0.85 : 0.6) : .white.opacity(hover ? 0.45 : 0.28) }
+
     /// The button that ticks the card's app to be started with the layout: a circle like the others, which shows a check mark when the app is ticked.
     private func selectButton(of window: IslandWindow, in size: CGSize, dark: Bool) -> some View {
         let rect = IslandCardAction.selectRect(in: size), on = window.selected
         return ZStack {
-            Circle().fill(dark ? Color.black.opacity(0.6) : Color.white.opacity(0.28))
+            Circle().fill(Self.buttonFill(dark: dark, hover: model.hoveredButton == .select(window.id)))
+                .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
             Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
                 .frame(width: rect.width * 0.5, height: rect.height * 0.5)
                 .scaleEffect(on ? 1 : 0.3).opacity(on ? 1 : 0)
@@ -128,9 +124,13 @@ struct MenuBarIslandWindowsView: View {
         let lit = model.cardsAt == nil ? 0 : size.width
         return ZStack(alignment: .top) {
             frame.fill(AppAccent.color).frame(width: lit, height: size.height).offset(x: shift)
+            // The front card is on the lit frame, where white would hardly show: the frame darkens while the pointer is on that card.
+            frame.fill(.black.opacity(model.windows.first(where: \.isActive)?.id == model.hoveredWindow && model.hoveredWindow != nil ? 0.14 : 0))
+                .frame(width: lit, height: size.height).offset(x: shift)
+                .animation(.easeOut(duration: 0.12), value: model.hoveredWindow)
             // A card the mouse carries is grey, its edge not dashed, whether it is over the frame or not (the front card has its frame).
             row { window in
-                AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity((window.id == model.liftedCard || window.isPlaceholder) && !window.isActive ? 0.22 : 0)))
+                AnyView(RoundedRectangle(cornerRadius: 2).fill(.white.opacity((window.id == model.liftedCard || window.isPlaceholder) && !window.isActive ? 0.22 : (window.id == model.hoveredWindow && !window.isActive ? 0.14 : 0))).animation(.easeOut(duration: 0.12), value: model.hoveredWindow))
             }
             // Outside the frame: the outlines of the windows beyond it, and the pictures, light.
             ZStack(alignment: .top) {
@@ -153,12 +153,5 @@ struct MenuBarIslandWindowsView: View {
             row { window in AnyView(badge(of: window, in: size)) }
         }
         .frame(width: wide, height: size.height, alignment: .top)
-        // The cards that go toward the edges of the island fade into it. The mask is as tall as the titles under the cards reach, which lie below the frame.
-        .mask(alignment: .top) {
-            LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: model.barHeight / wide),
-                                   .init(color: .black, location: 1 - model.barHeight / wide), .init(color: .clear, location: 1)],
-                           startPoint: .leading, endPoint: .trailing)
-                .frame(width: wide, height: size.height + model.windowsGap + model.captionHeight)
-        }
     }
 }

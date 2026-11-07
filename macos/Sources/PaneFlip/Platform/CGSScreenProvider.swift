@@ -168,8 +168,9 @@ final class CGSScreenProvider: ScreenProviding {
     /// The notch of a display: what lies between the two usable parts of the top edge, and how far down it reaches; zero without one.
     private func notch(of screen: NSScreen) -> (width: CGFloat, height: CGFloat) {
         #if DEBUG
-        // To try the app without a notched display: PANEFLIP_FAKE_NOTCH=1 (or =<width>x<height>), or the default PaneFlipFakeNotch, gives the main display one.
-        if let fake = Self.fakeNotch, screen == NSScreen.screens.first, screen.safeAreaInsets.top == 0 {
+        // To try the app without a notched display: PANEFLIP_FAKE_NOTCH=1 (or =<width>x<height>), or the default PaneFlipFakeNotch, gives the built-in display one
+        // (the main display when there is no built-in one).
+        if let fake = Self.fakeNotch, Self.hostsFakeNotch(screen) {
             // Without a height of its own the notch is as tall as the menu bar, as on a notched display.
             return (fake.width, fake.height > 0 ? fake.height : max(screen.frame.maxY - screen.visibleFrame.maxY, menuBarThickness))
         }
@@ -179,6 +180,14 @@ final class CGSScreenProvider: ScreenProviding {
     }
 
     #if DEBUG
+    /// The display that gets the fake notch: the built-in one, else the first, and only one without a real notch.
+    static func hostsFakeNotch(_ screen: NSScreen) -> Bool {
+        let builtIn = NSScreen.screens.first {
+            ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber).map { CGDisplayIsBuiltin($0.uint32Value) != 0 } ?? false
+        }
+        return fakeNotch != nil && screen == (builtIn ?? NSScreen.screens.first) && screen.safeAreaInsets.top == 0
+    }
+
     static let fakeNotch: (width: CGFloat, height: CGFloat)? = {
         // From the scheme's environment (PANEFLIP_FAKE_NOTCH) or, without touching the scheme, from the app's defaults (PaneFlipFakeNotch).
         guard let value = ProcessInfo.processInfo.environment["PANEFLIP_FAKE_NOTCH"] ?? UserDefaults.standard.string(forKey: "PaneFlipFakeNotch"), !value.isEmpty, value != "0" else { return nil }

@@ -22,7 +22,7 @@ final class MenuBarIslandModelTests: XCTestCase {
     func testWithNoZoneChosenThereIsNoRowAndTheIslandIsAsTallAsItsPicture() {
         let model = model()
         XCTAssertEqual(model.windowsHeight, 0)
-        XCTAssertEqual(model.openSize, CGSize(width: 32 * 5 + 48, height: 24 + 16 * 5 + 24), "the picture and the height of the menu bar round it")
+        XCTAssertEqual(model.openSize, CGSize(width: max(32 * 5 + 24, model.cornerRowWidth), height: 46 + 16 * 5 + 12), "the row of buttons, the picture and the room round it")
     }
 
     private func cards(_ count: Int, front: Int) -> [IslandWindow] {
@@ -45,8 +45,8 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.cardsFit, 7 * card.width, accuracy: 0.001, "whichever is in front")
         XCTAssertEqual(model.frameShift, -3 * card.width, accuracy: 0.001, "the frame is on the first card: three cards left of the middle")
         model.displayWidth = 200
-        XCTAssertEqual(model.cardsFit, 160, "never past the display, less the room beside the island; the picture is the least")
-        let extra = 7 * card.width - 160
+        XCTAssertEqual(model.cardsFit, 176, "never past the display, less the room beside the island; the picture is the least")
+        let extra = 7 * card.width - 176
         XCTAssertEqual(model.rowShift, extra / 2, accuracy: 0.001, "the row is wider than its room: it is moved to bring the first card into view, as far as its end allows")
         XCTAssertEqual(model.frameShift, -3 * card.width + extra / 2, accuracy: 0.001)
     }
@@ -63,49 +63,44 @@ final class MenuBarIslandModelTests: XCTestCase {
     func testAChosenZoneAddsTheGapTheFrameAndTheTitleToTheHeight() {
         let model = model()
         choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
-        XCTAssertEqual(model.windowsHeight, 80 + 12 + 30)
-        XCTAssertEqual(model.openSize.height, 24 + 80 + 12 + 122 + 12, "the gaps are half the height of the menu bar, the title as far from the frame as from the lower edge")
-        XCTAssertEqual(model.openSize.width, 32 * 5 + 48, "one card is not wider than the picture")
+        model.windows = cards(1, front: 0)
+        XCTAssertEqual(model.windowsHeight, 80 + 12 + 16)
+        XCTAssertEqual(model.openSize.height, 46 + 80 + 12 + 108 + 12, "the gaps are half the height of the menu bar, the title as far from the frame as from the lower edge")
+        XCTAssertEqual(model.openSize.width, max(32 * 5 + 24, model.cornerRowWidth), "one card is not wider than the picture")
     }
 
     func testThePanelIsTallEnoughForTheLargestZone() {
         let model = model()
         choose(model, rect: CGRect(x: 0, y: 0, width: 1000, height: 500))
+        model.windows = cards(1, front: 0)
         XCTAssertEqual(model.tallestOpenHeight, model.openSize.height + 2 * MenuBarIslandModel.noticeButtonHeight + 2 * model.windowsGap, "and for the two lines of a notice at its foot")
     }
 
-    func testTheCornerButtonsStandAtTheTwoEdgesOfThePictureInTheBarAboveIt() {
+    func testTheCornerButtonsStandAtTheTwoEdgesOfTheIslandInTheRowAboveThePicture() {
         let model = model()
         XCTAssertEqual(model.cornerButtonsOpacity, 0, "not while the island is closed")
         model.expanded = true
         model.contentOpacity = 1
         XCTAssertEqual(model.cornerButtonsOpacity, 1)
-        let side = MenuBarIslandModel.cornerSide, half = model.glyph.size.width * model.openZoom / 2
-        XCTAssertEqual(model.cornerButtonCentre(.quit).x, half - side / 2, "the last ends where the picture ends, not at the island's edge")
-        XCTAssertEqual(model.cornerButtonCentre(.editLayout).x, -half + side / 2, "the first begins where the picture begins")
-        XCTAssertEqual(model.cornerButtonCentre(.quit).y, model.barHeight / 2, "in the bar, above the picture")
-        let step = side + MenuBarIslandModel.cornerGap
-        XCTAssertEqual(model.cornerButtonCentre(.openApps).x - model.cornerButtonCentre(.editLayout).x, step)
-        XCTAssertEqual(model.cornerButtonCentre(.quit).x - model.cornerButtonCentre(.settings).x, step)
+        XCTAssertEqual(model.topHeight, 46, "the buttons with the room above and below them")
+        let half = model.openSize.width / 2 - model.sideRoom
+        let first = model.cornerButtonCentre(.editLayout), last = model.cornerButtonCentre(.quit)
+        XCTAssertEqual(first.x - model.cornerButtonWidth(.editLayout) / 2, -half, accuracy: 0.001, "the first begins at the room of the left side")
+        XCTAssertEqual(last.x + model.cornerButtonWidth(.quit) / 2, half, accuracy: 0.001, "the last ends at the room of the right side")
+        XCTAssertEqual(last.y, model.topHeight / 2)
+        let step = model.cornerGap
+        XCTAssertEqual(model.cornerButtonCentre(.openApps).x - model.cornerButtonWidth(.openApps) / 2 - (first.x + model.cornerButtonWidth(.editLayout) / 2), step, accuracy: 0.001)
+        XCTAssertEqual(last.x - model.cornerButtonWidth(.quit) / 2 - (model.cornerButtonCentre(.settings).x + model.cornerButtonWidth(.settings) / 2), step, accuracy: 0.001)
     }
 
-    func testTheEditButtonStandsAtTheTopRightOfTheOpenPictureAndGivesWayToTheEditingNotice() {
+    func testTheRowOfButtonsLeavesTheNotchItsWidthAndTheRoomOfTheIslandOnBothSides() {
         let model = model()
-        XCTAssertFalse(model.showsEditButton, "not while the island is closed")
-        model.expanded = true
-        model.zoom = model.openZoom
-        model.contentOpacity = 1
-        XCTAssertTrue(model.showsEditButton)
-        XCTAssertEqual(model.editButtonOpacity, 1, accuracy: 1e-9)
-        model.zoom = 1
-        XCTAssertEqual(model.editButtonOpacity, 0, "not while the island is still small")
-        model.zoom = model.openZoom
-        let side = MenuBarIslandModel.editButtonSide, margin = MenuBarIslandModel.editButtonMargin
-        XCTAssertEqual(model.editButtonCentre.x, (model.glyph.screen.maxX - model.glyph.size.width / 2) * model.zoom - margin - side / 2)
-        XCTAssertEqual(model.editButtonCentre.y, model.barHeight + margin + side / 2, "just under the bar, at the picture's top edge")
-        model.noticeEditing = true
-        model.notice = AttributedString("Zone edge editing is on.")
-        XCTAssertFalse(model.showsEditButton, "the mode is on already")
+        let plain = model.cornerRowWidth
+        model.notchWidth = 200
+        XCTAssertGreaterThan(model.cornerRowWidth, plain + 200 - 1, "the notch lies between the two groups")
+        let wide = IslandCornerAction.allCases.map { model.cornerButtonWidth($0) }
+        let groups = max(wide[0] + wide[1] + model.cornerGap, wide[2] + wide[3] + model.cornerGap)
+        XCTAssertEqual(model.cornerRowWidth, 2 * groups + 200 + 2 * model.sideRoom + 2 * model.sideRoom, accuracy: 0.001)
     }
 
     func testTheEditingNoticeGrowsByALineWhenAZoneEdgeWasMoved() {
@@ -124,14 +119,15 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.notice = AttributedString("Done")
         let line = model.noticeRowWidth + 2 * model.windowsGap
         XCTAssertEqual(model.openSize.width, max(line, 32 + 48), "no wider than the closed island unless the line needs more")
-        XCTAssertEqual(model.openSize.height, 24 + 12 + 22 + 12, "the bar, a gap, the line and a gap")
+        XCTAssertEqual(model.openSize.height, 20 + 12 + 22 + 12, "the picture, a gap, the line and a gap")
         model.expanded = true
-        XCTAssertEqual(model.noticeTop, 24 + 16 * 5 + 12, "under the picture")
+        XCTAssertEqual(model.noticeTop, 46 + 16 * 5 + 12, "under the picture")
         XCTAssertEqual(model.openSize.height, model.noticeTop + 22 + 12)
         choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
-        XCTAssertEqual(model.noticeTop, 24 + 80 + 12, "and still there with a row of cards, which lies under it")
+        model.windows = cards(1, front: 0)
+        XCTAssertEqual(model.noticeTop, 46 + 80 + 12, "and still there with a row of cards, which lies under it")
         XCTAssertEqual(model.windowsTop, model.noticeTop + 22 + 12)
-        XCTAssertEqual(model.openSize.height, model.windowsTop + 122 + 12)    }
+        XCTAssertEqual(model.openSize.height, model.windowsTop + 108 + 12)    }
 
     func testWindowsShownAloneLieUnderTheLineOfANotice() {
         let model = model()
@@ -141,8 +137,49 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.windows = cards(2, front: 0)
         let noticeOnly = model.openSize.height
         model.peeking = true
-        XCTAssertEqual(model.windowsTop, 24 + 12 + 22 + 12)
-        XCTAssertEqual(model.openSize.height, noticeOnly + 122 + 12, "the row of cards under the line")
+        XCTAssertEqual(model.windowsTop, 20 + 12 + 22 + 12)
+        XCTAssertEqual(model.openSize.height, noticeOnly + 108 + 12, "the row of cards under the line")
+    }
+
+    func testTheIslandForChoosingAZoneHasNoRowOfButtonsWhereThereIsNoNotch() {
+        let model = model()
+        model.expanded = true
+        model.contentOpacity = 1
+        XCTAssertEqual(model.topHeight, 46)
+        model.pick(model.glyph.cells[0].id)
+        XCTAssertEqual(model.topHeight, model.windowsGap, "only the room above the picture")
+        XCTAssertEqual(model.cornerButtonsOpacity, 0)
+        model.endPick()
+        XCTAssertEqual(model.topHeight, model.windowsGap, "and not while it closes")
+        model.openedByPointer()
+        XCTAssertEqual(model.topHeight, 46, "the pointer opens it with its row again")
+        model.pick(model.glyph.cells[0].id)
+        model.notchWidth = 200
+        XCTAssertEqual(model.topHeight, 46, "a notch hides the middle of the top: the island keeps its row")
+        XCTAssertEqual(model.cornerButtonsOpacity, 0, "but it shows no buttons in it")
+        model.openedByPointer()
+        model.startChoosing()   // a window dragged onto the island
+        XCTAssertEqual(model.cornerButtonsOpacity, 0)
+        XCTAssertEqual(model.topHeight, 46)
+    }
+
+    func testWindowsShownAloneStandTheRoomUnderThePictureAtRest() {
+        let model = model()
+        model.displayWidth = 1000
+        choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
+        model.windows = cards(2, front: 0)
+        model.peeking = true
+        XCTAssertEqual(model.windowsTop, 24 - MenuBarIslandView.margin + model.windowsGap)
+    }
+
+    func testAZoneWithNoWindowHasNoRoomForATitleUnderItsCard() {
+        let model = model()
+        choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
+        model.windows = []
+        XCTAssertEqual(model.windowsHeight, 80, "the card alone")
+        XCTAssertEqual(model.openSize.height, 46 + 80 + 12 + 80 + 12)
+        model.windows = cards(1, front: 0)
+        XCTAssertEqual(model.windowsHeight, 80 + 12 + 16)
     }
 
     func testClosingTheRowTakesBackTheHeight() {

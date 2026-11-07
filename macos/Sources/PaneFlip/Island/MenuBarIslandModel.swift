@@ -52,6 +52,14 @@ final class MenuBarIslandModel {
     var windowsDrag: CGFloat = 0
     /// The card the mouse is over (`IslandWindow.id`) while the island is open under the pointer: it shows its buttons. Nil when the mouse is on none.
     var hoveredCard: String?
+    /// The button the pointer is over: it is drawn lighter.
+    var hoveredButton: IslandButton?
+    /// The zone of the picture, and the card of the row (`IslandWindow.id`), the pointer is over: a click there does something, so they are drawn lighter.
+    private(set) var hoveredZone: UUID?
+    /// The zone the pointer left, and how far the change has come (0 to 1): the lighter fill fades over, as the lit zone of the focus does.
+    private(set) var previousHoveredZone: UUID?
+    var zoneHoverBlend: CGFloat = 1
+    var hoveredWindow: String?
     /// The card the mouse carries (`IslandWindow.id`), and where its middle is, from the middle of the row.
     var carriedCard: String?
     /// The card is held up: it is put down while it goes to its place.
@@ -63,8 +71,27 @@ final class MenuBarIslandModel {
     /// Device pixels per point of the display: what the drawing is aligned to.
     var scale: CGFloat = 2
 
+    /// The pointer is over another zone (nil: none).
+    func hover(zone id: UUID?) {
+        guard id != hoveredZone else { return }
+        previousHoveredZone = hoveredZone
+        hoveredZone = id
+        withTransaction(Transaction(animation: nil)) { zoneHoverBlend = 0 }
+        DispatchQueue.main.async { [self] in withAnimation(.easeOut(duration: 0.12)) { zoneHoverBlend = 1 } }
+    }
+
     /// The zone a window is being sent to changes (nil: none): it lights up as the old one goes out.
+    /// The island is the one opened to choose the zone for a window: it stays so until the pointer opens it again, also while it closes (its shape must not change then).
+    private(set) var choosing = false
+
+    /// The pointer opened the island.
+    func openedByPointer() { choosing = false }
+
+    /// A window is being dragged onto the island, or sent with the keys: it shows no buttons.
+    func startChoosing() { choosing = true }
+
     func pick(_ id: UUID?) {
+        if id != nil { choosing = true }
         guard id != pickedID else { return }
         previousPickedID = pickedID
         pickedID = id

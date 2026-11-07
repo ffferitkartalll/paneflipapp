@@ -131,6 +131,7 @@ targets:
       - path: Sources/PaneFlip/Island/IslandWindow.swift
       - path: Sources/PaneFlip/Island/IslandCardAction.swift
       - path: Sources/PaneFlip/Island/IslandCornerAction.swift
+      - path: Sources/PaneFlip/Island/IslandButton.swift
       - path: Sources/PaneFlip/Island/IslandShiftedRow.swift
       - path: Sources/PaneFlip/Island/IslandCardsLayout.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift

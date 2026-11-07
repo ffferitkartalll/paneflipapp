@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 /// The buttons in the bar's strip above the picture of the open island, in the order they stand from the left: two at its left edge, two at its right edge
 /// (the last one at the corner itself).
@@ -17,12 +17,12 @@ enum IslandCornerAction: CaseIterable {
     }
 
     /// The same words as the menu bar menu.
-    var title: LocalizedStringKey {
+    var title: String {
         switch self {
-        case .editLayout: "Edit layout"
-        case .openApps: "Open selected apps"
-        case .settings: "Settings"
-        case .quit: "Quit"
+        case .editLayout: String(localized: "Edit layout")
+        case .openApps: String(localized: "Open selected apps")
+        case .settings: String(localized: "Settings")
+        case .quit: String(localized: "Quit")
         }
     }
 }

@@ -10,6 +10,7 @@ private func CGSSetConnectionProperty(_ connection: Int32, _ target: Int32, _ ke
 /// coordinates.
 final class IslandShieldView: NSView {
     var onPress: ((CGPoint) -> Void)?
+    var onSecondaryPress: ((CGPoint) -> Void)?
     var onDrag: ((CGPoint) -> Void)?
     var onRelease: ((CGPoint) -> Void)?
     /// The pointer's shape over the shield while it is not the arrow (the hand while a card is carried).
@@ -24,6 +25,7 @@ final class IslandShieldView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) { onPress?(NSEvent.mouseLocation) }
+    override func rightMouseDown(with event: NSEvent) { onSecondaryPress?(NSEvent.mouseLocation) }
     override func mouseDragged(with event: NSEvent) {
         cursor?.set()
         onDrag?(NSEvent.mouseLocation)
