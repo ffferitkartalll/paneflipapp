@@ -4,7 +4,14 @@ import Observation
 /// What a zone's notch shows (`ZoneNotchView`): at rest, lit under the pointer, or grown into a row of the zone's open windows while they are switched.
 @Observable
 final class ZoneNotchModel {
-    var hovered = false
+    /// 0 for the notch at rest, 1 for the one the pointer is on (and for the grown one): moved by the owner, so that it goes from one to the other as a movement.
+    var lift: CGFloat = 0
+    /// 0 for the notch at rest, 1 for the grown one: how far each part has turned into the card of its window (`ZoneNotchRow`).
+    var grow: CGFloat = 0
+    /// How many open windows the zone holds: the notch at rest is as wide as they ask (`ZoneNotchView.size(forWindows:)`).
+    var windowCount = 1
+    /// The place of the zone's front window among them: with the pointer on the notch, that part of it is filled.
+    var activeIndex = 0
     /// The open windows of a switch, in the grown notch; empty: the notch is not grown.
     var cards: [IslandWindow] = []
     /// How wide each card of the grown notch is, in the order of `cards`, and how tall the notch is then.
