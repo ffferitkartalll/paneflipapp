@@ -5,7 +5,7 @@ import SwiftUI
 /// Shows a notch at the top inner edge of every zone in view that holds a window (see `ZoneNotchView`). Each notch is a small panel of its own (the window under it is
 /// found by its title bar everywhere else), standing just above the window in front of its zone: every window above that one covers the notch too. The notch the pointer is on is lit, and a press on it opens the row of the zone's windows, as a switch does, without switching. While the
 /// zone's windows are switched, its notch grows into a row of its open windows, above the pictures that slide, until a moment after the switch. The wheel and two
-/// fingers on a notch switch its zone's windows, as on the open island's row of cards (`scrollTarget`). While the layout scrolls to the screens beyond the edge there are none.
+/// fingers on a notch switch its zone's windows, (`scrollTarget`). While the layout scrolls to the screens beyond the edge there are none.
 final class ZoneNotches: ZonePresenting {
     private let coordinator: StackCoordinator
     private let settings: AppSettings
@@ -166,7 +166,7 @@ final class ZoneNotches: ZonePresenting {
         }
     }
 
-    /// What the wheel and two fingers switch at `point`, as over the open island's row of cards: the windows of the zone whose notch the pointer is on (found as it
+    /// What the wheel and two fingers switch at `point`: the windows of the zone whose notch the pointer is on (found as it
     /// moved, `hover`), or whose grown notch it is on, or where that notch stood before it grew, so that a switch the scroll began goes on as the notch grows.
     /// Every scroll event of the system asks: only rectangles are compared.
     func scrollTarget(at point: CGPoint) -> ScrollSwitchTarget? {
@@ -174,7 +174,7 @@ final class ZoneNotches: ZonePresenting {
             guard let panel = panels[id] else { return false }
             return notchRect(of: id, in: panel).insetBy(dx: -2, dy: -2).contains(point) || (id == grown && panel.frame.contains(point))
         }
-        guard let zone, let stack = coordinator.stacks[zone], stack.tabs.count > 1 else { return nil }
+        guard let zone, zone == coordinator.focusedZoneID, let stack = coordinator.stacks[zone], stack.tabs.count > 1 else { return nil }   // only the zone with the focus switches
         return .zoneWindows(zone)
     }
 

@@ -289,18 +289,28 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     // MARK: What scrolls over the island
 
-    /// What the wheel and two fingers scroll with the pointer here, if it is on an island that is open: over the picture, and the room round it, the layout of
-    /// the screen; over the cards of the zone chosen in the picture, the windows of that zone (when it stands on the screen and has more than one window).
+    /// What the wheel and two fingers scroll, with no key held, with the pointer on an island that is open: over the picture, and the room round it, the layout of
+    /// the screen; over the cards of the zone chosen in the picture, the windows of that zone (when it has the focus, stands on the screen and has more than one window).
     func scrollTarget(at point: CGPoint) -> ScrollSwitchTarget? {
         for entry in entries.values where entry.hovered {
             let frame = islandFrame(of: entry, open: true), model = entry.model
             guard frame.contains(point) else { continue }
             guard let zone = model.windowsZone, frame.maxY - point.y > model.windowsTop - model.windowsGap / 2 else { return .strip }
-            guard let stack = coordinator.stacks[zone], stack.tabs.count > 1, !stack.isParked else { return nil }
+            // Only the zone with the focus has its windows switched.
+            guard let stack = coordinator.stacks[zone], stack.tabs.count > 1, !stack.isParked, zone == coordinator.focusedZoneID else { return nil }
             return .zoneWindows(zone)
         }
         return nil
     }
+
+    /// An island is open.
+    var isOpen: Bool { entries.values.contains { $0.hovered } }
+
+    /// An island is open and shows the row of a zone's windows: a switch of that zone's windows shows there, not in the zone's notch.
+    var showsWindowsRow: Bool { entries.values.contains { $0.hovered && $0.model.windowsZone != nil } }
+
+    /// The pointer is on the island, open or at rest.
+    func covers(_ point: CGPoint) -> Bool { entries.values.contains { islandFrame(of: $0, open: $0.hovered).contains(point) } }
 
     /// The windows of the zones changed (one came to the front): the rows of cards show it at once.
     func windowsDidChange() {
@@ -829,7 +839,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
     private func choose(_ card: IslandWindow, in zone: UUID) {
-        guard let stack = coordinator.stacks[zone], !stack.isParked else { return }
+        guard let stack = coordinator.stacks[zone] else { return }   // a zone beyond the screen's edge too: its screen is scrolled into view
         if let id = card.windowID {
             if card.isActive {
                 coordinator.focus(zone: zone)

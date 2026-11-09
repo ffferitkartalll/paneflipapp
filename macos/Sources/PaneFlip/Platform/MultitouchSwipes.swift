@@ -28,7 +28,15 @@ final class MultitouchSwipes: ScrollSwitchListening {
     /// The reports come on the system's own thread, one after the other.
     private let lock = NSLock()
     private var swipe = FingerSwipe()
+    private var touchingNow = 0
     private var wake: NSObjectProtocol?
+
+    /// How many fingers touch the trackpad now (read by the scroll tap, on the main thread).
+    var fingers: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return touchingNow
+    }
 
     init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool) {
         self.gain = gain
@@ -94,6 +102,7 @@ final class MultitouchSwipes: ScrollSwitchListening {
         devices = nil
         lock.lock()
         swipe = FingerSwipe()
+        touchingNow = 0
         lock.unlock()
     }
 
@@ -114,6 +123,7 @@ final class MultitouchSwipes: ScrollSwitchListening {
         }
         let n = Double(max(touching, 1))
         lock.lock()
+        touchingNow = touching
         let outputs = swipe.add(fingers: touching, x: x / n, y: y / n, at: time)
         lock.unlock()
         guard !outputs.isEmpty else { return }

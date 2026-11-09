@@ -4,6 +4,9 @@ import AppKit
 final class StagePanels {
     private var panels: [CGDirectDisplayID: NSPanel] = [:]
 
+    /// Above the windows, below the island (which is floating).
+    static let level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue - 1)
+
     /// The panel of a screen, made once.
     func panel(for screen: NSScreen) -> NSPanel {
         let id = (screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0
@@ -13,8 +16,7 @@ final class StagePanels {
             return panel
         }
         let panel = NSPanel(contentRect: screen.frame, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        // Above the windows, below the island (which is floating).
-        panel.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue - 1)
+        panel.level = Self.level
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = false
