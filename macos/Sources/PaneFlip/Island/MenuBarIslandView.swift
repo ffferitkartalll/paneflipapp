@@ -62,6 +62,17 @@ struct MenuBarIslandView: View {
                         .animation(.easeOut(duration: 0.1).delay(0.2), value: open)
                     }
                 }
+                .overlay(alignment: .top) {
+                    // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades. Part of the shape, so
+                    // that it is cut by the shape's edges while the island opens and closes, never seen outside it.
+                    if open || lined {
+                        MenuBarIslandWindowsView(model: model)
+                            .frame(width: model.windowsSpan, height: model.windowsHeight, alignment: .top)
+                            .clipped()
+                            .offset(x: -(left + right) / 2, y: model.windowsTop)   // the shape is centred on (left + right) / 2, the row on the island's middle
+                            .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
+                    }
+                }
                 // A faint rim (sides and bottom), so the island shows against a black window behind it.
                 .overlay { IslandRim().stroke(.white.opacity(0.18), lineWidth: 1) }
                 .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius))
@@ -75,12 +86,6 @@ struct MenuBarIslandView: View {
                 IslandGlyph(model: model, gap: 0).offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
             }
             if open || lined {
-                // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades.
-                MenuBarIslandWindowsView(model: model)
-                    .frame(width: model.windowsSpan, height: model.windowsHeight, alignment: .top)
-                    .clipped()
-                    .offset(x: 0, y: model.windowsTop)
-                    .opacity(model.windowsZone == nil ? 0 : model.contentOpacity)
                 if let text = model.notice {
                     let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
