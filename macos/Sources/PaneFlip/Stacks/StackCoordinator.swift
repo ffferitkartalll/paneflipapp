@@ -557,12 +557,17 @@ final class StackCoordinator {
     /// A click on a card: the zone with the focus goes to that window the way a turn of the wheel goes (as many windows on or back as lie between), so a click
     /// while the pictures still glide takes them over where they are, in either direction, and waits for nothing.
     func clickSelect(_ id: CGWindowID, in stack: ZoneStack) {
-        // A zone without the focus is not stepped through: that window becomes its front one and the focus goes there, a zone beyond the screen's edge being
-        // scrolled into view first (`focus(zone:)`).
         guard stack.id == focusedZoneID else {
-            guard stack.refs[id] != nil else { return }
+            guard let ref = stack.refs[id] else { return }
+            // A zone in view takes the focus first, then slides to the window as one that has it does.
+            if !stack.isParked, stack.activeID != id {
+                focus(zone: stack.id)
+                if stack.id == focusedZoneID, focusPending?.zone != stack.id { return clickSelect(id, in: stack) }
+            }
+            // A zone beyond the screen's edge (or one the layout has to scroll to) is scrolled into view first (`focus(zone:)`): the window comes forward there.
             stack.activeID = id
             onActivity?(stack.id)
+            if focusPending?.zone == stack.id { focusPending?.ref = ref }
             return focus(zone: stack.id)
         }
         guard let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), let to = stack.tabs.firstIndex(where: { $0.id == id }) else { return }

@@ -607,6 +607,24 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(coordinator.focusedZoneID, other, "and the zone has the focus")
     }
 
+    func testACardClickInAnotherZoneInViewSlidesToTheWindowOnceTheZoneHasTheFocus() {
+        let (stage, snapshots, zone) = scrubSetUp()
+        let other = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 400, height: 300), other: CGRect(x: 400, y: 0, width: 400, height: 300)])
+        snapshots.images[10] = FakeWindowSnapshots.picture()
+        snapshots.images[11] = FakeWindowSnapshots.picture()
+        coordinator.snap(.fake(10), into: other)
+        coordinator.snap(.fake(11), into: other)
+        coordinator.stacks[other]?.activeID = 10
+        stage.end()
+
+        coordinator.clickSelect(11, in: coordinator.stacks[other]!)
+
+        XCTAssertEqual(coordinator.focusedZoneID, other, "the zone has the focus")
+        XCTAssertEqual(stage.scrubBegun.last?.count, 2, "its pictures slide to the window, not a jump")
+        XCTAssertEqual(coordinator.stacks[other]?.activeID, 11)
+    }
+
     func testWithoutACarouselTheCardClickJustSelects() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
