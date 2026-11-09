@@ -36,8 +36,6 @@ extension MenuBarIsland {
         /// The last offset the fingers told, and whether it is being drawn already: told as often as events come, drawn once per turn of the run loop.
         var following: CGFloat?
         var dragging: CGFloat?
-        /// Ends the showing of the windows alone (`peekWindows`).
-        var peekEnd: DispatchWorkItem?
         /// Ends the notice (`showNotice`).
         var noticeEnd: DispatchWorkItem?
 

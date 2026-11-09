@@ -34,8 +34,6 @@ final class MenuBarIslandModel {
     var windowsZone: UUID?
     /// The windows of that zone (they stay while the row closes, so that it fades instead of going at once).
     var windows: [IslandWindow] = []
-    /// The island has grown only to show the windows of `windowsZone`, with no picture of the zones, because a window of the zone was stepped to (see `MenuBarIsland.peekWindows`).
-    var peeking = false
     /// What was just done to a zone, told in one line under the bar with a button to undo it, the island otherwise at rest (see `MenuBarIsland.showNotice`).
     var notice: AttributedString?
     /// How much of the time of the notice is left (1 to 0): the ring round its close button.

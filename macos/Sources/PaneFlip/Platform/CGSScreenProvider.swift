@@ -59,6 +59,11 @@ final class CGSScreenProvider: ScreenProviding {
 
     var menuBarThickness: CGFloat { NSStatusBar.system.thickness }
 
+    func menuBarHeight(of screen: ScreenInfo) -> CGFloat {
+        let native = NSScreen.screens.first { $0.frame == screen.cocoaFrame }
+        return ceil(max(native.map { $0.frame.maxY - $0.visibleFrame.maxY } ?? 0, screen.notchHeight, menuBarThickness))
+    }
+
     /// While either is open the window manager keeps a shield window over a whole display, at layer 19. Its name is
     /// not used: other apps' window names are only readable with the Screen Recording permission. The size check
     /// keeps the window manager's smaller windows (Stage Manager's strip, for one) from counting.

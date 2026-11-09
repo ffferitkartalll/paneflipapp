@@ -6,10 +6,6 @@ import QuartzCore
 /// runs: a window that turns up while the island's front card moves disturbs the island for a few frames.
 /// The animation runs in the render server, not in the app: it does not stutter when the app is busy.
 final class PanelSlideStage: SlideStaging {
-    /// A spring, like the front card of the island: it starts quickly and lands softly, without the long standstill at the end
-    /// of an ease-in-out curve. Critically damped: no overshoot.
-    static let stiffness: CGFloat = 320
-    static let damping: CGFloat = 36
     /// The hand-over to the real window starts this far into the slide (of its settling time), while the picture is
     /// all but at rest: the last part of a spring only creeps.
     static let handOver = 0.7
@@ -221,8 +217,8 @@ final class PanelSlideStage: SlideStaging {
         layer.removeAnimation(forKey: "slide")
         let animation = CASpringAnimation(keyPath: "position.x")
         animation.mass = 1
-        animation.stiffness = Self.stiffness
-        animation.damping = Self.damping
+        animation.stiffness = SlideSpring.stiffness   // the spring of what shows the switch too, so that they keep in step
+        animation.damping = SlideSpring.damping
         animation.fromValue = layer.position.x
         animation.toValue = left + layer.bounds.width / 2
         animation.duration = animation.settlingDuration

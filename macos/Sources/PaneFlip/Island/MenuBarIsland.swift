@@ -30,8 +30,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private static let shrinkAfter: TimeInterval = 0.7
     /// The one motion of the island and its cards: it eases out and stops, with no spring.
     private static let motion = Animation.easeOut(duration: 0.3)
-    /// How long the windows of a zone stay in sight if nothing is seen to move, with the pointer away from the island.
-    private static let peekTime: TimeInterval = 1
     /// How long a notice stays.
     private static let noticeTime: TimeInterval = 10
     private var dragging = false
@@ -190,9 +188,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     private func update(_ entry: Entry, screen: ScreenInfo, layout: NamedLayout, among all: [ScreenInfo]) {
-        // The whole height of the menu bar there: what the screen leaves above its usable area (nothing when the bar hides).
         let native = NSScreen.screens.first { $0.frame == screen.cocoaFrame }
-        let bar = ceil(max(native.map { $0.frame.maxY - $0.visibleFrame.maxY } ?? 0, screen.notchHeight, screens.menuBarThickness))
+        let bar = screens.menuBarHeight(of: screen)   // the whole height of the menu bar there
         let margin = MenuBarIslandView.margin
         let height = bar - 2 * margin
         let model = entry.model
@@ -313,9 +310,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     /// The focus was moved by a shortcut: the lit zone follows at once, not at the next look.
     func focusDidMove() { followFocus() }
 
-    /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle).
+    /// The fingers lead the windows of a zone (`fraction` of its width; 0: they let go, and the windows settle): the open row of that zone follows them.
     func windowsScrubbed(zone: UUID, by fraction: CGFloat) {
-        if fraction != 0 { peekWindows(of: zone) }
         for entry in entries.values where entry.model.windowsZone == zone {
             if fraction == 0 {
                 entry.dragging = nil
@@ -334,54 +330,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         }
     }
 
-    /// A window of a zone is being stepped to (a shortcut, the wheel, the fingers) and the pointer is not on the island: the island grows to show that zone's windows
-    /// alone, as wide as the cards need, and goes back a moment after the last step.
-    func peekWindows(of zone: UUID) {
-        guard !covered, !dragging, coordinator.stacks[zone]?.isEmpty == false else { return }
-        for entry in entries.values where entry.zones.contains(zone) && !entry.hovered && picking !== entry {
-            let model = entry.model
-            if !model.peeking || model.windowsZone != zone {
-                withAnimation(Self.motion) {
-                    model.peeking = true
-                    model.windows = windows(of: zone, openOnly: true)
-                    model.windowsZone = zone
-                    model.contentOpacity = 1
-                }
-            }
-            armPeekEnd(of: entry)
-        }
-    }
-
-    /// The windows go out of sight when the pictures have come to rest, or, if nothing moves (a step past the first or the last window), after a moment.
-    private func armPeekEnd(of entry: Entry) {
-        entry.peekEnd?.cancel()
-        let work = DispatchWorkItem { [weak self, weak entry] in
-            guard let self, let entry else { return }
-            if coordinator.isMoving { armPeekEnd(of: entry) } else { endPeek(entry) }
-        }
-        entry.peekEnd = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.peekTime, execute: work)
-    }
-
-    /// The pictures of the windows have come to rest: the windows shown alone go away at once.
-    func motionEnded() {
-        guard !coordinator.isMoving else { return }
-        for entry in entries.values where entry.model.peeking { endPeek(entry) }
-    }
-
-    private func endPeek(_ entry: Entry) {
-        entry.peekEnd?.cancel()
-        entry.peekEnd = nil
-        guard entry.model.peeking, !entry.hovered else { return }
-        if entry.model.notice == nil { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }   // a notice goes on showing
-        withAnimation(Self.motion) {
-            entry.model.peeking = false
-            entry.model.windowsZone = nil
-            entry.dragging = nil
-            entry.model.windowsDrag = 0
-        }
-    }
-
     // MARK: The notice
 
     /// A window was added to a zone or taken out of one: the island of that zone's display opens to one line that says so, with a button that undoes it,
@@ -395,13 +343,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             // The name as the card of the window carries it (a window added is in its zone by now).
             let name = change.kind == .removed ? change.title : coordinator.shownName(of: change.window.id) ?? change.title
             let seconds = change.kind == .enlarged ? StackCoordinator.enlargedTime : Self.noticeTime
-            entry.peekEnd?.cancel()
             withAnimation(Self.motion) {
                 // With the pointer on the island it stays as it is, the line at its foot.
-                if !entry.hovered {
-                    entry.model.peeking = false
-                    entry.model.windowsZone = nil
-                }
+                if !entry.hovered { entry.model.windowsZone = nil }
                 let format: String
                 switch change.kind {
                 case .added: format = String(localized: "The window %@ was placed in zone %@.")
@@ -437,14 +381,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             }
             guard !covered, let entry = entries.values.first(where: { $0.display.contains(NSEvent.mouseLocation) }) ?? entries.values.first else { return }
             for other in entries.values where other !== entry { hideNotice(other) }
-            entry.peekEnd?.cancel()
             entry.noticeEnd?.cancel()
             entry.noticeEnd = nil
             withAnimation(Self.motion) {
-                if !entry.hovered {
-                    entry.model.peeking = false
-                    entry.model.windowsZone = nil
-                }
+                if !entry.hovered { entry.model.windowsZone = nil }
                 entry.model.noticeEditing = true
                 entry.model.noticeCloses = false
                 entry.model.notice = AttributedString(String(localized: "Zone edge editing is on."))
@@ -468,8 +408,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         entry.noticeEnd?.cancel()
         entry.noticeEnd = nil
         guard entry.model.notice != nil else { return }
-        // Not while the windows are shown alone or the island is open: they go on showing, and their own end fades them.
-        if !entry.hovered && !entry.model.peeking { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
+        // Not while the island is open: it goes on showing, and its own end fades it.
+        if !entry.hovered { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
         // The text stays while the island shrinks, so that it does not change on the way.
         withAnimation(Self.motion) { entry.model.notice = nil }
         placeShield(of: entry)
@@ -510,10 +450,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             let hit: Bool
             if entry.hovered {
                 // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
-                let size = model.openSize
-                hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
-            } else if model.peeking {
-                // The windows are shown alone, the island grown only for them: the pointer coming onto it opens it fully. A notice does not do that: only the island itself does.
                 let size = model.openSize
                 hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
             } else {
@@ -597,22 +533,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     private func setOpen(_ open: Bool, for entry: Entry) {
         entry.hovered = open
         if open { if picking === entry || dragging { entry.model.startChoosing() } else { entry.model.openedByPointer() } }
-        if open { entry.peekEnd?.cancel(); entry.peekEnd = nil }
         // A notice goes on showing when the island shrinks back to it: its line is drawn with the content's opacity, which stays.
         if !open { if entry.model.notice == nil { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }; entry.model.hoveredCard = nil; entry.model.hoveredButton = nil; entry.model.hover(zone: nil); entry.model.hoveredWindow = nil }
-        // The pointer comes onto the island while a zone has the focus: its windows show as if its zone had been clicked, and the island grows to hold them.
-        let zone = open && !dragging && picking !== entry ? focused(in: entry).flatMap { coordinator.stacks[$0]?.isEmpty == false ? $0 : nil } : nil
+        // The row of windows opens only when a zone is clicked (`click`), not when the pointer comes onto the island.
         withAnimation(Self.motion) {
             entry.model.expanded = open
-            if open { entry.model.contentOpacity = 1; entry.model.peeking = false }
+            if open { entry.model.contentOpacity = 1 }
             entry.model.zoom = open ? entry.model.openZoom : 1
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
-            if let zone {
-                entry.dragging = nil
-                entry.model.windowsDrag = 0
-                entry.model.windows = windows(of: zone)
-                entry.model.windowsZone = zone
-            }
         }
         placeShield(of: entry)
     }
@@ -942,7 +870,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             withAnimation(Self.motion) { entry.model.windowsZone = nil }
             return placeShield(of: entry)
         }
-        let now = windows(of: zone, openOnly: entry.model.peeking)
+        let now = windows(of: zone)
         // Nothing changed (nearly every look): no animation, no shield to place.
         guard now != entry.model.windows else { return }
         // Another window in front only moves the row; windows that came or went grow or shrink the island.
@@ -976,8 +904,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         return made
     }
 
-    /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place (`openOnly`: the windows alone).
-    private func windows(of zone: UUID, openOnly: Bool = false) -> [IslandWindow] {
+    /// How wide the open island writes the title of a card on the display of `zone` (the grown notch writes its titles as wide).
+    func titleWidth(of zone: UUID) -> CGFloat? { entries.values.first { $0.zones.contains(zone) }?.model.cardWidth }
+
+    /// The cards of a zone as the open row has them: also shown in the grown notch of a zone (`ZoneNotches`).
+    func cards(of zone: UUID) -> [IslandWindow] { windows(of: zone).filter { !$0.isPlaceholder } }
+
+    /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place.
+    private func windows(of zone: UUID) -> [IslandWindow] {
         guard let stack = coordinator.stacks[zone] else { return [] }
         let tabs = Dictionary(stack.tabs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let openApps = Set(stack.tabs.map(\.bundleID))
@@ -1002,7 +936,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
             }
         }
         cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
-        if openOnly { return cards.filter { $0.windowID != nil } }   // the windows shown alone: those that are open
         if let placing, placing.zone == zone { cards.insert(.placeholder, at: min(placing.index, cards.count)) }
         return cards
     }

@@ -31,7 +31,7 @@ struct MenuBarIslandWindowsView: View {
     /// What stands under a card: its title, and why an app is not open in brackets after it. It is in the cell of the card, so they move with it.
     private func caption(_ window: IslandWindow) -> some View {
         let font = Font(NSFont.menuBarFont(ofSize: 0))   // as the date and the time of the menu bar
-        return (window.absence.map { Text(verbatim: window.name + " (") + Text($0.title) + Text(verbatim: ")") } ?? Text(verbatim: window.name))
+        return Text(verbatim: window.caption)
             .font(font)
             .foregroundStyle(.white.opacity(window.isActive ? 1 : 0.55))
             .frame(maxWidth: .infinity)   // the text is centred in the width of its card, whatever that is while the card widens or narrows

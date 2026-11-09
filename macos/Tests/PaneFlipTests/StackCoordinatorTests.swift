@@ -480,6 +480,22 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(windows.frames[1], .zero, "held windows are not moved either")
     }
 
+    func testAClosedWindowLeavingItsZoneIsToldAtOnce() {
+        let zone = UUID(), other = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100), other: CGRect(x: 100, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1), into: zone)
+        coordinator.snap(.fake(2), into: zone)
+        coordinator.snap(.fake(3), into: other)
+        coordinator.stacks[zone]?.activeID = 2
+        var told: [UUID] = []
+        coordinator.onActivity = { told.append($0) }
+
+        coordinator.release(window: 2)
+
+        XCTAssertEqual(told, [zone], "its zone, and only its zone, shows the change (the island, the grown notch)")
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1, "the window before it is in front")
+    }
+
     func testAnIgnoredAppIsNeverSnappedAndLetGoWhenItJoinsTheList() {
         let apps = FakeApps()
         apps.apps = [AppInfo(pid: 100, bundleID: "free", name: "Free"), AppInfo(pid: 200, bundleID: "other", name: "Other")]
@@ -625,15 +641,23 @@ final class StackCoordinatorTests: XCTestCase {
         snapshots.answersAtOnce = false
 
         coordinator.beginWindowScrub(at: CGPoint(x: 200, y: 150))
-        var stepped: [UUID] = []
-        coordinator.onWindowStep = { stepped.append($0) }
         coordinator.moveWindowScrub(by: -200, at: 0)
         coordinator.endWindowScrub()
         snapshots.answer()
 
-        XCTAssertEqual(stepped, [zone], "the island shows the step, since the fingers showed it nothing")
         XCTAssertEqual(stage.scrubEnded, [1])
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 3)
+    }
+
+    func testASwitchIsToldToItsNotch() {
+        let (stage, _, zone) = scrubSetUp()
+        var switched: [UUID] = []
+        coordinator.onSwitch = { switched.append($0) }
+
+        coordinator.stepWindowScrub(in: coordinator.stacks[zone]!, by: 1)
+
+        XCTAssertEqual(switched, [zone], "its notch shows the switch")
+        XCTAssertEqual(stage.scrubEnded, [1])
     }
 
     func testAShortSlowSwipeGoesBackToTheWindowItCameFrom() {

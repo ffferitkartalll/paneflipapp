@@ -30,11 +30,12 @@ extension MenuBarIslandModel {
 
     private static func cardSize(screenHeight: CGFloat) -> CGSize { CGSize(width: screenHeight * 16 / 9, height: screenHeight) }
 
+    /// How wide a card of the open island is, and the title under it, whatever zone is chosen.
+    var cardWidth: CGFloat { Self.cardSize(screenHeight: glyph.screen.height * openZoom).width }
+
     /// The room the row of cards has: at least as wide as the picture, and wide enough for every card when the display has room; the cards that still do not fit
-    /// are cut by the edges of the island. With the windows shown alone, no wider than the cards.
-    var cardsFit: CGFloat {
-        peeking ? min(cardsNeeded, displayWidth - 2 * sideRoom) : max(glyph.size.width * openZoom, min(cardsNeeded, displayWidth - 2 * sideRoom))
-    }
+    /// are cut by the edges of the island.
+    var cardsFit: CGFloat { max(glyph.size.width * openZoom, min(cardsNeeded, displayWidth - 2 * sideRoom)) }
 
     /// The width that shows every card of the row: the island grows to this much, never past the display. Nothing without a row.
     private var cardsNeeded: CGFloat { windowsFrame.width * CGFloat(windows.count) }
@@ -169,21 +170,19 @@ extension MenuBarIslandModel {
         // A notice: with the pointer away the picture stays as it is at rest and the island holds one line under it, no wider than the closed island unless the line needs
         // more; with the pointer on the island it is the open island with the line at its foot.
         let line = max(noticeRowWidth, noticeEditUndoWidth) + 2 * windowsGap, height = noticeTop + noticeBlockHeight + windowsGap
-        // The windows of a zone shown alone (stepping through them) lie under the line too.
-        guard expanded || peeking else { return CGSize(width: max(line, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin), height: height) }
+        guard expanded else { return CGSize(width: max(line, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin), height: height) }
         return CGSize(width: max(plainOpenSize.width, line), height: height + (windowsHeight > 0 ? windowsHeight + windowsGap : 0))
     }
 
     /// Where the line of the notice begins, from the top of the island: under the bar, or, with the island open, under the picture of the zones (above the row of cards).
     var noticeTop: CGFloat { expanded ? topHeight + glyph.size.height * openZoom + windowsGap : restBottom + windowsGap }
 
-    /// Where the row of cards begins: under the picture, and under the line of a notice if there is one (with the windows shown alone, under the bar).
+    /// Where the row of cards begins: under the picture, and under the line of a notice if there is one.
     var windowsTop: CGFloat { noticeTop + (notice != nil ? noticeBlockHeight + windowsGap : 0) }
 
     private var plainOpenSize: CGSize {
         let width = windowsSpan
-        return CGSize(width: peeking ? max(width, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin) : max(width, cornerRowWidth),
-                      height: openHeight(picture: peeking ? 0 : glyph.size.height * openZoom, windows: windowsHeight))
+        return CGSize(width: max(width, cornerRowWidth), height: openHeight(picture: glyph.size.height * openZoom, windows: windowsHeight))
     }
 
     /// The tallest the open island gets, with the largest zone chosen: the panel it grows in is as tall as that.
@@ -192,5 +191,5 @@ extension MenuBarIslandModel {
             + 2 * Self.noticeButtonHeight + 2 * windowsGap   // the lines of a notice at the foot
     }
 
-    private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { (peeking ? restBottom : topHeight) + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : sideRoom) }
+    private func openHeight(picture: CGFloat, windows rowHeight: CGFloat) -> CGFloat { topHeight + picture + (rowHeight > 0 ? windowsGap + rowHeight + windowsGap : sideRoom) }
 }

@@ -15,7 +15,7 @@ struct MenuBarIslandView: View {
     /// One island that is always fixed to the top of the screen. With the pointer on it, the same black shape reaches down below the menu bar and the
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
-        let m = Self.margin, open = model.expanded, peek = (model.peeking || model.notice != nil) && !open, bar = model.barHeight, size = model.openSize
+        let m = Self.margin, open = model.expanded, lined = model.notice != nil && !open, bar = model.barHeight, size = model.openSize
         let split = model.notchWidth > 0 && !open   // at a notch the closed island lies in two halves, one each side of it
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
@@ -24,8 +24,8 @@ struct MenuBarIslandView: View {
             // The height of the menu bar again as room right, left and below.
             left = -size.width / 2; right = size.width / 2
             glyphLeft = -gw / 2; glyphTop = model.topHeight; height = size.height   // in the middle: the island is wider than it when no zone waits beyond the edges
-        } else if peek {
-            // Only the windows of a zone: the picture stays as it is at rest, and the island is as wide as the cards need.
+        } else if lined {
+            // A notice: the picture stays as it is at rest, and the island holds its line under it.
             left = -size.width / 2; right = size.width / 2
             glyphLeft = -gw / 2; glyphTop = m; height = size.height
         } else if split {
@@ -74,7 +74,7 @@ struct MenuBarIslandView: View {
             } else {
                 IslandGlyph(model: model, gap: 0).offset(x: glyphLeft + px(model.glyph.size.width * model.zoom) / 2, y: glyphTop)
             }
-            if open || peek {
+            if open || lined {
                 // Under the picture, as wide as the room of the island; it grows out of the picture's foot as the island grows, and fades.
                 MenuBarIslandWindowsView(model: model)
                     .frame(width: model.windowsSpan, height: model.windowsHeight, alignment: .top)

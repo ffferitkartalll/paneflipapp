@@ -15,6 +15,8 @@ protocol ScreenProviding {
     /// Pointer in bottom-left-origin (Cocoa) coordinates.
     var pointerCocoa: CGPoint { get }
     var menuBarThickness: CGFloat { get }
+    /// The whole height of the menu bar on `screen`: what the screen leaves above its usable area, at least the notch and the system's thickness (the bar can hide).
+    func menuBarHeight(of screen: ScreenInfo) -> CGFloat
     /// Mission Control or App Exposé is showing: windows are rearranged or hidden and should be left alone.
     var isMissionControlActive: Bool { get }
     /// Cocoa ↔ Accessibility rectangle conversion (the transform is its own inverse).

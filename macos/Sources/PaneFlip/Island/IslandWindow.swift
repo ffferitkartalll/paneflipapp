@@ -21,6 +21,9 @@ struct IslandWindow: Identifiable, Equatable {
     /// The app is ticked to be started with the layout (`Open selected apps`).
     var selected = false
 
+    /// Its name as it is written under the card (and in the grown notch): why an app is not open in brackets after it.
+    var caption: String { absence.map { "\(name) (\($0.title))" } ?? name }
+
     /// The badge as the card draws it: a number above 99 is "99+".
     var badgeText: String? {
         guard let badge, !badge.isEmpty else { return nil }
