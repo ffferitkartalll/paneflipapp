@@ -108,9 +108,14 @@ final class IconFont {
         let key = bundleID.isEmpty ? appName : bundleID
         // Only the bitmap: registering the glyph rebuilds the whole font on the main thread, which the island does when it needs the character.
         if images[key] == nil { images[key] = rendered(bundleID: bundleID, appName: appName, icon: icon, size: Self.bitmapSize).representation(using: .png, properties: [:])! }
-        let image = images[key].flatMap(NSImage.init(data:)) ?? NSImage()
-        image.size = NSSize(width: size, height: size)
-        return image
+        let bitmap = images[key].flatMap(NSImage.init(data:)) ?? NSImage()
+        // Drawn when it is shown, at the pixels it is shown in and with the best filter: the bitmap is several times larger than the icon, and scaled down
+        // by the view alone it comes out with hard, jagged edges.
+        return NSImage(size: NSSize(width: size, height: size), flipped: false) { rect in
+            NSGraphicsContext.current?.imageInterpolation = .high
+            bitmap.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1)
+            return true
+        }
     }
 
     /// The app icon reduced to its foreground shape, drawn in white: the most common colour is taken as the

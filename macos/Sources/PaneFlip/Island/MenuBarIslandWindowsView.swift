@@ -114,7 +114,7 @@ struct MenuBarIslandWindowsView: View {
         func picture(_ window: IslandWindow, _ ink: Color) -> AnyView {
             AnyView(Group {
                 if let glyph = window.glyph {
-                    Image(nsImage: glyph).renderingMode(.template).resizable().scaledToFit().foregroundStyle(window.windowID == nil && !window.isPlaceholder ? ink.opacity(0.5) : ink).frame(width: icon, height: icon)
+                    Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).antialiased(true).scaledToFit().foregroundStyle(window.windowID == nil && !window.isPlaceholder ? ink.opacity(0.5) : ink).frame(width: icon, height: icon)
                 }
             })
         }
