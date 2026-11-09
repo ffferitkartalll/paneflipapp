@@ -174,6 +174,8 @@ final class AppContainer {
             if Date().timeIntervalSince(missionControlAsked.at) > 0.3 { missionControlAsked = (Date(), screens.isMissionControlActive) }
             return missionControlAsked.active
         }
+        let fingerSwipes = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
+                                                       isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) })
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers },
                                                        overIsland: { [settings, coordinator, editor, island, notches] in
@@ -183,16 +185,17 @@ final class AppContainer {
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown,
                   target != .strip || v.overflowZonesEnabled else { return nil }
-            // Asked last, only over the island: it costs a window list, and every scroll event of the system comes through here.
+            // Asked last, only over the island or a notch: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
-        }) { [settings, keys, coordinator, editor] in
+        }, fingers: { fingerSwipes.fingers }) { [settings, keys, coordinator, editor, island] in
             let v = settings.values
-            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown else { return nil }
+            // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
+            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
             let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
             let windows = v.windowScrollKeys.isHeld(using: keys)
             // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
             if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return missionControl() ? nil : .strip }
-            let target: ScrollSwitchTarget? = windows ? .windows : nil
+            let target: ScrollSwitchTarget? = windows && !island.isOpen ? .windows : nil   // with the island open, windows are switched on it
             // Asked only once a key is held: it costs a window list. Nothing of ours moves under Mission Control or App Exposé.
             return target != nil && missionControl() ? nil : target
         }
@@ -208,8 +211,6 @@ final class AppContainer {
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target != .strip || v.overflowZonesEnabled)
                 && !missionControl()
         }
-        let fingerSwipes: ScrollSwitchListening = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                                       isOn: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers })
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
@@ -227,8 +228,8 @@ final class AppContainer {
         }
         coordinator.usableAreaOf = { screenOf($0)?.axVisible }
         let scrubbed = coordinator.onWindowScrub
-        // A switch of a zone's windows shows in its grown notch.
-        coordinator.onSwitch = { [weak notches] zone in notches?.showSwitch(of: zone) }
+        // A switch of a zone's windows shows in its grown notch, or, with an island open on the row of windows, in that row (the notch stays as it is).
+        coordinator.onSwitch = { [weak notches, weak island] zone in if island?.showsWindowsRow != true { notches?.showSwitch(of: zone) } }
         coordinator.onWindowScrub = { [weak notches] zone, fraction in
             scrubbed?(zone, fraction)
             notches?.scrubbed(zone: zone, by: fraction)
@@ -268,7 +269,7 @@ final class AppContainer {
             capsLockKey.start()
             shortcut.start { press in
                 switch press {
-                case .cycle(let reverse): coordinator.cycleFocusedZone(reverse: reverse)
+                case .cycle(let reverse): if !island.isOpen { coordinator.cycleFocusedZone(reverse: reverse) }   // with the island open, windows are switched on it
                 case .scroll(let edge): scroller.scroll(toward: edge)
                 case .focusZone(let direction): coordinator.focusZone(toward: direction)
                 case .undoWindow: coordinator.undoLast(); island.dismissWindowNotice()

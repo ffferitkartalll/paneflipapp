@@ -25,11 +25,14 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     private let twoFingers: () -> Bool
     /// What the wheel and two fingers scroll with the pointer on the open island or a zone's notch, if anything: that, whatever the settings and the keys.
     private let overIsland: () -> ScrollSwitchTarget?
+    /// How many fingers touch the trackpad: over the island or a notch only exactly two fingers scroll (three and four are `MultitouchSwipes`', and do nothing there).
+    private let fingers: () -> Int
 
-    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, target: @escaping () -> ScrollSwitchTarget?) {
+    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int, target: @escaping () -> ScrollSwitchTarget?) {
         self.gain = gain
         self.twoFingers = twoFingers
         self.overIsland = overIsland
+        self.fingers = fingers
         self.target = target
     }
 
@@ -67,7 +70,10 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         guard type == .scrollWheel else { return Unmanaged.passUnretained(event) }
         // Fingers on the trackpad scroll as they always do unless the settings give them to the keys; a mouse wheel is the keys' either way.
         let wheel = event.getIntegerValueField(.scrollWheelEventIsContinuous) == 0
-        let aimed: ScrollSwitchTarget? = overIsland() ?? (wheel || twoFingers() ? target() : nil)
+        // The end of a swipe and the glide after it have no fingers on the trackpad any more; they go on with the swipe they belong to.
+        let phase = event.getIntegerValueField(.scrollWheelEventScrollPhase)   // 1 began, 2 changed, 4 ended, 8 cancelled
+        let touching = wheel || phase == 4 || phase == 8 || event.getIntegerValueField(.scrollWheelEventMomentumPhase) != 0 || fingers() == 2
+        let aimed: ScrollSwitchTarget? = (touching ? overIsland() : nil) ?? (wheel || twoFingers() ? target() : nil)
         // The keys were let go (or others taken) in the middle of a swipe: it ends here.
         if inGesture, aimed != gestureTarget {
             inGesture = false
@@ -88,7 +94,6 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
 
         // Two fingers: the content follows them to the left and the right, in a swipe that began that way (see `AxisLock`); a swipe that
         // began up or down moves nothing, however it goes on.
-        let phase = event.getIntegerValueField(.scrollWheelEventScrollPhase)   // 1 began, 2 changed, 4 ended, 8 cancelled
         if phase == 1 { axis = AxisLock() }
         let delta = axis.add(horizontal: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)),
                              vertical: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))

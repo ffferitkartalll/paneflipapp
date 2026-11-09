@@ -9,6 +9,8 @@ final class PanelScrollStage: ScrollStaging {
     private var strip: CALayer?
     private var layers: [CGWindowID: CALayer] = [:]
     private var visible = CGRect.zero
+    /// The screen's panel while it stands among the windows, not above them.
+    private var raised: NSPanel?
 
     init(screens: ScreenProviding, panels: StagePanels) {
         self.screens = screens
@@ -18,8 +20,17 @@ final class PanelScrollStage: ScrollStaging {
     func begin(pictures: [ScrollPicture], over visible: CGRect, covered: @escaping () -> Void) {
         remove()
         let cocoa = screens.flip(visible)
-        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: cocoa.midX, y: cocoa.midY)) }),
-              let root = panels.panel(for: screen).contentView?.layer else { return covered() }
+        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: cocoa.midX, y: cocoa.midY)) }) else { return covered() }
+        let panel = panels.panel(for: screen)
+        guard let root = panel.contentView?.layer else { return covered() }
+        // A window that is in no zone and stands in front of the zones' windows stays in front of the pictures too: the panel goes just above the front-most window it
+        // covers, not above everything. Windows ordered later (a click on one) are not held.
+        let pictured = Set(pictures.map(\.id))
+        if let front = CGWindowNumbers.ids(.optionOnScreenOnly).first(where: pictured.contains) {
+            panel.level = .normal
+            panel.order(.above, relativeTo: Int(front))
+            raised = panel
+        }
         let clip = CALayer()
         clip.frame = cocoa.offsetBy(dx: -screen.frame.minX, dy: -screen.frame.minY)
         clip.masksToBounds = true
@@ -102,6 +113,9 @@ final class PanelScrollStage: ScrollStaging {
 
     private func remove() {
         clip?.removeFromSuperlayer()
+        raised?.level = StagePanels.level
+        raised?.orderFrontRegardless()
+        raised = nil
         clip = nil
         strip = nil
         layers = [:]

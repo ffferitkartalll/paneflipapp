@@ -445,19 +445,22 @@ final class StackCoordinator {
     private var windowScrub: WindowScrub?
     private static let earlyStepDistance: CGFloat = 80
 
-    /// Two fingers came down over `point`: the zone under it (else the zone of the window in focus) is the one to swipe through. False
+    /// The zone under `point`, if it has the focus: windows are switched over their zone only, and only the zone with the focus has them switched.
+    private func zoneUnder(_ point: CGPoint) -> ZoneStack? { zoneID(at: point).flatMap { $0 == focusedZoneID ? stacks[$0] : nil } }
+
+    /// Two fingers came down over `point`: the zone under it, if it has the focus, is the one to swipe through. False
     /// when the pictures cannot follow the fingers (a slide that is not a swipe runs, there is nothing to swipe through): the caller steps
     /// instead, and a step that has to wait for the slide waits.
     @discardableResult
     func beginWindowScrub(at point: CGPoint) -> Bool {
-        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? focusedWindowCached().flatMap({ stack(containing: $0.id) }) else { return false }
+        guard let stack = zoneUnder(point) else { return false }
         return beginWindowScrub(in: stack)
     }
 
-    /// The same for a zone that is known (the row of cards that is scrolled over).
+    /// The same for a zone that is known (the row of cards that is scrolled over). Only the zone that has the focus has its windows switched, by any method.
     @discardableResult
     func beginWindowScrub(in stack: ZoneStack) -> Bool {
-        guard windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
+        guard stack.id == focusedZoneID, windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
               stack.tabs.count > 1, let start = stack.activeID else { return false }
         let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
         windowScrub = scrub
@@ -500,7 +503,7 @@ final class StackCoordinator {
     /// if they are already on their way, so that turns follow one another as quickly as they come, in either direction. Without
     /// pictures to move (a slide that is not a swipe runs, motion is reduced) it is a step like those of the keys.
     func stepWindowScrub(in stack: ZoneStack, by step: Int) {
-        guard step != 0 else { return }
+        guard step != 0, stack.id == focusedZoneID else { return }
         if let scrub = windowScrub {
             // Turns that come while the pictures of an earlier one are still being taken add up to it.
             if scrub.stack === stack, scrub.ended, let forced = scrub.forced { scrub.forced = forced + step }
@@ -551,17 +554,24 @@ final class StackCoordinator {
         }
     }
 
-    /// A click on a card: the zone goes to that window the way a turn of the wheel goes (as many windows on or back as lie between), so a click
+    /// A click on a card: the zone with the focus goes to that window the way a turn of the wheel goes (as many windows on or back as lie between), so a click
     /// while the pictures still glide takes them over where they are, in either direction, and waits for nothing.
     func clickSelect(_ id: CGWindowID, in stack: ZoneStack) {
+        // A zone without the focus is not stepped through: that window becomes its front one and the focus goes there, a zone beyond the screen's edge being
+        // scrolled into view first (`focus(zone:)`).
+        guard stack.id == focusedZoneID else {
+            guard stack.refs[id] != nil else { return }
+            stack.activeID = id
+            onActivity?(stack.id)
+            return focus(zone: stack.id)
+        }
         guard let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), let to = stack.tabs.firstIndex(where: { $0.id == id }) else { return }
         stepWindowScrub(in: stack, by: to - from)
     }
 
-    /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point` (else the zone of the window in
-    /// focus) goes `step` windows on or back, the way a turn of the wheel over its row of cards does (`stepWindowScrub(in:by:)`).
+    /// A turn of the wheel with the keys held, or a swipe the pictures could not follow: the zone under `point`, if it has the focus, goes `step` windows on or back, the way a turn of the wheel over its row of cards does (`stepWindowScrub(in:by:)`).
     func stepWindowScrub(at point: CGPoint, by step: Int) {
-        guard let stack = zoneID(at: point).flatMap({ stacks[$0] }) ?? focusedWindowCached().flatMap({ stack(containing: $0.id) }) else { return }
+        guard let stack = zoneUnder(point) else { return }
         stepWindowScrub(in: stack, by: step)
     }
 

@@ -552,6 +552,8 @@ final class StackCoordinatorTests: XCTestCase {
         coordinator.snap(.fake(2), into: zone)
         coordinator.snap(.fake(3), into: other)
         coordinator.stacks[zone]?.activeID = 1
+        windows.focused = .fake(1)
+        coordinator.followFocus()
 
         coordinator.stepWindowScrub(at: CGPoint(x: 50, y: 50), by: 1)
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "one step on, in the zone under the pointer")
@@ -562,6 +564,47 @@ final class StackCoordinatorTests: XCTestCase {
 
         coordinator.stepWindowScrub(at: CGPoint(x: 50, y: 50), by: -1)
         XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1, "a step back")
+    }
+
+    func testOnlyTheZoneWithTheFocusHasItsWindowsSwitched() {
+        let zone = UUID(), other = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100), other: CGRect(x: 100, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1), into: zone)
+        coordinator.snap(.fake(2), into: zone)
+        coordinator.snap(.fake(3), into: other)
+        coordinator.snap(.fake(4), into: other)
+        coordinator.stacks[zone]?.activeID = 1
+        coordinator.stacks[other]?.activeID = 3
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+
+        coordinator.stepWindowScrub(in: coordinator.stacks[other]!, by: 1)
+        coordinator.stepWindowScrub(at: CGPoint(x: 150, y: 50), by: 1)
+        XCTAssertEqual(coordinator.stacks[other]?.activeID, 3, "a zone without the focus keeps its front window, whatever the method")
+        XCTAssertFalse(coordinator.beginWindowScrub(in: coordinator.stacks[other]!), "and its row cannot be led by the fingers")
+
+        coordinator.stepWindowScrub(at: CGPoint(x: 500, y: 500), by: 1)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 1, "the pointer off every zone switches nothing, though a zone has the focus")
+
+        coordinator.stepWindowScrub(in: coordinator.stacks[zone]!, by: 1)
+        XCTAssertEqual(coordinator.stacks[zone]?.activeID, 2, "the zone with the focus is switched")
+    }
+
+    func testACardClickInAZoneWithoutTheFocusGivesItTheFocusWithThatWindow() {
+        let zone = UUID(), other = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100), other: CGRect(x: 100, y: 0, width: 100, height: 100)])
+        coordinator.snap(.fake(1), into: zone)
+        coordinator.snap(.fake(3), into: other)
+        coordinator.snap(.fake(4), into: other)
+        coordinator.stacks[zone]?.activeID = 1
+        coordinator.stacks[other]?.activeID = 3
+        windows.focused = .fake(1)
+        coordinator.followFocus()
+
+        coordinator.clickSelect(4, in: coordinator.stacks[other]!)
+
+        XCTAssertEqual(coordinator.stacks[other]?.activeID, 4, "the window of the card is the zone's front one")
+        XCTAssertEqual(coordinator.focusedZoneID, other, "and the zone has the focus")
     }
 
     func testWithoutACarouselTheCardClickJustSelects() {
@@ -603,6 +646,8 @@ final class StackCoordinatorTests: XCTestCase {
         for id in 1...windowCount { coordinator.snap(.fake(CGWindowID(id)), into: zone) }
         coordinator.stacks[zone]?.activeID = 2
         stage.end()   // the slides of the snaps
+        windows.focused = .fake(2)   // the zone has the focus: only that one has its windows switched
+        coordinator.followFocus()
         return (stage, snapshots, zone)
     }
 
