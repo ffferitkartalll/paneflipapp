@@ -7,7 +7,7 @@ struct CardGhostView: View {
     var body: some View {
         if let glyph = model.card?.glyph {
             let icon = model.icon
-            Image(nsImage: glyph).renderingMode(.template).resizable().scaledToFit().foregroundStyle(.white)
+            Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).antialiased(true).scaledToFit().foregroundStyle(.white)
                 .frame(width: icon, height: icon)
                 .frame(width: icon * 1.6, height: icon * 1.6)
                 .background(Circle().fill(Color.black))

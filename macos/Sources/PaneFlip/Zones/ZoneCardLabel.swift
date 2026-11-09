@@ -24,7 +24,7 @@ struct ZoneCardLabel: View {
         let open = card.windowID != nil
         HStack(spacing: Self.spacing) {
             if let glyph = card.glyph {
-                Image(nsImage: glyph).renderingMode(.template).resizable().scaledToFit().frame(width: Self.icon, height: Self.icon)
+                Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).antialiased(true).scaledToFit().frame(width: Self.icon, height: Self.icon)
             }
             Text(verbatim: card.caption).font(Font(Self.font)).lineLimit(1)
         }
