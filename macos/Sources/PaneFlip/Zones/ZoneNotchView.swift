@@ -17,7 +17,7 @@ struct ZoneNotchView: View {
         let shape = UnevenRoundedRectangle(bottomLeadingRadius: radius, bottomTrailingRadius: radius, style: .circular)
         ZStack(alignment: .topLeading) {
             shape.fill(model.hovered && !grown ? AppAccent.color : Color(nsColor: .windowBackgroundColor))
-            if grown { ZoneNotchRow(cards: model.cards, widths: model.widths, height: model.height, lit: model.lit) }
+            if grown { ZoneNotchRow(cards: model.cards, widths: model.widths, height: model.height, lit: model.lit, hovered: model.hoveredCard) }
         }
         .frame(width: size.width, height: size.height)
         .clipShape(shape)

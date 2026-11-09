@@ -12,10 +12,20 @@ struct ZoneNotchRow: View {
     let height: CGFloat
     /// Which card is lit: its place among them, between two while the fingers lead.
     let lit: CGFloat
+    /// The card the pointer is on: it is tinted unless it is the lit one.
+    let hovered: Int?
 
     var body: some View {
         let stretch = CardRow.lit(at: lit, widths: widths)
         ZStack(alignment: .topLeading) {
+            // Each card has a tint of its own that fades in and out, as the cards of the open island's row do: nothing slides from one card to the next.
+            HStack(spacing: 0) {
+                ForEach(Array(widths.enumerated()), id: \.offset) { index, width in
+                    Rectangle().fill(AppAccent.color.opacity(index == hovered && abs(CGFloat(index) - lit) > 0.5 ? 0.25 : 0))
+                        .frame(width: width, height: height)
+                        .animation(.easeOut(duration: 0.12), value: hovered)
+                }
+            }
             labels(ink: nil)
             ZStack(alignment: .topLeading) {
                 AppAccent.color
