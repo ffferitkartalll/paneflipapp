@@ -14,6 +14,8 @@ final class ZoneNotches: ZonePresenting {
     /// The windows of a zone as the island's cards have them, and how wide the open island writes the title of a card on the display of a zone.
     private let cards: (UUID) -> [IslandWindow]
     private let titleWidth: (UUID) -> CGFloat?
+    /// A card put in the place of another one in a zone (the zone's windows stand in the new order).
+    private let moveCard: (UUID, IslandWindow, IslandWindow) -> Void
     private var panels: [UUID: NSPanel] = [:]
     private var models: [UUID: ZoneNotchModel] = [:]
     private var timer: Timer?
@@ -24,6 +26,8 @@ final class ZoneNotches: ZonePresenting {
     private var shrinkBack: DispatchWorkItem?
     /// Where the fingers have led the lit card, not shown yet (`scrubbed`).
     private var dragging: CGFloat?
+    /// A card of the grown notch that the mouse is down on: it is a click if it is let go where it was, else it is carried to another place in the row.
+    private var carry: (zone: UUID, card: String, from: CGPoint, grab: CGFloat, centres: [String: CGFloat], moved: Bool)?
     /// How long the grown notch stays once the pictures are at rest.
     private static let lingering: TimeInterval = 0.5
     private static let growth = Animation.easeOut(duration: 0.2)
@@ -36,13 +40,14 @@ final class ZoneNotches: ZonePresenting {
     }
 
     init(coordinator: StackCoordinator, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo],
-         cards: @escaping (UUID) -> [IslandWindow], titleWidth: @escaping (UUID) -> CGFloat?) {
+         cards: @escaping (UUID) -> [IslandWindow], titleWidth: @escaping (UUID) -> CGFloat?, moveCard: @escaping (UUID, IslandWindow, IslandWindow) -> Void) {
         self.coordinator = coordinator
         self.settings = settings
         self.screens = screens
         self.screensNow = screensNow
         self.cards = cards
         self.titleWidth = titleWidth
+        self.moveCard = moveCard
     }
 
     /// Keeps the notches above their windows: a window that comes to the front (a click, another app, another window of the zone) goes over its notch, which is put back
@@ -107,10 +112,7 @@ final class ZoneNotches: ZonePresenting {
         let frame = screens.flip(rect), mid = CGPoint(x: frame.midX, y: frame.midY)
         guard let screen = screensNow().first(where: { $0.cocoaFrame.contains(mid) }) else { return }
         let height = min(screens.menuBarHeight(of: screen), frame.height / 4)
-        let most = titleWidth(zone) ?? 100, room = frame.width - 2 * ZoneCorner.radius
-        // shortcut: never narrower than a card's picture and room, so a zone too narrow for its windows has the row run past its sides; show the pictures alone if that is seen.
-        let widths = CardRow.narrowed(open.map { min(ZoneCardLabel.width(of: $0), ZoneCardLabel.chrome(of: $0) + most) },
-                                      narrowest: 2 * ZoneCardLabel.padding + ZoneCardLabel.icon + ZoneCardLabel.spacing) { $0.reduce(0, +) <= room }
+        let widths = rowWidths(of: open, in: zone, zoneWidth: frame.width)
         let size = CGSize(width: widths.reduce(0, +), height: height)
         if hovered == zone { hovered = nil }
         grown = zone
@@ -132,6 +134,14 @@ final class ZoneNotches: ZonePresenting {
             }
             hoverCard(at: NSEvent.mouseLocation)   // the pointer may be on a card already
         }
+    }
+
+    /// How wide each card of the row is: as wide as its whole name, up to as wide as the open island writes a title, the widest narrower when the zone is too narrow.
+    private func rowWidths(of open: [IslandWindow], in zone: UUID, zoneWidth: CGFloat) -> [CGFloat] {
+        let most = titleWidth(zone) ?? 100, room = zoneWidth - 2 * ZoneCorner.radius
+        // shortcut: never narrower than a card's picture and room, so a zone too narrow for its windows has the row run past its sides; show the pictures alone if that is seen.
+        return CardRow.narrowed(open.map { min(ZoneCardLabel.width(of: $0), ZoneCardLabel.chrome(of: $0) + most) },
+                                narrowest: 2 * ZoneCardLabel.padding + ZoneCardLabel.icon + ZoneCardLabel.spacing) { $0.reduce(0, +) <= room }
     }
 
     /// Something changed in a zone: while its notch is grown, the lit card slides to the window now in front. Only its place changes: a step costs next to nothing.
@@ -208,6 +218,7 @@ final class ZoneNotches: ZonePresenting {
         shrinkBack?.cancel()
         if stays { hovered = zone }
         models[zone]?.hoveredCard = nil
+        models[zone]?.carriedCard = nil
         withAnimation(Self.growth, completionCriteria: .removed) { models[zone]?.cards = [] } completion: { [weak self] in
             // Its panel back to the notch's size, level and place; not while windows slide (then once they are at rest), nor if it was grown again meanwhile.
             guard let self, grown != zone, !coordinator.isMoving else { return }
@@ -239,15 +250,68 @@ final class ZoneNotches: ZonePresenting {
         return CGRect(x: frame.midX - size.width / 2, y: frame.maxY - size.height, width: size.width, height: size.height)
     }
 
-    /// A press on a notch: at rest, the row of the zone's windows opens (nothing is switched); on a card of the open row, that window comes to the front of its zone
-    /// and the focus goes with it, as a click on a card of the open island does.
+    /// A press on a notch: at rest, the row of the zone's windows opens (nothing is switched); on a card of the open row, the card is held: let go where it was, its
+    /// window comes to the front of its zone and the focus goes with it (`release`), as a click on a card of the open island does; carried, it changes place in the row.
     private func press(_ zone: UUID, at point: CGPoint) {
         guard grown == zone, let panel = panels[zone], let model = models[zone], !model.cards.isEmpty else { return showSwitch(of: zone) }
         shrinkLater()
-        guard let stack = coordinator.stacks[zone], !stack.isParked,
-              let index = CardRow.index(atX: point.x - panel.frame.minX, widths: model.widths),
-              let id = model.cards[index].windowID else { return }
-        if id == stack.activeID { coordinator.focus(zone: zone) } else { coordinator.clickSelect(id, in: stack) }
+        guard let index = CardRow.index(atX: point.x - panel.frame.minX, widths: model.widths) else { return }
+        var centres: [String: CGFloat] = [:], edge: CGFloat = 0
+        for (card, width) in zip(model.cards, model.widths) {
+            centres[card.id] = edge + width / 2
+            edge += width
+        }
+        let card = model.cards[index]
+        carry = (zone, card.id, point, point.x - panel.frame.minX - (centres[card.id] ?? 0), centres, false)
+    }
+
+    /// The mouse moves with a card held: the card goes to the place where its middle is, among the others (measured as the row lay when the mouse went down).
+    private func drag(to point: CGPoint) {
+        guard var current = carry, let panel = panels[current.zone], let model = models[current.zone] else { return }
+        if !current.moved && hypot(point.x - current.from.x, point.y - current.from.y) < 4 { return }
+        if !current.moved { (panel.contentView as? ZonePressView)?.cursor = .closedHand }   // the card is in the hand until it is let go
+        current.moved = true
+        carry = current
+        shrinkLater()
+        guard let from = model.cards.firstIndex(where: { $0.id == current.card }) else { return }
+        let centre = point.x - panel.frame.minX - current.grab
+        // The card floats where the mouse has it, inside the notch.
+        var still = Transaction()
+        still.disablesAnimations = true
+        withTransaction(still) {
+            model.carriedCard = current.card
+            // No edge of the card goes past the notch's.
+            let half = (model.cards.firstIndex { $0.id == current.card }.map { model.widths[$0] } ?? 0) / 2
+            model.carriedX = min(max(centre, half), model.widths.reduce(0, +) - half)
+        }
+        let to = model.cards.filter { $0.id != current.card }.filter { (current.centres[$0.id] ?? 0) < centre }.count
+        guard to != from, let rect = coordinator.stacks[current.zone]?.rect else { return }
+        moveCard(current.zone, model.cards[from], model.cards[to])
+        let open = cards(current.zone).filter { $0.windowID != nil }
+        guard open.count == model.cards.count else { return }
+        withAnimation(Self.growth) {
+            model.cards = open
+            model.widths = rowWidths(of: open, in: current.zone, zoneWidth: screens.flip(rect).width)
+            model.lit = Self.front(of: open)
+            model.hoveredCard = open.firstIndex { $0.id == current.card }
+        }
+    }
+
+    /// The mouse is let go: a card held where it was is clicked.
+    private func release() {
+        guard let current = carry else { return }
+        carry = nil
+        // A card carried goes to its place, and is put down.
+        if current.moved { (panels[current.zone]?.contentView as? ZonePressView)?.cursor = nil }
+        if current.moved, let model = models[current.zone], let index = model.cards.firstIndex(where: { $0.id == current.card }) {
+            withAnimation(Self.growth) { model.carriedX = model.widths[..<index].reduce(0, +) + model.widths[index] / 2 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak model] in
+                if model?.carriedCard == current.card { model?.carriedCard = nil }
+            }
+        }
+        guard !current.moved, let model = models[current.zone], let stack = coordinator.stacks[current.zone], !stack.isParked,
+              let id = model.cards.first(where: { $0.id == current.card })?.windowID else { return }
+        if id == stack.activeID { coordinator.focus(zone: current.zone) } else { coordinator.clickSelect(id, in: stack) }
     }
 
     /// The window that was clicked or brought forward is raised by its app a moment later.
@@ -270,6 +334,8 @@ final class ZoneNotches: ZonePresenting {
         let model = ZoneNotchModel()
         let view = ZonePressView()
         view.onPress = { [weak self] point in self?.press(zone, at: point) }
+        view.onDrag = { [weak self] point in self?.drag(to: point) }
+        view.onRelease = { [weak self] _ in self?.release() }
         let host = NSHostingView(rootView: ZoneNotchView(model: model))
         host.sizingOptions = []
         host.autoresizingMask = [.width, .height]

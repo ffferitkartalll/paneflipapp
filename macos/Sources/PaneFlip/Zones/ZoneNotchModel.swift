@@ -14,4 +14,7 @@ final class ZoneNotchModel {
     var lit: CGFloat = 0
     /// The card the pointer is on (its place among them), if any: one that is not lit gets a hover effect.
     var hoveredCard: Int?
+    /// The card the mouse carries (`IslandWindow.id`) and where its middle is, from the left edge of the notch: it floats there, its place in the row empty.
+    var carriedCard: String?
+    var carriedX: CGFloat = 0
 }
