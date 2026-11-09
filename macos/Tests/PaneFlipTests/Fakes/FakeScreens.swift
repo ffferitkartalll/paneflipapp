@@ -6,6 +6,7 @@ final class FakeScreens: ScreenProviding {
     var pointerAX = CGPoint.zero
     var pointerCocoa = CGPoint.zero
     var menuBarThickness: CGFloat = 24
+    func menuBarHeight(of screen: ScreenInfo) -> CGFloat { max(screen.notchHeight, menuBarThickness) }
     var isMissionControlActive = false
     var isDockSettled = true
 

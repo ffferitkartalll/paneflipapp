@@ -81,18 +81,22 @@ final class AppContainer {
         let island = MenuBarIsland(lighting: overlay, badging: DockAppBadges(), coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })
         engine.add(presenter: island)
-        coordinator.onActivity = { [weak island] _ in island?.windowsDidChange() }
+        let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens },
+                                  cards: { [weak island] in island?.cards(of: $0) ?? [] }, titleWidth: { [weak island] in island?.titleWidth(of: $0) })
+        engine.add(presenter: notches)
+        coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         coordinator.deskRect = { desk.rect($0) }
         coordinator.displayOf = { desk.display(of: $0) }
         coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
         let motionEnded = coordinator.onMotionEnded
-        coordinator.onMotionEnded = { [weak island] in
-            motionEnded?(); island?.motionEnded()
+        coordinator.onMotionEnded = { [weak notches, weak coordinator] in
+            motionEnded?()
+            // The notches were left as they were while the windows moved; put right once nothing moves (a swipe's end comes while its pictures still glide).
+            if coordinator?.isMoving == false { notches?.zonesDidChange() }
             // The list of windows the photographs are taken from is read again once the windows are at rest, not in the wait of the next swipe.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { capture.prepare() }
         }
-        coordinator.onWindowStep = { [weak island] zone in island?.peekWindows(of: zone) }
         coordinator.onWindowScrub = { [weak island] zone, fraction in island?.windowsScrubbed(zone: zone, by: fraction) }
 
         settings.onPlacementChanged = { [weak engine, weak settings] in
@@ -172,9 +176,10 @@ final class AppContainer {
         }
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers },
-                                                       overIsland: { [settings, coordinator, editor, island] in
-            // The cheap test first: nearly every scroll event of the system is not over the island.
-            guard let target = island.scrollTarget(at: NSEvent.mouseLocation) else { return nil }
+                                                       overIsland: { [settings, coordinator, editor, island, notches] in
+            // The cheap test first: nearly every scroll event of the system is not over the island or a notch.
+            let pointer = NSEvent.mouseLocation
+            guard let target = island.scrollTarget(at: pointer) ?? notches.scrollTarget(at: pointer) else { return nil }
             let v = settings.values
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown,
                   target != .strip || v.overflowZonesEnabled else { return nil }
@@ -221,6 +226,13 @@ final class AppContainer {
             return best?.screen
         }
         coordinator.usableAreaOf = { screenOf($0)?.axVisible }
+        let scrubbed = coordinator.onWindowScrub
+        // A switch of a zone's windows shows in its grown notch.
+        coordinator.onSwitch = { [weak notches] zone in notches?.showSwitch(of: zone) }
+        coordinator.onWindowScrub = { [weak notches] zone, fraction in
+            scrubbed?(zone, fraction)
+            notches?.scrubbed(zone: zone, by: fraction)
+        }
         coordinator.edgeMarginOf = { [planner] rect in screenOf(rect).map { planner.spacing(for: $0.key).margin } ?? 0 }
         coordinator.onFocusBeyondTheEdge = { [weak scroller] zone in scroller?.reveal(zone: zone) }
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
@@ -250,6 +262,7 @@ final class AppContainer {
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
+            notches.start()
             pointerCrossing.start()
             capsLock.remap(settings.values.capsLockAsModifier)
             capsLockKey.start()

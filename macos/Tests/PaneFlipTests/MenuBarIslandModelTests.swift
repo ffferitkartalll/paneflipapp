@@ -129,18 +129,6 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.windowsTop, model.noticeTop + 28 + 12)
         XCTAssertEqual(model.openSize.height, model.windowsTop + 108 + 12)    }
 
-    func testWindowsShownAloneLieUnderTheLineOfANotice() {
-        let model = model()
-        model.displayWidth = 1000
-        model.notice = AttributedString("Done")
-        choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
-        model.windows = cards(2, front: 0)
-        let noticeOnly = model.openSize.height
-        model.peeking = true
-        XCTAssertEqual(model.windowsTop, 20 + 12 + 28 + 12)
-        XCTAssertEqual(model.openSize.height, noticeOnly + 108 + 12, "the row of cards under the line")
-    }
-
     func testTheIslandForChoosingAZoneHasNoRowOfButtonsWhereThereIsNoNotch() {
         let model = model()
         model.expanded = true
@@ -161,15 +149,6 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.startChoosing()   // a window dragged onto the island
         XCTAssertEqual(model.cornerButtonsOpacity, 0)
         XCTAssertEqual(model.topHeight, 52)
-    }
-
-    func testWindowsShownAloneStandTheRoomUnderThePictureAtRest() {
-        let model = model()
-        model.displayWidth = 1000
-        choose(model, rect: CGRect(x: 0, y: 0, width: 500, height: 250))
-        model.windows = cards(2, front: 0)
-        model.peeking = true
-        XCTAssertEqual(model.windowsTop, 24 - MenuBarIslandView.margin + model.windowsGap)
     }
 
     func testAZoneWithNoWindowHasNoRoomForATitleUnderItsCard() {

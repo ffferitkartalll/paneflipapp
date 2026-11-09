@@ -12,6 +12,8 @@ final class IconFont {
     private(set) var fontName: String?
 
     static let bitmapSize = 144
+    /// A system glyph is aspect-fit into this share of its square picture, like the symbols of the system's tabs.
+    static let glyphShare: CGFloat = 0.8
     static let ppem = 100
     static let advance = 1500   // font units; 1000 per em, so an icon is 1.5 em wide
 
@@ -82,8 +84,7 @@ final class IconFont {
     private func rendered(bundleID: String, appName: String, icon: NSImage, size: Int) -> NSBitmapImageRep {
         guard let glyph = glyph(bundleID: bundleID, appName: appName), glyph.size.width > 0, glyph.size.height > 0 else { return Self.template(icon, size: size) }
         let rep = Self.blank(size)
-        // Aspect-fit into 80 % of the square, like the symbols of the system's tabs.
-        let box = CGFloat(size) * 0.8
+        let box = CGFloat(size) * Self.glyphShare
         let scale = min(box / glyph.size.width, box / glyph.size.height)
         let area = NSRect(x: (CGFloat(size) - glyph.size.width * scale) / 2, y: (CGFloat(size) - glyph.size.height * scale) / 2,
                           width: glyph.size.width * scale, height: glyph.size.height * scale)

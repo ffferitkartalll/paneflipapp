@@ -45,10 +45,11 @@ final class StackCoordinator {
     var displayOf: (CGRect) -> String? = { _ in nil }
     /// Called when a stack changed in a way the island should show (window added, tab switched).
     var onActivity: ((UUID) -> Void)?
-    /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The island's frame follows them.
+    /// The fingers lead the windows of a zone: how far, as a part of the zone's width (0 when they let go). The lit card of the zone's notch
+    /// and the island's open row follow them.
     var onWindowScrub: ((UUID, CGFloat) -> Void)?
-    /// A window of a zone is being stepped to (a shortcut, the wheel): the island shows the zone's windows for a moment.
-    var onWindowStep: ((UUID) -> Void)?
+    /// The windows of a zone are being switched (a shortcut, the wheel, the fingers, a click on a card): its notch shows them for the while.
+    var onSwitch: ((UUID) -> Void)?
     /// A window was added to a zone or taken out of one by the person: the island tells it, with a button to undo it.
     var onWindowChange: ((WindowChange) -> Void)?
     /// The window that was enlarged is back in its zone (or gone): the island closes its message.
@@ -250,6 +251,7 @@ final class StackCoordinator {
             select(id, in: stack)
             return true
         }
+        onSwitch?(stack.id)
         // The island moves to the new window now, together with the slide, not once the slide is over.
         leftFront = (frontID, Date().addingTimeInterval(2))
         stack.activeID = id
@@ -463,6 +465,7 @@ final class StackCoordinator {
         DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
             if self?.windowScrub === scrub { self?.endWindowScrub() }
         }
+        onSwitch?(stack.id)
         guard let carousel else { scrub.failed = true; return true }
         carousel.beginScrub(windows: stack.tabs.compactMap { stack.refs[$0.id] }, current: start, in: scrub.rect) { [weak self] shown, carried in
             guard let self, windowScrub === scrub else { return }
@@ -505,7 +508,6 @@ final class StackCoordinator {
         }
         // Not past the first and the last window: there is nothing to move to, and nothing is photographed for it.
         guard !placementOnly(), let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), stack.tabs.indices.contains(from + step) else { return }
-        onWindowStep?(stack.id)
         guard beginWindowScrub(in: stack) else {
             doOrWait { [weak self, weak stack] in stack.map { self?.stepStack($0, by: step) ?? true } ?? true }
             return
@@ -533,7 +535,6 @@ final class StackCoordinator {
         let shift = scrub.forced.map { min(max(index + $0, 0), scrub.windows.count - 1) - index }
             ?? (scrub.liftedEarly ? min(max(index + early, 0), scrub.windows.count - 1) - index : nil)
             ?? scrub.gesture.shift(zoneWidth: scrub.rect.width, current: index, count: scrub.windows.count)
-        if scrub.liftedEarly, shift != 0 { onWindowStep?(stack.id) }   // the fingers moved nothing the island could show: it shows the step
         guard shift != 0, let entering = stack.refs[scrub.windows[index + shift]] else {
             // Back on the window it began on: a swipe that took the focus gives it to this window.
             let staying = stack.refs[scrub.start]
@@ -803,7 +804,7 @@ final class StackCoordinator {
     func settled(_ id: CGWindowID) { displaced[id] = nil }
 
     /// Removes a window from the live stack only; the memory is the caller's business. Nothing is brought to the
-    /// front: the system decides what is revealed, and the island's front card follows the focus.
+    /// front: the system decides what is revealed, and the island's front card follows the focus. The zone tells it at once.
     func removeFromStack(window id: CGWindowID) {
         if enlarged?.window.id == id { forgetEnlargement() }   // it left its zone: nothing to go back to
         glide?.cancel(id)
@@ -812,9 +813,11 @@ final class StackCoordinator {
             stack.tabs.removeAll { $0.id == id }
             stack.refreshNames()
             stack.mru.removeAll { $0 == id }
-            guard stack.activeID == id else { continue }
-            // The island shows the window that was in front before this one; the window itself is not raised.
-            stack.activeID = stack.mru.first { stack.refs[$0] != nil } ?? stack.tabs.last?.id
+            if stack.activeID == id {
+                // The island shows the window that was in front before this one; the window itself is not raised.
+                stack.activeID = stack.mru.first { stack.refs[$0] != nil } ?? stack.tabs.last?.id
+            }
+            onActivity?(stack.id)
         }
     }
 
