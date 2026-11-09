@@ -1,11 +1,5 @@
 import AppKit
 
-@_silgen_name("CGSMainConnectionID")
-private func CGSMainConnectionID() -> Int32
-
-@_silgen_name("CGSSetConnectionProperty")
-private func CGSSetConnectionProperty(_ connection: Int32, _ target: Int32, _ key: CFString, _ value: CFTypeRef) -> Int32
-
 /// The nearly clear view of the island's shield: it takes the mouse, and tells where it was pressed, dragged and let go, at the pointer's place in screen
 /// coordinates.
 final class IslandShieldView: NSView {
@@ -16,9 +10,7 @@ final class IslandShieldView: NSView {
     /// The pointer's shape over the shield while it is not the arrow (the hand while a card is carried).
     var cursor: NSCursor? {
         didSet {
-            // PaneFlip is not the app in front: the window server only takes a shape from such an app when its connection asks for it.
-            let connection = CGSMainConnectionID()
-            _ = CGSSetConnectionProperty(connection, connection, "SetsCursorInBackground" as CFString, kCFBooleanTrue)
+            BackgroundCursor.allow()
             (cursor ?? .arrow).set()
             window?.invalidateCursorRects(for: self)
         }

@@ -303,6 +303,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
         return nil
     }
 
+    /// A card of a zone is put in the place of another one (dragged in the zone's notch): the windows of the zone stand in the new order.
+    func move(_ card: IslandWindow, toPlaceOf other: IslandWindow, in zone: UUID) {
+        guard let source = slot(of: card, in: zone), let target = slot(of: other, in: zone) else { return }
+        coordinator.moveSlot(source, toPlaceOf: target, inZone: zone)
+    }
+
     /// An island is open.
     var isOpen: Bool { entries.values.contains { $0.hovered } }
 
