@@ -12,4 +12,6 @@ final class ZoneNotchModel {
     var height: CGFloat = 0
     /// Which card is lit: its place among them, between two while the fingers lead.
     var lit: CGFloat = 0
+    /// The card the pointer is on (its place among them), if any: one that is not lit gets a hover effect.
+    var hoveredCard: Int?
 }

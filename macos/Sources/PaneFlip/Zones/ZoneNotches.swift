@@ -102,7 +102,7 @@ final class ZoneNotches: ZonePresenting {
         defer { shrinkLater() }
         guard grown != zone else { return }
         let open = cards(zone).filter { $0.windowID != nil }
-        guard open.count > 1 else { return }
+        guard !open.isEmpty else { return }
         if grown != nil { collapse() }
         let frame = screens.flip(rect), mid = CGPoint(x: frame.midX, y: frame.midY)
         guard let screen = screensNow().first(where: { $0.cocoaFrame.contains(mid) }) else { return }
@@ -130,6 +130,7 @@ final class ZoneNotches: ZonePresenting {
                 model.lit = Self.front(of: row)
                 model.cards = row
             }
+            hoverCard(at: NSEvent.mouseLocation)   // the pointer may be on a card already
         }
     }
 
@@ -206,6 +207,7 @@ final class ZoneNotches: ZonePresenting {
         grown = nil
         shrinkBack?.cancel()
         if stays { hovered = zone }
+        models[zone]?.hoveredCard = nil
         withAnimation(Self.growth, completionCriteria: .removed) { models[zone]?.cards = [] } completion: { [weak self] in
             // Its panel back to the notch's size, level and place; not while windows slide (then once they are at rest), nor if it was grown again meanwhile.
             guard let self, grown != zone, !coordinator.isMoving else { return }
@@ -216,11 +218,19 @@ final class ZoneNotches: ZonePresenting {
     /// Lights the notch under the pointer; not one another window covers there (the pointer is on that window). The frontmost window at the pointer is the notch itself
     /// or, where the notch draws nothing, the zone's own window.
     private func hover(at point: CGPoint) {
+        hoverCard(at: point)
         hovered = panels.first { id, panel in
             guard id != grown, panel.isVisible, notchRect(of: id, in: panel).insetBy(dx: -2, dy: -2).contains(point) else { return false }
             let top = NSWindow.windowNumber(at: point, belowWindowWithWindowNumber: 0)
             return top == panel.windowNumber || top == coordinator.stacks[id]?.activeID.map { Int($0) }
         }?.key
+    }
+
+    /// The card of the grown notch under the pointer is tinted (unless it is the lit one: `ZoneNotchRow`).
+    private func hoverCard(at point: CGPoint) {
+        guard let zone = grown, let panel = panels[zone], let model = models[zone] else { return }
+        let card = panel.frame.contains(point) ? CardRow.index(atX: point.x - panel.frame.minX, widths: model.widths) : nil
+        if model.hoveredCard != card { model.hoveredCard = card }
     }
 
     /// Where the notch of `zone` is drawn, in the middle of its panel's top edge: twice as large while the pointer is on it (where it stood so for a grown one).
