@@ -31,11 +31,16 @@ final class ZoneNotches: ZonePresenting {
     /// How long the grown notch stays once the pictures are at rest.
     private static let lingering: TimeInterval = 0.5
     private static let growth = Animation.easeOut(duration: 0.2)
+    /// The notch lit under the pointer, and at rest again.
+    private static let lifting = Animation.easeOut(duration: 0.15)
     /// The notch the pointer is on.
     private var hovered: UUID? {
         didSet {
             guard hovered != oldValue else { return }
-            for id in [oldValue, hovered].compactMap({ $0 }) { models[id]?.hovered = id == hovered }
+            // Lit, or at rest again, as a movement; not while it is grown (its cards stand for it) or turns back (`collapse` ends that).
+            for id in [oldValue, hovered].compactMap({ $0 }) where models[id]?.cards.isEmpty ?? false {
+                withAnimation(Self.lifting) { models[id]?.lift = id == hovered ? 1 : 0 }
+            }
         }
     }
 
@@ -76,10 +81,12 @@ final class ZoneNotches: ZonePresenting {
             let zone = screens.flip(stack.rect)
             // A full-screen app has the display: no notches there.
             guard current.contains(where: { $0.desktopNumber != nil && $0.cocoaFrame.contains(CGPoint(x: zone.midX, y: zone.midY)) }) else { continue }
-            let size = ZoneNotchView.hoverSize
-            let rect = CGRect(x: zone.midX - size.width / 2, y: zone.maxY - size.height, width: size.width, height: size.height)
             let panel = panels[stack.id] ?? make(for: stack.id)
-            if stack.id != grown {   // a grown one keeps its place and level until it is back
+            models[stack.id]?.windowCount = stack.tabs.count
+            models[stack.id]?.activeIndex = stack.tabs.firstIndex { $0.id == stack.activeID } ?? 0
+            let size = NotchSize.hoverSize(forWindows: stack.tabs.count)
+            let rect = CGRect(x: zone.midX - size.width / 2, y: zone.maxY - size.height, width: size.width, height: size.height)
+            if stack.id != grown, models[stack.id]?.cards.isEmpty ?? true {   // a grown one keeps its place and level until it is back (until its cards have turned back into the parts)
                 if panel.frame != rect { panel.setFrame(rect, display: false) }
                 if panel.level != .normal { panel.level = .normal }
             }
@@ -95,6 +102,8 @@ final class ZoneNotches: ZonePresenting {
         guard !coordinator.isMoving else { return }
         for (id, panel) in panels where id != grown {
             guard let front = coordinator.stacks[id]?.activeID else { panel.orderOut(nil); continue }
+            if models[id]?.windowCount != coordinator.stacks[id]?.tabs.count { return zonesDidChange() }   // a window came or went: the notch is as wide as they ask
+            if let stack = coordinator.stacks[id], let index = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), models[id]?.activeIndex != index { models[id]?.activeIndex = index }
             panel.order(.above, relativeTo: Int(front))
         }
     }
@@ -114,7 +123,6 @@ final class ZoneNotches: ZonePresenting {
         let height = min(screens.menuBarHeight(of: screen), frame.height / 4)
         let widths = rowWidths(of: open, in: zone, zoneWidth: frame.width)
         let size = CGSize(width: widths.reduce(0, +), height: height)
-        if hovered == zone { hovered = nil }
         grown = zone
         panel.setFrame(CGRect(x: frame.midX - size.width / 2, y: frame.maxY - size.height, width: size.width, height: size.height), display: false)
         // The notch at rest laid out in the larger panel now, where it stands on the screen, so that the growth starts there and not from where it was in the panel.
@@ -131,6 +139,8 @@ final class ZoneNotches: ZonePresenting {
                 model.height = height
                 model.lit = Self.front(of: row)
                 model.cards = row
+                model.grow = 1
+                model.lift = 1
             }
             hoverCard(at: NSEvent.mouseLocation)   // the pointer may be on a card already
         }
@@ -219,10 +229,20 @@ final class ZoneNotches: ZonePresenting {
         if stays { hovered = zone }
         models[zone]?.hoveredCard = nil
         models[zone]?.carriedCard = nil
-        withAnimation(Self.growth, completionCriteria: .removed) { models[zone]?.cards = [] } completion: { [weak self] in
-            // Its panel back to the notch's size, level and place; not while windows slide (then once they are at rest), nor if it was grown again meanwhile.
-            guard let self, grown != zone, !coordinator.isMoving else { return }
-            zonesDidChange()
+        // First the cards turn back into the parts of the notch (the notch the pointer was on), then, if the pointer is gone, that goes back to the notch at rest: the way
+        // it grew, backwards. Only then are the cards taken away, which changes nothing that is seen.
+        withAnimation(Self.growth, completionCriteria: .removed) { models[zone]?.grow = 0 } completion: { [weak self] in
+            guard let self, grown != zone, let model = models[zone] else { return }
+            let finish = { [weak self] in
+                guard let self, grown != zone else { return }
+                model.cards = []
+                // Its panel back to the notch's size, level and place; not while windows slide (then once they are at rest), nor if it was grown again meanwhile.
+                guard !coordinator.isMoving else { return }
+                zonesDidChange()
+            }
+            let lift: CGFloat = hovered == zone ? 1 : 0
+            if model.lift == lift { return finish() }
+            withAnimation(Self.lifting, completionCriteria: .removed) { model.lift = lift } completion: { finish() }
         }
     }
 
@@ -246,7 +266,8 @@ final class ZoneNotches: ZonePresenting {
 
     /// Where the notch of `zone` is drawn, in the middle of its panel's top edge: twice as large while the pointer is on it (where it stood so for a grown one).
     private func notchRect(of zone: UUID, in panel: NSPanel) -> CGRect {
-        let frame = panel.frame, size = zone == hovered || zone == grown ? ZoneNotchView.hoverSize : ZoneNotchView.size
+        let frame = panel.frame, count = models[zone]?.windowCount ?? 1
+        let size = zone == hovered || zone == grown ? NotchSize.hoverSize(forWindows: count) : NotchSize.size(forWindows: count)
         return CGRect(x: frame.midX - size.width / 2, y: frame.maxY - size.height, width: size.width, height: size.height)
     }
 
@@ -322,7 +343,7 @@ final class ZoneNotches: ZonePresenting {
     }
 
     private func make(for zone: UUID) -> NSPanel {
-        let p = NSPanel(contentRect: CGRect(origin: .zero, size: ZoneNotchView.hoverSize), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+        let p = NSPanel(contentRect: CGRect(origin: .zero, size: NotchSize.hoverSize(forWindows: 1)), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         p.level = .normal   // among the windows, so that it can stand just above one of them
         p.isOpaque = false
         p.backgroundColor = .clear
