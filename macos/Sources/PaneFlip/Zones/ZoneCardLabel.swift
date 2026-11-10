@@ -12,8 +12,14 @@ struct ZoneCardLabel: View {
     /// The app's picture: so large that the glyph in it (which fills only a share of it) is as tall as a line of the name.
     static let icon = ((font.ascender - font.descender) / IconFont.glyphShare).rounded(), spacing: CGFloat = 6, padding: CGFloat = 12
 
-    /// How wide a card is beside its name: the room at its two ends and the app's picture.
-    static func chrome(of card: IslandWindow) -> CGFloat { 2 * padding + (card.glyph == nil ? 0 : icon + spacing) }
+    /// The Dock's badge as the compact row draws it, left of the picture: how tall it is, and how wide.
+    static let badgeHeight: CGFloat = 16
+    static func badgeWidth(of card: IslandWindow) -> CGFloat { card.badgeText.map { max(badgeHeight, CGFloat($0.count) * 5 + 4) } ?? 0 }
+    /// What the badge takes of the card: its width and the gap to the picture (the picture's gap to the title).
+    static func badgeRoom(of card: IslandWindow) -> CGFloat { card.badgeText == nil ? 0 : badgeWidth(of: card) + spacing }
+
+    /// How wide a card is beside its name: the room at its two ends, the badge and the app's picture.
+    static func chrome(of card: IslandWindow) -> CGFloat { 2 * padding + badgeRoom(of: card) + (card.glyph == nil ? 0 : icon + spacing) }
 
     /// How wide the card is with its whole name.
     static func width(of card: IslandWindow) -> CGFloat {

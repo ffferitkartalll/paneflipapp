@@ -39,6 +39,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private var badges: [String: String] = [:]
     private let badgeQueue = DispatchQueue(label: "island.badges", qos: .utility)
     private var badgeAsking = false
+    /// Whether something else shows cards now (a zone's notch): the badges are asked for then too.
+    var badgesWanted: () -> Bool = { false }
+    /// The badges changed: what shows cards tells it.
+    var onBadgesChanged: (() -> Void)?
     private var carryTarget: IslandCarryTarget?
     /// The window of the card being carried, and the zone it lay in when the mouse went down on it (the row shown may change meanwhile).
     private var carrying: (ref: WindowRef, zone: UUID)?
@@ -876,15 +880,18 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     /// The windows of the open row: as they are now (one that came, went or came to the front is shown), or, if the zone is gone, no row.
-    /// Asks the Dock for the badges while a row of windows is open, off the main thread; the cards change when they have.
-    private func refreshBadges() {
-        guard !badgeAsking, entries.values.contains(where: { $0.model.windowsZone != nil }) else { return }
+    /// Asks the Dock for the badges while a row of windows is open (or a notch shows cards), off the main thread; the cards change when they have.
+    func refreshBadges() {
+        guard !badgeAsking, entries.values.contains(where: { $0.model.windowsZone != nil }) || badgesWanted() else { return }
         badgeAsking = true
         badgeQueue.async { [badging] in
             let fresh = badging.badges()
             DispatchQueue.main.async { [self] in
                 badgeAsking = false
-                if fresh != badges { badges = fresh }
+                if fresh != badges {
+                    badges = fresh
+                    onBadgesChanged?()
+                }
             }
         }
     }

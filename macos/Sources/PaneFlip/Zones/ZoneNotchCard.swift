@@ -1,8 +1,8 @@
 import AppKit
 import SwiftUI
 
-/// What a card of the notch expanded (`ZoneNotchExpanded`) has besides its picture and its title, which are the compact row's and move into place (`ZoneNotchRow`): the Dock's
-/// badge at the top right, and the buttons of the card under the pointer, as the island's row has them. It is `width` wide while the
+/// What a card of the notch expanded (`ZoneNotchExpanded`) has besides its picture, its title and its badge, which are the compact row's and move into place (`ZoneNotchRow`): the
+/// buttons of the card under the pointer, as the island's row has them. It is `width` wide while the
 /// notch grows into it, its contents as large as they will be, in the middle.
 struct ZoneNotchCard: View {
     let slot: IslandWindow
@@ -15,7 +15,6 @@ struct ZoneNotchCard: View {
     var body: some View {
         let card = ZoneNotchExpanded.pictureSize(width: cardWidth)
         ZStack(alignment: .topLeading) {
-            badge(in: card).opacity(hovered ? 0 : 1)
             if hovered { buttons(in: card) }
         }
         .frame(width: card.width, height: card.height)
@@ -45,21 +44,6 @@ struct ZoneNotchCard: View {
             .offset(x: rect.minX, y: rect.minY)
         }
         // As large as the card, from its top left corner: an offset moves a button but not the room it takes.
-        .frame(width: card.width, height: card.height, alignment: .topLeading)
-    }
-
-    private func badge(in card: CGSize) -> some View {
-        let rect = IslandCardAction.rects(in: card, among: [.remove]).first?.rect ?? .zero
-        return ZStack(alignment: .topLeading) {
-            if let text = slot.badgeText {
-                Text(verbatim: text)
-                    .font(.system(size: rect.width * 0.5, weight: .bold)).foregroundStyle(.white)
-                    .minimumScaleFactor(0.5).lineLimit(1).padding(.horizontal, 1)
-                    .frame(width: rect.width, height: rect.height)
-                    .background(Circle().fill(Color.red))
-                    .offset(x: rect.minX, y: rect.minY)
-            }
-        }
         .frame(width: card.width, height: card.height, alignment: .topLeading)
     }
 }

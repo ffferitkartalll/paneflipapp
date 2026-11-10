@@ -4,6 +4,8 @@ import Foundation
 /// What a zone's notch asks the island for: the cards of a zone's windows as the island's row has them, and what the island does when one is clicked, its buttons are
 /// pressed or it is put in another place. The notch shows and does what the island's row does, from the one source.
 protocol ZoneCardSource: AnyObject {
+    /// Asks the Dock for the apps' badges again (the cards change when it has answered).
+    func refreshBadges()
     /// The open windows of a zone, in the order of the zone.
     func cards(of zone: UUID) -> [IslandWindow]
     /// Every card of the zone's row: its windows and the apps of the zone that are not open.

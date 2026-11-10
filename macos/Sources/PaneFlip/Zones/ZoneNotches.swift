@@ -32,6 +32,19 @@ final class ZoneNotches: ZonePresenting {
     private static let growth = Animation.easeOut(duration: 0.2)
     /// The notch lit under the pointer, and at rest again.
     private static let lifting = Animation.easeOut(duration: 0.15)
+    /// A notch shows cards: the island asks for the Dock's badges for them.
+    var showsCards: Bool { grown != nil }
+
+    /// The Dock's badges changed: the cards shown take them (the same cards, in the same order).
+    func badgesDidChange() {
+        guard let zone = grown, let model = models[zone], !model.cards.isEmpty else { return }
+        let open = source.cards(of: zone)
+        if open.map(\.id) == model.cards.map(\.id), open != model.cards { model.cards = open }
+        guard !model.slots.isEmpty else { return }
+        let all = source.allCards(of: zone)
+        if all.map(\.id) == model.slots.map(\.id), all != model.slots { model.slots = all }
+    }
+
     /// The notch the pointer is on.
     private var hovered: UUID? {
         didSet {
@@ -112,6 +125,7 @@ final class ZoneNotches: ZonePresenting {
         guard let panel = panels[zone], let model = models[zone], let rect = coordinator.stacks[zone]?.rect else { return }
         defer { shrinkLater() }
         guard grown != zone else { return }
+        source.refreshBadges()
         let open = source.cards(of: zone).filter { $0.windowID != nil }
         guard !open.isEmpty else { return }
         if grown != nil { collapse() }
@@ -148,7 +162,7 @@ final class ZoneNotches: ZonePresenting {
         let most = source.titleWidth(of: zone) ?? 100, room = zoneWidth - 2 * ZoneCorner.radius
         // shortcut: never narrower than a card's picture and room, so a zone too narrow for its windows has the row run past its sides; show the pictures alone if that is seen.
         return CardRow.narrowed(open.map { min(ZoneCardLabel.width(of: $0), ZoneCardLabel.chrome(of: $0) + most) },
-                                narrowest: 2 * ZoneCardLabel.padding + ZoneCardLabel.icon + ZoneCardLabel.spacing) { $0.reduce(0, +) <= room }
+                                narrowest: open.map { 2 * ZoneCardLabel.padding + ZoneCardLabel.icon + ZoneCardLabel.spacing + ZoneCardLabel.badgeRoom(of: $0) }) { $0.reduce(0, +) <= room }
     }
 
     /// Something changed in a zone: while its notch is grown, the lit card slides to the window now in front. Only its place changes: a step costs next to nothing.
