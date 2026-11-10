@@ -81,9 +81,7 @@ final class AppContainer {
         let island = MenuBarIsland(lighting: overlay, badging: DockAppBadges(), coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })
         engine.add(presenter: island)
-        let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens },
-                                  cards: { [weak island] in island?.cards(of: $0) ?? [] }, titleWidth: { [weak island] in island?.titleWidth(of: $0) },
-                                  moveCard: { [weak island] zone, card, other in island?.move(card, toPlaceOf: other, in: zone) })
+        let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, source: island)
         engine.add(presenter: notches)
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })

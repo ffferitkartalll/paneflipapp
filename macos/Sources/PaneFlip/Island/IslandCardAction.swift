@@ -18,14 +18,14 @@ enum IslandCardAction: CaseIterable {
     private static let margin: CGFloat = 4, gap: CGFloat = 4
     /// As large as when all are shown.
     private static func side(in card: CGSize) -> CGFloat {
-        let count = CGFloat(allCases.count)
+        let count = CGFloat(allCases.count + 1)   // and the button that ticks the app
         return min(20, max(6, floor((card.width - 2 * margin - count * gap) / count)))
     }
 
-    /// The button in the bottom right corner that ticks the card's app to be started with the layout, as large as the others.
+    /// The button that ticks the card's app to be started with the layout, as large as the others: in the top right corner, to the left of the one that removes it.
     static func selectRect(in card: CGSize) -> CGRect {
         let side = side(in: card)
-        return CGRect(x: card.width - margin - side, y: card.height - margin - side, width: side, height: side)
+        return CGRect(x: card.width - margin - 2 * side - gap, y: margin, width: side, height: side)
     }
 
     /// Where the buttons stand in a card of this size, from its top left corner; smaller when the card is narrow.
