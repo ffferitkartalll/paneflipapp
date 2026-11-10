@@ -8,5 +8,6 @@ extension EditorModel {
         let strip: StripLayout
         let offset: Double
         let defaultZone: UUID?
+        let aspects: [UUID: ZoneAspect]
     }
 }

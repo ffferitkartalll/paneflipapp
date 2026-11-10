@@ -17,6 +17,7 @@ protocol LayoutManaging: AnyObject {
     /// Takes effect with the next `updateLayout`, which lays the zones out again.
     func setSpacing(key: String, id: UUID, gap: Double, edgeMargin: Double, minZoneSize: Double)
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String)
+    func setZoneAspects(key: String, id: UUID, _ aspects: [UUID: ZoneAspect])
     func rename(key: String, id: UUID, to name: String)
     /// The zone that receives the apps of a display that is unplugged; nil leaves it to the first zone.
     func setDefaultZone(key: String, id: UUID, to zone: UUID?)

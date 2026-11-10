@@ -4216,6 +4216,9 @@
         }
       }
     },
+    "Aspect ratio" : {
+      "extractionState" : "manual"
+    },
     "Blank layout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13207,6 +13210,9 @@
           }
         }
       }
+    },
+    "Free" : {
+      "extractionState" : "manual"
     },
     "Gap between zones" : {
       "extractionState" : "manual",

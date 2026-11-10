@@ -8,6 +8,8 @@ struct EditorView: View {
     let area: CGSize
     @State private var showShapes = false
     @State private var showSpacing = false
+    /// The zone whose aspect-ratio list is open.
+    @State private var aspectZone: UUID?
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
     private let snapDistance: CGFloat = 20
     @Environment(\.displayScale) private var displayScale
@@ -87,7 +89,10 @@ struct EditorView: View {
                 ForEach(lines) { d in lineView(d, in: rect) }
                 ForEach(lines) { d in handleView(d, in: rect) }
 
-                ForEach(zones.filter { model.strip.part(of: $0.id) == .screen }) { z in defaultButton(z) }
+                ForEach(zones.filter { model.strip.part(of: $0.id) == .screen }) { z in
+                    defaultButton(z)
+                    aspectButton(z, in: rect, screen: screenRect)
+                }
 
                 controls
                 overflowButtons(size: geo.size)
@@ -100,14 +105,57 @@ struct EditorView: View {
     /// A star in the bottom left corner of each zone of the screen, as far from the left edge as from the bottom one: the filled one is the default zone, which takes the apps whose zone is gone.
     private func defaultButton(_ z: ZoneRect) -> some View {
         let on = model.effectiveDefaultZone == z.id
-        let side: CGFloat = 32, gap: CGFloat = 12
-        return Button { model.setDefaultZone(z.id) } label: { Image(systemName: on ? "star.fill" : "star") }
+        return cornerButton(on ? "star.fill" : "star", help: "Default zone") { model.setDefaultZone(z.id) }
+            // The zone is drawn 3 points inside its rectangle; the button is a square, so both gaps are `cornerGap`.
+            .position(x: z.rect.minX + 3 + Self.cornerGap + Self.cornerSide / 2, y: z.rect.maxY - 3 - Self.cornerGap - Self.cornerSide / 2)
+    }
+
+    private static let cornerSide: CGFloat = 34, cornerGap: CGFloat = 12
+
+    /// The round glass button of the zones' bottom left corner: the default-zone star and the aspect-ratio button are made by it, so they look the same.
+    private func cornerButton(_ symbol: String, help: LocalizedStringKey, action: @escaping () -> Void) -> some View {
+        // The picture has the same room whatever the symbol, so the button is as large for a wide symbol as for a star.
+        Button(action: action) { Image(systemName: symbol).frame(width: 18, height: 18) }
             .buttonStyle(.glass)
             .buttonBorderShape(.circle)
-            .frame(width: side, height: side)
-            .help("Default zone")
-            // The zone is drawn 3 points inside its rectangle; the button is a square, so both gaps are `gap`.
-            .position(x: z.rect.minX + 3 + gap + side / 2, y: z.rect.maxY - 3 - gap - side / 2)
+            .controlSize(.large)   // as large as the buttons along the top
+            .frame(width: Self.cornerSide, height: Self.cornerSide)
+            .help(help)
+    }
+
+    /// Next to the star, in its style: the ratio the zone keeps while its lines move. The list marks the one it has (Free if none); the ones its lines cannot give it are dimmed.
+    private func aspectButton(_ z: ZoneRect, in rect: CGRect, screen: CGRect) -> some View {
+        let current = model.aspects[z.id]
+        let least = CGFloat(model.minZoneSize)
+        func row(_ aspect: ZoneAspect?) -> some View {
+            Button {
+                model.setAspect(aspect, of: z.id, in: rect, screen: screen, least: least)
+                aspectZone = nil
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark").opacity(current == aspect ? 1 : 0)
+                    if let aspect { Text(verbatim: "\(aspect.width):\(aspect.height)") } else { Text("Free") }
+                    Spacer(minLength: 0)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(aspect.map { !model.canSetAspect($0, of: z.id, in: rect, screen: screen, least: least) } ?? false)
+        }
+        return cornerButton(current == nil ? "aspectratio" : "aspectratio.fill", help: "Aspect ratio") { aspectZone = z.id }
+            .background {
+                Color.clear.popover(isPresented: Binding(get: { aspectZone == z.id }, set: { if !$0 { aspectZone = nil } })) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        row(nil)
+                        Divider()
+                        ForEach(ZoneAspect.common, id: \.self) { row($0) }
+                    }
+                    .padding(12)
+                    .frame(width: 120)
+                }
+            }
+            .position(x: z.rect.minX + 3 + Self.cornerGap + Self.cornerSide + 8 + Self.cornerSide / 2, y: z.rect.maxY - 3 - Self.cornerGap - Self.cornerSide / 2)
     }
 
     // MARK: Areas beyond the screen
@@ -369,7 +417,7 @@ struct EditorView: View {
         let lo = min(model.minZoneSize / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         snappedLine = step != nil
-        model.setRatio(d.id, r, in: rect, least: CGFloat(model.minZoneSize))
+        model.setRatio(d.id, r, in: rect, screen: CGRect(x: rect.minX + CGFloat(model.strip.leadingWidth) * area.width, y: 0, width: area.width, height: area.height), least: CGFloat(model.minZoneSize))
     }
 
     /// The line goes with the pointer from where its handle (or the line) was taken, not from the line's middle.

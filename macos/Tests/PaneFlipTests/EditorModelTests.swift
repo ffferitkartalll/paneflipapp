@@ -24,6 +24,28 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(editor.effectiveDefaultZone, a)
     }
 
+    func testAZoneKeepsItsRatioWhileALineMovesAndLosesItWhenSplit() {
+        let a = UUID(), b = UUID(), c = UUID(), column = UUID()
+        let rect = CGRect(x: 0, y: 0, width: 1600, height: 1000)
+        var applied: [UUID: ZoneAspect] = [:]
+        let editor = EditorModel(strip: StripLayout(root: .split(id: column, sideBySide: true, ratio: 0.5, first: .leaf(a),
+                                                                 second: .split(id: UUID(), sideBySide: false, ratio: 0.5, first: .leaf(b), second: .leaf(c)))),
+                                 onApply: { applied = $0.aspects }, onClose: {})
+        editor.setAspect(ZoneAspect(16, 9), of: b, in: rect, screen: rect, least: 100)
+        editor.setRatio(column, 0.6, in: rect, screen: rect, least: 100)
+        let zone = editor.root.zones(in: rect).first { $0.id == b }!.rect
+        XCTAssertEqual(zone.width / zone.height, 16.0 / 9, accuracy: 0.001)
+        editor.undo()
+        editor.undo()
+        XCTAssertNil(editor.aspects[b], "undone with the lines")
+        editor.redo()
+        editor.split(b, sideBySide: true, ratio: 0.5)
+        XCTAssertNil(editor.aspects[b], "split, a zone is no longer at its ratio")
+        editor.undo()
+        editor.apply()
+        XCTAssertEqual(applied, [b: ZoneAspect(16, 9)])
+    }
+
     func testAPlusAddsAScreenAsWideAsTheScreenAndTheViewGoesToIt() {
         let editor = model()
         XCTAssertTrue(editor.canAddLeading && editor.canAddTrailing, "a lone screen has nothing on either side")
@@ -154,9 +176,9 @@ final class EditorModelTests: XCTestCase {
         editor.split(a, sideBySide: true, ratio: 0.5)
         guard case .split(let line, _, _, _, _) = editor.root else { return XCTFail("a split") }
         let rect = CGRect(x: 0, y: 0, width: 1000, height: 600)
-        for ratio in [0.45, 0.4, 0.35, 0.3] { editor.setRatio(line, ratio, in: rect, least: 10) }
+        for ratio in [0.45, 0.4, 0.35, 0.3] { editor.setRatio(line, ratio, in: rect, screen: rect, least: 10) }
         editor.endResize()
-        editor.setRatio(line, 0.6, in: rect, least: 10)   // a second drag
+        editor.setRatio(line, 0.6, in: rect, screen: rect, least: 10)   // a second drag
         editor.undo()
         guard case .split(_, _, let afterOne, _, _) = editor.root else { return XCTFail("a split") }
         XCTAssertEqual(afterOne, 0.3, accuracy: 1e-9, "the second drag is undone as a whole")
