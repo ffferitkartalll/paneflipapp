@@ -15,6 +15,8 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var minZoneSize: Double?
     /// The names the user gave to zones, by zone; a zone without one is told by its number.
     public var zoneNames: [UUID: String] = [:]
+    /// The width-to-height ratio the layout editor keeps a zone at; a zone without one is free.
+    public var zoneAspects: [UUID: ZoneAspect] = [:]
     /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
     public var startApps: Set<String> = []
 
@@ -38,6 +40,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         copy.leading = leading.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.zoneNames = Dictionary(uniqueKeysWithValues: zoneNames.compactMap { zone, name in ids[zone].map { ($0, name) } })
+        copy.zoneAspects = Dictionary(uniqueKeysWithValues: zoneAspects.compactMap { zone, aspect in ids[zone].map { ($0, aspect) } })
         return copy
     }
 
@@ -46,7 +49,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return try c.decodeIfPresent(Overflow.self, forKey: key).map { [$0] } ?? []
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, edgeMargin, minZoneSize, startApps, zoneNames }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, edgeMargin, minZoneSize, startApps, zoneNames, zoneAspects }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -63,6 +66,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         minZoneSize = try c.decodeIfPresent(Double.self, forKey: .minZoneSize)
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
         zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]
+        zoneAspects = try c.decodeIfPresent([UUID: ZoneAspect].self, forKey: .zoneAspects) ?? [:]
     }
 
     /// The screen's layout with the areas beyond its edges.

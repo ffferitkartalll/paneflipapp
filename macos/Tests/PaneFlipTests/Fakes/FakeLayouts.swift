@@ -25,4 +25,5 @@ final class FakeLayouts: LayoutManaging {
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String) {}
     func rename(key: String, id: UUID, to name: String) {}
     func setDefaultZone(key: String, id: UUID, to zone: UUID?) {}
+    func setZoneAspects(key: String, id: UUID, _ aspects: [UUID: ZoneAspect]) {}
 }

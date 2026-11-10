@@ -87,6 +87,7 @@ public final class LayoutRepository {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].strip = strip
         s.layouts[i].zoneNames = s.layouts[i].zoneNames.filter { strip.zoneIDs.contains($0.key) }
+        s.layouts[i].zoneAspects = s.layouts[i].zoneAspects.filter { strip.zoneIDs.contains($0.key) }
         screens[Self.split(key).display] = s
     }
 
@@ -111,6 +112,13 @@ public final class LayoutRepository {
               s.layouts[i].strip.zoneIDs.contains(zone) else { return }
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         s.layouts[i].zoneNames[zone] = trimmed.isEmpty ? nil : trimmed
+        screens[Self.split(key).display] = s
+    }
+
+    /// Sets the ratios the editor keeps the zones of a layout at; a zone that is not in the layout has none.
+    public func setZoneAspects(_ aspects: [UUID: ZoneAspect], ofLayout id: UUID, key: String) {
+        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        s.layouts[i].zoneAspects = aspects.filter { s.layouts[i].strip.zoneIDs.contains($0.key) }
         screens[Self.split(key).display] = s
     }
 

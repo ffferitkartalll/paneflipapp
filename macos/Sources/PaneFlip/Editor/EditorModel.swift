@@ -33,17 +33,21 @@ final class EditorModel {
     /// The zone that takes the apps whose zone is gone; nil while the layout keeps the first one.
     private(set) var defaultZone: UUID?
 
+    /// The width-to-height ratio each zone keeps while the lines move; a zone without one is free.
+    private(set) var aspects: [UUID: ZoneAspect]
+
     @ObservationIgnored private let onApply: (EditorModel) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
     init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, minZoneSize: Double = AppSettings.minZoneSizeRange.lowerBound,
-         defaultZone: UUID? = nil, onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
+         defaultZone: UUID? = nil, aspects: [UUID: ZoneAspect] = [:], onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
         self.allowsOverflow = allowsOverflow
         self.gap = gap
         self.margin = margin
         self.minZoneSize = minZoneSize
         self.defaultZone = defaultZone
+        self.aspects = aspects
         self.onApply = onApply
         self.onClose = onClose
     }
@@ -53,7 +57,10 @@ final class EditorModel {
 
     /// The zones and the lines to draw in `rect` (the whole strip; `screen` is the part of it that is the screen). The screen's own layout stands where the desktop puts it,
     /// with the gap and the margin, so that a line is where it is on the desktop; the areas beyond the edges are drawn as they are.
-    func laid(in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) {
+    func laid(in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) { laid(strip, in: rect, screen: screen) }
+
+    private func laid(_ strip: StripLayout, in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) {
+        let root = strip.composite
         let zones = root.zones(in: rect), dividers = root.dividers(in: rect)
         guard gap > 0 || margin > 0 else { return (zones, dividers) }
         let area = StripGeometry(strip: strip, screen: screen).rootArea(margin: margin)
@@ -74,26 +81,28 @@ final class EditorModel {
 
     /// Call before a change: what is now becomes the thing undo goes back to.
     private func checkpoint() {
-        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
         future = []
         resizing = nil
     }
 
     func undo() {
         guard let before = past.popLast() else { return }
-        future.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
+        future.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
         strip = before.strip
         offset = before.offset
         defaultZone = before.defaultZone
+        aspects = before.aspects
         resizing = nil
     }
 
     func redo() {
         guard let after = future.popLast() else { return }
-        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
         strip = after.strip
         offset = after.offset
         defaultZone = after.defaultZone
+        aspects = after.aspects
         resizing = nil
     }
 
@@ -112,6 +121,7 @@ final class EditorModel {
     func reset() {
         checkpoint()
         strip = StripLayout(root: .leaf(strip.root.leafIDs[0]))
+        aspects = [:]
         offset = 0
     }
 
@@ -119,6 +129,7 @@ final class EditorModel {
     func useShape(_ preset: LayoutPreset) {
         checkpoint()
         strip.root = preset.root.reusing(strip.root.leafIDs)
+        aspects = [:]
         offset = 0
     }
 
@@ -172,17 +183,46 @@ final class EditorModel {
 
     func split(_ zone: UUID, sideBySide: Bool, ratio: Double) {
         checkpoint()
+        aspects[zone] = nil   // halved, it is no longer at its ratio
         edit { $0.splitting(zone, sideBySide: sideBySide, ratio: ratio) }
     }
 
     /// Moves a line in the strip as drawn in `rect`; no other line moves, and the line stops where it would pass the next one (zones of at least `least` points are left).
     /// The moves of one drag (until `endResize`) are one change to undo.
-    func setRatio(_ line: UUID, _ ratio: Double, in rect: CGRect, least: CGFloat) {
+    /// The zones with a ratio keep it: the lines across them move with the line.
+    func setRatio(_ line: UUID, _ ratio: Double, in rect: CGRect, screen: CGRect, least: CGFloat) {
         if resizing != line {
             checkpoint()
             resizing = line
         }
-        edit { $0.movingLine(line, to: ratio, in: rect, least: least)?.node ?? $0 }
+        edit { $0.movingLine(line, to: ratio, in: rect, least: least, aspects: aspects, laid: laidZones(in: rect, screen: screen))?.node ?? $0 }
+    }
+
+    private func laidZones(in rect: CGRect, screen: CGRect) -> LayoutNode.Laid {
+        { [self] node in laid(StripLayout(composite: node, leadingIDs: strip.leading.map(\.id), trailingIDs: strip.trailing.map(\.id)), in: rect, screen: screen).zones }
+    }
+
+    /// The zone brought to `aspect` by moving its lines, or nil if they cannot give it that (a zone along both edges of the screen has no line to move).
+    private func fitting(_ aspect: ZoneAspect, zone: UUID, in rect: CGRect, screen: CGRect, least: CGFloat) -> LayoutNode? {
+        strip.composite.settingAspect(of: zone, to: aspect, among: aspects, in: rect, least: least, laid: laidZones(in: rect, screen: screen))
+    }
+
+    func canSetAspect(_ aspect: ZoneAspect, of zone: UUID, in rect: CGRect, screen: CGRect, least: CGFloat) -> Bool {
+        fitting(aspect, zone: zone, in: rect, screen: screen, least: least) != nil
+    }
+
+    /// Keeps `zone` at `aspect` from now on (nil: free), moving its lines to it.
+    func setAspect(_ aspect: ZoneAspect?, of zone: UUID, in rect: CGRect, screen: CGRect, least: CGFloat) {
+        guard let aspect else {
+            guard aspects[zone] != nil else { return }
+            checkpoint()
+            aspects[zone] = nil
+            return
+        }
+        guard let node = fitting(aspect, zone: zone, in: rect, screen: screen, least: least) else { return }
+        checkpoint()
+        aspects[zone] = aspect
+        edit { _ in node }
     }
 
     func endResize() { resizing = nil }
@@ -192,7 +232,11 @@ final class EditorModel {
         checkpoint()
         if let i = strip.leading.firstIndex(where: { $0.id == line }) { strip.leading.remove(at: i) }
         else if let i = strip.trailing.firstIndex(where: { $0.id == line }) { strip.trailing.remove(at: i) }
-        else { edit { $0.collapsing(line) } }
+        else {
+            // The zones of its two sides become one.
+            if let sides = strip.composite.sides(ofSplit: line) { (sides.first.leafIDs + sides.second.leafIDs).forEach { aspects[$0] = nil } }
+            edit { $0.collapsing(line) }
+        }
         settle()
     }
 
@@ -202,6 +246,8 @@ final class EditorModel {
     func merge(_ a: UUID, _ b: UUID) {
         guard let result = merged(a, b) else { return }
         checkpoint()
+        aspects[a] = nil
+        aspects[b] = nil
         strip = result
     }
 

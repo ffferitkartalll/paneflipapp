@@ -40,6 +40,7 @@ final class EditorController: LayoutEditing {
             margin: CGFloat(layout.edgeMargin(in: settings.values)),
             minZoneSize: layout.minZoneSize(in: settings.values),
             defaultZone: layout.fallbackZoneID,
+            aspects: layout.zoneAspects,
             onApply: { [layouts, repository] model in
                 let strip = model.strip
                 // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
@@ -47,6 +48,7 @@ final class EditorController: LayoutEditing {
                 layouts.setSpacing(key: screen.key, id: layoutID, gap: Double(model.gap), edgeMargin: Double(model.margin), minZoneSize: model.minZoneSize)
                 layouts.updateLayout(key: screen.key, id: layoutID, strip: result)   // lays the zones out again, with the new spacing
                 layouts.setDefaultZone(key: screen.key, id: layoutID, to: model.defaultZone)
+                layouts.setZoneAspects(key: screen.key, id: layoutID, model.aspects)
             },
             onClose: { [weak self] in self?.hide() })
 
