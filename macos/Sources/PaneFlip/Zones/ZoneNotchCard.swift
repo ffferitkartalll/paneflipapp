@@ -15,7 +15,7 @@ struct ZoneNotchCard: View {
     var body: some View {
         let card = ZoneNotchExpanded.pictureSize(width: cardWidth)
         ZStack(alignment: .topLeading) {
-            if hovered { buttons(in: card) }
+            buttons(in: card)
         }
         .frame(width: card.width, height: card.height)
         .frame(width: width)   // the card keeps its size and is cut by the notch while the notch is narrower
@@ -30,20 +30,24 @@ struct ZoneNotchCard: View {
                     .frame(width: item.rect.width * 0.5, height: item.rect.height * 0.5)
                     .frame(width: item.rect.width, height: item.rect.height)
                     .background(Circle().fill(Self.fill(hover: hoveredButton == .card(item.action, slot.id))))
+                    .animation(.easeOut(duration: 0.1), value: hoveredButton)
                     .offset(x: item.rect.minX, y: item.rect.minY)
             }
             let rect = IslandCardAction.selectRect(in: card)
             ZStack {
                 Circle().fill(Self.fill(hover: hoveredButton == .select(slot.id)))
-                if slot.selected {
-                    Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
-                        .frame(width: rect.width * 0.5, height: rect.height * 0.5)
-                }
+                    .animation(.easeOut(duration: 0.1), value: hoveredButton)
+                Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                    .frame(width: rect.width * 0.5, height: rect.height * 0.5)
+                    .scaleEffect(slot.selected ? 1 : 0.3).opacity(slot.selected ? 1 : 0)
             }
+            .animation(.easeOut(duration: 0.18), value: slot.selected)
             .frame(width: rect.width, height: rect.height)
             .offset(x: rect.minX, y: rect.minY)
         }
         // As large as the card, from its top left corner: an offset moves a button but not the room it takes.
         .frame(width: card.width, height: card.height, alignment: .topLeading)
+        .opacity(hovered ? 1 : 0)
+        .animation(.easeOut(duration: 0.12), value: hovered)   // fades in and out as the island's cards' buttons do
     }
 }

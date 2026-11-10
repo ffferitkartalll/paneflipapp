@@ -137,13 +137,15 @@ struct ZoneNotchRow: View {
                 // The Dock's badge: left of the icon as the notch is compact, at the remove button's place on the card as it expands, one badge moving there;
                 // the buttons of the card under the pointer take its place.
                 if let text = card.badgeText {
+                    let buttonsShow = index == hovered && carried == nil && card.hasButtons
                     let target = IslandCardAction.rects(in: picture, among: [.remove]).first?.rect ?? .zero
                     let small = ZoneCardLabel.badgeHeight / target.width
                     let compactX = sideRoom + ZoneCardLabel.padding + ZoneCardLabel.badgeWidth(of: card) / 2
                     let centre = CGPoint(x: mix(compactX, (cells[index] - picture.width) / 2 + target.midX), y: mix(tall / 2, target.midY))
                     ZoneNotchBadge(text: text, base: target.width, scale: mix(small, 1))
                         .position(centre)
-                        .opacity(index == hovered && carried == nil && card.hasButtons ? 1 - expand : 1)
+                        .opacity(buttonsShow ? 1 - expand : 1)
+                        .animation(.easeOut(duration: 0.12), value: buttonsShow)   // gives way to the buttons as the island's badge does
                 }
             }
             let textWidth = mix(nameWidth, cardWidth)
