@@ -83,6 +83,8 @@ final class AppContainer {
         engine.add(presenter: island)
         let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, source: island)
         engine.add(presenter: notches)
+        island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
+        island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         coordinator.deskRect = { desk.rect($0) }

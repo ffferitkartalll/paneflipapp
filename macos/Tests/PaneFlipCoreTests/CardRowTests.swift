@@ -7,17 +7,18 @@ struct CardRowTests {
     private func fits(_ widths: [CGFloat]) -> Bool { widths.reduce(0, +) <= room }
 
     @Test func cardsThatFitKeepTheirWidths() {
-        #expect(CardRow.narrowed([100, 200, 250], narrowest: 50, fits: fits) == [100, 200, 250])
+        #expect(CardRow.narrowed([100, 200, 250], narrowest: [50, 50, 50], fits: fits) == [100, 200, 250])
     }
 
     @Test func onlyTheWidestAreMadeNarrowerAndOnlyAsMuchAsTheyMust() {
-        let widths = CardRow.narrowed([50, 50, 400, 400], narrowest: 40, fits: fits)
+        let widths = CardRow.narrowed([50, 50, 400, 400], narrowest: [40, 40, 40, 40], fits: fits)
         #expect(widths[0] == 50 && widths[1] == 50, "the narrow ones stay")
         #expect(abs(widths[2] - 250) < 0.01 && widths[2] == widths[3], "the widest share what is left")
     }
 
     @Test func noCardIsMadeNarrowerThanTheNarrowest() {
-        #expect(CardRow.narrowed([50, 300, 300], narrowest: 290, fits: fits) == [50, 290, 290], "they do not fit even so")
+        #expect(CardRow.narrowed([50, 300, 300], narrowest: [290, 290, 290], fits: fits) == [50, 290, 290], "they do not fit even so")
+        #expect(CardRow.narrowed([300, 300], narrowest: [100, 200], fits: { $0.reduce(0, +) <= 250 }) == [100, 200], "each keeps its own narrowest")
     }
 
     @Test func theLitCardStandsOnACardAndBetweenTwo() {

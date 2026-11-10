@@ -129,16 +129,28 @@ struct ZoneNotchRow: View {
         return ZStack(alignment: .topLeading) {
             if let glyph = card.glyph {
                 let side = mix(ZoneCardLabel.icon, bigIcon)
+                let iconX = mix(sideRoom + ZoneCardLabel.padding + ZoneCardLabel.badgeRoom(of: card) + ZoneCardLabel.icon / 2, cells[index] / 2) - side / 2, iconY = mix(tall / 2, groupTop + bigIcon / 2) - side / 2
                 Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).antialiased(true).scaledToFit()
                     .foregroundStyle(style)
                     .frame(width: side, height: side)
-                    .offset(x: mix(sideRoom + ZoneCardLabel.padding + ZoneCardLabel.icon / 2, cells[index] / 2) - side / 2, y: mix(tall / 2, groupTop + bigIcon / 2) - side / 2)
+                    .offset(x: iconX, y: iconY)
+                // The Dock's badge: left of the icon as the notch is compact, at the remove button's place on the card as it expands, one badge moving there;
+                // the buttons of the card under the pointer take its place.
+                if let text = card.badgeText {
+                    let target = IslandCardAction.rects(in: picture, among: [.remove]).first?.rect ?? .zero
+                    let small = ZoneCardLabel.badgeHeight / target.width
+                    let compactX = sideRoom + ZoneCardLabel.padding + ZoneCardLabel.badgeWidth(of: card) / 2
+                    let centre = CGPoint(x: mix(compactX, (cells[index] - picture.width) / 2 + target.midX), y: mix(tall / 2, target.midY))
+                    ZoneNotchBadge(text: text, base: target.width, scale: mix(small, 1))
+                        .position(centre)
+                        .opacity(index == hovered && carried == nil && card.hasButtons ? 1 - expand : 1)
+                }
             }
             let textWidth = mix(nameWidth, cardWidth)
             Text(verbatim: card.caption).font(Font(ZoneCardLabel.font)).lineLimit(1).multilineTextAlignment(.center)
                 .foregroundStyle(style)
                 .frame(width: textWidth, height: ZoneNotchExpanded.titleHeight)
-                .offset(x: mix(sideRoom + ZoneCardLabel.padding + (card.glyph != nil ? ZoneCardLabel.icon + ZoneCardLabel.spacing : 0) + nameWidth / 2, cells[index] / 2) - textWidth / 2,
+                .offset(x: mix(sideRoom + ZoneCardLabel.padding + ZoneCardLabel.badgeRoom(of: card) + (card.glyph != nil ? ZoneCardLabel.icon + ZoneCardLabel.spacing : 0) + nameWidth / 2, cells[index] / 2) - textWidth / 2,
                         y: mix(tall / 2, groupTop + bigIcon + ZoneNotchExpanded.groupGap + ZoneNotchExpanded.titleHeight / 2) - ZoneNotchExpanded.titleHeight / 2)
         }
         .frame(width: cells[index], height: tall, alignment: .topLeading)
