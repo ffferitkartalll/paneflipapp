@@ -144,6 +144,7 @@ struct ZoneNotchRow: View {
                     let centre = CGPoint(x: mix(compactX, (cells[index] - picture.width) / 2 + target.midX), y: mix(tall / 2, target.midY))
                     ZoneNotchBadge(text: text, base: target.width, scale: mix(small, 1))
                         .position(centre)
+                        .transition(.opacity)
                         .opacity(buttonsShow ? 1 - expand : 1)
                         .animation(.easeOut(duration: 0.12), value: buttonsShow)   // gives way to the buttons as the island's badge does
                 }
