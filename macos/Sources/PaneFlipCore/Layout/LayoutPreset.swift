@@ -15,6 +15,15 @@ public struct LayoutPreset: Identifiable {
 
     public static let single = LayoutPreset("single") { zone }
 
+    /// The most rows or columns a grid made by hand may have.
+    public static let gridRange = 1...8
+
+    /// A grid of equal zones, `rows` by `columns`, each clamped to `gridRange`.
+    public static func custom(rows: Int, columns: Int) -> LayoutPreset {
+        let r = min(max(rows, gridRange.lowerBound), gridRange.upperBound), c = min(max(columns, gridRange.lowerBound), gridRange.upperBound)
+        return LayoutPreset("grid\(r)x\(c)") { grid(rows: r, columns: c) }
+    }
+
     /// The shapes offered when a layout is added: every shape there is, plainest first. A screen is offered `suggested(for:)`.
     public static let all: [LayoutPreset] = [
         LayoutPreset("columns2") { columns(2) },

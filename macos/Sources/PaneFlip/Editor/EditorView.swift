@@ -7,6 +7,9 @@ struct EditorView: View {
     /// The area zones are laid out in, in points: one screen's width of the editor stands for it.
     let area: CGSize
     @State private var showShapes = false
+    @State private var showGrid = false
+    @State private var gridRows = 1
+    @State private var gridColumns = 1
     @State private var showSpacing = false
     /// The zone whose aspect-ratio list is open.
     @State private var aspectZone: UUID?
@@ -201,7 +204,35 @@ struct EditorView: View {
 
     // MARK: Controls
 
-    private var shapes: some View {
+    private var shapes: some View { shapeList }
+
+    /// Rows and columns of a grid, shown on the layout as the sliders move; Apply keeps it, closing the popover otherwise puts the layout back.
+    private var gridMaker: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            SliderSettingRow(title: "Rows", detail: "How many zones are stacked from top to bottom.",
+                             value: Binding(get: { Double(gridRows) }, set: { gridRows = Int($0) }),
+                             range: Double(LayoutPreset.gridRange.lowerBound)...Double(LayoutPreset.gridRange.upperBound), step: 1, unit: "")
+            SliderSettingRow(title: "Columns", detail: "How many zones stand side by side.",
+                             value: Binding(get: { Double(gridColumns) }, set: { gridColumns = Int($0) }),
+                             range: Double(LayoutPreset.gridRange.lowerBound)...Double(LayoutPreset.gridRange.upperBound), step: 1, unit: "")
+            HStack {
+                Spacer()
+                Button("Apply") {
+                    model.applyGrid()
+                    showGrid = false
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(14)
+        .frame(width: 340)
+        .onChange(of: gridRows) { model.previewGrid(rows: gridRows, columns: gridColumns) }
+        .onChange(of: gridColumns) { model.previewGrid(rows: gridRows, columns: gridColumns) }
+        .onAppear { model.previewGrid(rows: gridRows, columns: gridColumns) }
+        .onDisappear { model.cancelGrid() }
+    }
+
+    private var shapeList: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
                 ForEach(LayoutPreset.suggested(for: area)) { preset in
@@ -253,6 +284,9 @@ struct EditorView: View {
                     Button { showShapes = true } label: { Label("Layouts", systemImage: "square.grid.2x2") }
                         .buttonStyle(.glass)
                         .popover(isPresented: $showShapes) { shapes }
+                    Button { gridRows = 1; gridColumns = 1; showGrid = true } label: { Label("Grid", systemImage: "square.grid.3x3") }
+                        .buttonStyle(.glass)
+                        .popover(isPresented: $showGrid) { gridMaker }
                     Button { showSpacing = true } label: { Label("Spacing", systemImage: "slider.horizontal.3") }
                         .buttonStyle(.glass)
                         .popover(isPresented: $showSpacing) { spacing }
@@ -372,17 +406,20 @@ struct EditorView: View {
         }
         guard let z = zones.first(where: { $0.rect.contains(p) }) else { return nil }
         let side = !model.shift
-        let extent = side ? z.rect.width : z.rect.height
-        let origin = side ? z.rect.minX : z.rect.minY
+        // The zones of the screen's own layout are laid with the gap, the areas beyond its edges in the picture are not.
+        let gap = model.strip.root.leafIDs.contains(z.id) ? model.gap : 0
+        let plain = LayoutNode.lineArea(z.rect, gap: gap)
+        let extent = side ? plain.width : plain.height
+        let origin = side ? plain.minX : plain.minY
         let minSize = model.minZoneSize
-        let valid = extent >= 2 * minSize
+        let valid = extent - gap >= 2 * minSize
 
         let pos = side ? p.x : p.y
         var snapped = false
         var r = Double((pos - origin) / extent)
         if valid, let step = SplitSnap.step(near: r, extent: Double(extent), distance: Double(snapDistance)) { r = step; snapped = true }
-        if valid { let lo = minSize / Double(extent); r = min(max(r, lo), 1 - lo) }
-        return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped)
+        if valid { let lo = (minSize + gap) / Double(extent); r = min(max(r, lo), 1 - lo) }
+        return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped, gap: gap)
     }
 
     /// What each side of the split under the pointer would be: its size in points, and, on a step, its share of the zone under it. The two lines are one block, centred in the side.
@@ -414,7 +451,7 @@ struct EditorView: View {
         var r = Double(((d.sideBySide ? p.x : p.y) - origin) / d.extent)
         let step = SplitSnap.step(near: r, extent: Double(d.extent), distance: Double(snapDistance))
         if let step { r = step }
-        let lo = min(model.minZoneSize / Double(d.extent), 0.5)
+        let lo = min((model.minZoneSize + (model.isAreaLine(d.id) ? 0 : model.gap)) / Double(d.extent), 0.5)
         r = min(max(r, lo), 1 - lo)
         snappedLine = step != nil
         model.setRatio(d.id, r, in: rect, screen: CGRect(x: rect.minX + CGFloat(model.strip.leadingWidth) * area.width, y: 0, width: area.width, height: area.height), least: CGFloat(model.minZoneSize))

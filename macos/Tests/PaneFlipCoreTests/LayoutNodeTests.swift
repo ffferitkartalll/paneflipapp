@@ -83,4 +83,35 @@ final class LayoutNodeTests: XCTestCase {
         XCTAssertEqual(sets[0].first, "columns3")
         XCTAssertEqual(sets[3].first, "rows2")
     }
+
+    func testAGridMadeByHandHasRowsTimesColumnsEqualZonesAndStaysInRange() {
+        let rect = CGRect(x: 0, y: 0, width: 1200, height: 800)
+        let zones = LayoutPreset.custom(rows: 2, columns: 4, ).root.zones(in: rect)
+        XCTAssertEqual(zones.count, 8)
+        XCTAssertTrue(zones.allSatisfy { abs($0.rect.width - 300) < 0.001 && abs($0.rect.height - 400) < 0.001 })
+        XCTAssertEqual(LayoutPreset.custom(rows: 0, columns: 99).root.leafIDs.count, LayoutPreset.gridRange.upperBound)
+    }
+
+    func testMergingTwoZonesOfAThreeByThreeGridMovesNoOtherLine() {
+        let rect = CGRect(x: 0, y: 0, width: 5000, height: 1263)
+        let grid = LayoutPreset.custom(rows: 3, columns: 3).root
+        let ids = grid.zones(in: rect).map(\.id)
+        let before = grid.zones(in: rect, gap: 20)
+        let merged = grid.merging(ids[1], ids[4], in: CGRect(x: 0, y: 0, width: 1000, height: 1000))!.zones(in: rect, gap: 20)
+        XCTAssertEqual(merged.count, 8)
+        for z in merged where z.id != ids[1] {
+            let old = before.first { $0.id == z.id }!.rect
+            XCTAssertEqual(z.rect.width, old.width, accuracy: 0.001)
+            XCTAssertEqual(z.rect.height, old.height, accuracy: 0.001)
+        }
+    }
+
+    func testZonesOfEqualRatiosAreEquallyLargeWithAGapAtTheEdgesToo() {
+        let rect = CGRect(x: 0, y: 0, width: 5000, height: 1000)
+        let zones = LayoutPreset.custom(rows: 3, columns: 4).root.zones(in: rect, gap: 20)
+        XCTAssertEqual(zones.count, 12)
+        XCTAssertTrue(zones.allSatisfy { abs($0.rect.width - 1235) < 0.001 && abs($0.rect.height - 320) < 0.001 })
+        XCTAssertEqual(zones.map(\.rect.minX).min(), 0)
+        XCTAssertEqual(zones.map(\.rect.maxX).max(), 5000, "no gap at the edges")
+    }
 }

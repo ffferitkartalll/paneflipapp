@@ -37,13 +37,13 @@ final class SplitDividerGapTests: XCTestCase {
         return (tree, a, b, c, first, second)
     }
 
-    func testAQuarterAHalfAndAQuarterKeepTheirWidthsLessHalfTheGapOnEachSideOfALine() {
+    func testAQuarterAHalfAndAQuarterKeepTheirWidthsLessTheGapAndEqualRatiosGiveEqualZones() {
         let l = layout()
         let area = CGRect(x: 0, y: 0, width: 5120, height: 1000)
         let zones = Dictionary(uniqueKeysWithValues: l.tree.zones(in: area, gap: 80).map { ($0.id, $0.rect) })
-        XCTAssertEqual(zones[l.a]?.width, 1240)
-        XCTAssertEqual(zones[l.b]?.width, 2480)
-        XCTAssertEqual(zones[l.c]?.width, 1240)
+        XCTAssertEqual(zones[l.a]?.width, 1220)
+        XCTAssertEqual(zones[l.b]?.width, 2520)
+        XCTAssertEqual(zones[l.c]?.width, 1220)
         XCTAssertEqual(zones[l.a]?.minX, 0, "no gap at the edge of the layout")
         XCTAssertEqual(zones[l.c]?.maxX, 5120)
         XCTAssertEqual(l.tree.zones(in: area, gap: 0).map(\.rect.width), [1280, 2560, 1280], "without a gap, the plain shares")
@@ -53,7 +53,7 @@ final class SplitDividerGapTests: XCTestCase {
         let l = layout()
         let area = CGRect(x: 0, y: 0, width: 5120, height: 1000)
         let zones = Dictionary(uniqueKeysWithValues: l.tree.zones(in: area, gap: 80).map { ($0.id, $0.rect) })
-        let lines = Dictionary(uniqueKeysWithValues: l.tree.dividers(in: area).map { ($0.id, $0.position) })
+        let lines = Dictionary(uniqueKeysWithValues: l.tree.dividers(in: LayoutNode.lineArea(area, gap: 80)).map { ($0.id, $0.position) })
         XCTAssertEqual(lines[l.first] ?? 0, (zones[l.a]!.maxX + zones[l.b]!.minX) / 2, accuracy: 0.001)
         XCTAssertEqual(lines[l.second] ?? 0, (zones[l.b]!.maxX + zones[l.c]!.minX) / 2, accuracy: 0.001)
     }
@@ -119,5 +119,15 @@ final class MovingLineTests: XCTestCase {
         let moved = t.node.movingLine(t.first, to: 0.9, in: area, least: 100)!
         let position = moved.node.dividers(in: area).first { $0.id == t.first }!.position
         XCTAssertEqual(position, next - 100, accuracy: 1, "a zone of the least size is left between the two")
+    }
+
+    func testALineReachesTheOuterEdgeWhereItsRectangleTouchesTheInnerOne() {
+        let outer = CGRect(x: 0, y: 0, width: 1000, height: 400), inner = outer.insetBy(dx: 20, dy: 30)
+        let line = SplitDivider(id: UUID(), sideBySide: true, parent: inner, ratio: 0.5).reaching(inner, to: outer)
+        XCTAssertEqual(line.parent, CGRect(x: 20, y: 0, width: 960, height: 400))
+        XCTAssertEqual(line.position, 500)
+        let inside = SplitDivider(id: UUID(), sideBySide: true, parent: CGRect(x: 20, y: 100, width: 500, height: 100), ratio: 0.5).reaching(inner, to: outer)
+        XCTAssertEqual(inside.parent.minY, 100)
+        XCTAssertEqual(inside.parent.maxY, 200)
     }
 }
