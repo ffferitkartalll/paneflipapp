@@ -35,14 +35,24 @@ final class ZoneNotches: ZonePresenting {
     /// A notch shows cards: the island asks for the Dock's badges for them.
     var showsCards: Bool { grown != nil }
 
-    /// The Dock's badges changed: the cards shown take them (the same cards, in the same order).
+    /// The Dock's badges changed: the cards shown take them (the same cards, in the same order), and the row is as wide as they now ask, as a movement: a badge that went
+    /// fades and its room closes, one that came makes room (the panel, as large as the row can be, grows first).
     func badgesDidChange() {
         guard let zone = grown, let model = models[zone], !model.cards.isEmpty else { return }
         let open = source.cards(of: zone)
-        if open.map(\.id) == model.cards.map(\.id), open != model.cards { model.cards = open }
-        guard !model.slots.isEmpty else { return }
-        let all = source.allCards(of: zone)
-        if all.map(\.id) == model.slots.map(\.id), all != model.slots { model.slots = all }
+        let openSame = open.map(\.id) == model.cards.map(\.id), all = source.allCards(of: zone)
+        let slotsSame = !model.slots.isEmpty && all.map(\.id) == model.slots.map(\.id)
+        guard (openSame && open != model.cards) || (slotsSame && all != model.slots) else { return }
+        var widths = model.widths
+        if openSame, carry == nil, let rect = coordinator.stacks[zone]?.rect, let panel = panels[zone], open.allSatisfy({ $0.windowID != nil }) {
+            widths = rowWidths(of: open, in: zone, zoneWidth: screens.flip(rect).width)
+            let wide = max(panel.frame.width, widths.reduce(0, +) + model.height), frame = panel.frame
+            if wide > frame.width { panel.setFrame(CGRect(x: frame.midX - wide / 2, y: frame.minY, width: wide, height: frame.height), display: false) }
+        }
+        withAnimation(Self.growth) {
+            if openSame { model.cards = open; model.widths = widths }
+            if slotsSame { model.slots = all }
+        }
     }
 
     /// The notch the pointer is on.
