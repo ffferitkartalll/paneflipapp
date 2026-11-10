@@ -4,7 +4,7 @@ import SwiftUI
 
 /// The island in the menu bar of every display: the zones of its layout, those beyond its edges too, with the zone of the window that has the focus lit up.
 /// It is as tall as the menu bar; where there is a notch it is not shown until the pointer comes.
-final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
+final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCardSource {
 
     private let coordinator: StackCoordinator
     private let repository: LayoutRepository
@@ -775,9 +775,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     private func toggleStart(_ window: IslandWindow, in entry: Entry) {
-        guard let zone = entry.model.windowsZone, let (key, layout) = layout(of: zone) else { return }
-        onSetStartApp?(key, layout.id, window.bundleID, !layout.startApps.contains(window.bundleID))
+        guard let zone = entry.model.windowsZone else { return }
+        toggleStart(window, in: zone)
         withAnimation(Self.motion) { entry.model.windows = windows(of: zone) }
+    }
+
+    func toggleStart(_ card: IslandWindow, in zone: UUID) {
+        guard let (key, layout) = layout(of: zone) else { return }
+        onSetStartApp?(key, layout.id, card.bundleID, !layout.startApps.contains(card.bundleID))
     }
 
     private func cardAction(at point: CGPoint, in entry: Entry) -> (IslandCardAction, IslandWindow)? {
@@ -794,9 +799,13 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
 
     private func perform(_ action: IslandCardAction, on window: IslandWindow, in entry: Entry) {
         guard let zone = entry.model.windowsZone else { return }
+        perform(action, on: window, in: zone)
+    }
+
+    func perform(_ action: IslandCardAction, on window: IslandWindow, in zone: UUID) {
         // A card of an app that is not open: the first button opens the app, the last takes it out of the zone.
         guard let id = window.windowID else {
-            if action == .remove { removeApp(window.bundleID, zone, Array(entry.zones)) } else { openApp(window.bundleID) }
+            if action == .remove { removeApp(window.bundleID, zone, Array(entries.values.first { $0.zones.contains(zone) }?.zones ?? [zone])) } else { openApp(window.bundleID) }
             return
         }
         guard let ref = coordinator.stacks[zone]?.refs[id] else { return }
@@ -844,7 +853,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     }
 
     /// A click on a card of the open row: that window comes to the front of its zone and the focus goes with it; an app that is not open is opened.
-    private func choose(_ card: IslandWindow, in zone: UUID) {
+    func choose(_ card: IslandWindow, in zone: UUID) {
         guard let stack = coordinator.stacks[zone] else { return }   // a zone beyond the screen's edge too: its screen is scrolled into view
         if let id = card.windowID {
             if card.isActive {
@@ -924,7 +933,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking {
     func titleWidth(of zone: UUID) -> CGFloat? { entries.values.first { $0.zones.contains(zone) }?.model.cardWidth }
 
     /// The cards of a zone as the open row has them: also shown in the grown notch of a zone (`ZoneNotches`).
-    func cards(of zone: UUID) -> [IslandWindow] { windows(of: zone).filter { !$0.isPlaceholder } }
+    func cards(of zone: UUID) -> [IslandWindow] { allCards(of: zone).filter { $0.windowID != nil } }
+
+    func allCards(of zone: UUID) -> [IslandWindow] { windows(of: zone).filter { !$0.isPlaceholder } }
 
     /// The cards of a zone in the order of the zone: its windows, and the apps of the zone that are not open, each in its place.
     private func windows(of zone: UUID) -> [IslandWindow] {

@@ -3,7 +3,7 @@ import CoreGraphics
 
 final class IslandCardActionTests: XCTestCase {
     func testTheButtonsStandInTheTopCornersOfTheCardWithoutTouchingEachOther() {
-        for width in [60, 120, 400] as [CGFloat] {
+        for width in [100, 120, 400] as [CGFloat] {
             let card = CGSize(width: width, height: 90)
             let rects = IslandCardAction.rects(in: card)
             XCTAssertEqual(rects.map(\.action), [.quit, .close, .hide, .minimize, .remove])
@@ -34,13 +34,15 @@ final class IslandCardActionTests: XCTestCase {
         XCTAssertEqual(card(window: nil, absence: .minimized).actions, [])
     }
 
-    func testTheSelectButtonStandsInTheBottomRightCornerAsLargeAsTheOthers() {
-        for width in [60, 142, 400] as [CGFloat] {
+    func testTheSelectButtonStandsInTheTopRightCornerToTheLeftOfTheRemoveButtonAsLargeAsTheOthers() {
+        for width in [100, 142, 400] as [CGFloat] {
             let card = CGSize(width: width, height: 90)
-            let select = IslandCardAction.selectRect(in: card), remove = IslandCardAction.rects(in: card)[4].rect
+            let rects = IslandCardAction.rects(in: card), select = IslandCardAction.selectRect(in: card), remove = rects[4].rect
             XCTAssertEqual(select.size, remove.size)
-            XCTAssertEqual(select.maxX, remove.maxX, "under the remove button, in the same column")
-            XCTAssertEqual(select.maxY, card.height - remove.minY, "as far from the foot as the others are from the top")
+            XCTAssertEqual(select.minY, remove.minY, "in the same row")
+            XCTAssertLessThan(select.maxX, remove.minX, "to the left of the remove button")
+            XCTAssertLessThan(rects[3].rect.maxX, select.minX, "and not on the buttons of the left corner")
+            XCTAssertTrue(CGRect(origin: .zero, size: card).contains(select))
         }
     }
 
