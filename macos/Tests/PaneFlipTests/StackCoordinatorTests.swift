@@ -688,6 +688,19 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertFalse(coordinator.isSliding)
     }
 
+    func testFingersHaveNoWindowToBringInPastTheEnds() {
+        let (_, _, zone) = scrubSetUp()
+        let point = CGPoint(x: 200, y: 150)
+        XCTAssertTrue(coordinator.canScrub(at: point, toward: 5) && coordinator.canScrub(at: point, toward: -5), "in the middle both ways")
+
+        coordinator.stacks[zone]?.activeID = 1
+        XCTAssertFalse(coordinator.canScrub(at: point, toward: 5), "no window before the first")
+        XCTAssertTrue(coordinator.canScrub(at: point, toward: -5))
+        coordinator.stacks[zone]?.activeID = 3
+        XCTAssertFalse(coordinator.canScrub(at: point, toward: -5), "no window after the last")
+        XCTAssertTrue(coordinator.canScrub(at: point, toward: 5))
+    }
+
     func testWhatTheFingersDoBeforeThePicturesAreThereIsNotCounted() {
         let (stage, snapshots, _) = scrubSetUp()
         snapshots.answersAtOnce = false

@@ -375,6 +375,16 @@ final class StripScroller {
 
     // MARK: Led by the fingers
 
+    /// Whether fingers moving by `delta` (to the right is positive: the zones beyond the left edge come in) have a rest position to go to on the screen under the pointer.
+    /// A scroll that runs is taken over whichever way they go.
+    func canLead(toward delta: CGFloat) -> Bool {
+        if scrolling != nil { return true }
+        let all = screens.screens()
+        guard let screen = all.first(where: { $0.cocoaFrame.contains(screens.pointerCocoa) }) ?? all.first,
+              let (geometry, side) = planner.strip(of: screen, among: all), side != nil else { return false }
+        return nextRest(from: geometry.clamped(viewport.offset(for: screen.key)), toward: delta > 0 ? .left : .right, in: geometry) != nil
+    }
+
     /// Two fingers came down: the layout of the screen under the pointer follows them, with everything beyond its edges, until they
     /// lift. False when this cannot be done (a scroll runs, nothing to scroll, motion is reduced): the caller steps on lifting. A screen with no
     /// window is followed too: the frame of the island and the map of the strip show the fingers' work.

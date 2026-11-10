@@ -487,6 +487,16 @@ final class StackCoordinator {
         return true
     }
 
+    /// Whether fingers moving by `delta` (to the right is positive: the previous window comes in) have a window to bring in, in the zone under `point` or in `stack`.
+    /// A swipe that already runs is taken over whichever way they go.
+    func canScrub(at point: CGPoint, toward delta: CGFloat) -> Bool { zoneUnder(point).map { canScrub(in: $0, toward: delta) } ?? false }
+
+    func canScrub(in stack: ZoneStack, toward delta: CGFloat) -> Bool {
+        guard windowScrub == nil else { return true }
+        guard let from = stack.tabs.firstIndex(where: { $0.id == stack.activeID }) else { return false }
+        return stack.tabs.indices.contains(from + (delta > 0 ? -1 : 1))
+    }
+
     /// The fingers moved by `delta` points (to the right is positive: the content follows them).
     func moveWindowScrub(by delta: CGFloat, at time: TimeInterval) {
         guard let scrub = windowScrub, !scrub.ended else { return }
