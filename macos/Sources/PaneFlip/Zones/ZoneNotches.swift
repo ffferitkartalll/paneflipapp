@@ -46,13 +46,18 @@ final class ZoneNotches: ZonePresenting {
         var widths = model.widths
         if openSame, carry == nil, let rect = coordinator.stacks[zone]?.rect, let panel = panels[zone], open.allSatisfy({ $0.windowID != nil }) {
             widths = rowWidths(of: open, in: zone, zoneWidth: screens.flip(rect).width)
-            let wide = max(panel.frame.width, widths.reduce(0, +) + model.height), frame = panel.frame
-            if wide > frame.width { panel.setFrame(CGRect(x: frame.midX - wide / 2, y: frame.minY, width: wide, height: frame.height), display: false) }
+            widen(panel, for: widths, height: model.height)
         }
         withAnimation(Self.growth) {
             if openSame { model.cards = open; model.widths = widths }
             if slotsSame { model.slots = all }
         }
+    }
+
+    /// The panel as wide as the row needs (never narrower than it is), around the same middle.
+    private func widen(_ panel: NSPanel, for widths: [CGFloat], height: CGFloat) {
+        let wide = widths.reduce(0, +) + height, frame = panel.frame
+        if wide > frame.width { panel.setFrame(CGRect(x: frame.midX - wide / 2, y: frame.minY, width: wide, height: frame.height), display: false) }
     }
 
     /// The notch the pointer is on.
@@ -135,7 +140,6 @@ final class ZoneNotches: ZonePresenting {
         guard let panel = panels[zone], let model = models[zone], let rect = coordinator.stacks[zone]?.rect else { return }
         defer { shrinkLater() }
         guard grown != zone else { return }
-        source.refreshBadges()
         let open = source.cards(of: zone).filter { $0.windowID != nil }
         guard !open.isEmpty else { return }
         if grown != nil { collapse() }
@@ -145,6 +149,7 @@ final class ZoneNotches: ZonePresenting {
         let widths = rowWidths(of: open, in: zone, zoneWidth: frame.width)
         let size = CGSize(width: widths.reduce(0, +) + height, height: height)   // and the button at its end, as wide as the row is tall
         grown = zone
+        source.refreshBadges()   // only now: it asks while a notch shows cards, and the badges of the last look may be old
         panel.setFrame(CGRect(x: frame.midX - size.width / 2, y: frame.maxY - size.height, width: size.width, height: size.height), display: false)
         // The notch at rest laid out in the larger panel now, where it stands on the screen, so that the growth starts there and not from where it was in the panel.
         panel.contentView?.layoutSubtreeIfNeeded()
@@ -155,8 +160,11 @@ final class ZoneNotches: ZonePresenting {
             guard let self, grown == zone else { return }
             // The window in front as it is now (it may have changed meanwhile), the row as it was laid out.
             let now = source.cards(of: zone).filter { $0.windowID != nil }, row = now.map(\.id) == open.map(\.id) ? now : open
+            // A badge that came since the row was laid out makes room before the cards grow, not after.
+            let fitted = row == open ? widths : rowWidths(of: row, in: zone, zoneWidth: frame.width)
+            widen(panel, for: fitted, height: height)
             withAnimation(Self.growth) {
-                model.widths = widths
+                model.widths = fitted
                 model.height = height
                 model.lit = Self.front(of: row)
                 model.cards = row
