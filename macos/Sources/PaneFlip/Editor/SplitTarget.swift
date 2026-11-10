@@ -1,3 +1,4 @@
+import PaneFlipCore
 import CoreGraphics
 
 /// Where a click would split a zone, and whether that split is allowed.
@@ -8,24 +9,26 @@ struct SplitTarget {
     let valid: Bool
     let snapped: Bool
 
-    /// The two zones the split would make: left and right, or above and below.
+    /// The gap the zone's layout leaves between zones: the ratio is of the zone with that gap added on every side (`LayoutNode.lineArea`), as the lines are laid.
+    var gap: CGFloat = 0
+
+    /// Where the line would stand on its axis.
+    private var position: CGFloat {
+        let plain = LayoutNode.lineArea(zone.rect, gap: gap)
+        return sideBySide ? plain.minX + plain.width * ratio : plain.minY + plain.height * ratio
+    }
+
+    /// The two zones the split would make: left and right, or above and below, the gap between them.
     var halves: (CGRect, CGRect) {
-        let r = zone.rect
+        let r = zone.rect, p = position, half = gap / 2
         if sideBySide {
-            let x = r.minX + r.width * ratio
-            return (CGRect(x: r.minX, y: r.minY, width: x - r.minX, height: r.height), CGRect(x: x, y: r.minY, width: r.maxX - x, height: r.height))
+            return (CGRect(x: r.minX, y: r.minY, width: p - half - r.minX, height: r.height), CGRect(x: p + half, y: r.minY, width: r.maxX - p - half, height: r.height))
         }
-        let y = r.minY + r.height * ratio
-        return (CGRect(x: r.minX, y: r.minY, width: r.width, height: y - r.minY), CGRect(x: r.minX, y: y, width: r.width, height: r.maxY - y))
+        return (CGRect(x: r.minX, y: r.minY, width: r.width, height: p - half - r.minY), CGRect(x: r.minX, y: p + half, width: r.width, height: r.maxY - p - half))
     }
 
     var line: (CGPoint, CGPoint) {
-        let r = zone.rect
-        if sideBySide {
-            let x = r.minX + r.width * ratio
-            return (CGPoint(x: x, y: r.minY), CGPoint(x: x, y: r.maxY))
-        }
-        let y = r.minY + r.height * ratio
-        return (CGPoint(x: r.minX, y: y), CGPoint(x: r.maxX, y: y))
+        let r = zone.rect, p = position
+        return sideBySide ? (CGPoint(x: p, y: r.minY), CGPoint(x: p, y: r.maxY)) : (CGPoint(x: r.minX, y: p), CGPoint(x: r.maxX, y: p))
     }
 }

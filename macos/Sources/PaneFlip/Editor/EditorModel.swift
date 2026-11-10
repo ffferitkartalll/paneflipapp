@@ -65,7 +65,8 @@ final class EditorModel {
         guard gap > 0 || margin > 0 else { return (zones, dividers) }
         let area = StripGeometry(strip: strip, screen: screen).rootArea(margin: margin)
         let ownZones = Dictionary(uniqueKeysWithValues: strip.root.zones(in: area, gap: gap).map { ($0.id, $0.rect) })
-        let ownLines = Dictionary(uniqueKeysWithValues: strip.root.dividers(in: area).map { ($0.id, $0) })
+        let inner = LayoutNode.lineArea(area, gap: gap)
+        let ownLines = Dictionary(uniqueKeysWithValues: strip.root.dividers(in: inner).map { ($0.id, $0.reaching(inner, to: screen)) })
         return (zones.map { zone in ownZones[zone.id].map { (id: zone.id, rect: $0) } ?? zone }, dividers.map { ownLines[$0.id] ?? $0 })
     }
 
@@ -80,6 +81,8 @@ final class EditorModel {
     var canRedo: Bool { !future.isEmpty }
 
     /// Call before a change: what is now becomes the thing undo goes back to.
+    @ObservationIgnored private var gridBase: Snapshot?
+
     private func checkpoint() {
         past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
         future = []
@@ -118,19 +121,44 @@ final class EditorModel {
         defaultZone = zone
     }
 
+    /// The screen in view goes back to one zone (the first it had); the other screens stay as they are.
     func reset() {
         checkpoint()
-        strip = StripLayout(root: .leaf(strip.root.leafIDs[0]))
-        aspects = [:]
-        offset = 0
+        replaceEditedRoot(.leaf(strip.root(at: offset).leafIDs[0]))
     }
 
-    /// The screen's own layout takes the shape of a preset; its zones keep the identities of the zones it had, in order.
+    /// The screen in view takes `node` as its layout; the zones it had lose their ratios.
+    private func replaceEditedRoot(_ node: LayoutNode) {
+        for id in strip.root(at: offset).leafIDs { aspects[id] = nil }
+        strip.setRoot(node, at: offset)
+    }
+
+    /// The screen in view (the screen itself or one beyond its edge) takes the shape of a preset; its zones keep the identities of the zones it had, in order.
     func useShape(_ preset: LayoutPreset) {
         checkpoint()
-        strip.root = preset.root.reusing(strip.root.leafIDs)
-        aspects = [:]
-        offset = 0
+        replaceEditedRoot(preset.root.reusing(strip.root(at: offset).leafIDs))
+    }
+
+    /// Shows a grid on the screen in view while its sliders move; `applyGrid` keeps it as one change, `cancelGrid` puts back what was there.
+    func previewGrid(rows: Int, columns: Int) {
+        let base = gridBase ?? Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects)
+        gridBase = base
+        strip = base.strip
+        aspects = base.aspects
+        replaceEditedRoot(LayoutPreset.custom(rows: rows, columns: columns).root.reusing(strip.root(at: offset).leafIDs))
+    }
+
+    func applyGrid() {
+        guard let base = gridBase else { return }
+        past.append(base)
+        future = []
+        gridBase = nil
+    }
+
+    func cancelGrid() {
+        guard let base = gridBase else { return }
+        strip = base.strip; offset = base.offset; defaultZone = base.defaultZone; aspects = base.aspects
+        gridBase = nil
     }
 
     /// The area the view is about (nil on the screen's own layout), which the user may remove.

@@ -56,6 +56,24 @@ public struct StripLayout: Equatable {
         return nil
     }
 
+    /// The layout of the screen a view resting at `offset` shows: the area's, or the screen's own.
+    public func root(at offset: Double) -> LayoutNode { area(at: offset)?.root ?? root }
+
+    /// Replaces the layout of the screen a view resting at `offset` shows.
+    public mutating func setRoot(_ node: LayoutNode, at offset: Double) {
+        var reached = 0.0
+        for i in trailing.indices {
+            reached += trailing[i].width
+            if abs(reached - offset) < 1e-9 { trailing[i].root = node; return }
+        }
+        reached = 0
+        for i in leading.indices {
+            reached += leading[i].width
+            if abs(-reached - offset) < 1e-9 { leading[i].root = node; return }
+        }
+        root = node
+    }
+
     /// Every zone in order across the strip: the outermost area on the left first, the outermost on the right last.
     public var zoneIDs: [UUID] { leadingZoneIDs + root.leafIDs + trailingZoneIDs }
 

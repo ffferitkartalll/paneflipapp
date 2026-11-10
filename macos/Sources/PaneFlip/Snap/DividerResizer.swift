@@ -21,6 +21,9 @@ final class DividerResizer: ZonePresenting {
         let area: CGRect
         /// The least a zone may be, in points.
         let least: CGFloat
+        /// The zones that keep their width-to-height ratio while a line moves (as in the layout editor), and how the zones of a tree are laid: with the gap, in the margin.
+        let aspects: [UUID: ZoneAspect]
+        let laid: LayoutNode.Laid
     }
 
     private let layouts: LayoutManaging
@@ -210,9 +213,13 @@ final class DividerResizer: ZonePresenting {
         case .trailing(let i): root = geometry.strip.trailing[i].root
         }
         // A screen at its rest fills the display, with the margin inside it, as the zones of the plan stand.
-        let area = geometry.rootArea(margin: CGFloat(layout.edgeMargin(in: settings.values)))
-        let layer = Layer(root: root, area: area, least: CGFloat(layout.minZoneSize(in: settings.values)))
-        return root.dividers(in: area).map { Line(key: screen.key, layoutID: layout.id, divider: $0, target: target, layer: layer) }
+        // The lines stand in the area with half a gap more on every side, between the zones that the gap leaves (`LayoutNode.lineArea`).
+        let area = LayoutNode.lineArea(geometry.rootArea(margin: CGFloat(layout.edgeMargin(in: settings.values))), gap: CGFloat(layout.gap(in: settings.values)))
+        let usable = geometry.rootArea(margin: 0)
+        let plain = geometry.rootArea(margin: CGFloat(layout.edgeMargin(in: settings.values))), gap = CGFloat(layout.gap(in: settings.values))
+        let layer = Layer(root: root, area: area, least: CGFloat(layout.minZoneSize(in: settings.values)), aspects: layout.zoneAspects,
+                          laid: { $0.zones(in: plain, gap: gap) })
+        return root.dividers(in: area).map { Line(key: screen.key, layoutID: layout.id, divider: $0.reaching(area, to: usable), target: target, layer: layer) }
     }
 
     /// Where on the line's axis the pointer is.
@@ -231,7 +238,7 @@ final class DividerResizer: ZonePresenting {
         if abs(free - line.divider.ratio) * Double(line.divider.extent) > Self.snapDistance { snapping = true }
         let wanted = snapping ? line.divider.ratio(forPosition: position, snapDistance: Self.snapDistance) : free
         // No other line moves: the line stops where it would pass the next one.
-        guard let moved = line.layer.root.movingLine(line.divider.id, to: wanted, in: line.layer.area, least: line.layer.least) else { return }
+        guard let moved = line.layer.root.movingLine(line.divider.id, to: wanted, in: line.layer.area, least: line.layer.least, aspects: line.layer.aspects, laid: line.layer.laid) else { return }
         dragging = (line, moved.ratio, moved.node)
         // The lines that meet the moved one grow and shrink with it (their span ends at it).
         for divider in moved.node.dividers(in: line.layer.area) {

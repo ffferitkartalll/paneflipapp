@@ -115,12 +115,20 @@ final class EditorModelTests: XCTestCase {
         XCTAssertFalse(editor.isAreaLine(UUID()))
     }
 
-    func testResetGoesBackToTheScreenAlone() {
-        let editor = model()
-        editor.addLeading(); editor.addTrailing()
+    func testResetAndShapesActOnTheScreenInViewOnly() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.addTrailing()
+        editor.useShape(LayoutPreset.all[1])   // three columns, on the area in view
+        XCTAssertEqual(editor.strip.trailing[0].root.leafIDs.count, 3)
+        XCTAssertEqual(editor.strip.root.leafIDs, [a], "the screen's own layout is not touched")
         editor.reset()
-        XCTAssertEqual(editor.offset, 0)
-        XCTAssertEqual(editor.strip.areaRests, [0])
+        XCTAssertEqual(editor.strip.trailing[0].root.leafIDs.count, 1)
+        XCTAssertEqual(editor.offset, 1, "and the view stays")
+        editor.previewGrid(rows: 2, columns: 2)
+        XCTAssertEqual(editor.strip.trailing[0].root.leafIDs.count, 4)
+        editor.cancelGrid()
+        XCTAssertEqual(editor.strip.trailing[0].root.leafIDs.count, 1)
     }
 
     func testAreasAddedBeforeKeepTheirWidthAndTheViewStillRestsAtTheirEdges() {
@@ -190,13 +198,12 @@ final class EditorModelTests: XCTestCase {
     func testAShapeReplacesTheScreenLayoutAndKeepsTheOldZonesInOrder() {
         let a = UUID()
         let editor = model(StripLayout(root: .leaf(a)))
-        editor.addTrailing()
         editor.useShape(LayoutPreset.all[1])   // three columns
+        editor.addTrailing()
         XCTAssertEqual(editor.strip.root.leafIDs.count, 3)
         XCTAssertEqual(editor.strip.root.leafIDs.first, a, "the first zone keeps its stack")
         XCTAssertEqual(editor.strip.trailing.count, 1, "the areas beyond stay")
-        XCTAssertEqual(editor.offset, 0)
-        editor.undo()
+        editor.undo(); editor.undo()
         XCTAssertEqual(editor.strip.root.leafIDs, [a])
     }
 
@@ -212,5 +219,24 @@ final class EditorModelTests: XCTestCase {
         let lines = Dictionary(uniqueKeysWithValues: laid.dividers.map { ($0.id, $0.position) })
         let zones = Dictionary(uniqueKeysWithValues: desktop)
         XCTAssertEqual(lines[inner] ?? 0, (zones[b]!.maxX + zones[c]!.minX) / 2, accuracy: 0.001, "in the middle of the gap, also inside a shrunk zone")
+    }
+
+    func testAGridPreviewFollowsTheSlidersAndIsKeptAsOneChangeOrPutBack() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.previewGrid(rows: 2, columns: 2)
+        editor.previewGrid(rows: 3, columns: 2)
+        XCTAssertEqual(editor.root.leafIDs.count, 6)
+        XCTAssertEqual(editor.root.leafIDs.first, a)
+        editor.cancelGrid()
+        XCTAssertEqual(editor.root.leafIDs, [a], "closed without Apply: as it was")
+        XCTAssertFalse(editor.canUndo)
+
+        editor.previewGrid(rows: 2, columns: 3)
+        editor.applyGrid()
+        editor.cancelGrid()   // closing the popover after Apply changes nothing
+        XCTAssertEqual(editor.root.leafIDs.count, 6)
+        editor.undo()
+        XCTAssertEqual(editor.root.leafIDs, [a], "one undo step for the whole drag")
     }
 }

@@ -95,6 +95,23 @@ final class DividerResizerTests: XCTestCase {
         XCTAssertEqual(ratio(of: strip.trailing[0].root), 0.5, "the area beyond is left alone")
     }
 
+    func testADragKeepsAZoneAtItsRatioAsTheLayoutEditorDoes() {
+        let d = UUID()
+        var layout = repository.layout(id: layoutID, key: key)!
+        layout.strip.root = .split(id: UUID(), sideBySide: false, ratio: 0.5, first: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(a), second: .leaf(b)), second: .leaf(d))
+        repository.setStrip(layout.strip, ofLayout: layoutID, key: key)
+        repository.setZoneAspects([a: ZoneAspect(2, 1)], ofLayout: layoutID, key: key)   // 500 x 250 now
+        resizer.toggle()
+        let mouse = resizer.shownHandles[1].mouse   // the vertical line
+        mouse.onPress?()
+        screens.pointerAX = CGPoint(x: 600, y: 250)
+        mouse.onDrag?()
+        mouse.onRelease?()
+        guard case .split(_, _, let rows, let first, _) = strip.root, case .split(_, _, let columns, _, _) = first else { return XCTFail("the shape changed") }
+        XCTAssertGreaterThan(columns, 0.51, "the line moved (to where the least zone size lets it)")
+        XCTAssertEqual(rows, columns, accuracy: 0.001, "the horizontal line went with it: the zone is still two to one")
+    }
+
     func testAClickThatMovesNothingChangesNothing() {
         resizer.toggle()
         let before = resizer.shownHandles[0]

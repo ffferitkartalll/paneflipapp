@@ -52,16 +52,16 @@ public indirect enum LayoutNode: Codable, Equatable {
                 CGRect(x: rect.minX, y: rect.minY + h, width: rect.width, height: rect.height - h))
     }
 
-    /// Splits a top-left-origin rectangle into zones. The lines lie where the ratios put them in `rect`, whatever the gap; `gap` is then taken from the zones: half of it on
-    /// each side of a line, never at the outer edges of `rect`. So a layout of a quarter, a half and a quarter of 5120 points with a gap of 80 gives zones of 1240, 2480 and 1240.
+    /// The rectangle the lines of a layout are laid in when there is a `gap`: the area with half a gap more on every side, so that taking half a gap from each side of
+    /// every zone leaves the zones at the edges of the area (no gap there) and makes zones of equal ratios equally large.
+    public static func lineArea(_ area: CGRect, gap: CGFloat) -> CGRect { area.insetBy(dx: -gap / 2, dy: -gap / 2) }
+
+    /// Splits a top-left-origin rectangle into zones. The lines lie where the ratios put them in `lineArea(rect, gap:)`, and half the gap is taken from every side of every zone:
+    /// a gap lies between zones only, the zones at the edges of `rect` reach them, and a ratio is a share of the room with every gap counted in: a layout of a quarter, a
+    /// half and a quarter of 5120 points with a gap of 80 gives zones of 1220, 2520 and 1220, three equal columns three of one size.
     public func zones(in rect: CGRect, gap: CGFloat = 0) -> [(id: UUID, rect: CGRect)] {
-        let half = gap / 2, tolerance: CGFloat = 0.5
-        return plainZones(in: rect).map { id, r in
-            guard half > 0 else { return (id, r) }
-            let left = r.minX > rect.minX + tolerance ? half : 0, right = r.maxX < rect.maxX - tolerance ? half : 0
-            let top = r.minY > rect.minY + tolerance ? half : 0, bottom = r.maxY < rect.maxY - tolerance ? half : 0
-            return (id, CGRect(x: r.minX + left, y: r.minY + top, width: r.width - left - right, height: r.height - top - bottom))
-        }
+        let half = gap / 2
+        return plainZones(in: Self.lineArea(rect, gap: gap)).map { id, r in (id, r.insetBy(dx: half, dy: half)) }
     }
 
     private func plainZones(in rect: CGRect) -> [(id: UUID, rect: CGRect)] {
@@ -176,7 +176,9 @@ public indirect enum LayoutNode: Codable, Equatable {
                 let first = rects.filter { (sideBySide ? $0.rect.maxX : $0.rect.maxY) <= c + e }
                 let second = rects.filter { (sideBySide ? $0.rect.minX : $0.rect.minY) >= c - e }
                 guard first.count + second.count == rects.count, !first.isEmpty, !second.isEmpty else { continue }
-                let ratio = Double((c - (sideBySide ? area.minX : area.minY)) / (sideBySide ? area.width : area.height))
+                // The cut itself, not its rounding to a half point: a ratio taken from the rounded cut moves every other line a little.
+                let cut = first.map { sideBySide ? $0.rect.maxX : $0.rect.maxY }.max() ?? c
+                let ratio = Double((cut - (sideBySide ? area.minX : area.minY)) / (sideBySide ? area.width : area.height))
                 let (ra, rb) = childRects(area, sideBySide: sideBySide, ratio: ratio)
                 if let f = build(first, in: ra), let s = build(second, in: rb) {
                     return .split(id: UUID(), sideBySide: sideBySide, ratio: ratio, first: f, second: s)
