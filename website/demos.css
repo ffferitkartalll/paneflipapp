@@ -79,3 +79,25 @@
 .dd div { height: 4.4cqw; display: flex; align-items: center; gap: 1cqw; padding: 0 1.4cqw; border-radius: 1cqw; font-size: 2cqw; white-space: nowrap; color: var(--text); transition: background .2s, color .2s; }
 .dd div.on { background: var(--mint); color: #062820; }
 .dd div b { width: 2cqw; font-weight: 700; }
+
+/* A zone's notch: a small dark tab at the zone's top edge that grows into a part for each window, the one in front lit. */
+.nt { position: absolute; z-index: 6; transform: translateX(-50%); width: 6cqw; height: 1cqw; display: flex; overflow: hidden; background: #121a17; border-radius: 0 0 1cqw 1cqw; box-shadow: 0 .6cqw 1.6cqw rgba(0, 0, 0, .3); transition: width .45s var(--ease), height .45s var(--ease); }
+.nt.big { width: 30cqw; height: 3.6cqw; }
+.nt .lit { position: absolute; top: 0; bottom: 0; background: var(--mint); opacity: 0; transition: left .5s var(--ease), opacity .3s; }
+.nt.big .lit { opacity: 1; }
+.nt .nc { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; gap: .6cqw; opacity: 0; transition: opacity .3s; }
+.nt.big .nc { opacity: 1; }
+.nt .nc i { width: 1.4cqw; height: 1.4cqw; border-radius: .4cqw; background: rgba(255, 255, 255, .6); transition: background .3s; }
+.nt .nc s { width: 4cqw; height: .7cqw; border-radius: 1cqw; background: rgba(255, 255, 255, .35); transition: background .3s; }
+.nt .nc.on i, .nt .nc.on s { background: #062820; }
+
+/* The island in the menu bar, open with the zones drawn small to choose one of them. */
+.isl { position: absolute; left: 50%; top: 0; z-index: 20; transform: translateX(-50%); width: 13cqw; height: 4.4cqw; background: #000; border-radius: 0 0 1.6cqw 1.6cqw; overflow: hidden; transition: width .45s var(--ease), height .45s var(--ease); }
+.isl.open { width: 34cqw; height: 22cqw; }
+.isl .map { position: absolute; inset: 2.6cqw 3cqw 2.6cqw; opacity: 0; transition: opacity .3s; }
+.isl.open .map { opacity: 1; transition-delay: .15s; }
+.isl .mz { position: absolute; border-radius: .8cqw; background: #2f3b37; transition: background .25s; }
+.isl .mz.on { background: var(--mint); }
+
+/* The zone the focus went to. */
+.fo { position: absolute; z-index: 7; border-radius: 1.6cqw; border: .45cqw solid var(--mint); box-shadow: 0 0 2cqw rgba(59, 232, 176, .45); pointer-events: none; transition: left .45s var(--ease), top .45s var(--ease), width .45s var(--ease), height .45s var(--ease), opacity .3s; }

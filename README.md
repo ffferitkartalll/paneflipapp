@@ -2,7 +2,7 @@
   <img src="docs/banner.jpg" width="100%" alt="PaneFlip: zones for your Mac, stacked apps, one island in the menu bar">
 </p>
 
-<h3 align="center">Split your displays into zones. Drop apps into them.<br>Flip between a zone's apps from the island in the menu bar.</h3>
+<h3 align="center">Split your displays into zones. Drop apps into them.<br>Flip between a zone's apps from its notch or from the island in the menu bar.</h3>
 
 <p align="center">
   <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/ffferitkartalll/paneflipapp?color=4c1" alt="Latest release"></a>
@@ -13,72 +13,103 @@
 
 <p align="center">
   <a href="#install-a-release">Install</a> ·
-  <a href="#quick-look">Quick look</a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="#features">Features</a> ·
   <a href="#shortcuts">Shortcuts</a> ·
   <a href="#macos-build-it-yourself">Build</a> ·
-  <a href="#translations">Translations</a>
+  <a href="#translations">Translations</a> ·
+  <a href="https://ffferitkartalll.github.io/paneflipapp/">Website</a>
 </p>
 
 PaneFlip is a native macOS menu-bar app (Swift, SwiftUI, Liquid Glass). It lays your screens out in zones that you draw,
-puts each app where it belongs, and lets several apps share one zone: the island in the menu bar switches between
-them. Your layouts and settings stay on your Mac, and the app is free and open source.
-
-## Quick look
-
-https://github.com/user-attachments/assets/5aad76fa-2026-4a2f-8ac1-4af6b928c75a
+puts each app where it belongs, and lets several apps share one zone: the zone's notch and the island in the menu bar
+switch between them. Your layouts and settings stay on your Mac, and the app is free and open source.
 
 ## How it works
 
-1. **Snap.** Drag a window while you hold <kbd>⌘</kbd> (the left one): the zones light up. Let go over one and the window
-   slides in and fills it. Apps you put in a zone are remembered, and come back to it when they reopen.
-2. **Stack and flip.** Put more apps in the same zone and they stack. Point at the island in the menu bar and click the zone:
-   click an app in its row, scroll over the row, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd> to flip. The next
-   window glides in beside the one it replaces.
-3. **Go beyond the screen.** A layout can go on past the edge of the display, as many screens as you like. Scroll with the
-   wheel or two fingers over the island in the menu bar, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> / <kbd>→</kbd>, and the whole layout slides over.
+1. **Snap.** Drag a window while you hold <kbd>⌃</kbd><kbd>⌥</kbd>: the zones light up. Let go over one and the window
+   slides in and fills it. Or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd> and choose a zone with the arrow keys. Apps you put
+   in a zone are remembered, and come back to it when they reopen.
+2. **Stack and flip.** Put more apps in the same zone and they stack. Point at the zone's notch, at its top edge, and it shows a
+   part for each window; scroll over it, press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd>, or click a card of its row. The
+   next window glides in beside the one it replaces.
+3. **Go beyond the screen.** A layout can go on past the edges of the display, as many screens as you like. Press
+   <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> / <kbd>→</kbd>, scroll over the island in the menu bar, or swipe, and the whole
+   layout slides over.
 
 ## Features
 
-**Layouts**
-- Draw a layout in the editor: click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge. A plus at an edge
-  adds a whole screen there; scroll to it and draw it at full size, with a small map showing where you are.
-- Start from one of twenty common shapes (columns, rows, grids, a main zone with side zones, banners) or from a blank
-  layout that opens in the editor at once. Name your layouts and your zones, duplicate a layout, set a gap per layout.
+**Layouts and the editor**
+- Draw a layout in the editor: click to split a zone (hold <kbd>⇧</kbd> to split it across), drag a line to resize (it sticks at
+  ¼, ⅓, ½, ⅔ and ¾), double-click a handle to remove the line, drag a zone onto its neighbour to merge them. Undo and redo.
+- **Grid** makes a grid of equal zones: move the Rows and Columns sliders and watch it, then Apply. Or start from one of 21
+  common shapes, or from a blank layout.
+- **Spacing** sets, for each layout, the gap between the zones, the margin at the screen's edges and the smallest a zone may be.
+  Zones of equal shares are equally large, with a gap or without.
+- Keep a zone at an aspect ratio (1:1, 4:3, 3:2, 16:10, 16:9, 21:9, or standing up): when a line moves, the zone's other lines
+  move with it, in the editor and on the desktop.
+- Star a default zone, name your layouts and zones, duplicate, export and import a layout.
 - A layout belongs to a display, and every desktop of that display uses the layout you choose for it. Switch layouts from
   the menu bar.
-- A margin runs round the edges of the screen, and a gap between the zones.
+- Move the lines between the zones on the desktop itself: press <kbd>⌃</kbd><kbd>⌥</kbd> twice quickly, drag a handle, then
+  Done or <kbd>esc</kbd>.
+
+**Putting windows in zones**
+- Hold <kbd>⌃</kbd><kbd>⌥</kbd> while you drag a window, and let go over a zone; or drop it on a zone of the island.
+- Press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd> to send the focused window to a zone of any display: the arrow keys choose in the
+  island, <kbd>↩</kbd> places, <kbd>⌫</kbd> takes it out of its zone, <kbd>esc</kbd> cancels.
+- A window dragged out of its zone glides back to the size it had before.
+- Undo the last action on a window with <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌫</kbd>: the island says what happened, with an Undo
+  button, for ten seconds. <kbd>⌃</kbd><kbd>⌥</kbd><kbd>esc</kbd> closes the message.
+- Apps you never want in a zone go on the list of ignored apps.
+
+**Stacks, notches and the island**
+- Every zone that holds a window has a notch at its top edge. Point at it and it grows, cut into a part for each window; click it
+  for a row of the windows, drag their cards into another order, or press the "more" button for the cards of the island.
+  Scroll over it to flip.
+- Flip only in the zone with the focus: <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> / <kbd>→</kbd>, hold <kbd>⌃</kbd><kbd>⌥</kbd> and
+  scroll, or swipe on the trackpad. The windows follow your fingers and settle on the nearest one.
+- Move the focus to the zone above, on the left, below or on the right with <kbd>⌃</kbd><kbd>⌥</kbd><kbd>I</kbd> / <kbd>J</kbd> /
+  <kbd>K</kbd> / <kbd>L</kbd>, on to the next display too.
+- Enlarge the focused window to the whole screen for fifteen seconds with <kbd>⌃</kbd><kbd>⌥</kbd><kbd>↩</kbd>, or a double click
+  on the front card of the island; it goes back to its zone when the time is up.
+- Point at the island in the menu bar and it opens: your zones drawn small, and buttons to edit the layout, open the selected
+  apps, Settings and Quit. Click a zone for its windows as cards: quit, close, hide, minimize or take a window out of its zone,
+  tick the apps to open with the layout, see the Dock's notification badges, drag a card to another zone.
 
 **Screens beyond the screen**
-- Any number of screens beyond each edge, one after the other, reached with the shortcuts, with the wheel or two fingers over the island in the
-  menu bar, or on the trackpad, by your choice: four fingers, or two fingers with the keys held. The layout goes from one screen to the next, and comes to rest at each of them.
-  A window that gets the focus there brings its zone into view by itself.
-
-**Stacks and the island**
-- The island's row shows the windows of a zone as cards, with the title of each under it. Click a card to bring its window
-  forward, or drag cards to put the windows in another order.
-- Choose which app opens in which zone, in what order the island shows them, and open the ones you tick with one click, from
-  the layout or from the menu bar. Apps you never want in a zone go on the list of ignored apps.
-- A window dragged out of its zone glides back to the size it had before.
+- Any number of screens beyond each edge, one after the other, reached with the shortcuts, with the wheel or two fingers over
+  the island, or on the trackpad, by your choice: two fingers with the keys held, or four fingers (three for a zone's windows).
+  The layout comes to rest at each screen. A window that gets the focus there brings its screen into view.
 
 **Everywhere**
-- Several displays and desktops. Unplug a display and its windows spread over the first display; plug it in and they go back to
-  their zones.
+- Several displays and desktops. Set where the displays stand on your desk, and the moves and the pointer go from one to the
+  next as they stand. Unplug a display and its windows spread over the others; plug it in and they go back to their zones.
 - Closed, hidden and minimized windows leave their zone and return when they do.
-- Updates from inside the app, or with Homebrew. 46 languages.
+- Caps Lock can be a modifier key: every shortcut then has a one-key version on <kbd>⇪</kbd>.
+- Launch at login, one switch that turns everything off, updates from inside the app or with Homebrew, 46 languages.
 
 ## Shortcuts
 
-| | Default | |
-|---|---|---|
-| Snap a window into a zone | hold <kbd>⌘</kbd> (left) while dragging | changeable |
-| Next / previous window of the zone | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
-| Scroll to the screen beyond the right / left edge | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd> | changeable |
-| Move the focus to the zone above / left / below / right | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | changeable |
-| Send the focused window to a zone, on any display | <kbd>⇧</kbd><kbd>⌃</kbd><kbd>⌥</kbd>, then the arrow keys, <kbd>↩</kbd> to place, <kbd>⌫</kbd> to take it out of its zone, <kbd>esc</kbd> to cancel | the modifier keys are changeable |
+Every shortcut can be changed in `Settings ▸ Shortcuts`. With Caps Lock as a modifier key (a setting there) the standard
+ones are built on <kbd>⇪</kbd> instead.
 
-All of them are set in `Settings ▸ Shortcuts`.
+| | Default | With Caps Lock |
+|---|---|---|
+| Put a window in a zone | hold <kbd>⌃</kbd><kbd>⌥</kbd> while dragging | hold <kbd>⇪</kbd> while dragging |
+| Send the focused window to a zone | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd>, then the arrow keys, <kbd>↩</kbd> to place, <kbd>⌫</kbd> to take it out of its zone, <kbd>esc</kbd> to cancel | <kbd>⇪</kbd><kbd>M</kbd> |
+| Next / previous window of the zone | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd> | <kbd>⇪</kbd><kbd>→</kbd> / <kbd>←</kbd> |
+| Move through a zone's windows | hold <kbd>⌃</kbd><kbd>⌥</kbd> and scroll over the zone | hold <kbd>⇪</kbd> and scroll |
+| Enlarge the focused window for 15 seconds | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>↩</kbd> | <kbd>⇪</kbd><kbd>↩</kbd> |
+| Move the focus to the zone above / left / below / right | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | <kbd>⇪</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> |
+| Undo the last window action | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌫</kbd> | <kbd>⇪</kbd><kbd>⌫</kbd> |
+| Close the undo message | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>esc</kbd> | <kbd>⇪</kbd><kbd>esc</kbd> |
+| Scroll to the screen beyond the right / left edge | <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd> | <kbd>⇪</kbd><kbd>⇧</kbd><kbd>→</kbd> / <kbd>←</kbd> |
+| Slide to the screens beyond the edges | hold <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> and scroll | hold <kbd>⇪</kbd><kbd>⇧</kbd> and scroll |
+| Move the lines between the zones | press <kbd>⌃</kbd><kbd>⌥</kbd> twice quickly | press <kbd>⇪</kbd> twice quickly |
+
+On the trackpad (`Settings ▸ Trackpad`): two fingers with the keys held, or, with no keys, three fingers for a zone's windows
+and four for the screens beyond the edges. Over the open island, or over a zone's notch, the wheel and two fingers need no keys.
 
 ## Install a release
 

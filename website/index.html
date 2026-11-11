@@ -148,6 +148,9 @@ th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--li
 tr:last-child td { border-bottom: 0; }
 td:last-child { color: var(--muted); }
 .table-wrap { overflow-x: auto; }
+table.sc thead th { font-size: 14px; font-weight: 600; color: var(--muted); }
+table.sc tr.grp th { padding-top: 22px; color: var(--mint); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+table.sc td:first-child { color: var(--text); }
 
 .install .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 860px) { .install .grid { grid-template-columns: minmax(0, 1fr); } }
@@ -193,7 +196,7 @@ footer a:hover { color: #fff; }
       <img class="icon icon-light" src="app-icon-light.png" alt="PaneFlip app icon" data-i18n-alt="hero.icon" width="120" height="120">
       <img class="icon icon-dark" src="app-icon-dark.png" alt="PaneFlip app icon" data-i18n-alt="hero.icon" width="120" height="120">
       <h1>PaneFlip</h1>
-      <p class="lead" data-i18n="hero.lead">Split your Mac's screens into zones. Drop apps into them.</p>
+      <p class="lead" data-i18n="hero.lead">Split your Mac's screens into zones. Drop apps into them, and flip between them from each zone's notch.</p>
       <div class="actions">
         <a class="btn" href="https://github.com/ffferitkartalll/paneflipapp/releases/latest" data-i18n="hero.download">Download for macOS</a>
         <a class="btn ghost" href="https://github.com/ffferitkartalll/paneflipapp" data-i18n="hero.github">View on GitHub</a>
@@ -210,11 +213,11 @@ footer a:hover { color: #fff; }
       <p class="sub" data-i18n="how.sub">Three ideas, and your windows always know where to go.</p>
       <div class="grid">
         <div class="card"><div class="n">1</div><h3 data-i18n="how.1h">Snap</h3>
-          <p data-i18n="how.1p">Drag a window while you hold <kbd>⌘</kbd>. The zones light up; let go over one and the window slides in and fills it. Apps you put in a zone are remembered and return when they reopen.</p></div>
+          <p data-i18n="how.1p">Drag a window while you hold <kbd>⌃</kbd><kbd>⌥</kbd>. The zones light up; let go over one and the window slides in and fills it. Apps you put in a zone are remembered and return when they reopen.</p></div>
         <div class="card"><div class="n">2</div><h3 data-i18n="how.2h">Stack and flip</h3>
-          <p data-i18n="how.2p">Several apps can share one zone. Click the zone in the island, then an app, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> <kbd>→</kbd> to flip.</p></div>
+          <p data-i18n="how.2p">Several apps can share one zone. Point at the zone's notch and click a window, scroll over it, or press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>←</kbd> <kbd>→</kbd> to flip.</p></div>
         <div class="card"><div class="n">3</div><h3 data-i18n="how.3h">Go beyond the screen</h3>
-          <p data-i18n="how.3p">A layout can go on past the edge of the display, with as many screens as you like. Scroll over the island in the menu bar, or hold the keys and scroll with two fingers.</p></div>
+          <p data-i18n="how.3p">A layout can go on past the edges of the display, with as many screens as you like. Press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> <kbd>→</kbd>, scroll over the island in the menu bar, or swipe.</p></div>
       </div>
     </section>
 
@@ -224,35 +227,53 @@ footer a:hover { color: #fff; }
     </section>
     <article class="feature" id="f-snap">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="snap.kicker">Snap</p><h3 data-i18n="snap.h3">Drag a window into a zone</h3><p class="blurb" data-i18n="snap.p">Hold <kbd>⌘</kbd> while you drag and the zones light up. Let go over one and the window slides in and fills it. PaneFlip remembers which app belongs where and puts it back when the app reopens.</p></div>
-        <div class="demo-col"><div class="frame" data-demo="snap" role="img" aria-label="A window is dragged into a zone while the command key is held" data-i18n-aria="snap.demo"></div><ul class="keys"><li><span><kbd data-hold="k">⌘</kbd></span> <span data-i18n="snap.k1">hold while dragging <em>Show the zones</em></span></li><li><span data-i18n="snap.k2">let go <em>Fill the zone</em></span></li></ul></div>
+        <div class="copy"><p class="kicker" data-i18n="snap.kicker">Snap</p><h3 data-i18n="snap.h3">Drag a window into a zone</h3><p class="blurb" data-i18n="snap.p">Hold <kbd>⌃</kbd><kbd>⌥</kbd> while you drag and the zones light up. Let go over one and the window slides in and fills it, or drop it on a zone of the island in the menu bar. PaneFlip remembers which app belongs where and puts it back when the app reopens. Dragged out of its zone, a window gets back the size it had.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="snap" role="img" aria-label="A window is dragged into a zone while the Control and Option keys are held" data-i18n-aria="snap.demo"></div><ul class="keys"><li><span><kbd data-hold="k">⌃</kbd><kbd data-hold="k">⌥</kbd></span> <span data-i18n="snap.k1">hold while dragging <em>Show the zones</em></span></li><li><span data-i18n="snap.k2">let go <em>Fill the zone</em></span></li></ul></div>
       </div>
     </article>
-    <article class="feature rev" id="f-stack">
+    <article class="feature rev" id="f-notch">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="stack.kicker">Stacks</p><h3 data-i18n="stack.h3">Many apps, one zone</h3><p class="blurb" data-i18n="stack.p">Put more apps in a zone and they stack. Click the zone in the island, then an app, or use the arrow keys to flip. The next window glides in beside the one it replaces.</p></div>
+        <div class="copy"><p class="kicker" data-i18n="notch.kicker">Notches</p><h3 data-i18n="notch.h3">A notch on every zone</h3><p class="blurb" data-i18n="notch.p">Every zone that holds a window has a small notch at its top edge. Point at it and it grows, a part for each window, the one in front lit. Click a card to bring its window forward, drag the cards into another order, scroll over it to flip, or press the "more" button for the cards of the island. The cards show the Dock's notification badges.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="notch" role="img" aria-label="The notch of a zone grows into a row of its windows, and a click on a card brings that window forward" data-i18n-aria="notch.demo"></div><ul class="keys"><li><span data-i18n="notch.k1">point <em>Grow the notch</em></span></li><li><span data-i18n="notch.k2">click a card <em>Bring it forward</em></span></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em data-i18n="notch.k3">Flip, no keys</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature" id="f-stack">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker" data-i18n="stack.kicker">Stacks</p><h3 data-i18n="stack.h3">Many apps, one zone</h3><p class="blurb" data-i18n="stack.p">Put more apps in a zone and they stack. The keys flip the zone with the focus: the next window glides in beside the one it replaces, and the zone's notch shows where you are.</p></div>
         <div class="demo-col"><div class="frame" data-demo="stack" role="img" aria-label="Three stacked windows of a zone flip one after another with the arrow keys" data-i18n-aria="stack.demo"></div><ul class="keys"><li><span><kbd data-hold="next">⌃</kbd><kbd data-hold="next">⌥</kbd><kbd data-hold="next">→</kbd></span> <em data-i18n="stack.k1">Next window</em></li><li><span><kbd data-hold="prev">⌃</kbd><kbd data-hold="prev">⌥</kbd><kbd data-hold="prev">←</kbd></span> <em data-i18n="stack.k2">Previous window</em></li></ul></div>
       </div>
     </article>
-    <article class="feature" id="f-scroll">
+    <article class="feature rev" id="f-scroll">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="scroll.kicker">Scroll</p><h3 data-i18n="scroll.h3">Scroll through a zone’s windows</h3><p class="blurb" data-i18n="scroll.p">Hold <kbd>⌥</kbd> <kbd>⌃</kbd> and scroll with two fingers: the windows follow your fingers, pass several at once and settle on the nearest one. A mouse wheel steps one window at a time. The speed is a setting.</p></div>
-        <div class="demo-col"><div class="frame" data-demo="scroll" role="img" aria-label="Two fingers scroll through the stacked windows of a zone" data-i18n-aria="scroll.demo"></div><ul class="keys"><li><span><kbd data-hold="k">⌥</kbd><kbd data-hold="k">⌃</kbd></span> <span data-i18n="scroll.k1">+ scroll <em>Through a zone’s windows</em></span></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em data-i18n="fingers">Two fingers</em></li></ul></div>
+        <div class="copy"><p class="kicker" data-i18n="scroll.kicker">Scroll</p><h3 data-i18n="scroll.h3">Scroll through a zone’s windows</h3><p class="blurb" data-i18n="scroll.p">Hold <kbd>⌃</kbd><kbd>⌥</kbd> and scroll over the zone with two fingers: the windows follow your fingers, pass several at once and settle on the nearest one. A mouse wheel steps one window at a time. Or choose three fingers in Settings, with no keys at all. The speed is a setting.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="scroll" role="img" aria-label="Two fingers scroll through the stacked windows of a zone" data-i18n-aria="scroll.demo"></div><ul class="keys"><li><span><kbd data-hold="k">⌃</kbd><kbd data-hold="k">⌥</kbd></span> <span data-i18n="scroll.k1">+ scroll <em>Through a zone’s windows</em></span></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em data-i18n="fingers">Two fingers</em></li></ul></div>
       </div>
     </article>
-    <article class="feature rev" id="f-beyond">
+    <article class="feature" id="f-send">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="beyond.kicker">Beyond the screen</p><h3 data-i18n="beyond.h3">Screens past the edge</h3><p class="blurb" data-i18n="beyond.p">A layout can go on past the edge of the display, with as many screens as you like. Scroll over the island in the menu bar, or hold <kbd>⌘</kbd> <kbd>⌥</kbd> <kbd>⌃</kbd> and scroll, and the whole layout slides over.</p></div>
-        <div class="demo-col"><div class="frame" data-demo="beyond" role="img" aria-label="The whole layout slides over to screens beyond the right edge of the screen" data-i18n-aria="beyond.demo"></div><ul class="keys"><li><span><kbd data-hold="right">⌃</kbd><kbd data-hold="right">⌥</kbd><kbd data-hold="right">⌘</kbd><kbd data-hold="right">→</kbd></span> <em data-i18n="beyond.k1">Screens to the right</em></li><li><span><kbd data-hold="left">⌃</kbd><kbd data-hold="left">⌥</kbd><kbd data-hold="left">⌘</kbd><kbd data-hold="left">←</kbd></span> <em data-i18n="beyond.k2">Screens to the left</em></li><li><span><kbd data-hold="scroll">⌘</kbd><kbd data-hold="scroll">⌥</kbd><kbd data-hold="scroll">⌃</kbd></span> <span data-i18n="beyond.k3">+ scroll <em>Slide the layout</em></span></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em data-i18n="fingers">Two fingers</em></li></ul></div>
+        <div class="copy"><p class="kicker" data-i18n="send.kicker">Keyboard</p><h3 data-i18n="send.h3">Send a window to a zone</h3><p class="blurb" data-i18n="send.p">Press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd> and the island opens with your zones. The arrow keys choose one, on any display; <kbd>↩</kbd> puts the focused window there, <kbd>⌫</kbd> takes it out of its zone, <kbd>esc</kbd> cancels.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="send" role="img" aria-label="The island opens, the arrow keys choose a zone and the window glides there" data-i18n-aria="send.demo"></div><ul class="keys"><li><span><kbd data-hold="m">⌃</kbd><kbd data-hold="m">⌥</kbd><kbd data-hold="m">M</kbd></span> <em data-i18n="send.k1">Open the island</em></li><li><span><kbd data-hold="arrow">↓</kbd></span> <em data-i18n="send.k2">Choose a zone</em></li><li><span><kbd data-hold="ret">↩</kbd></span> <em data-i18n="send.k3">Put it there</em></li></ul></div>
       </div>
     </article>
-    <article class="feature" id="f-editor">
+    <article class="feature rev" id="f-focus">
       <div class="feature-inner">
-        <div class="copy"><p class="kicker" data-i18n="layoutsWord">Layouts</p><h3 data-i18n="editor.h3">Draw your own layout</h3><p class="blurb" data-i18n="editor.p">Click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge. Or start from one of twenty common shapes. Name your layouts and zones, and set a gap for each.</p></div>
+        <div class="copy"><p class="kicker" data-i18n="send.kicker">Keyboard</p><h3 data-i18n="focus.h3">Move the focus, enlarge a window</h3><p class="blurb" data-i18n="focus.p">Four keys on the places of an inverted T move the focus to the zone above, on the left, below or on the right, on to the next display too. <kbd>⌃</kbd><kbd>⌥</kbd><kbd>↩</kbd> enlarges the focused window to the whole screen for fifteen seconds; it goes back to its zone when the time is up, or when you press it again.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="focus" role="img" aria-label="The focus moves from zone to zone with the keys, then a window is enlarged and goes back" data-i18n-aria="focus.demo"></div><ul class="keys"><li><span><kbd data-hold="l">⌃</kbd><kbd data-hold="l">⌥</kbd><kbd data-hold="l">L</kbd></span> <em data-i18n="focus.k1">Zone on the right</em></li><li><span><kbd data-hold="k">⌃</kbd><kbd data-hold="k">⌥</kbd><kbd data-hold="k">K</kbd></span> <em data-i18n="focus.k2">Zone below</em></li><li><span><kbd data-hold="ret">⌃</kbd><kbd data-hold="ret">⌥</kbd><kbd data-hold="ret">↩</kbd></span> <em data-i18n="focus.k3">Enlarge</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature" id="f-beyond">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker" data-i18n="beyond.kicker">Beyond the screen</p><h3 data-i18n="beyond.h3">Screens past the edge</h3><p class="blurb" data-i18n="beyond.p">A layout can go on past the edges of the display, with as many screens as you like. Press the keys, scroll over the island in the menu bar, hold <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> and scroll, or swipe with four fingers, and the whole layout slides over and comes to rest at the next screen. A window that gets the focus there brings its screen into view.</p></div>
+        <div class="demo-col"><div class="frame" data-demo="beyond" role="img" aria-label="The whole layout slides over to screens beyond the right edge of the screen" data-i18n-aria="beyond.demo"></div><ul class="keys"><li><span><kbd data-hold="right">⌃</kbd><kbd data-hold="right">⌥</kbd><kbd data-hold="right">⌘</kbd><kbd data-hold="right">→</kbd></span> <em data-i18n="beyond.k1">Screens to the right</em></li><li><span><kbd data-hold="left">⌃</kbd><kbd data-hold="left">⌥</kbd><kbd data-hold="left">⌘</kbd><kbd data-hold="left">←</kbd></span> <em data-i18n="beyond.k2">Screens to the left</em></li><li><span><kbd data-hold="scroll">⌃</kbd><kbd data-hold="scroll">⌥</kbd><kbd data-hold="scroll">⌘</kbd></span> <span data-i18n="beyond.k3">+ scroll <em>Slide the layout</em></span></li><li><span class="touch" aria-hidden="true"><span class="f" style="margin-left:-9px"></span><span class="f" style="margin-left:3px"></span></span> <em data-i18n="fingers">Two fingers</em></li></ul></div>
+      </div>
+    </article>
+    <article class="feature rev" id="f-editor">
+      <div class="feature-inner">
+        <div class="copy"><p class="kicker" data-i18n="layoutsWord">Layouts</p><h3 data-i18n="editor.h3">Draw your own layout</h3><p class="blurb" data-i18n="editor.p">Click to split a zone, drag a line to resize, drag a zone onto its neighbour to merge. Make a grid of equal zones with two sliders, or start from one of 21 common shapes. Keep a zone at an aspect ratio, star the zone new apps go to, and set the gap, the margin and the smallest zone for each layout.</p></div>
         <div class="demo-col"><div class="frame" data-demo="editor" role="img" aria-label="A zone is split in two, one part is split again, and a line is dragged to resize" data-i18n-aria="editor.demo"></div><ul class="keys"><li><span data-i18n="editor.k1">click <em>Split</em></span></li><li><span data-i18n="editor.k2">drag a line <em>Resize</em></span></li><li><span data-i18n="editor.k3">drag a zone <em>Merge</em></span></li></ul></div>
       </div>
     </article>
-    <article class="feature rev" id="f-layouts">
+    <article class="feature" id="f-layouts">
       <div class="feature-inner">
         <div class="copy"><p class="kicker" data-i18n="menubar">Menu bar</p><h3 data-i18n="layouts.h3">Switch layouts in one click</h3><p class="blurb" data-i18n="layouts.p">Every desktop of a display can use the layout you choose for it. Pick another from the menu bar and the windows glide to their new zones.</p></div>
         <div class="demo-col"><div class="frame" data-demo="layouts" role="img" aria-label="A layout is chosen in the menu bar and the windows glide to their new zones" data-i18n-aria="layouts.demo"></div><ul class="keys"><li><span><kbd data-i18n="menubar">Menu bar</kbd></span> <em data-i18n="layouts.k1">Choose a layout</em></li></ul></div>
@@ -262,35 +283,72 @@ footer a:hover { color: #fff; }
       <h2 data-i18n="more.h2">And everything around it</h2>
       <p class="sub" data-i18n="more.sub">The details that make it feel like part of the Mac.</p>
       <div class="features">
-        <div class="card"><h3 data-i18n="layoutsWord">Layouts</h3><ul>
-          <li data-i18n="more.1a">Draw zones in the editor: click to split, drag a line to resize, drop one on a neighbour to merge.</li>
-          <li data-i18n="more.1b">Start from twenty common shapes or a blank layout. Name layouts and zones, set a gap per layout.</li>
-          <li data-i18n="more.1c">Switch layouts from the menu bar. Every desktop of a display can use its own.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.editH">The layout editor</h3><ul>
+          <li data-i18n="more.editA">Click to split a zone, hold <kbd>⇧</kbd> to split it across. A line sticks at ¼, ⅓, ½, ⅔ and ¾; double-click its handle to remove it.</li>
+          <li data-i18n="more.editB"><b>Grid</b>: move the Rows and Columns sliders, watch the zones, then Apply.</li>
+          <li data-i18n="more.editC"><b>Spacing</b>: the gap between zones, the margin at the screen's edges and the smallest zone, for each layout. Equal shares make equal zones.</li>
+          <li data-i18n="more.editD">Keep a zone at 1:1, 4:3, 3:2, 16:10, 16:9, 21:9, or standing up: its other lines move with the one you drag.</li>
+          <li data-i18n="more.editE">Add a screen at either edge with a plus, undo and redo, name layouts and zones, duplicate, export and import a layout.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.islandH">The island</h3><ul>
+          <li data-i18n="more.islandA">Point at the island in the menu bar: your zones drawn small, and buttons to edit the layout, open the selected apps, Settings and Quit.</li>
+          <li data-i18n="more.islandB">Click a zone for its windows as cards. Quit, close, hide or minimize an app, take it out of its zone, or tick it to open with the layout.</li>
+          <li data-i18n="more.islandC">Drag a card into another order, onto another zone, or out of its zone. Drop a dragged window on a zone of the island.</li>
+          <li data-i18n="more.islandD">Double-click the card in front to enlarge its window. The island hides while an app is full screen.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.edgesH">Zone edges on the desktop</h3><ul>
+          <li data-i18n="more.edgesA">Press <kbd>⌃</kbd><kbd>⌥</kbd> twice quickly: a handle shows on every line between the zones of the screen.</li>
+          <li data-i18n="more.edgesB">Drag a handle and the windows follow. The lines reach the menu bar, the Dock and the screen's sides.</li>
+          <li data-i18n="more.edgesC">The island takes a move back with its Undo button; Done or <kbd>esc</kbd> ends it.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.undoH">Undo</h3><ul>
+          <li data-i18n="more.undoA">Put a window in a zone or take it out by mistake? <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌫</kbd> undoes it.</li>
+          <li data-i18n="more.undoB">The island says what happened in one line, with an Undo button, for ten seconds; <kbd>⌃</kbd><kbd>⌥</kbd><kbd>esc</kbd> closes it.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.padH">Trackpad and mouse</h3><ul>
+          <li data-i18n="more.padA">Two fingers with the keys held, or, with no keys, three fingers for a zone's windows and four for the screens beyond the edges.</li>
+          <li data-i18n="more.padB">Over the open island and over a notch, the wheel and two fingers work with no keys.</li>
+          <li data-i18n="more.padC">The speed is a setting, and follows the system's own trackpad speed.</li></ul></div>
+        <div class="card"><h3 data-i18n="more.displaysH">Displays and desktops</h3><ul>
+          <li data-i18n="more.displaysA">Every desktop of a display can use a layout of its own.</li>
+          <li data-i18n="more.displaysB">Drag the displays to where they stand on your desk: the focus, the windows and the pointer go from one to the next as they stand.</li>
+          <li data-i18n="more.displaysC">Unplug a display and its windows spread over the others; plug it in and they go back to their zones.</li></ul></div>
         <div class="card"><h3 data-i18n="more.2h">Stacks</h3><ul>
           <li data-i18n="more.2b">Choose which app opens in which zone and open them all with one click.</li>
-          <li data-i18n="more.2c">A window dragged out of its zone glides back to the size it had.</li></ul></div>
-        <div class="card"><h3 data-i18n="more.3h">Screens beyond the screen</h3><ul>
-          <li data-i18n="more.3a">Any number of screens past each edge, one after the other.</li>
-          <li data-i18n="more.3b">Hold keys and scroll with two fingers or the mouse wheel; a window that gets focus brings its zone into view.</li>
-          <li data-i18n="more.3c">Trackpad speed is a setting.</li></ul></div>
+          <li data-i18n="more.2c">Closed, hidden and minimized windows leave their zone and return when they do.</li>
+          <li data-i18n="more.2d">Apps you never want in a zone go on the list of ignored apps.</li></ul></div>
         <div class="card"><h3 data-i18n="more.4h">Everywhere</h3><ul>
-          <li data-i18n="more.4a">Several displays and desktops. Unplug a display and its apps move to the main screen; plug it in and they go back.</li>
-          <li data-i18n="more.4b">Closed, hidden and minimized windows leave their zone and return when they do.</li>
-          <li data-i18n="more.4c">Updates from inside the app. 46 languages.</li></ul></div>
+          <li data-i18n="more.keysA">Every shortcut can be changed in Settings.</li>
+          <li data-i18n="more.keysB">Make Caps Lock a modifier key and every shortcut gets a version on <kbd>⇪</kbd>; capitals are then <kbd>⌘</kbd><kbd>⇪</kbd>.</li>
+          <li data-i18n="more.4a">Launch at login, and one switch that turns everything off without quitting.</li>
+          <li data-i18n="more.4c">Updates from inside the app or with Homebrew. 46 languages.</li>
+          <li data-i18n="more.4d">Layouts and settings stay on your Mac.</li></ul></div>
       </div>
     </section>
 
     <section id="shortcuts">
       <h2 data-i18n="sc.h2">Shortcuts</h2>
-      <p class="sub" data-i18n="sc.sub">Every one of them can be changed in Settings.</p>
+      <p class="sub" data-i18n="sc.sub">Every one of them can be changed in Settings. With Caps Lock as a modifier key, the standard ones are built on <kbd>⇪</kbd>.</p>
       <div class="table-wrap">
-        <table>
+        <table class="sc">
+          <thead><tr><th></th><th data-i18n="sc.default">Default</th><th data-i18n="sc.caps">With Caps Lock</th></tr></thead>
           <tbody>
-            <tr><td data-i18n="sc.1a">Snap a window into a zone</td><td data-i18n="sc.1b">hold <kbd>⌘</kbd> (left) while dragging</td></tr>
-            <tr><td data-i18n="sc.3a">Next / previous window of the zone</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
-            <tr><td data-i18n="sc.4a">Screens beyond the right / left edge</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
-            <tr><td data-i18n="sc.5a">Scroll through a zone's windows</td><td data-i18n="sc.5b">hold <kbd>⌥</kbd><kbd>⌃</kbd> and scroll</td></tr>
-            <tr><td data-i18n="sc.6a">Scroll toward the screens beyond the edge</td><td data-i18n="sc.6b">hold <kbd>⌘</kbd><kbd>⌥</kbd><kbd>⌃</kbd> and scroll</td></tr>
+            <tr class="grp"><th colspan="3" data-i18n="sc.g1">Windows and zones</th></tr>
+            <tr><td data-i18n="sc.1a">Put a window in a zone</td><td data-i18n="sc.1b">hold <kbd>⌃</kbd><kbd>⌥</kbd> while dragging</td><td data-i18n="sc.1c">hold <kbd>⇪</kbd> while dragging</td></tr>
+            <tr><td data-i18n="sc.2a">Send the focused window to a zone</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd></td><td><kbd>⇪</kbd><kbd>M</kbd></td></tr>
+            <tr><td data-i18n="sc.2b">… then choose, place, take out, cancel</td><td colspan="2"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> · <kbd>↩</kbd> · <kbd>⌫</kbd> · <kbd>esc</kbd></td></tr>
+            <tr><td data-i18n="sc.7a">Undo the last window action</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌫</kbd></td><td><kbd>⇪</kbd><kbd>⌫</kbd></td></tr>
+            <tr><td data-i18n="sc.7b">Close the undo message</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>esc</kbd></td><td><kbd>⇪</kbd><kbd>esc</kbd></td></tr>
+            <tr><td data-i18n="sc.8a">Move the lines between the zones</td><td data-i18n="sc.8b">press <kbd>⌃</kbd><kbd>⌥</kbd> twice quickly</td><td data-i18n="sc.8c">press <kbd>⇪</kbd> twice quickly</td></tr>
+            <tr class="grp"><th colspan="3" data-i18n="sc.g2">Windows in a zone</th></tr>
+            <tr><td data-i18n="sc.3a">Next / previous window of the zone</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>→</kbd> / <kbd>←</kbd></td><td><kbd>⇪</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
+            <tr><td data-i18n="sc.5a">Scroll through a zone's windows</td><td data-i18n="sc.5b">hold <kbd>⌃</kbd><kbd>⌥</kbd> and scroll</td><td data-i18n="sc.5c">hold <kbd>⇪</kbd> and scroll</td></tr>
+            <tr><td data-i18n="sc.9a">Enlarge the focused window for 15 seconds</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>↩</kbd></td><td><kbd>⇪</kbd><kbd>↩</kbd></td></tr>
+            <tr class="grp"><th colspan="3" data-i18n="sc.g3">Moving between zones</th></tr>
+            <tr><td data-i18n="sc.10a">Zone above / on the left / below / on the right</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd></td><td><kbd>⇪</kbd><kbd>I</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd></td></tr>
+            <tr class="grp"><th colspan="3" data-i18n="sc.g4">Screens beyond the screen</th></tr>
+            <tr><td data-i18n="sc.4a">Screens beyond the right / left edge</td><td><kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> / <kbd>←</kbd></td><td><kbd>⇪</kbd><kbd>⇧</kbd><kbd>→</kbd> / <kbd>←</kbd></td></tr>
+            <tr><td data-i18n="sc.6a">Scroll toward the screens beyond the edge</td><td data-i18n="sc.6b">hold <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> and scroll</td><td data-i18n="sc.6c">hold <kbd>⇪</kbd><kbd>⇧</kbd> and scroll</td></tr>
+            <tr class="grp"><th colspan="3" data-i18n="sc.g5">Trackpad and mouse</th></tr>
+            <tr><td data-i18n="sc.11a">Three or four fingers (a setting)</td><td colspan="2" data-i18n="sc.11b">three fingers: a zone's windows · four fingers: the screens beyond the edges</td></tr>
+            <tr><td data-i18n="sc.12a">Over the open island or a notch</td><td colspan="2" data-i18n="sc.12b">the wheel or two fingers, no keys</td></tr>
+            <tr><td data-i18n="sc.13a">On the front card of the island</td><td colspan="2" data-i18n="sc.13b">double-click to enlarge its window</td></tr>
           </tbody>
         </table>
       </div>
