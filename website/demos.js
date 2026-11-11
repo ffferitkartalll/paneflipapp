@@ -43,6 +43,17 @@ function touch(root) {
     move(n, ms) { fs.forEach((f) => { f.style.transitionDuration = ms + 'ms'; f.style.transform = `translateX(${n * 4}px)`; }); },
   };
 }
+// The notch of a zone with `n` windows, at the middle of the zone's top edge.
+function notch(sc, r, n) {
+  const el = h(`<div class="nt"><div class="lit"></div>${'<div class="nc"><i></i><s></s></div>'.repeat(n)}</div>`);
+  css(el, { left: unit(r[0] + r[2] / 2), top: unit(r[1]) });
+  sc.append(el);
+  const lit = el.querySelector('.lit'), cards = el.querySelectorAll('.nc');
+  return {
+    grow(on) { el.classList.toggle('big', on); },
+    lit(i) { css(lit, { left: unit((i * 100) / n), width: unit(100 / n) }); cards.forEach((c, j) => c.classList.toggle('on', j === i)); },
+  };
+}
 function stack(sc, r, classes) {
   const el = h('<div class="stack"></div>');
   css(el, box(r));
@@ -75,15 +86,80 @@ const demos = {
 
   stack(sc, root) {
     sc.append(win('w1 p1', Z0), win('w5 p3', Z2));
-    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']);
+    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']), nt = notch(sc, Z1, 3);
     const next = held(root, 'next'), prev = held(root, 'prev');
-    const step = async (wait, key, n) => { key.press(true); await wait(260); s.pos(n); await wait(500); key.press(false); await wait(600); };
+    // While the windows are switched the zone's notch shows them, the one in front lit.
+    const step = async (wait, key, n) => { key.press(true); nt.grow(true); await wait(260); s.pos(n); nt.lit(n); await wait(500); key.press(false); await wait(600); };
     return {
-      reset() { s.pos(0, 0); next.press(false); prev.press(false); },
+      reset() { s.pos(0, 0); nt.grow(false); nt.lit(0); next.press(false); prev.press(false); },
       async body(wait) {
         await wait(700);
         await step(wait, next, 1); await step(wait, next, 2); await step(wait, prev, 1);
-        await wait(500);
+        await wait(500); nt.grow(false); await wait(500);
+      },
+    };
+  },
+
+  notch(sc, root) {
+    sc.append(win('w1 p1', Z0), win('w5 p3', Z2));
+    notch(sc, Z0, 1); notch(sc, Z2, 1);
+    const s = stack(sc, Z1, ['w2 p2', 'w3 p1', 'w4 p3']), nt = notch(sc, Z1, 3), cur = cursor(sc), pad = touch(root);
+    const card = (i) => [Z1MID + (i - 1) * 10, Z1[1] + 3.4];
+    return {
+      reset() { s.pos(0, 0); nt.grow(false); nt.lit(0); cur.show(false); cur.to(80, 80); pad.show(false); pad.down(false); pad.move(-3, 0); },
+      async body(wait) {
+        cur.show(true); await wait(300); cur.to(Z1MID + 1, Z1[1] + 1.2); await wait(1100);
+        nt.grow(true); await wait(900);
+        cur.to(...card(1)); await wait(1100); cur.click(); await wait(150);
+        nt.lit(1); s.pos(1); await wait(1300);
+        // Two fingers over the notch flip on, with no key held.
+        pad.show(true); await wait(400); pad.down(true); await wait(250);
+        pad.move(3, 900); nt.lit(2); s.pos(2, 900); await wait(1100);
+        pad.down(false); pad.show(false); await wait(700);
+        cur.to(70, 80); await wait(500); nt.grow(false); await wait(700);
+        cur.show(false); await wait(300);
+      },
+    };
+  },
+
+  send(sc, root) {
+    const a = win('w1 p1', Z0), b = win('w2 p2', Z1), c = win('w5 p3', Z2);
+    sc.append(a, c, b);
+    const isl = h(`<div class="isl"><div class="map">${[Z0, Z1, Z2].map(() => '<div class="mz"></div>').join('')}</div></div>`);
+    root.append(isl);
+    const mz = isl.querySelectorAll('.mz');
+    [Z0, Z1, Z2].forEach((r, i) => css(mz[i], box(r)));
+    const choose = (i) => mz.forEach((m, j) => m.classList.toggle('on', j === i));
+    const m = held(root, 'm'), arrow = held(root, 'arrow'), ret = held(root, 'ret');
+    return {
+      reset() { css(b, { ...box(Z1), zIndex: 2 }); isl.classList.remove('open'); choose(1); [m, arrow, ret].forEach((k) => k.press(false)); },
+      async body(wait) {
+        await wait(800);
+        m.press(true); await wait(250); isl.classList.add('open'); await wait(400); m.press(false); await wait(900);
+        arrow.press(true); await wait(200); choose(2); await wait(300); arrow.press(false); await wait(900);
+        ret.press(true); await wait(200); isl.classList.remove('open'); css(b, box(Z2)); await wait(300); ret.press(false); await wait(1600);
+      },
+    };
+  },
+
+  focus(sc, root) {
+    const big = win('w5 p3', Z2);
+    sc.append(win('w1 p1', Z0), win('w2 p2', Z1), big);
+    const fo = h('<div class="fo"></div>');
+    sc.append(fo);
+    const FULL = [1.6, 2.7, 96.8, 94.6];
+    const l = held(root, 'l'), k = held(root, 'k'), ret = held(root, 'ret');
+    const press = async (wait, key, then) => { key.press(true); await wait(250); then(); await wait(450); key.press(false); await wait(900); };
+    return {
+      reset() { css(fo, { ...box(Z0), opacity: 1 }); css(big, { ...box(Z2), zIndex: 1 }); [l, k, ret].forEach((x) => x.press(false)); },
+      async body(wait) {
+        await wait(800);
+        await press(wait, l, () => css(fo, box(Z1)));
+        await press(wait, k, () => css(fo, box(Z2)));
+        // Enlarged for a while, then back in its zone.
+        await press(wait, ret, () => { fo.style.opacity = 0; css(big, { ...box(FULL), zIndex: 9 }); });
+        await wait(1400);
+        css(big, box(Z2)); await wait(900); fo.style.opacity = 1; await wait(600);
       },
     };
   },
