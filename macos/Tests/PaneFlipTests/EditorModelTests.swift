@@ -221,6 +221,22 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(lines[inner] ?? 0, (zones[b]!.maxX + zones[c]!.minX) / 2, accuracy: 0.001, "in the middle of the gap, also inside a shrunk zone")
     }
 
+    func testTheScreensBeyondTheEdgesHaveTheGapAndTheMarginInTheEditorToo() {
+        let a = UUID(), b = UUID(), c = UUID(), line = UUID()
+        let area = Overflow(width: 1, root: .split(id: line, sideBySide: true, ratio: 0.5, first: .leaf(b), second: .leaf(c)))
+        let editor = EditorModel(strip: StripLayout(root: .leaf(a), trailing: [area]), gap: 20, margin: 10, onApply: { _ in }, onClose: {})
+        let screen = CGRect(x: 0, y: 0, width: 1000, height: 600), strip = CGRect(x: 0, y: 0, width: 2000, height: 600)
+        let laid = editor.laid(in: strip, screen: screen)
+        let rects = Dictionary(uniqueKeysWithValues: laid.zones.map { ($0.id, $0.rect) })
+        XCTAssertEqual(rects[b], CGRect(x: 1010, y: 10, width: 480, height: 580), "the margin round the screen beyond the edge, half the gap at its line")
+        XCTAssertEqual(rects[c], CGRect(x: 1510, y: 10, width: 480, height: 580))
+        let drawn = laid.dividers.first { $0.id == line }!
+        XCTAssertEqual(drawn.position, 1500, accuracy: 0.001)
+        XCTAssertEqual(drawn.parent.minY, 0, "the line reaches the edge of its screen")
+        XCTAssertEqual(drawn.parent.maxY, 600)
+        XCTAssertEqual(editor.lineReach(of: b, screen: screen)?.outer, CGRect(x: 1000, y: 0, width: 1000, height: 600))
+    }
+
     func testAGridPreviewFollowsTheSlidersAndIsKeptAsOneChangeOrPutBack() {
         let a = UUID()
         let editor = model(StripLayout(root: .leaf(a)))

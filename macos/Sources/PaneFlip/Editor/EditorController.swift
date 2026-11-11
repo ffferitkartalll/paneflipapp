@@ -62,13 +62,15 @@ final class EditorController: LayoutEditing {
         NSApp.activate(ignoringOtherApps: true)
         panel = p
 
-        monitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown, .scrollWheel]) { [weak model] event in
+        monitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown, .scrollWheel]) { [weak model, weak p] event in
             switch event.type {
             case .flagsChanged: model?.shift = event.modifierFlags.contains(.shift)
             case .keyDown where event.keyCode == 53:   // Esc
                 model?.close()
                 return nil
             case .scrollWheel:
+                // A scroll over a popover of the editor (the list of shapes) is the popover's own: it is a window of its own.
+                guard event.window === p else { return event }
                 // The glide after the fingers lifted means nothing; two fingers move a screen along, a wheel steps.
                 guard event.momentumPhase.isEmpty else { return nil }
                 if event.hasPreciseScrollingDeltas {

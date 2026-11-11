@@ -11,6 +11,10 @@ struct EditorView: View {
     @State private var gridRows = 1
     @State private var gridColumns = 1
     @State private var showSpacing = false
+    @State private var showInfo = false
+    /// The pointer is at the top of the screen, where the buttons are: they show only then, and while one of their popovers is open.
+    @State private var overControls = false
+    @State private var controlsWidth: CGFloat = 800
     /// The zone whose aspect-ratio list is open.
     @State private var aspectZone: UUID?
     /// Within this many points of the centre, a new or dragged divider snaps to exactly 50 %.
@@ -292,6 +296,9 @@ struct EditorView: View {
                         .popover(isPresented: $showSpacing) { spacing }
                     Button { model.reset() } label: { Label("Reset", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.glass)
+                    Button { showInfo = true } label: { Label("Info", systemImage: "info.circle") }
+                        .buttonStyle(.glass)
+                        .popover(isPresented: $showInfo) { info }
                     if model.editedArea != nil {
                         Button { model.removeEditedArea() } label: { Label("Remove screen", systemImage: "trash") }
                             .buttonStyle(.glass)
@@ -302,34 +309,37 @@ struct EditorView: View {
                 }
             }
             .controlSize(.large)
-            hint
-            if !model.strip.leading.isEmpty || !model.strip.trailing.isEmpty { overflowHint }
+            .opacity(overControls || showShapes || showGrid || showSpacing || showInfo ? 1 : 0)
+            .animation(.easeOut(duration: 0.15), value: overControls)
+            .fixedSize()   // every button at its full title, in every language
+            .padding(.top, 28).padding(.horizontal, 40)
+            .frame(height: Self.controlsHeight, alignment: .top)
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { controlsWidth = $0 }
+            .contentShape(Rectangle())
+            .onHover { overControls = $0 }
             Spacer()
         }
-        .padding(.top, 28)
         .frame(maxWidth: .infinity)
     }
 
-    private var hint: some View {
-        Text("Click to split  ·  Hold ⇧ for a horizontal split\nDrag a line to resize  ·  Double-click a handle to remove it\nDrag a zone onto its neighbour to merge them")
-            .multilineTextAlignment(.center)
-            .font(.callout).foregroundStyle(.secondary)
-            .padding(.horizontal, 14).padding(.vertical, 8)
-            .glassEffect(.regular, in: .rect(cornerRadius: 12))
-            .allowsHitTesting(false)
+    /// How the editor is used, shown on request: the lines of the hint, and the one about the screens beyond the edges when the layout has any.
+    private var info: some View {
+        VStack(spacing: 10) {
+            Text("Click to split  ·  Hold ⇧ for a horizontal split\nDrag a line to resize  ·  Double-click a handle to remove it\nDrag a zone onto its neighbour to merge them")
+            if !model.strip.leading.isEmpty || !model.strip.trailing.isEmpty {
+                Text("Scroll with two fingers or the mouse wheel to move between screens.")
+            }
+        }
+        .multilineTextAlignment(.center)
+        .font(.callout).foregroundStyle(.secondary)
+        .padding(14)
     }
 
-    private var overflowHint: some View {
-        Text("Scroll with two fingers or the mouse wheel to move between screens.")
-            .multilineTextAlignment(.center)
-            .font(.callout).foregroundStyle(.secondary)
-            .padding(.horizontal, 14).padding(.vertical, 8)
-            .glassEffect(.regular, in: .rect(cornerRadius: 12))
-            .allowsHitTesting(false)
-    }
+    /// The room of the row of buttons at the top, as wide as the row is: the pointer in it shows them, and no zone is split by a click there.
+    private static let controlsHeight: CGFloat = 90
 
     private func controlsRect(_ size: CGSize) -> CGRect {
-        CGRect(x: size.width / 2 - 260, y: 0, width: 520, height: model.strip.totalWidth > 1 ? 250 : 190)   // buttons + hints
+        CGRect(x: (size.width - controlsWidth) / 2, y: 0, width: controlsWidth, height: Self.controlsHeight)
     }
 
     // MARK: Merge
@@ -406,8 +416,7 @@ struct EditorView: View {
         }
         guard let z = zones.first(where: { $0.rect.contains(p) }) else { return nil }
         let side = !model.shift
-        // The zones of the screen's own layout are laid with the gap, the areas beyond its edges in the picture are not.
-        let gap = model.strip.root.leafIDs.contains(z.id) ? model.gap : 0
+        let gap = model.gap
         let plain = LayoutNode.lineArea(z.rect, gap: gap)
         let extent = side ? plain.width : plain.height
         let origin = side ? plain.minX : plain.minY
@@ -419,7 +428,9 @@ struct EditorView: View {
         var r = Double((pos - origin) / extent)
         if valid, let step = SplitSnap.step(near: r, extent: Double(extent), distance: Double(snapDistance)) { r = step; snapped = true }
         if valid { let lo = (minSize + gap) / Double(extent); r = min(max(r, lo), 1 - lo) }
-        return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped, gap: gap)
+        // The screen in the picture: the strip is drawn shifted by the offset.
+        let screen = CGRect(x: -CGFloat(model.offset) * size.width, y: 0, width: size.width, height: size.height)
+        return SplitTarget(zone: z, sideBySide: side, ratio: r, valid: valid, snapped: snapped, gap: gap, reach: model.lineReach(of: z.id, screen: screen))
     }
 
     /// What each side of the split under the pointer would be: its size in points, and, on a step, its share of the zone under it. The two lines are one block, centred in the side.
