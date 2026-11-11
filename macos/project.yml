@@ -138,6 +138,8 @@ targets:
       - path: Sources/PaneFlip/Island/IslandCardsLayout.swift
       - path: Sources/PaneFlip/Editor/EditorModel.swift
       - path: Sources/PaneFlip/Editor/EditorModel+Snapshot.swift
+      - path: Sources/PaneFlip/Editor/SplitTarget.swift
+      - path: Sources/PaneFlip/Editor/EditorZone.swift
       - path: Sources/PaneFlip/Platform/ScrollStaging.swift
       - path: Sources/PaneFlip/Platform/ScrollPicture.swift
       - path: Sources/PaneFlip/Platform/AppInfo.swift

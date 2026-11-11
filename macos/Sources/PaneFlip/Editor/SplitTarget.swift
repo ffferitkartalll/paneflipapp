@@ -27,8 +27,14 @@ struct SplitTarget {
         return (CGRect(x: r.minX, y: r.minY, width: r.width, height: p - half - r.minY), CGRect(x: r.minX, y: p + half, width: r.width, height: r.maxY - p - half))
     }
 
+    /// Where the lines of the zone's layout end (`inner`, the area they are laid in) and how far they are drawn (`outer`, the screen), if the zone is of the screen's own layout.
+    var reach: (inner: CGRect, outer: CGRect)?
+
+    /// The line as it will be drawn once the zone is split: across the zone with its half gaps, and on to the screen's edge where the zone lies along it.
     var line: (CGPoint, CGPoint) {
-        let r = zone.rect, p = position
+        var d = SplitDivider(id: zone.id, sideBySide: sideBySide, parent: LayoutNode.lineArea(zone.rect, gap: gap), ratio: ratio)
+        if let reach { d = d.reaching(reach.inner, to: reach.outer) }
+        let r = d.parent, p = d.position
         return sideBySide ? (CGPoint(x: p, y: r.minY), CGPoint(x: p, y: r.maxY)) : (CGPoint(x: r.minX, y: p), CGPoint(x: r.maxX, y: p))
     }
 }

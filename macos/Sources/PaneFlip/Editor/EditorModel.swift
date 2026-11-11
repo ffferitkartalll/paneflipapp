@@ -55,19 +55,53 @@ final class EditorModel {
     /// The screen and both overflows as one tree: what the editor draws and the lines it lets the user drag.
     var root: LayoutNode { strip.composite }
 
-    /// The zones and the lines to draw in `rect` (the whole strip; `screen` is the part of it that is the screen). The screen's own layout stands where the desktop puts it,
-    /// with the gap and the margin, so that a line is where it is on the desktop; the areas beyond the edges are drawn as they are.
+    /// The zones and the lines to draw in `rect` (the whole strip; `screen` is the part of it that is the screen). Every screen of the strip, the screen's own and each one beyond
+    /// its edges, stands as the desktop lays it: with the gap between its zones and the margin round it, so that a line is where it is on the desktop.
     func laid(in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) { laid(strip, in: rect, screen: screen) }
 
     private func laid(_ strip: StripLayout, in rect: CGRect, screen: CGRect) -> (zones: [(id: UUID, rect: CGRect)], dividers: [SplitDivider]) {
         let root = strip.composite
         let zones = root.zones(in: rect), dividers = root.dividers(in: rect)
         guard gap > 0 || margin > 0 else { return (zones, dividers) }
-        let area = StripGeometry(strip: strip, screen: screen).rootArea(margin: margin)
-        let ownZones = Dictionary(uniqueKeysWithValues: strip.root.zones(in: area, gap: gap).map { ($0.id, $0.rect) })
-        let inner = LayoutNode.lineArea(area, gap: gap)
-        let ownLines = Dictionary(uniqueKeysWithValues: strip.root.dividers(in: inner).map { ($0.id, $0.reaching(inner, to: screen)) })
+        var ownZones: [UUID: CGRect] = [:], ownLines: [UUID: SplitDivider] = [:]
+        for part in Self.screens(of: strip, screen: screen) {
+            let reach = lineReach(in: part.rect)
+            for zone in part.root.zones(in: Self.inset(part.rect, by: margin), gap: gap) { ownZones[zone.id] = zone.rect }
+            for line in part.root.dividers(in: reach.inner) { ownLines[line.id] = line.reaching(reach.inner, to: reach.outer) }
+        }
         return (zones.map { zone in ownZones[zone.id].map { (id: zone.id, rect: $0) } ?? zone }, dividers.map { ownLines[$0.id] ?? $0 })
+    }
+
+    /// The screens of a strip in the picture, each with its layout: the screen's own at `screen`, those beyond its edges beside it, one after the other.
+    private static func screens(of strip: StripLayout, screen: CGRect) -> [(root: LayoutNode, rect: CGRect)] {
+        var parts = [(root: strip.root, rect: screen)]
+        var x = screen.maxX
+        for area in strip.trailing {
+            let width = CGFloat(area.width) * screen.width
+            parts.append((area.root, CGRect(x: x, y: screen.minY, width: width, height: screen.height)))
+            x += width
+        }
+        x = screen.minX
+        for area in strip.leading {
+            let width = CGFloat(area.width) * screen.width
+            x -= width
+            parts.append((area.root, CGRect(x: x, y: screen.minY, width: width, height: screen.height)))
+        }
+        return parts
+    }
+
+    private static func inset(_ rect: CGRect, by margin: CGFloat) -> CGRect {
+        CGRect(x: rect.minX + margin, y: rect.minY + margin, width: max(rect.width - 2 * margin, 0), height: max(rect.height - 2 * margin, 0))
+    }
+
+    /// The area the lines of a screen of the strip are laid in (`inner`) and the screen they are drawn out to (`outer`, `rect`).
+    private func lineReach(in rect: CGRect) -> (inner: CGRect, outer: CGRect) {
+        (LayoutNode.lineArea(Self.inset(rect, by: margin), gap: gap), rect)
+    }
+
+    /// `lineReach` of the screen of the strip that `zone` is in: the same for a line there is and for one a click would make.
+    func lineReach(of zone: UUID, screen: CGRect) -> (inner: CGRect, outer: CGRect)? {
+        Self.screens(of: strip, screen: screen).first { $0.root.leafIDs.contains(zone) }.map { lineReach(in: $0.rect) }
     }
 
     func apply() {
