@@ -15,6 +15,16 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(storage.saved?.placementEnabled, false)
     }
 
+    func testTheAppIsNotUsedAsAnIslandUntilChosenAndTheChoiceIsAnnounced() {
+        let settings = AppSettings(storage: Storage())
+        XCTAssertFalse(settings.values.islandEnabled)
+        var notified = 0
+        settings.onIslandChanged = { notified += 1 }
+        settings.values.islandEnabled = true
+        settings.values.gap = 12
+        XCTAssertEqual(notified, 1, "only a change of this setting is announced")
+    }
+
     func testBrandIconsAreFetchedUnlessSwitchedOff() {
         XCTAssertTrue(AppSettings(storage: Storage()).values.fetchBrandIcons)
     }

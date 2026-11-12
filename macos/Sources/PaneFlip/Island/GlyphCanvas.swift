@@ -26,6 +26,8 @@ struct GlyphCanvas: View, Animatable {
     /// How far apart the two halves of the picture are drawn (the picture is cut in the middle, at a notch): the zones at the cut are stretched across.
     var gap: CGFloat
     let scale: CGFloat
+    /// The colour of the drawing on its ground.
+    let ink: IslandInk
     /// The zone the pointer is over, the one it left and how far the change has come: the lighter fill fades over.
     var hoveredID: UUID? = nil
     var previousHoveredID: UUID? = nil
@@ -51,7 +53,8 @@ struct GlyphCanvas: View, Animatable {
 
     private func fill(of id: UUID, accent: (red: CGFloat, green: CGFloat, blue: CGFloat)) -> Color {
         let lit = lit(id)
-        return Color(red: 1 + (accent.red - 1) * lit, green: 1 + (accent.green - 1) * lit, blue: 1 + (accent.blue - 1) * lit, opacity: 0.28 + (1 - 0.28) * lit)
+        let base = CGFloat(ink.white)
+        return Color(red: base + (accent.red - base) * lit, green: base + (accent.green - base) * lit, blue: base + (accent.blue - base) * lit, opacity: 0.28 + (1 - 0.28) * lit)
     }
 
     private func px(_ value: CGFloat) -> CGFloat { (value * scale).rounded() / scale }
@@ -103,7 +106,7 @@ struct GlyphCanvas: View, Animatable {
                 let rect = inner(cell.rect)
                 context.drawLayer { layer in
                     layer.clip(to: windowPath, options: .inverse)
-                    layer.stroke(Path(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 2), with: .color(.white.opacity(0.5)),
+                    layer.stroke(Path(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 2), with: .color(ink.color(0.5)),
                                  style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [1.5, 2.5]))
                 }
             }
@@ -127,26 +130,26 @@ struct GlyphCanvas: View, Animatable {
                     let on = max(lit(cell.id), picked(cell.id))
                     context.drawLayer { layer in
                         layer.clip(to: windowPath)
-                        layer.fill(shape, with: .color(Color(white: 1 - on).opacity((0.2 + 0.1 * on) * hover)))
+                        layer.fill(shape, with: .color(Color(white: ink.white * (1 - on)).opacity((0.2 + 0.1 * on) * hover)))
                     }
                     context.drawLayer { layer in
                         layer.clip(to: windowPath, options: .inverse)
-                        layer.fill(shape, with: .color(.white.opacity(0.18 * hover)))
+                        layer.fill(shape, with: .color(ink.color(0.18 * hover)))
                     }
                 }
                 if picked(cell.id) > 0 { context.fill(shape, with: .color(AppAccent.placement.opacity(picked(cell.id)))) }
                 if cell.id == selectedID {
-                    context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(.white.opacity(0.9)), lineWidth: 1.5)
+                    context.stroke(Path(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), cornerRadius: 2), with: .color(ink.color(0.9)), lineWidth: 1.5)
                 }
                 if zoom > 1, let text = texts[cell.id] {
                     context.drawLayer { layer in
                         layer.clip(to: Path(rect))
-                        // White on the grey zones, dark on the lit one (and between the two as the focus moves), as the date and the time of the menu bar are written.
-                        let ink = Color(white: 1 - 0.92 * max(picked(cell.id), lit(cell.id))).opacity(min(zoom - 1, 1) * labels)
-                        layer.draw(Text(verbatim: text).font(Font(NSFont.menuBarFont(ofSize: 0))).foregroundStyle(ink), at: CGPoint(x: rect.midX, y: rect.midY))
+                        // The ink on the grey zones, dark on the lit one (and between the two as the focus moves), as the date and the time of the menu bar are written.
+                        let strength = max(picked(cell.id), lit(cell.id)), label = Color(white: ink.white + (0.08 - ink.white) * strength).opacity(min(zoom - 1, 1) * labels)
+                        layer.draw(Text(verbatim: text).font(Font(NSFont.menuBarFont(ofSize: 0))).foregroundStyle(label), at: CGPoint(x: rect.midX, y: rect.midY))
                     }
                 }
             }
-            context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(.white.opacity(0.5)), lineWidth: 1)
+            context.stroke(Path(roundedRect: window.insetBy(dx: 0.5, dy: 0.5), cornerRadius: 3), with: .color(ink.color(0.5)), lineWidth: 1)
     }
 }

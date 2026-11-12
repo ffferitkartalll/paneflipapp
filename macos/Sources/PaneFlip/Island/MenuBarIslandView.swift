@@ -8,6 +8,7 @@ import SwiftUI
 struct MenuBarIslandView: View {
     static let margin: CGFloat = 4
     let model: MenuBarIslandModel
+    @Environment(\.colorScheme) private var scheme
 
     /// How much larger the picture is with the pointer on the island.
     static let hoverZoom: CGFloat = 5
@@ -35,8 +36,12 @@ struct MenuBarIslandView: View {
             left = -(gw / 2 + m); right = gw / 2 + m
             glyphLeft = -gw / 2; glyphTop = m; height = bar
         }
+        let ink = model.ink(for: scheme)
+        // Hanging from the top of the screen it is round at the bottom only; as a popover under the menu bar, all round.
+        let top = model.popover ? IslandRim.radius : 0
+        let outline = UnevenRoundedRectangle(topLeadingRadius: top, bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius, topTrailingRadius: top)
         return ZStack(alignment: .top) {
-            UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius).fill(.black)
+            outline.fill(model.ground)
                 .frame(width: right - left, height: height)
                 .overlay(alignment: .top) {
                     // Part of the shape, so they grow with it: as far from its edges as the picture is, and they appear once it has nearly grown.
@@ -49,9 +54,9 @@ struct MenuBarIslandView: View {
                                         .frame(width: MenuBarIslandModel.cornerSymbol, height: MenuBarIslandModel.cornerSymbol)
                                     Text(verbatim: action.title).font(Font(MenuBarIslandModel.noticeFont)).lineLimit(1)
                                 }
-                                .foregroundStyle(.white)
+                                .foregroundStyle(ink.color())
                                 .frame(width: model.cornerButtonWidth(action), height: MenuBarIslandModel.cornerHeight)
-                                .background(Capsule().fill(.white.opacity(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
+                                .background(Capsule().fill(ink.color(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
                                 .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                                 if action == .openApps { Spacer(minLength: model.notchWidth) }
                             }
@@ -74,8 +79,8 @@ struct MenuBarIslandView: View {
                     }
                 }
                 // A faint rim (sides and bottom), so the island shows against a black window behind it.
-                .overlay { IslandRim().stroke(.white.opacity(0.18), lineWidth: 1) }
-                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: IslandRim.radius, bottomTrailingRadius: IslandRim.radius))
+                .overlay { IslandRim(closed: model.popover).stroke(ink.color(0.18), lineWidth: 1) }
+                .clipShape(outline)
                 .shadow(color: .black.opacity(0.4), radius: 8, y: 3)
                 .offset(x: (left + right) / 2)
             if model.notchWidth > 0 {
@@ -89,7 +94,7 @@ struct MenuBarIslandView: View {
                 if let text = model.notice {
                     let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
-                        Text(text).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(.white).lineLimit(1).truncationMode(.tail)
+                        Text(text).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.color()).lineLimit(1).truncationMode(.tail)
                             .frame(width: model.noticeTextWidth, alignment: .leading)
                         Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
                             .frame(width: model.noticeButtonWidth, height: height)
@@ -103,9 +108,9 @@ struct MenuBarIslandView: View {
                                 }
                             }
                         if model.noticeCloses {
-                            Image(systemName: "xmark").font(.system(size: 13)).foregroundStyle(.white)
+                            Image(systemName: "xmark").font(.system(size: 13)).foregroundStyle(ink.color())
                                 .frame(width: height, height: height)
-                                .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(.white.opacity(model.hoveredButton == .noticeClose ? 0.32 : 0.18)))
+                                .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(ink.color(model.hoveredButton == .noticeClose ? 0.32 : 0.18)))
                                 .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                                 .overlay {
                                     // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
@@ -120,7 +125,7 @@ struct MenuBarIslandView: View {
                 if model.hasEditUndo {
                     let radius = MenuBarIslandModel.noticeRadius, height = MenuBarIslandModel.noticeButtonHeight
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
-                        Text(verbatim: MenuBarIslandModel.editUndoText).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(.white).lineLimit(1)
+                        Text(verbatim: MenuBarIslandModel.editUndoText).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.color()).lineLimit(1)
                             .frame(width: model.editUndoTextWidth, alignment: .leading)
                         Text("Undo").font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
                             .frame(width: MenuBarIslandModel.editUndoButtonWidth, height: height)
@@ -133,7 +138,7 @@ struct MenuBarIslandView: View {
                 if model.pickedID != nil {
                     Text(verbatim: model.pickingNote)
                         .font(Font(MenuBarIslandModel.pickingNoteFont))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(ink.color())
                         .multilineTextAlignment(.center)
                         .frame(width: model.cardsFit, height: model.pickingNoteHeight, alignment: .top)
                         .offset(x: 0, y: model.topHeight + gh + model.windowsGap)
@@ -142,7 +147,24 @@ struct MenuBarIslandView: View {
             }
         }
         .animation(.easeOut(duration: 0.3), value: model.glyph.size)
+        .overlay(alignment: .top) {
+            // The arrow of the popover, in the room above it, under the menu bar icon (and no nearer a corner than the shape is round).
+            if model.popover, let x = model.arrowX {
+                let arrow = MenuBarIslandModel.arrowSize, reach = IslandRim.radius + arrow.width / 2
+                ZStack {
+                    IslandArrow().fill(model.ground)
+                    IslandArrow(edgeOnly: true).stroke(ink.color(0.18), lineWidth: 1)
+                }
+                .frame(width: arrow.width, height: arrow.height)
+                .offset(x: min(max(x, left + reach), right - reach), y: -arrow.height)
+            }
+        }
+        .opacity(model.isHidden ? 0 : 1)
+        .animation(.easeOut(duration: 0.2), value: model.isHidden)
+        .padding(.top, model.arrowBand)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        // A popover grows out of the menu bar icon and shrinks back into it: it is scaled about the tip of its arrow (the panel is as wide as the display).
+        .scaleEffect(model.popoverScale, anchor: UnitPoint(x: 0.5 + (model.arrowX ?? 0) / max(model.displayWidth, 1), y: 0))
         .ignoresSafeArea()   // the panel lies under the notch: the safe area would push the island down
     }
 

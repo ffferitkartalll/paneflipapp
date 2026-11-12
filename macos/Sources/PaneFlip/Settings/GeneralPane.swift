@@ -23,6 +23,11 @@ struct GeneralPane: View {
                            detail: "Turn all features on or off without quitting the app. When off, windows are left alone and the island is not shown.") {
                     Toggle("Enable", isOn: $settings.values.placementEnabled).labelsHidden()
                 }
+                SettingRow(title: "Use as an island",
+                           detail: "Show PaneFlip as an island at the middle of the menu bar. When off, a click on the menu bar icon opens the island below it.") {
+                    Toggle("Use as an island", isOn: $settings.values.islandEnabled).labelsHidden()
+                }
+                .disabled(!settings.values.placementEnabled)
             }
 
             Section("Language") {

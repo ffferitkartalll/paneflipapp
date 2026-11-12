@@ -26,6 +26,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private let startedAt = ProcessInfo.processInfo.systemUptime
     private var monitor: Any?
     private var localMonitor: Any?
+    /// The clicks outside the island, which close it when it is open as a popover (those in other apps' windows, and those in this app's own).
+    private var clickMonitor: Any?
+    private var localClickMonitor: Any?
     /// How long the island takes to shrink back, with some room.
     private static let shrinkAfter: TimeInterval = 0.7
     /// The one motion of the island and its cards: it eases out and stops, with no spring.
@@ -75,6 +78,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private var covered = false
     /// True while something else owns the screen (the layout editor); set by `AppContainer`.
     var isSuppressed: () -> Bool = { false }
+    /// Where the menu bar icon stands (screen coordinates); set by `AppContainer`.
+    var iconFrame: () -> CGRect? = { nil }
     /// Where a dragged window would be put down among the cards of the open row: the grey card with a plus stands at `index`.
     private var placing: (zone: UUID, index: Int)?
     /// How long a dragged window waits on a zone before its row of cards opens.
@@ -103,6 +108,13 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         monitor = NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] _ in self?.hover(at: NSEvent.mouseLocation) }
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: .mouseMoved) { [weak self] event in
             self?.hover(at: NSEvent.mouseLocation)
+            return event
+        }
+        let presses: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: presses) { [weak self] event in self?.pressedOutside(event) }
+        localClickMonitor = NSEvent.addLocalMonitorForEvents(matching: presses) { [weak self] event in
+            // A click on the island itself (its shield) is its own.
+            if let self, !entries.values.contains(where: { $0.shield === event.window }) { pressedOutside(event) }
             return event
         }
         timer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { [weak self] _ in
@@ -217,15 +229,16 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         withTransaction(Transaction(animation: nil)) { model.outlineShift = 0 }   // the glyph stands where the glide ended
         model.barHeight = bar
         model.displayWidth = screen.cocoaFrame.width
-        model.notchWidth = screen.notchWidth
+        model.restsHidden = !settings.values.islandEnabled
+        model.popover = model.restsHidden
+        model.notchWidth = model.popover ? 0 : screen.notchWidth   // not at the notch when it is not used as an island
         model.scale = native?.backingScaleFactor ?? 2
         // The open island is as wide as its picture and the room beside it, and must fit the display.
         model.openZoom = model.fitZoom(toDisplayWidth: screen.cocoaFrame.width)
-        let width = screen.cocoaFrame.width
         // Tall enough for the island at its largest, with a row of cards under its picture.
-        let tall = ceil(model.tallestOpenHeight)
-        let frame = CGRect(x: screen.cocoaFrame.midX - width / 2, y: screen.cocoaFrame.maxY - tall, width: width, height: tall)
+        let frame = anchoredFrame(of: entry, tall: ceil(model.tallestOpenHeight + (model.popover ? MenuBarIslandModel.arrowSize.height : 0)))
         entry.rest = frame
+        model.arrowX = arrowOffset(of: entry, in: frame)
         if !covered && entry.panel.frame != frame { entry.panel.setFrame(frame, display: true) }
         if !covered { entry.panel.orderFrontRegardless() }
         refreshWindows(of: entry)
@@ -471,13 +484,14 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             if entry.hovered {
                 // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
                 let size = model.openSize
-                hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
+                // As a popover it stays open wherever the pointer goes: a click outside it, or on the icon, closes it.
+                hit = model.popover || (point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2)
             } else {
                 // The island itself; with a notch, its two halves and the notch between them.
                 let half = model.notchWidth / 2 + model.glyph.size.width / 2 + m
                 // Dragging a window, the pointer need not hit the island exactly: three times the height of the menu bar around it (left, right, below).
                 let reach = dragging ? 3 * model.barHeight : 0
-                hit = point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
+                hit = !model.restsHidden && point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
             }
             if entry.cooling { if hit { continue }; entry.cooling = false }
             let overRow = dragging && hit && entry.hovered && rowHit(at: point, in: entry).onRow
@@ -551,6 +565,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     private func setOpen(_ open: Bool, for entry: Entry) {
+        // The island grows out of the icon where it is now. If the arrow had to be moved, that is done first and the island grows on the next turn of the
+        // run loop: a move that is part of the growing would be animated too, and the island would grow out of the place the arrow was.
+        if open, anchor(entry) {
+            DispatchQueue.main.async { [weak self, weak entry] in if let self, let entry, !entry.hovered { setOpen(true, for: entry) } }
+            return
+        }
         entry.hovered = open
         if open { if picking === entry || dragging { entry.model.startChoosing() } else { entry.model.openedByPointer() } }
         // A notice goes on showing when the island shrinks back to it: its line is drawn with the content's opacity, which stays.
@@ -565,17 +585,93 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         placeShield(of: entry)
     }
 
+    /// The panel's frame: centred on its display, or, with the app not used as an island, centred on the menu bar icon (when it is on this display) as far as the display lets the island be.
+    private func anchoredFrame(of entry: Entry, tall: CGFloat) -> CGRect {
+        let display = entry.display
+        var middle = display.midX
+        if !settings.values.islandEnabled, let icon = iconFrame(), display.contains(CGPoint(x: icon.midX, y: icon.midY)) {
+            let half = min(entry.model.openSize.width, display.width - 2 * Self.edgeGap) / 2
+            middle = min(max(icon.midX, display.minX + Self.edgeGap + half), display.maxX - Self.edgeGap - half)
+        }
+        return CGRect(x: middle - display.width / 2, y: display.maxY - entry.model.drop - tall, width: display.width, height: tall)
+    }
+
+    /// Puts the panel where it hangs now (what is shown may be wider than the room beside the menu bar icon, and the icon may have moved) and the arrow under the icon.
+    /// The arrow is told even when the panel stays where it is (against the edge of the display, as the icon moves along the menu bar).
+    /// Whether the arrow was moved.
+    @discardableResult
+    private func anchor(_ entry: Entry) -> Bool {
+        guard !covered, entry.display != .zero else { return false }
+        let frame = anchoredFrame(of: entry, tall: entry.rest.height)
+        if frame != entry.rest { entry.rest = frame; entry.panel.setFrame(frame, display: true) }
+        let arrow = arrowOffset(of: entry, in: frame)
+        guard entry.model.arrowX != arrow else { return false }
+        withTransaction(Transaction(animation: nil)) { entry.model.arrowX = arrow }
+        return true
+    }
+
+    /// How far from the edge of the display the island stands when it reaches it, hanging under the menu bar icon.
+    private static let edgeGap: CGFloat = 10
+
+    /// Where the arrow stands, from the middle of the panel: under the icon, if it is on this display, and the island hangs under it.
+    private func arrowOffset(of entry: Entry, in frame: CGRect) -> CGFloat? {
+        guard entry.model.popover, let icon = iconFrame(), entry.display.contains(CGPoint(x: icon.midX, y: icon.midY)) else { return nil }
+        return icon.midX - frame.midX
+    }
+
+    /// A mouse button went down outside the island. On the icon it is the icon's click, which closes the island (or opens it) when the button comes up: closed here,
+    /// that click would open it again.
+    private func pressedOutside(_ event: NSEvent) {
+        if event.type == .leftMouseDown && iconFrame()?.contains(NSEvent.mouseLocation) == true { return }
+        closePopovers()
+    }
+
+    /// The island open as a popover closes (a click outside it).
+    private func closePopovers() {
+        for entry in entries.values where entry.hovered && entry.model.popover && picking !== entry { setOpen(false, for: entry) }
+    }
+
+    /// Opens the island under the menu bar icon, or closes it when it is open; it stays open until then, or until a click outside it.
+    func openUnderIcon() {
+        guard !covered, let icon = iconFrame(),
+              let entry = entries.values.first(where: { $0.display.contains(CGPoint(x: icon.midX, y: icon.midY)) }) else { return }
+        setOpen(!entry.hovered, for: entry)
+    }
+
+    /// The setting that uses the app as an island changed: every island closes and goes to where it belongs.
+    func modeDidChange() {
+        for entry in entries.values where entry.hovered { setOpen(false, for: entry) }
+        guard !covered else { return zonesDidChange() }
+        if settings.values.islandEnabled {
+            // Becoming an island: it comes down from the top edge of the screen to its place.
+            zonesDidChange()
+            entries.values.forEach(slideIn)
+        } else {
+            // Leaving it: it goes up to the top edge and out of sight, and only then is put where the popover hangs.
+            let gone = DispatchGroup()
+            for entry in entries.values { gone.enter(); slideAway(entry) { gone.leave() } }
+            gone.notify(queue: .main) { [weak self] in
+                guard let self else { return }
+                entries.values.forEach { $0.panel.alphaValue = 1 }   // the popover is out of sight by its own opacity
+                zonesDidChange()
+            }
+        }
+    }
+
     /// Where the island stands, or will stand once it has grown, at the top of its display (screen coordinates): what the shield covers.
     private func islandFrame(of entry: Entry, open: Bool) -> CGRect {
         let model = entry.model, top = entry.panel.frame
+        // Out of sight at rest: the shield is one pixel, so that it takes nothing of the menu bar.
+        if model.restsHidden && !open && model.notice == nil { return CGRect(x: top.midX, y: top.maxY - 1, width: 1, height: 1) }
         let size = open || model.notice != nil ? model.openSize : CGSize(width: model.notchWidth + model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
-        return CGRect(x: top.midX - size.width / 2, y: top.maxY - size.height, width: size.width, height: size.height)
+        return CGRect(x: top.midX - size.width / 2, y: model.shapeTop(of: top) - size.height, width: size.width, height: size.height)
     }
 
     /// The shield grows with the island at once, so that the island never has the mouse go through it, and shrinks once the island has shrunk.
     private func placeShield(of entry: Entry) {
         entry.shrinking?.cancel()
         entry.shrinking = nil
+        anchor(entry)
         let target = islandFrame(of: entry, open: entry.hovered), current = entry.shield.frame
         let covering = current.isEmpty ? target : current.union(target)
         if covering != current { entry.shield.setFrame(covering, display: false) }
@@ -597,7 +693,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         lastCard = nil
         ghost.end()
         for entry in entries.values where entry.hovered {
-            if let action = cornerAction(at: point, in: entry) { onCornerAction?(action); return }
+            if let action = cornerAction(at: point, in: entry) {
+                onCornerAction?(action)
+                if entry.model.popover { setOpen(false, for: entry) }   // a popover is done once a button was used
+                return
+            }
             if let window = selectButtonHit(at: point, in: entry) { toggleStart(window, in: entry); return }
             if let (action, window) = cardAction(at: point, in: entry) { perform(action, on: window, in: entry); return }
         }
@@ -979,7 +1079,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
     private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
         let model = entry.model, bar = model.topHeight, frame = entry.panel.frame
-        let x = (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom, y = (frame.maxY - point.y - bar) / model.openZoom
+        let x = (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom, y = (model.shapeTop(of: frame) - point.y - bar) / model.openZoom
         guard entry.hovered else { return nil }
         return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
     }

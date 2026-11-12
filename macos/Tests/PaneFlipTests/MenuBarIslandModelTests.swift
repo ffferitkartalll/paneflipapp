@@ -161,6 +161,56 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.windowsHeight, 80 + 12 + 16)
     }
 
+    func testAnIslandThatIsNotUsedAsOneIsOutOfSightUnlessOpenOrHoldingANotice() {
+        let model = model()
+        XCTAssertFalse(model.isHidden, "used as an island: always in sight")
+        model.restsHidden = true
+        XCTAssertTrue(model.isHidden)
+        model.expanded = true
+        XCTAssertFalse(model.isHidden, "open")
+        model.expanded = false
+        model.notice = AttributedString("Done")
+        XCTAssertFalse(model.isHidden, "a notice")
+    }
+
+    func testAnIslandThatIsNotUsedAsOneIsAPopoverUnderTheMenuBarWithTheInkOfTheSystemsAppearance() {
+        let model = model()
+        XCTAssertEqual(model.drop, 0, "at the notch it hangs from the top of the screen")
+        XCTAssertFalse(model.ink(for: .light).light, "and is black whatever the system's appearance")
+        model.popover = true
+        XCTAssertEqual(model.drop, 24, "right under the menu bar: the room for the arrow is the top of the panel")
+        XCTAssertTrue(model.ink(for: .light).light, "dark ink on the light ground")
+        XCTAssertFalse(model.ink(for: .dark).light)
+        XCTAssertEqual(model.ink(for: .light).white, 0)
+        XCTAssertEqual(model.ink(for: .dark).white, 1)
+    }
+
+    func testThePopoverHasRoomForItsArrowOnlyOnTheDisplayOfTheIcon() {
+        let model = model()
+        let panel = CGRect(x: 0, y: 0, width: 1000, height: 300)
+        XCTAssertEqual(model.arrowBand, 0)
+        model.popover = true
+        XCTAssertEqual(model.arrowBand, 0, "the icon is not on this display")
+        XCTAssertEqual(model.shapeTop(of: panel), 300)
+        model.arrowX = 120
+        XCTAssertEqual(model.arrowBand, MenuBarIslandModel.arrowSize.height)
+        XCTAssertEqual(model.shapeTop(of: panel), 300 - MenuBarIslandModel.arrowSize.height, "the shape begins under the arrow")
+        model.popover = false
+        XCTAssertEqual(model.arrowBand, 0, "hanging from the top of the screen it has none")
+    }
+
+    func testAPopoverIsASpeckWhenClosedAndFullSizeWhenOpenOrHoldingANotice() {
+        let model = model()
+        XCTAssertEqual(model.popoverScale, 1, "the island at the notch is not scaled")
+        model.popover = true
+        XCTAssertLessThan(model.popoverScale, 0.1)
+        model.expanded = true
+        XCTAssertEqual(model.popoverScale, 1)
+        model.expanded = false
+        model.notice = AttributedString("Done")
+        XCTAssertEqual(model.popoverScale, 1)
+    }
+
     func testClosingTheRowTakesBackTheHeight() {
         let model = model()
         let closed = model.openSize

@@ -21,6 +21,14 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
         XCTAssertNil(defaults.object(forKey: "edgeScrollEnabled"))
     }
 
+    func testUsingTheAppAsAnIslandIsOffUntilSavedAndThenKept() {
+        XCTAssertFalse(storage.load().islandEnabled)
+        var values = SettingsValues()
+        values.islandEnabled = true
+        storage.save(values)
+        XCTAssertTrue(storage.load().islandEnabled)
+    }
+
     func testTheDeskArrangementIsKept() {
         var values = SettingsValues()
         values.deskArrangement = DeskArrangement(origins: ["a": CGPoint(x: 10, y: 20)])

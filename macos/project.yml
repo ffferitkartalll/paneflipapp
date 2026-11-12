@@ -125,6 +125,8 @@ targets:
       - path: Sources/PaneFlip/Island/MenuBarIslandView.swift
       - path: Sources/PaneFlip/Island/IslandGlyph.swift
       - path: Sources/PaneFlip/Island/GlyphCanvas.swift
+      - path: Sources/PaneFlip/Island/IslandInk.swift
+      - path: Sources/PaneFlip/Island/IslandArrow.swift
       - path: Sources/PaneFlip/Island/ClockwiseRing.swift
       - path: Sources/PaneFlip/Island/IslandRim.swift
       - path: Sources/PaneFlip/Island/IslandCarryTarget.swift
