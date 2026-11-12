@@ -16,6 +16,11 @@ final class NotchVisibilityTests: XCTestCase {
         XCTAssertEqual(NotchVisibility.zones(among: [a, b, c], focused: b, grown: a), [a, b])
     }
 
+    func testTheZoneAWindowIsDraggedOutOfHasNoNotchWhileItIsDragged() {
+        XCTAssertEqual(NotchVisibility.zones(among: [a, b, c], focused: b, grown: a, dragged: b), [a])
+        XCTAssertTrue(NotchVisibility.zones(among: [a, b, c], focused: b, grown: nil, dragged: b).isEmpty)
+    }
+
     func testAZoneOutOfViewHasNone() {
         XCTAssertTrue(NotchVisibility.zones(among: [a, c], focused: b, grown: nil).isEmpty)
     }

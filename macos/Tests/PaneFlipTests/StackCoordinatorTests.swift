@@ -276,6 +276,31 @@ final class StackCoordinatorTests: XCTestCase {
         XCTAssertEqual(told, [.added, .added, .added, .removed], "an undo is not a change to be told or undone again")
     }
 
+    func testUndoingATakeOutPutsTheWindowBackWhereItWasAmongTheSlotsOfTheZoneWhetherTheirAppsAreOpenOrNot() {
+        let apps = FakeApps()
+        apps.apps = (1...4).map { AppInfo(pid: pid_t($0), bundleID: "app.\($0)", name: "App \($0)") }
+        let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        let window = { (id: CGWindowID) in WindowRef.fake(id, pid: pid_t(id)) }
+        coordinator.snap(window(1), into: zone)
+        coordinator.snap(window(2), into: zone)
+        memory.remember(zoneID: zone, bundleID: "app.closed", title: "")   // an app of the zone that is not open, between 2 and 3
+        coordinator.snap(window(3), into: zone)
+        coordinator.snap(window(4), into: zone)
+        let area = CGRect(x: 0, y: 0, width: 1000, height: 1000)
+        let cards = { self.memory.slots(inZone: zone).map(\.windowID) }
+        let order: [CGWindowID?] = [1, 2, nil, 3, 4]
+        XCTAssertEqual(cards(), order)
+
+        for id in CGWindowID(1)...4 {
+            coordinator.remove(window(id), centredIn: area)
+            XCTAssertTrue(coordinator.undoLast())
+            XCTAssertEqual(cards(), order, "window \(id) is back between the slots it stood between")
+            XCTAssertEqual(coordinator.stack(containing: id)?.tabs.map(\.id), [1, 2, 3, 4], "and among the open windows")
+        }
+    }
+
     func testAnEnlargedWindowKeepsTheMarginOfTheLayoutRoundTheScreensEdges() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 10, y: 10, width: 100, height: 80)])

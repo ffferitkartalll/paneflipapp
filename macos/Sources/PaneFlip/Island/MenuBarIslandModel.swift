@@ -68,7 +68,7 @@ final class MenuBarIslandModel {
     var notchWidth: CGFloat = 0
     /// The island is not used as one: at rest it is out of sight (it shows when it is open or holds a notice).
     var restsHidden = false
-    var isHidden: Bool { restsHidden && !expanded && notice == nil }
+    var isHidden: Bool { restsHidden && !expanded && notice == nil && !picturing }
     /// Drawn as a popover under the menu bar, on the system's ground, not as the island at the notch (set a moment after `restsHidden`, once the island has faded out).
     var popover = false
     /// The ground of the open island: black, as the notch is, or the system's own.
@@ -81,8 +81,19 @@ final class MenuBarIslandModel {
     var arrowX: CGFloat?
     /// The room above the island for the arrow.
     var arrowBand: CGFloat { popover && arrowX != nil ? Self.arrowSize.height : 0 }
+    /// The layout scrolls while the app is not used as an island: the popover shows the small picture of the zones, as the island has it at rest.
+    var picturing = false
+    var pictureOnly: Bool { popover && !expanded && notice == nil && picturing }
+    /// A popover that holds a notice and is not open: the notice alone, with no picture of the zones above it.
+    var noticeOnly: Bool { popover && !expanded && notice != nil }
+    /// Whether the island is laid out open: with the pointer on it; and, as a popover, at rest too (it is scaled in and out, not grown), unless it holds a notice only.
+    var isLaidOpen: Bool { expanded || (popover && notice == nil && !picturing) }
+    /// How large the picture of the zones is: as large as the open island has it when it is laid out open, else as at rest.
+    var restingZoom: CGFloat { isLaidOpen ? openZoom : 1 }
     /// How large the popover is: it grows from the icon and shrinks back into it, so closed it is a speck there.
-    var popoverScale: CGFloat { popover && !expanded && notice == nil ? 0.05 : 1 }
+    var popoverScale: CGFloat { popover && scaledDown ? 0.05 : 1 }
+    /// The popover is a speck at the icon (set by the island, as a movement: it grows when opened or when a notice comes, and shrinks back when closed).
+    var scaledDown = true
     /// The top of the island's shape in a panel of this frame (screen coordinates).
     func shapeTop(of panel: CGRect) -> CGFloat { panel.maxY - arrowBand }
     /// The colour of the drawing on that ground.

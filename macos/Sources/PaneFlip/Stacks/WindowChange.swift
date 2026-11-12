@@ -13,4 +13,7 @@ struct WindowChange {
     /// Where the window was before: its zone, or, when it had none, the frame it stood at.
     let zoneBefore: UUID?
     let frameBefore: CGRect?
+    /// The slots that stood right before and right after the window's in its zone (open or not), so that undoing the change puts it back between them, not at the end.
+    var slotBefore: UUID? = nil
+    var slotAfter: UUID? = nil
 }

@@ -21,6 +21,8 @@ final class SnapDragController {
     /// Runs the question "which window is under the pointer" off the main thread: the app under the pointer may be slow to answer, and every press anywhere asks it.
     private let background: (@escaping () -> Void) -> Void
     private var presses = 0
+    /// A window that stands in a zone is being dragged (the zone), or the drag is over (nil): the zone's notch is out of the way meanwhile.
+    var onZoneDrag: ((UUID?) -> Void)?
 
     init(windows: WindowSystem, screens: ScreenProviding, coordinator: StackCoordinator,
          settings: AppSettings, keys: KeyStateProviding, overlay: SnapZoneOverlay, island: ZoneDropTarget,
@@ -78,6 +80,7 @@ final class SnapDragController {
                   hypot(f.minX - c.start.minX, f.minY - c.start.minY) > 4,
                   abs(f.width - c.start.width) < 2, abs(f.height - c.start.height) < 2 else { return }
             dragging = true
+            onZoneDrag?(coordinator.stack(containing: c.ref.id)?.id)
             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in self?.updateOverlay() }
         }
         updateOverlay()
@@ -118,6 +121,9 @@ final class SnapDragController {
         candidate = nil
         dragging = false
         overlay.hide()
-        if wasDragging { island.dragEnded() }   // a plain click on the island is no drag: it stays open
+        if wasDragging {
+            island.dragEnded()   // a plain click on the island is no drag: it stays open
+            onZoneDrag?(nil)
+        }
     }
 }

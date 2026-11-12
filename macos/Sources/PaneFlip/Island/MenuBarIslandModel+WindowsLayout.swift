@@ -166,16 +166,17 @@ extension MenuBarIslandModel {
 
     /// The open island: as wide as the picture and the room round it, as tall as the picture, the windows of a chosen zone under it, and the room round it.
     var openSize: CGSize {
+        if pictureOnly { return CGSize(width: glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin, height: barHeight) }
         guard notice != nil else { return plainOpenSize }
         // A notice: with the pointer away the picture stays as it is at rest and the island holds one line under it, no wider than the closed island unless the line needs
         // more; with the pointer on the island it is the open island with the line at its foot.
         let line = max(noticeRowWidth, noticeEditUndoWidth) + 2 * windowsGap, height = noticeTop + noticeBlockHeight + windowsGap
-        guard expanded else { return CGSize(width: max(line, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin), height: height) }
+        guard expanded else { return CGSize(width: noticeOnly ? line : max(line, glyph.size.width + notchWidth + 2 * MenuBarIslandView.margin), height: height) }
         return CGSize(width: max(plainOpenSize.width, line), height: height + (windowsHeight > 0 ? windowsHeight + windowsGap : 0))
     }
 
     /// Where the line of the notice begins, from the top of the island: under the bar, or, with the island open, under the picture of the zones (above the row of cards).
-    var noticeTop: CGFloat { expanded ? topHeight + glyph.size.height * openZoom + windowsGap : restBottom + windowsGap }
+    var noticeTop: CGFloat { expanded ? topHeight + glyph.size.height * openZoom + windowsGap : (noticeOnly ? windowsGap : restBottom + windowsGap) }
 
     /// Where the row of cards begins: under the picture, and under the line of a notice if there is one.
     var windowsTop: CGFloat { noticeTop + (notice != nil ? noticeBlockHeight + windowsGap : 0) }

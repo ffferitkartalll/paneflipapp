@@ -199,16 +199,54 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(model.arrowBand, 0, "hanging from the top of the screen it has none")
     }
 
-    func testAPopoverIsASpeckWhenClosedAndFullSizeWhenOpenOrHoldingANotice() {
+    func testAPopoverIsASpeckWhileItIsScaledDownAndFullSizeOtherwise() {
         let model = model()
+        model.scaledDown = true
         XCTAssertEqual(model.popoverScale, 1, "the island at the notch is not scaled")
         model.popover = true
         XCTAssertLessThan(model.popoverScale, 0.1)
-        model.expanded = true
+        model.scaledDown = false
         XCTAssertEqual(model.popoverScale, 1)
-        model.expanded = false
+    }
+
+    func testThePictureIsAsLargeAsWhenOpenForAPopoverAtRestButNotWhileItHoldsOnlyANotice() {
+        let model = model()
+        XCTAssertEqual(model.restingZoom, 1, "the island at the notch is small at rest")
+        model.popover = true
+        XCTAssertEqual(model.restingZoom, 5, "a popover is laid out open, and scaled in and out")
         model.notice = AttributedString("Done")
-        XCTAssertEqual(model.popoverScale, 1)
+        XCTAssertEqual(model.restingZoom, 1, "a notice only: the picture is as at rest, or the line would lie over it")
+        model.expanded = true
+        XCTAssertEqual(model.restingZoom, 5)
+    }
+
+    func testAPopoverThatHoldsANoticeIsTheLineAloneWithNoPictureAboveIt() {
+        let model = model()
+        model.notice = AttributedString("Done")
+        let island = model.openSize, islandTop = model.noticeTop
+        XCTAssertFalse(model.noticeOnly, "the island at the notch keeps its picture")
+        model.popover = true
+        XCTAssertTrue(model.noticeOnly)
+        XCTAssertEqual(model.noticeTop, model.windowsGap, "the line stands right under the room at the top")
+        XCTAssertLessThan(model.noticeTop, islandTop)
+        XCTAssertLessThan(model.openSize.height, island.height, "no room for the picture")
+        XCTAssertEqual(model.openSize.height, model.noticeTop + MenuBarIslandModel.noticeButtonHeight + model.windowsGap)
+        model.expanded = true
+        XCTAssertFalse(model.noticeOnly, "open: the picture and the line under it")
+    }
+
+    func testWhileTheLayoutScrollsAPopoverShowsTheSmallPictureAlone() {
+        let model = model()
+        model.popover = true
+        model.restsHidden = true
+        XCTAssertTrue(model.isHidden)
+        model.picturing = true
+        XCTAssertFalse(model.isHidden, "in sight while the layout scrolls")
+        XCTAssertFalse(model.isLaidOpen, "as the island is at rest, not open")
+        XCTAssertEqual(model.restingZoom, 1)
+        XCTAssertEqual(model.openSize, CGSize(width: 32 + 2 * MenuBarIslandView.margin, height: 24), "as large as the closed island")
+        model.expanded = true
+        XCTAssertFalse(model.pictureOnly, "open: the whole island")
     }
 
     func testClosingTheRowTakesBackTheHeight() {

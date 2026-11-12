@@ -72,6 +72,23 @@ public final class StackMemory {
         records = copy
     }
 
+    /// The slots of the same zone that stand right before and right after slot `i`, whether their apps are open or not (the cards of the zone are in this order).
+    public func neighbours(ofSlot i: Int) -> (before: UUID?, after: UUID?) {
+        guard records.indices.contains(i) else { return (nil, nil) }
+        let zone = records[i].zoneID
+        let same = { (record: StackRecord) in record.zoneID == zone && !record.bundleID.isEmpty }
+        return (records[..<i].last(where: same)?.id, records[(i + 1)...].first(where: same)?.id)
+    }
+
+    /// Puts slot `i` back between its former neighbours: just before the one that followed it, else just after the one that preceded it; where it is when both are gone.
+    public func moveSlot(_ i: Int, between before: UUID?, and after: UUID?) {
+        if let after, let j = records.firstIndex(where: { $0.id == after }) {
+            moveSlot(i, toPlaceOf: Self.place(of: i, beside: j, after: false))
+        } else if let before, let j = records.firstIndex(where: { $0.id == before }) {
+            moveSlot(i, toPlaceOf: Self.place(of: i, beside: j, after: true))
+        }
+    }
+
     /// Where slot `i` has to be moved to (`moveSlot(_:toPlaceOf:)`) to end up just before slot `j`, or just after it.
     public static func place(of i: Int, beside j: Int, after: Bool) -> Int {
         after ? (i < j ? j : j + 1) : (i < j ? j - 1 : j)

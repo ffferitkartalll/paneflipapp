@@ -184,7 +184,12 @@ final class StackCoordinator {
         }
         let home = memory.home(ofWindow: ref.id)
         let before = stack(containing: ref.id)?.id
-        if before != zoneID { record(.init(kind: .added, window: ref, title: title(of: ref), zone: zoneID, zoneBefore: before, frameBefore: before == nil ? windows.frame(of: ref) : nil)) }
+        // A window moved from one zone to another goes back between the slots it stood between.
+        let near = before == nil ? nil : memory.index(ofWindow: ref.id).map { memory.neighbours(ofSlot: $0) }
+        if before != zoneID {
+            record(.init(kind: .added, window: ref, title: title(of: ref), zone: zoneID, zoneBefore: before, frameBefore: before == nil ? windows.frame(of: ref) : nil,
+                         slotBefore: near?.before, slotAfter: near?.after))
+        }
         unsnap(window: ref.id)
         pulledOut.remove(ref.id)
         displaced[ref.id] = nil
@@ -751,8 +756,10 @@ final class StackCoordinator {
     }
 
     private func recordRemoval(of ref: WindowRef) {
-        guard let zone = stack(containing: ref.id)?.id else { return }
-        record(.init(kind: .removed, window: ref, title: shownName(of: ref.id) ?? title(of: ref), zone: zone, zoneBefore: zone, frameBefore: nil))
+        guard let stack = stack(containing: ref.id) else { return }
+        let near = memory.index(ofWindow: ref.id).map { memory.neighbours(ofSlot: $0) }
+        record(.init(kind: .removed, window: ref, title: shownName(of: ref.id) ?? title(of: ref), zone: stack.id, zoneBefore: stack.id, frameBefore: nil,
+                     slotBefore: near?.before, slotAfter: near?.after))
     }
 
     /// Undoes the last change that can still be undone (a window that is gone, or a zone that is, is skipped). False when there is none.
@@ -767,6 +774,7 @@ final class StackCoordinator {
                 endEnlargement()
             } else if let zone = change.zoneBefore, stacks[zone] != nil {
                 snap(change.window, into: zone)
+                putBack(change, inZone: zone)
             } else if change.kind == .added, change.zoneBefore == nil {
                 unsnap(window: change.window.id)
                 if let frame = change.frameBefore {
@@ -778,6 +786,21 @@ final class StackCoordinator {
             return true
         }
         return false
+    }
+
+    /// A window put back in a zone by an undo takes the place it had among the zone's slots (the cards, open or not), not the end of them.
+    private func putBack(_ change: WindowChange, inZone zone: UUID) {
+        guard change.slotBefore != nil || change.slotAfter != nil, let slot = memory.index(ofWindow: change.window.id) else { return }
+        memory.moveSlot(slot, between: change.slotBefore, and: change.slotAfter)
+        sortTabs(of: zone)
+    }
+
+    /// The windows of the zone stand in the order of their slots.
+    private func sortTabs(of zone: UUID) {
+        guard let stack = stacks[zone] else { return }
+        let place = { (tab: ZoneStack.Tab) in self.memory.index(ofWindow: tab.id) ?? Int.max }
+        stack.tabs = stack.tabs.enumerated().sorted { (place($0.element), $0.offset) < (place($1.element), $1.offset) }.map(\.element)
+        stack.refreshNames()
     }
 
     /// Takes a window out of its zone for good (the window itself stays open).
@@ -796,10 +819,7 @@ final class StackCoordinator {
     /// A slot of a zone was put in the place of another one (a card of the island was dragged): the windows of the zone stand in the new order.
     func moveSlot(_ i: Int, toPlaceOf j: Int, inZone zone: UUID) {
         memory.moveSlot(i, toPlaceOf: j)
-        guard let stack = stacks[zone] else { return }
-        let place = { (tab: ZoneStack.Tab) in self.memory.index(ofWindow: tab.id) ?? Int.max }
-        stack.tabs = stack.tabs.enumerated().sorted { (place($0.element), $0.offset) < (place($1.element), $1.offset) }.map(\.element)
-        stack.refreshNames()
+        sortTabs(of: zone)
     }
 
     /// The window went away or must wait: leave the zone but keep the memory slot so it can come back.
