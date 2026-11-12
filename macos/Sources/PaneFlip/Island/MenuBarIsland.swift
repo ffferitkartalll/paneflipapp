@@ -235,6 +235,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         model.scale = native?.backingScaleFactor ?? 2
         // The open island is as wide as its picture and the room beside it, and must fit the display.
         model.openZoom = model.fitZoom(toDisplayWidth: screen.cocoaFrame.width)
+        withTransaction(Transaction(animation: nil)) { model.zoom = model.popover || model.expanded ? model.openZoom : 1 }   // a popover is drawn open at all times
         // Tall enough for the island at its largest, with a row of cards under its picture.
         let frame = anchoredFrame(of: entry, tall: ceil(model.tallestOpenHeight + (model.popover ? MenuBarIslandModel.arrowSize.height : 0)))
         entry.rest = frame
@@ -579,7 +580,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         withAnimation(Self.motion) {
             entry.model.expanded = open
             if open { entry.model.contentOpacity = 1 }
-            entry.model.zoom = open ? entry.model.openZoom : 1
+            entry.model.zoom = open || entry.model.popover ? entry.model.openZoom : 1
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
         }
         placeShield(of: entry)

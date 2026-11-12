@@ -16,7 +16,8 @@ struct MenuBarIslandView: View {
     /// One island that is always fixed to the top of the screen. With the pointer on it, the same black shape reaches down below the menu bar and the
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
-        let m = Self.margin, open = model.expanded, lined = model.notice != nil && !open, bar = model.barHeight, size = model.openSize
+        // A popover is always laid out open (it grows out of the icon by being scaled, see below), unless it holds a notice only.
+        let m = Self.margin, open = model.expanded || (model.popover && model.notice == nil), lined = model.notice != nil && !open, bar = model.barHeight, size = model.openSize
         let split = model.notchWidth > 0 && !open   // at a notch the closed island lies in two halves, one each side of it
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
@@ -156,7 +157,7 @@ struct MenuBarIslandView: View {
                     IslandArrow(edgeOnly: true).stroke(ink.color(0.18), lineWidth: 1)
                 }
                 .frame(width: arrow.width, height: arrow.height)
-                .offset(x: min(max(x, left + reach), right - reach), y: -arrow.height)
+                .offset(x: min(max(x, -size.width / 2 + reach), size.width / 2 - reach), y: -arrow.height)
             }
         }
         .opacity(model.isHidden ? 0 : 1)
