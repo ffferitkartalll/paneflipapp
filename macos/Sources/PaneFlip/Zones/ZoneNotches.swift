@@ -21,6 +21,8 @@ final class ZoneNotches: ZonePresenting {
     /// The zone whose notch is grown to show a switch of its windows.
     private var grown: UUID?
     private var shrinkBack: DispatchWorkItem?
+    /// The zone with the focus when the notches were last laid out: the only zone that has one.
+    private var litZone: UUID?
     /// Where the fingers have led the lit card, not shown yet (`scrubbed`).
     private var dragging: CGFloat?
     /// A card of the grown notch that the mouse is down on: it is a click if it is let go where it was, else it is carried to another place in the row.
@@ -99,10 +101,13 @@ final class ZoneNotches: ZonePresenting {
     }
 
     func zonesDidChange() {
+        litZone = coordinator.focusedZoneID
         guard settings.values.placementEnabled, !coordinator.isScrolling else { return removeAll() }   // the scroll ends with a change of its own
         let current = screensNow()
         var shown = Set<UUID>()
-        for stack in coordinator.visibleStacks {
+        // Only the zone with the focus has a notch, on whichever display (and the one that is grown, until it is back).
+        let wanted = NotchVisibility.zones(among: coordinator.visibleStacks.map(\.id), focused: litZone, grown: grown)
+        for stack in coordinator.visibleStacks where wanted.contains(stack.id) {
             let zone = screens.flip(stack.rect)
             // A full-screen app has the display: no notches there.
             guard current.contains(where: { $0.desktopNumber != nil && $0.cocoaFrame.contains(CGPoint(x: zone.midX, y: zone.midY)) }) else { continue }
@@ -125,6 +130,7 @@ final class ZoneNotches: ZonePresenting {
     /// Not while windows move (a switch, a scroll): putting windows in order meanwhile makes the window server drop frames of what moves; once they are at rest.
     func restack() {
         guard !coordinator.isMoving else { return }
+        if coordinator.focusedZoneID != litZone { return zonesDidChange() }   // the focus went to another zone: the notch goes with it
         for (id, panel) in panels where id != grown {
             guard let front = coordinator.stacks[id]?.activeID else { panel.orderOut(nil); continue }
             if models[id]?.windowCount != coordinator.stacks[id]?.tabs.count { return zonesDidChange() }   // a window came or went: the notch is as wide as they ask

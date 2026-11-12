@@ -89,7 +89,7 @@ final class AppContainer {
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         coordinator.deskRect = { desk.rect($0) }
         coordinator.displayOf = { desk.display(of: $0) }
-        coordinator.onFocusMoved = { [weak island] in island?.focusDidMove() }
+        coordinator.onFocusMoved = { [weak island, weak notches] in island?.focusDidMove(); notches?.zonesDidChange() }
         let motionEnded = coordinator.onMotionEnded
         coordinator.onMotionEnded = { [weak notches, weak coordinator] in
             motionEnded?()
