@@ -137,6 +137,7 @@ final class AppContainer {
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: overlay, island: island,
                                       background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })
+        snap.onZoneDrag = { [weak notches] zone in notches?.windowDragged(from: zone) }
         let resizer = DividerResizer(layouts: layouts, repository: repository, planner: planner, screens: screens, settings: settings, viewport: viewport, keys: keys, capsLock: capsLockState, screensNow: { [unowned engine] in engine.lastScreens },
                                      isBlocked: { [editor] in editor.isShown })
         engine.add(presenter: resizer)

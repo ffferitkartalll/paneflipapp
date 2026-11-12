@@ -38,6 +38,8 @@ extension MenuBarIsland {
         var dragging: CGFloat?
         /// Ends the notice (`showNotice`).
         var noticeEnd: DispatchWorkItem?
+        /// Ends the picture shown while the layout scrolls (`showPicture`).
+        var pictureEnd: DispatchWorkItem?
 
         init(panel: NSPanel, shield: NSPanel) {
             self.panel = panel

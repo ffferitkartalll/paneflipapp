@@ -57,6 +57,28 @@ final class StackMemoryTests: XCTestCase {
         }
     }
 
+    func testASlotIsPutBackBetweenItsFormerNeighboursOpenOrNot() {
+        let zone = UUID(), other = UUID()
+        let memory = StackMemory(store: MemoryStore())
+        for (n, bundle) in ["a", "b", "c", "d"].enumerated() {
+            let slot = memory.remember(zoneID: zone, bundleID: bundle, title: "")
+            if bundle != "c" { memory.bind(slot: slot, toWindow: CGWindowID(n + 1), title: "") }   // c is not open
+        }
+        memory.remember(zoneID: other, bundleID: "x", title: "")   // another zone's slot does not count
+        let names = { memory.records.filter { $0.zoneID == zone }.map(\.bundleID) }
+
+        for gone in ["a", "b", "c", "d"] {
+            let i = memory.records.firstIndex { $0.bundleID == gone }!
+            let near = memory.neighbours(ofSlot: i)
+            let record = memory.records[i]
+            memory.removeApp(gone, inZone: zone, among: [zone])
+            let back = memory.remember(zoneID: zone, bundleID: gone, title: "")   // at the end, or after its app's last slot
+            memory.moveSlot(back, between: near.before, and: near.after)
+            XCTAssertEqual(names(), ["a", "b", "c", "d"], "\(gone) is back in its place")
+            XCTAssertNotEqual(memory.records[memory.records.firstIndex { $0.bundleID == gone }!].id, record.id)
+        }
+    }
+
     func testUnbindKeepsTheSlotForgetRemovesIt() {
         let memory = StackMemory(store: MemoryStore())
         let zone = UUID()

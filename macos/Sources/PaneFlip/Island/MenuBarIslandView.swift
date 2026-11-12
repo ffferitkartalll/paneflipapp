@@ -16,8 +16,7 @@ struct MenuBarIslandView: View {
     /// One island that is always fixed to the top of the screen. With the pointer on it, the same black shape reaches down below the menu bar and the
     /// picture grows inside it. Every part is placed by hand, from the centre of the screen, so that all of them move with the same spring.
     var body: some View {
-        // A popover is always laid out open (it grows out of the icon by being scaled, see below), unless it holds a notice only.
-        let m = Self.margin, open = model.expanded || (model.popover && model.notice == nil), lined = model.notice != nil && !open, bar = model.barHeight, size = model.openSize
+        let m = Self.margin, open = model.isLaidOpen, lined = model.notice != nil && !open, bar = model.barHeight, size = model.openSize
         let split = model.notchWidth > 0 && !open   // at a notch the closed island lies in two halves, one each side of it
         let gw = model.glyph.size.width * (open ? model.openZoom : 1), gh = model.glyph.size.height * (open ? model.openZoom : 1)
         // The shape: its left and right edge and its height. The picture: where it begins, and how far from the top.
@@ -84,7 +83,9 @@ struct MenuBarIslandView: View {
                 .clipShape(outline)
                 .shadow(color: .black.opacity(0.4), radius: 8, y: 3)
                 .offset(x: (left + right) / 2)
-            if model.notchWidth > 0 {
+            if model.noticeOnly {
+                // A popover that holds a notice shows the line alone.
+            } else if model.notchWidth > 0 {
                 // At a notch the picture is cut in the middle, the halves apart by the notch's width while the island is closed (the left half ends at the
                 // notch's left edge, the right half begins at its right edge, and the notch hides what is between); together once it is open.
                 IslandGlyph(model: model, gap: open ? 0 : model.notchWidth).offset(x: 0, y: glyphTop)
@@ -160,8 +161,8 @@ struct MenuBarIslandView: View {
                 .offset(x: min(max(x, -size.width / 2 + reach), size.width / 2 - reach), y: -arrow.height)
             }
         }
+        // It fades with whatever opens or closes it (the animation of that change); an animation of its own here would take the layout changes of the same update along.
         .opacity(model.isHidden ? 0 : 1)
-        .animation(.easeOut(duration: 0.2), value: model.isHidden)
         .padding(.top, model.arrowBand)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         // A popover grows out of the menu bar icon and shrinks back into it: it is scaled about the tip of its arrow (the panel is as wide as the display).

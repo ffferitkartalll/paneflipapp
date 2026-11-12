@@ -23,6 +23,8 @@ final class ZoneNotches: ZonePresenting {
     private var shrinkBack: DispatchWorkItem?
     /// The zone with the focus when the notches were last laid out: the only zone that has one.
     private var litZone: UUID?
+    /// The zone a window of which is being dragged: it has no notch until the drag is over.
+    private var draggedZone: UUID?
     /// Where the fingers have led the lit card, not shown yet (`scrubbed`).
     private var dragging: CGFloat?
     /// A card of the grown notch that the mouse is down on: it is a click if it is let go where it was, else it is carried to another place in the row.
@@ -100,13 +102,20 @@ final class ZoneNotches: ZonePresenting {
         ].compactMap { $0 }
     }
 
+    /// A window is being dragged out of `zone`, or the drag is over (nil).
+    func windowDragged(from zone: UUID?) {
+        guard draggedZone != zone else { return }
+        draggedZone = zone
+        zonesDidChange()
+    }
+
     func zonesDidChange() {
         litZone = coordinator.focusedZoneID
         guard settings.values.placementEnabled, !coordinator.isScrolling else { return removeAll() }   // the scroll ends with a change of its own
         let current = screensNow()
         var shown = Set<UUID>()
         // Only the zone with the focus has a notch, on whichever display (and the one that is grown, until it is back).
-        let wanted = NotchVisibility.zones(among: coordinator.visibleStacks.map(\.id), focused: litZone, grown: grown)
+        let wanted = NotchVisibility.zones(among: coordinator.visibleStacks.map(\.id), focused: litZone, grown: grown, dragged: draggedZone)
         for stack in coordinator.visibleStacks where wanted.contains(stack.id) {
             let zone = screens.flip(stack.rect)
             // A full-screen app has the display: no notches there.

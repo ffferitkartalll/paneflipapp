@@ -179,6 +179,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     private static let slideTime: TimeInterval = 0.25
+    /// How long a movement of the island takes (`motion`), with some room.
+    private static let motionTime: TimeInterval = 0.35
 
     /// The island goes up out of the screen, fading, and `done` runs when it has gone.
     private func slideAway(_ entry: Entry, done: @escaping () -> Void) {
@@ -235,7 +237,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         model.scale = native?.backingScaleFactor ?? 2
         // The open island is as wide as its picture and the room beside it, and must fit the display.
         model.openZoom = model.fitZoom(toDisplayWidth: screen.cocoaFrame.width)
-        withTransaction(Transaction(animation: nil)) { model.zoom = model.popover || model.expanded ? model.openZoom : 1 }   // a popover is drawn open at all times
+        withTransaction(Transaction(animation: nil)) { model.zoom = model.restingZoom }
         // Tall enough for the island at its largest, with a row of cards under its picture.
         let frame = anchoredFrame(of: entry, tall: ceil(model.tallestOpenHeight + (model.popover ? MenuBarIslandModel.arrowSize.height : 0)))
         entry.rest = frame
@@ -279,6 +281,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// Offsets are the layout's own, not relative to where a scroll began: the island knows the offset its picture was built at.
     func glide(on screen: ScreenInfo, from: CGFloat?, to: CGFloat) {
         guard let entry = entries[screen.displayID], screen.axVisible.width > 0 else { return }
+        showPicture(of: entry)
         let model = entry.model
         let scale = model.glyph.screen.width / screen.axVisible.width
         entry.glides += 1
@@ -293,6 +296,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// The fingers lead the layout: the frame follows them, as the small picture of the scroll on the screen does.
     func follow(on screen: ScreenInfo, offset: CGFloat) {
         guard let entry = entries[screen.displayID], screen.axVisible.width > 0 else { return }
+        showPicture(of: entry)
         entry.glides += 1   // a glide that is on its way gives way to the fingers
         let queued = entry.following != nil
         entry.following = offset
@@ -377,7 +381,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             // The name as the card of the window carries it (a window added is in its zone by now).
             let name = change.kind == .removed ? change.title : coordinator.shownName(of: change.window.id) ?? change.title
             let seconds = change.kind == .enlarged ? StackCoordinator.enlargedTime : Self.noticeTime
-            withAnimation(Self.motion) {
+            lay(out: entry) {
                 // With the pointer on the island it stays as it is, the line at its foot.
                 if !entry.hovered { entry.model.windowsZone = nil }
                 let format: String
@@ -393,7 +397,6 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             }
             withTransaction(Transaction(animation: nil)) { entry.model.noticeLeft = 1 }
             DispatchQueue.main.async { withAnimation(.linear(duration: seconds)) { entry.model.noticeLeft = 0 } }
-            placeShield(of: entry)
             entry.noticeEnd?.cancel()
             let work = DispatchWorkItem { [weak self, weak entry] in if let self, let entry { hideNotice(entry) } }
             entry.noticeEnd = work
@@ -417,14 +420,13 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             for other in entries.values where other !== entry { hideNotice(other) }
             entry.noticeEnd?.cancel()
             entry.noticeEnd = nil
-            withAnimation(Self.motion) {
+            lay(out: entry) {
                 if !entry.hovered { entry.model.windowsZone = nil }
                 entry.model.noticeEditing = true
                 entry.model.noticeCloses = false
                 entry.model.notice = AttributedString(String(localized: "Zone edge editing is on."))
                 entry.model.contentOpacity = 1
             }
-            placeShield(of: entry)
         }
     }
 
@@ -438,14 +440,58 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         }
     }
 
+    /// A popover shrinks back into the icon, and `clear` (what it showed goes) runs once it has gone, unless it was opened meanwhile.
+    private func shrink(_ entry: Entry, then clear: @escaping () -> Void) {
+        withAnimation(Self.motion) { entry.model.scaledDown = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.motionTime) { [weak self, weak entry] in
+            guard let self, let entry, entry.model.scaledDown else { return }
+            withTransaction(Transaction(animation: nil)) { clear(); entry.model.zoom = entry.model.restingZoom }
+            placeShield(of: entry)
+        }
+    }
+
+    /// The layout scrolls: with the app not used as an island, the picture of the zones shows under the icon, small as the island is at rest, for as long as it does
+    /// and a moment after.
+    private func showPicture(of entry: Entry) {
+        guard entry.model.popover, !entry.hovered, !covered else { return }
+        entry.pictureEnd?.cancel()
+        if !entry.model.picturing { lay(out: entry) { entry.model.picturing = true; entry.model.contentOpacity = 1 } }
+        let work = DispatchWorkItem { [weak self, weak entry] in
+            guard let self, let entry, !entry.hovered else { return }
+            shrink(entry) { entry.model.picturing = false }
+        }
+        entry.pictureEnd = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.pictureTime, execute: work)
+    }
+
+    /// How long the picture stays after the last step of a scroll.
+    private static let pictureTime: TimeInterval = 0.8
+
+    /// Lays a notice out on the island of `entry` (`change` puts it in the model). Under the menu bar and not open, the popover has it laid out first, as a speck, and then
+    /// grows out of the icon: a notice laid out as it grows would be animated too.
+    private func lay(out entry: Entry, _ change: () -> Void) {
+        let popover = entry.model.popover && !entry.hovered
+        if popover { anchor(entry) }
+        withAnimation(popover ? nil : Self.motion) {
+            change()
+            entry.model.zoom = entry.model.restingZoom   // a notice only: the picture is as at rest
+        }
+        placeShield(of: entry)
+        if popover { DispatchQueue.main.async { withAnimation(Self.motion) { entry.model.scaledDown = false } } }
+    }
+
     private func hideNotice(_ entry: Entry) {
         entry.noticeEnd?.cancel()
         entry.noticeEnd = nil
         guard entry.model.notice != nil else { return }
+        if entry.model.popover && !entry.hovered {
+            shrink(entry) { entry.model.notice = nil }   // the notice goes with the popover
+            return
+        }
         // Not while the island is open: it goes on showing, and its own end fades it.
         if !entry.hovered { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }
         // The text stays while the island shrinks, so that it does not change on the way.
-        withAnimation(Self.motion) { entry.model.notice = nil }
+        withAnimation(Self.motion) { entry.model.notice = nil; entry.model.zoom = entry.model.restingZoom }
         placeShield(of: entry)
     }
 
@@ -482,17 +528,23 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             let model = entry.model, bar = entry.panel.frame
             let m = MenuBarIslandView.margin
             let hit: Bool
-            if entry.hovered {
+            // Dragging a window, the pointer need not hit the island (or the icon) exactly: three times the height of the menu bar around it (left, right, below).
+            let reach = dragging ? 3 * model.barHeight : 0
+            if entry.hovered && model.popover {
+                // A popover stays open wherever the pointer goes (a click outside it, or on the icon, closes it); while a window is dragged, only while the pointer is
+                // on it or near the icon.
+                hit = !dragging || islandFrame(of: entry, open: true).contains(point) || isNearIcon(point, in: entry, reach: reach)
+            } else if entry.hovered {
                 // The block below the bar, and the bar's row above it, which the pointer crosses to get there.
                 let size = model.openSize
-                // As a popover it stays open wherever the pointer goes: a click outside it, or on the icon, closes it.
-                hit = model.popover || (point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2)
+                hit = point.y >= bar.maxY - size.height && point.y <= bar.maxY && abs(point.x - bar.midX) <= size.width / 2
+            } else if model.restsHidden {
+                // Not used as an island: a window dragged to the menu bar icon opens the island under it, to be dropped on one of its zones.
+                hit = dragging && isNearIcon(point, in: entry, reach: reach)
             } else {
                 // The island itself; with a notch, its two halves and the notch between them.
                 let half = model.notchWidth / 2 + model.glyph.size.width / 2 + m
-                // Dragging a window, the pointer need not hit the island exactly: three times the height of the menu bar around it (left, right, below).
-                let reach = dragging ? 3 * model.barHeight : 0
-                hit = !model.restsHidden && point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
+                hit = point.y >= bar.maxY - model.barHeight - reach && point.y <= bar.maxY && abs(point.x - bar.midX) <= half + reach
             }
             if entry.cooling { if hit { continue }; entry.cooling = false }
             let overRow = dragging && hit && entry.hovered && rowHit(at: point, in: entry).onRow
@@ -579,8 +631,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         // The row of windows opens only when a zone is clicked (`click`), not when the pointer comes onto the island.
         withAnimation(Self.motion) {
             entry.model.expanded = open
+            entry.model.scaledDown = !open && entry.model.notice == nil
             if open { entry.model.contentOpacity = 1 }
-            entry.model.zoom = open || entry.model.popover ? entry.model.openZoom : 1
+            entry.model.zoom = entry.model.restingZoom
             if !open { entry.model.windowsZone = nil; entry.dragging = nil; entry.model.windowsDrag = 0 }   // the row goes with the island; a late end of a swipe cannot leave it offset
         }
         placeShield(of: entry)
@@ -590,9 +643,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private func anchoredFrame(of entry: Entry, tall: CGFloat) -> CGRect {
         let display = entry.display
         var middle = display.midX
-        if !settings.values.islandEnabled, let icon = iconFrame(), display.contains(CGPoint(x: icon.midX, y: icon.midY)) {
+        if !settings.values.islandEnabled, let icon = iconMidX(on: display) {
             let half = min(entry.model.openSize.width, display.width - 2 * Self.edgeGap) / 2
-            middle = min(max(icon.midX, display.minX + Self.edgeGap + half), display.maxX - Self.edgeGap - half)
+            middle = min(max(icon, display.minX + Self.edgeGap + half), display.maxX - Self.edgeGap - half)
         }
         return CGRect(x: middle - display.width / 2, y: display.maxY - entry.model.drop - tall, width: display.width, height: tall)
     }
@@ -614,16 +667,34 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// How far from the edge of the display the island stands when it reaches it, hanging under the menu bar icon.
     private static let edgeGap: CGFloat = 10
 
-    /// Where the arrow stands, from the middle of the panel: under the icon, if it is on this display, and the island hangs under it.
+    /// Where the arrow stands, from the middle of the panel: under the icon, when the island hangs under it.
     private func arrowOffset(of entry: Entry, in frame: CGRect) -> CGFloat? {
-        guard entry.model.popover, let icon = iconFrame(), entry.display.contains(CGPoint(x: icon.midX, y: icon.midY)) else { return nil }
-        return icon.midX - frame.midX
+        guard entry.model.popover, let icon = iconMidX(on: entry.display) else { return nil }
+        return icon - frame.midX
+    }
+
+    /// Where the middle of the menu bar icon stands on a display: where it is, on the display its window is on; on another display as far from its right edge as it is
+    /// there (the menu bars of the displays hold the same items, from the right). nil: the icon is not known yet.
+    private func iconMidX(on display: CGRect) -> CGFloat? {
+        guard let icon = iconFrame(), let home = entries.values.map(\.display).first(where: { $0.contains(CGPoint(x: icon.midX, y: icon.midY)) }) else { return nil }
+        return display == home ? icon.midX : display.maxX - (home.maxX - icon.midX)
+    }
+
+    /// Whether the point is on the menu bar icon (on the display it is on).
+    private func isOnIcon(_ point: CGPoint) -> Bool {
+        entries.values.first(where: { $0.display.contains(point) }).map { isNearIcon(point, in: $0, reach: 0) } ?? false
+    }
+
+    /// Whether the point is on the menu bar icon of the entry's display, or within `reach` of it.
+    private func isNearIcon(_ point: CGPoint, in entry: Entry, reach: CGFloat) -> Bool {
+        guard let icon = iconFrame(), entry.display.contains(point), let x = iconMidX(on: entry.display) else { return false }
+        return IconReach.contains(point, iconMidX: x, iconWidth: icon.width, displayTop: entry.display.maxY, barHeight: entry.model.barHeight, reach: reach)
     }
 
     /// A mouse button went down outside the island. On the icon it is the icon's click, which closes the island (or opens it) when the button comes up: closed here,
     /// that click would open it again.
     private func pressedOutside(_ event: NSEvent) {
-        if event.type == .leftMouseDown && iconFrame()?.contains(NSEvent.mouseLocation) == true { return }
+        if event.type == .leftMouseDown && isOnIcon(NSEvent.mouseLocation) { return }
         closePopovers()
     }
 
@@ -632,20 +703,28 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         for entry in entries.values where entry.hovered && entry.model.popover && picking !== entry { setOpen(false, for: entry) }
     }
 
+    /// What changes in `body` is not animated (not even by an animation modifier of the views): the island is changed over from one use to the other.
+    private func withoutAnimation(_ body: () -> Void) {
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction, body)
+    }
+
     /// Opens the island under the menu bar icon, or closes it when it is open; it stays open until then, or until a click outside it.
     func openUnderIcon() {
-        guard !covered, let icon = iconFrame(),
-              let entry = entries.values.first(where: { $0.display.contains(CGPoint(x: icon.midX, y: icon.midY)) }) else { return }
+        // The display the click was on (the icon is on the menu bar of every display), else the one its window is on.
+        let home = iconFrame().flatMap { icon in entries.values.first { $0.display.contains(CGPoint(x: icon.midX, y: icon.midY)) } }
+        guard !covered, let entry = entries.values.first(where: { $0.display.contains(NSEvent.mouseLocation) }) ?? home else { return }
         setOpen(!entry.hovered, for: entry)
     }
 
     /// The setting that uses the app as an island changed: every island closes and goes to where it belongs.
     func modeDidChange() {
         for entry in entries.values where entry.hovered { setOpen(false, for: entry) }
-        guard !covered else { return zonesDidChange() }
+        guard !covered else { return withoutAnimation { zonesDidChange() } }
         if settings.values.islandEnabled {
-            // Becoming an island: it comes down from the top edge of the screen to its place.
-            zonesDidChange()
+            // Becoming an island: it comes down from the top edge of the screen to its place (the island itself is not scaled or faded meanwhile).
+            withoutAnimation { zonesDidChange() }
             entries.values.forEach(slideIn)
         } else {
             // Leaving it: it goes up to the top edge and out of sight, and only then is put where the popover hangs.
@@ -654,7 +733,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             gone.notify(queue: .main) { [weak self] in
                 guard let self else { return }
                 entries.values.forEach { $0.panel.alphaValue = 1 }   // the popover is out of sight by its own opacity
-                zonesDidChange()
+                withoutAnimation { self.zonesDidChange() }
             }
         }
     }
@@ -663,7 +742,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private func islandFrame(of entry: Entry, open: Bool) -> CGRect {
         let model = entry.model, top = entry.panel.frame
         // Out of sight at rest: the shield is one pixel, so that it takes nothing of the menu bar.
-        if model.restsHidden && !open && model.notice == nil { return CGRect(x: top.midX, y: top.maxY - 1, width: 1, height: 1) }
+        if model.isHidden && !open { return CGRect(x: top.midX, y: top.maxY - 1, width: 1, height: 1) }
         let size = open || model.notice != nil ? model.openSize : CGSize(width: model.notchWidth + model.glyph.size.width + 2 * MenuBarIslandView.margin, height: model.barHeight)
         return CGRect(x: top.midX - size.width / 2, y: model.shapeTop(of: top) - size.height, width: size.width, height: size.height)
     }
