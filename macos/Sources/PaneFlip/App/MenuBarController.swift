@@ -9,6 +9,11 @@ final class MenuBarController: @unchecked Sendable {
     private let settings: AppSettings
     private let menu: NSMenu
     private var item: NSStatusItem?
+    /// A click on the icon, with the app not used as an island and switched on: opens the island under the icon.
+    var onOpenIsland: (() -> Void)?
+
+    /// Where the icon stands (screen coordinates).
+    var iconFrame: CGRect? { item?.button?.window?.frame }
 
     init(settings: AppSettings, menu: NSMenu) {
         self.settings = settings
@@ -32,8 +37,10 @@ final class MenuBarController: @unchecked Sendable {
             item?.menu = menu
             item?.button?.performClick(nil)
             item?.menu = nil
-        } else {
+        } else if settings.values.islandEnabled || !settings.values.placementEnabled {
             settings.values.placementEnabled.toggle()
+        } else {
+            onOpenIsland?()
         }
     }
 

@@ -4,6 +4,8 @@ import Foundation
 public struct SettingsValues: Equatable {
     /// Master switch: place apps into zones at all (snapping, remembering, restoring, the island).
     public var placementEnabled = true
+    /// Use the app as an island at the middle of the menu bar. Off: the island is out of sight until a click on the menu bar icon opens it under the icon.
+    public var islandEnabled = false
     /// Space between zones in points; not applied to screen edges.
     public var gap = 4.0
     /// A window dragged out of its zone goes back to the size it had before the zone took it in.

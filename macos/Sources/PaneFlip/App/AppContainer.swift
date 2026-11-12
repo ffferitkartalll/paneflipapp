@@ -129,7 +129,11 @@ final class AppContainer {
                                                        openSettings: SettingsWindowOpener.open)
         // A menu does not take the app's language by itself: the one the app started with, as the scenes have it.
         let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))
-        self.menuBar = MenuBarController(settings: settings, menu: menu)
+        let menuBar = MenuBarController(settings: settings, menu: menu)
+        self.menuBar = menuBar
+        menuBar.onOpenIsland = { [weak island] in island?.openUnderIcon() }
+        island.iconFrame = { [weak menuBar] in menuBar?.iconFrame }
+        settings.onIslandChanged = { [weak island] in island?.modeDidChange() }
         let snap = SnapDragController(windows: windows, screens: screens, coordinator: coordinator, settings: settings,
                                       keys: keys, overlay: overlay, island: island,
                                       background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) })

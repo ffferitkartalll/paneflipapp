@@ -66,6 +66,27 @@ final class MenuBarIslandModel {
     var barHeight: CGFloat = 24
     /// 0 on a display without a notch.
     var notchWidth: CGFloat = 0
+    /// The island is not used as one: at rest it is out of sight (it shows when it is open or holds a notice).
+    var restsHidden = false
+    var isHidden: Bool { restsHidden && !expanded && notice == nil }
+    /// Drawn as a popover under the menu bar, on the system's ground, not as the island at the notch (set a moment after `restsHidden`, once the island has faded out).
+    var popover = false
+    /// The ground of the open island: black, as the notch is, or the system's own.
+    var ground: Color { popover ? Color(nsColor: .windowBackgroundColor) : .black }
+    /// How far the panel stands below the top of the display: right under the menu bar (the room for the arrow is the top of the panel).
+    var drop: CGFloat { popover ? barHeight : 0 }
+    /// The arrow of the popover that points at the menu bar icon, as a popover has one.
+    static let arrowSize = CGSize(width: 18, height: 10)
+    /// Where the arrow stands, from the middle of the panel; nil: the icon is not on this display.
+    var arrowX: CGFloat?
+    /// The room above the island for the arrow.
+    var arrowBand: CGFloat { popover && arrowX != nil ? Self.arrowSize.height : 0 }
+    /// How large the popover is: it grows from the icon and shrinks back into it, so closed it is a speck there.
+    var popoverScale: CGFloat { popover && !expanded && notice == nil ? 0.05 : 1 }
+    /// The top of the island's shape in a panel of this frame (screen coordinates).
+    func shapeTop(of panel: CGRect) -> CGFloat { panel.maxY - arrowBand }
+    /// The colour of the drawing on that ground.
+    func ink(for scheme: ColorScheme) -> IslandInk { IslandInk(light: popover && scheme == .light) }
     /// Device pixels per point of the display: what the drawing is aligned to.
     var scale: CGFloat = 2
 

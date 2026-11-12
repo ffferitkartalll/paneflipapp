@@ -23,6 +23,7 @@ public final class AppSettings {
             }
             storage.save(values)
             if values.placementEnabled != oldValue.placementEnabled { onPlacementChanged?() }
+            if values.islandEnabled != oldValue.islandEnabled { onIslandChanged?() }
             if values.overflowZonesEnabled != oldValue.overflowZonesEnabled { onOverflowZonesChanged?() }
             if values.ignoredApps != oldValue.ignoredApps { onIgnoredAppsChanged?() }
             if values.capsLockAsModifier != oldValue.capsLockAsModifier { onCapsLockChanged?() }
@@ -32,6 +33,7 @@ public final class AppSettings {
     /// The language the app started with: a different choice only takes effect after a restart.
     @ObservationIgnored public let launchLanguage: String
     @ObservationIgnored public var onPlacementChanged: (() -> Void)?
+    @ObservationIgnored public var onIslandChanged: (() -> Void)?
     @ObservationIgnored public var onOverflowZonesChanged: (() -> Void)?
     @ObservationIgnored public var onIgnoredAppsChanged: (() -> Void)?
     @ObservationIgnored public var onCapsLockChanged: (() -> Void)?

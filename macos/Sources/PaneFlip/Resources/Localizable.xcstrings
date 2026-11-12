@@ -38217,6 +38217,287 @@
         }
       }
     },
+    "Show PaneFlip as an island at the middle of the menu bar. When off, a click on the menu bar icon opens the island below it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعرض PaneFlip كجزيرة في منتصف شريط القوائم. عند الإيقاف، يفتح النقر على أيقونة شريط القوائم الجزيرة أسفلها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показвайте PaneFlip като остров в средата на лентата с менюта. Когато е изключено, щракване върху иконата в лентата с менюта отваря острова под нея."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip-কে মেনু বারের মাঝখানে দ্বীপ হিসেবে দেখান। বন্ধ থাকলে মেনু বার আইকনে ক্লিক করলে তার নিচে দ্বীপ খোলে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra PaneFlip com una illa al mig de la barra de menús. Si està desactivat, en fer clic a la icona de la barra de menús s'obre l'illa a sota."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zobrazujte PaneFlip jako ostrůvek uprostřed řádku nabídek. Když je vypnuto, kliknutí na ikonu v řádku nabídek otevře ostrůvek pod ní."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis PaneFlip som en ø midt i menulinjen. Når det er slået fra, åbner et klik på ikonet i menulinjen øen under det."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeige PaneFlip als Insel in der Mitte der Menüleiste. Ist die Option aus, öffnet ein Klick auf das Symbol in der Menüleiste die Insel darunter."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εμφανίστε το PaneFlip ως νησί στη μέση της γραμμής μενού. Όταν είναι απενεργοποιημένο, ένα κλικ στο εικονίδιο της γραμμής μενού ανοίγει το νησί από κάτω."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra PaneFlip como una isla en el centro de la barra de menús. Si está desactivado, al hacer clic en el icono de la barra de menús se abre la isla debajo."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuva PaneFlip saarena menüüriba keskel. Väljalülitatuna avab klõps menüüriba ikoonil saare selle all."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip را به‌صورت جزیره در وسط نوار منو نمایش دهید. وقتی خاموش باشد، کلیک روی نماد نوار منو جزیره را زیر آن باز می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytä PaneFlip saarena valikkorivin keskellä. Kun asetus on pois päältä, valikkorivin kuvakkeen napsautus avaa saaren sen alle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipakita ang PaneFlip bilang isla sa gitna ng menu bar. Kapag naka-off, bubuksan ng pag-click sa icon ng menu bar ang isla sa ilalim nito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affichez PaneFlip sous forme d'îlot au milieu de la barre des menus. Désactivé, un clic sur l'icône de la barre des menus ouvre l'îlot en dessous."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הציגו את PaneFlip כאי באמצע שורת התפריטים. כשהאפשרות כבויה, לחיצה על הסמל בשורת התפריטים פותחת את האי מתחתיו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip को मेन्यू बार के बीच में द्वीप के रूप में दिखाएँ। बंद होने पर मेन्यू बार आइकन पर क्लिक करने से द्वीप उसके नीचे खुलता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prikaži PaneFlip kao otok na sredini trake izbornika. Kad je isključeno, klik na ikonu u traci izbornika otvara otok ispod nje."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jelenítsd meg a PaneFlipet szigetként a menüsor közepén. Kikapcsolva a menüsor ikonjára kattintva a sziget alatta nyílik meg."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan PaneFlip sebagai pulau di tengah bilah menu. Jika mati, mengeklik ikon bilah menu akan membuka pulau di bawahnya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra PaneFlip come un'isola al centro della barra dei menu. Se disattivato, un clic sull'icona della barra dei menu apre l'isola sotto di essa."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlipをメニューバーの中央にアイランドとして表示します。オフのときは、メニューバーのアイコンをクリックすると、その下にアイランドが開きます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip을 메뉴 막대 가운데에 아일랜드로 표시합니다. 끄면 메뉴 막대 아이콘을 클릭할 때 그 아래에 아일랜드가 열립니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodykite PaneFlip kaip salą meniu juostos viduryje. Kai išjungta, spustelėjus meniu juostos piktogramą, po ja atsidaro sala."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rādiet PaneFlip kā salu izvēlņu joslas vidū. Ja izslēgts, noklikšķinot uz izvēlņu joslas ikonas, zem tās atveras sala."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip मेनू बारच्या मध्यभागी बेट म्हणून दाखवा. बंद असताना मेनू बार आयकॉनवर क्लिक केल्यास त्याखाली बेट उघडते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paparkan PaneFlip sebagai pulau di tengah bar menu. Apabila dimatikan, mengklik ikon bar menu membuka pulau di bawahnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis PaneFlip som en øy midt i menylinjen. Når det er slått av, åpner et klikk på ikonet i menylinjen øya under det."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon PaneFlip als eiland midden in de menubalk. Als dit uit staat, opent een klik op het symbool in de menubalk het eiland eronder."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuj PaneFlip jako wyspę pośrodku paska menu. Gdy wyłączone, kliknięcie ikony na pasku menu otwiera wyspę pod nią."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostre o PaneFlip como uma ilha no meio da barra de menus. Se estiver desativado, clicar no ícone da barra de menus abre a ilha por baixo."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostre o PaneFlip como uma ilha no meio da barra de menus. Se estiver desativado, clicar no ícone da barra de menus abre a ilha logo abaixo."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afișați PaneFlip ca insulă în mijlocul barei de meniu. Dezactivat, un clic pe pictograma din bara de meniu deschide insula sub ea."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показывать PaneFlip в виде острова посередине строки меню. Если выключено, щелчок по значку в строке меню открывает остров под ним."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zobrazujte PaneFlip ako ostrov uprostred panela s ponukami. Keď je vypnuté, kliknutie na ikonu v paneli s ponukami otvorí ostrov pod ňou."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prikažite PaneFlip kot otok na sredini menijske vrstice. Ko je izklopljeno, klik na ikono v menijski vrstici odpre otok pod njo."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прикажите PaneFlip као острво на средини траке менија. Када је искључено, клик на икону у траци менија отвара острво испод ње."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa PaneFlip som en ö mitt i menyraden. När det är avstängt öppnar ett klick på ikonen i menyraden ön under den."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மெனு பட்டியின் நடுவில் PaneFlip-ஐ தீவாகக் காட்டவும். அணைத்திருந்தால், மெனு பட்டி ஐகானைக் கிளிக் செய்தால் அதன் கீழே தீவு திறக்கும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "మెనూ బార్ మధ్యలో PaneFlip ను ద్వీపంగా చూపించండి. ఆఫ్‌లో ఉంటే, మెనూ బార్ ఐకాన్‌పై క్లిక్ చేస్తే దాని కింద ద్వీపం తెరుచుకుంటుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แสดง PaneFlip เป็นเกาะตรงกลางแถบเมนู เมื่อปิด การคลิกไอคอนบนแถบเมนูจะเปิดเกาะไว้ใต้ไอคอนนั้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip'i menü çubuğunun ortasında ada olarak gösterin. Kapalıyken menü çubuğundaki simgeye tıklamak adayı simgenin altında açar."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показувати PaneFlip як острів посередині рядка меню. Якщо вимкнено, клацання значка в рядку меню відкриває острів під ним."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PaneFlip کو مینو بار کے بیچ میں جزیرے کے طور پر دکھائیں۔ بند ہونے پر مینو بار آئیکن پر کلک کرنے سے اس کے نیچے جزیرہ کھلتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiển thị PaneFlip dưới dạng đảo ở giữa thanh menu. Khi tắt, nhấp vào biểu tượng trên thanh menu sẽ mở đảo bên dưới nó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在菜单栏中间将 PaneFlip 显示为岛。关闭后，点按菜单栏图标会在其下方打开岛。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在選單列中間將 PaneFlip 顯示為島。關閉後，點按選單列圖像會在其下方開啟島。"
+          }
+        }
+      }
+    },
     "Some displays are level with the one to their left, so a screen beyond the edge of one lands on the other." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -46924,6 +47205,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新"
+          }
+        }
+      }
+    },
+    "Use as an island" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام كجزيرة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Използване като остров"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "দ্বীপ হিসেবে ব্যবহার করুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilitza com a illa"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Používat jako ostrůvek"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug som ø"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Insel verwenden"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χρήση ως νησί"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar como isla"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasuta saarena"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استفاده به‌صورت جزیره"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käytä saarena"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gamitin bilang isla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser comme îlot"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שימוש כאי"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "द्वीप के रूप में उपयोग करें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koristi kao otok"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Használat szigetként"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan sebagai pulau"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa come isola"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイランドとして使う"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아일랜드로 사용"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naudoti kaip salą"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izmantot kā salu"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बेट म्हणून वापरा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan sebagai pulau"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk som øy"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruiken als eiland"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używaj jako wyspy"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar como ilha"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar como ilha"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folosiți ca insulă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать как остров"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Používať ako ostrov"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uporabi kot otok"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Користи као острво"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Använd som ö"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "தீவாகப் பயன்படுத்து"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ద్వీపంగా ఉపయోగించండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ใช้เป็นเกาะ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada olarak kullan"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовувати як острів"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزیرے کے طور پر استعمال کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng như một đảo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用作岛"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用作島"
           }
         }
       }

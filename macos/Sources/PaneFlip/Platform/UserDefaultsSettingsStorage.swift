@@ -28,6 +28,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         Self.removedKeys.forEach(defaults.removeObject(forKey:))
         var v = SettingsValues()
         v.placementEnabled = defaults.object(forKey: "placementEnabled") as? Bool ?? v.placementEnabled
+        v.islandEnabled = defaults.object(forKey: "islandEnabled") as? Bool ?? v.islandEnabled
         v.gap = defaults.object(forKey: "gap") as? Double ?? v.gap
         v.restoreSizeOnLeave = defaults.object(forKey: "restoreSizeOnLeave") as? Bool ?? v.restoreSizeOnLeave
         v.edgeMargin = defaults.object(forKey: "edgeMargin") as? Double ?? v.edgeMargin
@@ -54,6 +55,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     func save(_ v: SettingsValues) {
         defaults.set(v.placementEnabled, forKey: "placementEnabled")
+        defaults.set(v.islandEnabled, forKey: "islandEnabled")
         defaults.set(v.gap, forKey: "gap")
         defaults.set(v.restoreSizeOnLeave, forKey: "restoreSizeOnLeave")
         defaults.set(v.edgeMargin, forKey: "edgeMargin")
