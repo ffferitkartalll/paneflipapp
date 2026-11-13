@@ -195,7 +195,7 @@ final class AppContainer {
                                                        isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) }, grid: canLeadGrid)
         // The wheel button with the keys of the windows' scroll held opens the grid of the zone under the pointer.
         let middleClick: MiddleClickListening = EventTapMiddleClick(zone: { [settings, keys] in
-            guard !zoneWindows.isShown, canLeadGrid(), settings.values.windowScrollKeys.isHeld(using: keys) else { return nil }
+            guard canLeadGrid(), settings.values.windowScrollKeys.isHeld(using: keys) else { return nil }
             return zoneWindows.pointedZone
         })
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
@@ -286,7 +286,7 @@ final class AppContainer {
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
-            middleClick.start { zoneWindows.show(zone: $0) }
+            middleClick.start { zoneWindows.toggle(zone: $0) }
             notches.start()
             pointerCrossing.start()
             capsLock.remap(settings.values.capsLockAsModifier)
@@ -300,7 +300,7 @@ final class AppContainer {
                 case .closeWindowUndoNotice: island.closeNotice()
                 case .enlargeWindow: coordinator.enlargeFocused()
                 case .zoneWindows:
-                    if !zoneWindows.isShown, let zone = coordinator.focusedZoneID ?? coordinator.focusedWindowCached().flatMap({ coordinator.stack(containing: $0.id)?.id }) { zoneWindows.show(zone: zone) }
+                    zoneWindows.toggle(zone: coordinator.focusedZoneID ?? coordinator.focusedWindowCached().flatMap({ coordinator.stack(containing: $0.id)?.id }))
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }
