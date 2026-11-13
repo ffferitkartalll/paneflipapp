@@ -235,7 +235,7 @@ final class AppContainer {
         coordinator.usableAreaOf = { screenOf($0)?.axVisible }
         let scrubbed = coordinator.onWindowScrub
         // A switch of a zone's windows shows in its grown notch, or, with an island open on the row of windows, in that row (the notch stays as it is).
-        coordinator.onSwitch = { [weak notches, weak island] zone in if island?.showsWindowsRow != true { notches?.showSwitch(of: zone) } }
+        coordinator.onSwitch = { [weak notches, weak island] zone in if island?.showsWindowsRow != true { notches?.switched(in: zone) } }
         coordinator.onWindowScrub = { [weak notches] zone, fraction in
             scrubbed?(zone, fraction)
             notches?.scrubbed(zone: zone, by: fraction)

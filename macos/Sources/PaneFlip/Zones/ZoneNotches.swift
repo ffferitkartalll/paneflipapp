@@ -25,6 +25,8 @@ final class ZoneNotches: ZonePresenting {
     private var litZone: UUID?
     /// The zone a window of which is being dragged: it has no notch until the drag is over.
     private var draggedZone: UUID?
+    /// What puts a notch back at rest after it was lit for a switch, for each zone.
+    private var lightEnds: [UUID: DispatchWorkItem] = [:]
     /// Where the fingers have led the lit card, not shown yet (`scrubbed`).
     private var dragging: CGFloat?
     /// A card of the grown notch that the mouse is down on: it is a click if it is let go where it was, else it is carried to another place in the row.
@@ -102,6 +104,51 @@ final class ZoneNotches: ZonePresenting {
         ].compactMap { $0 }
     }
 
+    /// The windows of `zone` are being switched (a shortcut, the wheel, the fingers): its notch grows into the row of its windows, or, if it opens on a click only, stays
+    /// closed, lit as it is with the pointer on it for the moment of the switch if that is asked for.
+    func switched(in zone: UUID) {
+        let values = settings.values
+        switch NotchSwitchResponse.of(opensOnClickOnly: values.notchOpensOnClickOnly, liftsOnSwitch: values.notchLiftsOnSwitch, grown: grown == zone) {
+        case .grow: showSwitch(of: zone)
+        case .lift: keepForSwitch(zone, lit: true)
+        case .stay: keepForSwitch(zone, lit: false)
+        }
+    }
+
+    /// The notch stays closed for a switch: above the stage the pictures slide on (they would cover it), lit as with the pointer on it if asked for; the lit part follows
+    /// the windows (`follow`). A moment after the switch it is put back (`endSwitch`).
+    private func keepForSwitch(_ zone: UUID, lit: Bool) {
+        guard let panel = panels[zone], let model = models[zone], grown == nil, model.cards.isEmpty else { return }
+        panel.level = .floating
+        panel.orderFrontRegardless()
+        if lit { withAnimation(Self.lifting) { model.lift = 1 } }
+        endSwitch(of: zone)
+    }
+
+    private func endSwitch(of zone: UUID) {
+        lightEnds[zone]?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            if coordinator.isMoving { return endSwitch(of: zone) }   // not while the windows still move
+            lightEnds[zone] = nil
+            guard let panel = panels[zone], let model = models[zone], model.cards.isEmpty else { return }
+            // The pointer on the notch keeps it lit (`hovered`).
+            if hovered != zone { withAnimation(Self.lifting) { model.lift = 0 } }
+            panel.level = .normal
+            restack()
+        }
+        lightEnds[zone] = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.lingering, execute: work)
+    }
+
+    /// The window in front of the zone changed: the lit part of the notch slides to it, on the spring the pictures slide with. (The grown notch has its own cards:
+    /// `windowsDidChange`.)
+    private func follow(_ stack: ZoneStack, in model: ZoneNotchModel) {
+        guard let index = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), model.activeIndex != index else { return }
+        model.activeIndex = index
+        if model.cards.isEmpty { withAnimation(SlideSpring.animation) { model.lit = CGFloat(index) } }
+    }
+
     /// A window is being dragged out of `zone`, or the drag is over (nil).
     func windowDragged(from zone: UUID?) {
         guard draggedZone != zone else { return }
@@ -121,13 +168,18 @@ final class ZoneNotches: ZonePresenting {
             // A full-screen app has the display: no notches there.
             guard current.contains(where: { $0.desktopNumber != nil && $0.cocoaFrame.contains(CGPoint(x: zone.midX, y: zone.midY)) }) else { continue }
             let panel = panels[stack.id] ?? make(for: stack.id)
-            models[stack.id]?.windowCount = stack.tabs.count
-            models[stack.id]?.activeIndex = stack.tabs.firstIndex { $0.id == stack.activeID } ?? 0
+            if let model = models[stack.id] {
+                let index = stack.tabs.firstIndex { $0.id == stack.activeID } ?? 0
+                let resized = model.windowCount != stack.tabs.count
+                model.windowCount = stack.tabs.count
+                model.activeIndex = index
+                if resized, model.cards.isEmpty { model.lit = CGFloat(index) }   // new, or a window came or went: the lit part stands on the window in front at once
+            }
             let size = NotchSize.hoverSize(forWindows: stack.tabs.count)
             let rect = CGRect(x: zone.midX - size.width / 2, y: zone.maxY - size.height, width: size.width, height: size.height)
             if stack.id != grown, models[stack.id]?.cards.isEmpty ?? true {   // a grown one keeps its place and level until it is back (until its cards have turned back into the parts)
                 if panel.frame != rect { panel.setFrame(rect, display: false) }
-                if panel.level != .normal { panel.level = .normal }
+                if panel.level != .normal && lightEnds[stack.id] == nil { panel.level = .normal }   // not while it stands above the stage for a switch
             }
             shown.insert(stack.id)
         }
@@ -140,10 +192,10 @@ final class ZoneNotches: ZonePresenting {
     func restack() {
         guard !coordinator.isMoving else { return }
         if coordinator.focusedZoneID != litZone { return zonesDidChange() }   // the focus went to another zone: the notch goes with it
-        for (id, panel) in panels where id != grown {
+        for (id, panel) in panels where id != grown && lightEnds[id] == nil {
             guard let front = coordinator.stacks[id]?.activeID else { panel.orderOut(nil); continue }
             if models[id]?.windowCount != coordinator.stacks[id]?.tabs.count { return zonesDidChange() }   // a window came or went: the notch is as wide as they ask
-            if let stack = coordinator.stacks[id], let index = stack.tabs.firstIndex(where: { $0.id == stack.activeID }), models[id]?.activeIndex != index { models[id]?.activeIndex = index }
+            if let stack = coordinator.stacks[id], let model = models[id] { follow(stack, in: model) }
             panel.order(.above, relativeTo: Int(front))
         }
     }
@@ -200,6 +252,7 @@ final class ZoneNotches: ZonePresenting {
 
     /// Something changed in a zone: while its notch is grown, the lit card slides to the window now in front. Only its place changes: a step costs next to nothing.
     func windowsDidChange(in zone: UUID) {
+        if zone != grown, let stack = coordinator.stacks[zone], let model = models[zone] { return follow(stack, in: model) }
         guard zone == grown, let model = models[zone], !model.cards.isEmpty else { return }   // still about to grow: it reads the window in front as it grows
         refreshSlots(of: zone)
         // shortcut: the row is laid out once, as it grows; a window in front that is not in it (one that came meanwhile) ends the row, one that went stays in it
@@ -212,6 +265,7 @@ final class ZoneNotches: ZonePresenting {
     /// The fingers lead the windows of `zone` (`fraction` of a window; to the right is positive, toward the windows before): the lit card of its grown notch follows
     /// them, and goes back to the window in front when they let go.
     func scrubbed(zone: UUID, by fraction: CGFloat) {
+        if zone != grown { return scrubbedClosed(zone, by: fraction) }
         guard zone == grown, let model = models[zone], !model.cards.isEmpty else { return }
         guard fraction != 0 else {
             dragging = nil   // a move still waiting is not for this any more
@@ -230,6 +284,15 @@ final class ZoneNotches: ZonePresenting {
             still.disablesAnimations = true
             withTransaction(still) { model.lit = min(max(front - fraction, 0), CGFloat(model.cards.count - 1)) }
         }
+    }
+
+    /// The same for a notch that is not grown: its lit part follows the fingers.
+    private func scrubbedClosed(_ zone: UUID, by fraction: CGFloat) {
+        guard let model = models[zone], model.cards.isEmpty else { return }
+        guard fraction != 0 else { return withAnimation(SlideSpring.animation) { model.lit = CGFloat(model.activeIndex) } }
+        var still = Transaction()
+        still.disablesAnimations = true
+        withTransaction(still) { model.lit = min(max(CGFloat(model.activeIndex) - fraction, 0), CGFloat(max(model.windowCount - 1, 0))) }
     }
 
     /// What the wheel and two fingers switch at `point`: the windows of the zone whose notch the pointer is on (found as it
@@ -573,6 +636,8 @@ final class ZoneNotches: ZonePresenting {
         panels[zone]?.orderOut(nil)
         panels[zone] = nil
         models[zone] = nil
+        lightEnds[zone]?.cancel()
+        lightEnds[zone] = nil
         if hovered == zone { hovered = nil }
         if grown == zone { grown = nil }
     }
