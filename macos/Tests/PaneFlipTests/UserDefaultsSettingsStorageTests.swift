@@ -32,13 +32,13 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
     func testTheNotchSettingsAreKeptAndStartAsTheyWere() {
         let fresh = storage.load()
         XCTAssertFalse(fresh.notchOpensOnClickOnly, "the notch opens for a switch, as before")
-        XCTAssertTrue(fresh.notchLiftsOnSwitch)
+        XCTAssertFalse(fresh.notchLiftsOnSwitch)
         var values = SettingsValues()
         values.notchOpensOnClickOnly = true
-        values.notchLiftsOnSwitch = false
+        values.notchLiftsOnSwitch = true
         storage.save(values)
         XCTAssertTrue(storage.load().notchOpensOnClickOnly)
-        XCTAssertFalse(storage.load().notchLiftsOnSwitch)
+        XCTAssertTrue(storage.load().notchLiftsOnSwitch)
     }
 
     func testTheDeskArrangementIsKept() {

@@ -19,7 +19,7 @@ public struct SettingsValues: Equatable {
     /// The notch of a zone opens into the row of the zone's windows only when it is clicked, not when the windows are switched.
     public var notchOpensOnClickOnly = false
     /// With `notchOpensOnClickOnly`: while windows are switched and the pointer is not on the notch, it shows as it does with the pointer on it (else it stays closed).
-    public var notchLiftsOnSwitch = true
+    public var notchLiftsOnSwitch = false
     /// Held while dragging a window to highlight zones and snap into one.
     public var snapTrigger = SnapTrigger.windowSnap
     /// Held while scrolling over a zone, with the mouse wheel or two fingers, to move through its windows.
