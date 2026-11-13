@@ -17,6 +17,16 @@ final class AxisLockTests: XCTestCase {
         XCTAssertEqual(lock.add(horizontal: -5, vertical: 40), -5, "up and down mean nothing once it is horizontal")
     }
 
+    func testAVerticalSwipeFollowsUpFromWhereItBeganAndNeverToTheSide() {
+        var lock = AxisLock()
+        XCTAssertEqual(lock.move(horizontal: 1, vertical: 5).up, 0)
+        let decided = lock.move(horizontal: 1, vertical: 6)
+        XCTAssertEqual(decided.up, 11, "what the fingers did while it was being decided is not lost")
+        XCTAssertEqual(decided.sideways, 0)
+        XCTAssertEqual(lock.move(horizontal: 90, vertical: -4).up, -4)
+        XCTAssertEqual(lock.move(horizontal: 90, vertical: -4).sideways, 0)
+    }
+
     func testASwipeUpOrDownNeverMovesAnythingNotEvenWhenItTurnsToTheSide() {
         var lock = AxisLock()
         XCTAssertEqual(lock.add(horizontal: 1, vertical: 12), 0)

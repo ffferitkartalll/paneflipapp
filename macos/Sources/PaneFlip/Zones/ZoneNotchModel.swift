@@ -26,8 +26,9 @@ final class ZoneNotchModel {
     var cardWidth: CGFloat = 0
     var hoveredSlot: Int?
     var hoveredButton: IslandButton?
-    /// The pointer is on the "more" button.
+    /// The pointer is on the "more" button, or on the button at the left end that opens the grid of the zone's windows.
     var moreHovered = false
+    var windowsHovered = false
     /// The card the pointer is on (its place among them), if any: one that is not lit gets a hover effect.
     var hoveredCard: Int?
     /// The card the mouse carries (`IslandWindow.id`) and where its middle is, from the left edge of the notch: it floats there, its place in the row empty.

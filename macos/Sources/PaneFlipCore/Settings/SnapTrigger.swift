@@ -32,6 +32,8 @@ public struct SnapTrigger: Codable, Equatable {
     public static let closeWindowUndoNotice = SnapTrigger(keys: [leftOption, leftControl, Key(code: 53, name: "Escape")])
     /// Enlarge the focused window of a zone to the usable area of its screen for fifteen seconds: Control+Option+Return.
     public static let enlargeWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 36, name: "Return")])
+    /// Open the grid of the windows of the zone in focus: Control+Option+Tab.
+    public static let zoneWindows = SnapTrigger(keys: [leftOption, leftControl, Key(code: 48, name: "Tab")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
     /// Pressed twice quickly, turns on the editing of the zone edges, without Caps Lock as a modifier key: Control and Option together.

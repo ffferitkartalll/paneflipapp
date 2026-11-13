@@ -25,12 +25,15 @@ final class FingerSwipeTests: XCTestCase {
         XCTAssertEqual(out.first, .began(fingers: 4))
     }
 
-    func testASwipeThatBeginsUpOrDownMovesNothing() {
+    func testASwipeThatBeginsUpOrDownIsASwipeUpOrDownWhoseMovesCountUpAsPositive() {
         var s = FingerSwipe()
         _ = swipe(&s, fingers: 3, frames: 4)
         var out: [FingerSwipe.Output] = []
         for i in 0..<10 { out += s.add(fingers: 3, x: 0.5, y: 0.5 + Double(i) * 0.02, at: Double(i)) }
-        XCTAssertTrue(out.isEmpty)
+        XCTAssertEqual(out.first, .liftBegan(fingers: 3))
+        guard case .moved(let first, _) = out[1] else { return XCTFail("moves follow the beginning") }
+        XCTAssertGreaterThan(first, 0, "up is positive")
+        XCTAssertFalse(out.contains(.began(fingers: 3)))
     }
 
     func testLiftingTheFingersEndsTheSwipeAndAFingerThatComesOrGoesEndsItForGood() {

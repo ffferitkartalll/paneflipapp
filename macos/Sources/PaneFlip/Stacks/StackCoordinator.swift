@@ -80,6 +80,9 @@ final class StackCoordinator {
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the island follows.
     var isScrolling = false
+    /// The grid of a zone's windows is open (`ZoneWindowsOverlay`): no way of switching the windows of a zone works (a shortcut, the wheel, the fingers, a card of the island or
+    /// the notch); the grid chooses the window itself, with `select`.
+    var switchLocked = false
     /// Whether PaneFlip itself has the focus (one of its own windows is in front): the window a swipe ends on is then given the focus.
     var holdsTheFocus: () -> Bool = { false }
     /// Highlights the zone the focus went to (a keyboard shortcut moved it): its rectangle.
@@ -248,6 +251,7 @@ final class StackCoordinator {
     /// has happened then.
     @discardableResult
     func slideSelect(_ id: CGWindowID, in stack: ZoneStack, forward: Bool? = nil) -> Bool {
+        guard !switchLocked else { return false }
         if isSliding { return extendSlide(to: id, in: stack, forward: forward) }
         guard let carousel, let entering = stack.refs[id], let frontID = stack.activeID, frontID != id,
               let leaving = stack.refs[frontID],
@@ -465,7 +469,7 @@ final class StackCoordinator {
     /// The same for a zone that is known (the row of cards that is scrolled over). Only the zone that has the focus has its windows switched, by any method.
     @discardableResult
     func beginWindowScrub(in stack: ZoneStack) -> Bool {
-        guard stack.id == focusedZoneID, windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
+        guard !switchLocked, stack.id == focusedZoneID, windowScrub == nil, !placementOnly(), !isSliding || carousel?.isSettlingSwipe == true,
               stack.tabs.count > 1, let start = stack.activeID else { return false }
         let scrub = WindowScrub(stack: stack, start: start, rect: stack.rect)
         windowScrub = scrub
@@ -518,7 +522,7 @@ final class StackCoordinator {
     /// if they are already on their way, so that turns follow one another as quickly as they come, in either direction. Without
     /// pictures to move (a slide that is not a swipe runs, motion is reduced) it is a step like those of the keys.
     func stepWindowScrub(in stack: ZoneStack, by step: Int) {
-        guard step != 0, stack.id == focusedZoneID else { return }
+        guard step != 0, !switchLocked, stack.id == focusedZoneID else { return }
         if let scrub = windowScrub {
             // Turns that come while the pictures of an earlier one are still being taken add up to it.
             if scrub.stack === stack, scrub.ended, let forced = scrub.forced { scrub.forced = forced + step }
@@ -572,6 +576,7 @@ final class StackCoordinator {
     /// A click on a card: the zone with the focus goes to that window the way a turn of the wheel goes (as many windows on or back as lie between), so a click
     /// while the pictures still glide takes them over where they are, in either direction, and waits for nothing.
     func clickSelect(_ id: CGWindowID, in stack: ZoneStack) {
+        guard !switchLocked else { return }
         guard stack.id == focusedZoneID else {
             guard let ref = stack.refs[id] else { return }
             // A zone in view takes the focus first, then slides to the window as one that has it does.

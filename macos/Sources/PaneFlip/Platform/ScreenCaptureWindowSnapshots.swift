@@ -33,6 +33,15 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
         configuration.backgroundColor = .clear
         guard let image = try? await SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration) else { return nil }
         let squared = WindowCorners.squared(image)
-        return WindowPicture(image: squared.image, frame: window.frame, cornerRadius: CGFloat(squared.radius) / scale)
+        return WindowPicture(image: squared.image, frame: currentFrame(of: window), cornerRadius: CGFloat(squared.radius) / scale)
+    }
+
+    /// Where the window stands now. The list of windows is kept for up to a minute (`Windows`), so the frame it holds can be from a moment when the window waited at the display's
+    /// edge (a picture that starts from there, over nothing, while the real window goes): the window server is asked again, which is cheap for one window.
+    private static func currentFrame(of window: SCWindow) -> CGRect {
+        guard let info = (CGWindowListCopyWindowInfo(.optionIncludingWindow, window.windowID) as? [[String: Any]])?.first,
+              let bounds = info[kCGWindowBounds as String] as? [String: CGFloat],
+              let x = bounds["X"], let y = bounds["Y"], let width = bounds["Width"], let height = bounds["Height"] else { return window.frame }
+        return CGRect(x: x, y: y, width: width, height: height)
     }
 }

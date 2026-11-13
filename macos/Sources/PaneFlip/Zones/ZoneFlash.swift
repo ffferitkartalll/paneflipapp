@@ -4,6 +4,8 @@ import AppKit
 /// focus left. The frame is a layer faded by Core Animation, which runs by itself: a window that is moved or an app that is brought forward right after
 /// cannot make it stutter.
 final class ZoneFlash {
+    /// How thick the frame is: the frame round a card of the grid of a zone's windows that has the focus is as thick (`ZoneWindowsCard`).
+    static let lineWidth: CGFloat = 1
     private let screens: ScreenProviding
     private let reduceMotion: () -> Bool
     private let outline = CALayer()
@@ -19,7 +21,7 @@ final class ZoneFlash {
         view.wantsLayer = true
         outline.cornerRadius = ZoneCorner.radius
         outline.cornerCurve = .continuous
-        outline.borderWidth = 1
+        outline.borderWidth = Self.lineWidth
         outline.opacity = 0
         view.layer?.addSublayer(outline)
         p.contentView = view

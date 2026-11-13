@@ -24,6 +24,8 @@ final class MultitouchSwipes: ScrollSwitchListening {
     private var swipeGain: CGFloat = 1
     /// Whether the settings give the trackpad's three and four fingers to the app; read when a swipe begins.
     private let isOn: () -> Bool
+    /// Whether three fingers going up or down may open and close the grid of the zone under the pointer; read when such a swipe begins.
+    private let grid: () -> Bool
     private var listening = false
     /// The reports come on the system's own thread, one after the other.
     private let lock = NSLock()
@@ -38,9 +40,10 @@ final class MultitouchSwipes: ScrollSwitchListening {
         return touchingNow
     }
 
-    init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool) {
+    init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool, grid: @escaping () -> Bool) {
         self.gain = gain
         self.isOn = isOn
+        self.grid = grid
     }
 
     deinit {
@@ -137,6 +140,11 @@ final class MultitouchSwipes: ScrollSwitchListening {
             guard listening else { return }
             swipeGain = gain()
             onEvent?(.began(fingers == 3 ? .windows : .strip))
+        case .liftBegan(let fingers):
+            listening = fingers == 3 && isOn() && grid()   // four fingers up or down mean nothing
+            guard listening else { return }
+            swipeGain = gain()
+            onEvent?(.began(.grid))
         case .moved(let delta, let time): if listening { onEvent?(.moved(delta * swipeGain, at: time)) }
         case .ended:
             if listening { onEvent?(.ended) }

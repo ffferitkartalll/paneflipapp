@@ -44,7 +44,8 @@ struct ZoneNotchView: View {
         let more = grown ? model.height * g : 0
         let compactHeight = lifted.height + (grown ? (model.height - lifted.height) * g : 0)
         let expandedHeight = slotted ? ZoneNotchExpanded.size(count: model.slots.count, cardWidth: model.cardWidth).height : compactHeight
-        let size = CGSize(width: cells.reduce(0, +) + more * (1 - e), height: compactHeight + (expandedHeight - compactHeight) * e)
+        let lead = more * (1 - e)   // the button at the left end is as wide as the one at the right end
+        let size = CGSize(width: cells.reduce(0, +) + 2 * lead, height: compactHeight + (expandedHeight - compactHeight) * e)
         let radius = lifted.height / 2 + (Self.grownRadius - lifted.height / 2) * g
         let shape = UnevenRoundedRectangle(bottomLeadingRadius: radius, bottomTrailingRadius: radius, style: .circular)
         ZStack(alignment: .topLeading) {
@@ -52,7 +53,8 @@ struct ZoneNotchView: View {
             ZoneNotchRow(cards: cards, widths: widths, cells: cells, height: compactHeight,
                          lit: slotted ? Self.place(of: model.lit, among: model.slots) : model.lit,
                          grow: g, expand: e, cardWidth: model.cardWidth, hovered: slotted ? model.hoveredSlot : (grown ? model.hoveredCard : nil),
-                         hoveredButton: model.hoveredButton, carried: model.carriedCard, carriedX: model.carriedX, moreHovered: model.moreHovered)
+                         hoveredButton: model.hoveredButton, carried: model.carriedCard, carriedX: model.carriedX, moreHovered: model.moreHovered,
+                         lead: lead, windowsHovered: model.windowsHovered)
         }
         .frame(width: size.width, height: size.height)
         .clipShape(shape)

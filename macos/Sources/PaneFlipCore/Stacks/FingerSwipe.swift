@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 
 /// Turns what the trackpad says about the fingers on it (how many, and where their centre is) into a swipe with three or four fingers
-/// that goes to the side: it begins when the fingers have settled and move to the side, and ends when they lift or their number changes.
+/// that goes to the side (or up or down): it begins when the fingers have settled and move to the side, and ends when they lift or their number changes.
 /// Fingers land one after another, so a swipe with four does not begin as one with three. Value type; pure.
 public struct FingerSwipe {
 
@@ -47,13 +47,15 @@ public struct FingerSwipe {
             last = centre
             return []
         }
-        let delta = axis.add(horizontal: (centre.x - last.x) * Self.travel, vertical: (centre.y - last.y) * Self.travel)
+        let step = axis.move(horizontal: (centre.x - last.x) * Self.travel, vertical: (centre.y - last.y) * Self.travel)
         last = centre
+        let lifts = axis.decision == .vertical
+        let delta = lifts ? step.up : step.sideways
         guard delta != 0 else { return [] }
         var outputs: [Output] = []
         if !active {
             active = true
-            outputs.append(.began(fingers: count))
+            outputs.append(lifts ? .liftBegan(fingers: count) : .began(fingers: count))
         }
         outputs.append(.moved(delta, at: time))
         return outputs

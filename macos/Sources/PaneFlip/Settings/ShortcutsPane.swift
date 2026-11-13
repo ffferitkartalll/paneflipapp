@@ -9,7 +9,7 @@ struct ShortcutsPane: View {
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
-                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut, \.sendToZoneKeys]
+                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut, \.zoneWindowsShortcut, \.sendToZoneKeys]
 
     var body: some View {
         Form {
@@ -38,6 +38,7 @@ struct ShortcutsPane: View {
                 chordRow(.nextWindow, title: "Next window", path: \.nextWindowShortcut)
                 chordRow(.previousWindow, title: "Previous window", path: \.previousWindowShortcut)
                 chordRow(.enlargeWindow, title: "Enlarge window", path: \.enlargeWindowShortcut)
+                chordRow(.zoneWindows, title: "Zone windows", path: \.zoneWindowsShortcut)
                 row(.windowScroll, title: "Hold while scrolling",
                     detail: "Hold these keys and scroll over a zone with the mouse wheel to move through its windows. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.windowScrollKeys, standard: standard(\.windowScrollKeys)) { settings.values.windowScrollKeys = $0 }

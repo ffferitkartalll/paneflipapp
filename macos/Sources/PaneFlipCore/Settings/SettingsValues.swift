@@ -42,6 +42,8 @@ public struct SettingsValues: Equatable {
     public var undoWindowShortcut = SnapTrigger.undoWindow
     /// Enlarge the focused window of a zone for a while.
     public var enlargeWindowShortcut = SnapTrigger.enlargeWindow
+    /// Open the grid of the windows of the zone in focus.
+    public var zoneWindowsShortcut = SnapTrigger.zoneWindows
     /// Close the message of the island that offers the undo.
     public var closeWindowUndoNoticeShortcut = SnapTrigger.closeWindowUndoNotice
 

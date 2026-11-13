@@ -25,6 +25,8 @@ final class ZoneNotches: ZonePresenting {
     private var litZone: UUID?
     /// The zone a window of which is being dragged: it has no notch until the drag is over.
     private var draggedZone: UUID?
+    /// Opens the grid of a zone's windows (the button at the left end of the grown notch); set by `AppContainer`.
+    var onZoneWindows: ((UUID) -> Void)?
     /// What puts a notch back at rest after it was lit for a switch, for each zone.
     private var lightEnds: [UUID: DispatchWorkItem] = [:]
     /// Where the fingers have led the lit card, not shown yet (`scrubbed`).
@@ -62,7 +64,7 @@ final class ZoneNotches: ZonePresenting {
 
     /// The panel as wide as the row needs (never narrower than it is), around the same middle.
     private func widen(_ panel: NSPanel, for widths: [CGFloat], height: CGFloat) {
-        let wide = widths.reduce(0, +) + height, frame = panel.frame
+        let wide = widths.reduce(0, +) + 2 * height, frame = panel.frame
         if wide > frame.width { panel.setFrame(CGRect(x: frame.midX - wide / 2, y: frame.minY, width: wide, height: frame.height), display: false) }
     }
 
@@ -214,7 +216,7 @@ final class ZoneNotches: ZonePresenting {
         guard let screen = screensNow().first(where: { $0.cocoaFrame.contains(mid) }) else { return }
         let height = min(screens.menuBarHeight(of: screen), frame.height / 4)
         let widths = rowWidths(of: open, in: zone, zoneWidth: frame.width)
-        let size = CGSize(width: widths.reduce(0, +) + height, height: height)   // and the button at its end, as wide as the row is tall
+        let size = CGSize(width: widths.reduce(0, +) + 2 * height, height: height)   // and the buttons at its ends, each as wide as the row is tall
         grown = zone
         source.refreshBadges()   // only now: it asks while a notch shows cards, and the badges of the last look may be old
         panel.setFrame(CGRect(x: frame.midX - size.width / 2, y: frame.maxY - size.height, width: size.width, height: size.height), display: false)
@@ -344,11 +346,12 @@ final class ZoneNotches: ZonePresenting {
             model.hoveredSlot = nil
             model.hoveredButton = nil
             model.moreHovered = false
+            model.windowsHovered = false
             collapseCompact(zone)
         }
         guard let model = models[zone], model.expand > 0 else { return shrink() }
         if let panel = panels[zone] {   // large enough for the compact row again
-            let compact = CGSize(width: model.widths.reduce(0, +) + model.height, height: model.height), frame = panel.frame
+            let compact = CGSize(width: model.widths.reduce(0, +) + 2 * model.height, height: model.height), frame = panel.frame
             let wide = max(frame.width, compact.width)
             panel.setFrame(CGRect(x: frame.midX - wide / 2, y: frame.maxY - frame.height, width: wide, height: frame.height), display: false)
         }
@@ -395,11 +398,14 @@ final class ZoneNotches: ZonePresenting {
             return
         }
         let inside = panel.frame.contains(point)
-        let card = inside ? CardRow.index(atX: point.x - panel.frame.minX, widths: model.widths) : nil
+        // The row stands right of the button at its left end.
+        let card = inside ? CardRow.index(atX: point.x - panel.frame.minX - model.height, widths: model.widths) : nil
         if model.hoveredCard != card { model.hoveredCard = card }
-        let cardsEnd = panel.frame.minX + model.widths.reduce(0, +)
+        let cardsEnd = panel.frame.minX + model.height + model.widths.reduce(0, +)
         let more = inside && point.x >= cardsEnd && point.x < cardsEnd + model.height
         if model.moreHovered != more { model.moreHovered = more }
+        let windows = inside && point.x < panel.frame.minX + model.height
+        if model.windowsHovered != windows { model.windowsHovered = windows }
     }
 
     // MARK: Expanded
@@ -493,16 +499,23 @@ final class ZoneNotches: ZonePresenting {
         guard grown == zone, let panel = panels[zone], let model = models[zone], !model.cards.isEmpty else { return showSwitch(of: zone) }
         shrinkLater()
         if !model.slots.isEmpty { return pressExpanded(zone, at: point) }
-        let cardsEnd = panel.frame.minX + model.widths.reduce(0, +)
+        if point.x < panel.frame.minX + model.height { return openZoneWindows(zone) }
+        let cardsEnd = panel.frame.minX + model.height + model.widths.reduce(0, +)
         if point.x >= cardsEnd, point.x < cardsEnd + model.height { return expand(zone) }
-        guard let index = CardRow.index(atX: point.x - panel.frame.minX, widths: model.widths) else { return }
+        guard let index = CardRow.index(atX: point.x - panel.frame.minX - model.height, widths: model.widths) else { return }
         var centres: [String: CGFloat] = [:], edge: CGFloat = 0
         for (card, width) in zip(model.cards, model.widths) {
             centres[card.id] = edge + width / 2
             edge += width
         }
         let card = model.cards[index]
-        carry = (zone, card.id, point, point.x - panel.frame.minX - (centres[card.id] ?? 0), centres, false)
+        carry = (zone, card.id, point, point.x - panel.frame.minX - model.height - (centres[card.id] ?? 0), centres, false)
+    }
+
+    /// The button at the left end of the grown notch: the windows of the zone as a grid of pictures over the zone (`ZoneWindowsOverlay`); the notch goes back.
+    private func openZoneWindows(_ zone: UUID) {
+        collapse()
+        onZoneWindows?(zone)
     }
 
     /// The mouse moves with a card held: the card goes to the place where its middle is, among the others (measured as the row lay when the mouse went down).
@@ -515,7 +528,7 @@ final class ZoneNotches: ZonePresenting {
         carry = current
         shrinkLater()
         guard let from = model.cards.firstIndex(where: { $0.id == current.card }) else { return }
-        let centre = point.x - panel.frame.minX - current.grab
+        let centre = point.x - panel.frame.minX - model.height - current.grab
         // The card floats where the mouse has it, inside the notch.
         var still = Transaction()
         still.disablesAnimations = true

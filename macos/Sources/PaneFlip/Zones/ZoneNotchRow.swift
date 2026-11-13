@@ -31,6 +31,10 @@ struct ZoneNotchRow: View {
     let carriedX: CGFloat
     /// The pointer is on the button at the end of the row that expands it (`ZoneNotches`): as wide as the row is tall.
     let moreHovered: Bool
+    /// How wide the room at the left end is, for the button that opens the grid of the zone's windows (as wide as the row is tall, with the cards; none at rest and expanded), and
+    /// whether the pointer is on it.
+    let lead: CGFloat
+    let windowsHovered: Bool
 
     var body: some View {
         let stretch = CardRow.lit(at: lit, widths: cells)
@@ -38,7 +42,7 @@ struct ZoneNotchRow: View {
         let tall = height + (ZoneNotchExpanded.cardHeight(width: cardWidth) - height) * expand
         // The card in front is the one carried: its lit fill goes with it.
         let litCarried = carried.flatMap { id in cards.firstIndex { $0.id == id } }.map { abs(CGFloat($0) - lit) < 0.5 } ?? false
-        ZStack(alignment: .topLeading) {
+        let row = ZStack(alignment: .topLeading) {
             // Each card has a tint of its own that fades in and out, as the cards of the open island's row do: nothing slides from one card to the next.
             HStack(spacing: 0) {
                 ForEach(Array(cells.enumerated()), id: \.offset) { index, width in
@@ -83,6 +87,17 @@ struct ZoneNotchRow: View {
                 .offset(x: cells.reduce(0, +))
                 .opacity(grow * (1 - expand))
                 .animation(.easeOut(duration: 0.12), value: moreHovered)
+        }
+        // The cards stand right of the button at the left end, which is as tall as they are.
+        return ZStack(alignment: .topLeading) {
+            row.padding(.leading, lead)
+            Image(systemName: "square.grid.2x2").resizable().scaledToFit().fontWeight(.bold)
+                .foregroundStyle(Color.primary.opacity(windowsHovered ? 1 : 0.6))
+                .frame(width: height * 0.5, height: height * 0.5)
+                .frame(width: height, height: height)
+                .background(AppAccent.color.opacity(windowsHovered ? 0.25 : 0))
+                .opacity(grow * (1 - expand))
+                .animation(.easeOut(duration: 0.12), value: windowsHovered)
         }
     }
 

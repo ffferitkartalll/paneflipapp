@@ -35,9 +35,9 @@ extension SnapTrigger {
         case 55, 54: String(localized: "Command") + " (⌘)"
         case 49: String(localized: "Space")
         case 36: String(localized: "Return") + " (↩)"
-        case 48: String(localized: "Tab")
+        case 48: String(localized: "Tab") + " (⇥)"
         case 51: String(localized: "Delete") + " (⌫)"
-        case 53: String(localized: "Escape")
+        case 53: String(localized: "Escape") + " (⎋)"
         default: Self.layoutCharacter(of: key.code) ?? key.name
         }
     }
