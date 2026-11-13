@@ -17,16 +17,20 @@ public struct AxisLock: Equatable {
 
     /// The fingers moved. Returns how far the content follows now to the side: nothing while the direction is not decided or when it is
     /// vertical, and the whole distance of the start at the moment it turns out horizontal.
-    public mutating func add(horizontal: CGFloat, vertical: CGFloat) -> CGFloat {
+    public mutating func add(horizontal: CGFloat, vertical: CGFloat) -> CGFloat { move(horizontal: horizontal, vertical: vertical).sideways }
+
+    /// The fingers moved (`vertical`: up is positive). Returns how far they went to the side if the swipe is horizontal, or up if it is vertical
+    /// (the whole distance of the start at the moment the direction is decided); the other is 0, and both are 0 while it is not decided.
+    public mutating func move(horizontal: CGFloat, vertical: CGFloat) -> (sideways: CGFloat, up: CGFloat) {
         switch decision {
-        case .vertical: return 0
-        case .horizontal: return horizontal
+        case .vertical: return (0, vertical)
+        case .horizontal: return (horizontal, 0)
         case .undecided:
             sideways += horizontal
             upDown += vertical
-            guard (sideways * sideways + upDown * upDown).squareRoot() >= Self.travel else { return 0 }
+            guard (sideways * sideways + upDown * upDown).squareRoot() >= Self.travel else { return (0, 0) }
             decision = abs(sideways) > abs(upDown) * Self.bias ? .horizontal : .vertical
-            return decision == .horizontal ? sideways : 0
+            return decision == .horizontal ? (sideways, 0) : (0, upDown)
         }
     }
 }

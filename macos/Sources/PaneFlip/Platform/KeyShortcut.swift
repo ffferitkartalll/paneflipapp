@@ -12,6 +12,8 @@ enum KeyShortcut: Equatable {
     case undoWindow
     /// Enlarge the focused window of a zone for a while.
     case enlargeWindow
+    /// Open the grid of the windows of the zone in focus.
+    case zoneWindows
     /// Close the message of the island that offers the undo.
     case closeWindowUndoNotice
 }

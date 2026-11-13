@@ -11,6 +11,7 @@ final class ScrollSwitchHandler {
     private let coordinator: StackCoordinator
     private let scroller: StripScroller
     private let screens: ScreenProviding
+    private let grid: ZoneWindowsLeading
     /// Whether fingers on the trackpad may move this now (the setting is on, nothing else is being placed). The wheel is asked before it is heard.
     private let allows: (ScrollSwitchTarget) -> Bool
     private var target: ScrollSwitchTarget?
@@ -23,15 +24,22 @@ final class ScrollSwitchHandler {
     private var started = false
     private static let decisionDistance: CGFloat = 2
 
-    init(coordinator: StackCoordinator, scroller: StripScroller, screens: ScreenProviding, allows: @escaping (ScrollSwitchTarget) -> Bool = { _ in true }) {
+    init(coordinator: StackCoordinator, scroller: StripScroller, screens: ScreenProviding, grid: ZoneWindowsLeading, allows: @escaping (ScrollSwitchTarget) -> Bool = { _ in true }) {
         self.allows = allows
         self.coordinator = coordinator
         self.scroller = scroller
         self.screens = screens
+        self.grid = grid
     }
 
     func handle(_ event: ScrollSwitchEvent) {
         switch event {
+        case .moved(let delta, _) where target == .grid: grid.moveLead(by: delta)
+        case .ended where target == .grid:
+            grid.endLead()
+            target = nil
+        case .began(.grid):
+            if allows(.grid) { target = .grid }
         case .began(let aimed):
             guard allows(aimed) else { return }   // its moves and its end find no target and do nothing
             target = aimed
@@ -66,6 +74,7 @@ final class ScrollSwitchHandler {
                 if follows { coordinator.endWindowScrub() } else if abs(plain.offset) >= Self.stepDistance, let stack = coordinator.stacks[zone] {
                     coordinator.stepWindowScrub(in: stack, by: plain.offset < 0 ? 1 : -1)
                 }
+            case .grid: break
             case .strip:
                 if follows { scroller.endLed() } else if abs(plain.offset) >= Self.stepDistance {
                     scroller.scroll(toward: plain.offset < 0 ? .right : .left)
@@ -79,6 +88,7 @@ final class ScrollSwitchHandler {
             case .windows: coordinator.stepWindowScrub(at: screens.pointerAX, by: step)
             case .zoneWindows(let zone): if let stack = coordinator.stacks[zone] { coordinator.stepWindowScrub(in: stack, by: step) }
             case .strip: scroller.scroll(toward: step > 0 ? .right : .left)
+            case .grid: break
             }
         }
     }
@@ -89,6 +99,7 @@ final class ScrollSwitchHandler {
         case .windows: coordinator.canScrub(at: screens.pointerAX, toward: way)
         case .zoneWindows(let zone): coordinator.stacks[zone].map { coordinator.canScrub(in: $0, toward: way) } ?? false
         case .strip: scroller.canLead(toward: way)
+        case .grid: false
         }
     }
 
@@ -97,6 +108,7 @@ final class ScrollSwitchHandler {
         case .windows: follows = coordinator.beginWindowScrub(at: screens.pointerAX)
         case .zoneWindows(let zone): follows = coordinator.stacks[zone].map { coordinator.beginWindowScrub(in: $0) } ?? false
         case .strip: follows = scroller.beginLed()
+        case .grid: break
         }
     }
 
@@ -104,6 +116,7 @@ final class ScrollSwitchHandler {
         switch target {
         case .windows, .zoneWindows: if follows { coordinator.moveWindowScrub(by: delta, at: time) } else { plain.add(delta, at: time) }
         case .strip: if follows { scroller.moveLed(by: delta, at: time) } else { plain.add(delta, at: time) }
+        case .grid: break
         }
     }
 }

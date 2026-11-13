@@ -301,6 +301,36 @@ final class StackCoordinatorTests: XCTestCase {
         }
     }
 
+    func testWhileTheGridOfAZonesWindowsIsOpenOnlyTheGridSwitchesTheWindows() {
+        let snapshots = FakeWindowSnapshots(), stage = FakeSlideStage()
+        snapshots.images = [1: FakeWindowSnapshots.picture(), 2: FakeWindowSnapshots.picture(), 3: FakeWindowSnapshots.picture()]
+        coordinator.carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() })
+        let zone = UUID()
+        coordinator.apply(zones: [zone: CGRect(x: 0, y: 0, width: 100, height: 100)])
+        [1, 2, 3].forEach { coordinator.snap(.fake($0), into: zone) }
+        let stack = coordinator.stacks[zone]!
+        stage.end()
+        windows.focused = .fake(3)
+        coordinator.followFocus()
+        XCTAssertEqual(stack.activeID, 3)
+
+        coordinator.switchLocked = true
+        XCTAssertFalse(coordinator.slideSelect(1, in: stack), "a card of the island")
+        coordinator.clickSelect(1, in: stack)
+        coordinator.cycleFocusedZone(reverse: true)
+        XCTAssertFalse(coordinator.beginWindowScrub(in: stack), "the fingers")
+        coordinator.stepWindowScrub(in: stack, by: -1)
+        XCTAssertEqual(stack.activeID, 3, "nothing switched")
+        XCTAssertFalse(coordinator.isSliding)
+
+        coordinator.select(1, in: stack)   // what the grid does itself, with no slide
+        XCTAssertEqual(stack.activeID, 1)
+        XCTAssertFalse(coordinator.isSliding)
+
+        coordinator.switchLocked = false
+        XCTAssertTrue(coordinator.slideSelect(2, in: stack), "free again")
+    }
+
     func testAnEnlargedWindowKeepsTheMarginOfTheLayoutRoundTheScreensEdges() {
         let zone = UUID()
         coordinator.apply(zones: [zone: CGRect(x: 10, y: 10, width: 100, height: 80)])

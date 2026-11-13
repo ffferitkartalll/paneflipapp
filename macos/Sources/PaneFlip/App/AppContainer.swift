@@ -83,6 +83,12 @@ final class AppContainer {
         engine.add(presenter: island)
         let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, source: island)
         engine.add(presenter: notches)
+        let zoneWindows = ZoneWindowsOverlay(coordinator: coordinator, screens: screens, source: island, snapshots: capture, planner: planner,
+                                             mover: WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) }),
+                                             refresher: engine,
+                                             gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) })
+        engine.add(presenter: zoneWindows)
+        notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
         island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
@@ -158,7 +164,7 @@ final class AppContainer {
         let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
-                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut)]
+                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut), (.zoneWindows, v.zoneWindowsShortcut)]
             if island.hasClosableNotice { all.append((.closeWindowUndoNotice, v.closeWindowUndoNoticeShortcut)) }
             if v.zoneNavigationEnabled {
                 all += [(.focusZone(.up), v.zoneUpShortcut), (.focusZone(.left), v.zoneLeftShortcut),
@@ -180,8 +186,18 @@ final class AppContainer {
             if Date().timeIntervalSince(missionControlAsked.at) > 0.3 { missionControlAsked = (Date(), screens.isMissionControlActive) }
             return missionControlAsked.active
         }
+        // Where a grid may be opened or closed from now: nothing else is being placed, edited or shown, and the pointer is on the zone that has the focus (not on the island).
+        let canLeadGrid: () -> Bool = { [settings, coordinator, editor, island] in
+            settings.values.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !island.covers(NSEvent.mouseLocation) && !missionControl()
+                && zoneWindows.pointedZone != nil
+        }
         let fingerSwipes = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                                       isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) })
+                                                       isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) }, grid: canLeadGrid)
+        // The wheel button with the keys of the windows' scroll held opens the grid of the zone under the pointer.
+        let middleClick: MiddleClickListening = EventTapMiddleClick(zone: { [settings, keys] in
+            guard !zoneWindows.isShown, canLeadGrid(), settings.values.windowScrollKeys.isHeld(using: keys) else { return nil }
+            return zoneWindows.pointedZone
+        })
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers },
                                                        overIsland: { [settings, coordinator, editor, island, notches] in
@@ -193,7 +209,7 @@ final class AppContainer {
                   target != .strip || v.overflowZonesEnabled else { return nil }
             // Asked last, only over the island or a notch: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
-        }, fingers: { fingerSwipes.fingers }) { [settings, keys, coordinator, editor, island] in
+        }, fingers: { fingerSwipes.fingers }, grid: canLeadGrid) { [settings, keys, coordinator, editor, island] in
             let v = settings.values
             // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
@@ -211,8 +227,8 @@ final class AppContainer {
                                      stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                     isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() })
-        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens) { [settings, coordinator, editor] target in
+                                     isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() || zoneWindows.isShown })
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens, grid: zoneWindows) { [settings, coordinator, editor] target in
             let v = settings.values
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target != .strip || v.overflowZonesEnabled)
                 && !missionControl()
@@ -269,6 +285,7 @@ final class AppContainer {
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
+            middleClick.start { zoneWindows.show(zone: $0) }
             notches.start()
             pointerCrossing.start()
             capsLock.remap(settings.values.capsLockAsModifier)
@@ -281,6 +298,8 @@ final class AppContainer {
                 case .undoWindow: coordinator.undoLast(); island.dismissWindowNotice()
                 case .closeWindowUndoNotice: island.closeNotice()
                 case .enlargeWindow: coordinator.enlargeFocused()
+                case .zoneWindows:
+                    if !zoneWindows.isShown, let zone = coordinator.focusedZoneID ?? coordinator.focusedWindowCached().flatMap({ coordinator.stack(containing: $0.id)?.id }) { zoneWindows.show(zone: zone) }
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { slideStage.prepare() }

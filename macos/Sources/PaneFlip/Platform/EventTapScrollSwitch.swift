@@ -15,6 +15,8 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     /// What the keys held now move, if anything: asked for at every scroll event.
     private let target: () -> ScrollSwitchTarget?
     private var gestureTarget: ScrollSwitchTarget?
+    /// The swipe in progress goes up and down, to open and close the grid of a zone's windows (its target is still the one the keys aim at).
+    private var lifting = false
     /// How far the content goes for each point the fingers scroll; read when two fingers come down.
     private let gain: () -> CGFloat
     private var gestureGain: CGFloat = 1
@@ -27,8 +29,12 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     private let overIsland: () -> ScrollSwitchTarget?
     /// How many fingers touch the trackpad: over the island or a notch only exactly two fingers scroll (three and four are `MultitouchSwipes`', and do nothing there).
     private let fingers: () -> Int
+    /// Whether a swipe up or down, with the keys that aim at the zone's windows held, may open and close the grid of the zone under the pointer: asked once the swipe is vertical.
+    private let grid: () -> Bool
 
-    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int, target: @escaping () -> ScrollSwitchTarget?) {
+    init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int,
+         grid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+        self.grid = grid
         self.gain = gain
         self.twoFingers = twoFingers
         self.overIsland = overIsland
@@ -62,6 +68,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             if inGesture {
                 inGesture = false
                 gestureTarget = nil
+                lifting = false
                 axis = AxisLock()
                 send(.ended)
             }
@@ -78,6 +85,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         if inGesture, aimed != gestureTarget {
             inGesture = false
             gestureTarget = nil
+            lifting = false
             axis = AxisLock()
             send(.ended)
         }
@@ -93,23 +101,32 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         }
 
         // Two fingers: the content follows them to the left and the right, in a swipe that began that way (see `AxisLock`); a swipe that
-        // began up or down moves nothing, however it goes on.
+        // began up or down opens and closes the grid of a zone's windows, if the keys aim at the zone's windows and the pointer is on it.
         if phase == 1 { axis = AxisLock() }
-        let delta = axis.add(horizontal: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)),
-                             vertical: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))
+        let step = axis.move(horizontal: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)),
+                             vertical: -CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))   // the content goes down with the fingers: up is negative
         let finished = phase == 4 || phase == 8
-        if !inGesture && !finished && delta != 0 {
-            inGesture = true
-            gestureTarget = aimed
-            gestureGain = gain()
-            send(.began(aimed))
+        if !inGesture && !finished {
+            let lift = axis.decision == .vertical && aimed == .windows && grid()
+            let delta = lift ? step.up : step.sideways
+            if delta != 0 {
+                inGesture = true
+                gestureTarget = aimed
+                lifting = lift
+                gestureGain = gain()
+                send(.began(lift ? .grid : aimed))
+                send(.moved(delta * gestureGain, at: TimeInterval(event.timestamp) / 1e9))
+            }
+        } else if inGesture && !finished {
+            let delta = lifting ? step.up : step.sideways
+            if delta != 0 { send(.moved(delta * gestureGain, at: TimeInterval(event.timestamp) / 1e9)) }
         }
-        if delta != 0 && !finished { send(.moved(delta * gestureGain, at: TimeInterval(event.timestamp) / 1e9)) }
         if finished {
             axis = AxisLock()
             if inGesture {
                 inGesture = false
                 gestureTarget = nil
+                lifting = false
                 send(.ended)
             }
         }
