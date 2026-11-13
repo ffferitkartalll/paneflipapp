@@ -51,7 +51,7 @@ struct ZoneNotchView: View {
             shape.fill(Color(nsColor: .windowBackgroundColor))
             ZoneNotchRow(cards: cards, widths: widths, cells: cells, height: compactHeight,
                          lit: slotted ? Self.place(of: model.lit, among: model.slots) : (grown ? model.lit : CGFloat(model.activeIndex)),
-                         lift: model.lift, grow: g, expand: e, cardWidth: model.cardWidth, hovered: slotted ? model.hoveredSlot : (grown ? model.hoveredCard : nil),
+                         grow: g, expand: e, cardWidth: model.cardWidth, hovered: slotted ? model.hoveredSlot : (grown ? model.hoveredCard : nil),
                          hoveredButton: model.hoveredButton, carried: model.carriedCard, carriedX: model.carriedX, moreHovered: model.moreHovered)
         }
         .frame(width: size.width, height: size.height)

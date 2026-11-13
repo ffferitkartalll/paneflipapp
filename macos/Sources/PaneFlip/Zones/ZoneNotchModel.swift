@@ -10,7 +10,7 @@ final class ZoneNotchModel {
     var grow: CGFloat = 0
     /// How many open windows the zone holds: the notch at rest is as wide as they ask (`ZoneNotchView.size(forWindows:)`).
     var windowCount = 1
-    /// The place of the zone's front window among them: with the pointer on the notch, that part of it is filled.
+    /// The place of the zone's front window among them: that part of the notch is filled with the accent colour, at rest too.
     var activeIndex = 0
     /// The open windows of a switch, in the grown notch; empty: the notch is not grown.
     var cards: [IslandWindow] = []
