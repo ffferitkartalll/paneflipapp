@@ -209,7 +209,8 @@ final class AppContainer {
                   target != .strip || v.overflowZonesEnabled else { return nil }
             // Asked last, only over the island or a notch: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
-        }, fingers: { fingerSwipes.fingers }, grid: canLeadGrid) { [settings, keys, coordinator, editor, island] in
+        }, fingers: { fingerSwipes.fingers },
+                                                       crowded: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers && fingerSwipes.crowded }, grid: canLeadGrid) { [settings, keys, coordinator, editor, island] in
             let v = settings.values
             // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
