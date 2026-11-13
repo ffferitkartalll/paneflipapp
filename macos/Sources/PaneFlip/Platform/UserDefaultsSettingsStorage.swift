@@ -36,6 +36,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         v.zoneNavigationEnabled = defaults.object(forKey: "zoneNavigationEnabled") as? Bool ?? v.zoneNavigationEnabled
         v.capsLockAsModifier = defaults.object(forKey: "capsLockAsModifier") as? Bool ?? v.capsLockAsModifier
         v.fetchBrandIcons = defaults.object(forKey: "fetchBrandIcons") as? Bool ?? v.fetchBrandIcons
+        v.notchOpensOnClickOnly = defaults.object(forKey: "notchOpensOnClickOnly") as? Bool ?? v.notchOpensOnClickOnly
+        v.notchLiftsOnSwitch = defaults.object(forKey: "notchLiftsOnSwitch") as? Bool ?? v.notchLiftsOnSwitch
         v.snapTrigger = defaults.data(forKey: "snapTrigger").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) }.flatMap { $0 == .formerSnapTrigger ? nil : $0 } ?? v.snapTrigger
         v.windowScrollKeys = defaults.data(forKey: "windowScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.windowScrollKeys
         v.stripScrollKeys = defaults.data(forKey: "stripScrollKeys").flatMap { try? JSONDecoder().decode(SnapTrigger.self, from: $0) } ?? v.stripScrollKeys
@@ -64,6 +66,8 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         defaults.set(v.capsLockAsModifier, forKey: "capsLockAsModifier")
         defaults.set(v.trackpadMethod.rawValue, forKey: "trackpadMethod")
         defaults.set(v.fetchBrandIcons, forKey: "fetchBrandIcons")
+        defaults.set(v.notchOpensOnClickOnly, forKey: "notchOpensOnClickOnly")
+        defaults.set(v.notchLiftsOnSwitch, forKey: "notchLiftsOnSwitch")
         defaults.set(try? JSONEncoder().encode(v.snapTrigger), forKey: "snapTrigger")
         defaults.set(v.trackpadSpeed, forKey: "trackpadSpeed")
         defaults.set(try? JSONEncoder().encode(v.windowScrollKeys), forKey: "windowScrollKeys")

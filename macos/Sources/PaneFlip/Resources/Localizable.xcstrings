@@ -23043,6 +23043,287 @@
         }
       }
     },
+    "Light up the zone notch while windows switch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضاءة شق المنطقة أثناء تبديل النوافذ"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осветяване на прореза при превключване на прозорци"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো পাল্টানোর সময় খাঁজ আলোকিত করুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il·lumina l'osca en canviar de finestra"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozsvítit výřez při přepínání oken"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lys hakket op, mens vinduer skiftes"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerbe beim Fensterwechsel aufleuchten lassen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φωτισμός εγκοπής κατά την εναλλαγή παραθύρων"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iluminar la muesca al cambiar de ventana"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tõsta sälk esile akende vahetamisel"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "روشن کردن شکاف هنگام جابه‌جایی پنجره‌ها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valaise lovi ikkunoita vaihdettaessa"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ilawan ang notch habang nagpapalit ng window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Éclairer l'encoche pendant le changement de fenêtre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הדלקת החריץ בעת מעבר בין חלונות"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो बदलते समय नॉच को जलाएँ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Osvijetli urez pri promjeni prozora"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevágás kivilágítása ablakváltáskor"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyalakan takik saat berpindah jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illumina la tacca durante il cambio di finestra"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウ切り替え中にノッチを点灯する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우를 전환하는 동안 노치 밝히기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apšviesti išpjovą perjungiant langus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izgaismot izgriezumu, pārslēdzot logus"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो बदलताना नॉच उजळवा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyalakan takuk semasa bertukar tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lys opp hakket mens vinduer byttes"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerf laten oplichten bij vensterwissel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozświetlaj wcięcie przy przełączaniu okien"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acender o entalhe ao mudar de janela"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acender o entalhe ao trocar de janela"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprinde decupajul la schimbarea ferestrelor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подсвечивать вырез при переключении окон"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozsvietiť výrez pri prepínaní okien"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Osvetli izrez ob preklapljanju oken"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осветли урез при мењању прозора"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lys upp skåran när fönster byts"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரங்களை மாற்றும்போது நாட்ச்சை ஒளிர்விடு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోలు మారుతున్నప్పుడు నాచ్‌ను వెలిగించండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ทำให้รอยบากสว่างขณะสลับหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereler değişirken çentiği aydınlat"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підсвічувати виріз під час перемикання вікон"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈوز بدلتے وقت نوچ کو روشن کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Làm sáng rãnh khi chuyển cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换窗口时点亮凹口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切換視窗時點亮凹口"
+          }
+        }
+      }
+    },
     "Looks for a newer release on GitHub. Nothing is sent but the request itself." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -28659,6 +28940,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打開「系統設定」"
+          }
+        }
+      }
+    },
+    "Open the zone notch only on a click" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح شق المنطقة بالنقر فقط"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отваряне на прореза само с щракване"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "শুধু ক্লিকে খাঁজ খুলুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obre l'osca només amb un clic"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otevírat výřez jen kliknutím"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn hakket kun ved klik"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerbe nur per Klick öffnen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άνοιγμα εγκοπής μόνο με κλικ"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir la muesca solo con un clic"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ava sälk ainult klõpsuga"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن شکاف فقط با کلیک"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa lovi vain napsautuksella"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan lang ang notch sa pag-click"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir l'encoche uniquement au clic"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתיחת החריץ בלחיצה בלבד"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नॉच केवल क्लिक पर खोलें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvori urez samo klikom"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevágás megnyitása csak kattintásra"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka takik hanya dengan klik"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri la tacca solo con un clic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリックしたときだけノッチを開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "클릭할 때만 노치 열기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atverti išpjovą tik spustelėjus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atvērt izgriezumu tikai ar klikšķi"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नॉच फक्त क्लिकवर उघडा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka takuk dengan klik sahaja"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne hakket bare med klikk"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerf alleen met een klik openen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwieraj wcięcie tylko kliknięciem"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir o entalhe só com um clique"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir o entalhe só com um clique"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deschide decupajul doar la clic"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открывать вырез только по щелчку"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otvárať výrez len kliknutím"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odpri izrez samo s klikom"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отварај урез само кликом"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna skåran bara med klick"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "கிளிக் செய்யும்போது மட்டும் நாட்ச்சைத் திற"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "క్లిక్ చేసినప్పుడు మాత్రమే నాచ్ తెరవండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เปิดรอยบากเมื่อคลิกเท่านั้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çentiği yalnızca tıklayınca aç"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкривати виріз лише за клацанням"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوچ صرف کلک پر کھولیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ mở rãnh khi nhấp"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅在点按时打开凹口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅在點按時打開凹口"
           }
         }
       }
@@ -42432,6 +42994,287 @@
         }
       }
     },
+    "The notch of a zone opens into the row of its windows only when you click it, not when you switch the zone's windows. The notch still lights up when the pointer is on it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتحول شق المنطقة إلى صف نوافذها بالنقر عليه فقط، وليس عند التبديل بين نوافذ المنطقة. ويظل الشق يضيء عند وجود المؤشر عليه."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прорезът на зоната се отваря към реда с прозорците ѝ само когато щракнете върху него, а не когато превключвате прозорците на зоната. Прорезът продължава да се осветява, когато курсорът е върху него."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোনের খাঁজ শুধু ক্লিক করলেই তার উইন্ডোর সারিতে খোলে, জোনের উইন্ডো পাল্টানোর সময় নয়। কার্সার খাঁজের ওপর থাকলে সেটি এখনও আলোকিত হয়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'osca d'una zona s'obre cap a la fila de les seves finestres només quan hi fas clic, no quan canvies de finestra a la zona. L'osca continua il·luminant-se quan el punter hi és a sobre."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Výřez zóny se rozevře do řady jejích oken, jen když na něj kliknete, ne když přepínáte okna zóny. Výřez se stále rozsvítí, když je na něm ukazatel."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hakket i en zone åbner sig til rækken af zonens vinduer, kun når du klikker på det, ikke når du skifter zonens vinduer. Hakket lyser stadig op, når markøren er på det."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Kerbe einer Zone öffnet sich nur per Klick zur Reihe ihrer Fenster, nicht beim Wechseln der Fenster der Zone. Die Kerbe leuchtet weiterhin auf, wenn der Zeiger darauf steht."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η εγκοπή μιας ζώνης ανοίγει στη σειρά των παραθύρων της μόνο όταν την πατήσετε, όχι όταν αλλάζετε τα παράθυρα της ζώνης. Η εγκοπή συνεχίζει να φωτίζεται όταν ο δείκτης βρίσκεται πάνω της."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La muesca de una zona se abre en la fila de sus ventanas solo cuando haces clic en ella, no cuando cambias de ventana en la zona. La muesca sigue iluminándose cuando el puntero está sobre ella."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tsooni sälk avaneb selle akende reaks ainult siis, kui sellel klõpsata, mitte tsooni akende vahetamisel. Sälk süttib endiselt, kui kursor on sellel."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شکاف یک ناحیه فقط با کلیک روی آن به ردیف پنجره‌هایش باز می‌شود، نه هنگام جابه‌جایی پنجره‌های ناحیه. شکاف همچنان وقتی نشانگر روی آن است روشن می‌شود."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alueen lovi avautuu ikkunoidensa riviksi vain, kun sitä napsautetaan, ei kun alueen ikkunoita vaihdetaan. Lovi valaistuu edelleen, kun osoitin on sen päällä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bubukas lang ang notch ng isang zone sa hanay ng mga window nito kapag ni-click mo ito, hindi kapag nagpapalit ka ng window ng zone. Iilaw pa rin ang notch kapag nasa ibabaw nito ang pointer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'encoche d'une zone ne s'ouvre sur la rangée de ses fenêtres que lorsque vous cliquez dessus, pas lorsque vous changez de fenêtre dans la zone. L'encoche s'éclaire toujours quand le pointeur est dessus."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חריץ האזור נפתח לשורת החלונות שלו רק בלחיצה עליו, ולא במעבר בין חלונות האזור. החריץ עדיין נדלק כשהמצביע נמצא עליו."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ज़ोन का नॉच केवल क्लिक करने पर उसकी विंडो की पंक्ति में खुलता है, ज़ोन की विंडो बदलने पर नहीं। पॉइंटर नॉच पर होने पर वह फिर भी जल उठता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urez zone otvara se u redak njezinih prozora samo kad ga kliknete, a ne kad mijenjate prozore zone. Urez se i dalje osvijetli kad je pokazivač na njemu."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A zóna bevágása csak kattintásra nyílik ki az ablakai sorává, az ablakok váltásakor nem. A bevágás továbbra is kivilágosodik, ha a mutató rajta van."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takik sebuah zona hanya terbuka menjadi deretan jendelanya saat diklik, bukan saat Anda berpindah jendela zona. Takik tetap menyala saat penunjuk berada di atasnya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La tacca di una zona si apre sulla riga delle sue finestre solo quando ci fai clic, non quando cambi finestra nella zona. La tacca si illumina comunque quando il puntatore è sopra di essa."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンのノッチは、ゾーンのウインドウを切り替えたときではなく、クリックしたときだけ、そのウインドウの列に開きます。ポインタがノッチの上にあるときは、これまでどおり点灯します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역의 노치는 영역의 윈도우를 전환할 때가 아니라 클릭할 때만 윈도우 행으로 열립니다. 포인터가 노치 위에 있으면 노치는 계속 밝아집니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonos išpjova atsiveria į jos langų eilutę tik ją spustelėjus, o ne perjungiant zonos langus. Išpjova vis tiek įsijungia, kai žymeklis yra ant jos."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonas izgriezums atveras uz tās logu rindu tikai tad, kad uz tā noklikšķina, nevis tad, kad pārslēdz zonas logus. Izgriezums joprojām iedegas, kad rādītājs ir uz tā."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोनचा नॉच फक्त क्लिक केल्यावरच त्याच्या विंडोच्या रांगेत उघडतो, झोनच्या विंडो बदलताना नाही. पॉइंटर नॉचवर असताना तो तरीही उजळतो."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takuk sesuatu zon terbuka menjadi baris tetingkapnya hanya apabila diklik, bukan apabila anda bertukar tetingkap zon. Takuk masih menyala apabila penuding berada di atasnya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hakket i en sone åpner seg til raden med sonens vinduer bare når du klikker på det, ikke når du bytter vindu i sonen. Hakket lyser fortsatt opp når pekeren er på det."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De kerf van een zone opent zich alleen bij een klik naar de rij met haar vensters, niet wanneer je van venster wisselt in de zone. De kerf licht nog steeds op als de aanwijzer erop staat."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wcięcie strefy otwiera się na rząd jej okien tylko po kliknięciu, a nie przy przełączaniu okien strefy. Wcięcie nadal się rozświetla, gdy wskaźnik jest na nim."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O entalhe de uma zona só se abre na fila das suas janelas quando clica nele, não quando muda de janela na zona. O entalhe continua a acender-se quando o ponteiro está sobre ele."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O entalhe de uma zona só se abre na fileira das janelas dela quando você clica nele, não quando troca de janela na zona. O entalhe continua acendendo quando o ponteiro está sobre ele."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decupajul unei zone se deschide spre rândul ferestrelor ei doar când faceți clic pe el, nu când schimbați ferestrele zonei. Decupajul se aprinde în continuare când cursorul este pe el."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вырез зоны раскрывается в ряд её окон только по щелчку, а не при переключении окон зоны. Вырез по-прежнему подсвечивается, когда на нём курсор."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Výrez zóny sa rozbalí do radu jej okien, len keď naň kliknete, nie keď prepínate okná zóny. Výrez sa stále rozsvieti, keď je na ňom ukazovateľ."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izrez cone se odpre v vrsto njenih oken samo ob kliku nanj, ne pa ob preklapljanju oken cone. Izrez se še vedno osvetli, ko je kazalec nanj."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Урез зоне се отвара у ред њених прозора само када кликнете на њега, а не када мењате прозоре зоне. Урез и даље светли када је показивач на њему."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skåran i en zon öppnas till raden med dess fönster bara när du klickar på den, inte när du byter fönster i zonen. Skåran lyser fortfarande upp när pekaren är på den."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலத்தின் நாட்ச் அதைக் கிளிக் செய்யும்போது மட்டுமே அதன் சாளர வரிசையாகத் திறக்கும்; மண்டலத்தின் சாளரங்களை மாற்றும்போது அல்ல. சுட்டி நாட்ச்சின் மேல் இருக்கும்போது அது இன்னும் ஒளிரும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్ నాచ్ క్లిక్ చేసినప్పుడు మాత్రమే దాని విండోల వరుసగా తెరుచుకుంటుంది, జోన్ విండోలను మార్చినప్పుడు కాదు. పాయింటర్ నాచ్‌పై ఉన్నప్పుడు అది ఇంకా వెలుగుతుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "รอยบากของโซนจะเปิดเป็นแถวหน้าต่างของโซนเมื่อคลิกเท่านั้น ไม่ใช่เมื่อสลับหน้าต่างของโซน รอยบากยังคงสว่างขึ้นเมื่อตัวชี้อยู่บนรอยบาก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir bölgenin çentiği, bölgenin pencereleri değiştirilirken değil, yalnızca tıklandığında pencere satırına açılır. İmleç çentiğin üzerindeyken çentik yine de aydınlanır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виріз зони розкривається в ряд її вікон лише за клацанням, а не під час перемикання вікон зони. Виріз, як і раніше, підсвічується, коли на ньому курсор."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زون کا نوچ صرف کلک کرنے پر اس کی ونڈوز کی قطار میں کھلتا ہے، زون کی ونڈوز بدلتے وقت نہیں۔ پوائنٹر نوچ پر ہو تو وہ پھر بھی روشن ہوتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rãnh của một vùng chỉ mở ra thành hàng cửa sổ của vùng khi bạn nhấp vào nó, không phải khi bạn chuyển cửa sổ của vùng. Rãnh vẫn sáng lên khi con trỏ ở trên nó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "区域的凹口仅在点按时展开为该区域的窗口行，切换区域窗口时不会展开。指针位于凹口上时，凹口仍会亮起。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "區域的凹口僅在點按時展開為該區域的視窗列，切換區域視窗時不會展開。指標位於凹口上時，凹口仍會亮起。"
+          }
+        }
+      }
+    },
     "The shortcuts in the Shortcuts tab move the focus to the zone above, to the left, below or to the right." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -48614,6 +49457,287 @@
         }
       }
     },
+    "While you switch a zone's windows and the pointer is not on its notch, the notch shows as it does with the pointer on it. When off, it stays closed." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أثناء التبديل بين نوافذ المنطقة وعدم وجود المؤشر على شقها، يظهر الشق كما يظهر عند وجود المؤشر عليه. عند الإيقاف يبقى مغلقًا."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Докато превключвате прозорците на зоната и курсорът не е върху прореза ѝ, той изглежда така, както когато курсорът е върху него. Когато е изключено, остава затворен."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোনের উইন্ডো পাল্টানোর সময় কার্সার খাঁজের ওপর না থাকলে খাঁজটি কার্সার ওপরে থাকার মতো দেখায়। বন্ধ থাকলে এটি বন্ধ থাকে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentre canvies de finestra d'una zona i el punter no és sobre la seva osca, l'osca es mostra com quan el punter hi és a sobre. Si està desactivat, es manté tancada."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Když přepínáte okna zóny a ukazatel není na jejím výřezu, výřez vypadá tak, jako když je na něm ukazatel. Když je vypnuto, zůstává zavřený."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mens du skifter en zones vinduer, og markøren ikke er på dens hak, vises hakket, som når markøren er på det. Når det er slået fra, forbliver det lukket."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wechselst du die Fenster einer Zone und der Zeiger steht nicht auf ihrer Kerbe, sieht die Kerbe so aus wie mit dem Zeiger darauf. Ist die Option aus, bleibt sie geschlossen."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όταν αλλάζετε τα παράθυρα μιας ζώνης και ο δείκτης δεν είναι στην εγκοπή της, η εγκοπή φαίνεται όπως όταν ο δείκτης είναι πάνω της. Όταν είναι απενεργοποιημένο, μένει κλειστή."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mientras cambias de ventana en una zona y el puntero no está sobre su muesca, la muesca se ve como cuando el puntero está sobre ella. Si está desactivado, permanece cerrada."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kui vahetad tsooni aknaid ja kursor pole selle sälgul, näeb sälk välja nagu siis, kui kursor on sellel. Väljalülitatuna jääb see suletuks."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وقتی پنجره‌های یک ناحیه را جابه‌جا می‌کنید و نشانگر روی شکاف آن نیست، شکاف همان‌طور دیده می‌شود که با نشانگر روی آن. وقتی خاموش است، بسته می‌ماند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kun vaihdat alueen ikkunoita eikä osoitin ole sen lovella, lovi näkyy samoin kuin osoittimen ollessa sen päällä. Kun asetus on pois päältä, se pysyy suljettuna."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habang nagpapalit ka ng window ng isang zone at wala sa notch nito ang pointer, ganito ang itsura ng notch kapag nasa ibabaw nito ang pointer. Kapag naka-off, nananatili itong sarado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pendant que vous changez de fenêtre dans une zone et que le pointeur n'est pas sur son encoche, elle s'affiche comme lorsque le pointeur est dessus. Désactivé, elle reste fermée."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בזמן מעבר בין חלונות של אזור, כשהמצביע לא על החריץ שלו, החריץ נראה כמו כשהמצביע עליו. כשהאפשרות כבויה, הוא נשאר סגור."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ज़ोन की विंडो बदलते समय जब पॉइंटर उसके नॉच पर नहीं होता, नॉच वैसा दिखता है जैसा पॉइंटर के उस पर होने पर दिखता है। बंद होने पर वह बंद रहता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dok mijenjate prozore zone, a pokazivač nije na njezinu urezu, urez izgleda kao kad je pokazivač na njemu. Kad je isključeno, ostaje zatvoren."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amíg egy zóna ablakait váltod, és a mutató nincs a bevágásán, a bevágás úgy néz ki, mintha a mutató rajta lenne. Kikapcsolva zárva marad."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saat Anda berpindah jendela sebuah zona dan penunjuk tidak berada di takiknya, takik tampil seperti saat penunjuk berada di atasnya. Jika mati, takik tetap tertutup."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentre cambi finestra in una zona e il puntatore non è sulla sua tacca, la tacca appare come quando il puntatore è sopra di essa. Se disattivato, resta chiusa."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンのウインドウを切り替えていて、ポインタがそのノッチの上にないとき、ノッチはポインタが上にあるときと同じ見た目になります。オフのときは閉じたままです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역의 윈도우를 전환하는 중 포인터가 노치 위에 없으면, 노치가 포인터가 위에 있을 때처럼 표시됩니다. 끄면 닫힌 채로 유지됩니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kai perjungiate zonos langus, o žymeklis nėra ant jos išpjovos, išpjova atrodo taip, kaip kai žymeklis yra ant jos. Kai išjungta, ji lieka uždara."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamēr pārslēdzat zonas logus un rādītājs nav uz tās izgriezuma, izgriezums izskatās tā, it kā rādītājs būtu uz tā. Ja izslēgts, tas paliek aizvērts."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोनच्या विंडो बदलताना पॉइंटर त्याच्या नॉचवर नसल्यास, नॉच पॉइंटर त्यावर असल्यासारखा दिसतो. बंद असताना तो बंद राहतो."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semasa anda bertukar tetingkap sesuatu zon dan penuding tidak berada pada takuknya, takuk kelihatan seperti apabila penuding berada di atasnya. Apabila dimatikan, ia kekal tertutup."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mens du bytter vindu i en sone og pekeren ikke er på hakket, vises hakket som når pekeren er på det. Når det er slått av, forblir det lukket."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terwijl je van venster wisselt in een zone en de aanwijzer niet op de kerf staat, ziet de kerf eruit zoals met de aanwijzer erop. Als dit uit staat, blijft hij gesloten."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy przełączasz okna strefy, a wskaźnik nie jest na jej wcięciu, wcięcie wygląda tak, jak gdy wskaźnik jest na nim. Gdy wyłączone, pozostaje zamknięte."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enquanto muda de janela numa zona e o ponteiro não está no seu entalhe, o entalhe aparece como quando o ponteiro está sobre ele. Se estiver desativado, permanece fechado."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enquanto você troca de janela em uma zona e o ponteiro não está no entalhe dela, o entalhe aparece como quando o ponteiro está sobre ele. Se estiver desativado, ele permanece fechado."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cât timp schimbați ferestrele unei zone și cursorul nu este pe decupajul ei, decupajul arată ca atunci când cursorul este pe el. Dezactivat, rămâne închis."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пока вы переключаете окна зоны и курсор не на её вырезе, вырез выглядит так же, как когда курсор на нём. Если выключено, он остаётся закрытым."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keď prepínate okná zóny a ukazovateľ nie je na jej výreze, výrez vyzerá tak, ako keď je na ňom ukazovateľ. Keď je vypnuté, zostáva zatvorený."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ko preklapljate okna cone in kazalec ni na njenem izrezu, je izrez videti, kot da je kazalec nanj. Ko je izklopljeno, ostane zaprt."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Док мењате прозоре зоне, а показивач није на њеном урезу, урез изгледа као када је показивач на њему. Када је искључено, остаје затворен."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medan du byter fönster i en zon och pekaren inte är på dess skåra visas skåran som när pekaren är på den. När det är avstängt förblir den stängd."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலத்தின் சாளரங்களை மாற்றும்போது சுட்டி அதன் நாட்ச்சின் மேல் இல்லையெனில், நாட்ச் சுட்டி மேலே இருப்பது போலத் தோன்றும். அணைத்திருந்தால் அது மூடியே இருக்கும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్ విండోలను మారుస్తున్నప్పుడు పాయింటర్ దాని నాచ్‌పై లేకపోతే, నాచ్ పాయింటర్ దానిపై ఉన్నట్లుగా కనిపిస్తుంది. ఆఫ్‌లో ఉంటే అది మూసి ఉంటుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ขณะที่คุณสลับหน้าต่างของโซนและตัวชี้ไม่ได้อยู่บนรอยบากของโซน รอยบากจะแสดงเหมือนตอนที่ตัวชี้อยู่บนรอยบาก เมื่อปิด รอยบากจะปิดอยู่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir bölgenin pencerelerini değiştirirken imleç çentiğin üzerinde değilse, çentik imleç üzerindeyken göründüğü gibi görünür. Kapalıyken çentik kapalı kalır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поки ви перемикаєте вікна зони і курсор не на її вирізі, виріз виглядає так само, як коли курсор на ньому. Якщо вимкнено, він залишається закритим."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زون کی ونڈوز بدلتے وقت جب پوائنٹر اس کے نوچ پر نہ ہو تو نوچ ویسا ہی دکھائی دیتا ہے جیسا پوائنٹر اس پر ہونے پر۔ بند ہونے پر وہ بند رہتا ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khi bạn chuyển cửa sổ của một vùng và con trỏ không ở trên rãnh của nó, rãnh trông giống như khi con trỏ ở trên nó. Khi tắt, rãnh vẫn đóng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换区域的窗口时，如果指针不在其凹口上，凹口会显示为指针位于其上时的样子。关闭后，凹口保持关闭。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切換區域的視窗時，如果指標不在其凹口上，凹口會顯示為指標位於其上時的樣子。關閉後，凹口保持關閉。"
+          }
+        }
+      }
+    },
     "Window placement shortcut is active" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -51139,6 +52263,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "區域邊緣"
+          }
+        }
+      }
+    },
+    "Zone notch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شق المنطقة"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прорез на зоната"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোনের খাঁজ"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Osca de la zona"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Výřez zóny"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonens hak"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonen-Kerbe"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εγκοπή ζώνης"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muesca de la zona"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tsooni sälk"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شکاف ناحیه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alueen lovi"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notch ng zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encoche de zone"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חריץ האזור"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ज़ोन का नॉच"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urez zone"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zóna bevágása"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takik zona"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tacca della zona"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンのノッチ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역 노치"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonos išpjova"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonas izgriezums"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोनचा नॉच"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takuk zon"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonens hakk"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonekerf"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wcięcie strefy"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entalhe da zona"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entalhe da zona"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decupajul zonei"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вырез зоны"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Výrez zóny"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izrez cone"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Урез зоне"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonens skåra"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலத்தின் நாட்ச்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్ నాచ్"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "รอยบากของโซน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölge çentiği"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виріз зони"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زون کا نوچ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rãnh vùng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "区域凹口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "區域凹口"
           }
         }
       }

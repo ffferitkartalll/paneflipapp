@@ -29,6 +29,18 @@ final class UserDefaultsSettingsStorageTests: XCTestCase {
         XCTAssertTrue(storage.load().islandEnabled)
     }
 
+    func testTheNotchSettingsAreKeptAndStartAsTheyWere() {
+        let fresh = storage.load()
+        XCTAssertFalse(fresh.notchOpensOnClickOnly, "the notch opens for a switch, as before")
+        XCTAssertTrue(fresh.notchLiftsOnSwitch)
+        var values = SettingsValues()
+        values.notchOpensOnClickOnly = true
+        values.notchLiftsOnSwitch = false
+        storage.save(values)
+        XCTAssertTrue(storage.load().notchOpensOnClickOnly)
+        XCTAssertFalse(storage.load().notchLiftsOnSwitch)
+    }
+
     func testTheDeskArrangementIsKept() {
         var values = SettingsValues()
         values.deskArrangement = DeskArrangement(origins: ["a": CGPoint(x: 10, y: 20)])
