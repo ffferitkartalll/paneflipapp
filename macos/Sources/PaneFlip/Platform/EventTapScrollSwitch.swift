@@ -6,7 +6,7 @@ import PaneFlipCore
 /// Accessibility permission the app already has. It hears the mouse wheel with the chosen keys held, and (when the settings ask for it)
 /// two fingers on the trackpad with the keys held; and, with no key held, the wheel and two fingers over the open island in the menu bar,
 /// which are the layout's (over its picture) or a zone's windows' (over their cards), and over a zone's notch, which are its windows'.
-/// Three and four fingers are `MultitouchSwipes`.
+/// Three and four fingers are `MultitouchSwipes`; the scroll the system makes of the first two of them is kept from the app here (`CrowdedScroll`).
 final class EventTapScrollSwitch: ScrollSwitchListening {
     private var tap: CFMachPort?
     private var onEvent: ((ScrollSwitchEvent) -> Void)?
@@ -31,9 +31,13 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     private let fingers: () -> Int
     /// Whether a swipe up or down, with the keys that aim at the zone's windows held, may open and close the grid of the zone under the pointer: asked once the swipe is vertical.
     private let grid: () -> Bool
+    /// Whether three or more fingers have been down in the touch in progress, and the settings give them to the app.
+    private let crowded: () -> Bool
+    private var crowdedScroll = CrowdedScroll()
 
     init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int,
-         grid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+         crowded: @escaping () -> Bool, grid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+        self.crowded = crowded
         self.grid = grid
         self.gain = gain
         self.twoFingers = twoFingers
@@ -89,7 +93,18 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             axis = AxisLock()
             send(.ended)
         }
-        guard let aimed else { return Unmanaged.passUnretained(event) }
+        guard let aimed else {
+            guard !wheel else { return Unmanaged.passUnretained(event) }
+            switch crowdedScroll.take(crowded: crowded(), phase: Int(phase)) {
+            case .pass: return Unmanaged.passUnretained(event)
+            case .swallow: return nil
+            case .end:
+                event.setIntegerValueField(.scrollWheelEventScrollPhase, value: 4)
+                for field in [CGEventField.scrollWheelEventDeltaAxis1, .scrollWheelEventDeltaAxis2, .scrollWheelEventPointDeltaAxis1, .scrollWheelEventPointDeltaAxis2,
+                              .scrollWheelEventFixedPtDeltaAxis1, .scrollWheelEventFixedPtDeltaAxis2] { event.setIntegerValueField(field, value: 0) }
+                return Unmanaged.passUnretained(event)
+            }
+        }
         // The glide that goes on after the fingers lifted is swallowed too, and means nothing.
         guard event.getIntegerValueField(.scrollWheelEventMomentumPhase) == 0 else { return nil }
 

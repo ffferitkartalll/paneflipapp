@@ -31,6 +31,9 @@ final class MultitouchSwipes: ScrollSwitchListening {
     private let lock = NSLock()
     private var swipe = FingerSwipe()
     private var touchingNow = 0
+    private var crowdedNow = false
+    /// When the last report came (the time since the start of the system).
+    private var reportedAt: TimeInterval = 0
     private var wake: NSObjectProtocol?
 
     /// How many fingers touch the trackpad now (read by the scroll tap, on the main thread).
@@ -38,6 +41,14 @@ final class MultitouchSwipes: ScrollSwitchListening {
         lock.lock()
         defer { lock.unlock() }
         return touchingNow
+    }
+
+    /// Whether three or more fingers have been down in the touch in progress: from the third finger until every finger is up (read by the scroll tap, on the main thread).
+    /// A trackpad that went away with fingers on it reports no more: what it said last counts for a second only, so scrolling is never kept from the apps for good.
+    var crowded: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return crowdedNow && ProcessInfo.processInfo.systemUptime - reportedAt < 1
     }
 
     init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool, grid: @escaping () -> Bool) {
@@ -106,6 +117,7 @@ final class MultitouchSwipes: ScrollSwitchListening {
         lock.lock()
         swipe = FingerSwipe()
         touchingNow = 0
+        crowdedNow = false
         lock.unlock()
     }
 
@@ -127,6 +139,8 @@ final class MultitouchSwipes: ScrollSwitchListening {
         let n = Double(max(touching, 1))
         lock.lock()
         touchingNow = touching
+        reportedAt = ProcessInfo.processInfo.systemUptime
+        if touching >= 3 { crowdedNow = true } else if touching == 0 { crowdedNow = false }
         let outputs = swipe.add(fingers: touching, x: x / n, y: y / n, at: time)
         lock.unlock()
         guard !outputs.isEmpty else { return }
