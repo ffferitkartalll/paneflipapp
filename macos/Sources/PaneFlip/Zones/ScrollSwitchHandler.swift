@@ -34,7 +34,7 @@ final class ScrollSwitchHandler {
 
     func handle(_ event: ScrollSwitchEvent) {
         switch event {
-        case .moved(let delta, _) where target == .grid: grid.moveLead(by: delta)
+        case .moved(let delta, let time) where target == .grid: grid.moveLead(by: delta, at: time)
         case .ended where target == .grid:
             grid.endLead()
             target = nil
