@@ -18,8 +18,6 @@ struct ZoneNotchRow: View {
     let height: CGFloat
     /// Which part or card is lit: its place among them, between two while the fingers lead.
     let lit: CGFloat
-    /// How much the accent colour shows: 0 at rest, 1 with the pointer on the notch, and grown.
-    let lift: CGFloat
     /// 0 for the notch at rest, 1 for the grown one; and 0 for the compact row, 1 for the expanded notch.
     let grow: CGFloat
     let expand: CGFloat
@@ -58,7 +56,7 @@ struct ZoneNotchRow: View {
             .frame(width: stretch.width, height: tall, alignment: .topLeading)
             .clipped()
             .offset(x: stretch.x)
-            .opacity(litCarried ? 0 : lift)
+            .opacity(litCarried ? 0 : 1)   // at rest too: the part of the front window is filled
             if expand > 0 { expandedCards(tall: tall).opacity(expand) }
         }
         .overlay(alignment: .topLeading) {
