@@ -72,7 +72,7 @@ struct ShortcutsPane: View {
                     detail: "Hold these keys and scroll over the screen with the mouse wheel to slide to the screens beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.stripScrollKeys, standard: standard(\.stripScrollKeys)) { settings.values.stripScrollKeys = $0 }
             }
-            .disabled(!settings.values.placementEnabled || !settings.values.overflowZonesEnabled)
+            .disabled(!settings.values.placementEnabled)
         }
         .formStyle(.grouped)
         .onDisappear { stopRecording() }

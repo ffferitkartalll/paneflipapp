@@ -32,22 +32,18 @@ final class EditorController: LayoutEditing {
     func edit(on screen: ScreenInfo, layoutID: UUID) {
         hide()
         guard let layout = repository.layout(id: layoutID, key: screen.key) else { return }
-        let showsOverflow = settings.values.overflowZonesEnabled
         let model = EditorModel(
-            strip: showsOverflow ? layout.strip : StripLayout(root: layout.root),
-            allowsOverflow: showsOverflow,
+            strip: layout.strip,
             gap: CGFloat(layout.gap(in: settings.values)),
             margin: CGFloat(layout.edgeMargin(in: settings.values)),
             minZoneSize: layout.minZoneSize(in: settings.values),
             defaultZone: layout.fallbackZoneID,
             aspects: layout.zoneAspects,
-            onApply: { [layouts, repository] model in
-                let strip = model.strip
-                // Switched off, the editor saw only the screen: the areas beyond it stay as they are.
-                let result = showsOverflow ? strip : repository.layout(id: layoutID, key: screen.key).map { strip.keepingAreas(of: $0.strip) } ?? strip
+            onApply: { [layouts] model in
                 layouts.setSpacing(key: screen.key, id: layoutID, gap: Double(model.gap), edgeMargin: Double(model.margin), minZoneSize: model.minZoneSize)
-                layouts.updateLayout(key: screen.key, id: layoutID, strip: result)   // lays the zones out again, with the new spacing
+                // Before the zones: the apps of a screen beyond the edge that was removed go to the default zone chosen now.
                 layouts.setDefaultZone(key: screen.key, id: layoutID, to: model.defaultZone)
+                layouts.updateLayout(key: screen.key, id: layoutID, strip: model.strip)   // lays the zones out again, with the new spacing
                 layouts.setZoneAspects(key: screen.key, id: layoutID, model.aspects)
             },
             onClose: { [weak self] in self?.hide() })

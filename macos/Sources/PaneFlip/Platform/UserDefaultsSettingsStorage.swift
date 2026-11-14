@@ -22,7 +22,7 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
 
     /// Settings that earlier versions had and this one does not: loading forgets them.
     // "deskArrangement" held the places in points; the places are in millimetres now (the displays are set again).
-    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement", "zoneNavigationBeyondEdges"]
+    private static let removedKeys = ["scrollGestureEnabled", "edgeScrollEnabled", "deskArrangement", "zoneNavigationBeyondEdges", "overflowZonesEnabled"]
 
     func load() -> SettingsValues {
         Self.removedKeys.forEach(defaults.removeObject(forKey:))
@@ -50,7 +50,6 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         // Not stored yet (an earlier version): the standard shortcut of the state Caps Lock is in.
         if defaults.data(forKey: "zoneEdgeEditKeys") == nil, v.capsLockAsModifier, let standard = StandardShortcuts.values(capsLock: true)[\.zoneEdgeEditKeys] { v.zoneEdgeEditKeys = standard }
         v.ignoredApps = defaults.stringArray(forKey: "ignoredApps") ?? v.ignoredApps
-        v.overflowZonesEnabled = defaults.object(forKey: "overflowZonesEnabled") as? Bool ?? v.overflowZonesEnabled
         v.language = defaults.string(forKey: "appLanguage") ?? v.language
         return v
     }
@@ -75,7 +74,6 @@ struct UserDefaultsSettingsStorage: SettingsStorage {
         for (key, path) in Self.shortcuts { defaults.set(try? JSONEncoder().encode(v[keyPath: path]), forKey: key) }
         defaults.set(try? JSONEncoder().encode(v.deskArrangement), forKey: "deskArrangementMillimetres")
         defaults.set(v.ignoredApps, forKey: "ignoredApps")
-        defaults.set(v.overflowZonesEnabled, forKey: "overflowZonesEnabled")
         // The system reads the app's language from `AppleLanguages` when the app starts; without it the system's order
         // is used. System Settings writes that key too (a language chosen for this app there), so it is touched only
         // when the choice here changed.

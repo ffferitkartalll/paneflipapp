@@ -42,8 +42,12 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         // The layout is saved first: if the app quits between the two writes, memory never names zones that the
         // saved layout lacks.
         repository.setStrip(strip, ofLayout: id, key: key)
-        if isActive, let area = screens.screens().first(where: { $0.key == key })?.axVisible {
-            release(memory.remap(ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: area)))
+        if isActive {
+            var map = screens.screens().first { $0.key == key }.map { ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: $0.axVisible) } ?? [:]
+            if let home = repository.layout(id: id, key: key)?.fallbackZoneID {
+                map.merge(ZoneRemapper.beyondEdges(old: old.strip, new: strip, home: home)) { kept, _ in kept }
+            }
+            if !map.isEmpty { release(memory.remap(map)) }
         }
         prune()
         if isActive {
@@ -106,33 +110,6 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func setDefaultZone(key: String, id: UUID, to zone: UUID?) {
         repository.setDefaultZone(zone, ofLayout: id, key: key)
-    }
-
-    /// The zones beyond the screens' edges are switched off: their apps go to the default zone of their layout.
-    func moveOverflowAppsToDefaultZones() {
-        var map: [UUID: UUID] = [:]
-        for layout in repository.screens.values.flatMap(\.layouts) {
-            guard let target = layout.fallbackZoneID else { continue }
-            let beyond = layout.strip.zoneIDs.filter { !layout.root.leafIDs.contains($0) }
-            beyond.forEach { map[$0] = target }
-        }
-        release(memory.remap(map))
-        refresher?.refreshZones()
-        refresher?.restoreWindows()
-    }
-
-    /// The zones beyond the screens' edges are switched on again: apps that left them when they were switched off go back
-    /// (a slot remembers the zones it was in).
-    func returnOverflowAppsToTheirZones() {
-        var released: [CGWindowID] = []
-        for layout in repository.screens.values.flatMap(\.layouts) {
-            guard let home = layout.fallbackZoneID else { continue }
-            let beyond = Set(layout.strip.zoneIDs).subtracting(layout.root.leafIDs)
-            released += memory.remap([home: home], preferred: beyond)
-        }
-        release(released)
-        refresher?.refreshZones()
-        refresher?.restoreWindows()
     }
 
     // MARK: Displays

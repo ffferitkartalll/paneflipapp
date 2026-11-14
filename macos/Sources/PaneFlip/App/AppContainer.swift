@@ -207,8 +207,7 @@ final class AppContainer {
             let pointer = NSEvent.mouseLocation
             guard let target = island.scrollTarget(at: pointer) ?? notches.scrollTarget(at: pointer) else { return nil }
             let v = settings.values
-            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown,
-                  target != .strip || v.overflowZonesEnabled else { return nil }
+            guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown else { return nil }
             // Asked last, only over the island or a notch: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
         }, fingers: { fingerSwipes.fingers },
@@ -216,7 +215,7 @@ final class AppContainer {
             let v = settings.values
             // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
-            let strip = v.overflowZonesEnabled && v.stripScrollKeys.isHeld(using: keys)
+            let strip = v.stripScrollKeys.isHeld(using: keys)
             let windows = v.windowScrollKeys.isHeld(using: keys)
             // The keys of the one are those of the other and more (Command, Option, Control against Option and Control): the longer wins.
             if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return missionControl() ? nil : .strip }
@@ -233,8 +232,7 @@ final class AppContainer {
                                      isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() || zoneWindows.isShown })
         let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens, grid: zoneWindows) { [settings, coordinator, editor] target in
             let v = settings.values
-            return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && (target != .strip || v.overflowZonesEnabled)
-                && !missionControl()
+            return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !missionControl()
         }
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
@@ -268,15 +266,6 @@ final class AppContainer {
         scroller.onRest = {
             coordinator.finishFocusBeyondTheEdge()
             coordinator.onMotionEnded?()
-        }
-        settings.onOverflowZonesChanged = { [weak layouts, weak engine, viewport, settings] in
-            guard !settings.values.overflowZonesEnabled else {
-                layouts?.returnOverflowAppsToTheirZones()
-                return
-            }
-            viewport.reset()
-            layouts?.moveOverflowAppsToDefaultZones()
-            engine?.refreshZones()
         }
         let launcher = AppLauncher(permissions: SystemPermissions(), screen: PermissionsWindowController(activation: activation)) {
             engine.start()

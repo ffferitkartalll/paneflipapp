@@ -106,11 +106,11 @@ extension MenuBarIslandModel {
         let group = IslandCornerAction.allCases.filter { $0.isOnLeft == onLeft }
         return group.reduce(0) { $0 + cornerButtonWidth($1) } + CGFloat(group.count - 1) * cornerGap
     }
-    /// The width the row of buttons needs, with the room at its sides. With a notch the notch lies between the two groups, the room from it to each as large as that round
+    /// The width the row of buttons needs, with the room at its sides: without a notch the two groups are one gap apart, as the buttons of a group are. With a notch the notch lies between the two groups, the room from it to each as large as that round
     /// the island, and the groups are as wide on both sides of the middle (the notch is in the middle of the island).
     var cornerRowWidth: CGFloat {
         let left = cornerGroupWidth(onLeft: true), right = cornerGroupWidth(onLeft: false)
-        let inside = notchWidth > 0 ? 2 * max(left, right) + notchWidth + 2 * sideRoom : left + right + 2 * cornerGap
+        let inside = notchWidth > 0 ? 2 * max(left, right) + notchWidth + 2 * sideRoom : left + right + cornerGap
         return inside + 2 * sideRoom
     }
     /// The middle of a button, from the middle of the island's top edge: x to the right, y down. The left ones begin at the island's left room, the right ones

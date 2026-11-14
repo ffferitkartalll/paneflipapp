@@ -116,15 +116,6 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(rect, bare.map { CGRect(x: $0.minX + 20, y: $0.minY + 20, width: $0.width - 40, height: $0.height - 40) })
     }
 
-    func testSwitchedOffTheAreaHasNoZoneAndNothingScrolls() {
-        settings.values.overflowZonesEnabled = false
-        let plan = planner.plan(on: screens.infos)
-        XCTAssertNil(plan[areaZone])
-        XCTAssertNotNil(plan[screenZone])
-        let found = planner.strip(of: screens.infos[0], among: screens.infos)
-        XCTAssertEqual(found?.0.range.lowerBound, found?.0.range.upperBound)
-    }
-
     func testScrollingBringsTheAreaInAndTakesTheScreensZoneToTheLeft() {
         viewport.set(250, for: key)
         let plan = planner.plan(on: screens.infos)

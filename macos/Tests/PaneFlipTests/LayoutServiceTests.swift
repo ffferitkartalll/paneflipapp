@@ -19,26 +19,23 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(repository.activeLayout(for: "screen")?.id, first.id)
     }
 
-    func testSwitchingOffTheZonesBeyondTheScreenMovesTheirAppsToTheDefaultZone() {
+    func testRemovingAScreenBeyondTheEdgeMovesItsAppsToTheDefaultZone() {
         let repository = LayoutRepository(store: MemoryDocumentStore())
         let memory = StackMemory(store: MemoryDocumentStore())
         let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
                                            settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
         let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
         let layout = repository.addLayout(for: "screen")
+        service.activate(key: "screen", id: layout.id)
         var strip = layout.strip
         let beyond = UUID()
         strip.trailing = [Overflow(width: 0.25, root: .leaf(beyond))]
         repository.setStrip(strip, ofLayout: layout.id, key: "screen")
         memory.remember(zoneID: beyond, bundleID: "app", title: "")
 
-        service.moveOverflowAppsToDefaultZones()
+        service.updateLayout(key: "screen", id: layout.id, strip: layout.strip)
 
-        XCTAssertEqual(memory.records[0].zoneID, layout.root.leafIDs[0])
-
-        service.returnOverflowAppsToTheirZones()
-
-        XCTAssertEqual(memory.records[0].zoneID, beyond)
+        XCTAssertEqual(memory.records.map(\.zoneID), [layout.root.leafIDs[0]])
     }
 
     func testSwitchingLayoutsSendsEveryAppToTheNewDefaultZoneAndBackToWhereItWas() {

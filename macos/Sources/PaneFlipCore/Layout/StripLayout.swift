@@ -80,11 +80,6 @@ public struct StripLayout: Equatable {
     private var leadingZoneIDs: [UUID] { leading.reversed().flatMap { $0.root.leafIDs } }
     private var trailingZoneIDs: [UUID] { trailing.flatMap { $0.root.leafIDs } }
 
-    /// This screen layout with the areas beyond the edges of `other` (for an editor that did not show them).
-    public func keepingAreas(of other: StripLayout) -> StripLayout {
-        StripLayout(leading: other.leading, root: root, trailing: other.trailing)
-    }
-
     public func part(of zone: UUID) -> Part? {
         if root.leafIDs.contains(zone) { return .screen }
         if leadingZoneIDs.contains(zone) { return .leading }

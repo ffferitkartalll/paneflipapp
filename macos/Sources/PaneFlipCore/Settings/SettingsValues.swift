@@ -67,9 +67,6 @@ public struct SettingsValues: Equatable {
     /// Where the displays stand on the desk; the zone moves between displays follow it.
     public var deskArrangement = DeskArrangement()
 
-    /// A layout may have zones beyond the left and right edges of a screen. Off: the editor does not show them, scrolling is
-    /// off and the apps in them are moved to the screen's default zone.
-    public var overflowZonesEnabled = true
     /// Bundle identifiers of apps whose windows PaneFlip leaves alone.
     public var ignoredApps: [String] = []
 
