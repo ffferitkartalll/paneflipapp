@@ -25,6 +25,28 @@ final class ZoneNotches: ZonePresenting {
     private var litZone: UUID?
     /// The zone a window of which is being dragged: it has no notch until the drag is over.
     private var draggedZone: UUID?
+    /// Mission Control or App Exposé is open, or the layout editor is (the island says so): no notches until it is closed.
+    var isCovered = false { didSet { if isCovered != oldValue { isCovered ? fadeAway() : fadeIn() } } }
+    private static let fade = 0.2
+
+    private func fadeAway() {
+        let fading = Array(panels.values)
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = Self.fade
+            fading.forEach { $0.animator().alphaValue = 0 }
+        }, completionHandler: { [weak self] in if self?.isCovered == true { self?.removeAll() } })
+    }
+
+    private func fadeIn() {
+        let kept = Set(panels.keys)   // still fading away: they come back from where they are
+        zonesDidChange()
+        for (zone, panel) in panels where !kept.contains(zone) { panel.alphaValue = 0 }
+        let shown = Array(panels.values)
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = Self.fade
+            shown.forEach { $0.animator().alphaValue = 1 }
+        }
+    }
     /// Opens the grid of a zone's windows (the button at the left end of the grown notch); set by `AppContainer`.
     var onZoneWindows: ((UUID) -> Void)?
     /// What puts a notch back at rest after it was lit for a switch, for each zone.
@@ -160,6 +182,7 @@ final class ZoneNotches: ZonePresenting {
 
     func zonesDidChange() {
         litZone = coordinator.focusedZoneID
+        guard !isCovered else { return }   // they fade away by themselves, and are laid out again when it is over
         guard settings.values.placementEnabled, !coordinator.isScrolling else { return removeAll() }   // the scroll ends with a change of its own
         let current = screensNow()
         var shown = Set<UUID>()

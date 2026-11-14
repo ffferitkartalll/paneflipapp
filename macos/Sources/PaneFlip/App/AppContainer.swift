@@ -89,7 +89,9 @@ final class AppContainer {
                                              gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) })
         engine.add(presenter: zoneWindows)
         notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
+        island.staysClosed = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
+        island.onCover = { [weak notches] in notches?.isCovered = $0 }
         island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
