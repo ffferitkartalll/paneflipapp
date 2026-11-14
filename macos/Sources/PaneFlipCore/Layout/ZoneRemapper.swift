@@ -14,4 +14,10 @@ public enum ZoneRemapper {
         }
         return map
     }
+
+    /// The zones of the screens beyond the edges that the new layout no longer has map to `home` (a screen beyond the edge was removed in the layout editor).
+    public static func beyondEdges(old: StripLayout, new: StripLayout, home: UUID) -> [UUID: UUID] {
+        let alive = Set(new.zoneIDs), screen = Set(old.root.leafIDs)
+        return Dictionary(uniqueKeysWithValues: old.zoneIDs.filter { !screen.contains($0) && !alive.contains($0) }.map { ($0, home) })
+    }
 }

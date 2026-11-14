@@ -46,7 +46,8 @@ struct MenuBarIslandView: View {
                 .overlay(alignment: .top) {
                     // Part of the shape, so they grow with it: as far from its edges as the picture is, and they appear once it has nearly grown.
                     if open {
-                        HStack(spacing: model.cornerGap) {
+                        // No spacing of the row's own: it would stand on both sides of the spacer between the two groups, and they would be two gaps apart.
+                        HStack(spacing: 0) {
                             ForEach(IslandCornerAction.allCases, id: \.self) { action in
                                 // The symbol is fitted into a box by its own shape (a font size would centre the line of text, not the symbol).
                                 HStack(spacing: MenuBarIslandModel.cornerSymbolGap) {
@@ -58,7 +59,9 @@ struct MenuBarIslandView: View {
                                 .frame(width: model.cornerButtonWidth(action), height: MenuBarIslandModel.cornerHeight)
                                 .background(Capsule().fill(ink.color(model.hoveredButton == .corner(action) ? 0.32 : 0.18)))
                                 .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
-                                if action == .openApps { Spacer(minLength: model.notchWidth) }
+                                .padding(.leading, IslandCornerAction.allCases.first { $0.isOnLeft == action.isOnLeft } == action ? 0 : model.cornerGap)
+                                // The two groups are one gap apart at least; with a notch, the notch and the room round it.
+                                if action == .openApps { Spacer(minLength: model.notchWidth > 0 ? model.notchWidth + 2 * model.sideRoom : model.cornerGap) }
                             }
                         }
                         .padding(.top, (model.topHeight - MenuBarIslandModel.cornerHeight) / 2)

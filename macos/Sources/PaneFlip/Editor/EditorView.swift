@@ -102,7 +102,6 @@ struct EditorView: View {
                 }
 
                 controls
-                overflowButtons(size: geo.size)
             }
             .animation(.smooth(duration: 0.4), value: model.offset)
             .coordinateSpace(name: "editor")
@@ -186,24 +185,6 @@ struct EditorView: View {
             }
         }
         .allowsHitTesting(false)
-    }
-
-    /// A plus button stands at an edge only where there is no screen beyond it: the view is at the outermost screen on that side.
-    private func overflowButtons(size: CGSize) -> some View {
-        ZStack {
-            if model.canAddLeading {
-                Button { model.addLeading() } label: { Image(systemName: "plus") }
-                    .help("Add a screen on the left")
-                    .position(x: 32, y: size.height / 2)
-            }
-            if model.canAddTrailing {
-                Button { model.addTrailing() } label: { Image(systemName: "plus") }
-                    .help("Add a screen on the right")
-                    .position(x: size.width - 32, y: size.height / 2)
-            }
-        }
-        .buttonStyle(.glass)
-        .controlSize(.large)
     }
 
     // MARK: Controls
@@ -299,6 +280,13 @@ struct EditorView: View {
                     Button { showInfo = true } label: { Label("Info", systemImage: "info.circle") }
                         .buttonStyle(.glass)
                         .popover(isPresented: $showInfo) { info }
+                    // A screen is added only where there is none beyond that edge: with the view at the outermost screen on that side.
+                    Button { model.addLeading() } label: { Label("Add a screen on the left", systemImage: "arrow.left.to.line") }
+                        .buttonStyle(.glass)
+                        .disabled(!model.canAddLeading)
+                    Button { model.addTrailing() } label: { Label("Add a screen on the right", systemImage: "arrow.right.to.line") }
+                        .buttonStyle(.glass)
+                        .disabled(!model.canAddTrailing)
                     if model.editedArea != nil {
                         Button { model.removeEditedArea() } label: { Label("Remove screen", systemImage: "trash") }
                             .buttonStyle(.glass)

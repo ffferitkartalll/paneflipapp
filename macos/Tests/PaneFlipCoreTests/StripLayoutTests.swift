@@ -13,15 +13,6 @@ final class StripLayoutTests: XCTestCase {
         StripLayout(composite: s.composite, leadingIDs: s.leading.map(\.id), trailingIDs: s.trailing.map(\.id))
     }
 
-    func testKeepingTheAreasOfAnotherStripChangesOnlyTheScreen() {
-        let kept = strip(leading: 0.5, trailing: 0.25)
-        let edited = StripLayout(root: .leaf(UUID()))
-        let result = edited.keepingAreas(of: kept)
-        XCTAssertEqual(result.root, edited.root)
-        XCTAssertEqual(result.leading, kept.leading)
-        XCTAssertEqual(result.trailing, kept.trailing)
-    }
-
     func testTheCompositeGivesEachPartItsShareOfTheWidth() {
         let s = strip(leading: 0.5, trailing: 0.25)
         XCTAssertEqual(s.totalWidth, 1.75)

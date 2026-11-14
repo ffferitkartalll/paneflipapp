@@ -8,7 +8,6 @@ import PaneFlipCore
 final class EditorModel {
     private(set) var strip: StripLayout
     /// False when the areas beyond the screen are switched off: they are neither shown nor added.
-    let allowsOverflow: Bool
     /// The gap between the zones and the margin round the layout, in points, as the desktop lays the zones out.
     var gap: CGFloat
     var margin: CGFloat
@@ -39,10 +38,9 @@ final class EditorModel {
     @ObservationIgnored private let onApply: (EditorModel) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
-    init(strip: StripLayout, allowsOverflow: Bool = true, gap: CGFloat = 0, margin: CGFloat = 0, minZoneSize: Double = AppSettings.minZoneSizeRange.lowerBound,
+    init(strip: StripLayout, gap: CGFloat = 0, margin: CGFloat = 0, minZoneSize: Double = AppSettings.minZoneSizeRange.lowerBound,
          defaultZone: UUID? = nil, aspects: [UUID: ZoneAspect] = [:], onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
-        self.allowsOverflow = allowsOverflow
         self.gap = gap
         self.margin = margin
         self.minZoneSize = minZoneSize
@@ -197,9 +195,9 @@ final class EditorModel {
 
     /// The area the view is about (nil on the screen's own layout), which the user may remove.
     var editedArea: Overflow? { strip.area(at: offset) }
-    /// The plus buttons show where the view is at the outermost screen on that side: another one comes after it.
-    var canAddLeading: Bool { allowsOverflow && abs(offset - (strip.areaRests.first ?? 0)) < 1e-9 }
-    var canAddTrailing: Bool { allowsOverflow && abs(offset - (strip.areaRests.last ?? 0)) < 1e-9 }
+    /// A screen can be added where the view is at the outermost screen on that side: another one comes after it.
+    var canAddLeading: Bool { abs(offset - (strip.areaRests.first ?? 0)) < 1e-9 }
+    var canAddTrailing: Bool { abs(offset - (strip.areaRests.last ?? 0)) < 1e-9 }
 
     /// Another screen, as wide as the screen, beyond the left (right) edge, outside the ones there are; the view goes to it.
     func addLeading() {

@@ -49,7 +49,7 @@ struct ZonePlanner {
         guard let layout = layouts.activeLayout(for: screen.key) else { return nil }
         let others = screens.filter { $0.displayID != screen.displayID }.map(\.cocoaFrame)
         let side = Parking.side(of: screen.cocoaFrame, others: others)
-        return (StripGeometry(strip: side == nil || !settings.values.overflowZonesEnabled ? StripLayout(root: layout.root) : layout.strip,
+        return (StripGeometry(strip: side == nil ? StripLayout(root: layout.root) : layout.strip,
                                        screen: screen.axVisible, gap: spacing(for: screen.key).gap, margin: spacing(for: screen.key).margin), side)
     }
 }

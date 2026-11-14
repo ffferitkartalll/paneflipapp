@@ -3,8 +3,8 @@ import PaneFlipCore
 
 /// The layout editor's model: the strip as screens, the view that rests at one of them, and what moves it.
 final class EditorModelTests: XCTestCase {
-    private func model(_ strip: StripLayout = StripLayout(root: .leaf(UUID())), overflow: Bool = true) -> EditorModel {
-        EditorModel(strip: strip, allowsOverflow: overflow, onApply: { _ in }, onClose: {})
+    private func model(_ strip: StripLayout = StripLayout(root: .leaf(UUID()))) -> EditorModel {
+        EditorModel(strip: strip, onApply: { _ in }, onClose: {})
     }
 
     func testTheDefaultZoneIsChosenUndoneAndFallsBackToTheFirstWhenItsZoneGoes() {
