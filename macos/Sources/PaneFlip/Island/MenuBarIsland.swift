@@ -76,8 +76,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private var picking: Entry?
     /// Mission Control or App Exposé is open, or the layout editor is: the islands are out of sight until it is closed.
     private var covered = false
+    /// Told when the islands go out of sight for that, and when they are back: the zone notches go with them. Set by `AppContainer`.
+    var onCover: ((Bool) -> Void)?
     /// True while something else owns the screen (the layout editor); set by `AppContainer`.
     var isSuppressed: () -> Bool = { false }
+    /// True while the pointer does not open the island (the grid of a zone's windows shows); set by `AppContainer`.
+    var staysClosed: () -> Bool = { false }
     /// Where the menu bar icon stands (screen coordinates); set by `AppContainer`.
     var iconFrame: () -> CGRect? = { nil }
     /// Where a dragged window would be put down among the cards of the open row: the grey card with a plus stands at `index`.
@@ -165,6 +169,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
 
     private func cover(_ covering: Bool) {
         covered = covering
+        onCover?(covering)
         for entry in entries.values {
             if covering {
                 hideNotice(entry)
@@ -552,7 +557,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             if drop != entry.dropZone { entry.dropZone = drop; entry.model.select(drop ?? focused(in: entry)) }
             if dragging { prepareDrop(on: overRow ? nil : drop, overRow: overRow, at: point, in: entry) }
             if entry.hovered { hoverCard(at: point, in: entry) }
-            guard hit != entry.hovered else { continue }
+            guard hit != entry.hovered, !(hit && staysClosed()) else { continue }
             setOpen(hit, for: entry)
         }
         for entry in entries.values {
