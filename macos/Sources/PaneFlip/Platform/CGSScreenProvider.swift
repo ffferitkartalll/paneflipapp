@@ -129,7 +129,7 @@ final class CGSScreenProvider: ScreenProviding {
             let notch = notch(of: s)
             return ScreenInfo(key: position.map { "\(uuid)|d\($0)" } ?? legacy, name: s.localizedName, size: s.frame.size,
                               cocoaFrame: s.frame, cocoaVisibleFrame: flip(usable), axVisible: usable,
-                              legacyKey: legacy, desktopCount: desktops.count, notchWidth: notch.width, notchHeight: notch.height,
+                              legacyKey: legacy, desktopCount: desktops.count, desktopsBefore: desktopsBefore(display: uuid, in: managed), notchWidth: notch.width, notchHeight: notch.height,
                               physicalSize: physicalSize(of: s))
         }
     }
@@ -245,6 +245,13 @@ final class CGSScreenProvider: ScreenProviding {
         guard let display = displays.first(where: { ($0["Display Identifier"] as? String)?.caseInsensitiveCompare(uuid) == .orderedSame }),
               let spaces = display["Spaces"] as? [[String: Any]] else { return [] }
         return spaces.filter { ($0["type"] as? Int ?? 0) == 0 }.compactMap { ($0["ManagedSpaceID"] as? NSNumber)?.uint64Value }
+    }
+
+    /// The ordinary desktops of the displays the system lists before this one.
+    private func desktopsBefore(display uuid: String, in displays: [[String: Any]]) -> Int {
+        let ids = displays.compactMap { $0["Display Identifier"] as? String }
+        guard let place = ids.firstIndex(where: { $0.caseInsensitiveCompare(uuid) == .orderedSame }) else { return 0 }
+        return ids[..<place].reduce(0) { $0 + ordinaryDesktops(onDisplay: $1, in: displays).count }
     }
 
     func currentSpaceIDs() -> Set<UInt64> {

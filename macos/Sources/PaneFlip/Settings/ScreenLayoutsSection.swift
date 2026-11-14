@@ -36,7 +36,7 @@ struct ScreenLayoutsSection: View {
                 Spacer()
                 // With several desktops the current one is told by its number; with one there is nothing to tell apart.
                 Group {
-                    if screen.desktopCount > 1, let number = screen.desktopNumber { Text("Desktop \(number)") } else { Text("Current desktop") }
+                    if screen.desktopCount > 1, let number = screen.desktopNumber { Text("Desktop \(screen.desktopsBefore + number)") } else { Text("Current desktop") }
                 }
                 .foregroundStyle(.secondary)
             }
@@ -73,7 +73,7 @@ struct ScreenLayoutsSection: View {
     private var desktopPickers: some View {
         ForEach(1...max(screen.desktopCount, 1), id: \.self) { number in
             let key = "\(screen.displayID)|d\(number)"
-            Picker("Desktop \(number)", selection: Binding(
+            Picker("Desktop \(screen.desktopsBefore + number)", selection: Binding(
                 get: { repository.activeLayout(for: key)?.id },
                 set: { if let id = $0 { layouts.activate(key: key, id: id) } else { layouts.deactivate(key: key) } })) {
                 Text("No layout").tag(UUID?.none)
