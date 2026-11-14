@@ -3,11 +3,11 @@ import PaneFlipCore
 
 final class UserDefaultsSettingsStorageTests: XCTestCase {
     private var defaults: UserDefaults!
-    private var suite = ""
+    // One name for every run: a name per test left a file per test in the user's Preferences folder (removing a domain leaves its file).
+    private let suite = "paneflip.tests"
     private var storage: UserDefaultsSettingsStorage!
 
     override func setUp() {
-        suite = "paneflip.tests.\(UUID().uuidString)"
         defaults = UserDefaults(suiteName: suite)
         defaults.removePersistentDomain(forName: suite)
         storage = UserDefaultsSettingsStorage(defaults: defaults)

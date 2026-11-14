@@ -29,7 +29,7 @@ final class AppContainer {
     private let launcher: AppLauncher
 
     init() {
-        let documents = JSONFileStore()
+        let documents = UserDefaultsDocumentStore()
         let settings = AppSettings(storage: UserDefaultsSettingsStorage())
         let repository = LayoutRepository(store: documents)
         let memory = StackMemory(store: documents)
