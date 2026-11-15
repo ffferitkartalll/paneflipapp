@@ -113,8 +113,21 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
     }
 
     /// The pictures are here: the grid is put over the zone with each picture over its window.
-    /// The panel is larger than the zone by the room the shadows of the cards at its edge need: they are not cut at the zone's edge.
-    private static func panelFrame(for zone: CGRect) -> CGRect { zone.insetBy(dx: -ZoneWindowsModel.shadowRoom, dy: -ZoneWindowsModel.shadowRoom) }
+    /// The panel is the whole display the zone is on, the menu bar and the Dock too, so that nothing cuts the shadows of the cards (a zone on no display has the room the shadows
+    /// need round it). Where the zone lies in it is `inset`, from the panel's top left.
+    private func placement(of zone: CGRect) -> (panel: CGRect, inset: CGPoint, whole: CGSize) {
+        let room = ZoneWindowsModel.shadowRoom
+        guard let screen = screens.screens().first(where: { $0.cocoaFrame.contains(CGPoint(x: zone.midX, y: zone.midY)) }) else {
+            return (zone.insetBy(dx: -room, dy: -room), CGPoint(x: room, y: room), CGSize(width: zone.width + 2 * room, height: zone.height + 2 * room))
+        }
+        let whole = screen.cocoaFrame
+        return (whole, CGPoint(x: zone.minX - whole.minX, y: whole.maxY - zone.maxY), whole.size)
+    }
+
+    private func place(_ model: ZoneWindowsModel, _ placement: (panel: CGRect, inset: CGPoint, whole: CGSize)) {
+        model.inset = placement.inset
+        model.wholeSize = placement.whole
+    }
 
     private func begin(zone: UUID, cards: [IslandWindow], pictures: [CGWindowID: WindowPicture]) {
         guard phase == .opening, self.zone == zone, let stack = coordinator.stacks[zone] else { return reset() }
@@ -136,8 +149,10 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         model.onToggleStart = { [weak self] card in self?.toggleStart(card) }
         model.onMove = { [weak self] card, target in self?.move(card, to: target) }
         model.onClose = { [weak self] in self?.hide() }
-        let panel = ZoneWindowsPanel(contentRect: Self.panelFrame(for: frame), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        panel.level = .statusBar   // above the Dock and the menu bar, which would cut the shadows of the cards at the zone's edge (the panel is larger than the zone)
+        let placement = placement(of: frame)
+        place(model, placement)
+        let panel = ZoneWindowsPanel(contentRect: placement.panel, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+        panel.level = .statusBar   // above the Dock and the menu bar, which would cut the shadows of the cards at the zone's edge (the panel is the whole display)
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = false
@@ -147,7 +162,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         let host = ZoneWindowsHostingView(rootView: ZoneWindowsView(model: model))
         host.sizingOptions = []
         panel.contentView = host
-        panel.setFrame(Self.panelFrame(for: frame), display: true)
+        panel.setFrame(placement.panel, display: true)
         panel.orderFrontRegardless()
         self.panel = panel
         self.model = model
@@ -401,7 +416,10 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         guard let zone, let model, let panel else { return }
         guard let stack = coordinator.stacks[zone] else { return reset() }   // the zone is gone, or the app is switched off
         let frame = screens.flip(stack.rect)
-        if panel.frame != Self.panelFrame(for: frame) { panel.setFrame(Self.panelFrame(for: frame), display: true); model.size = frame.size }
+        let placement = placement(of: frame)
+        if panel.frame != placement.panel { panel.setFrame(placement.panel, display: true) }
+        if model.size != frame.size { model.size = frame.size }
+        place(model, placement)
     }
 
     // MARK: Cards
