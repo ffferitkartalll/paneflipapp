@@ -46,6 +46,9 @@ final class StripScroller {
     /// The fingers move the layout of a screen: its layout offset. Called as often as the pictures move.
     var onFollow: ((ScreenInfo, _ offset: CGFloat) -> Void)?
     var onGlide: ((ScreenInfo, _ from: CGFloat?, _ to: CGFloat) -> Void)?
+    /// A glide by the clock begins or is given a new aim for a zone that was asked for: how far the layout has to go from where it shows now, and the time it takes.
+    /// The frame round that zone rides in with its picture.
+    var onRide: ((_ shift: CGFloat, _ duration: TimeInterval) -> Void)?
     /// The zone a focus change asked the scroll to bring into view; each scroll that comes to rest goes on until it shows.
     private var revealing: UUID?
     /// Presses that came while a scroll landed, to be done when it is over.
@@ -185,6 +188,7 @@ final class StripScroller {
             if !current.led, aim != nil || current.phase != .landing && current.geometry.zones(offset: target).first(where: { $0.id == id })?.isOnScreen == true,
                let rect = planner.rect(of: id, at: target, on: current.screen, among: screens.screens()) {
                 standsAt?(rect)
+                if scrolling?.phase == .gliding { onRide?(target - current.shown, Self.glide) }   // one that is still covering tells when it begins to glide
                 return true
             }
             revealing = id
@@ -207,14 +211,21 @@ final class StripScroller {
     /// The nearest rest position beyond `offset` that shows the zone (all of it, else any of it), and the edge it lies toward; nil when the zone is in view at
     /// `offset` or no rest shows it.
     private func rest(showing id: UUID, from offset: CGFloat, on screen: ScreenInfo, geometry: StripGeometry) -> (edge: ScreenEdge, rest: CGFloat)? {
-        if let home = homeRest(of: id, from: offset, geometry: geometry) { return (offset > home ? .left : .right, home) }
-        guard let placed = geometry.zones(offset: offset).first(where: { $0.id == id }), !placed.isOnScreen else { return nil }
-        let edge: ScreenEdge = placed.rect.minX >= screen.axVisible.midX ? .right : .left
+        let frame = screen.axVisible
+        func whole(_ rect: CGRect) -> Bool { rect.minX >= frame.minX - 0.5 && rect.maxX <= frame.maxX + 0.5 }
+        let now = geometry.zones(offset: offset).first { $0.id == id }
+        // With rests at the lines between zones a view may show part of a screen: a zone that is all in view needs no scroll (not back to its screen either), and one
+        // that is cut by an edge is brought in whole.
+        let cut = geometry.stopsAtZones && now?.isOnScreen == true && !whole(now!.rect)
+        if geometry.stopsAtZones, let now, now.isOnScreen, !cut { return nil }
+        if !cut, let home = homeRest(of: id, from: offset, geometry: geometry) { return (offset > home ? .left : .right, home) }
+        guard let placed = now, !placed.isOnScreen || cut else { return nil }
+        let edge: ScreenEdge = cut ? (placed.rect.maxX > frame.maxX + 0.5 ? .right : .left) : placed.rect.minX >= frame.midX ? .right : .left
         let beyond = edge == .right ? geometry.rests.filter { $0 > offset + 0.5 } : geometry.rests.filter { $0 < offset - 0.5 }.reversed()
         // The nearest rest that shows the whole zone, else the nearest that shows any of it.
         let shown = beyond.compactMap { rest in geometry.zones(offset: rest).first { $0.id == id }.map { (rest, $0) } }.filter { $0.1.isOnScreen }
-        let whole = shown.first { $0.1.rect.minX >= screen.axVisible.minX - 0.5 && $0.1.rect.maxX <= screen.axVisible.maxX + 0.5 }
-        return (whole ?? shown.first).map { (edge, $0.0) }
+        let all = shown.first { whole($0.1.rect) }
+        return (all ?? (cut ? nil : shown.first)).map { (edge, $0.0) }
     }
 
     /// The rest position of the screen itself (no zone beyond its edges in view), when `id` is a zone of the screen and the layout is scrolled away from it.
@@ -358,7 +369,10 @@ final class StripScroller {
         current.glideTo = current.target
         current.glideBegan = now()
         scrolling = current
-        if !current.led { onGlide?(current.screen, current.start, current.target) }
+        if !current.led {
+            onGlide?(current.screen, current.start, current.target)
+            onRide?(current.target - current.start, Self.glide)
+        }
         if current.led {
             // The pictures follow the fingers, from where they are now; no clock moves them until the fingers lift.
             followFingers()

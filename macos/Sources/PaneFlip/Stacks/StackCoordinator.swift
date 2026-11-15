@@ -87,6 +87,8 @@ final class StackCoordinator {
     var holdsTheFocus: () -> Bool = { false }
     /// Highlights the zone the focus went to (a keyboard shortcut moved it): its rectangle.
     var flashZone: (CGRect) -> Void = { _ in }
+    /// The frame of a zone the layout is about to scroll into view, at the place it will stand: it may wait and come in with the scroll. Without it, `flashZone`.
+    var flashZoneAhead: ((CGRect) -> Void)?
     /// Called when the focus moved to a window: the layout scrolls to its zone if it is out of sight beyond the screen's edge, or back to the screen itself
     /// if the zone is one of the screen's own and the layout is scrolled away.
     var onFocusBeyondTheEdge: ((UUID) -> Void)?
@@ -360,8 +362,8 @@ final class StackCoordinator {
     private var chosenFocus: (zone: UUID, window: CGWindowID, until: Date)?
 
     /// Control+Option+O/K/L/;: the focus goes to the front window of the zone beside the zone of the window in focus (the zone of the window
-    /// under the pointer when that one is in none). Past the last zone on the screen it goes on to the zones of another display, never to the zones
-    /// beyond the screen's edge. Nothing happens where there is no such zone.
+    /// under the pointer when that one is in none). Past the last zone on the screen to the left or to the right it goes on to the zones
+    /// beyond the screen's edge, which the layout scrolls into view, and after those to the zones of another display. Nothing happens where there is no such zone.
     ///
     /// A press only moves the place the focus is going to (`chosenFocus`) and asks the layout to bring that zone into view; the window comes forward
     /// once the zone is in view and nothing scrolls. Presses that follow quickly, with scrolls and landings in between, start from the place the
@@ -393,8 +395,12 @@ final class StackCoordinator {
             ZoneNeighbour.nearest(to: currentRect, number: current.order, among: zones.map { (id: $0.id, rect: $0.rect, number: $0.number) }, toward: direction)
         }
         let own = { (zone: (id: UUID, rect: CGRect, number: Int, display: String?)) in zone.display == display }
-        // On the screen first; none that way: the zones of another display.
-        let next = nearest(visible.filter(own)) ?? nearest(visible.filter { !own($0) })
+        let horizontal = direction == .left || direction == .right
+        let beyond = horizontal ? stacks.values.filter { $0.isParked && !$0.isEmpty && $0.id != current.id }.map(candidate) : []
+        // From a zone out of sight the nearest of all of its display, not the first one on the screen: the zones between are not skipped. Else on the screen
+        // first; none that way: the nearest zone with windows beyond the edge, the one next to the screen first; none there either: the zones of another display.
+        let next = current.isParked ? nearest((visible + beyond).filter(own)) ?? nearest(visible.filter { !own($0) })
+            : nearest(visible.filter(own)) ?? nearest(beyond.filter(own)) ?? nearest(visible.filter { !own($0) })
         guard let id = next, let target = stacks[id], let active = target.activeID, let ref = target.refs[active] else { return }
         chosenFocus = (id, ref.id, Date().addingTimeInterval(4))
         focusedZoneID = id
@@ -405,7 +411,7 @@ final class StackCoordinator {
         // keeps the machine busy while the pictures glide. The frame shows at once where the zone will stand when the layout can say so.
         let scrolls = onReachBeyondTheEdge?(id) { [weak self] rect in
             self?.focusPending?.flashed = true
-            self?.flashZone(rect)
+            (self?.flashZoneAhead ?? self?.flashZone)?(rect)
         } ?? false
         if !scrolls, !target.isParked, !isScrolling {
             // In view and nothing moves: the frame first, which the render server fades by itself; bringing the window forward may keep this

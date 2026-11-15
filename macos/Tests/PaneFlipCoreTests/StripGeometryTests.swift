@@ -150,4 +150,21 @@ final class StripGeometryTests: XCTestCase {
         XCTAssertEqual(gapped.first { $0.id == far }!.rect.minX - gapped.first { $0.id == near }!.rect.maxX, 8, "between one area and the next too")
         XCTAssertEqual(gapped.first { $0.id == far }!.rect.maxX, 3256, "the margin at the far end of the last area")
     }
+
+    func testWithTheSettingScrollingAlsoRestsWhereAZoneStandsAtAnEdgeOfTheScreen() {
+        func split(_ ratio: Double) -> LayoutNode { .split(id: UUID(), sideBySide: true, ratio: ratio, first: .leaf(UUID()), second: .leaf(UUID())) }
+        let strip = StripLayout(leading: [], root: split(0.4), trailing: [Overflow(width: 1, root: split(0.5))])
+        let screen = CGRect(x: 0, y: 0, width: 1000, height: 400)
+
+        XCTAssertEqual(StripGeometry(strip: strip, screen: screen).rests, [0, 1000], "off: only the screens")
+        // The line of the screen's split at its left edge (400), the line of the next screen's split at its right edge (500), and the two screens.
+        XCTAssertEqual(StripGeometry(strip: strip, screen: screen, stopsAtZones: true).rests, [0, 400, 500, 1000])
+
+        // With a gap and a margin every screen is still a rest, exactly where it is without the setting.
+        let plain = StripGeometry(strip: strip, screen: screen, gap: 10, margin: 20)
+        let stepped = StripGeometry(strip: strip, screen: screen, gap: 10, margin: 20, stopsAtZones: true)
+        XCTAssertTrue(plain.rests.allSatisfy(stepped.rests.contains))
+        XCTAssertEqual(stepped.rests.count, 4)
+        XCTAssertTrue(stepped.rests.allSatisfy(stepped.range.contains))
+    }
 }

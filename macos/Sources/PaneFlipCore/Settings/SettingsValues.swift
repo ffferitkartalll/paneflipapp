@@ -67,6 +67,8 @@ public struct SettingsValues: Equatable {
     /// Where the displays stand on the desk; the zone moves between displays follow it.
     public var deskArrangement = DeskArrangement()
 
+    /// Scrolling between the screens of a layout also comes to rest at the lines between zones, not only at the screens.
+    public var scrollStopsAtZones = false
     /// Bundle identifiers of apps whose windows PaneFlip leaves alone.
     public var ignoredApps: [String] = []
 

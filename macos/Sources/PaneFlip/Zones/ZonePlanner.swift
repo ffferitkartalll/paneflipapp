@@ -50,6 +50,7 @@ struct ZonePlanner {
         let others = screens.filter { $0.displayID != screen.displayID }.map(\.cocoaFrame)
         let side = Parking.side(of: screen.cocoaFrame, others: others)
         return (StripGeometry(strip: side == nil ? StripLayout(root: layout.root) : layout.strip,
-                                       screen: screen.axVisible, gap: spacing(for: screen.key).gap, margin: spacing(for: screen.key).margin), side)
+                                       screen: screen.axVisible, gap: spacing(for: screen.key).gap, margin: spacing(for: screen.key).margin,
+                              stopsAtZones: settings.values.scrollStopsAtZones), side)
     }
 }

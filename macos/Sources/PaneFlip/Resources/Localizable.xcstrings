@@ -36812,6 +36812,287 @@
         }
       }
     },
+    "Scrolling between the screens of a layout also stops at the edges of zones, not only at each screen." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتوقف التمرير بين شاشات التخطيط عند حواف المناطق أيضًا، وليس عند كل شاشة فقط."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Превъртането между екраните на оформлението спира и на ръбовете на зоните, не само на всеки екран."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "লেআউটের স্ক্রিনগুলোর মধ্যে স্ক্রল করার সময় শুধু প্রতিটি স্ক্রিনে নয়, জোনের প্রান্তেও থামে।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El desplaçament entre les pantalles d'una disposició també s'atura a les vores de les zones, no només a cada pantalla."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posouvání mezi obrazovkami rozložení se zastaví i na okrajích zón, nejen na každé obrazovce."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rulning mellem et layouts skærme stopper også ved zonernes kanter, ikke kun ved hver skærm."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Scrollen zwischen den Bildschirmen eines Layouts hält auch an den Kanten der Zonen an, nicht nur an jedem Bildschirm."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η κύλιση μεταξύ των οθονών μιας διάταξης σταματά και στα άκρα των ζωνών, όχι μόνο σε κάθε οθόνη."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El desplazamiento entre las pantallas de un diseño también se detiene en los bordes de las zonas, no solo en cada pantalla."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerimine paigutuse ekraanide vahel peatub ka tsoonide servadel, mitte ainult igal ekraanil."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیمایش بین صفحه‌نمایش‌های یک چیدمان در لبه‌های ناحیه‌ها هم می‌ایستد، نه فقط در هر صفحه‌نمایش."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vieritys asettelun näyttöjen välillä pysähtyy myös alueiden reunoille, ei vain jokaiselle näytölle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang pag-scroll sa pagitan ng mga screen ng layout ay humihinto rin sa mga gilid ng mga zone, hindi lang sa bawat screen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le défilement entre les écrans d'une disposition s'arrête aussi aux bords des zones, pas seulement à chaque écran."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגלילה בין המסכים של פריסה נעצרת גם בקצוות האזורים, לא רק בכל מסך."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लेआउट की स्क्रीन के बीच स्क्रोल करना ज़ोन के किनारों पर भी रुकता है, केवल हर स्क्रीन पर नहीं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomicanje među zaslonima rasporeda zaustavlja se i na rubovima zona, ne samo na svakom zaslonu."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Az elrendezés képernyői közötti görgetés a zónák szélénél is megáll, nem csak minden képernyőnél."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menggulir antar layar tata letak juga berhenti di tepi zona, tidak hanya di setiap layar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo scorrimento tra gli schermi di un layout si ferma anche ai bordi delle zone, non solo a ogni schermo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レイアウトの画面間のスクロールは、各画面だけでなくゾーンの端でも止まります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레이아웃의 화면 간 스크롤이 각 화면뿐 아니라 영역의 가장자리에서도 멈춥니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slinkimas tarp išdėstymo ekranų sustoja ir ties zonų kraštais, ne tik ties kiekvienu ekranu."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritināšana starp izkārtojuma ekrāniem apstājas arī pie zonu malām, ne tikai pie katra ekrāna."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लेआउटच्या स्क्रीनमधील स्क्रोलिंग फक्त प्रत्येक स्क्रीनवरच नाही, तर झोनच्या कडांवरही थांबते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menatal antara skrin susun atur juga berhenti di tepi zon, bukan hanya di setiap skrin."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rulling mellom skjermene i en layout stopper også ved kantene av sonene, ikke bare ved hver skjerm."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrollen tussen de schermen van een indeling stopt ook bij de randen van zones, niet alleen bij elk scherm."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przewijanie między ekranami układu zatrzymuje się także na krawędziach stref, nie tylko na każdym ekranie."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O deslocamento entre os ecrãs de um esquema também para nas margens das zonas, não apenas em cada ecrã."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A rolagem entre as telas de um layout também para nas bordas das zonas, não apenas em cada tela."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derularea între ecranele unui aranjament se oprește și la marginile zonelor, nu doar la fiecare ecran."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прокрутка между экранами раскладки останавливается и у краёв зон, а не только на каждом экране."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posúvanie medzi obrazovkami rozloženia sa zastaví aj na okrajoch zón, nielen na každej obrazovke."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drsenje med zasloni postavitve se ustavi tudi na robovih območij, ne le na vsakem zaslonu."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Померање међу екранима распореда зауставља се и на ивицама зона, не само на сваком екрану."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rullning mellan en layouts skärmar stannar även vid zonernas kanter, inte bara vid varje skärm."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "தளவமைப்பின் திரைகளுக்கு இடையே உருட்டுவது ஒவ்வொரு திரையில் மட்டுமல்லாமல், மண்டலங்களின் விளிம்புகளிலும் நிற்கும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "లేఅవుట్ స్క్రీన్‌ల మధ్య స్క్రోలింగ్ ప్రతి స్క్రీన్ వద్ద మాత్రమే కాకుండా జోన్‌ల అంచుల వద్ద కూడా ఆగుతుంది."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การเลื่อนระหว่างหน้าจอของเลย์เอาต์จะหยุดที่ขอบของโซนด้วย ไม่ใช่เฉพาะที่แต่ละหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir düzenin ekranları arasında kaydırma yalnızca her ekranda değil, bölgelerin kenarlarında da durur."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прокручування між екранами розкладки зупиняється й біля країв зон, а не лише на кожному екрані."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لے آؤٹ کی اسکرینوں کے درمیان اسکرولنگ صرف ہر اسکرین پر نہیں بلکہ زونز کے کناروں پر بھی رکتی ہے۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Việc cuộn giữa các màn hình của bố cục cũng dừng ở các cạnh của vùng, không chỉ ở mỗi màn hình."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在布局的屏幕之间滚动时，除了每个屏幕外，也会在区域的边缘停住。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在佈局的螢幕之間捲動時，除了每個螢幕外，也會在區域的邊緣停住。"
+          }
+        }
+      }
+    },
     "Send window to zone" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40461,6 +40742,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "啟動"
+          }
+        }
+      }
+    },
+    "Stop at the lines between zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التوقف عند الخطوط بين المناطق"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спиране на линиите между зоните"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "জোনের মাঝের রেখায় থামুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atura't a les línies entre zones"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastavit na čarách mezi zónami"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop ved linjerne mellem zoner"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An den Linien zwischen Zonen anhalten"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στάση στις γραμμές μεταξύ ζωνών"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detenerse en las líneas entre zonas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peatu tsoonidevahelistel joontel"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توقف روی خط‌های بین ناحیه‌ها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pysähdy alueiden välisille viivoille"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huminto sa mga linya sa pagitan ng mga zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S'arrêter aux lignes entre les zones"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עצירה בקווים שבין האזורים"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ज़ोन के बीच की रेखाओं पर रुकें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaustavi se na crtama između zona"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Megállás a zónák közötti vonalaknál"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berhenti di garis antar zona"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermati alle linee tra le zone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンの境界線で止まる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역 사이의 선에서 멈추기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sustoti ties linijomis tarp zonų"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apstāties pie līnijām starp zonām"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "झोनमधील रेषांवर थांबा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berhenti di garisan antara zon"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stopp ved linjene mellom soner"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppen bij de lijnen tussen zones"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatrzymuj na liniach między strefami"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parar nas linhas entre zonas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parar nas linhas entre zonas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oprește-te la liniile dintre zone"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Останавливаться на линиях между зонами"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastaviť na čiarach medzi zónami"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ustavi se na črtah med območji"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заустави се на линијама између зона"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stanna vid linjerna mellan zoner"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "மண்டலங்களுக்கு இடையிலான கோடுகளில் நிறுத்து"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "జోన్‌ల మధ్య గీతల వద్ద ఆగండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หยุดที่เส้นระหว่างโซน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölgeler arasındaki çizgilerde dur"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зупинятися на лініях між зонами"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زونز کے درمیان کی لکیروں پر رکیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dừng ở các đường giữa các vùng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在区域之间的分隔线处停住"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在區域之間的分隔線處停住"
           }
         }
       }

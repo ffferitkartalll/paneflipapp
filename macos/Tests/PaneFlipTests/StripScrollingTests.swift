@@ -281,6 +281,21 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(viewport.offset(for: key), 1000, "the screen that holds it, whatever the lines between zones")
     }
 
+    func testWithRestsAtTheLinesAZoneCutByAnEdgeIsBroughtInWholeAndOneInViewStaysWhereItIs() {
+        _ = setUpZoneLines()
+        settings.values.scrollStopsAtZones = true
+        viewport.set(400, for: key)   // the right zone of the screen stands at the left edge; the first zone of the next screen is cut by the right edge
+        refresher.onRefresh()
+        let scroller = scroller()
+        let inView = repository.activeLayout(for: key)!.strip.root.leafIDs[1]
+
+        XCTAssertFalse(scroller.reveal(zone: inView), "all in view: no scroll, not back to its screen either")
+        XCTAssertTrue(scroller.reveal(zone: areaZone))
+        run(60); settle()
+        XCTAssertEqual(viewport.offset(for: key), 500, "the nearest rest that shows the whole zone")
+        XCTAssertFalse(scroller.reveal(zone: areaZone), "it shows now: nothing more")
+    }
+
     func testRevealingAFarAreaScrollsStraightToIt() {
         let far = UUID()
         var strip = repository.activeLayout(for: key)!.strip

@@ -237,6 +237,7 @@ final class AppContainer {
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }
+        coordinator.flashZoneAhead = { zoneFlash.expect($0) }
         coordinator.onWindowChange = { [weak island] in island?.showNotice($0) }
         coordinator.onEnlargementEnd = { [weak island] in island?.dismissWindowNotice() }
         // The screen that holds most of a zone.
@@ -262,6 +263,7 @@ final class AppContainer {
         coordinator.onReachBeyondTheEdge = { [weak scroller] zone, standsAt in scroller?.reveal(zone: zone, standsAt: standsAt) ?? false }
         scroller.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
         scroller.onGlide = { [weak island] screen, from, to in island?.glide(on: screen, from: from, to: to) }
+        scroller.onRide = { zoneFlash.ride(by: $0, duration: $1) }
         // A zone a shortcut asked for beyond the edge is focused once the scroll is over.
         scroller.onRest = {
             coordinator.finishFocusBeyondTheEdge()
