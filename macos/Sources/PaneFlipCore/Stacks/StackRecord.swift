@@ -9,8 +9,6 @@ public struct StackRecord: Codable, Equatable {
     public var title: String
     /// Zones this slot had in other layouts, so it goes back to them when such a layout is active again.
     public var otherZones: [UUID] = []
-    /// The zone this slot belongs to while its display is unplugged and its window stands apart, or has been put in a zone of another display: it goes back there when that display returns.
-    public var home: UUID?
     /// The live window currently filling this slot, if any. Not persisted: window numbers change on every launch.
     public var windowID: CGWindowID?
 
@@ -22,7 +20,7 @@ public struct StackRecord: Codable, Equatable {
         self.windowID = windowID
     }
 
-    enum CodingKeys: String, CodingKey { case id, zoneID, bundleID, title, otherZones, home }
+    enum CodingKeys: String, CodingKey { case id, zoneID, bundleID, title, otherZones }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -32,6 +30,5 @@ public struct StackRecord: Codable, Equatable {
         title = try c.decode(String.self, forKey: .title)
         // Files written before layouts were remembered per slot have no such key.
         otherZones = try c.decodeIfPresent([UUID].self, forKey: .otherZones) ?? []
-        home = try c.decodeIfPresent(UUID.self, forKey: .home)
     }
 }

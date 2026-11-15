@@ -100,10 +100,7 @@ final class WindowRestorer {
             if ruleZone[record.bundleID] == nil { ruleZone[record.bundleID] = record.zoneID }
         }
         guard !ruleZone.isEmpty else { return }
-        // A window that left with its display goes first: to the slot it left, before another slot of its app can take it.
-        let own = Set(coordinator.displacedWindows.compactMap { coordinator.displacedSlot(of: $0.id) })
-        let unbound = memory.unboundSlots(in: visible)
-        let slots = unbound.filter { own.contains(memory.records[$0].id) } + unbound.filter { !own.contains(memory.records[$0].id) }
+        let slots = memory.unboundSlots(in: visible)
 
         // Windows available per app. A window its app merely hid on close still shows up in the accessibility
         // list; it isn't back until it is visible again.
@@ -117,13 +114,6 @@ final class WindowRestorer {
             if !free.isEmpty { candidates[app.bundleID, default: []] += free }
         }
 
-        // A window that left with its display is known by name: the app's window list may not show it for a while after the display is back
-        // (the app is busy, or the system has not yet put the window on screen), and it must not be taken for a closed one then.
-        for ref in coordinator.displacedWindows where !claimed.contains(ref.id) && (onlyPID == nil || ref.pid == onlyPID) {
-            guard let bundleID = apps.app(pid: ref.pid)?.bundleID, ruleZone[bundleID] != nil, windows.frame(of: ref) != nil,
-                  !windows.isMinimized(ref), !apps.isHidden(pid: ref.pid), !candidates[bundleID, default: []].contains(where: { $0.id == ref.id }) else { continue }
-            candidates[bundleID, default: []].append(ref)
-        }
         let displays = screens.screens().map(\.axVisible)
         func display(of rect: CGRect) -> Int? { displays.firstIndex { $0.contains(CGPoint(x: rect.midX, y: rect.midY)) } }
 
@@ -138,9 +128,7 @@ final class WindowRestorer {
             var best: (index: Int, score: Int)?
             for (i, window) in free.enumerated() {
                 let frame = windows.frame(of: window)
-                // A window that left with its display takes the slot it left and no other.
-                if coordinator.isDisplaced(window.id), coordinator.displacedSlot(of: window.id) != record.id { continue }
-                if let zoneDisplay, !coordinator.isDisplaced(window.id), let frame, let there = display(of: frame), there != zoneDisplay { continue }
+                if let zoneDisplay, let frame, let there = display(of: frame), there != zoneDisplay { continue }
                 var score = 0
                 if let zone, let frame, zone.contains(CGPoint(x: frame.midX, y: frame.midY)) { score += 2 }
                 if windows.title(of: window) == record.title { score += 1 }
@@ -148,7 +136,6 @@ final class WindowRestorer {
             }
             guard let pick = best?.index else { continue }
             coordinator.attach(free[pick], toSlot: slot, raise: false)
-            coordinator.settled(free[pick].id)
             touched.insert(record.zoneID)
             free.remove(at: pick)
             candidates[record.bundleID] = free
@@ -159,8 +146,6 @@ final class WindowRestorer {
             guard let zoneID = ruleZone[bundleID], let stack = coordinator.stacks[zoneID] else { continue }
             let zoneDisplay = display(of: stack.rect)
             for window in free {
-                // A window that left with its display goes back to its own slot only: before the display's zones are in view it must not join another zone.
-                if coordinator.isDisplaced(window.id) { continue }
                 if let zoneDisplay, let frame = windows.frame(of: window), let there = display(of: frame), there != zoneDisplay { continue }
                 let slot = memory.remember(zoneID: zoneID, bundleID: bundleID, title: "")
                 coordinator.attach(window, toSlot: slot, raise: false)

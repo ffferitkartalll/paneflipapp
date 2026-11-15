@@ -331,7 +331,6 @@ final class AppContainer {
     func start() {
         menuBar.install()
         layouts.migrateKeys()
-        layouts.displaysDidChange()   // remember the displays that are connected
         layouts.prune()   // drop remembered apps whose zone no longer exists in any layout
         launcher.launch()
     }
