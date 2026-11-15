@@ -14,12 +14,15 @@ public struct StripGeometry: Equatable {
     /// The gap between zones, and the margin of every screen of the strip (the screen's own and each area) round its edges.
     public let gap: CGFloat
     public let margin: CGFloat
+    /// Scrolling also comes to rest at the lines between zones (a setting), not only at the screens of the strip.
+    public let stopsAtZones: Bool
 
-    public init(strip: StripLayout, screen: CGRect, gap: CGFloat = 0, margin: CGFloat = 0) {
+    public init(strip: StripLayout, screen: CGRect, gap: CGFloat = 0, margin: CGFloat = 0, stopsAtZones: Bool = false) {
         self.strip = strip
         self.screen = screen
         self.gap = gap
         self.margin = margin
+        self.stopsAtZones = stopsAtZones
     }
 
     /// What is seen between the zones of two neighbouring screens is the larger of the gap and one margin (each screen has its margin, and the two meet there: they are not added,
@@ -36,7 +39,6 @@ public struct StripGeometry: Equatable {
     /// The offsets the screen may have.
     public var range: ClosedRange<CGFloat> { -leadingWidth ... trailingWidth }
 
-    /// The offsets where scrolling comes to rest: the screen's own layout and each area's far edge, on both sides. Scrolling goes from one screen to the next, never to a line between zones.
     /// The screen a view at `offset` shows when it is at a rest (within half a point of one); nil while it is between two.
     public func screen(restingAt offset: CGFloat) -> RestingScreen? {
         if abs(offset) < 0.5 { return .own }
@@ -74,8 +76,22 @@ public struct StripGeometry: Equatable {
         return before.screen(restingAt: offset).flatMap(restOffset(of:))
     }
 
-    /// A view rests where the far edge of an area stands at the far edge of the screen: the widths of the areas up to it, and the gap before each of them.
+    /// The offsets where scrolling comes to rest: the screens of the strip and, with `stopsAtZones`, every place where a zone stands at the screen's left or right edge
+    /// (its margin away from it, as at a screen), no further than the strip goes. A place less than a point from another is the same place; a screen's own comes first.
     public var rests: [CGFloat] {
+        guard stopsAtZones else { return screenRests }
+        var offsets = screenRests
+        for zone in zones(offset: 0) {
+            for offset in [zone.rect.minX - (screen.minX + margin), zone.rect.maxX - (screen.maxX - margin)]
+            where offset >= range.lowerBound - 0.5 && offset <= range.upperBound + 0.5 && !offsets.contains(where: { abs($0 - offset) < 1 }) {
+                offsets.append(clamped(offset))
+            }
+        }
+        return offsets.sorted()
+    }
+
+    /// A view rests at a screen where the far edge of an area stands at the far edge of the screen: the widths of the areas up to it, and the gap before each of them.
+    private var screenRests: [CGFloat] {
         var offsets: [CGFloat] = [0]
         var reached: CGFloat = 0
         let apart = screenGap()

@@ -22,6 +22,14 @@ struct ZonesPane: View {
                 }
             }
             .disabled(!settings.values.placementEnabled)
+
+            Section("Screens beyond the screen") {
+                SettingRow(title: "Stop at the lines between zones",
+                           detail: "Scrolling between the screens of a layout also stops at the edges of zones, not only at each screen.") {
+                    Toggle("Stop at the lines between zones", isOn: $settings.values.scrollStopsAtZones).labelsHidden()
+                }
+            }
+            .disabled(!settings.values.placementEnabled)
         }
         .formStyle(.grouped)
     }
