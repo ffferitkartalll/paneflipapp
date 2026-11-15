@@ -46,6 +46,15 @@ final class LayoutGridModelTests: XCTestCase {
         XCTAssertEqual(model.zones.compactMap(\.model.highlighted), ["w3"])
     }
 
+    func testAMarkedCardIsTheOneOfThisDisplayWhileTheFocusIsStillHere() throws {
+        XCTAssertNil(model.pointed, "nothing is marked yet: only the focus says where the keys are")
+        model.select(model.places.first { $0.card.id == "w4" })
+        XCTAssertEqual(model.pointed?.card.id, "w4")
+        model.select(nil)
+        XCTAssertNil(model.pointed, "a key that left this display leaves nothing marked here, so the other display's mark decides where the next key starts")
+        XCTAssertEqual(model.current?.card.id, "w3", "the focus still shows as the card to be chosen")
+    }
+
     func testTheArrowKeysGoFromCardToCardAcrossTheZonesAndTheGridScrollsToACardOutOfView() throws {
         func go(_ direction: ZoneDirection) throws -> CGFloat {
             let from = try XCTUnwrap(model.current)

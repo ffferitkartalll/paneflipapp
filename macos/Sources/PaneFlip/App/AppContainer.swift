@@ -89,18 +89,19 @@ final class AppContainer {
                                              gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) })
         engine.add(presenter: zoneWindows)
         notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
+        let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         let layoutGrid = LayoutGridOverlay(coordinator: coordinator, screens: screens, source: island, snapshots: capture, planner: planner,
                                            mover: WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) }),
                                            refresher: engine,
                                            gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) },
-                                           gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) })
+                                           gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
+                                           deskRect: { desk.rect($0) })
         layoutGrid.isBlocked = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
         island.staysClosed = { [weak zoneWindows, weak layoutGrid] in zoneWindows?.isShown ?? false || layoutGrid?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
         island.onCover = { [weak notches] in notches?.isCovered = $0 }
         island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
-        let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         coordinator.deskRect = { desk.rect($0) }
         coordinator.displayOf = { desk.display(of: $0) }
         coordinator.onFocusMoved = { [weak island, weak notches] in island?.focusDidMove(); notches?.zonesDidChange() }
