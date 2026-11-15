@@ -13,6 +13,22 @@ struct ZoneWindowsView: View {
             Color.black.opacity(0.01)
                 .contentShape(Rectangle())
                 .onTapGesture { model.onClose() }
+            // Every place of the grid has a dashed line round it, behind the card that stands in it: it comes with the cards, and stays where it is as the cards move (the
+            // cards do not take it along; it is covered by the card that comes, and shows again when the card goes).
+            // The one the carried card would be put down in is stronger, and stays so until the card is carried to another place.
+            let target = model.carried.flatMap { id in model.cards.firstIndex { $0.id == id } }
+            ForEach(Array((cells + model.emptyCells).enumerated()), id: \.offset) { offset, cell in
+                let chosen = offset == target
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(.white.opacity(chosen ? 1 : 0.45), style: StrokeStyle(lineWidth: chosen ? 3 : 1.5, dash: [8, 6]))
+                    .animation(.easeOut(duration: 0.2), value: chosen)
+                    .frame(width: cell.width, height: cell.height)
+                    .position(x: cell.midX, y: cell.midY)
+                    .animation(nil, value: model.cards.count)
+                    .transition(.identity)
+                    .opacity(appear)
+                    .allowsHitTesting(false)
+            }
             ForEach(Array(model.cards.enumerated()), id: \.element.id) { index, card in
                 if cells.indices.contains(index) {
                     let cell = cells[index], carried = model.carried == card.id
@@ -25,7 +41,7 @@ struct ZoneWindowsView: View {
                     let place = CGPoint(x: start.x + (cell.midX - start.x) * appear, y: start.y + (cell.midY - start.y) * appear)
                     ZoneWindowsCard(model: model, card: card, size: size)
                         .scaleEffect(x: carried ? 1.04 : startScale.width + (1 - startScale.width) * appear, y: carried ? 1.04 : startScale.height + (1 - startScale.height) * appear)
-                        .opacity(from == nil ? appear : 1)
+                        .opacity(carried && model.carrier != nil ? 0 : 1)   // the grid of the whole layout draws a card it carries itself
                         .position(carried ? model.carriedAt : place)
                         .zIndex(carried ? 2 : (card.id == model.front ? 1 : 0))
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("zone"))

@@ -26,6 +26,8 @@ final class MultitouchSwipes: ScrollSwitchListening {
     private let isOn: () -> Bool
     /// Whether three fingers going up or down may open and close the grid of the zone under the pointer; read when such a swipe begins.
     private let grid: () -> Bool
+    /// Whether four fingers going up or down may open and close the grid of the whole layout; read when such a swipe begins.
+    private let layoutGrid: () -> Bool
     private var listening = false
     /// The reports come on the system's own thread, one after the other.
     private let lock = NSLock()
@@ -51,10 +53,11 @@ final class MultitouchSwipes: ScrollSwitchListening {
         return crowdedNow && ProcessInfo.processInfo.systemUptime - reportedAt < 1
     }
 
-    init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool, grid: @escaping () -> Bool) {
+    init(gain: @escaping () -> CGFloat, isOn: @escaping () -> Bool, grid: @escaping () -> Bool, layoutGrid: @escaping () -> Bool) {
         self.gain = gain
         self.isOn = isOn
         self.grid = grid
+        self.layoutGrid = layoutGrid
     }
 
     deinit {
@@ -155,10 +158,11 @@ final class MultitouchSwipes: ScrollSwitchListening {
             swipeGain = gain()
             onEvent?(.began(fingers == 3 ? .windows : .strip))
         case .liftBegan(let fingers):
-            listening = fingers == 3 && isOn() && grid()   // four fingers up or down mean nothing
+            // Three fingers up or down open and close the grid of a zone's windows, four the grid of the whole layout.
+            listening = isOn() && (fingers == 3 ? grid() : fingers == 4 && layoutGrid())
             guard listening else { return }
             swipeGain = gain()
-            onEvent?(.began(.grid))
+            onEvent?(.began(fingers == 3 ? .grid : .layoutGrid))
         case .moved(let delta, let time): if listening { onEvent?(.moved(delta * swipeGain, at: time)) }
         case .ended:
             if listening { onEvent?(.ended) }

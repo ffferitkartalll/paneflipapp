@@ -27,8 +27,8 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
     private var zone: UUID?
     private var timer: Timer?
     private var monitors: [Any] = []
-    /// The windows pictures were asked for already.
-    private var asked: Set<CGWindowID> = []
+    /// Keeps the cards as the zone has them while the grid is open (shared with the grid of a whole layout).
+    private let keeper: ZoneCardsKeeper
     /// The real windows of the zone while they wait at the display's edge, and whether the grid holds the zones (`StackCoordinator.isScrolling`) meanwhile.
     private var parked: [WindowRef] = []
     private var holding = false
@@ -75,6 +75,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         self.mover = mover
         self.refresher = refresher
         self.gapOf = gapOf
+        keeper = ZoneCardsKeeper(coordinator: coordinator, source: source, snapshots: snapshots)
     }
 
     var isShown: Bool { phase != nil }
@@ -90,7 +91,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         self.zone = zone
         snapshots.prepare()
         let refs = cards.compactMap { $0.windowID.flatMap { stack.refs[$0] } }
-        asked = Set(refs.map(\.id))
+        keeper.asked = Set(refs.map(\.id))
         snapshots.snapshots(of: refs) { [weak self] pictures in self?.begin(zone: zone, cards: cards, pictures: pictures) }
     }
 
@@ -383,7 +384,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         model = nil
         zone = nil
         phase = nil
-        asked = []
+        keeper.asked = []
         opening = nil
         lead = nil
         leadReady = false
@@ -455,26 +456,8 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
 
     /// The cards as the zone has them now (a window that came, went or was moved); none left: the grid closes.
     private func refresh(animated: Animation? = .smooth(duration: 0.25)) {
-        guard phase == .open, let zone, let model, let stack = coordinator.stacks[zone] else { return }
-        let now = source.allCards(of: zone)
-        guard !now.isEmpty else { return hide() }
-        if now != model.cards { withAnimation(animated) { model.cards = now } }
-        if !now.contains(where: { $0.id == model.highlighted }) { model.highlighted = now.first(where: \.isActive)?.id ?? now.first?.id }   // its window went
-        askForPictures(of: now, in: stack)
-    }
-
-    /// The pictures of the windows that have none yet (one that came while the grid was open): they come one by one, the card shows the glyph of its app until then.
-    private func askForPictures(of cards: [IslandWindow], in stack: ZoneStack) {
-        let refs = cards.compactMap { card in card.windowID.flatMap { id in asked.contains(id) ? nil : stack.refs[id] } }
-        guard !refs.isEmpty else { return }
-        refs.forEach { asked.insert($0.id) }
-        let model = self.model
-        snapshots.snapshots(of: refs) { [weak self] pictures in
-            guard let self, let model, self.model === model else { return }
-            withAnimation(.easeOut(duration: 0.15)) {
-                for (id, picture) in pictures { model.pictures["w\(id)"] = picture }
-            }
-        }
+        guard phase == .open, let zone, let model else { return }
+        if !keeper.refresh(model, zone: zone, animated: animated) { hide() }
     }
 
     // MARK: Watching

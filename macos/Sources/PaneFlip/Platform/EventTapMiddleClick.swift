@@ -5,14 +5,14 @@ import Foundation
 /// (the app asks the keys and the pointer); its release goes the same way.
 final class EventTapMiddleClick: MiddleClickListening {
     private var tap: CFMachPort?
-    private var onClick: ((UUID) -> Void)?
-    private let zone: () -> UUID?
+    private var onClick: ((MiddleClickRequest) -> Void)?
+    private let request: () -> MiddleClickRequest?
     /// The press was taken: its release is too.
     private var taken = false
 
-    init(zone: @escaping () -> UUID?) { self.zone = zone }
+    init(request: @escaping () -> MiddleClickRequest?) { self.request = request }
 
-    func start(onClick: @escaping (UUID) -> Void) {
+    func start(onClick: @escaping (MiddleClickRequest) -> Void) {
         self.onClick = onClick
         let callback: CGEventTapCallBack = { _, type, event, refcon in
             guard let refcon else { return Unmanaged.passUnretained(event) }
@@ -37,9 +37,9 @@ final class EventTapMiddleClick: MiddleClickListening {
             defer { taken = false }
             return taken ? nil : Unmanaged.passUnretained(event)
         }
-        guard let zone = zone() else { return Unmanaged.passUnretained(event) }
+        guard let request = request() else { return Unmanaged.passUnretained(event) }
         taken = true
-        DispatchQueue.main.async { [weak self] in self?.onClick?(zone) }
+        DispatchQueue.main.async { [weak self] in self?.onClick?(request) }
         return nil
     }
 }

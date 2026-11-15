@@ -833,6 +833,12 @@ final class StackCoordinator {
         sortTabs(of: zone)
     }
 
+    /// The slot of an app that is not open was carried to another zone: it comes back there, when the app opens.
+    func moveSlot(_ i: Int, toZone zone: UUID) {
+        memory.setZone(ofSlot: i, to: zone)
+        onActivity?(zone)
+    }
+
     /// The window went away or must wait: leave the zone but keep the memory slot so it can come back.
     func release(window id: CGWindowID) {
         if let ref = stacks.values.lazy.compactMap({ $0.refs[id] }).first, let bundleID = app(of: ref) {

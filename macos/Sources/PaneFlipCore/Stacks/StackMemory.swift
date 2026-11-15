@@ -72,6 +72,18 @@ public final class StackMemory {
         records = copy
     }
 
+    /// Puts slot `i` in another zone, as the last of its cards there (a card was carried to it); its window, if it has one, is for the caller to put there.
+    public func setZone(ofSlot i: Int, to zone: UUID) {
+        guard records.indices.contains(i), records[i].zoneID != zone else { return }
+        var copy = records
+        var record = copy.remove(at: i)
+        record.zoneID = zone
+        record.home = nil
+        let last = copy.lastIndex { $0.zoneID == zone && !$0.bundleID.isEmpty }.map { $0 + 1 } ?? copy.count
+        copy.insert(record, at: last)
+        records = copy
+    }
+
     /// The slots of the same zone that stand right before and right after slot `i`, whether their apps are open or not (the cards of the zone are in this order).
     public func neighbours(ofSlot i: Int) -> (before: UUID?, after: UUID?) {
         guard records.indices.contains(i) else { return (nil, nil) }

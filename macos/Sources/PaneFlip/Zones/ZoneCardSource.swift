@@ -14,6 +14,8 @@ protocol ZoneCardSource: AnyObject {
     func titleWidth(of zone: UUID) -> CGFloat?
     /// A card is put in the place of another one: the windows of the zone stand in the new order.
     func move(_ card: IslandWindow, toPlaceOf other: IslandWindow, in zone: UUID)
+    /// A card was carried to another zone: its window is put there (it glides), or, for an app that is not open, the app's slot goes there.
+    func send(_ card: IslandWindow, from zone: UUID, to target: UUID)
     /// A click on a card: its window comes to the front of the zone and the focus goes with it (twice in a row on the front one: enlarged); an app that is not open is opened.
     func choose(_ card: IslandWindow, in zone: UUID)
     /// A button of a card.

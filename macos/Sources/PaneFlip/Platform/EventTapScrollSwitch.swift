@@ -31,14 +31,17 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     private let fingers: () -> Int
     /// Whether a swipe up or down, with the keys that aim at the zone's windows held, may open and close the grid of the zone under the pointer: asked once the swipe is vertical.
     private let grid: () -> Bool
+    /// Whether a swipe up or down, with the keys that scroll toward the screens beyond the edges held, may open and close the grid of the whole layout: asked once the swipe is vertical.
+    private let layoutGrid: () -> Bool
     /// Whether three or more fingers have been down in the touch in progress, and the settings give them to the app.
     private let crowded: () -> Bool
     private var crowdedScroll = CrowdedScroll()
 
     init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int,
-         crowded: @escaping () -> Bool, grid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+         crowded: @escaping () -> Bool, grid: @escaping () -> Bool, layoutGrid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
         self.crowded = crowded
         self.grid = grid
+        self.layoutGrid = layoutGrid
         self.gain = gain
         self.twoFingers = twoFingers
         self.overIsland = overIsland
@@ -122,14 +125,16 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
                              vertical: -CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))   // the content goes down with the fingers: up is negative
         let finished = phase == 4 || phase == 8
         if !inGesture && !finished {
-            let lift = axis.decision == .vertical && aimed == .windows && grid()
+            let liftZone = axis.decision == .vertical && aimed == .windows && grid()
+            let liftLayout = axis.decision == .vertical && aimed == .strip && layoutGrid()
+            let lift = liftZone || liftLayout
             let delta = lift ? step.up : step.sideways
             if delta != 0 {
                 inGesture = true
                 gestureTarget = aimed
                 lifting = lift
                 gestureGain = gain()
-                send(.began(lift ? .grid : aimed))
+                send(.began(liftLayout ? .layoutGrid : liftZone ? .grid : aimed))
                 send(.moved(delta * gestureGain, at: TimeInterval(event.timestamp) / 1e9))
             }
         } else if inGesture && !finished {

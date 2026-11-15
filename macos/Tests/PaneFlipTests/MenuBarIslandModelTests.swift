@@ -89,7 +89,9 @@ final class MenuBarIslandModelTests: XCTestCase {
         XCTAssertEqual(last.x + model.cornerButtonWidth(.quit) / 2, half, accuracy: 0.001, "the last ends at the room of the right side")
         XCTAssertEqual(last.y, model.topHeight / 2)
         let step = model.cornerGap
-        XCTAssertEqual(model.cornerButtonCentre(.openApps).x - model.cornerButtonWidth(.openApps) / 2 - (first.x + model.cornerButtonWidth(.editLayout) / 2), step, accuracy: 0.001)
+        let grid = model.cornerButtonCentre(.gridView)
+        XCTAssertEqual(grid.x - model.cornerButtonWidth(.gridView) / 2 - (first.x + model.cornerButtonWidth(.editLayout) / 2), step, accuracy: 0.001, "the grid view button stands right of the first")
+        XCTAssertEqual(model.cornerButtonCentre(.openApps).x - model.cornerButtonWidth(.openApps) / 2 - (grid.x + model.cornerButtonWidth(.gridView) / 2), step, accuracy: 0.001)
         XCTAssertEqual(last.x - model.cornerButtonWidth(.quit) / 2 - (model.cornerButtonCentre(.settings).x + model.cornerButtonWidth(.settings) / 2), step, accuracy: 0.001)
     }
 
@@ -99,7 +101,8 @@ final class MenuBarIslandModelTests: XCTestCase {
         model.notchWidth = 200
         XCTAssertGreaterThan(model.cornerRowWidth, plain + 200 - 1, "the notch lies between the two groups")
         let wide = IslandCornerAction.allCases.map { model.cornerButtonWidth($0) }
-        let groups = max(wide[0] + wide[1] + model.cornerGap, wide[2] + wide[3] + model.cornerGap)
+        // Three buttons on the left of the notch, two on its right.
+        let groups = max(wide[0] + wide[1] + wide[2] + 2 * model.cornerGap, wide[3] + wide[4] + model.cornerGap)
         XCTAssertEqual(model.cornerRowWidth, 2 * groups + 200 + 2 * model.sideRoom + 2 * model.sideRoom, accuracy: 0.001)
     }
 

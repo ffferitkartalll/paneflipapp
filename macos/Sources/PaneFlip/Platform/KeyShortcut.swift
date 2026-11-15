@@ -14,6 +14,8 @@ enum KeyShortcut: Equatable {
     case enlargeWindow
     /// Open the grid of the windows of the zone in focus.
     case zoneWindows
+    /// Open (or close) the grid of the whole layout of every display.
+    case layoutGrid
     /// Close the message of the island that offers the undo.
     case closeWindowUndoNotice
 }

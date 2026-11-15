@@ -70,4 +70,27 @@ final class ZoneGridTests: XCTestCase {
         XCTAssertEqual(ZoneGrid.index(at: CGPoint(x: 2000, y: 10), in: cells), 1, "outside: the nearest")
         XCTAssertNil(ZoneGrid.index(at: .zero, in: []))
     }
+
+    func testThePlacesTheCardsLeaveEmptyAreTheRestOfTheGrid() {
+        let size = CGSize(width: 1000, height: 600)
+        let all = ZoneGrid.cells(count: 4, in: size, gap: 10)
+        XCTAssertEqual(ZoneGrid.emptyCells(count: 3, in: size, gap: 10), [all[3]], "three cards in a grid of four places: the last one is empty")
+        XCTAssertEqual(ZoneGrid.emptyCells(count: 4, in: size, gap: 10), [], "a full grid has none")
+        XCTAssertEqual(ZoneGrid.emptyCells(count: 5, in: size, gap: 10).count, 4, "five cards stand in a grid of nine places")
+        XCTAssertEqual(ZoneGrid.emptyCells(count: 0, in: size, gap: 10), all, "no card: every place")
+    }
+
+    func testACardCarriedToAnEmptyCellIsPutAfterTheLastCardAndNeverBeforeOne() {
+        let size = CGSize(width: 200, height: 200)
+        let two = ZoneGrid.cells(count: 4, in: size, gap: 0)   // the grid of two cards (one waiting there, one carried): 2 by 2
+        // One card in the zone, the carried one is the second: the third and fourth cells are empty, so it goes second; the first cell is the waiting card's.
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: two[2].midX, y: two[2].midY), count: 2, in: size, gap: 0), 1)
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: two[3].midX, y: two[3].midY), count: 2, in: size, gap: 0), 1)
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: two[0].midX, y: two[0].midY), count: 2, in: size, gap: 0), 0)
+        // Four cards and the carried one make five: a grid of 3 by 3, and its empty cells are the end.
+        let nine = ZoneGrid.cells(count: 9, in: size, gap: 0)
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: nine[5].midX, y: nine[5].midY), count: 5, in: size, gap: 0), 4)
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: nine[6].midX, y: nine[6].midY), count: 5, in: size, gap: 0), 4)
+        XCTAssertEqual(ZoneGrid.place(at: CGPoint(x: nine[2].midX, y: nine[2].midY), count: 5, in: size, gap: 0), 2)
+    }
 }

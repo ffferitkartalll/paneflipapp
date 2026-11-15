@@ -13,7 +13,8 @@ final class ZoneWindowsModel {
     var pictures: [String: WindowPicture] = [:]
     /// The room of the zone, and the room between the cards (the one between zones).
     /// How far the panel reaches beyond the zone on every side, for the shadows of the cards at its edge.
-    static let shadowRoom: CGFloat = 32
+    /// (The shadow of a card is blurred 16 points and 5 lower: it reaches about 40 points past the card's edge, so the room is more than that.)
+    static let shadowRoom: CGFloat = 64
     var size: CGSize = .zero
     var gap: CGFloat = 0
     /// Where each window stood in the zone when the grid opened, in the room of the zone: its picture goes from there to its card, and back.
@@ -33,8 +34,14 @@ final class ZoneWindowsModel {
     var carried: String?
     var carriedAt: CGPoint = .zero
 
-    /// Where the cards stand, in the order of `cards`.
+    /// Where the cards stand, in the order of `cards`, and the places of the grid they leave empty.
     var cells: [CGRect] { ZoneGrid.cells(count: cards.count, in: size, gap: gap) }
+    var emptyCells: [CGRect] { ZoneGrid.emptyCells(count: cards.count, in: size, gap: gap) }
+
+    /// Carries the cards instead of this grid (the grid of the whole layout), and whether this grid follows the focus: its card with the focus is marked, and the mark
+    /// stays on a card of it (a zone of the grid of the whole layout that has not the focus has no mark).
+    @ObservationIgnored weak var carrier: ZoneCardCarrying?
+    @ObservationIgnored var tracksFocus = true
 
     // What the owner does with what is done in the grid.
     @ObservationIgnored var onChoose: (IslandWindow) -> Void = { _ in }
@@ -67,17 +74,21 @@ final class ZoneWindowsModel {
             guard hypot(point.x - start.x, point.y - start.y) >= 4 else { return }
             grab = CGPoint(x: start.x - cells[from].midX, y: start.y - cells[from].midY)
             carried = card.id
+            carrier?.carryBegan(card, from: self)
         }
+        if let carrier { return carrier.carryMoved() }
         var still = Transaction()
         still.disablesAnimations = true
         withTransaction(still) { carriedAt = CGPoint(x: point.x - grab.x, y: point.y - grab.y) }
-        guard let to = ZoneGrid.index(at: carriedAt, in: cells), to != from else { return }
+        // The place is the one the pointer is over (an empty cell is the end), as in the grid of a whole layout.
+        guard let to = ZoneGrid.place(at: point, count: cards.count, in: size, gap: gap), to != from else { return }
         onMove(card, cards[to])
     }
 
     /// The mouse is let go: a card held where it was is chosen; a carried one goes to its place.
     func dropped(_ card: IslandWindow) {
         guard carried != nil else { return onChoose(card) }
+        if let carrier { return carrier.carryEnded(card, from: self) }   // the grid of the whole layout lands the card itself
         carried = nil   // from where the mouse let it go to its place (where `cells` say)
     }
 }
