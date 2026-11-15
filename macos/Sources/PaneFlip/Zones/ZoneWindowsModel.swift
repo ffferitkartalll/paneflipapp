@@ -15,6 +15,10 @@ final class ZoneWindowsModel {
     /// How far the panel reaches beyond the zone on every side, for the shadows of the cards at its edge.
     /// (The shadow of a card is blurred 16 points and 5 lower: it reaches about 40 points past the card's edge, so the room is more than that.)
     static let shadowRoom: CGFloat = 64
+    /// Where the zone lies in a panel that is larger than it (the whole display, so that nothing cuts the shadows of the cards), and the size of that panel. Zero: the panel is
+    /// the zone with `shadowRoom` on every side (the grid of the whole layout lays the zones out itself).
+    var inset: CGPoint = .zero
+    var wholeSize: CGSize = .zero
     var size: CGSize = .zero
     var gap: CGFloat = 0
     /// Where each window stood in the zone when the grid opened, in the room of the zone: its picture goes from there to its card, and back.

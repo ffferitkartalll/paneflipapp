@@ -6,7 +6,7 @@ struct ZoneWindowsView: View {
     let model: ZoneWindowsModel
 
     var body: some View {
-        let cells = model.cells, appear = model.appear
+        let cells = model.cells, appear = model.appear, whole = model.wholeSize != .zero
         let middle = CGPoint(x: model.size.width / 2, y: model.size.height / 2)
         ZStack(alignment: .topLeading) {
             // Nothing is drawn behind the cards; this takes a click between them (a window that is fully clear lets the mouse through, so not quite clear).
@@ -41,6 +41,7 @@ struct ZoneWindowsView: View {
                     let place = CGPoint(x: start.x + (cell.midX - start.x) * appear, y: start.y + (cell.midY - start.y) * appear)
                     ZoneWindowsCard(model: model, card: card, size: size)
                         .scaleEffect(x: carried ? 1.04 : startScale.width + (1 - startScale.width) * appear, y: carried ? 1.04 : startScale.height + (1 - startScale.height) * appear)
+                        .animation(.easeOut(duration: 0.15), value: carried)   // the card grows as it is taken up, not at once
                         .opacity(carried && model.carrier != nil ? 0 : 1)   // the grid of the whole layout draws a card it carries itself
                         .position(carried ? model.carriedAt : place)
                         .zIndex(carried ? 2 : (card.id == model.front ? 1 : 0))
@@ -54,5 +55,8 @@ struct ZoneWindowsView: View {
         .frame(width: model.size.width, height: model.size.height)
         .padding(ZoneWindowsModel.shadowRoom)
         .frame(width: model.size.width + 2 * ZoneWindowsModel.shadowRoom, height: model.size.height + 2 * ZoneWindowsModel.shadowRoom, alignment: .topLeading)
+        .offset(x: whole ? model.inset.x - ZoneWindowsModel.shadowRoom : 0, y: whole ? model.inset.y - ZoneWindowsModel.shadowRoom : 0)
+        .frame(width: whole ? model.wholeSize.width : nil, height: whole ? model.wholeSize.height : nil, alignment: .topLeading)
+        .ignoresSafeArea()   // a panel that is the whole display lies under the menu bar and the notch: the safe area would push the grid down
     }
 }
