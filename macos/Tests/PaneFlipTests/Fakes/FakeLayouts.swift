@@ -18,6 +18,7 @@ final class FakeLayouts: LayoutManaging {
     func duplicate(key: String, id: UUID) {}
     func importLayout(for key: String, _ layout: NamedLayout) {}
     func removeLayout(key: String, id: UUID) {}
+    func resetLayout(key: String, id: UUID) {}
     func activate(key: String, id: UUID) {}
     func deactivate(key: String) {}
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {}

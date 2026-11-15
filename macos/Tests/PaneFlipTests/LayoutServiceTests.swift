@@ -65,4 +65,59 @@ final class LayoutServiceTests: XCTestCase {
 
         XCTAssertEqual(memory.records.map(\.zoneID), [first.root.leafIDs[0], beyond])
     }
+
+    func testADisplayWithoutALayoutGetsTheStandardOneAndOneWithLayoutsKeepsThem() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let area = CGRect(x: 0, y: 0, width: 1000, height: 600)
+        func info(_ key: String) -> ScreenInfo { ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area) }
+        let kept = repository.addLayout(for: "old|d1")
+
+        service.ensureLayouts(on: [info("old|d1"), info("new|d1")])
+        service.ensureLayouts(on: [info("old|d1"), info("new|d1")])   // again: nothing more is added
+
+        XCTAssertEqual(repository.layouts(for: "old|d1").map(\.id), [kept.id])
+        let added = repository.layouts(for: "new|d1")
+        XCTAssertEqual(added.count, 1)
+        XCTAssertEqual(added.first?.root.leafIDs.count, 1)
+        XCTAssertEqual(added.first?.gap, 0)
+        XCTAssertEqual(repository.activeLayout(for: "new|d1")?.id, added.first?.id)
+    }
+
+    func testResettingALayoutBringsItsAppsToItsOneZone() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let screens = FakeScreens()
+        let area = CGRect(x: 0, y: 0, width: 1000, height: 600)
+        screens.infos = [ScreenInfo(key: "screen", name: "screen", size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area)]
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
+        let layout = repository.addLayout(for: "screen", preset: .custom(rows: 1, columns: 2))
+        memory.remember(zoneID: layout.root.leafIDs[1], bundleID: "app", title: "")
+
+        service.resetLayout(key: "screen", id: layout.id)
+
+        let fresh = repository.layout(id: layout.id, key: "screen")
+        XCTAssertEqual(fresh?.root.leafIDs.count, 1)
+        XCTAssertEqual(memory.records.map(\.zoneID), fresh?.root.leafIDs, "the app went to the zone that is left")
+    }
+
+    func testTheOnlyLayoutOfADisplayCannotBeRemovedByTheService() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let only = repository.addLayout(for: "screen")
+        memory.remember(zoneID: only.root.leafIDs[0], bundleID: "app", title: "")
+
+        service.removeLayout(key: "screen", id: only.id)
+
+        XCTAssertEqual(repository.layouts(for: "screen").map(\.id), [only.id])
+        XCTAssertEqual(memory.records.count, 1, "its apps are not forgotten")
+    }
 }

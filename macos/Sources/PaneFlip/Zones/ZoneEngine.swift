@@ -87,6 +87,7 @@ final class ZoneEngine: ZoneRefreshing {
         let current = screens.screens()
         lastSignatures = current.map(\.layoutSignature)
         lastScreens = current
+        displayHandler?.ensureLayouts(on: current)
         displayHandler?.desktopsDidChange(on: current)
         keepScreensInView(on: current)
         coordinator.apply(plan: planner.plan(on: current))

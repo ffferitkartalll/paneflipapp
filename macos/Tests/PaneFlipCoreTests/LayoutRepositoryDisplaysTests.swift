@@ -44,4 +44,41 @@ final class LayoutRepositoryDisplaysTests: XCTestCase {
         let stripped = try JSONSerialization.data(withJSONObject: object)
         XCTAssertNil(try JSONDecoder().decode(NamedLayout.self, from: stripped).defaultZoneID)
     }
+
+    func testTheStandardLayoutHasOneZoneAndNoSpaceAndNothingBeyondTheEdges() {
+        let layout = NamedLayout.standard(name: "Layout 1")
+        XCTAssertEqual(layout.root.leafIDs.count, 1)
+        XCTAssertEqual(layout.gap, 0)
+        XCTAssertEqual(layout.edgeMargin, 0)
+        XCTAssertTrue(layout.leading.isEmpty && layout.trailing.isEmpty)
+    }
+
+    func testTheLastLayoutOfADisplayIsNeverRemoved() {
+        let repository = repository()
+        let only = repository.addStandardLayout(for: "A|d1", named: "one")
+        repository.removeLayout(id: only.id, key: "A|d1")
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [only.id])
+        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, only.id)
+        let second = repository.addLayout(for: "A|d1")
+        repository.removeLayout(id: only.id, key: "A|d1")
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [second.id])
+    }
+
+    func testAResetLayoutKeepsItsNameAndPlaceAndStartsAgain() {
+        let repository = repository()
+        let first = repository.addLayout(for: "A|d1", named: "mine", preset: .custom(rows: 2, columns: 2))
+        repository.setSpacing(gap: 12, edgeMargin: 8, minZoneSize: 100, ofLayout: first.id, key: "A|d1")
+        repository.setStartApp("app", chosen: true, ofLayout: first.id, key: "A|d1")
+        let second = repository.addLayout(for: "A|d1", named: "other")
+
+        let fresh = repository.resetLayout(id: first.id, key: "A|d1")
+
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [first.id, second.id])
+        XCTAssertEqual(fresh?.name, "mine")
+        XCTAssertEqual(fresh?.root.leafIDs.count, 1)
+        XCTAssertEqual(fresh?.gap, 0)
+        XCTAssertEqual(fresh?.edgeMargin, 0)
+        XCTAssertTrue(fresh?.startApps.isEmpty ?? false)
+        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, first.id, "still the one the desktop uses")
+    }
 }
