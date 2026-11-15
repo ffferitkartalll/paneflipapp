@@ -36,10 +36,20 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func updateLayout(key: String, id: UUID, strip: StripLayout, animated: Bool) {
         guard let old = repository.layout(id: id, key: key) else { return }
-        let isActive = repository.activeLayout(for: key)?.id == id
         // The layout is saved first: if the app quits between the two writes, memory never names zones that the
         // saved layout lacks.
         repository.setStrip(strip, ofLayout: id, key: key)
+        settle(from: old, to: strip, key: key, id: id, animated: animated)
+    }
+
+    func resetLayout(key: String, id: UUID) {
+        guard let old = repository.layout(id: id, key: key), let fresh = repository.resetLayout(id: id, key: key) else { return }
+        settle(from: old, to: fresh.strip, key: key, id: id, animated: false)
+    }
+
+    /// The layout `old` was saved as `strip`: the windows of its zones that are gone go to the zones that took their places, and the zones are laid out again.
+    private func settle(from old: NamedLayout, to strip: StripLayout, key: String, id: UUID, animated: Bool) {
+        let isActive = repository.activeLayout(for: key)?.id == id
         if isActive {
             var map = screens.screens().first { $0.key == key }.map { ZoneRemapper.byCoverage(old: old.root, new: strip.root, in: $0.axVisible) } ?? [:]
             if let home = repository.layout(id: id, key: key)?.fallbackZoneID {
@@ -57,6 +67,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
     }
 
     func removeLayout(key: String, id: UUID) {
+        guard repository.layouts(for: key).count > 1 else { return }
         if repository.activeLayout(for: key)?.id == id,
            let other = repository.layouts(for: key).first(where: { $0.id != id && !repository.isTaken(layout: $0.id, key: key) }) {
             activate(key: key, id: other.id)
@@ -120,6 +131,12 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
             let pick = old.first { $0 == screen.legacyKey }
                 ?? old.max { (Int($0.split(separator: "|").last ?? "") ?? 0) < (Int($1.split(separator: "|").last ?? "") ?? 0) }
             if let pick { repository.moveScreen(from: pick, to: screen.key) }
+        }
+    }
+
+    func ensureLayouts(on screens: [ScreenInfo]) {
+        for screen in screens where screen.desktopNumber != nil && repository.layouts(for: screen.key).isEmpty {
+            repository.addStandardLayout(for: screen.key, named: String(localized: "Layout \(1)"))
         }
     }
 

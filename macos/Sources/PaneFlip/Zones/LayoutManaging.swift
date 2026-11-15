@@ -8,7 +8,10 @@ protocol LayoutManaging: AnyObject {
     func importLayout(for key: String, _ layout: NamedLayout)
     /// `animated`: the windows glide to their new places (a line between zones was moved by hand) instead of jumping.
     func updateLayout(key: String, id: UUID, strip: StripLayout, animated: Bool)
+    /// Does nothing for the last layout of a display: it is never removed (see `resetLayout`).
     func removeLayout(key: String, id: UUID)
+    /// The layout goes back to one zone with no space round or between zones and nothing beyond the edges; its windows go to that zone.
+    func resetLayout(key: String, id: UUID)
     func activate(key: String, id: UUID)
     /// The key's desktop gets no layout, so no zones.
     func deactivate(key: String)

@@ -55,13 +55,37 @@ public final class LayoutRepository {
 
     @discardableResult
     public func addLayout(for key: String, named name: String? = nil, preset: LayoutPreset = .single) -> NamedLayout {
+        let layout = NamedLayout(name: name ?? "", root: preset.root)
+        append(layout, key: key)
+        return layout
+    }
+
+    /// Adds the layout every display starts with (see `NamedLayout.standard`).
+    @discardableResult
+    public func addStandardLayout(for key: String, named name: String) -> NamedLayout {
+        let layout = NamedLayout.standard(name: name)
+        append(layout, key: key)
+        return layout
+    }
+
+    /// Adds the layout to the display's layouts; the key's desktop takes it if it has none.
+    private func append(_ layout: NamedLayout, key: String) {
         let (display, desktop) = Self.split(key)
         var s = screens[display] ?? ScreenLayouts()
-        let layout = NamedLayout(name: name ?? "", root: preset.root)
         s.layouts.append(layout)
         if s.byDesktop[desktop] == nil { s.byDesktop[desktop] = layout.id }
         screens[display] = s
-        return layout
+    }
+
+    /// Puts a layout back as it starts (see `NamedLayout.standard`), with its name and its place among the layouts kept; its zones are new ones. Returns it, nil without it.
+    @discardableResult
+    public func resetLayout(id: UUID, key: String) -> NamedLayout? {
+        let display = Self.split(key).display
+        guard var s = screens[display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return nil }
+        let fresh = NamedLayout.standard(name: s.layouts[i].name, id: id)
+        s.layouts[i] = fresh
+        screens[display] = s
+        return fresh
     }
 
     /// Adds a copy of a layout to the display's layouts; no desktop uses it yet.
@@ -183,9 +207,10 @@ public final class LayoutRepository {
         screens[display] = s
     }
 
+    /// The last layout of a display is never removed: every display keeps at least one.
     public func removeLayout(id: UUID, key: String) {
         let display = Self.split(key).display
-        guard var s = screens[display] else { return }
+        guard var s = screens[display], s.layouts.count > 1 else { return }
         s.layouts.removeAll { $0.id == id }
         s.byDesktop = s.byDesktop.filter { $0.value != id }
         screens[display] = s

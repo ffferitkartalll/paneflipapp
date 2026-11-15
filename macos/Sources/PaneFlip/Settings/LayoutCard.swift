@@ -10,6 +10,8 @@ struct LayoutCard: View {
     let isActive: Bool
     /// Another desktop of the display uses this layout.
     var isTaken = false
+    /// The only layout of its display: it cannot be removed, only reset.
+    var isOnly = false
     let layouts: LayoutManaging
     let editor: LayoutEditing
 
@@ -18,6 +20,7 @@ struct LayoutCard: View {
     @State private var draftName = ""
     @State private var exporting = false
     @State private var confirmingRemoval = false
+    @State private var offeringReset = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -81,8 +84,12 @@ struct LayoutCard: View {
             }
             Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }.hoverHighlight()
                 .buttonStyle(.bordered)
-            Button { confirmingRemoval = true } label: { stretched("Remove") }.hoverHighlight()
+            Button { if isOnly { offeringReset = true } else { confirmingRemoval = true } } label: { stretched("Remove") }.hoverHighlight()
                 .buttonStyle(.bordered)
+                .alert("The layout cannot be removed because there is no other layout saved on its screen. It can be reset instead. Reset it?", isPresented: $offeringReset) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Reset", role: .destructive) { layouts.resetLayout(key: screen.key, id: layout.id) }
+                }
                 .confirmationDialog("Remove this layout?", isPresented: $confirmingRemoval, titleVisibility: .visible) {
                     Button("Remove", role: .destructive) { layouts.removeLayout(key: screen.key, id: layout.id) }
                     Button("Cancel", role: .cancel) {}

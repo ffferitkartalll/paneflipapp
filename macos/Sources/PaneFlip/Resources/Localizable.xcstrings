@@ -43275,6 +43275,287 @@
         }
       }
     },
+    "The layout cannot be removed because there is no other layout saved on its screen. It can be reset instead. Reset it?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يمكن إزالة التخطيط لأنه لا يوجد تخطيط آخر محفوظ على شاشته. يمكن إعادة ضبطه بدلاً من ذلك. هل تريد إعادة ضبطه؟"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оформлението не може да бъде премахнато, защото на екрана му няма запазено друго оформление. Вместо това може да бъде нулирано. Да се нулира ли?"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "লেআউটটি সরানো যাবে না, কারণ এর স্ক্রিনে আর কোনো লেআউট সংরক্ষিত নেই। এর পরিবর্তে এটি রিসেট করা যায়। রিসেট করবেন?"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No es pot eliminar la disposició perquè no hi ha cap altra disposició desada a la seva pantalla. En lloc d'això, es pot restablir. Vols restablir-la?"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozvržení nelze odebrat, protože na jeho obrazovce není uloženo žádné další rozvržení. Místo toho ho lze obnovit. Obnovit ho?"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layoutet kan ikke fjernes, fordi der ikke er gemt andre layouts på dets skærm. Det kan i stedet nulstilles. Vil du nulstille det?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Layout kann nicht entfernt werden, weil auf seinem Bildschirm kein anderes Layout gesichert ist. Stattdessen kann es zurückgesetzt werden. Zurücksetzen?"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η διάταξη δεν μπορεί να αφαιρεθεί, επειδή δεν υπάρχει άλλη αποθηκευμένη διάταξη στην οθόνη της. Αντί γι' αυτό μπορεί να γίνει επαναφορά. Να γίνει επαναφορά;"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede eliminar la disposición porque no hay ninguna otra disposición guardada en su pantalla. En su lugar, se puede restablecer. ¿Quieres restablecerla?"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paigutust ei saa eemaldada, kuna selle ekraanil pole salvestatud ühtegi teist paigutust. Selle asemel saab selle lähtestada. Kas lähtestada?"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این چیدمان قابل حذف نیست، چون هیچ چیدمان دیگری روی صفحه‌ی آن ذخیره نشده است. به‌جای آن می‌توان آن را بازنشانی کرد. بازنشانی شود؟"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asettelua ei voi poistaa, koska sen näytölle ei ole tallennettu muita asetteluja. Sen voi sen sijaan palauttaa. Palautetaanko se?"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi maaalis ang layout dahil walang ibang layout na naka-save sa screen nito. Maaari itong i-reset sa halip. I-reset ba ito?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La disposition ne peut pas être supprimée, car aucune autre disposition n’est enregistrée sur son écran. Elle peut être réinitialisée à la place. La réinitialiser ?"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לא ניתן להסיר את הפריסה כי אין פריסה אחרת שמורה במסך שלה. במקום זאת אפשר לאפס אותה. לאפס אותה?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लेआउट हटाया नहीं जा सकता, क्योंकि उसकी स्क्रीन पर कोई दूसरा लेआउट सहेजा हुआ नहीं है। इसके बजाय उसे रीसेट किया जा सकता है। क्या उसे रीसेट करें?"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raspored se ne može ukloniti jer na njegovu zaslonu nije spremljen nijedan drugi raspored. Umjesto toga može se resetirati. Resetirati ga?"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Az elrendezés nem távolítható el, mert a képernyőjén nincs másik mentett elrendezés. Helyette visszaállítható. Visszaállítod?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tata letak tidak dapat dihapus karena tidak ada tata letak lain yang tersimpan di layarnya. Sebagai gantinya, tata letak dapat diatur ulang. Atur ulang?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La disposizione non può essere rimossa perché sul suo schermo non è salvata nessun'altra disposizione. Può invece essere ripristinata. Ripristinarla?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このレイアウトは、画面に保存されている他のレイアウトがないため削除できません。代わりにリセットできます。リセットしますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 화면에 저장된 다른 레이아웃이 없어 레이아웃을 제거할 수 없습니다. 대신 재설정할 수 있습니다. 재설정할까요?"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Išdėstymo pašalinti negalima, nes jo ekrane nėra išsaugoto kito išdėstymo. Vietoj to jį galima atstatyti. Atstatyti?"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izkārtojumu nevar noņemt, jo tā ekrānā nav saglabāts neviens cits izkārtojums. Tā vietā to var atiestatīt. Vai atiestatīt?"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लेआउट काढता येत नाही, कारण त्याच्या स्क्रीनवर दुसरा कोणताही लेआउट जतन केलेला नाही. त्याऐवजी तो रीसेट करता येतो. रीसेट करायचा?"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reka letak tidak boleh dialih keluar kerana tiada reka letak lain disimpan pada skrinnya. Sebaliknya, ia boleh ditetap semula. Tetap semula?"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layouten kan ikke fjernes fordi det ikke er lagret noen annen layout på skjermen. Den kan tilbakestilles i stedet. Tilbakestille den?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De indeling kan niet worden verwijderd, omdat er geen andere indeling op het scherm is bewaard. In plaats daarvan kan hij worden hersteld. Herstellen?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można usunąć układu, ponieważ na jego ekranie nie zapisano żadnego innego układu. Zamiast tego można go zresetować. Zresetować?"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A disposição não pode ser removida porque não existe outra disposição guardada no seu ecrã. Pode ser reposta em alternativa. Repô-la?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O layout não pode ser removido porque não há outro layout salvo na tela dele. Em vez disso, ele pode ser redefinido. Redefinir?"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aranjarea nu poate fi eliminată, deoarece pe ecranul ei nu este salvată nicio altă aranjare. În schimb, poate fi resetată. O resetezi?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раскладку нельзя удалить, потому что на её экране нет другой сохранённой раскладки. Вместо этого её можно сбросить. Сбросить?"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozloženie nemožno odstrániť, pretože na jeho obrazovke nie je uložené žiadne iné rozloženie. Namiesto toho ho možno obnoviť. Obnoviť ho?"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postavitve ni mogoče odstraniti, ker na njenem zaslonu ni shranjena nobena druga postavitev. Namesto tega jo je mogoče ponastaviti. Jo ponastavim?"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Распоред се не може уклонити јер на његовом екрану није сачуван ниједан други распоред. Уместо тога може се ресетовати. Ресетовати га?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layouten kan inte tas bort eftersom det inte finns någon annan layout sparad på dess skärm. Den kan återställas i stället. Vill du återställa den?"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "அமைப்பை அகற்ற முடியாது, ஏனெனில் அதன் திரையில் வேறு எந்த அமைப்பும் சேமிக்கப்படவில்லை. அதற்குப் பதிலாக அதை மீட்டமைக்கலாம். மீட்டமைக்கவா?"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "లేఅవుట్‌ను తీసివేయడం సాధ్యం కాదు, ఎందుకంటే దాని స్క్రీన్‌పై మరే ఇతర లేఅవుట్ సేవ్ చేయబడలేదు. బదులుగా దాన్ని రీసెట్ చేయవచ్చు. రీసెట్ చేయాలా?"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ไม่สามารถนำเลย์เอาต์ออกได้ เพราะไม่มีเลย์เอาต์อื่นที่บันทึกไว้บนหน้าจอของมัน แต่สามารถรีเซ็ตได้แทน ต้องการรีเซ็ตไหม"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen kaldırılamaz çünkü bulunduğu ekranda kayıtlı başka bir düzen yok. Bunun yerine sıfırlanabilir. Sıfırlansın mı?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Компонування не можна видалити, бо на його екрані немає іншого збереженого компонування. Натомість його можна скинути. Скинути?"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ترتیب کو ہٹایا نہیں جا سکتا کیونکہ اس کی اسکرین پر کوئی دوسری ترتیب محفوظ نہیں ہے۔ اس کے بجائے اسے ری سیٹ کیا جا سکتا ہے۔ کیا اسے ری سیٹ کریں؟"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể xóa bố cục vì không có bố cục nào khác được lưu trên màn hình của nó. Thay vào đó, có thể đặt lại bố cục. Đặt lại?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法移除此布局，因为其所在屏幕上没有保存其他布局。可以改为重置。要重置吗？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法移除此版面配置，因為其所在螢幕上沒有儲存其他版面配置。可以改為重設。要重設嗎？"
+          }
+        }
+      }
+    },
     "The layout editor won't split or resize a zone below this." : {
       "extractionState" : "manual",
       "localizations" : {

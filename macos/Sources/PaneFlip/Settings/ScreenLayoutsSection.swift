@@ -20,6 +20,7 @@ struct ScreenLayoutsSection: View {
                     ForEach(repository.layouts(for: screen.key)) { layout in
                         LayoutCard(screen: screen, layout: layout, isActive: layout.id == activeID,
                                    isTaken: repository.isTaken(layout: layout.id, key: screen.key),
+                                   isOnly: repository.layouts(for: screen.key).count == 1,
                                    layouts: layouts, editor: editor)
                     }
                     addCard
