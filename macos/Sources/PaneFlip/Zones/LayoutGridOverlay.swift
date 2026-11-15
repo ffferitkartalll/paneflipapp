@@ -85,9 +85,12 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// How near the pointer is to a display's left or right edge to count as at it, how long it stays there before the grid goes on to the next screen, and the same again for each
     /// screen after it.
     private static let edgeBand: CGFloat = 4
+    /// A rectangle on a display, moved to where the user says that display stands on the desk (Settings): the arrow keys go to the display beside it there.
+    private let deskRect: (CGRect) -> CGRect
 
     init(coordinator: StackCoordinator, screens: ScreenProviding, source: ZoneCardSource, snapshots: WindowSnapshotting, planner: ZonePlanner, mover: WindowMover,
-         refresher: ZoneRefreshing, gapOf: @escaping (ScreenInfo) -> CGFloat, gain: @escaping () -> CGFloat) {
+         refresher: ZoneRefreshing, gapOf: @escaping (ScreenInfo) -> CGFloat, gain: @escaping () -> CGFloat, deskRect: @escaping (CGRect) -> CGRect) {
+        self.deskRect = deskRect
         self.gain = gain
         self.coordinator = coordinator
         self.screens = screens
@@ -278,6 +281,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
                     : picture.frame.offsetBy(dx: -area.minX - zone.rect.minX, dy: -area.minY - zone.rect.minY)
             }
             let id = zone.id
+            grid.chosenAnywhere = false
+            grid.onPointed = { [weak self, weak grid] in self?.pointedChanged(in: grid) }
             grid.onChoose = { [weak self] card in self?.choose(card, in: id) }
             grid.onPerform = { [weak self] action, card in self?.perform(action, on: card, in: id) }
             grid.onToggleStart = { [weak self] card in self?.toggleStart(card, in: id) }
@@ -408,6 +413,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
 
     /// The card to be chosen and its display: where the pointer or the arrow keys are, else the card with the focus, else the first card there is.
     private func located() -> (display: LayoutGridDisplay, place: LayoutGridPlace)? {
+        // A card the pointer or the arrow keys are on, on any display, comes before the card with the focus (else a key could never leave a display that has the focus).
+        for display in displays { if let place = display.model.pointed { return (display, place) } }
         for display in displays { if let place = display.model.current { return (display, place) } }
         for display in displays { if let place = display.model.places.first { return (display, place) } }
         return nil
@@ -422,13 +429,30 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
             scroll(display, to: display.model.shiftShowing(next))
             return
         }
-        func global(_ place: LayoutGridPlace, in d: LayoutGridDisplay) -> CGRect { place.rect.offsetBy(dx: d.area.minX - d.model.shift, dy: d.area.minY) }
+        func global(_ place: LayoutGridPlace, in d: LayoutGridDisplay) -> CGRect { deskRect(place.rect.offsetBy(dx: d.area.minX - d.model.shift, dy: d.area.minY)) }
         var candidates: [(display: LayoutGridDisplay, place: LayoutGridPlace)] = []
         for other in displays where other !== display { candidates += other.model.places.filter(other.model.isInView).map { (other, $0) } }
+        let origin = global(from, in: display)
+        // On the desk a display is beside this one only where their heights meet (the display below lies under, not beside): left and right need a card at the height of this one.
+        let horizontal = direction == .left || direction == .right
         let list = candidates.enumerated().map { (id: $0.offset, rect: global($0.element.place, in: $0.element.display), number: $0.offset) }
-        guard let index = ZoneNeighbour.nearest(to: global(from, in: display), number: 0, among: list, toward: direction) else { return }
+            .filter { !horizontal || min($0.rect.maxY, origin.maxY) > max($0.rect.minY, origin.minY) }
+        guard let index = ZoneNeighbour.nearest(to: origin, number: 0, among: list, toward: direction) else { return }
         display.model.select(nil)
         candidates[index].display.model.select(candidates[index].place)
+    }
+
+    private var syncingPointers = false
+
+    /// One card is the one to be chosen in the whole grid, the last one the pointer or the arrow keys went to: when a zone marks one, no other zone, on any display, does.
+    private func pointedChanged(in changed: ZoneWindowsModel?) {
+        guard !syncingPointers else { return }
+        syncingPointers = true
+        defer { syncingPointers = false }
+        let zones = displays.flatMap(\.model.zones).map(\.model)
+        if let changed, changed.pointed != nil { for other in zones where other !== changed { other.pointed = nil } }
+        let any = zones.contains { $0.pointed != nil }
+        for zone in zones { zone.chosenAnywhere = any }
     }
 
     private func choosePointed() {
@@ -841,3 +865,4 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         monitors = []
     }
 }
+

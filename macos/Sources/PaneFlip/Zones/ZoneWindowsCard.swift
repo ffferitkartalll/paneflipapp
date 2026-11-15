@@ -45,7 +45,7 @@ struct ZoneWindowsCard: View {
         // (the window in front) has the thickness of the frame that shows where the focus went between zones, the card to be chosen (under the pointer, or where the arrow keys
         // went) twice that: where the focus is, and where a click or Return would send it, are always told apart.
         .overlay {
-            let focused = model.highlighted == card.id, pointed = model.pointed == card.id && model.carried == nil
+            let focused = model.highlighted == card.id, pointed = (model.pointed == card.id || (focused && !(model.chosenAnywhere ?? (model.pointed != nil)))) && model.carried == nil
             RoundedRectangle(cornerRadius: radius).strokeBorder(AppAccent.color, lineWidth: pointed ? 2 * ZoneFlash.lineWidth : ZoneFlash.lineWidth)
                 .opacity(model.appear * (focused || pointed ? 1 : 0))
                 .animation(.easeOut(duration: 0.15), value: focused)

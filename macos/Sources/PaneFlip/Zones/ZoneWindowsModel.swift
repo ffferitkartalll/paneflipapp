@@ -29,7 +29,9 @@ final class ZoneWindowsModel {
     var highlighted: String?
     /// The card a click, or Return, chooses: the one the pointer is on, or the arrow keys went to (they go on from it, from the card with the focus at first). Its frame is
     /// twice as thick as the one of the card with the focus.
-    var pointed: String?
+    var pointed: String? { didSet { if pointed != oldValue { onPointed() } } }
+    /// In the grid of the whole layout: whether any zone of it has a card to be chosen. While none has, the card with the focus is the one (it has the thicker frame too); nil in the grid of one zone, where it is the zone's own mark.
+    var chosenAnywhere: Bool?
     /// The card the mouse carries, and where its middle is, in the room of the zone.
     var carried: String?
     var carriedAt: CGPoint = .zero
@@ -44,6 +46,7 @@ final class ZoneWindowsModel {
     @ObservationIgnored var tracksFocus = true
 
     // What the owner does with what is done in the grid.
+    @ObservationIgnored var onPointed: () -> Void = {}
     @ObservationIgnored var onChoose: (IslandWindow) -> Void = { _ in }
     @ObservationIgnored var onPerform: (IslandCardAction, IslandWindow) -> Void = { _, _ in }
     @ObservationIgnored var onToggleStart: (IslandWindow) -> Void = { _ in }

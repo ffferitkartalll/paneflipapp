@@ -40,11 +40,12 @@ final class LayoutGridModel {
         return (steps > 0 ? rests.sorted().first { $0 > shift + 0.5 } : rests.sorted().last { $0 < shift - 0.5 }) ?? shift
     }
 
+    /// The card the pointer or the arrow keys are on. Nil when this display has none.
+    var pointed: LayoutGridPlace? { places.first { $0.zone.model.pointed == $0.card.id } }
+
     /// The card to be chosen: where the pointer or the arrow keys are, else the card with the focus. Nil when this display has neither.
     var current: LayoutGridPlace? {
-        let all = places
-        return all.first { $0.zone.model.pointed == $0.card.id }
-            ?? all.first { $0.zone.id == focused && $0.zone.model.highlighted == $0.card.id }
+        pointed ?? places.first { $0.zone.id == focused && $0.zone.model.highlighted == $0.card.id }
     }
 
     /// The card to be chosen is this one (nil: none on this display); it is the only one marked.
@@ -53,11 +54,13 @@ final class LayoutGridModel {
         place?.zone.model.pointed = place?.card.id
     }
 
-    /// The nearest card of this display toward `direction` from `place`, in its zone or in another one; nil when there is none that way.
+    /// The nearest card of this display toward `direction` from `place`, in its zone or in another one; nil when there is none that way. Up and down stay on the screen in view
+    /// (the screens of the layout lie side by side: a card of another screen is not below or above), left and right go on to the screens beyond.
     func neighbour(of place: LayoutGridPlace, toward direction: ZoneDirection) -> LayoutGridPlace? {
         let all = places
         guard let current = all.firstIndex(where: { $0.zone.id == place.zone.id && $0.card.id == place.card.id }) else { return nil }
-        let others = all.enumerated().map { (id: $0.offset, rect: $0.element.rect, number: $0.offset) }
+        let vertical = direction == .up || direction == .down
+        let others = all.enumerated().filter { !vertical || isInView($0.element) }.map { (id: $0.offset, rect: $0.element.rect, number: $0.offset) }
         return ZoneNeighbour.nearest(to: all[current].rect, number: current, among: others, toward: direction).map { all[$0] }
     }
 
