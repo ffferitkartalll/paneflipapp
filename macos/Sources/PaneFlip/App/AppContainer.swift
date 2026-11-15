@@ -89,7 +89,13 @@ final class AppContainer {
                                              gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) })
         engine.add(presenter: zoneWindows)
         notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
-        island.staysClosed = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
+        let layoutGrid = LayoutGridOverlay(coordinator: coordinator, screens: screens, source: island, snapshots: capture, planner: planner,
+                                           mover: WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) }),
+                                           refresher: engine,
+                                           gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) },
+                                           gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) })
+        layoutGrid.isBlocked = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
+        island.staysClosed = { [weak zoneWindows, weak layoutGrid] in zoneWindows?.isShown ?? false || layoutGrid?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
         island.onCover = { [weak notches] in notches?.isCovered = $0 }
         island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
@@ -154,9 +160,10 @@ final class AppContainer {
         island.onEditEdges = { [weak resizer] in resizer?.toggle() }
         island.onUndoEdit = { [weak resizer] in resizer?.undo() }
         island.onSetStartApp = { [layouts] in layouts.setStartApp(key: $0, id: $1, bundleID: $2, chosen: $3) }
-        island.onCornerAction = { [editor, layoutApps, repository, screens] action in
+        island.onCornerAction = { [editor, layoutApps, repository, screens, layoutGrid] action in
             switch action {
             case .editLayout: editor.toggleAtPointer()
+            case .gridView: layoutGrid.show()
             case .openApps: layoutApps.open(apps: layoutApps.startApps(on: screens, in: repository))
             case .settings: SettingsWindowOpener.open()
             case .quit: NSApp.terminate(nil)
@@ -166,7 +173,7 @@ final class AppContainer {
         let shortcut: KeyShortcutListening = EventTapKeyShortcut(capsLock: capsLockState) { [settings] in
             let v = settings.values
             var all: [(KeyShortcut, SnapTrigger)] = [(.cycle(reverse: false), v.nextWindowShortcut), (.cycle(reverse: true), v.previousWindowShortcut),
-                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut), (.zoneWindows, v.zoneWindowsShortcut)]
+                                                     (.scroll(.right), v.scrollRightShortcut), (.scroll(.left), v.scrollLeftShortcut), (.undoWindow, v.undoWindowShortcut), (.enlargeWindow, v.enlargeWindowShortcut), (.zoneWindows, v.zoneWindowsShortcut), (.layoutGrid, v.layoutGridShortcut)]
             if island.hasClosableNotice { all.append((.closeWindowUndoNotice, v.closeWindowUndoNoticeShortcut)) }
             if v.zoneNavigationEnabled {
                 all += [(.focusZone(.up), v.zoneUpShortcut), (.focusZone(.left), v.zoneLeftShortcut),
@@ -191,14 +198,23 @@ final class AppContainer {
         // Where a grid may be opened or closed from now: nothing else is being placed, edited or shown, and the pointer is on the zone that has the focus (not on the island).
         let canLeadGrid: () -> Bool = { [settings, coordinator, editor, island] in
             settings.values.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !island.covers(NSEvent.mouseLocation) && !missionControl()
-                && zoneWindows.pointedZone != nil
+                && !layoutGrid.isShown && zoneWindows.pointedZone != nil
+        }
+        // The grid of the whole layout needs no zone under the pointer; it is for the whole desk.
+        let canLeadLayoutGrid: () -> Bool = { [settings, coordinator, editor, island] in
+            settings.values.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !island.covers(NSEvent.mouseLocation) && !missionControl() && !zoneWindows.isShown
         }
         let fingerSwipes = MultitouchSwipes(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                                       isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) }, grid: canLeadGrid)
-        // The wheel button with the keys of the windows' scroll held opens the grid of the zone under the pointer.
-        let middleClick: MiddleClickListening = EventTapMiddleClick(zone: { [settings, keys] in
-            guard canLeadGrid(), settings.values.windowScrollKeys.isHeld(using: keys) else { return nil }
-            return zoneWindows.pointedZone
+                                                       isOn: { [settings, island] in settings.values.trackpadMethod == .threeAndFourFingers && !island.covers(NSEvent.mouseLocation) }, grid: canLeadGrid,
+                                                       layoutGrid: canLeadLayoutGrid)
+        // The wheel button with the keys of the windows' scroll held opens the grid of the zone under the pointer; with the keys of the screens' scroll, the grid of the whole layout.
+        let middleClick: MiddleClickListening = EventTapMiddleClick(request: { [settings, keys] in
+            let v = settings.values
+            let strip = v.stripScrollKeys.isHeld(using: keys), windows = v.windowScrollKeys.isHeld(using: keys)
+            // The keys of the one are those of the other and more: the longer wins.
+            if strip && (!windows || v.stripScrollKeys.keys.count >= v.windowScrollKeys.keys.count) { return canLeadLayoutGrid() ? .layout : nil }
+            guard windows, canLeadGrid() else { return nil }
+            return zoneWindows.pointedZone.map { .zone($0) }
         })
         let scrollSwitch: ScrollSwitchListening = EventTapScrollSwitch(gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                                        twoFingers: { [settings] in settings.values.trackpadMethod == .keysAndTwoFingers },
@@ -211,7 +227,8 @@ final class AppContainer {
             // Asked last, only over the island or a notch: it costs a window list, and every scroll event of the system comes through here.
             return missionControl() ? nil : target
         }, fingers: { fingerSwipes.fingers },
-                                                       crowded: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers && fingerSwipes.crowded }, grid: canLeadGrid) { [settings, keys, coordinator, editor, island] in
+                                                       crowded: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers && fingerSwipes.crowded }, grid: canLeadGrid,
+                                                       layoutGrid: canLeadLayoutGrid) { [settings, keys, coordinator, editor, island] in
             let v = settings.values
             // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
@@ -229,8 +246,8 @@ final class AppContainer {
                                      stage: PanelScrollStage(screens: screens, panels: stagePanels),
                                      metronome: DisplayLinkMetronome.start, refresher: engine,
                                      reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion },
-                                     isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() || zoneWindows.isShown })
-        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens, grid: zoneWindows) { [settings, coordinator, editor] target in
+                                     isBusy: { coordinator.placementOnly() || editor.isShown || missionControl() || zoneWindows.isShown || layoutGrid.isShown })
+        let scrollSwitchHandler = ScrollSwitchHandler(coordinator: coordinator, scroller: scroller, screens: screens, grid: zoneWindows, layoutGrid: layoutGrid) { [settings, coordinator, editor] target in
             let v = settings.values
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !missionControl()
         }
@@ -279,7 +296,12 @@ final class AppContainer {
             scrollSwitch.start(onEvent: scrollSwitchHandler.handle)
             fingerSwipes.start(onEvent: scrollSwitchHandler.handle)
             placementKeys.start(onEvent: placement.handle)
-            middleClick.start { zoneWindows.toggle(zone: $0) }
+            middleClick.start { request in
+                switch request {
+                case .zone(let zone): zoneWindows.toggle(zone: zone)
+                case .layout: layoutGrid.toggle()
+                }
+            }
             notches.start()
             pointerCrossing.start()
             capsLock.remap(settings.values.capsLockAsModifier)
@@ -292,7 +314,9 @@ final class AppContainer {
                 case .undoWindow: coordinator.undoLast(); island.dismissWindowNotice()
                 case .closeWindowUndoNotice: island.closeNotice()
                 case .enlargeWindow: coordinator.enlargeFocused()
+                case .layoutGrid: layoutGrid.toggle()
                 case .zoneWindows:
+                    guard !layoutGrid.isShown else { return }
                     zoneWindows.toggle(zone: coordinator.focusedZoneID ?? coordinator.focusedWindowCached().flatMap({ coordinator.stack(containing: $0.id)?.id }))
                 }
             }

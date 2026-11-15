@@ -34,6 +34,8 @@ public struct SnapTrigger: Codable, Equatable {
     public static let enlargeWindow = SnapTrigger(keys: [leftOption, leftControl, Key(code: 36, name: "Return")])
     /// Open the grid of the windows of the zone in focus: Control+Option+Tab.
     public static let zoneWindows = SnapTrigger(keys: [leftOption, leftControl, Key(code: 48, name: "Tab")])
+    /// Open the grid of the whole layout of every display: Command, Option and Control with Tab (the keys that scroll toward the screens beyond the edges, and Tab).
+    public static let layoutGrid = SnapTrigger(keys: [commandKey, leftOption, leftControl, Key(code: 48, name: "Tab")])
     public static let scrollRight = SnapTrigger(keys: [commandKey, leftOption, leftControl, rightArrow])
     public static let scrollLeft = SnapTrigger(keys: [commandKey, leftOption, leftControl, leftArrow])
     /// Pressed twice quickly, turns on the editing of the zone edges, without Caps Lock as a modifier key: Control and Option together.

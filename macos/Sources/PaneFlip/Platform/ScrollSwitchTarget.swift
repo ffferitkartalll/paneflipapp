@@ -7,5 +7,7 @@ enum ScrollSwitchTarget: Equatable {
     case windows, strip
     /// The grid of the windows of the zone under the pointer, opened and closed by a swipe up and down (the moves are how far the fingers went up).
     case grid
+    /// The grid of the whole layout of every display, opened by a swipe up and closed by one down (with the keys that scroll toward the screens beyond the edges held).
+    case layoutGrid
     case zoneWindows(UUID)
 }

@@ -336,6 +336,15 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         coordinator.moveSlot(source, toPlaceOf: target, inZone: zone)
     }
 
+    /// A card of a zone is carried to another zone (in the grid of the whole layout).
+    func send(_ card: IslandWindow, from zone: UUID, to target: UUID) {
+        if let id = card.windowID {
+            if let ref = coordinator.stack(containing: id)?.refs[id] { coordinator.snap(ref, into: target) }
+        } else if let slot = slot(of: card, in: zone) {
+            coordinator.moveSlot(slot, toZone: target)
+        }
+    }
+
     /// An island is open.
     var isOpen: Bool { entries.values.contains { $0.hovered } }
 
@@ -781,6 +790,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             if let action = cornerAction(at: point, in: entry) {
                 onCornerAction?(action)
                 if entry.model.popover { setOpen(false, for: entry) }   // a popover is done once a button was used
+                // The grid of the layout takes the display: the island closes, and stays closed until the pointer has left it.
+                else if action == .gridView { entry.cooling = true; setOpen(false, for: entry) }
                 return
             }
             if let window = selectButtonHit(at: point, in: entry) { toggleStart(window, in: entry); return }

@@ -9,7 +9,7 @@ struct ShortcutsPane: View {
 
     private typealias ChordPath = WritableKeyPath<SettingsValues, SnapTrigger>
     private static let chordPaths: [ChordPath] = [\.nextWindowShortcut, \.previousWindowShortcut, \.scrollRightShortcut, \.scrollLeftShortcut,
-                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut, \.zoneWindowsShortcut, \.sendToZoneKeys]
+                                              \.zoneUpShortcut, \.zoneLeftShortcut, \.zoneDownShortcut, \.zoneRightShortcut, \.undoWindowShortcut, \.closeWindowUndoNoticeShortcut, \.enlargeWindowShortcut, \.zoneWindowsShortcut, \.layoutGridShortcut, \.sendToZoneKeys]
 
     var body: some View {
         Form {
@@ -68,6 +68,7 @@ struct ShortcutsPane: View {
             Section("Screens beyond the screen") {
                 chordRow(.scrollRight, title: "Scroll to the right", path: \.scrollRightShortcut)
                 chordRow(.scrollLeft, title: "Scroll to the left", path: \.scrollLeftShortcut)
+                chordRow(.layoutGrid, title: "Layout grid", path: \.layoutGridShortcut)
                 row(.stripScroll, title: "Hold while scrolling",
                     detail: "Hold these keys and scroll over the screen with the mouse wheel to slide to the screens beyond its edges. Two fingers do it too when Keys and two fingers is chosen in the Trackpad tab.",
                     value: settings.values.stripScrollKeys, standard: standard(\.stripScrollKeys)) { settings.values.stripScrollKeys = $0 }

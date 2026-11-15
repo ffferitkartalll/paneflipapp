@@ -248,4 +248,21 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.home), [nil, nil, nil])
         XCTAssertEqual(memory.records.map(\.zoneID), [away, away, away])
     }
+
+    func testASlotCarriedToAnotherZoneComesLastThereAndLosesItsHome() {
+        let memory = StackMemory(store: MemoryStore())
+        let a = UUID(), b = UUID()
+        let first = memory.remember(zoneID: a, bundleID: "one", title: "")
+        _ = memory.remember(zoneID: b, bundleID: "two", title: "")
+        _ = memory.remember(zoneID: b, bundleID: "three", title: "")
+        memory.setHome(slot: first, to: a)
+
+        memory.setZone(ofSlot: first, to: b)
+
+        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"], "after the cards the zone has")
+        XCTAssertEqual(memory.records.last?.zoneID, b)
+        XCTAssertNil(memory.records.last?.home)
+        memory.setZone(ofSlot: 2, to: b)
+        XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"], "the zone it is in already: nothing changes")
+    }
 }

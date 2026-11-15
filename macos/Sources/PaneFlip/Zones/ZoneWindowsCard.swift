@@ -8,13 +8,15 @@ struct ZoneWindowsCard: View {
     let card: IslandWindow
     /// The size of the card: the same for every card, an app that is not open too. The picture of a window is scaled to it, not kept to its own shape.
     let size: CGSize
+    /// False: the card shows the glyph of its app, as one that has no picture does.
+    var showsPicture = true
     @State private var hoveredButton: IslandButton?
 
     /// As large as the picture of the app on a card of the island's row: never large on a large card.
     private static func glyphSide(in size: CGSize) -> CGFloat { min(32, max(14, min(size.width, size.height) * 0.4)) }
 
     var body: some View {
-        let picture = model.pictures[card.id]
+        let picture = showsPicture ? model.pictures[card.id] : nil
         let radius = picture.map { $0.cornerRadius * size.width / max($0.frame.width, 1) } ?? 8
         ZStack(alignment: .topLeading) {
             if let picture {

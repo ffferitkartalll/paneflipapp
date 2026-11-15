@@ -22,6 +22,12 @@ public enum ZoneGrid {
         }
     }
 
+    /// The places of the grid that `count` cards leave empty (the rest of the side × side cells, row by row); every place when there is no card.
+    public static func emptyCells(count: Int, in size: CGSize, gap: CGFloat) -> [CGRect] {
+        let side = side(forCards: count)
+        return Array(cells(count: side * side, in: size, gap: gap).dropFirst(max(count, 0)))
+    }
+
     /// The card an arrow key goes to from the card `index` (`columns` to the right, `rows` down; negative: left, up) among `count` cards: one step along the grid, and not
     /// past its edge; in the last row, which may not be full, the last card where the column has none.
     public static func moved(from index: Int, columns: Int, rows: Int, count: Int) -> Int {
@@ -39,5 +45,13 @@ public enum ZoneGrid {
             return dx * dx + dy * dy
         }
         return cells.indices.min { distance(cells[$0]) < distance(cells[$1]) }
+    }
+
+    /// Where a card carried over the grid is put down at `point`, among `count` cards, itself one of them: the place of the cell the point is in, in the grid those `count`
+    /// cards make, whose empty cells count as its end (the card goes after the last one then, never past it).
+    public static func place(at point: CGPoint, count: Int, in size: CGSize, gap: CGFloat) -> Int? {
+        guard count > 0 else { return nil }
+        let side = side(forCards: count)
+        return index(at: point, in: cells(count: side * side, in: size, gap: gap)).map { min($0, count - 1) }
     }
 }
