@@ -66,8 +66,8 @@ final class ZoneEngine: ZoneRefreshing {
 
     // MARK: ZoneRefreshing
 
-    /// After a display was unplugged nothing is moved until the Dock has landed on a remaining display (however long that takes; it is looked at every 0.1 s, every 0.5 s after 3 s): then the windows of the display
-    /// that is gone spread over the usable area, once. The system itself moves them at once; that cannot be held back.
+    /// After a display was unplugged the zones are not laid out until the Dock has landed on a remaining display (however long that takes; it is looked at every 0.1 s, every 0.5 s after 3 s):
+    /// the usable area of the displays is not right before.
     private var waitingForDock = false
 
     private func displaysChanged(waited: Int = 0) {
@@ -78,7 +78,6 @@ final class ZoneEngine: ZoneRefreshing {
             return
         }
         waitingForDock = false
-        displayHandler?.displaysDidChange()
         refreshZones()
         scheduleRestore()
     }

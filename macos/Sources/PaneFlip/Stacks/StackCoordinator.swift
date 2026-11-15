@@ -12,12 +12,6 @@ final class StackCoordinator {
     /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
-    /// Windows of an unplugged display, spread over the usable area of another one: in no zone, their slots wait for the display. Kept for the session only.
-    private var displaced: [CGWindowID: (ref: WindowRef, slot: UUID?)] = [:]
-    func isDisplaced(_ id: CGWindowID) -> Bool { displaced[id] != nil }
-    var displacedWindows: [WindowRef] { displaced.values.map(\.ref) }
-    /// The slot a displaced window filled: when its display is back it goes to that slot, not to another one of the same app.
-    func displacedSlot(of id: CGWindowID) -> UUID? { displaced[id]?.slot }
     /// The window that had the focus at the last look (see `followFocus`).
     private var lastFocusedID: CGWindowID?
     /// The window that had the focus at the last look, as a handle (see `followFocus`).
@@ -187,7 +181,6 @@ final class StackCoordinator {
             if let glide { glide.glide(ref, to: zone.rect) } else { windows.setFrame(zone.rect, of: ref) }
             return
         }
-        let home = memory.home(ofWindow: ref.id)
         let before = stack(containing: ref.id)?.id
         // A window moved from one zone to another goes back between the slots it stood between.
         let near = before == nil ? nil : memory.index(ofWindow: ref.id).map { memory.neighbours(ofSlot: $0) }
@@ -197,9 +190,7 @@ final class StackCoordinator {
         }
         unsnap(window: ref.id)
         pulledOut.remove(ref.id)
-        displaced[ref.id] = nil
         let slot = memory.remember(zoneID: zoneID, bundleID: apps.app(pid: ref.pid)?.bundleID ?? "", title: "")
-        memory.setHome(slot: slot, to: home)
         // A zone beyond the screen's edge keeps its windows out of sight: the window is put there without being brought forward.
         attach(ref, toSlot: slot, raise: !zone.isParked, glide: true)
     }
@@ -847,23 +838,6 @@ final class StackCoordinator {
         memory.unbind(window: id)
         removeFromStack(window: id)
     }
-
-    /// The display of `zones` was unplugged: their windows leave the zones and spread over `area`, the usable area of another display. Their slots
-    /// stay bound to them and remember the zone (see `StackMemory.displace`).
-    func displace(zones: Set<UUID>, over area: CGRect) {
-        memory.displace(zones: zones)
-        for id in zones {
-            guard let stack = stacks[id] else { continue }
-            for ref in Array(stack.refs.values) {
-                displaced[ref.id] = (ref, memory.index(ofWindow: ref.id).map { memory.records[$0].id })
-                removeFromStack(window: ref.id)
-                windows.setFrame(area, of: ref)
-            }
-        }
-    }
-
-    /// The window has its zone again (or is gone): it is no longer displaced.
-    func settled(_ id: CGWindowID) { displaced[id] = nil }
 
     /// Removes a window from the live stack only; the memory is the caller's business. Nothing is brought to the
     /// front: the system decides what is revealed, and the island's front card follows the focus. The zone tells it at once.

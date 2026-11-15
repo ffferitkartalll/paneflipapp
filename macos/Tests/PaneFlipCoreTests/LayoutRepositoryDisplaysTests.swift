@@ -4,14 +4,6 @@ import XCTest
 final class LayoutRepositoryDisplaysTests: XCTestCase {
     private func repository() -> LayoutRepository { LayoutRepository(store: MemoryStore()) }
 
-    func testZonesOfDisplaysThatAreGoneAreTold() {
-        let repository = repository()
-        let kept = repository.addLayout(for: "A|d1")
-        let gone = repository.addLayout(for: "B|d1")
-        XCTAssertEqual(repository.zoneIDs(ofDisplaysNotIn: ["A"]), Set(gone.root.leafIDs))
-        XCTAssertFalse(repository.zoneIDs(ofDisplaysNotIn: ["A"]).contains(kept.root.leafIDs[0]))
-    }
-
     /// A document from before desktops were told apart by their position: one entry per "display|<space id>".
     private func oldRepository(_ keys: [String]) -> (LayoutRepository, [NamedLayout]) {
         let store = MemoryStore()

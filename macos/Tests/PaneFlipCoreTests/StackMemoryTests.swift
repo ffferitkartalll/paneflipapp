@@ -230,38 +230,17 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.title), ["two"])
     }
 
-    func testDisplacedSlotsKeepTheirHomeAndGoBackToItWhenTheDisplayReturns() {
-        let memory = StackMemory(store: MemoryStore())
-        let away = UUID(), here = UUID()
-        let a = memory.remember(zoneID: away, bundleID: "app", title: "")
-        let b = memory.remember(zoneID: away, bundleID: "app", title: "")
-        memory.bind(slot: a, toWindow: 1, title: "")
-
-        XCTAssertEqual(memory.displace(zones: [away]), [1], "only the slot with a live window")
-        XCTAssertEqual(memory.records[a].home, away)
-        XCTAssertNil(memory.records[b].home)
-
-        memory.setHome(slot: memory.remember(zoneID: here, bundleID: "app", title: ""), to: away)
-
-        XCTAssertEqual(memory.returnHome(to: [away]), [1], "the live window is released to be attached again")
-        XCTAssertEqual(memory.records[a].windowID, nil)
-        XCTAssertEqual(memory.records.map(\.home), [nil, nil, nil])
-        XCTAssertEqual(memory.records.map(\.zoneID), [away, away, away])
-    }
-
-    func testASlotCarriedToAnotherZoneComesLastThereAndLosesItsHome() {
+    func testASlotCarriedToAnotherZoneComesLastThere() {
         let memory = StackMemory(store: MemoryStore())
         let a = UUID(), b = UUID()
         let first = memory.remember(zoneID: a, bundleID: "one", title: "")
         _ = memory.remember(zoneID: b, bundleID: "two", title: "")
         _ = memory.remember(zoneID: b, bundleID: "three", title: "")
-        memory.setHome(slot: first, to: a)
 
         memory.setZone(ofSlot: first, to: b)
 
         XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"], "after the cards the zone has")
         XCTAssertEqual(memory.records.last?.zoneID, b)
-        XCTAssertNil(memory.records.last?.home)
         memory.setZone(ofSlot: 2, to: b)
         XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"], "the zone it is in already: nothing changes")
     }

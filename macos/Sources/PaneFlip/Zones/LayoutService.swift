@@ -10,8 +10,6 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
     private let coordinator: StackCoordinator
     private let screens: ScreenProviding
     weak var refresher: ZoneRefreshing?
-    /// The displays seen at the last look; empty before the first one.
-    private var knownDisplays: Set<String> = []
 
     init(repository: LayoutRepository, memory: StackMemory, coordinator: StackCoordinator, screens: ScreenProviding) {
         self.repository = repository
@@ -123,25 +121,6 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
                 ?? old.max { (Int($0.split(separator: "|").last ?? "") ?? 0) < (Int($1.split(separator: "|").last ?? "") ?? 0) }
             if let pick { repository.moveScreen(from: pick, to: screen.key) }
         }
-    }
-
-    /// The windows of a display that is gone spread over the usable area of the first display and are in no zone; when the display comes
-    /// back they return to the zones they were in, also when they were put in a zone of another display meanwhile (a slot remembers its home).
-    func displaysDidChange() {
-        let current = screens.screens()
-        let connected = Set(current.map(\.displayID))
-        let before = knownDisplays
-        knownDisplays = connected
-        guard before.isEmpty || before != connected else { return }
-
-        // The windows of a display that is gone spread over the usable area of the first display, in no zone; their slots wait for the display.
-        if let main = current.first {
-            coordinator.displace(zones: repository.zoneIDs(ofDisplaysNotIn: connected), over: main.axVisible)
-        }
-        // Every zone of the displays that came back, whichever layout is active there.
-        let home = repository.zoneIDs(ofDisplaysNotIn: before).subtracting(repository.zoneIDs(ofDisplaysNotIn: connected))
-        if !before.isEmpty, !home.isEmpty { release(memory.returnHome(to: home)) }
-        refresher?.restoreWindows()
     }
 
     func desktopsDidChange(on screens: [ScreenInfo]) {

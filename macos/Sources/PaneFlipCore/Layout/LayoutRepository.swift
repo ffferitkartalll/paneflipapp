@@ -135,15 +135,6 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
-    /// Every zone of every layout kept for a display that is not among `displays` (display identifiers).
-    public func zoneIDs(ofDisplaysNotIn displays: Set<String>) -> Set<UUID> {
-        var zones: Set<UUID> = []
-        for (key, layouts) in screens where !displays.contains(Self.display(of: key)) {
-            layouts.layouts.forEach { zones.formUnion($0.strip.zoneIDs) }
-        }
-        return zones
-    }
-
     /// The keys a display had before desktops were told apart by their position ("display|<space id>").
     public func legacyKeys(ofDisplay display: String) -> [String] {
         screens.filter { Self.display(of: $0.key) == display && !$0.value.layouts.isEmpty }.keys

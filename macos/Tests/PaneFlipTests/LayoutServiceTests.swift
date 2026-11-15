@@ -65,46 +65,4 @@ final class LayoutServiceTests: XCTestCase {
 
         XCTAssertEqual(memory.records.map(\.zoneID), [first.root.leafIDs[0], beyond])
     }
-
-    private func screen(_ key: String) -> ScreenInfo {
-        let area = CGRect(x: 0, y: 0, width: 1000, height: 600)
-        return ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area)
-    }
-
-    func testWindowsOfAnUnpluggedDisplaySpreadOverTheFirstDisplayAndComeBackToTheirZones() {
-        let repository = LayoutRepository(store: MemoryDocumentStore())
-        let memory = StackMemory(store: MemoryDocumentStore())
-        let screens = FakeScreens()
-        let windows = FakeWindowSystem()
-        let coordinator = StackCoordinator(windows: windows, memory: memory,
-                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
-        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
-        let main = repository.addLayout(for: "main|d1").root.leafIDs[0]
-        let away = repository.addLayout(for: "external|d1").root.leafIDs[0]
-        let rect = CGRect(x: 0, y: 0, width: 100, height: 100)
-        coordinator.apply(zones: [main: rect, away: rect])
-        coordinator.snap(.fake(1), into: away)
-        coordinator.snap(.fake(2), into: away)
-
-        screens.infos = [screen("main|d1"), screen("external|d1")]
-        service.displaysDidChange()                       // both there
-        screens.infos = [screen("main|d1")]
-        service.displaysDidChange()                       // the external one is unplugged
-
-        XCTAssertEqual(windows.frames[1], CGRect(x: 0, y: 0, width: 1000, height: 600), "spread over the usable area")
-        XCTAssertNil(coordinator.stack(containing: 1), "in no zone")
-        XCTAssertEqual(memory.records.map(\.zoneID), [away, away])
-        XCTAssertEqual(memory.records.map(\.windowID), [1, 2], "the slots stay bound")
-        XCTAssertEqual(coordinator.displacedSlot(of: 1), memory.records[0].id, "a displaced window knows its slot")
-        XCTAssertEqual(coordinator.displacedSlot(of: 2), memory.records[1].id)
-
-        coordinator.snap(.fake(1), into: main)           // put in a zone of the first display meanwhile
-        XCTAssertEqual(memory.records.filter { $0.windowID == 1 }.map(\.home), [away], "the new slot keeps the home")
-
-        screens.infos = [screen("main|d1"), screen("external|d1")]
-        service.displaysDidChange()                       // plugged in again
-        XCTAssertEqual(memory.records.map(\.zoneID).filter { $0 == away }.count, 2, "both slots are back in the zone they came from")
-        XCTAssertEqual(memory.records.map(\.windowID), [nil, nil], "to be attached there again")
-        XCTAssertNil(coordinator.stack(containing: 1))
-    }
 }
