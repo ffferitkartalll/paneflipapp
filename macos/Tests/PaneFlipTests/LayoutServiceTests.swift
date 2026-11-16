@@ -84,6 +84,8 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(added.count, 1)
         XCTAssertEqual(added.first?.root.leafIDs.count, 1)
         XCTAssertEqual(added.first?.gap, 0)
+        XCTAssertEqual(added.first?.name, "", "the default layout has no stored name: its title follows the app's language")
+        XCTAssertEqual(added.first?.title(in: added), String(localized: "Default"))
         XCTAssertEqual(repository.activeLayout(for: "new|d1")?.id, added.first?.id)
     }
 
@@ -106,7 +108,7 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.zoneID), fresh?.root.leafIDs, "the app went to the zone that is left")
     }
 
-    func testTheOnlyLayoutOfADisplayCannotBeRemovedByTheService() {
+    func testTheDefaultLayoutOfADisplayCannotBeRemovedByTheService() {
         let repository = LayoutRepository(store: MemoryDocumentStore())
         let memory = StackMemory(store: MemoryDocumentStore())
         let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
@@ -119,5 +121,14 @@ final class LayoutServiceTests: XCTestCase {
 
         XCTAssertEqual(repository.layouts(for: "screen").map(\.id), [only.id])
         XCTAssertEqual(memory.records.count, 1, "its apps are not forgotten")
+    }
+
+    func testALayoutWithNoNameIsTitledByItsPlaceAndARenamedOneByItsName() {
+        let first = NamedLayout.standard(name: ""), second = NamedLayout.standard(name: ""), third = NamedLayout.standard(name: "mine")
+        let all = [first, second, third]
+        XCTAssertEqual(first.title(in: all), String(localized: "Default"))
+        XCTAssertEqual(second.title(in: all), String(localized: "Layout \(2)"))
+        XCTAssertEqual(third.title(in: all), "mine")
+        XCTAssertEqual(third.defaultTitle(in: all), String(localized: "Layout \(3)"), "what it goes back to")
     }
 }

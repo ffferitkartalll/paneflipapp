@@ -7,11 +7,13 @@ struct LayoutCard: View {
 
     let screen: ScreenInfo
     let layout: NamedLayout
+    /// The name the layout has until it is renamed.
+    var defaultTitle = ""
     let isActive: Bool
     /// Another desktop of the display uses this layout.
     var isTaken = false
-    /// The only layout of its display: it cannot be removed, only reset.
-    var isOnly = false
+    /// The default layout of its display: it cannot be renamed or removed, only reset.
+    var isDefault = false
     let layouts: LayoutManaging
     let editor: LayoutEditing
 
@@ -36,13 +38,18 @@ struct LayoutCard: View {
         }
         .frame(width: Self.width)
         .fileExporter(isPresented: $exporting, document: LayoutFile(data: (try? layout.exported()) ?? Data()),
-                      contentType: .json, defaultFilename: layout.name) { _ in }
+                      contentType: .json, defaultFilename: title) { _ in }
         .alert("Rename Layout", isPresented: $isRenaming) {
-            TextField("Layout name", text: $draftName)
+            TextField(defaultTitle, text: $draftName)
             Button("Done", action: commitRename)
+            if !layout.name.isEmpty {
+                Button("Back to the default name (\(defaultTitle))") { layouts.rename(key: screen.key, id: layout.id, to: "") }
+            }
             Button("Cancel", role: .cancel) {}
         }
     }
+
+    private var title: String { layout.name.isEmpty ? defaultTitle : layout.name }
 
     // MARK: Parts
 
@@ -53,18 +60,20 @@ struct LayoutCard: View {
 
     private var nameRow: some View {
         HStack(spacing: 8) {
-            Text(layout.name)
+            Text(verbatim: title)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)   // a long name wraps, never truncates
-            Button {
-                draftName = layout.name
-                isRenaming = true
-            } label: { Image(systemName: "pencil") }
-                .controlSize(.small)
-                .hoverHighlight()
-                .help("Rename")
-                .accessibilityLabel("Rename")
+            if !isDefault {
+                Button {
+                    draftName = layout.name
+                    isRenaming = true
+                } label: { Image(systemName: "pencil") }
+                    .controlSize(.small)
+                    .hoverHighlight()
+                    .help("Rename")
+                    .accessibilityLabel("Rename")
+            }
         }
     }
 
@@ -84,9 +93,9 @@ struct LayoutCard: View {
             }
             Button { editor.edit(on: screen, layoutID: layout.id) } label: { stretched("Edit") }.hoverHighlight()
                 .buttonStyle(.bordered)
-            Button { if isOnly { offeringReset = true } else { confirmingRemoval = true } } label: { stretched("Remove") }.hoverHighlight()
+            Button { if isDefault { offeringReset = true } else { confirmingRemoval = true } } label: { stretched("Remove") }.hoverHighlight()
                 .buttonStyle(.bordered)
-                .alert("The layout cannot be removed because there is no other layout saved on its screen. It can be reset instead. Reset it?", isPresented: $offeringReset) {
+                .alert("The default layout cannot be removed. Reset it instead?", isPresented: $offeringReset) {
                     Button("Cancel", role: .cancel) {}
                     Button("Reset", role: .destructive) { layouts.resetLayout(key: screen.key, id: layout.id) }
                 }

@@ -53,15 +53,22 @@ final class LayoutRepositoryDisplaysTests: XCTestCase {
         XCTAssertTrue(layout.leading.isEmpty && layout.trailing.isEmpty)
     }
 
-    func testTheLastLayoutOfADisplayIsNeverRemoved() {
+    func testTheDefaultLayoutOfADisplayIsNeverRemovedNorRenamed() {
         let repository = repository()
-        let only = repository.addStandardLayout(for: "A|d1", named: "one")
-        repository.removeLayout(id: only.id, key: "A|d1")
-        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [only.id])
-        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, only.id)
-        let second = repository.addLayout(for: "A|d1")
-        repository.removeLayout(id: only.id, key: "A|d1")
-        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [second.id])
+        let first = repository.addStandardLayout(for: "A|d1", named: "Default")
+        let second = repository.addLayout(for: "A|d1", named: "Layout 2")
+        XCTAssertTrue(repository.isDefault(layout: first.id, key: "A|d1"))
+        XCTAssertFalse(repository.isDefault(layout: second.id, key: "A|d1"))
+
+        repository.removeLayout(id: first.id, key: "A|d1")
+        repository.rename(layout: first.id, key: "A|d1", to: "other")
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [first.id, second.id])
+        XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, first.id)
+        XCTAssertEqual(repository.layouts(for: "A|d1").first?.name, "Default")
+
+        repository.rename(layout: second.id, key: "A|d1", to: "mine")
+        repository.removeLayout(id: second.id, key: "A|d1")
+        XCTAssertEqual(repository.layouts(for: "A|d1").map(\.id), [first.id])
     }
 
     func testAResetLayoutKeepsItsNameAndPlaceAndStartsAgain() {

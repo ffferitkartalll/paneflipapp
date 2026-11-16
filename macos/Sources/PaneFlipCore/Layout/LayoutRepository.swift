@@ -115,8 +115,13 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
+    /// The first layout of a display is its default one: it keeps its name and is never removed, only reset.
+    public func isDefault(layout id: UUID, key: String) -> Bool {
+        layouts(for: key).first?.id == id
+    }
+
     public func rename(layout id: UUID, key: String, to name: String) {
-        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        guard !isDefault(layout: id, key: key), var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].name = name
         screens[Self.split(key).display] = s
     }
@@ -207,10 +212,10 @@ public final class LayoutRepository {
         screens[display] = s
     }
 
-    /// The last layout of a display is never removed: every display keeps at least one.
+    /// The default layout of a display (its first) is never removed: every display keeps at least one.
     public func removeLayout(id: UUID, key: String) {
         let display = Self.split(key).display
-        guard var s = screens[display], s.layouts.count > 1 else { return }
+        guard !isDefault(layout: id, key: key), var s = screens[display] else { return }
         s.layouts.removeAll { $0.id == id }
         s.byDesktop = s.byDesktop.filter { $0.value != id }
         screens[display] = s
