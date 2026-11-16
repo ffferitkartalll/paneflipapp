@@ -4497,6 +4497,287 @@
         }
       }
     },
+    "Back to the default name (%@)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العودة إلى الاسم الافتراضي (%@)"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Връщане към името по подразбиране (%@)"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিফল্ট নামে ফিরুন (%@)"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Torna al nom predeterminat (%@)"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zpět na výchozí název (%@)"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilbage til standardnavnet (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück zum Standardnamen (%@)"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιστροφή στο προεπιλεγμένο όνομα (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver al nombre predeterminado (%@)"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tagasi vaikenimele (%@)"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازگشت به نام پیش‌فرض (%@)"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takaisin oletusnimeen (%@)"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bumalik sa default na pangalan (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenir au nom par défaut (%@)"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חזרה לשם ברירת המחדל (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिफ़ॉल्ट नाम पर लौटें (%@)"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vrati na zadani naziv (%@)"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vissza az alapértelmezett névre (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kembali ke nama default (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Torna al nome predefinito (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトの名前に戻す (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 이름으로 되돌리기 (%@)"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grįžti prie numatytojo pavadinimo (%@)"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atgriezties pie noklusējuma nosaukuma (%@)"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डीफॉल्ट नावावर परत जा (%@)"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kembali kepada nama lalai (%@)"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilbake til standardnavnet (%@)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terug naar de standaardnaam (%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wróć do nazwy domyślnej (%@)"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltar ao nome predefinido (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltar ao nome padrão (%@)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Înapoi la numele implicit (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть имя по умолчанию (%@)"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Späť na predvolený názov (%@)"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nazaj na privzeto ime (%@)"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Врати на подразумевани назив (%@)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tillbaka till standardnamnet (%@)"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இயல்புநிலை பெயருக்குத் திரும்பு (%@)"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిఫాల్ట్ పేరుకు తిరిగి వెళ్లండి (%@)"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กลับไปใช้ชื่อเริ่มต้น (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsayılan ada geri dön (%@)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повернути типову назву (%@)"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈیفالٹ نام پر واپس جائیں (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quay lại tên mặc định (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复默认名称 (%@)"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "還原為預設名稱 (%@)"
+          }
+        }
+      }
+    },
     "Blank layout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9551,6 +9832,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "目前的桌面"
+          }
+        }
+      }
+    },
+    "Default" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الافتراضي"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По подразбиране"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ডিফল্ট"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predeterminada"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Výchozí"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προεπιλογή"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predeterminada"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaikimisi"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیش‌فرض"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oletus"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par défaut"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ברירת מחדל"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिफ़ॉल्ट"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadano"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alapértelmezett"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predefinita"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numatytasis"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noklusējums"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डीफॉल्ट"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lalai"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standaard"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Domyślny"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predefinida"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padrão"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Implicită"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По умолчанию"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predvolené"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privzeto"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подразумевано"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இயல்புநிலை"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "డిఫాల్ట్"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ค่าเริ่มต้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsayılan"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Типове"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ڈیفالٹ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mặc định"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "預設"
           }
         }
       }
@@ -21915,287 +22477,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "佈局格狀"
-          }
-        }
-      }
-    },
-    "Layout name" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اسم التخطيط"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Име на оформлението"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "লেআউটের নাম"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nom de la disposició"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Název rozložení"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Layoutnavn"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Layoutname"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Όνομα διάταξης"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nombre de la disposición"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paigutuse nimi"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "نام چیدمان"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Asettelun nimi"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pangalan ng layout"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nom de la disposition"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "שם הפריסה"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउट का नाम"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Naziv rasporeda"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elrendezés neve"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nama tata letak"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nome del layout"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "レイアウト名"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "레이아웃 이름"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Išdėstymo pavadinimas"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Izkārtojuma nosaukums"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "लेआउटचे नाव"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nama reka letak"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Layoutnavn"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Naam van indeling"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nazwa układu"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nome da disposição"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nome do layout"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Numele aspectului"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Название раскладки"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Názov rozloženia"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ime postavitve"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Назив распореда"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Layoutnamn"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "தளவமைப்பின் பெயர்"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "లేఅవుట్ పేరు"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ชื่อเลย์เอาต์"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Düzen adı"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Назва розкладки"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "لے آؤٹ کا نام"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tên bố cục"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "布局名称"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "版面配置名稱"
           }
         }
       }
@@ -43275,283 +43556,283 @@
         }
       }
     },
-    "The layout cannot be removed because there is no other layout saved on its screen. It can be reset instead. Reset it?" : {
+    "The default layout cannot be removed. Reset it instead?" : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "لا يمكن إزالة التخطيط لأنه لا يوجد تخطيط آخر محفوظ على شاشته. يمكن إعادة ضبطه بدلاً من ذلك. هل تريد إعادة ضبطه؟"
+            "value" : "لا يمكن إزالة التخطيط الافتراضي. هل تريد إعادة ضبطه بدلاً من ذلك؟"
           }
         },
         "bg" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Оформлението не може да бъде премахнато, защото на екрана му няма запазено друго оформление. Вместо това може да бъде нулирано. Да се нулира ли?"
+            "value" : "Оформлението по подразбиране не може да бъде премахнато. Да се нулира ли вместо това?"
           }
         },
         "bn" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "লেআউটটি সরানো যাবে না, কারণ এর স্ক্রিনে আর কোনো লেআউট সংরক্ষিত নেই। এর পরিবর্তে এটি রিসেট করা যায়। রিসেট করবেন?"
+            "value" : "ডিফল্ট লেআউট সরানো যাবে না। এর পরিবর্তে রিসেট করবেন?"
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No es pot eliminar la disposició perquè no hi ha cap altra disposició desada a la seva pantalla. En lloc d'això, es pot restablir. Vols restablir-la?"
+            "value" : "No es pot eliminar la disposició predeterminada. Vols restablir-la en lloc d'això?"
           }
         },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rozvržení nelze odebrat, protože na jeho obrazovce není uloženo žádné další rozvržení. Místo toho ho lze obnovit. Obnovit ho?"
+            "value" : "Výchozí rozvržení nelze odebrat. Obnovit ho místo toho?"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Layoutet kan ikke fjernes, fordi der ikke er gemt andre layouts på dets skærm. Det kan i stedet nulstilles. Vil du nulstille det?"
+            "value" : "Standardlayoutet kan ikke fjernes. Vil du nulstille det i stedet?"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Layout kann nicht entfernt werden, weil auf seinem Bildschirm kein anderes Layout gesichert ist. Stattdessen kann es zurückgesetzt werden. Zurücksetzen?"
+            "value" : "Das Standard-Layout kann nicht entfernt werden. Stattdessen zurücksetzen?"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Η διάταξη δεν μπορεί να αφαιρεθεί, επειδή δεν υπάρχει άλλη αποθηκευμένη διάταξη στην οθόνη της. Αντί γι' αυτό μπορεί να γίνει επαναφορά. Να γίνει επαναφορά;"
+            "value" : "Η προεπιλεγμένη διάταξη δεν μπορεί να αφαιρεθεί. Να γίνει επαναφορά αντί γι' αυτό;"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se puede eliminar la disposición porque no hay ninguna otra disposición guardada en su pantalla. En su lugar, se puede restablecer. ¿Quieres restablecerla?"
+            "value" : "No se puede eliminar la disposición predeterminada. ¿Quieres restablecerla en su lugar?"
           }
         },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Paigutust ei saa eemaldada, kuna selle ekraanil pole salvestatud ühtegi teist paigutust. Selle asemel saab selle lähtestada. Kas lähtestada?"
+            "value" : "Vaikepaigutust ei saa eemaldada. Kas lähtestada see selle asemel?"
           }
         },
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "این چیدمان قابل حذف نیست، چون هیچ چیدمان دیگری روی صفحه‌ی آن ذخیره نشده است. به‌جای آن می‌توان آن را بازنشانی کرد. بازنشانی شود؟"
+            "value" : "چیدمان پیش‌فرض قابل حذف نیست. به‌جای آن بازنشانی شود؟"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asettelua ei voi poistaa, koska sen näytölle ei ole tallennettu muita asetteluja. Sen voi sen sijaan palauttaa. Palautetaanko se?"
+            "value" : "Oletusasettelua ei voi poistaa. Palautetaanko se sen sijaan?"
           }
         },
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hindi maaalis ang layout dahil walang ibang layout na naka-save sa screen nito. Maaari itong i-reset sa halip. I-reset ba ito?"
+            "value" : "Hindi maaalis ang default na layout. I-reset ito sa halip?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La disposition ne peut pas être supprimée, car aucune autre disposition n’est enregistrée sur son écran. Elle peut être réinitialisée à la place. La réinitialiser ?"
+            "value" : "La disposition par défaut ne peut pas être supprimée. La réinitialiser à la place ?"
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "לא ניתן להסיר את הפריסה כי אין פריסה אחרת שמורה במסך שלה. במקום זאת אפשר לאפס אותה. לאפס אותה?"
+            "value" : "לא ניתן להסיר את פריסת ברירת המחדל. לאפס אותה במקום זאת?"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "लेआउट हटाया नहीं जा सकता, क्योंकि उसकी स्क्रीन पर कोई दूसरा लेआउट सहेजा हुआ नहीं है। इसके बजाय उसे रीसेट किया जा सकता है। क्या उसे रीसेट करें?"
+            "value" : "डिफ़ॉल्ट लेआउट हटाया नहीं जा सकता। क्या इसके बजाय उसे रीसेट करें?"
           }
         },
         "hr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raspored se ne može ukloniti jer na njegovu zaslonu nije spremljen nijedan drugi raspored. Umjesto toga može se resetirati. Resetirati ga?"
+            "value" : "Zadani raspored se ne može ukloniti. Resetirati ga umjesto toga?"
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Az elrendezés nem távolítható el, mert a képernyőjén nincs másik mentett elrendezés. Helyette visszaállítható. Visszaállítod?"
+            "value" : "Az alapértelmezett elrendezés nem távolítható el. Helyette visszaállítod?"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tata letak tidak dapat dihapus karena tidak ada tata letak lain yang tersimpan di layarnya. Sebagai gantinya, tata letak dapat diatur ulang. Atur ulang?"
+            "value" : "Tata letak default tidak dapat dihapus. Atur ulang sebagai gantinya?"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La disposizione non può essere rimossa perché sul suo schermo non è salvata nessun'altra disposizione. Può invece essere ripristinata. Ripristinarla?"
+            "value" : "La disposizione predefinita non può essere rimossa. Ripristinarla invece?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このレイアウトは、画面に保存されている他のレイアウトがないため削除できません。代わりにリセットできます。リセットしますか？"
+            "value" : "デフォルトのレイアウトは削除できません。代わりにリセットしますか？"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 화면에 저장된 다른 레이아웃이 없어 레이아웃을 제거할 수 없습니다. 대신 재설정할 수 있습니다. 재설정할까요?"
+            "value" : "기본 레이아웃은 제거할 수 없습니다. 대신 재설정할까요?"
           }
         },
         "lt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Išdėstymo pašalinti negalima, nes jo ekrane nėra išsaugoto kito išdėstymo. Vietoj to jį galima atstatyti. Atstatyti?"
+            "value" : "Numatytojo išdėstymo pašalinti negalima. Atstatyti jį vietoj to?"
           }
         },
         "lv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Izkārtojumu nevar noņemt, jo tā ekrānā nav saglabāts neviens cits izkārtojums. Tā vietā to var atiestatīt. Vai atiestatīt?"
+            "value" : "Noklusējuma izkārtojumu nevar noņemt. Vai tā vietā to atiestatīt?"
           }
         },
         "mr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "लेआउट काढता येत नाही, कारण त्याच्या स्क्रीनवर दुसरा कोणताही लेआउट जतन केलेला नाही. त्याऐवजी तो रीसेट करता येतो. रीसेट करायचा?"
+            "value" : "डीफॉल्ट लेआउट काढता येत नाही. त्याऐवजी तो रीसेट करायचा?"
           }
         },
         "ms" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reka letak tidak boleh dialih keluar kerana tiada reka letak lain disimpan pada skrinnya. Sebaliknya, ia boleh ditetap semula. Tetap semula?"
+            "value" : "Reka letak lalai tidak boleh dialih keluar. Tetap semula sebaliknya?"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Layouten kan ikke fjernes fordi det ikke er lagret noen annen layout på skjermen. Den kan tilbakestilles i stedet. Tilbakestille den?"
+            "value" : "Standardlayouten kan ikke fjernes. Tilbakestille den i stedet?"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "De indeling kan niet worden verwijderd, omdat er geen andere indeling op het scherm is bewaard. In plaats daarvan kan hij worden hersteld. Herstellen?"
+            "value" : "De standaardindeling kan niet worden verwijderd. In plaats daarvan herstellen?"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nie można usunąć układu, ponieważ na jego ekranie nie zapisano żadnego innego układu. Zamiast tego można go zresetować. Zresetować?"
+            "value" : "Nie można usunąć układu domyślnego. Zresetować go zamiast tego?"
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A disposição não pode ser removida porque não existe outra disposição guardada no seu ecrã. Pode ser reposta em alternativa. Repô-la?"
+            "value" : "A disposição predefinida não pode ser removida. Repô-la em alternativa?"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O layout não pode ser removido porque não há outro layout salvo na tela dele. Em vez disso, ele pode ser redefinido. Redefinir?"
+            "value" : "O layout padrão não pode ser removido. Redefinir em vez disso?"
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aranjarea nu poate fi eliminată, deoarece pe ecranul ei nu este salvată nicio altă aranjare. În schimb, poate fi resetată. O resetezi?"
+            "value" : "Aranjarea implicită nu poate fi eliminată. O resetezi în schimb?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Раскладку нельзя удалить, потому что на её экране нет другой сохранённой раскладки. Вместо этого её можно сбросить. Сбросить?"
+            "value" : "Раскладку по умолчанию нельзя удалить. Сбросить её вместо этого?"
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rozloženie nemožno odstrániť, pretože na jeho obrazovke nie je uložené žiadne iné rozloženie. Namiesto toho ho možno obnoviť. Obnoviť ho?"
+            "value" : "Predvolené rozloženie nemožno odstrániť. Obnoviť ho namiesto toho?"
           }
         },
         "sl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Postavitve ni mogoče odstraniti, ker na njenem zaslonu ni shranjena nobena druga postavitev. Namesto tega jo je mogoče ponastaviti. Jo ponastavim?"
+            "value" : "Privzete postavitve ni mogoče odstraniti. Jo namesto tega ponastavim?"
           }
         },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Распоред се не може уклонити јер на његовом екрану није сачуван ниједан други распоред. Уместо тога може се ресетовати. Ресетовати га?"
+            "value" : "Подразумевани распоред се не може уклонити. Ресетовати га уместо тога?"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Layouten kan inte tas bort eftersom det inte finns någon annan layout sparad på dess skärm. Den kan återställas i stället. Vill du återställa den?"
+            "value" : "Standardlayouten kan inte tas bort. Vill du återställa den i stället?"
           }
         },
         "ta" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "அமைப்பை அகற்ற முடியாது, ஏனெனில் அதன் திரையில் வேறு எந்த அமைப்பும் சேமிக்கப்படவில்லை. அதற்குப் பதிலாக அதை மீட்டமைக்கலாம். மீட்டமைக்கவா?"
+            "value" : "இயல்புநிலை அமைப்பை அகற்ற முடியாது. அதற்குப் பதிலாக மீட்டமைக்கவா?"
           }
         },
         "te" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "లేఅవుట్‌ను తీసివేయడం సాధ్యం కాదు, ఎందుకంటే దాని స్క్రీన్‌పై మరే ఇతర లేఅవుట్ సేవ్ చేయబడలేదు. బదులుగా దాన్ని రీసెట్ చేయవచ్చు. రీసెట్ చేయాలా?"
+            "value" : "డిఫాల్ట్ లేఅవుట్‌ను తీసివేయడం సాధ్యం కాదు. బదులుగా రీసెట్ చేయాలా?"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ไม่สามารถนำเลย์เอาต์ออกได้ เพราะไม่มีเลย์เอาต์อื่นที่บันทึกไว้บนหน้าจอของมัน แต่สามารถรีเซ็ตได้แทน ต้องการรีเซ็ตไหม"
+            "value" : "ไม่สามารถนำเลย์เอาต์เริ่มต้นออกได้ ต้องการรีเซ็ตแทนไหม"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Düzen kaldırılamaz çünkü bulunduğu ekranda kayıtlı başka bir düzen yok. Bunun yerine sıfırlanabilir. Sıfırlansın mı?"
+            "value" : "Varsayılan düzen kaldırılamaz. Onun yerine sıfırlansın mı?"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Компонування не можна видалити, бо на його екрані немає іншого збереженого компонування. Натомість його можна скинути. Скинути?"
+            "value" : "Типове компонування не можна видалити. Скинути його натомість?"
           }
         },
         "ur-PK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ترتیب کو ہٹایا نہیں جا سکتا کیونکہ اس کی اسکرین پر کوئی دوسری ترتیب محفوظ نہیں ہے۔ اس کے بجائے اسے ری سیٹ کیا جا سکتا ہے۔ کیا اسے ری سیٹ کریں؟"
+            "value" : "ڈیفالٹ ترتیب کو ہٹایا نہیں جا سکتا۔ کیا اس کے بجائے اسے ری سیٹ کریں؟"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Không thể xóa bố cục vì không có bố cục nào khác được lưu trên màn hình của nó. Thay vào đó, có thể đặt lại bố cục. Đặt lại?"
+            "value" : "Không thể xóa bố cục mặc định. Đặt lại thay thế?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法移除此布局，因为其所在屏幕上没有保存其他布局。可以改为重置。要重置吗？"
+            "value" : "无法移除默认布局。要改为重置吗？"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "無法移除此版面配置，因為其所在螢幕上沒有儲存其他版面配置。可以改為重設。要重設嗎？"
+            "value" : "無法移除預設版面配置。要改為重設嗎？"
           }
         }
       }

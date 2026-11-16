@@ -97,6 +97,7 @@ targets:
       - path: Sources/PaneFlip/Zones/ZonePresenting.swift
       - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
       - path: Sources/PaneFlip/Settings/SnapTrigger+Title.swift
+      - path: Sources/PaneFlip/Settings/NamedLayout+Title.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift
       - path: Sources/PaneFlip/Zones/ZonePlanner.swift

@@ -17,7 +17,7 @@ struct MenuLayouts: View {
                 get: { repository.activeLayout(for: screen.key)?.id },
                 set: { if let id = $0 { layouts.activate(key: screen.key, id: id) } })) {
                 ForEach(free) { layout in
-                    Text(verbatim: layout.name).tag(Optional(layout.id))
+                    Text(verbatim: layout.title(in: repository.layouts(for: screen.key))).tag(Optional(layout.id))
                 }
             } label: {
                 Text(verbatim: screen.name)

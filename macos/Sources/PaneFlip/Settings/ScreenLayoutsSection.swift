@@ -17,10 +17,11 @@ struct ScreenLayoutsSection: View {
             ScrollView(.horizontal) {
                 HStack(alignment: .top, spacing: 14) {
                     let activeID = repository.activeLayout(for: screen.key)?.id
-                    ForEach(repository.layouts(for: screen.key)) { layout in
-                        LayoutCard(screen: screen, layout: layout, isActive: layout.id == activeID,
+                    let all = repository.layouts(for: screen.key)
+                    ForEach(all) { layout in
+                        LayoutCard(screen: screen, layout: layout, defaultTitle: layout.defaultTitle(in: all), isActive: layout.id == activeID,
                                    isTaken: repository.isTaken(layout: layout.id, key: screen.key),
-                                   isOnly: repository.layouts(for: screen.key).count == 1,
+                                   isDefault: repository.isDefault(layout: layout.id, key: screen.key),
                                    layouts: layouts, editor: editor)
                     }
                     addCard
@@ -79,7 +80,7 @@ struct ScreenLayoutsSection: View {
                 set: { if let id = $0 { layouts.activate(key: key, id: id) } else { layouts.deactivate(key: key) } })) {
                 Text("No layout").tag(UUID?.none)
                 ForEach(repository.layouts(for: key).filter { !repository.isTaken(layout: $0.id, key: key) }) { layout in
-                    Text(verbatim: layout.name).tag(Optional(layout.id))
+                    Text(verbatim: layout.title(in: repository.layouts(for: key))).tag(Optional(layout.id))
                 }
             }
         }

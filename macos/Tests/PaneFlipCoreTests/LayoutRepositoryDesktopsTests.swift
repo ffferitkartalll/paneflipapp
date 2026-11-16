@@ -32,10 +32,11 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
 
     func testRemovingALayoutLeavesItsDesktopsWithoutOne() {
         let repository = LayoutRepository(store: MemoryStore())
-        let first = repository.addLayout(for: "A|d1")
         repository.addLayout(for: "A|d1")
+        let second = repository.addLayout(for: "A|d1")
+        repository.activate(layout: second.id, key: "A|d1")
 
-        repository.removeLayout(id: first.id, key: "A|d1")
+        repository.removeLayout(id: second.id, key: "A|d1")
 
         XCTAssertNil(repository.activeLayout(for: "A|d1"))
         XCTAssertEqual(repository.layouts(for: "A|d1").count, 1)

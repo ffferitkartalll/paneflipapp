@@ -20,14 +20,13 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     @discardableResult
     func addLayout(for key: String, preset: LayoutPreset) -> NamedLayout {
-        let number = repository.layouts(for: key).count + 1
-        let layout = repository.addLayout(for: key, named: String(localized: "Layout \(number)"), preset: preset)
+        let layout = repository.addLayout(for: key, named: "", preset: preset)
         if repository.activeLayout(for: key)?.id == layout.id { refresher?.refreshZones() }
         return layout
     }
 
     func duplicate(key: String, id: UUID) {
-        repository.duplicateLayout(id: id, key: key, named: String(localized: "Layout \(repository.layouts(for: key).count + 1)"))
+        repository.duplicateLayout(id: id, key: key, named: "")
     }
 
     func importLayout(for key: String, _ layout: NamedLayout) {
@@ -67,7 +66,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
     }
 
     func removeLayout(key: String, id: UUID) {
-        guard repository.layouts(for: key).count > 1 else { return }
+        guard !repository.isDefault(layout: id, key: key) else { return }
         if repository.activeLayout(for: key)?.id == id,
            let other = repository.layouts(for: key).first(where: { $0.id != id && !repository.isTaken(layout: $0.id, key: key) }) {
             activate(key: key, id: other.id)
@@ -136,7 +135,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func ensureLayouts(on screens: [ScreenInfo]) {
         for screen in screens where screen.desktopNumber != nil && repository.layouts(for: screen.key).isEmpty {
-            repository.addStandardLayout(for: screen.key, named: String(localized: "Layout \(1)"))
+            repository.addStandardLayout(for: screen.key, named: "")
         }
     }
 
