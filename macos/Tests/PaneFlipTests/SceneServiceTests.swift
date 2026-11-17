@@ -8,6 +8,8 @@ final class SceneServiceTests: XCTestCase {
     private var memory: StackMemory!
     private var service: SceneService!
     private var desk = DeskArrangement()
+    private var fakeLayouts: FakeLayouts!
+    private var fakeScreens: FakeScreens!
 
     private func info(_ key: String) -> ScreenInfo { ScreenInfo(key: key, name: key, size: area.size, cocoaFrame: area, cocoaVisibleFrame: area, axVisible: area) }
 
@@ -15,8 +17,10 @@ final class SceneServiceTests: XCTestCase {
         repository = LayoutRepository(store: MemoryDocumentStore())
         scenes = SceneRepository(store: MemoryDocumentStore())
         memory = StackMemory(store: MemoryDocumentStore())
+        fakeLayouts = FakeLayouts(repository: repository)
+        fakeScreens = FakeScreens()
         let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory, settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
-        service = SceneService(scenes: scenes, repository: repository, layouts: FakeLayouts(repository: repository), memory: memory, coordinator: coordinator, screens: FakeScreens(), arrangement: { [unowned self] in self.desk })
+        service = SceneService(scenes: scenes, repository: repository, layouts: fakeLayouts, memory: memory, coordinator: coordinator, screens: fakeScreens, arrangement: { [unowned self] in self.desk })
     }
 
     func testTheWindowsOfAnUnpluggedDisplayGoToTheOtherOneAndComeBackWhenItIsPluggedIn() {
@@ -108,6 +112,21 @@ final class SceneServiceTests: XCTestCase {
         func zone(_ app: String) -> UUID? { memory.records.first { $0.bundleID == app }?.zoneID }
         XCTAssertTrue([zone("app0"), zone("app1"), zone("app2")].allSatisfy { a.root.leafIDs.contains($0!) }, "what lies nearest to the display next to it goes there")
         XCTAssertTrue(b.root.leafIDs.contains(zone("app3")!), "the zone farthest on goes to the other display")
+    }
+
+    func testALayoutChosenForADisplayInTheSceneInUseIsPutOnItAtOnce() {
+        repository.addStandardLayout(for: "A|d1", named: "")
+        let second = repository.addLayout(for: "A|d1", named: "", preset: .custom(rows: 1, columns: 2))
+        fakeScreens.infos = [info("A|d1")]
+        let scene = scenes.add()
+
+        service.setLayout(sceneID: scene.id, display: "A", layoutID: second.id)
+        XCTAssertTrue(fakeLayouts.activated.isEmpty, "a scene that is not in use leaves the displays alone")
+
+        service.select(id: scene.id)
+        fakeLayouts.reset()
+        service.setLayout(sceneID: scene.id, display: "A", layoutID: second.id)
+        XCTAssertEqual(fakeLayouts.activated, [second.id])
     }
 
     func testNothingMovesAtTheFirstLook() {

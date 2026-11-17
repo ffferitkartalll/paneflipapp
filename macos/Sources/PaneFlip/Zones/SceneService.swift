@@ -31,7 +31,12 @@ final class SceneService: SceneManaging, SceneDisplacing {
     func select(id: UUID) {
         scenes.select(id)
         guard let scene = scenes.scenes.first(where: { $0.id == id }) else { return }
-        for screen in screens.screens() where screen.desktopNumber != nil {
+        apply(scene, toDisplay: nil)
+    }
+
+    /// Puts the layouts of a scene on the displays (on one of them when `display` is given).
+    private func apply(_ scene: DisplayScene, toDisplay display: String?) {
+        for screen in screens.screens() where screen.desktopNumber != nil && (display == nil || screen.displayID == display) {
             let wanted = scene.layouts[screen.displayID] ?? repository.layouts(for: screen.key).first?.id
             if let wanted, repository.activeLayout(for: screen.key)?.id != wanted, !repository.isTaken(layout: wanted, key: screen.key) {
                 layouts.activate(key: screen.key, id: wanted)
@@ -43,7 +48,11 @@ final class SceneService: SceneManaging, SceneDisplacing {
     func rename(id: UUID, to name: String) { scenes.rename(id, to: name) }
     func remove(id: UUID) { scenes.remove(id) }
     func reset(id: UUID) { scenes.reset(id) }
-    func setLayout(sceneID: UUID, display: String, layoutID: UUID) { scenes.setLayout(layoutID, ofDisplay: display, inScene: sceneID) }
+    /// A layout chosen for a display in the scene in use is put on it at once.
+    func setLayout(sceneID: UUID, display: String, layoutID: UUID) {
+        scenes.setLayout(layoutID, ofDisplay: display, inScene: sceneID)
+        if scenes.activeScene.id == sceneID { apply(scenes.activeScene, toDisplay: display) }
+    }
     func setMoves(sceneID: UUID, zone: UUID, to destinations: [UUID]) { scenes.setMoves(ofZone: zone, to: destinations, inScene: sceneID) }
 
     // MARK: SceneDisplacing
