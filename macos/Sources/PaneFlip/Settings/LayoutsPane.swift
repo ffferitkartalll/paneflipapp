@@ -14,9 +14,10 @@ struct LayoutsPane: View {
 
     var body: some View {
         let _ = displaysChanged
+        let all = screens.screens()
         Form {
-            ForEach(screens.screens()) { screen in
-                ScreenLayoutsSection(screen: screen, repository: repository, layouts: layouts, editor: editor)
+            ForEach(all) { screen in
+                ScreenLayoutsSection(screen: screen, pictureWidth: DeskScale.width(of: screen, among: all), repository: repository, layouts: layouts, editor: editor)
             }
         }
         .formStyle(.grouped)

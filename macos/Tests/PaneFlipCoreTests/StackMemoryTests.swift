@@ -244,4 +244,19 @@ final class StackMemoryTests: XCTestCase {
         memory.setZone(ofSlot: 2, to: b)
         XCTAssertEqual(memory.records.map(\.bundleID), ["two", "three", "one"], "the zone it is in already: nothing changes")
     }
+
+    func testSlotsThatMoveToOneZoneStandInTheOrderOfTheirZonesAndThenOfTheirPlaces() {
+        let memory = StackMemory(store: MemoryStore())
+        let first = UUID(), second = UUID(), target = UUID()
+        memory.remember(zoneID: target, bundleID: "t", title: "")
+        memory.remember(zoneID: second, bundleID: "b1", title: "")
+        memory.remember(zoneID: first, bundleID: "a1", title: "")
+        memory.remember(zoneID: second, bundleID: "b2", title: "")
+        memory.remember(zoneID: first, bundleID: "a2", title: "")
+
+        memory.remap([first: target, second: target], sourceOrder: [first, second])
+
+        XCTAssertEqual(memory.records.map(\.bundleID), ["t", "a1", "a2", "b1", "b2"])
+        XCTAssertTrue(memory.records.allSatisfy { $0.zoneID == target })
+    }
 }
