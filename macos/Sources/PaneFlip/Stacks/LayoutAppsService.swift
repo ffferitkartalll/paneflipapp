@@ -47,6 +47,7 @@ final class LayoutAppsService: LayoutAppsEditing {
         for bundleID in Set(bundleIDs) where !settings.values.ignoredApps.contains(bundleID) {
             if let pid = running[bundleID], windows.isShowingWindow(ofApp: pid) { continue }
             apps.launch(bundleID: bundleID)
+            coordinator.noteOpened(app: bundleID)
             started = true
         }
         // The windows take a moment to appear, and an app that was not brought to the front is not looked at otherwise.

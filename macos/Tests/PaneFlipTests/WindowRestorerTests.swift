@@ -118,6 +118,16 @@ final class WindowRestorerTests: XCTestCase {
         XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 0)
     }
 
+    func testAnAppOpenedForItsSlotGoesThereAlthoughItsWindowOpensOnAnotherDisplay() {
+        appWithTwoWindows(first: right.insetBy(dx: 10, dy: 10), second: right.insetBy(dx: 20, dy: 20))
+        coordinator.noteOpened(app: "app.a")   // the card of the app was chosen in the grid
+
+        restorer.restore()
+
+        XCTAssertEqual(coordinator.stacks[zone]?.tabs.count, 1, "one window takes the slot")
+        XCTAssertNotNil(memory.records[0].windowID)
+    }
+
     func testTheWindowInsideTheZoneTakesTheSlotAndTheOtherOneJoinsAfterIt() {
         appWithTwoWindows(first: CGRect(x: 600, y: 50, width: 300, height: 300), second: CGRect(x: 20, y: 20, width: 400, height: 300))
 

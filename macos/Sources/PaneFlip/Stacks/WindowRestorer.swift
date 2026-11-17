@@ -128,7 +128,8 @@ final class WindowRestorer {
             var best: (index: Int, score: Int)?
             for (i, window) in free.enumerated() {
                 let frame = windows.frame(of: window)
-                if let zoneDisplay, let frame, let there = display(of: frame), there != zoneDisplay { continue }
+                // An app that was opened for its slot (a card chosen, the layout's apps) goes there wherever its window opens.
+                if !coordinator.justOpened(record.bundleID), let zoneDisplay, let frame, let there = display(of: frame), there != zoneDisplay { continue }
                 var score = 0
                 if let zone, let frame, zone.contains(CGPoint(x: frame.midX, y: frame.midY)) { score += 2 }
                 if windows.title(of: window) == record.title { score += 1 }
