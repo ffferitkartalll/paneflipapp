@@ -115,6 +115,10 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
+    /// Every display that has layouts, and the layouts of one display (whatever its desktop).
+    public var displayIDs: [String] { Array(screens.keys) }
+    public func layouts(ofDisplay display: String) -> [NamedLayout] { screens[display]?.layouts ?? [] }
+
     /// The first layout of a display is its default one: it keeps its name and is never removed, only reset.
     public func isDefault(layout id: UUID, key: String) -> Bool {
         layouts(for: key).first?.id == id

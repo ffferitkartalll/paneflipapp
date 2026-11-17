@@ -98,6 +98,11 @@ targets:
       - path: Sources/PaneFlip/Platform/UserDefaultsSettingsStorage.swift
       - path: Sources/PaneFlip/Settings/SnapTrigger+Title.swift
       - path: Sources/PaneFlip/Settings/NamedLayout+Title.swift
+      - path: Sources/PaneFlip/Settings/DisplayScene+Title.swift
+      - path: Sources/PaneFlip/Zones/SceneService.swift
+      - path: Sources/PaneFlip/Zones/DeskSpace.swift
+      - path: Sources/PaneFlip/Zones/SceneManaging.swift
+      - path: Sources/PaneFlip/Zones/SceneDisplacing.swift
       - path: Sources/PaneFlip/Zones/LayoutAppsEditing.swift
       - path: Sources/PaneFlip/Zones/ZoneRefreshing.swift
       - path: Sources/PaneFlip/Zones/ZonePlanner.swift

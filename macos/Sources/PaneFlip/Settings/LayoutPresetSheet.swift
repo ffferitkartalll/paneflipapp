@@ -4,24 +4,33 @@ import SwiftUI
 /// The window that opens for Add layout: every shape a new layout can start from, drawn for the screen it is for.
 struct LayoutPresetSheet: View {
     let screen: ScreenInfo
+    let pictureWidth: CGFloat
     /// Adds a layout of the shape; `edit` opens the editor on it at once.
     let pick: (LayoutPreset, _ edit: Bool) -> Void
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modalRoom) private var room
 
-    private static let width: CGFloat = 150
+    /// All the room there is: the whole content area of the window it opens over.
+    private var size: CGSize { room }
+    private static let spacing: CGFloat = 14
+    /// The room for the grid: the sheet less its padding and the grid's own.
+    private var gridWidth: CGFloat { size.width - 46 }
+
+    private var grid: PictureGrid { PictureGrid(width: gridWidth, wanted: pictureWidth, spacing: Self.spacing) }
+    private var picture: CGFloat { grid.picture }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Add layout").font(.title2.bold())
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: Self.width), spacing: 14)], spacing: 14) {
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(picture), spacing: Self.spacing), count: grid.columns), spacing: Self.spacing) {
                     blankTile
                     ForEach(LayoutPreset.suggested(for: screen.size)) { preset in
                         Button {
                             pick(preset, false)
                             dismiss()
                         } label: {
-                            LayoutMiniature(root: preset.root, screenSize: screen.size, width: Self.width)
+                            LayoutMiniature(root: preset.root, screenSize: screen.size, width: picture)
                         }
                         .buttonStyle(.plain)
                         .hoverHighlight(radius: 8)
@@ -37,7 +46,7 @@ struct LayoutPresetSheet: View {
             }
         }
         .padding(20)
-        .frame(width: 560, height: 520)
+        .frame(width: size.width, height: size.height)
     }
 
     /// The way to a layout of one zone that is open in the editor at once.
@@ -49,7 +58,7 @@ struct LayoutPresetSheet: View {
             // Exactly as large as a layout's miniature: the box has the screen's shape and the content sits in it.
             Color.clear
                 .aspectRatio(screen.size.width / screen.size.height, contentMode: .fit)
-                .frame(width: Self.width)
+                .frame(width: picture)
                 .overlay {
                     VStack(spacing: 6) {
                         Image(systemName: "plus").font(.system(size: 22, weight: .regular))

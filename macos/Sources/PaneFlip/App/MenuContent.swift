@@ -6,6 +6,8 @@ import SwiftUI
 struct MenuContent: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
+    let scenes: SceneRepository
+    let sceneManager: SceneManaging
     let screens: ScreenProviding
     @Bindable var settings: AppSettings
     let apps: LayoutAppsEditing
@@ -18,6 +20,7 @@ struct MenuContent: View {
         Toggle("Enable", isOn: $settings.values.placementEnabled)
         Divider()
         MenuLayouts(repository: repository, layouts: layouts, screens: screens)
+        MenuScenes(scenes: scenes, manager: sceneManager)
         let toStart = apps.startApps(on: screens, in: repository)
         Button("Edit layout") { editor.toggleAtPointer() }
         Button("Open selected apps") { apps.open(apps: toStart) }

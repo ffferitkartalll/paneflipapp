@@ -6,6 +6,8 @@ import SwiftUI
 struct SettingsView: View {
     let repository: LayoutRepository
     let layouts: LayoutManaging
+    let scenes: SceneRepository
+    let sceneManager: SceneManaging
     let editor: LayoutEditing
     let apps: LayoutAppsEditing
     let screens: ScreenProviding
@@ -18,6 +20,8 @@ struct SettingsView: View {
     @Bindable var navigation: SettingsNavigation
 
     /// How tall each tab was measured to be, so that a tab is laid out the same way each time it is shown.
+    /// The size of this window, which the sheets over it may not exceed.
+    @State private var windowSize = CGSize(width: 720, height: 600)
     @State private var naturalHeights: [SettingsTab: CGFloat] = [:]
 
     private func natural(_ tab: SettingsTab) -> Binding<CGFloat> {
@@ -51,6 +55,11 @@ struct SettingsView: View {
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
                 .tag(SettingsTab.layouts)
 
+            ScenesPane(repository: repository, scenes: scenes, manager: sceneManager, screens: screens, settings: settings)
+                .cappedHeight(contentHeight, natural: natural(.scenes))
+                .tabItem { Label("Scenes", systemImage: "rectangle.on.rectangle") }
+                .tag(SettingsTab.scenes)
+
             ZonesPane(settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.zones))
                 .tabItem { Label("Zones", systemImage: "rectangle.split.3x1") }
@@ -82,9 +91,11 @@ struct SettingsView: View {
                 .tag(SettingsTab.updates)
         }
         .scenePadding()
-        .frame(width: 640)
+        .frame(width: 720)
         .background(FixedWindowTitle(title: String(localized: "Settings")))
         .background(WindowPresenceReporter(activation: activation, minimizable: true, identifier: SettingsContentKeeper.windowIdentifier))
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { windowSize = $0 }
+        .environment(\.modalRoom, CGSize(width: windowSize.width - 80, height: windowSize.height - 40))   // the room inside the window's content (measured under the tabs): 40 pt at the sides and below. A sheet is centred on the window and cannot rise over the tabs, so a sheet this tall stands against them and 40 pt above the bottom
         .onAppear { NSApp.activate(ignoringOtherApps: true) }
     }
 }

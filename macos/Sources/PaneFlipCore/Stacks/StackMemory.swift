@@ -158,23 +158,42 @@ public final class StackMemory {
     /// layout that is becoming active again) goes back there instead of to the zone `map` names. Returns the live
     /// windows that were bound to a moved slot (now unbound), which the caller must release so they get
     /// re-attached to their new zone.
+    ///
+    /// `sourceOrder` (the zones in the order of their screens, when a display's windows are put into zones of the others): the slots that moved stand last in their new zone, in the
+    /// order of the zones they came from and, from the same zone, in the order they had there.
     @discardableResult
-    public func remap(_ map: [UUID: UUID], preferred: Set<UUID> = []) -> [CGWindowID] {
+    public func remap(_ map: [UUID: UUID], preferred: Set<UUID> = [], sourceOrder: [UUID] = []) -> [CGWindowID] {
         guard !map.isEmpty else { return [] }
         var released: [CGWindowID] = []
         var copy = records
+        var moved: [(slot: StackRecord, from: UUID, at: Int)] = []
         for i in copy.indices {
             guard let mapped = map[copy[i].zoneID] else { continue }
             let old = copy[i].zoneID
             let new = copy[i].otherZones.first(where: preferred.contains) ?? mapped
             guard new != old else { continue }
+            moved.append((copy[i], old, i))
             copy[i].otherZones.removeAll { $0 == new }
             if !copy[i].otherZones.contains(old) { copy[i].otherZones.append(old) }
             copy[i].zoneID = new
             if let w = copy[i].windowID { released.append(w); copy[i].windowID = nil }
         }
+        if !sourceOrder.isEmpty { copy = Self.ordered(copy, moved: moved.map(\.at), by: moved.map { ($0.at, sourceOrder.firstIndex(of: $0.from) ?? sourceOrder.count) }) }
         records = copy
         return released
+    }
+
+    /// The slots at `moved` taken out and put back after the last slot of the zone each has now (at the end when it has none), the ones of one zone in the order of `rank`, then of
+    /// their places.
+    private static func ordered(_ records: [StackRecord], moved: [Int], by rank: [(at: Int, rank: Int)]) -> [StackRecord] {
+        let order = Dictionary(uniqueKeysWithValues: rank.map { ($0.at, $0.rank) })
+        let slots = moved.sorted { (order[$0] ?? 0, $0) < (order[$1] ?? 0, $1) }.map { records[$0] }
+        var result = records.enumerated().filter { !moved.contains($0.offset) }.map(\.element)
+        for slot in slots {
+            let after = result.lastIndex { $0.zoneID == slot.zoneID }.map { $0 + 1 } ?? result.count
+            result.insert(slot, at: after)
+        }
+        return result
     }
 
     /// Drops slots whose zone no longer exists in any layout.

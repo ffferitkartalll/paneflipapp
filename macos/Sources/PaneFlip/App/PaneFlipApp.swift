@@ -17,7 +17,7 @@ struct PaneFlipApp: App {
     var body: some Scene {
         // Opened from the menu bar menu (Settings).
         Settings {
-            SettingsView(repository: container.layoutRepository, layouts: container.layouts, editor: container.editor, apps: container.layoutApps,
+            SettingsView(repository: container.layoutRepository, layouts: container.layouts, scenes: container.scenes, sceneManager: container.sceneService, editor: container.editor, apps: container.layoutApps,
                          screens: container.screens,
                          settings: container.settings, launchAtLogin: container.launchAtLogin, relauncher: container.relauncher, catalog: container.appCatalog, updates: container.updates,
                          activation: container.activation, navigation: container.settingsNavigation)

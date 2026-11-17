@@ -15,6 +15,8 @@ final class AppContainer {
 
     // Services
     let layouts: LayoutService
+    let scenes: SceneRepository
+    let sceneService: SceneService
     let engine: ZoneEngine
     let editor: EditorController
     let layoutApps: LayoutAppsService
@@ -33,6 +35,7 @@ final class AppContainer {
         let settings = AppSettings(storage: UserDefaultsSettingsStorage())
         let repository = LayoutRepository(store: documents)
         let memory = StackMemory(store: documents)
+        let scenes = SceneRepository(store: documents)
 
         let screens = CGSScreenProvider()
         let windows = AXWindowSystem(screens: screens)
@@ -72,6 +75,9 @@ final class AppContainer {
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
         engine.displayHandler = layouts
+        let sceneService = SceneService(scenes: scenes, repository: repository, layouts: layouts, memory: memory, coordinator: coordinator, screens: screens,
+                                         arrangement: { [settings] in settings.values.deskArrangement })
+        engine.sceneHandler = sceneService
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
@@ -128,6 +134,8 @@ final class AppContainer {
         self.screens = screens
         self.windows = windows
         self.layouts = layouts
+        self.scenes = scenes
+        self.sceneService = sceneService
         self.engine = engine
         self.layoutApps = layoutApps
         self.appCatalog = apps
@@ -140,7 +148,7 @@ final class AppContainer {
         let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
         island.isSuppressed = { [unowned editor] in editor.isShown }
-        let menuContent = MenuContent(repository: repository, layouts: layouts, screens: screens, settings: settings, apps: layoutApps, editor: editor,
+        let menuContent = MenuContent(repository: repository, layouts: layouts, scenes: scenes, sceneManager: sceneService, screens: screens, settings: settings, apps: layoutApps, editor: editor,
                                                        openSettings: SettingsWindowOpener.open)
         // A menu does not take the app's language by itself: the one the app started with, as the scenes have it.
         let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))

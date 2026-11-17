@@ -5,6 +5,8 @@ import UniformTypeIdentifiers
 /// One screen: its name and size, then its layouts as cards and the card for adding another.
 struct ScreenLayoutsSection: View {
     let screen: ScreenInfo
+    /// How wide the picture of a layout of this display is drawn.
+    let pictureWidth: CGFloat
     let repository: LayoutRepository
     let layouts: LayoutManaging
     let editor: LayoutEditing
@@ -19,12 +21,11 @@ struct ScreenLayoutsSection: View {
                     let activeID = repository.activeLayout(for: screen.key)?.id
                     let all = repository.layouts(for: screen.key)
                     ForEach(all) { layout in
-                        LayoutCard(screen: screen, layout: layout, defaultTitle: layout.defaultTitle(in: all), isActive: layout.id == activeID,
+                        LayoutCard(screen: screen, pictureWidth: pictureWidth, layout: layout, defaultTitle: layout.defaultTitle(in: all), isActive: layout.id == activeID,
                                    isTaken: repository.isTaken(layout: layout.id, key: screen.key),
                                    isDefault: repository.isDefault(layout: layout.id, key: screen.key),
                                    layouts: layouts, editor: editor)
                     }
-                    addCard
                 }
                 .fixedSize(horizontal: false, vertical: true)   // the row is as tall as its tallest card
                 .padding(.vertical, 6)
@@ -42,6 +43,20 @@ struct ScreenLayoutsSection: View {
                 }
                 .foregroundStyle(.secondary)
             }
+        } footer: {
+            // Import to the left of Add, both at the right edge of the panel (a footer is inset a little).
+            HStack(spacing: 4) {
+                Spacer()
+                footerButton("square.and.arrow.down", "Import") { importing = true }
+                footerButton("plus", "Add") { choosesShape = true }
+            }
+            .padding(.trailing, -10)
+        }
+        .sheet(isPresented: $choosesShape) {
+            LayoutPresetSheet(screen: screen, pictureWidth: pictureWidth) { preset, edit in
+                let layout = layouts.addLayout(for: screen.key, preset: preset)
+                if edit { editor.edit(on: screen, layoutID: layout.id) }
+            }
         }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
             guard case .success(let url) = result else { return }
@@ -54,21 +69,6 @@ struct ScreenLayoutsSection: View {
             }
         }
         .alert("This file is not a layout.", isPresented: $importFailed) { Button("Done") {} }
-    }
-
-    private func halfCard(_ icon: String, _ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon).font(.system(size: 22, weight: .regular))
-                Text(title).font(.headline)
-            }
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.quaternary, in: .rect(cornerRadius: 8))
-            .contentShape(.rect(cornerRadius: 8))
-        }
-        .buttonStyle(.plain)
-        .hoverHighlight(radius: 8)
     }
 
     /// Which layout each desktop of the display uses; a layout is offered to one desktop at a time.
@@ -86,26 +86,11 @@ struct ScreenLayoutsSection: View {
         }
     }
 
-    /// Built like a layout preview and exactly as large as a whole layout card (preview, name row, buttons).
-    /// The size comes from an invisible real card, so it is the same with or without layouts, for any screen shape.
-    private var addCard: some View {
-        ZStack {
-            LayoutCard(screen: screen, layout: NamedLayout(name: "Layout", root: .leaf(UUID())), isActive: false,
-                       layouts: layouts, editor: editor)
-                .hidden()
-
-            // The card in two halves: Add on top, Import below.
-            VStack(spacing: 6) {
-                halfCard("plus", "Add") { choosesShape = true }
-                halfCard("square.and.arrow.down", "Import") { importing = true }
-            }
-            .sheet(isPresented: $choosesShape) {
-                LayoutPresetSheet(screen: screen) { preset, edit in
-                    let layout = layouts.addLayout(for: screen.key, preset: preset)
-                    if edit { editor.edit(on: screen, layoutID: layout.id) }
-                }
-            }
-        }
-        .frame(width: LayoutCard.width)
+    private func footerButton(_ icon: String, _ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
+        Button(action: action) { Image(systemName: icon).font(.body).frame(width: 24, height: 24).contentShape(.rect) }
+            .buttonStyle(.plain)
+            .hoverHighlight(radius: 6)
+            .help(title)
+            .accessibilityLabel(title)
     }
 }

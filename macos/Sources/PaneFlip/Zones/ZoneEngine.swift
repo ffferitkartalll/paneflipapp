@@ -8,6 +8,8 @@ final class ZoneEngine: ZoneRefreshing {
     var onPermissionLost: (() -> Void)?
     /// Told first when displays were plugged in or out.
     weak var displayHandler: DisplayChangeHandling?
+    /// Told after that: the windows of an unplugged display move, those of a plugged-in one come back.
+    weak var sceneHandler: SceneDisplacing?
 
     private let planner: ZonePlanner
     private let coordinator: StackCoordinator
@@ -88,6 +90,7 @@ final class ZoneEngine: ZoneRefreshing {
         lastSignatures = current.map(\.layoutSignature)
         lastScreens = current
         displayHandler?.ensureLayouts(on: current)
+        sceneHandler?.displaysDidChange(on: current)
         displayHandler?.desktopsDidChange(on: current)
         keepScreensInView(on: current)
         coordinator.apply(plan: planner.plan(on: current))
