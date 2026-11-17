@@ -148,7 +148,7 @@ final class AppContainer {
         let editor = EditorController(repository: repository, layouts: layouts, screens: screens, settings: settings)
         self.editor = editor
         island.isSuppressed = { [unowned editor] in editor.isShown }
-        let menuContent = MenuContent(repository: repository, layouts: layouts, scenes: scenes, sceneManager: sceneService, screens: screens, settings: settings, apps: layoutApps, editor: editor,
+        let menuContent = MenuContent(repository: repository, scenes: scenes, sceneManager: sceneService, screens: screens, settings: settings, apps: layoutApps, editor: editor,
                                                        openSettings: SettingsWindowOpener.open)
         // A menu does not take the app's language by itself: the one the app started with, as the scenes have it.
         let menu = NSHostingMenu(rootView: menuContent.environment(\.locale, Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")))

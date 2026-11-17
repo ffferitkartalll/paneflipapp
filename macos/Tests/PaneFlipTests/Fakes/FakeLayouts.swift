@@ -19,7 +19,9 @@ final class FakeLayouts: LayoutManaging {
     func importLayout(for key: String, _ layout: NamedLayout) {}
     func removeLayout(key: String, id: UUID) {}
     func resetLayout(key: String, id: UUID) {}
-    func activate(key: String, id: UUID) {}
+    private(set) var activated: [UUID] = []
+    func reset() { activated = [] }
+    func activate(key: String, id: UUID) { activated.append(id) }
     func deactivate(key: String) {}
     func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {}
     func setSpacing(key: String, id: UUID, gap: Double, edgeMargin: Double, minZoneSize: Double) {}

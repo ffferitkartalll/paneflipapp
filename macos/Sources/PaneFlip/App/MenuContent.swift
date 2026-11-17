@@ -2,10 +2,9 @@ import AppKit
 import PaneFlipCore
 import SwiftUI
 
-/// The menu bar menu: the app's name, the on/off switch, the layout switcher and layout actions, Settings and Quit, each group set apart by a divider.
+/// The menu bar menu: the app's name, the on/off switch, the scene switcher and layout actions, Settings and Quit, each group set apart by a divider.
 struct MenuContent: View {
     let repository: LayoutRepository
-    let layouts: LayoutManaging
     let scenes: SceneRepository
     let sceneManager: SceneManaging
     let screens: ScreenProviding
@@ -19,7 +18,6 @@ struct MenuContent: View {
             .disabled(true)
         Toggle("Enable", isOn: $settings.values.placementEnabled)
         Divider()
-        MenuLayouts(repository: repository, layouts: layouts, screens: screens)
         MenuScenes(scenes: scenes, manager: sceneManager)
         let toStart = apps.startApps(on: screens, in: repository)
         Button("Edit layout") { editor.toggleAtPointer() }
