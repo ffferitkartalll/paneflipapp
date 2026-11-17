@@ -9,15 +9,11 @@ struct LayoutCard: View {
     let layout: NamedLayout
     /// The name the layout has until it is renamed.
     var defaultTitle = ""
-    let isActive: Bool
-    /// Another desktop of the display uses this layout.
-    var isTaken = false
     /// The default layout of its display: it cannot be renamed or removed, only reset.
     var isDefault = false
     let layouts: LayoutManaging
     let editor: LayoutEditing
 
-    @Environment(\.controlActiveState) private var activeState
     @State private var isRenaming = false
     @State private var draftName = ""
     @State private var exporting = false
@@ -27,7 +23,7 @@ struct LayoutCard: View {
     @State private var hovered = false
     @State private var hoveredButton: String?
 
-    private static let margin: CGFloat = 4, gap: CGFloat = 4
+    private static let margin: CGFloat = 4
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -73,22 +69,20 @@ struct LayoutCard: View {
         }
         .onHover { hovered = $0 }
         .sheet(isPresented: $previewing) { LayoutPreviewSheet(screen: screen, layout: layout, title: title, pictureWidth: pictureWidth) }
-        .overlay { RoundedRectangle(cornerRadius: 8).strokeBorder(isActive ? (activeState == .inactive ? Color.secondary : AppAccent.color) : .clear, lineWidth: 2).allowsHitTesting(false) }
     }
 
     private static let side: CGFloat = 20
     private var pictureHeight: CGFloat { pictureWidth * screen.size.height / max(screen.size.width, 1) }
 
-    /// Activate in the top left corner, Remove in the top right one, Edit in the bottom left one, and Duplicate in the bottom right one with Export to its left.
+    /// Duplicate in the top left corner, Remove in the top right one, Edit in the bottom left one, and Export in the bottom right one.
     private var buttons: some View {
         let left = Self.margin, right = pictureWidth - Self.margin - Self.side
         let top = Self.margin, bottom = pictureHeight - Self.margin - Self.side
         return ZStack(alignment: .topLeading) {
-            button("activate", isActive ? "checkmark.circle.fill" : "checkmark", "Activate", x: left, y: top, enabled: !isActive && !isTaken) { layouts.activate(key: screen.key, id: layout.id) }
             button("remove", "trash", "Remove", x: right, y: top) { if isDefault { offeringReset = true } else { confirmingRemoval = true } }
             button("edit", "pencil", "Edit", x: left, y: bottom) { editor.edit(on: screen, layoutID: layout.id) }
-            button("duplicate", "plus.square.on.square", "Duplicate", x: right, y: bottom) { layouts.duplicate(key: screen.key, id: layout.id) }
-            button("export", "square.and.arrow.up", "Export…", x: right - Self.side - Self.gap, y: bottom) { exporting = true }
+            button("duplicate", "plus.square.on.square", "Duplicate", x: left, y: top) { layouts.duplicate(key: screen.key, id: layout.id) }
+            button("export", "square.and.arrow.up", "Export…", x: right, y: bottom) { exporting = true }
         }
         .frame(width: pictureWidth, alignment: .topLeading)
         .opacity(hovered ? 1 : 0)
