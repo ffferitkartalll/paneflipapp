@@ -12,6 +12,10 @@ final class StackCoordinator {
     /// Windows the user took out of their zone (or a newcomer pushed out): an app's rule must not pull them back.
     /// Kept for the session only.
     private(set) var pulledOut: Set<CGWindowID> = []
+    /// When each app was last opened (by the island, a layout, or from the Dock): its window goes to the app's slot wherever it opens, also on another display than the zone's.
+    private var openedAt: [String: Date] = [:]
+    func noteOpened(app bundleID: String) { openedAt[bundleID] = Date() }
+    func justOpened(_ bundleID: String) -> Bool { openedAt[bundleID].map { Date().timeIntervalSince($0) < 15 } ?? false }
     /// The window that had the focus at the last look (see `followFocus`).
     private var lastFocusedID: CGWindowID?
     /// The window that had the focus at the last look, as a handle (see `followFocus`).

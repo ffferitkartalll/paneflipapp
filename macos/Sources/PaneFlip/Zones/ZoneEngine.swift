@@ -56,7 +56,10 @@ final class ZoneEngine: ZoneRefreshing {
                      NSWorkspace.didUnhideApplicationNotification] {
             // Only the app that came is looked at: asking every app with a zone for its windows at each switch held the main thread for long.
             workspace.addObserver(forName: name, object: nil, queue: .main) { [weak self] note in
-                self?.scheduleRestore(onlyApp: (note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.processIdentifier)
+                let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+                // An app that starts (from the Dock, say) takes the slot it waits in wherever its window opens, also on another display than the zone's.
+                if name == NSWorkspace.didLaunchApplicationNotification, let bundleID = app?.bundleIdentifier { self?.coordinator.noteOpened(app: bundleID) }
+                self?.scheduleRestore(onlyApp: app?.processIdentifier)
             }
         }
         NotificationCenter.default.addObserver(
