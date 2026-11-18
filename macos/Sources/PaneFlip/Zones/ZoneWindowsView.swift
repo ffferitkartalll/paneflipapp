@@ -7,7 +7,6 @@ struct ZoneWindowsView: View {
 
     var body: some View {
         let cells = model.cells, appear = model.appear, whole = model.wholeSize != .zero
-        let middle = CGPoint(x: model.size.width / 2, y: model.size.height / 2)
         ZStack(alignment: .topLeading) {
             // Nothing is drawn behind the cards; this takes a click between them (a window that is fully clear lets the mouse through, so not quite clear).
             Color.black.opacity(0.01)
@@ -33,16 +32,16 @@ struct ZoneWindowsView: View {
                 if cells.indices.contains(index) {
                     let cell = cells[index], carried = model.carried == card.id
                     let size = cell.size
-                    // From over its window to the middle of its cell; a card with no window comes out of the middle of the zone.
+                    // From over its window to the middle of its cell; a card with no window is not seen to move or grow: it comes into being in its cell, fading in.
                     let from = model.origins[card.id]
-                    let start = from.map { CGPoint(x: $0.midX, y: $0.midY) } ?? middle
+                    let start = from.map { CGPoint(x: $0.midX, y: $0.midY) } ?? CGPoint(x: cell.midX, y: cell.midY)
                     // The card is scaled to the window's shape and size at first (not alike along both sides: a card is not quite the shape of the zone).
-                    let startScale = CGSize(width: from.map { size.width > 0 ? $0.width / size.width : 1 } ?? 0.3, height: from.map { size.height > 0 ? $0.height / size.height : 1 } ?? 0.3)
+                    let startScale = CGSize(width: from.map { size.width > 0 ? $0.width / size.width : 1 } ?? 1, height: from.map { size.height > 0 ? $0.height / size.height : 1 } ?? 1)
                     let place = CGPoint(x: start.x + (cell.midX - start.x) * appear, y: start.y + (cell.midY - start.y) * appear)
                     ZoneWindowsCard(model: model, card: card, size: size)
                         .scaleEffect(x: carried ? 1.04 : startScale.width + (1 - startScale.width) * appear, y: carried ? 1.04 : startScale.height + (1 - startScale.height) * appear)
                         .animation(.easeOut(duration: 0.15), value: carried)   // the card grows as it is taken up, not at once
-                        .opacity(carried && model.carrier != nil ? 0 : 1)   // the grid of the whole layout draws a card it carries itself
+                        .opacity(carried && model.carrier != nil ? 0 : (from == nil ? appear : 1))   // the grid of the whole layout draws a card it carries itself
                         .position(carried ? model.carriedAt : place)
                         .zIndex(carried ? 2 : (card.id == model.front ? 1 : 0))
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("zone"))
