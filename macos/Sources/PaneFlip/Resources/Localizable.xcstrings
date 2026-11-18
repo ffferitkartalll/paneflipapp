@@ -37374,6 +37374,287 @@
         }
       }
     },
+    "Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انقر بزر الماوس الأيمن على تخطيط لرؤية التطبيقات في مناطقه، أو تغيير ترتيبها، أو نقلها إلى منطقة أخرى، أو إخراجها."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щракнете с десния бутон върху оформление, за да видите приложенията в зоните му, да смените реда им, да ги преместите в друга зона или да ги премахнете."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কোনো লেআউটে রাইট-ক্লিক করে তার জোনের অ্যাপগুলো দেখুন, ক্রম বদলান, অন্য জোনে সরান বা সরিয়ে দিন।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feu clic amb el botó dret en una disposició per veure les aplicacions de les seves zones, canviar-ne l'ordre, moure-les a una altra zona o treure-les."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klikněte pravým tlačítkem na rozvržení, abyste viděli aplikace v jeho zónách, změnili jejich pořadí, přesunuli je do jiné zóny nebo je odebrali."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Højreklik på et layout for at se apps i dets zoner, ændre deres rækkefølge, flytte dem til en anden zone eller fjerne dem."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klicke mit der rechten Maustaste auf ein Layout, um die Apps in seinen Zonen zu sehen, ihre Reihenfolge zu ändern, sie in eine andere Zone zu verschieben oder zu entfernen."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάντε δεξί κλικ σε μια διάταξη για να δείτε τις εφαρμογές στις ζώνες της, να αλλάξετε τη σειρά τους, να τις μετακινήσετε σε άλλη ζώνη ή να τις αφαιρέσετε."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz clic derecho en un diseño para ver las apps de sus zonas, cambiar su orden, moverlas a otra zona o quitarlas."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paremklõpsake paigutusel, et näha selle tsoonide rakendusi, muuta nende järjekorda, liigutada need teise tsooni või eemaldada."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "روی یک چیدمان راست‌کلیک کنید تا برنامه‌های منطقه‌هایش را ببینید، ترتیب آن‌ها را عوض کنید، به منطقهٔ دیگری ببرید یا بردارید."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Napsauta asettelua hiiren kakkospainikkeella nähdäksesi sen vyöhykkeiden sovellukset, muuttaaksesi niiden järjestystä, siirtääksesi ne toiseen vyöhykkeeseen tai poistaaksesi ne."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mag-right-click sa isang layout para makita ang mga app sa mga zone nito, baguhin ang pagkakasunod-sunod, ilipat sa ibang zone o alisin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites un clic droit sur une disposition pour voir les apps de ses zones, changer leur ordre, les déplacer dans une autre zone ou les retirer."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לחצו לחיצה ימנית על פריסה כדי לראות את האפליקציות באזורים שלה, לשנות את הסדר שלהן, להעביר אותן לאזור אחר או להוציא אותן."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी लेआउट पर राइट-क्लिक करके उसके ज़ोन के ऐप्स देखें, उनका क्रम बदलें, उन्हें दूसरे ज़ोन में ले जाएँ या हटाएँ।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desnom tipkom miša kliknite raspored da vidite aplikacije u njegovim zonama, promijenite njihov redoslijed, premjestite ih u drugu zonu ili ih uklonite."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kattintson jobb gombbal egy elrendezésre, hogy lássa a zónáiban lévő alkalmazásokat, módosítsa a sorrendjüket, áthelyezze őket másik zónába, vagy eltávolítsa őket."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik kanan pada tata letak untuk melihat app di zonanya, mengubah urutannya, memindahkannya ke zona lain, atau mengeluarkannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai clic destro su un layout per vedere le app nelle sue zone, cambiarne l'ordine, spostarle in un'altra zona o rimuoverle."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レイアウトを右クリックすると、そのゾーンにあるAppの確認、順番の変更、別のゾーンへの移動、取り除きができます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레이아웃을 마우스 오른쪽 버튼으로 클릭하면 해당 영역의 앱을 보고, 순서를 바꾸고, 다른 영역으로 옮기거나 제거할 수 있습니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spustelėkite išdėstymą dešiniuoju pelės mygtuku, kad pamatytumėte jo zonų programas, pakeistumėte jų tvarką, perkeltumėte į kitą zoną arba pašalintumėte."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ar peles labo pogu noklikšķiniet uz izkārtojuma, lai redzētu tā zonu lietotnes, mainītu to secību, pārvietotu uz citu zonu vai noņemtu."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एखाद्या लेआउटवर राईट-क्लिक करून त्याच्या झोनमधील अॅप्स पाहा, त्यांचा क्रम बदला, दुसऱ्या झोनमध्ये हलवा किंवा काढून टाका."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik kanan pada reka letak untuk melihat apl dalam zonnya, menukar susunannya, mengalihkannya ke zon lain atau mengeluarkannya."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Høyreklikk på en layout for å se appene i sonene, endre rekkefølgen, flytte dem til en annen sone eller fjerne dem."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik met de rechtermuisknop op een indeling om de apps in de zones te zien, de volgorde te wijzigen, ze naar een andere zone te verplaatsen of ze te verwijderen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknij układ prawym przyciskiem myszy, aby zobaczyć aplikacje w jego strefach, zmienić ich kolejność, przenieść je do innej strefy lub usunąć."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique com o botão direito num esquema para ver as apps das suas zonas, alterar a ordem, movê-las para outra zona ou retirá-las."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique com o botão direito em um layout para ver os apps das suas zonas, mudar a ordem, movê-los para outra zona ou retirá-los."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faceți clic dreapta pe un aspect pentru a vedea aplicațiile din zonele lui, a le schimba ordinea, a le muta în altă zonă sau a le scoate."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите правой кнопкой мыши на макет, чтобы увидеть приложения в его зонах, изменить их порядок, переместить в другую зону или убрать."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknite pravým tlačidlom na rozloženie, aby ste videli aplikácie v jeho zónach, zmenili ich poradie, presunuli ich do inej zóny alebo ich odstránili."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z desnim klikom na razporeditev si oglejte aplikacije v njenih conah, spremenite njihovo zaporedje, jih premaknite v drugo cono ali odstranite."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кликните десним тастером миша на распоред да видите апликације у његовим зонама, промените њихов редослед, преместите их у другу зону или их уклоните."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Högerklicka på en layout för att se apparna i dess zoner, ändra ordningen, flytta dem till en annan zon eller ta bort dem."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ஒரு லேஅவுட்டில் வலது-கிளிக் செய்து அதன் மண்டலங்களிலுள்ள ஆப்ஸைப் பார்க்கலாம், வரிசையை மாற்றலாம், வேறு மண்டலத்துக்கு நகர்த்தலாம் அல்லது நீக்கலாம்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "లేఅవుట్‌పై రైట్-క్లిక్ చేసి దాని జోన్‌లలోని యాప్‌లను చూడండి, క్రమాన్ని మార్చండి, మరొక జోన్‌కు తరలించండి లేదా తొలగించండి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คลิกขวาที่เลย์เอาต์เพื่อดูแอปในโซนของเลย์เอาต์นั้น เปลี่ยนลำดับ ย้ายไปโซนอื่น หรือนำออก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir düzenin bölgelerindeki uygulamaları görmek, sıralarını değiştirmek, başka bir bölgeye taşımak veya çıkarmak için düzene sağ tıklayın."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Клацніть правою кнопкою миші макет, щоб побачити застосунки в його зонах, змінити їхній порядок, перемістити в іншу зону або прибрати."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کسی لے آؤٹ پر رائٹ کلک کر کے اس کے زونز کی ایپس دیکھیں، ان کی ترتیب بدلیں، انہیں دوسرے زون میں منتقل کریں یا ہٹا دیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấp chuột phải vào một bố cục để xem các ứng dụng trong vùng của nó, đổi thứ tự, chuyển sang vùng khác hoặc gỡ ra."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右键点按布局，可查看其区域中的App、更改顺序、移到其他区域或移除。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "對版面配置按一下滑鼠右鍵，即可檢視其區域中的 App、更改順序、移到其他區域或移除。"
+          }
+        }
+      }
+    },
     "Return" : {
       "extractionState" : "manual",
       "localizations" : {
