@@ -12,6 +12,10 @@ struct ZoneWindowsCard: View {
     var showsPicture = true
     @State private var hoveredButton: IslandButton?
 
+    /// How far the title and the buttons stand further inside the card than the island's cards have them: they lie on the picture, in the accent colour, and must be seen to
+    /// belong to the card.
+    private static let inset: CGFloat = 6
+
     /// As large as the picture of the app on a card of the island's row: never large on a large card.
     private static func glyphSide(in size: CGSize) -> CGFloat { min(32, max(14, min(size.width, size.height) * 0.4)) }
 
@@ -25,7 +29,7 @@ struct ZoneWindowsCard: View {
                 RoundedRectangle(cornerRadius: radius).fill(.white.opacity(0.1))
                 if let glyph = card.glyph {
                     Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).scaledToFit()
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundStyle(AppAccent.color)
                         .frame(width: Self.glyphSide(in: size), height: Self.glyphSide(in: size))
                         .frame(width: size.width, height: size.height)
                 }
@@ -68,42 +72,42 @@ struct ZoneWindowsCard: View {
     /// The title of the window, over the top of its picture, between the buttons of the card (a narrow card shows it only while the buttons do not).
     private var title: some View {
         let rects = IslandCardAction.rects(in: size, among: card.actions).map(\.rect)
-        let room = size.width - 2 * ((rects.filter { $0.midX < size.width / 2 }.map(\.maxX).max() ?? 4) + 6)
+        let room = size.width - 2 * ((rects.filter { $0.midX < size.width / 2 }.map(\.maxX).max() ?? 4) + Self.inset + 6)
         let shown = room >= 60 || !buttonsShown
         return Text(verbatim: card.caption)
             .font(Font(NSFont.menuBarFont(ofSize: 0)))
-            .foregroundStyle(.white)
+            .foregroundStyle(AppAccent.ink)
             .lineLimit(1)
             .truncationMode(.tail)
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
-            .background(Capsule().fill(.black.opacity(0.55)))
-            .frame(maxWidth: shown && buttonsShown ? max(room, 0) : max(size.width - 16, 0))
+            .background(Capsule().fill(AppAccent.color).shadow(color: .black.opacity(0.45), radius: 3, y: 1))
+            .frame(maxWidth: shown && buttonsShown ? max(room, 0) : max(size.width - 2 * (8 + Self.inset), 0))
             .frame(width: size.width, alignment: .top)
-            .padding(.top, 4)
+            .padding(.top, 4 + Self.inset)
             .opacity(shown && model.appear >= 1 ? 1 : 0)
             .animation(.easeOut(duration: 0.12), value: shown && model.appear >= 1)
     }
 
-    private static func fill(hover: Bool) -> Color { .black.opacity(hover ? 0.85 : 0.6) }
+    private static func fill(hover: Bool) -> Color { AppAccent.color.opacity(hover ? 1 : 0.85) }
 
     /// The buttons of the card under the pointer, as the cards of the island's row have them.
     private var buttons: some View {
         ZStack(alignment: .topLeading) {
             ForEach(IslandCardAction.rects(in: size, among: card.actions), id: \.action) { item in
-                Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(AppAccent.ink)
                     .frame(width: item.rect.width * 0.5, height: item.rect.height * 0.5)
                     .frame(width: item.rect.width, height: item.rect.height)
-                    .background(Circle().fill(Self.fill(hover: hoveredButton == .card(item.action, card.id))))
+                    .background(Circle().fill(Self.fill(hover: hoveredButton == .card(item.action, card.id))).shadow(color: .black.opacity(0.45), radius: 3, y: 1))
                     .contentShape(Circle())
                     .onHover { hoveredButton = $0 ? .card(item.action, card.id) : (hoveredButton == .card(item.action, card.id) ? nil : hoveredButton) }
                     .onTapGesture { model.onPerform(item.action, card) }
-                    .offset(x: item.rect.minX, y: item.rect.minY)
+                    .offset(x: item.rect.minX + (item.action == .remove ? -Self.inset : Self.inset), y: item.rect.minY + Self.inset)
             }
             let rect = IslandCardAction.selectRect(in: size)
             ZStack {
-                Circle().fill(Self.fill(hover: hoveredButton == .select(card.id)))
-                Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                Circle().fill(Self.fill(hover: hoveredButton == .select(card.id))).shadow(color: .black.opacity(0.45), radius: 3, y: 1)
+                Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(AppAccent.ink)
                     .frame(width: rect.width * 0.5, height: rect.height * 0.5)
                     .scaleEffect(card.selected ? 1 : 0.3).opacity(card.selected ? 1 : 0)
             }
@@ -111,7 +115,7 @@ struct ZoneWindowsCard: View {
             .contentShape(Circle())
             .onHover { hoveredButton = $0 ? .select(card.id) : (hoveredButton == .select(card.id) ? nil : hoveredButton) }
             .onTapGesture { model.onToggleStart(card) }
-            .offset(x: rect.minX, y: rect.minY)
+            .offset(x: rect.minX - Self.inset, y: rect.minY + Self.inset)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .opacity(buttonsShown ? 1 : 0)
