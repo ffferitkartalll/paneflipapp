@@ -1,17 +1,22 @@
 import AppKit
 import CoreGraphics
 import Foundation
+import Observation
 import PaneFlipCore
 
-/// The apps of a layout: their icons, starting them, and taking one out of a zone (its window is let go and the restorer places the rest).
+/// The apps of a layout: their icons, starting them, and changing their zones and order (a window whose slot changed is let go and the restorer places it again).
+@Observable
 final class LayoutAppsService: LayoutAppsEditing {
-    private let memory: StackMemory
-    private let coordinator: StackCoordinator
-    private let apps: AppCatalog
-    private let refresher: ZoneRefreshing
-    private let iconFont: IconFont
-    private let settings: AppSettings
-    private let windows: WindowSystem
+    /// Changes whenever the apps changed: a view that listed them (`entries`) is drawn again.
+    private var revision = 0
+
+    @ObservationIgnored private let memory: StackMemory
+    @ObservationIgnored private let coordinator: StackCoordinator
+    @ObservationIgnored private let apps: AppCatalog
+    @ObservationIgnored private let refresher: ZoneRefreshing
+    @ObservationIgnored private let iconFont: IconFont
+    @ObservationIgnored private let settings: AppSettings
+    @ObservationIgnored private let windows: WindowSystem
 
     init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont,
          settings: AppSettings, windows: WindowSystem) {
@@ -22,6 +27,16 @@ final class LayoutAppsService: LayoutAppsEditing {
         self.iconFont = iconFont
         self.settings = settings
         self.windows = windows
+    }
+
+    func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {
+        _ = revision
+        return memory.apps(inZones: zones).map { app in
+            let name = apps.name(bundleID: app.bundleID) ?? app.bundleID
+            return LayoutAppEntry(zoneID: app.zoneID, bundleID: app.bundleID, name: name, icon: glyph(bundleID: app.bundleID, name: name),
+                           // Only the open windows: a closed one is not worth ordering.
+                           windows: app.slots.filter { $0.windowID != nil }.map { .init(slot: $0.index, title: $0.title) })
+        }
     }
 
     func glyph(ofApp bundleID: String) -> NSImage {
@@ -55,12 +70,29 @@ final class LayoutAppsService: LayoutAppsEditing {
         for delay in [0.7, 2.0, 4.0] { DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [refresher] in refresher.restoreWindows() } }
     }
 
+    func move(app bundleID: String, from zone: UUID, to target: UUID, inZones zones: [UUID]) {
+        changed(memory.assignApp(bundleID, inZone: zone, toZone: target, among: Set(zones)))
+    }
+
+    func reorder(app bundleID: String, in zone: UUID, by offset: Int, inZones zones: [UUID]) {
+        changed(memory.moveApp(bundleID, inZone: zone, by: offset, among: Set(zones)))
+    }
+
+    func reorder(window slot: Int, by offset: Int, inZones zones: [UUID]) {
+        changed(memory.moveWindow(slot, by: offset, among: Set(zones)))
+    }
+
+    func clear(zones: [UUID]) {
+        changed(memory.forget(zones: Set(zones)))
+    }
+
     func remove(app bundleID: String, in zone: UUID, inZones zones: [UUID]) {
         changed(memory.removeApp(bundleID, inZone: zone, among: Set(zones)))
     }
 
     private func changed(_ released: [CGWindowID]) {
         released.forEach(coordinator.removeFromStack)
+        revision += 1
         refresher.restoreWindows()
     }
 }

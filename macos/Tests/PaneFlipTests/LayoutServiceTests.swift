@@ -66,6 +66,58 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(memory.records.map(\.zoneID), [first.root.leafIDs[0], beyond])
     }
 
+    func testSwitchingLayoutsPutsEachAppInTheZoneThatLiesWhereItsZoneLay() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let first = repository.addLayout(for: "screen")
+        let (left, right) = (UUID(), UUID())
+        var strip = first.strip
+        strip.root = .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(left), second: .leaf(right))
+        repository.setStrip(strip, ofLayout: first.id, key: "screen")
+        repository.setDefaultZone(left, ofLayout: first.id, key: "screen")
+        let other = repository.addLayout(for: "screen")
+        let (a, b, c) = (UUID(), UUID(), UUID())
+        var otherStrip = other.strip
+        otherStrip.root = .split(id: UUID(), sideBySide: true, ratio: 0.33, first: .leaf(a), second: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(b), second: .leaf(c)))
+        repository.setStrip(otherStrip, ofLayout: other.id, key: "screen")
+        repository.setDefaultZone(a, ofLayout: other.id, key: "screen")
+        memory.remember(zoneID: left, bundleID: "left", title: "")
+        memory.remember(zoneID: right, bundleID: "right", title: "")
+
+        service.activate(key: "screen", id: other.id)
+
+        XCTAssertEqual(memory.records.map(\.zoneID), [a, c], "the default zone to the default zone, the other to the zone that lies nearest to it")
+    }
+
+    func testSwitchingLayoutsPutsTheAppsOfTheZonesBeyondAnEdgeInTheZonesBeyondTheSameEdge() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let first = repository.addLayout(for: "screen")
+        let (left, right) = (UUID(), UUID())
+        var strip = first.strip
+        strip.leading = [Overflow(width: 0.25, root: .leaf(left))]
+        strip.trailing = [Overflow(width: 0.25, root: .leaf(right))]
+        repository.setStrip(strip, ofLayout: first.id, key: "screen")
+        let other = repository.addLayout(for: "screen")
+        let (otherLeft, otherRight) = (UUID(), UUID())
+        var otherStrip = other.strip
+        otherStrip.leading = [Overflow(width: 0.25, root: .leaf(otherLeft))]
+        otherStrip.trailing = [Overflow(width: 0.25, root: .leaf(otherRight))]
+        repository.setStrip(otherStrip, ofLayout: other.id, key: "screen")
+        memory.remember(zoneID: left, bundleID: "left", title: "")
+        memory.remember(zoneID: right, bundleID: "right", title: "")
+
+        service.activate(key: "screen", id: other.id)
+
+        XCTAssertEqual(memory.records.map(\.zoneID), [otherLeft, otherRight])
+    }
+
     func testADisplayWithoutALayoutGetsTheStandardOneAndOneWithLayoutsKeepsThem() {
         let repository = LayoutRepository(store: MemoryDocumentStore())
         let memory = StackMemory(store: MemoryDocumentStore())

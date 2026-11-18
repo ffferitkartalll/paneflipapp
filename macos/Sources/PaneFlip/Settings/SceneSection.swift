@@ -14,6 +14,7 @@ struct SceneSection: View {
     let arrangement: DeskArrangement
     let repository: LayoutRepository
     let manager: SceneManaging
+    let apps: LayoutAppsEditing
 
     private static let spacing: CGFloat = 16
 
@@ -33,7 +34,8 @@ struct SceneSection: View {
                     let chosen = layouts(of: screen)
                     let shrink = (DeskScale.mapWidth - Self.spacing * CGFloat(screens.count - 1)) / DeskScale.mapWidth
                     SceneLayoutPicker(screen: screen, pictureWidth: DeskScale.width(of: screen, among: screens), shownWidth: DeskScale.width(of: screen, among: screens) * shrink,
-                                      layouts: chosen.all, selected: chosen.used?.id) {
+                                      layouts: chosen.all, selected: chosen.used?.id,
+                                      inUse: Set(chosen.all.map(\.id).filter { repository.activeLayout(for: screen.key)?.id == $0 || repository.isTaken(layout: $0, key: screen.key) }), apps: apps) {
                         manager.setLayout(sceneID: scene.id, display: screen.displayID, layoutID: $0)
                     }
                 }

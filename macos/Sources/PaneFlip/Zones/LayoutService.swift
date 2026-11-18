@@ -76,15 +76,14 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         refresher?.refreshZones()
     }
 
-    /// Makes a layout active; the apps of all the old zones (those beyond the edges too) move to the new layout's default
-    /// zone, except those that were in one of its zones before: they go back there.
+    /// Makes a layout active; the apps of the old zones go to the zones of the new layout that lie where theirs lay (`SceneMoves.automatic`: default zone to default
+    /// zone), except those that were in one of its zones before: they go back there.
     func activate(key: String, id: UUID) {
         guard let new = repository.layout(id: id, key: key) else { return }
         let old = repository.activeLayout(for: key)
         repository.activate(layout: id, key: key)
-        if let old, old.id != id, let home = new.fallbackZoneID {
-            let map = Dictionary(uniqueKeysWithValues: old.strip.zoneIDs.map { ($0, home) })
-            release(memory.remap(map, preferred: Set(new.strip.zoneIDs)))
+        if let old, old.id != id {
+            release(memory.remap(SceneMoves.automatic(from: old, to: new), preferred: Set(new.strip.zoneIDs)))
         }
         refresher?.refreshZones()
         refresher?.restoreWindows()

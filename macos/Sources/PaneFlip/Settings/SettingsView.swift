@@ -55,7 +55,7 @@ struct SettingsView: View {
                 .tabItem { Label("Layouts", systemImage: "rectangle.split.2x2") }
                 .tag(SettingsTab.layouts)
 
-            ScenesPane(repository: repository, scenes: scenes, manager: sceneManager, screens: screens, settings: settings)
+            ScenesPane(repository: repository, scenes: scenes, manager: sceneManager, apps: apps, screens: screens, settings: settings)
                 .cappedHeight(contentHeight, natural: natural(.scenes))
                 .tabItem { Label("Scenes", systemImage: "rectangle.on.rectangle") }
                 .tag(SettingsTab.scenes)
