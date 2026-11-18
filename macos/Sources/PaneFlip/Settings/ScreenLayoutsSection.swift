@@ -13,6 +13,10 @@ struct ScreenLayoutsSection: View {
     @State private var choosesShape = false
     @State private var importing = false
     @State private var importFailed = false
+    /// Where the row of layouts is scrolled to and how far it can go, to step it by one layout.
+    @State private var position = ScrollPosition(x: 0)
+    @State private var offset: CGFloat = 0
+    @State private var maxOffset: CGFloat = 0
 
     var body: some View {
         Section {
@@ -24,10 +28,24 @@ struct ScreenLayoutsSection: View {
                                    isDefault: repository.isDefault(layout: layout.id, key: screen.key), layouts: layouts, editor: editor)
                     }
                 }
+                .scrollTargetLayout()
                 .fixedSize(horizontal: false, vertical: true)   // the row is as tall as its tallest card
                 .padding(.vertical, 6)
             }
             .scrollIndicators(.hidden)
+            .scrollPosition($position)
+            .scrollTargetBehavior(.viewAligned)   // let go anywhere, the row comes to rest on the nearest layout
+            .onScrollGeometryChange(for: CGPoint.self) { CGPoint(x: $0.contentOffset.x, y: max($0.contentSize.width - $0.containerSize.width, 0)) } action: { _, now in
+                offset = now.x
+                maxOffset = now.y
+            }
+            // The wheel of a mouse moves the row by one layout for each notch, with the pointer over it and no Shift key.
+            .background(WheelStepCatcher { notch in
+                guard maxOffset > 0 else { return false }   // all the layouts show: the wheel scrolls the page
+                let target = PagedScroll.offset(after: PagedScroll.notch(notch), from: offset, pitch: pictureWidth + 14, maxOffset: maxOffset)
+                withAnimation(.smooth(duration: 0.25)) { position.scrollTo(x: target) }
+                return true
+            })
         } header: {
             HStack {
                 Label(screen.name, systemImage: "display")
