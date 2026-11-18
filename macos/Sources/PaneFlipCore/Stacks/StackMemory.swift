@@ -317,6 +317,36 @@ public final class StackMemory {
         return result
     }
 
+    /// Another layout of a display takes the place of the one in use (both in the scene in use). Every layout keeps its own slots: what is done to the apps of one never reaches
+    /// another. A layout that has no slots yet gets those of the one it replaces, in the zones `map` names (zone of the old layout to zone of the new one). One that has some
+    /// gets, for each app, only the slots it lacks for the windows that are open (an app opened since gets its place in the new layout too). Returns the live windows of the
+    /// old layout's slots (now unbound), which the caller must release so that they are placed in the zones of the new one.
+    @discardableResult
+    public func switchLayout(from old: Set<UUID>, to new: Set<UUID>, map: [UUID: UUID]) -> [CGWindowID] {
+        var copy = records
+        for i in copy.indices { copy[i].otherZones.removeAll(where: new.contains) }   // slots of the new layout that were once only remembered in others: they are its own now
+        let leaving = copy.filter { old.contains($0.zoneID) && !$0.bundleID.isEmpty }
+        for i in copy.indices where old.contains(copy[i].zoneID) { copy[i].windowID = nil }
+        var lacking: [StackRecord]
+        if copy.contains(where: { new.contains($0.zoneID) && !$0.bundleID.isEmpty }) {
+            var have: [String: Int] = [:]
+            for record in copy where new.contains(record.zoneID) { have[record.bundleID, default: 0] += 1 }
+            lacking = []
+            for record in leaving where record.windowID != nil {
+                if have[record.bundleID, default: 0] > 0 { have[record.bundleID]! -= 1 } else { lacking.append(record) }
+            }
+        } else {
+            lacking = leaving
+        }
+        for var record in lacking {
+            guard let zone = map[record.zoneID] else { continue }
+            record = StackRecord(zoneID: zone, bundleID: record.bundleID, title: record.title)
+            copy.insert(record, at: copy.lastIndex { $0.zoneID == zone }.map { $0 + 1 } ?? copy.count)
+        }
+        records = copy
+        return leaving.compactMap(\.windowID)
+    }
+
     /// Drops slots whose zone no longer exists in any layout.
     public func prune(keepingZones alive: Set<UUID>) {
         var kept = records.filter { alive.contains($0.zoneID) }

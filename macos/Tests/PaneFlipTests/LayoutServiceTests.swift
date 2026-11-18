@@ -59,11 +59,13 @@ final class LayoutServiceTests: XCTestCase {
 
         service.activate(key: "screen", id: other.id)
 
-        XCTAssertEqual(memory.records.map(\.zoneID), [second, second])
+        XCTAssertEqual(memory.slots(inZones: repository.layout(id: other.id, key: "screen")!.strip.zoneIDs).map(\.zoneID), [second, second], "the new layout has its own slots")
+        XCTAssertEqual(memory.slots(inZones: repository.layout(id: first.id, key: "screen")!.strip.zoneIDs).map(\.zoneID), [first.root.leafIDs[0], beyond], "and the old one keeps its own")
 
         service.activate(key: "screen", id: first.id)
 
-        XCTAssertEqual(memory.records.map(\.zoneID), [first.root.leafIDs[0], beyond])
+        XCTAssertEqual(memory.slots(inZones: repository.layout(id: first.id, key: "screen")!.strip.zoneIDs).map(\.zoneID), [first.root.leafIDs[0], beyond])
+        XCTAssertEqual(memory.records.count, 4, "nothing is added a second time")
     }
 
     func testSwitchingLayoutsPutsEachAppInTheZoneThatLiesWhereItsZoneLay() {
@@ -89,7 +91,7 @@ final class LayoutServiceTests: XCTestCase {
 
         service.activate(key: "screen", id: other.id)
 
-        XCTAssertEqual(memory.records.map(\.zoneID), [a, c], "the default zone to the default zone, the other to the zone that lies nearest to it")
+        XCTAssertEqual(memory.slots(inZones: repository.layout(id: other.id, key: "screen")!.strip.zoneIDs).map(\.zoneID), [a, c], "the default zone to the default zone, the other to the zone that lies nearest to it")
     }
 
     func testSwitchingLayoutsPutsTheAppsOfTheZonesBeyondAnEdgeInTheZonesBeyondTheSameEdge() {
@@ -115,7 +117,7 @@ final class LayoutServiceTests: XCTestCase {
 
         service.activate(key: "screen", id: other.id)
 
-        XCTAssertEqual(memory.records.map(\.zoneID), [otherLeft, otherRight])
+        XCTAssertEqual(memory.slots(inZones: repository.layout(id: other.id, key: "screen")!.strip.zoneIDs).map(\.zoneID), [otherLeft, otherRight])
     }
 
     func testADisplayWithoutALayoutGetsTheStandardOneAndOneWithLayoutsKeepsThem() {
@@ -182,5 +184,32 @@ final class LayoutServiceTests: XCTestCase {
         XCTAssertEqual(second.title(in: all), String(localized: "Layout \(2)"))
         XCTAssertEqual(third.title(in: all), "mine")
         XCTAssertEqual(third.defaultTitle(in: all), String(localized: "Layout \(3)"), "what it goes back to")
+    }
+
+    func testWhatIsDoneInTheNewLayoutNeverReachesTheOldOne() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let first = repository.addLayout(for: "screen")
+        let other = repository.addLayout(for: "screen")
+        let (one, two) = (first.root.leafIDs[0], other.root.leafIDs[0])
+        let a = memory.remember(zoneID: one, bundleID: "a", title: "")
+        memory.bind(slot: a, toWindow: 1, title: "")
+        let b = memory.remember(zoneID: one, bundleID: "b", title: "")
+        memory.bind(slot: b, toWindow: 2, title: "")
+
+        XCTAssertEqual(Set(memory.switchLayout(from: [one], to: [two], map: [one: two])), [1, 2], "the windows are given back to be placed again")
+        // In the new layout: the order of its apps changes, one is taken out, another opened.
+        memory.moveSlot(memory.slots(inZones: [two])[1].index, toPlaceOf: memory.slots(inZones: [two])[0].index)
+        memory.removeApp("a", inZone: two, among: [two])
+        let c = memory.remember(zoneID: two, bundleID: "c", title: "")
+        memory.bind(slot: c, toWindow: 3, title: "")
+
+        memory.switchLayout(from: [two], to: [one], map: [two: one])
+
+        XCTAssertEqual(memory.slots(inZones: [one]).map(\.bundleID), ["a", "b", "c"], "the old layout keeps its apps and their order, and gets the one opened meanwhile")
+        XCTAssertTrue(memory.slots(inZones: [one]).allSatisfy { $0.zoneID == one })
     }
 }

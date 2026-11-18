@@ -83,7 +83,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         let old = repository.activeLayout(for: key)
         repository.activate(layout: id, key: key)
         if remapping, let old, old.id != id {
-            release(memory.remap(SceneMoves.automatic(from: old, to: new), preferred: Set(new.strip.zoneIDs)))
+            release(memory.switchLayout(from: Set(old.strip.zoneIDs), to: Set(new.strip.zoneIDs), map: SceneMoves.automatic(from: old, to: new)))
         }
         refresher?.refreshZones()
         refresher?.restoreWindows()
