@@ -7,8 +7,6 @@ struct LayoutAppsView: View {
     let layout: NamedLayout
     /// The name the layout is shown under (a layout without a name of its own has a default one).
     let title: String
-    /// Whether the apps can be sent back out of the zones: not while a display uses the layout.
-    let canReset: Bool
     let editor: LayoutAppsEditing
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modalRoom) private var room
@@ -45,7 +43,7 @@ struct LayoutAppsView: View {
             .padding(.horizontal, -20)
             HStack {
                 Spacer()
-                if canReset { Button("Reset") { editor.clear(zones: zones) } }
+                Button("Reset") { editor.clear(zones: zones) }
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
             }
         }

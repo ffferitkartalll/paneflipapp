@@ -7,6 +7,9 @@ import PaneFlipCore
 /// The apps of a layout: their icons, starting them, and changing their zones and order (a window whose slot changed is let go and the restorer places it again).
 @Observable
 final class LayoutAppsService: LayoutAppsEditing {
+    /// Which scene is in use and the memory of another one (set where the scenes exist): without them every scene is the one in use.
+    @ObservationIgnored var scenes: (active: () -> UUID, memory: (UUID) -> StackMemory)?
+
     /// Changes whenever the apps changed: a view that listed them (`entries`) is drawn again.
     private var revision = 0
 
@@ -27,6 +30,14 @@ final class LayoutAppsService: LayoutAppsEditing {
         self.iconFont = iconFont
         self.settings = settings
         self.windows = windows
+    }
+
+    func editing(scene: UUID) -> LayoutAppsEditing {
+        guard let scenes, scenes.active() != scene else { return self }
+        // Read afresh each time: the scene may have been in use since. Its slots wait for windows, so nothing live is touched.
+        let other = LayoutAppsService(memory: scenes.memory(scene), coordinator: coordinator, apps: apps, refresher: refresher, iconFont: iconFont, settings: settings, windows: windows)
+        other.scenes = (active: scenes.active, memory: scenes.memory)
+        return other
     }
 
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry] {

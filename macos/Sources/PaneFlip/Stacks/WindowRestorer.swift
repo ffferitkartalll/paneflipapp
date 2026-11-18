@@ -12,6 +12,8 @@ final class WindowRestorer {
     private let coordinator: StackCoordinator
     private let availability: WindowAvailability
     private let settings: AppSettings
+    /// Called when every app has been looked at: what has no zone to go to is known then.
+    var onRestored: (() -> Void)?
 
     init(windows: WindowSystem, apps: AppCatalog, screens: ScreenProviding, memory: StackMemory, coordinator: StackCoordinator,
          availability: WindowAvailability, settings: AppSettings) {
@@ -92,6 +94,7 @@ final class WindowRestorer {
     /// remembered window. `onlyApp` limits it to one app.
     func restore(onlyApp onlyPID: pid_t? = nil, listed: [pid_t: [WindowRef]] = [:]) {
         guard windows.isTrusted, settings.values.placementEnabled, !coordinator.placementOnly() else { return }
+        defer { if onlyPID == nil { onRestored?() } }
         let visible = coordinator.visibleZoneIDs
         // The zone an app belongs in: where its first remembered window is.
         var ruleZone: [String: UUID] = [:]

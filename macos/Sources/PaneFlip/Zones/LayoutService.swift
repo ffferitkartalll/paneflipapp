@@ -78,11 +78,11 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     /// Makes a layout active; the apps of the old zones go to the zones of the new layout that lie where theirs lay (`SceneMoves.automatic`: default zone to default
     /// zone), except those that were in one of its zones before: they go back there.
-    func activate(key: String, id: UUID) {
+    func activate(key: String, id: UUID, remapping: Bool) {
         guard let new = repository.layout(id: id, key: key) else { return }
         let old = repository.activeLayout(for: key)
         repository.activate(layout: id, key: key)
-        if let old, old.id != id {
+        if remapping, let old, old.id != id {
             release(memory.remap(SceneMoves.automatic(from: old, to: new), preferred: Set(new.strip.zoneIDs)))
         }
         refresher?.refreshZones()

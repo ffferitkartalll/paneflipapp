@@ -10,18 +10,20 @@ final class SceneService: SceneManaging, SceneDisplacing {
     private let layouts: LayoutManaging
     private let memory: StackMemory
     private let coordinator: StackCoordinator
+    private let loose: LooseWindows
     private let screens: ScreenProviding
     private let arrangement: () -> DeskArrangement
     /// Every display seen since the app started: what an unplugged display looked like is no longer to be asked of the system.
     private var known: [String: ScreenInfo] = [:]
 
-    init(scenes: SceneRepository, repository: LayoutRepository, layouts: LayoutManaging, memory: StackMemory, coordinator: StackCoordinator, screens: ScreenProviding,
+    init(scenes: SceneRepository, repository: LayoutRepository, layouts: LayoutManaging, memory: StackMemory, coordinator: StackCoordinator, loose: LooseWindows, screens: ScreenProviding,
          arrangement: @escaping () -> DeskArrangement) {
         self.scenes = scenes
         self.repository = repository
         self.layouts = layouts
         self.memory = memory
         self.coordinator = coordinator
+        self.loose = loose
         self.screens = screens
         self.arrangement = arrangement
     }
@@ -29,24 +31,40 @@ final class SceneService: SceneManaging, SceneDisplacing {
     // MARK: SceneManaging
 
     func select(id: UUID) {
+        let before = scenes.activeScene.id
         scenes.select(id)
         guard let scene = scenes.scenes.first(where: { $0.id == id }) else { return }
-        apply(scene, toDisplay: nil)
+        activated(scene, after: before)
     }
 
-    /// Puts the layouts of a scene on the displays (on one of them when `display` is given).
-    private func apply(_ scene: DisplayScene, toDisplay display: String?) {
+    /// A scene took the place of the one in use: each scene remembers its windows apart, so the memory of the new one is loaded, not worked out from the layouts of the old one.
+    private func activated(_ scene: DisplayScene, after before: UUID) {
+        let changed = scene.id != before
+        if changed {
+            let released = memory.switchScene(to: scene.id, keepingZones: repository.allZoneIDs)
+            loose.gather(coordinator.detach(windows: released))
+        }
+        apply(scene, toDisplay: nil, switching: changed)
+    }
+
+    /// Puts the layouts of a scene on the displays (on one of them when `display` is given). `switching`: the scene is a new one, so its layouts are put on the displays even
+    /// when they are there already (the windows of the scene have to be shown), and the windows are not moved to the zones that lie where theirs did.
+    private func apply(_ scene: DisplayScene, toDisplay display: String?, switching: Bool = false) {
         for screen in screens.screens() where screen.desktopNumber != nil && (display == nil || screen.displayID == display) {
             let wanted = scene.layouts[screen.displayID] ?? repository.layouts(for: screen.key).first?.id
-            if let wanted, repository.activeLayout(for: screen.key)?.id != wanted, !repository.isTaken(layout: wanted, key: screen.key) {
-                layouts.activate(key: screen.key, id: wanted)
+            if let wanted, switching || repository.activeLayout(for: screen.key)?.id != wanted, !repository.isTaken(layout: wanted, key: screen.key) {
+                layouts.activate(key: screen.key, id: wanted, remapping: !switching)
             }
         }
     }
 
     @discardableResult func addScene() -> DisplayScene { scenes.add() }
     func rename(id: UUID, to name: String) { scenes.rename(id, to: name) }
-    func remove(id: UUID) { scenes.remove(id) }
+    func remove(id: UUID) {
+        let before = scenes.activeScene.id
+        scenes.remove(id)
+        if scenes.activeScene.id != before { activated(scenes.activeScene, after: before) }   // the scene in use was the one removed
+    }
     func reset(id: UUID) { scenes.reset(id) }
     /// A layout chosen for a display in the scene in use is put on it at once.
     func setLayout(sceneID: UUID, display: String, layoutID: UUID) {

@@ -5,16 +5,41 @@ import Foundation
 /// Pure bookkeeping: it never touches a window.
 public final class StackMemory {
     public private(set) var records: [StackRecord] {
-        didSet { if !deferSave { store.save(records, named: Self.documentName) } }
+        didSet { if !deferSave { store.save(records, named: documentName) } }
     }
     /// Set while a title changes: titles change constantly, so they are written with the next real change.
     private var deferSave = false
     private let store: DocumentStore
-    private static let documentName = "stacks"
+    /// The memory of the scene in use is its own document: the same layout in two scenes keeps its windows apart.
+    private var documentName: String
+    private static let legacyName = "stacks"
 
-    public init(store: DocumentStore) {
+    /// `scene`: the scene in use (nil: the one memory there was before scenes had their own). The first start with scenes takes over what was remembered before them.
+    public init(store: DocumentStore, scene: UUID? = nil) {
         self.store = store
-        records = store.load([StackRecord].self, named: Self.documentName) ?? []
+        documentName = scene.map(Self.name(of:)) ?? Self.legacyName
+        if scene != nil, store.load([StackRecord].self, named: documentName) == nil, let old = store.load([StackRecord].self, named: Self.legacyName), !old.isEmpty {
+            records = old
+            store.save([StackRecord](), named: Self.legacyName)   // it belongs to this scene now: no other takes it over
+            store.save(old, named: documentName)
+        } else {
+            records = store.load([StackRecord].self, named: documentName) ?? []
+        }
+    }
+
+    private static func name(of scene: UUID) -> String { "\(legacyName)-\(scene.uuidString)" }
+
+    /// Makes the memory of another scene the one in use (the zones that no longer exist in any layout are dropped from it, see `alive`). Returns the live windows of the memory
+    /// that was in use, which the caller must release: the slots of the other scene wait for windows again.
+    @discardableResult
+    public func switchScene(to scene: UUID, keepingZones alive: Set<UUID>) -> [CGWindowID] {
+        let name = Self.name(of: scene)
+        guard name != documentName else { return [] }
+        let released = Array(boundWindowIDs)
+        documentName = name
+        records = store.load([StackRecord].self, named: name) ?? []
+        prune(keepingZones: alive)
+        return released
     }
 
     // MARK: Queries

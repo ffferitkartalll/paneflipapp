@@ -10,7 +10,7 @@ struct SceneLayoutPicker: View {
     let shownWidth: CGFloat
     let layouts: [NamedLayout]
     let selected: UUID?
-    /// The layouts the display uses now, on this desktop and on its others: their apps are in use.
+    /// The layouts the display shows now, on this desktop and on its others, while the scene is in use (none when it is not): a right click on them opens nothing, their apps are changed in the island and the grids.
     let inUse: Set<UUID>
     let apps: LayoutAppsEditing
     let onChoose: (UUID) -> Void

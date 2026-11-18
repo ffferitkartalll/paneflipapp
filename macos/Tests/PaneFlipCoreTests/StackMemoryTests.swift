@@ -354,4 +354,25 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertTrue(memory.records.allSatisfy { $0.zoneID == y && $0.otherZones.isEmpty })
         _ = moved
     }
+
+    func testEachSceneRemembersItsWindowsApartAndTheOldMemoryIsTakenOverOnce() {
+        let store = MemoryStore()
+        let zone = UUID(), first = UUID(), second = UUID()
+        let legacy = StackMemory(store: store)
+        legacy.remember(zoneID: zone, bundleID: "old", title: "")
+
+        let memory = StackMemory(store: store, scene: first)
+        XCTAssertEqual(memory.records.map(\.bundleID), ["old"], "the first scene takes over what was remembered before scenes")
+        let slot = memory.remember(zoneID: zone, bundleID: "one", title: "")
+        memory.bind(slot: slot, toWindow: 5, title: "")
+
+        XCTAssertEqual(memory.switchScene(to: second, keepingZones: [zone]), [5], "the windows of the memory that was in use are given back")
+        XCTAssertTrue(memory.records.isEmpty, "a scene seen the first time remembers nothing")
+        memory.remember(zoneID: zone, bundleID: "two", title: "")
+        memory.switchScene(to: first, keepingZones: [zone])
+        XCTAssertEqual(memory.records.map(\.bundleID), ["old", "one"])
+        XCTAssertNil(memory.records[1].windowID, "the windows are found again, not remembered")
+        XCTAssertEqual(StackMemory(store: store, scene: second).records.map(\.bundleID), ["two"], "and each is kept")
+        XCTAssertTrue(StackMemory(store: store, scene: UUID()).records.isEmpty, "the old memory is not taken over twice")
+    }
 }
