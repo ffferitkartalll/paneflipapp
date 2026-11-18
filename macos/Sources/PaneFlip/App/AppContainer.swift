@@ -34,8 +34,8 @@ final class AppContainer {
         let documents = UserDefaultsDocumentStore()
         let settings = AppSettings(storage: UserDefaultsSettingsStorage())
         let repository = LayoutRepository(store: documents)
-        let memory = StackMemory(store: documents)
         let scenes = SceneRepository(store: documents)
+        let memory = StackMemory(store: documents, scene: scenes.activeScene.id)
 
         let screens = CGSScreenProvider()
         let windows = AXWindowSystem(screens: screens)
@@ -72,10 +72,12 @@ final class AppContainer {
         let planner = ZonePlanner(layouts: repository, settings: settings, viewport: viewport)
         let engine = ZoneEngine(planner: planner,
                                 coordinator: coordinator, restorer: restorer, screens: screens, windows: windows)
+        let loose = LooseWindows(windows: windows, screens: screens, repository: repository, memory: memory, coordinator: coordinator)
+        restorer.onRestored = { loose.settle() }
         let layouts = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: screens)
         layouts.refresher = engine
         engine.displayHandler = layouts
-        let sceneService = SceneService(scenes: scenes, repository: repository, layouts: layouts, memory: memory, coordinator: coordinator, screens: screens,
+        let sceneService = SceneService(scenes: scenes, repository: repository, layouts: layouts, memory: memory, coordinator: coordinator, loose: loose, screens: screens,
                                          arrangement: { [settings] in settings.values.deskArrangement })
         engine.sceneHandler = sceneService
 
@@ -83,6 +85,7 @@ final class AppContainer {
         let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
         let navigation = SettingsNavigation()
         let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, iconFont: iconFont, settings: settings, windows: windows)
+        layoutApps.scenes = (active: { [scenes] in scenes.activeScene.id }, memory: { [documents] in StackMemory(store: documents, scene: $0) })
         let overlay = SnapZoneOverlay(screens: screens)
         let island = MenuBarIsland(lighting: overlay, badging: DockAppBadges(), coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })

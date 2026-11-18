@@ -84,4 +84,21 @@ final class LayoutAppsServiceTests: XCTestCase {
         service.reorder(window: second, by: -1, inZones: [zone])
         XCTAssertEqual(memory.records.map(\.title), ["2", "1"])
     }
+
+    func testAnotherSceneShowsAndChangesItsOwnAppsNotThoseOfTheSceneInUse() {
+        let store = MemoryDocumentStore()
+        let inUse = UUID(), other = UUID()
+        let live = StackMemory(store: store, scene: inUse)
+        live.remember(zoneID: zone, bundleID: "com.example.one", title: "")
+        service = LayoutAppsService(memory: live, coordinator: StackCoordinator(windows: windows, memory: live, settings: settings, apps: FakeApps()), apps: FakeApps(),
+                                    refresher: refresher, iconFont: IconFont(brands: NoBrands()), settings: settings, windows: windows)
+        service.scenes = (active: { inUse }, memory: { StackMemory(store: store, scene: $0) })
+
+        let theOther = service.editing(scene: other)
+        XCTAssertTrue(theOther.entries(inZones: [zone]).isEmpty, "the same layout in another scene has no apps")
+
+        StackMemory(store: store, scene: other).remember(zoneID: zone, bundleID: "com.example.two", title: "")
+        theOther.clear(zones: [zone])
+        XCTAssertEqual(live.records.map(\.bundleID), ["com.example.one"], "the scene in use is left alone")
+    }
 }

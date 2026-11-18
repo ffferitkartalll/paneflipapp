@@ -3,15 +3,15 @@ import XCTest
 
 final class SheetPlacingDelegateTests: XCTestCase {
     private func window(_ width: CGFloat, _ height: CGFloat) -> NSWindow {
-        NSWindow(contentRect: NSRect(x: 0, y: 0, width: width, height: height), styleMask: [.titled], backing: .buffered, defer: false)
+        NSWindow(contentRect: NSRect(x: 0, y: 0, width: width, height: height), styleMask: [.titled], backing: .buffered, defer: true)
     }
 
     func testASheetOverTheSheetIsPutTheInsetLowerAndTheWindowsOwnDelegateComesBackWhenTheSheetHasGone() {
-        let main = window(720, 700)
+        let main = FakeSheetHost(width: 720, height: 700)
         let own = FakeWindowDelegate()
         main.delegate = own
         let under = window(640, 600)
-        main.beginSheet(under)
+        main.attached = under
         SheetPlacingDelegate.install(on: main, under: under, inset: 20)
         let place = NSRect(x: 0, y: 620, width: 720, height: 0)
 
@@ -19,17 +19,17 @@ final class SheetPlacingDelegateTests: XCTestCase {
         XCTAssertEqual(main.delegate?.window?(main, willPositionSheet: under, using: place), place, "the sheet under stays where the window puts it")
         XCTAssertEqual(main.delegate?.windowShouldClose?(main), false, "the rest goes to the window's own delegate")
 
-        main.endSheet(under)
+        main.endSheet()
         XCTAssertTrue(main.delegate === own)
         XCTAssertEqual(own.endedSheets, 1, "the window's own delegate hears of the end once")
     }
 
     func testTheStandInKeepsItselfWhileTheSheetIsOpenAndLetsGoWithIt() {
-        let main = window(720, 700)
+        let main = FakeSheetHost(width: 720, height: 700)
         let own = FakeWindowDelegate()
         main.delegate = own
         let under = window(640, 600)
-        main.beginSheet(under)
+        main.attached = under
         weak var standIn: NSObject?
         autoreleasepool {
             SheetPlacingDelegate.install(on: main, under: under, inset: 20)
@@ -37,13 +37,13 @@ final class SheetPlacingDelegateTests: XCTestCase {
         }
         XCTAssertNotNil(standIn, "a window holds its delegate weakly: the stand-in keeps itself")
 
-        autoreleasepool { main.endSheet(under) }
+        autoreleasepool { main.endSheet() }
         XCTAssertTrue(main.delegate === own)
         XCTAssertNil(standIn, "and lets itself go with the sheet")
     }
 
     func testNothingStandsInForASheetThatIsNotAttachedAndASecondInstallChangesNothing() {
-        let main = window(720, 700)
+        let main = FakeSheetHost(width: 720, height: 700)
         let own = FakeWindowDelegate()
         main.delegate = own
         let under = window(640, 600)
@@ -51,12 +51,12 @@ final class SheetPlacingDelegateTests: XCTestCase {
         SheetPlacingDelegate.install(on: main, under: under, inset: 20)
         XCTAssertTrue(main.delegate === own, "not attached: nothing to stand in for")
 
-        main.beginSheet(under)
+        main.attached = under
         autoreleasepool {
             SheetPlacingDelegate.install(on: main, under: under, inset: 20)
             SheetPlacingDelegate.install(on: main, under: under, inset: 20)
         }
-        autoreleasepool { main.endSheet(under) }
+        autoreleasepool { main.endSheet() }
         XCTAssertTrue(main.delegate === own)
         XCTAssertEqual(own.endedSheets, 1)
     }

@@ -5,6 +5,8 @@ import PaneFlipCore
 /// What the rest of the app asks of the apps of a layout: their icons, which of them start with it, starting them, and the apps of its zones in their order (moved to another
 /// zone, put in another place, taken out, all forgotten). A view that lists them is drawn again whenever they change.
 protocol LayoutAppsEditing: AnyObject {
+    /// The same for the windows of one scene: each scene remembers its own, so the apps of a layout are the scene's, not those of the scene in use.
+    func editing(scene: UUID) -> LayoutAppsEditing
     /// The layout's apps in the island's order, one entry per app and zone. `zones` is the layout's zone identifiers.
     func entries(inZones zones: [UUID]) -> [LayoutAppEntry]
     /// The app's icon as the island draws it: a one-colour glyph that follows the text colour.

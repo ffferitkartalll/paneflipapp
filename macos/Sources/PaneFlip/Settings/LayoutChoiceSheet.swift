@@ -1,7 +1,7 @@
 import PaneFlipCore
 import SwiftUI
 
-/// The layouts of a display as pictures; a click on one chooses it, a right click shows the apps of the scene in it.
+/// The layouts of a display as pictures; a click on one chooses it, a right click shows the apps of the scene in it (not of the layout the scene in use shows now: its apps are changed in the island and the grids).
 struct LayoutChoiceSheet: View {
     let screen: ScreenInfo
     let pictureWidth: CGFloat
@@ -28,7 +28,7 @@ struct LayoutChoiceSheet: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(verbatim: screen.name).font(.title2.bold())
-                Text("Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out.")
+                Text("Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out. Not for the layout in use: its apps are changed in the island and the grid view.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -47,7 +47,7 @@ struct LayoutChoiceSheet: View {
                             }
                         }
                         .buttonStyle(.plain)
-                        .onRightClick { showing = layout }
+                        .onRightClick { if !inUse.contains(layout.id) { showing = layout } }
                     }
                 }
                 .padding(2)
@@ -62,7 +62,7 @@ struct LayoutChoiceSheet: View {
         .frame(width: size.width, height: size.height)
         .background(NestedSheetPlacement(inset: Self.padding))
         .sheet(item: $showing) {
-            LayoutAppsView(layout: $0, title: $0.title(in: layouts), canReset: !inUse.contains($0.id), editor: apps)
+            LayoutAppsView(layout: $0, title: $0.title(in: layouts), editor: apps)
                 .environment(\.modalRoom, CGSize(width: size.width - 2 * Self.padding, height: size.height - 2 * Self.padding))   // the room inside this sheet
         }
     }

@@ -12,7 +12,9 @@ protocol LayoutManaging: AnyObject {
     func removeLayout(key: String, id: UUID)
     /// The layout goes back to one zone with no space round or between zones and nothing beyond the edges; its windows go to that zone.
     func resetLayout(key: String, id: UUID)
-    func activate(key: String, id: UUID)
+    /// `remapping`: the windows of the layout that was in use are put in the zones of the new one that lie where theirs did (a scene change loads the windows of the
+    /// scene instead).
+    func activate(key: String, id: UUID, remapping: Bool)
     /// The key's desktop gets no layout, so no zones.
     func deactivate(key: String)
     /// The gap between the zones of the layout; nil takes the one of the settings.
@@ -27,5 +29,6 @@ protocol LayoutManaging: AnyObject {
 }
 
 extension LayoutManaging {
+    func activate(key: String, id: UUID) { activate(key: key, id: id, remapping: true) }
     func updateLayout(key: String, id: UUID, strip: StripLayout) { updateLayout(key: key, id: id, strip: strip, animated: false) }
 }
