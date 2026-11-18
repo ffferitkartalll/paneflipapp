@@ -7,6 +7,7 @@ struct ScenesPane: View {
     let repository: LayoutRepository
     let scenes: SceneRepository
     let manager: SceneManaging
+    let apps: LayoutAppsEditing
     let screens: ScreenProviding
     let settings: AppSettings
     /// Bumped when displays are plugged in or out or desktops change, so the list of screens is read again.
@@ -22,7 +23,7 @@ struct ScenesPane: View {
                     .foregroundStyle(.secondary)
             }
             ForEach(all) { scene in
-                SceneSection(scene: scene, isLast: scene.id == all.last?.id, scenes: all, isActive: scene.id == scenes.activeScene.id, screens: shown, arrangement: settings.values.deskArrangement, repository: repository, manager: manager)
+                SceneSection(scene: scene, isLast: scene.id == all.last?.id, scenes: all, isActive: scene.id == scenes.activeScene.id, screens: shown, arrangement: settings.values.deskArrangement, repository: repository, manager: manager, apps: apps)
             }
         }
         .formStyle(.grouped)

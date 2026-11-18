@@ -1,17 +1,23 @@
 import PaneFlipCore
 import SwiftUI
 
-/// The layouts of a display as pictures; a click on one chooses it.
+/// The layouts of a display as pictures; a click on one chooses it, a right click shows the apps of the scene in it.
 struct LayoutChoiceSheet: View {
     let screen: ScreenInfo
     let pictureWidth: CGFloat
     let layouts: [NamedLayout]
     let selected: UUID?
+    let inUse: Set<UUID>
+    let apps: LayoutAppsEditing
     let onChoose: (UUID) -> Void
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modalRoom) private var room
+    /// The layout whose apps are shown (a right click on it).
+    @State private var showing: NamedLayout?
 
     private static let spacing: CGFloat = 14
+    /// The room round the content, and how far inside this sheet the sheet of a layout's apps lies.
+    private static let padding: CGFloat = 20
     /// All the room there is: the whole content area of the window it opens over.
     private var size: CGSize { room }
     /// The pictures fill the width of the sheet in as many columns as fit (see `PictureGrid`), from the display's size on the desk map.
@@ -36,6 +42,7 @@ struct LayoutChoiceSheet: View {
                             }
                         }
                         .buttonStyle(.plain)
+                        .onRightClick { showing = layout }
                     }
                 }
                 .padding(2)
@@ -46,7 +53,12 @@ struct LayoutChoiceSheet: View {
                     .keyboardShortcut(.cancelAction)
             }
         }
-        .padding(20)
+        .padding(Self.padding)
         .frame(width: size.width, height: size.height)
+        .background(NestedSheetPlacement(inset: Self.padding))
+        .sheet(item: $showing) {
+            LayoutAppsView(layout: $0, title: $0.title(in: layouts), canReset: !inUse.contains($0.id), editor: apps)
+                .environment(\.modalRoom, CGSize(width: size.width - 2 * Self.padding, height: size.height - 2 * Self.padding))   // the room inside this sheet
+        }
     }
 }

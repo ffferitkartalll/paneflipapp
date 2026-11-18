@@ -10,6 +10,9 @@ struct SceneLayoutPicker: View {
     let shownWidth: CGFloat
     let layouts: [NamedLayout]
     let selected: UUID?
+    /// The layouts the display uses now, on this desktop and on its others: their apps are in use.
+    let inUse: Set<UUID>
+    let apps: LayoutAppsEditing
     let onChoose: (UUID) -> Void
 
     @State private var choosing = false
@@ -30,6 +33,6 @@ struct SceneLayoutPicker: View {
                 .buttonStyle(.plain)
             }
         }
-        .sheet(isPresented: $choosing) { LayoutChoiceSheet(screen: screen, pictureWidth: pictureWidth, layouts: layouts, selected: selected, onChoose: onChoose) }
+        .sheet(isPresented: $choosing) { LayoutChoiceSheet(screen: screen, pictureWidth: pictureWidth, layouts: layouts, selected: selected, inUse: inUse, apps: apps, onChoose: onChoose) }
     }
 }
