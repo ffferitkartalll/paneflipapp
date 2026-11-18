@@ -26,7 +26,12 @@ struct LayoutChoiceSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(verbatim: screen.name).font(.title2.bold())
+            VStack(alignment: .leading, spacing: 4) {
+                Text(verbatim: screen.name).font(.title2.bold())
+                Text("Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             ScrollView {
                 LazyVGrid(columns: Array(repeating: GridItem(.fixed(picture), spacing: Self.spacing), count: grid.columns), alignment: .leading, spacing: Self.spacing) {
                     ForEach(layouts) { layout in
