@@ -6,7 +6,7 @@ struct ZoneWindowsView: View {
     let model: ZoneWindowsModel
 
     var body: some View {
-        let cells = model.cells, appear = model.appear, whole = model.wholeSize != .zero
+        let cells = model.cells, whole = model.wholeSize != .zero
         ZStack(alignment: .topLeading) {
             // Nothing is drawn behind the cards; this takes a click between them (a window that is fully clear lets the mouse through, so not quite clear).
             Color.black.opacity(0.01)
@@ -16,34 +16,35 @@ struct ZoneWindowsView: View {
             // cards do not take it along; it is covered by the card that comes, and shows again when the card goes).
             // The one the carried card would be put down in is stronger, and stays so until the card is carried to another place.
             let target = model.carried.flatMap { id in model.cards.firstIndex { $0.id == id } }
-            ForEach(Array((cells + model.emptyCells).enumerated()), id: \.offset) { offset, cell in
-                let chosen = offset == target
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(.white.opacity(chosen ? 1 : 0.45), style: StrokeStyle(lineWidth: chosen ? 3 : 1.5, dash: [8, 6]))
-                    .animation(.easeOut(duration: 0.2), value: chosen)
-                    .frame(width: cell.width, height: cell.height)
-                    .position(x: cell.midX, y: cell.midY)
-                    .animation(nil, value: model.cards.count)
-                    .transition(.identity)
-                    .opacity(appear)
-                    .allowsHitTesting(false)
+            // The lines fade in and out with the grid's opening, as the cards of apps that are not open do (`CardGlide`): in their place, with `ZoneWindowsModel.appear`. Drawn once as
+            // a picture (`outlinePicture`), except the place the carried card would be put down in, which is stronger and eases to it.
+            let places = cells + model.emptyCells
+            ZStack(alignment: .topLeading) {
+                if let picture = model.outlinePicture(of: places.enumerated().filter { $0.offset != target }.map(\.element)) {
+                    Image(decorative: picture, scale: 2).resizable().frame(width: model.size.width, height: model.size.height)
+                        .modifier(AppearOpacity(model: model))   // on the picture itself: opacity on the whole group would be drawn in a pass of its own
+                }
+                if let target, places.indices.contains(target) {
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(.white, style: StrokeStyle(lineWidth: 3, dash: [8, 6]))
+                        .frame(width: places[target].width, height: places[target].height)
+                        .position(x: places[target].midX, y: places[target].midY)
+                        .modifier(AppearOpacity(model: model))
+                        .transition(.opacity)
+                }
             }
+            .animation(.easeOut(duration: 0.2), value: target)
+            .animation(nil, value: model.cards.count)
+            .frame(width: model.size.width, height: model.size.height, alignment: .topLeading)
+            .allowsHitTesting(false)
             ForEach(Array(model.cards.enumerated()), id: \.element.id) { index, card in
                 if cells.indices.contains(index) {
                     let cell = cells[index], carried = model.carried == card.id
                     let size = cell.size
                     // From over its window to the middle of its cell; a card with no window is not seen to move or grow: it comes into being in its cell, fading in.
-                    let from = model.origins[card.id]
-                    let start = from.map { CGPoint(x: $0.midX, y: $0.midY) } ?? CGPoint(x: cell.midX, y: cell.midY)
-                    // The card is scaled to the window's shape and size at first (not alike along both sides: a card is not quite the shape of the zone).
-                    let startScale = CGSize(width: from.map { size.width > 0 ? $0.width / size.width : 1 } ?? 1, height: from.map { size.height > 0 ? $0.height / size.height : 1 } ?? 1)
-                    let place = CGPoint(x: start.x + (cell.midX - start.x) * appear, y: start.y + (cell.midY - start.y) * appear)
                     ZoneWindowsCard(model: model, card: card, size: size)
-                        .scaleEffect(x: carried ? 1.04 : startScale.width + (1 - startScale.width) * appear, y: carried ? 1.04 : startScale.height + (1 - startScale.height) * appear)
-                        .animation(.easeOut(duration: 0.15), value: carried)   // the card grows as it is taken up, not at once
-                        .opacity(carried && model.carrier != nil ? 0 : (from == nil ? appear : 1))   // the grid of the whole layout draws a card it carries itself
-                        .position(carried ? model.carriedAt : place)
-                        .zIndex(carried ? 2 : (card.id == model.front ? 1 : 0))
+                        .modifier(CardGlide(model: model, cell: cell, from: model.origins[card.id], carried: carried, hidden: carried && model.carrier != nil))
+                        .zIndex(carried ? 3 : (card.id == model.front ? 2 : (card.windowID == nil ? 0 : 1)))   // a card of an app that is not open lies behind the open ones as they slide
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("zone"))
                             .onChanged { model.dragged(card, from: $0.startLocation, to: $0.location) }
                             .onEnded { _ in withAnimation(.smooth(duration: 0.25)) { model.dropped(card) } })
@@ -51,6 +52,7 @@ struct ZoneWindowsView: View {
             }
         }
         .coordinateSpace(name: "zone")
+        .modifier(SlidingHitTesting(model: model))   // the hover is worked out again once the cards rest
         .frame(width: model.size.width, height: model.size.height)
         .padding(ZoneWindowsModel.shadowRoom)
         .frame(width: model.size.width + 2 * ZoneWindowsModel.shadowRoom, height: model.size.height + 2 * ZoneWindowsModel.shadowRoom, alignment: .topLeading)

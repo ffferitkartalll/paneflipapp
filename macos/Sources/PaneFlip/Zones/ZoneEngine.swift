@@ -87,6 +87,8 @@ final class ZoneEngine: ZoneRefreshing {
         scheduleRestore()
     }
 
+    func refreshPresenters() { presenters.forEach { $0.zonesDidChange() } }
+
     func refreshZones() {
         guard !waitingForDock else { return }
         let current = screens.screens()

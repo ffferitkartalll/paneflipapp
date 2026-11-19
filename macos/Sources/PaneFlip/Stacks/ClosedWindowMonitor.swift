@@ -33,7 +33,7 @@ final class ClosedWindowMonitor {
         // A slow list never stacks a second one; a tick during a scroll is skipped (the next one catches up).
         guard !isLooking else { return }
         let held = coordinator.heldWindows
-        guard !held.isEmpty, !coordinator.placementOnly(), !coordinator.isMoving else { return }
+        guard !held.isEmpty, !coordinator.placementOnly(), !coordinator.blocksClosedWindowCheck else { return }
         // While the desktop is switching, windows are in flux and would look closed; wait it out.
         let spaces = screens.currentSpaceIDs()
         if spaces != lastSpaces { lastSpaces = spaces; return }
@@ -48,7 +48,7 @@ final class ClosedWindowMonitor {
     private func finish(looked: [WindowRef], sets: (all: Set<CGWindowID>, onScreen: Set<CGWindowID>), spaces: Set<UInt64>) {
         isLooking = false
         // The list is old by now: drop it when the windows are moving, the desktops changed, or the stacks changed under it.
-        guard !coordinator.isMoving, !coordinator.placementOnly(), screens.currentSpaceIDs() == spaces else { return }
+        guard !coordinator.blocksClosedWindowCheck, !coordinator.placementOnly(), screens.currentSpaceIDs() == spaces else { return }
         let stillHeld = Set(coordinator.heldWindows.map(\.id))
         let snapshot = availability.snapshot(of: sets, currentSpaces: spaces)
         let candidates = looked.filter { stillHeld.contains($0.id) && availability.isGone($0, in: snapshot) }

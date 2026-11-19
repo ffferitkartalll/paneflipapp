@@ -10,5 +10,6 @@ struct LayoutGridPlan {
     /// How far the layout was scrolled.
     let offset: CGFloat
     let rests: [CGFloat]
-    let zones: [(id: UUID, rect: CGRect, cards: [IslandWindow])]
+    /// The cards are read after the pictures were asked for (`LayoutGridOverlay.show`).
+    var zones: [(id: UUID, rect: CGRect, cards: [IslandWindow])]
 }
