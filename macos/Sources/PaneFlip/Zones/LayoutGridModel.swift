@@ -18,12 +18,42 @@ final class LayoutGridModel {
     var rests: [CGFloat] = [0]
     /// The zones of the screens beyond the edges are drawn: not while the cards slide (opening, closing), when they would be worked out at every step for nothing.
     var drawsOffView = false
+    /// How far the grid has opened (`ZoneWindowsModel.appear`, the same in every zone): the grid makes room for the search bar as it does.
+    /// The views that read it are told after the value is in place: told before, one that works the value out at once would read the old one, and stay as it was.
+    @ObservationIgnored private var kept: CGFloat = 0
+    var appear: CGFloat {
+        get { access(keyPath: \.appear); return kept }
+        set { kept = newValue; withMutation(keyPath: \.appear) {} }
+    }
+    /// What the search bar shows, the same on every display.
+    var search = LayoutGridSearch()
     /// The card the mouse carries, while the pointer is on this display.
     var carry: LayoutGridGhost?
     /// Where the display's usable area begins, in Accessibility coordinates; and the zone that had the focus when the grid opened.
     @ObservationIgnored var origin: CGPoint = .zero
     @ObservationIgnored var focused: UUID?
     @ObservationIgnored var onClose: () -> Void = {}
+
+    /// The search bar lies over the grid: as far below the menu bar as the zones are from the edge of the screen (the margin of the layout), and as far above the zones as they are
+    /// from each other (its gap). The zones, as tall as they were, are made lower by what the bar and that gap take; their width stays, so that no zone beyond the edge shows.
+    static let searchBarHeight: CGFloat = 34
+    var barGap: CGFloat = 0
+    /// The search bar, and the room for it, are on the display the grid was opened on only (set when the display is made). Where the island stands there, in the coordinates of
+    /// the panel: the bar comes down from behind it.
+    var showsSearch = false
+    var islandCover: CGRect?
+    /// Where the zones begin and end, from the top of the display's usable area.
+    var blockTop: CGFloat { zones.map(\.rect.minY).min() ?? 0 }
+    private var blockHeight: CGFloat { (zones.map(\.rect.maxY).max() ?? size.height) - blockTop }
+    /// How much of the height the bar and the gap below it take (none where the zones are too low for both).
+    var room: CGFloat { showsSearch && blockHeight > (Self.searchBarHeight + barGap) * 3 ? Self.searchBarHeight + barGap : 0 }
+    /// How much lower the zones are made, as a share of what they were.
+    var gridScale: CGFloat { blockHeight > 0 ? (blockHeight - room) / blockHeight : 1 }
+
+    /// Where `point` (in the usable area of the display, as the pointer has it) is in the grid, which is made lower for the search bar.
+    func inGrid(_ point: CGPoint) -> CGPoint {
+        CGPoint(x: point.x, y: blockTop + (point.y - blockTop - room) / gridScale)
+    }
 
     /// Every card with its zone and its place in the room of the display (before the grid is scrolled).
     var places: [LayoutGridPlace] {

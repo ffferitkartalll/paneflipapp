@@ -23,8 +23,22 @@ struct LayoutGridView: View {
             if let ghost = model.carry { LayoutGridGhostView(ghost: ghost) }
         }
         .frame(width: model.size.width, height: model.size.height, alignment: .topLeading)
+        .modifier(GridMakesRoom(model: model))
+        // Between the zones the grid takes the mouse too (a click closes it, as one outside it does): the wheel and the fingers scroll it there as well. The window server lets the
+        // mouse through the points of a window that are quite clear, so this is the least that is not (one step of the 8 bits of its opacity: nothing to the eye).
+        .background { Color.black.opacity(1.0 / 255).contentShape(Rectangle()).onTapGesture { model.onClose() } }
         .offset(x: model.inset.x, y: model.inset.y)
         .frame(width: model.wholeSize.width, height: model.wholeSize.height, alignment: .topLeading)
+        .overlay(alignment: .topLeading) {
+            if model.room > 0 {
+                LayoutGridSearchBar(search: model.search)
+                    .frame(width: model.size.width, height: LayoutGridModel.searchBarHeight, alignment: .top)
+                    .offset(x: model.inset.x, y: model.inset.y + model.blockTop)
+                    .modifier(BarComesFromTop(model: model))
+                    .frame(width: model.wholeSize.width, height: model.wholeSize.height, alignment: .topLeading)
+                    .mask { IslandCutout(cover: model.islandCover) }
+            }
+        }
         .ignoresSafeArea()   // the panel lies under the menu bar and the notch: the safe area would push the grid down
     }
 }

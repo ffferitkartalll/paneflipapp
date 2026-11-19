@@ -106,6 +106,7 @@ final class AppContainer {
                                            gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                            deskRect: { desk.rect($0) })
         layoutGrid.isBlocked = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
+        layoutGrid.islandShape = { [weak island] in island?.restingFrame(on: $0) }
         island.staysClosed = { [weak zoneWindows, weak layoutGrid] in zoneWindows?.isShown ?? false || layoutGrid?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
         island.onCover = { [weak notches] in notches?.isCovered = $0 }

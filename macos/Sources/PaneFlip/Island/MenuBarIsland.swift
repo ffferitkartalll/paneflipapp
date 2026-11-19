@@ -352,6 +352,12 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     var showsWindowsRow: Bool { entries.values.contains { $0.hovered && $0.model.windowsZone != nil } }
 
     /// The pointer is on the island, open or at rest.
+    /// Where the island stands at rest on `screen`, in Cocoa coordinates; nil where it is out of sight (the app is not used as an island).
+    func restingFrame(on screen: ScreenInfo) -> CGRect? {
+        guard let entry = entries[screen.displayID], !entry.model.isHidden else { return nil }
+        return islandFrame(of: entry, open: false)
+    }
+
     func covers(_ point: CGPoint) -> Bool { entries.values.contains { islandFrame(of: $0, open: $0.hovered).contains(point) } }
 
     /// The windows of the zones changed (one came to the front): the rows of cards show it at once.

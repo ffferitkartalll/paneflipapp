@@ -75,6 +75,7 @@ struct ZoneWindowsCard: View {
         .onContinuousHover { phase in
             switch phase {
             case .active:
+                guard !model.ignoresHover else { return }
                 if model.hovered != card.id { model.hovered = card.id }
                 if model.pointed != card.id { model.pointed = card.id }
             case .ended:

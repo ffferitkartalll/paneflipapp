@@ -54,6 +54,16 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// Where the mouse holds the carried card, from its middle (as `ZoneWindowsModel` keeps it for the grid of one zone).
     private var grab: CGPoint = .zero
     private var carryMonitors: [Any] = []
+    /// The text typed in the search bar (the same on every display), and which of the cards that match it is the one marked.
+    private let search = LayoutGridSearch()
+    /// Where the pointer was when the grid was asked for: the display it is on has the search bar.
+    private var triggerPoint = CGPoint.zero
+    /// Where the island stands on a display (Cocoa coordinates), asked when the grid is made; set by `AppContainer`.
+    var islandShape: (ScreenInfo) -> CGRect? = { _ in nil }
+    /// How far each display's grid was scrolled when the search first moved it: it goes back there when the search ends.
+    private var scrolledBySearch: [ObjectIdentifier: CGFloat]?
+    private var matchIndex = 0
+    private var appNames: [String: String] = [:]
     /// The pointer stays at the edge of a display while a card is carried: which display, which side (-1 left, 1 right), since when, and until when it waits before the next step.
     private var edge: (display: ObjectIdentifier, side: Int)?
     /// The fingers lead the grid (`LayoutGridLeading`) as they lead the grid of one zone (`ZoneWindowsOverlay`): where the pictures were when they took hold (`from`, as
@@ -105,6 +115,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         self.refresher = refresher
         self.gapOf = gapOf
         keeper = ZoneCardsKeeper(coordinator: coordinator, source: source, snapshots: snapshots)
+        search.onClear = { [weak self] in self?.exitSearch() }
+        search.onChange = { [weak self] in self?.searchChanged() }
     }
 
     var isShown: Bool { phase != nil }
@@ -190,7 +202,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
 
     private func setAppear(_ value: CGFloat) {
         appear = value
-        displays.forEach { $0.model.zones.forEach { $0.model.appear = value } }
+        displays.forEach { $0.model.appear = value; $0.model.zones.forEach { $0.model.appear = value } }
     }
 
     private func slide(to value: CGFloat, then: @escaping () -> Void = {}) {
@@ -250,6 +262,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
             guard plans.contains(where: { $0.zones.contains { !$0.cards.isEmpty } }) else { return }   // no card anywhere: nothing to show
         }
         phase = .opening
+        triggerPoint = screens.pointerAX
         run += 1
         let mine = run
         snapshots.prepare()
@@ -267,7 +280,10 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
 
     /// The pictures are here: a grid is put over each display with each picture over its window.
     private func begin(_ plans: [LayoutGridPlan], pictures: [CGWindowID: WindowPicture]) {
-        displays = plans.map { makeDisplay($0, pictures: pictures) }
+        // The display the grid was asked for on has the search bar (and the room for it): the one the pointer was on, else the first.
+        let searching = plans.firstIndex { screens.flip($0.screen.cocoaFrame).insetBy(dx: -2, dy: -2).contains(triggerPoint) } ?? 0
+        displays = plans.enumerated().map { makeDisplay($1, pictures: pictures, searching: $0 == searching) }
+        updateSearchCounts()
         coordinator.switchLocked = true
         let mine = run
         // A few frames for the window server to put the pictures on screen, then the real windows may go.
@@ -280,10 +296,17 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         }
     }
 
-    private func makeDisplay(_ plan: LayoutGridPlan, pictures: [CGWindowID: WindowPicture]) -> LayoutGridDisplay {
+    private func makeDisplay(_ plan: LayoutGridPlan, pictures: [CGWindowID: WindowPicture], searching: Bool) -> LayoutGridDisplay {
         let area = plan.screen.axVisible
         let model = LayoutGridModel()
         model.size = area.size
+        model.search = search
+        model.barGap = gapOf(plan.screen)
+        model.showsSearch = searching
+        if searching, let island = islandShape(plan.screen) {
+            let frame = plan.screen.cocoaFrame
+            model.islandCover = CGRect(x: island.minX - frame.minX, y: frame.maxY - island.maxY, width: island.width, height: island.height)
+        }
         model.rests = plan.rests
         model.origin = area.origin
         model.focused = coordinator.focusedZoneID
@@ -396,7 +419,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
 
     private func resume() {
         phase = .open
-        keyDisplay()?.panel.makeKey()   // the keys are the grid's now
+        (displays.first { $0.model.showsSearch } ?? keyDisplay())?.panel.makeKey()   // the keys are the grid's now
         watch()
         if timer == nil { timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in self?.refresh() } }
     }
@@ -442,6 +465,93 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         var target = model.rests.min { abs($0 - projected) < abs($1 - projected) } ?? model.shift
         if current.scrub.isFlick, abs(target - current.start) < 0.5 { target = model.rest(steps: current.scrub.speed > 0 ? -1 : 1) }
         withAnimation(Self.scrollSlide) { model.shift = target }
+    }
+
+    // MARK: Search
+
+    private func updateSearchCounts() {
+        search.zones = displays.reduce(0) { $0 + $1.model.zones.count }
+        search.windows = displays.reduce(0) { $0 + $1.model.places.filter { $0.card.windowID != nil }.count }
+    }
+
+    /// The cards, on every display and in every zone (those of the screens beyond the edges too), whose title (or the name of its app) matches what is typed, the best match first
+    /// (`WindowSearch`): those of apps that are not open too (the name of the app), though they are not counted.
+    private var matches: [(display: LayoutGridDisplay, place: LayoutGridPlace)] {
+        let all = displays.flatMap { display in display.model.places.map { (display: display, place: $0) } }
+        return WindowSearch.matches(search.query, in: all.map(\.place.card.name), others: all.map { appName(of: $0.place.card.bundleID) }).map { all[$0] }
+    }
+
+    /// The name of the app a window belongs to, for a search that has the app's name instead of the window's title (asked once for each app).
+    private func appName(of bundleID: String) -> String {
+        if let known = appNames[bundleID] { return known }
+        let name = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID).map { FileManager.default.displayName(atPath: $0.path).replacingOccurrences(of: ".app", with: "") } ?? ""
+        appNames[bundleID] = name
+        return name
+    }
+
+    /// The cards that do not match are dimmed; with nothing typed, none is.
+    private func applyMatching() {
+        let ids: Set<String>? = search.query.trimmingCharacters(in: .whitespaces).isEmpty ? nil : Set(matches.map(\.place.card.id))
+        displays.forEach { $0.model.zones.forEach { if $0.model.matching != ids { $0.model.matching = ids } } }
+    }
+
+    /// What is typed changed: the first match is the card to be chosen (its screen is scrolled to); with nothing typed the grids are as they were before the search.
+    private func searchChanged() {
+        applyMatching()
+        guard !search.query.trimmingCharacters(in: .whitespaces).isEmpty else { return endSearch() }
+        matchIndex = 0
+        markMatch()
+    }
+
+    /// The search ends: the text goes, the keys are given back to the grid, and each display shows the screens it showed before the search moved it.
+    private func exitSearch() {
+        search.query = ""
+        displays.forEach { $0.panel.makeFirstResponder(nil) }
+        search.blurToken += 1
+        searchChanged()
+    }
+
+    /// The cards pass under the pointer while the grid scrolls for the search: they must not take the mark from the match (the animation lasts 0.3 s).
+    private func quietHover() {
+        let zones = displays.flatMap(\.model.zones).map(\.model)
+        zones.forEach { $0.ignoresHover = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { zones.forEach { $0.ignoresHover = false } }
+    }
+
+    private func endSearch() {
+        displays.forEach { $0.model.select(nil) }
+        guard let saved = scrolledBySearch else { return }
+        scrolledBySearch = nil
+        for display in displays { if let shift = saved[ObjectIdentifier(display)] { scroll(display, to: shift) } }
+        quietHover()
+    }
+
+    private func stepMatch(by step: Int) {
+        let count = matches.count
+        guard count > 0 else { return }
+        matchIndex = (matchIndex + step + count) % count
+        markMatch()
+    }
+
+    private func markMatch() {
+        let found = matches
+        guard !found.isEmpty else { return }
+        let hit = found[matchIndex % found.count]
+        if scrolledBySearch == nil { scrolledBySearch = Dictionary(uniqueKeysWithValues: displays.map { (ObjectIdentifier($0), $0.model.shift) }) }
+        displays.forEach { $0.model.select(nil) }
+        hit.display.model.select(hit.place)
+        scroll(hit.display, to: hit.display.model.shiftShowing(hit.place))
+        quietHover()
+    }
+
+    /// A key that is not one of the grid's: typed in the search bar (not with Command or Control held, and not the function keys, whose characters are private ones).
+    /// shortcut: the characters the key gives, so no input methods or dead keys; the text field does that, and gets the keys back with the next one.
+    private func type(_ event: NSEvent) {
+        guard phase == .open, !event.modifierFlags.contains(.command), !event.modifierFlags.contains(.control), let text = event.characters,
+              text.unicodeScalars.allSatisfy({ $0.value >= 0x20 && $0.value != 0x7F && !(0xF700...0xF8FF).contains($0.value) }) else { return }
+        search.query += text
+        searchChanged()
+        search.focusToken += 1
     }
 
     // MARK: Arrow keys
@@ -551,6 +661,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     private func refresh() {
         guard phase == .open, Date() >= slideEnds else { return }   // asking every zone for its cards takes a while: not in the middle of a slide
         displays.forEach { $0.model.zones.forEach { reload($0.id) } }
+        updateSearchCounts()
+        applyMatching()
         guard let current = opening else { return }
         if let zone = displays.lazy.flatMap(\.model.zones).first(where: { $0.id == current.zone }),
            let card = zone.model.cards.first(where: { $0.bundleID == current.bundleID && $0.windowID != nil }) {
@@ -570,7 +682,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         guard phase == .open, let (display, home) = displays.lazy.compactMap({ d in d.model.zones.first { $0.model === zone }.map { (d, $0) } }).first,
               let index = zone.cards.firstIndex(where: { $0.id == card.id }), zone.cells.indices.contains(index) else { return }
         let point = screens.pointerAX, cell = zone.cells[index]
-        grab = CGPoint(x: point.x - display.area.minX + display.model.shift - home.rect.minX - cell.midX, y: point.y - display.area.minY - home.rect.minY - cell.midY)
+        let inGrid = display.model.inGrid(CGPoint(x: point.x - display.area.minX, y: point.y - display.area.minY))
+        grab = CGPoint(x: inGrid.x + display.model.shift - home.rect.minX - cell.midX, y: inGrid.y - home.rect.minY - cell.midY)
         carrying = (card, home.id, zone.pictures[card.id], cell.size)
         shown = (cell.size, LayoutGridGhost.fits(zone.pictures[card.id], in: cell.size))
         edge = nil
@@ -592,7 +705,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         let point = screens.pointerAX
         guard let display = display(at: point) else { displays.forEach { $0.model.carry = nil }; return }
         displays.filter { $0 !== display }.forEach { $0.model.carry = nil }
-        let at = CGPoint(x: point.x - display.area.minX, y: point.y - display.area.minY)
+        let at = display.model.inGrid(CGPoint(x: point.x - display.area.minX, y: point.y - display.area.minY))
         // The card is where the mouse holds it, and it is the middle of the card that says which place it is over, as in the grid of one zone.
         let middle = CGPoint(x: at.x - grab.x, y: at.y - grab.y)
         var model = zoneModel(carried.zone), sized = false
@@ -847,6 +960,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// Everything goes back as it was, at once: the windows too.
     private func reset() {
         coordinator.holdsStill = false
+        search.query = ""
+        scrolledBySearch = nil
         stopWatching()
         timer?.invalidate()
         timer = nil
@@ -878,17 +993,28 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         let clicks: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
         monitors = [
             NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in if event.keyCode == 53 { self?.hide() } },
-            // The arrow keys move the mark, Return chooses, Escape closes; any other key is not let through to the window behind.
+            // The arrow keys move the mark (not while searching: they are the text field's then), Return chooses, Escape ends the search (the grid stays), then closes; Tab goes to the next match, other keys are typed in the search bar (by its text field, or by hand when a click took the keys from it, which it then gets back) and not let through to the window behind.
             NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
                 guard let self, displays.contains(where: { $0.panel === event.window }) else { return event }
+                // The search bar's text field has the keys while it is the first responder (it is, unless a click took them): it is let have the ones that are not the grid's.
+                let field = event.window?.firstResponder as? NSText
                 switch event.keyCode {
-                case 53: hide()
-                case 36, 76: choosePointed()
-                case 123: movePointer(toward: .left)
-                case 124: movePointer(toward: .right)
-                case 125: movePointer(toward: .down)
-                case 126: movePointer(toward: .up)
-                default: break
+                case 53: if field != nil || !search.query.isEmpty { exitSearch() } else { hide() }   // the search first, then the grid
+                case 36, 76:
+                    if (field as? NSTextInputClient)?.hasMarkedText() == true { return event }   // an input method's choice is made with Return
+                    choosePointed()
+                case 123, 124, 125, 126:
+                    // While searching the arrow keys are the text field's (the caret goes along the text); only with no search do they go from card to card.
+                    if field != nil { return event }
+                    if !search.query.isEmpty { search.focusToken += 1; break }   // a click took the keys from the field: it has them back for the next key
+                    movePointer(toward: [123: .left, 124: .right, 125: .down, 126: .up][event.keyCode] ?? .left)
+                case 48: stepMatch(by: event.modifierFlags.contains(.shift) ? -1 : 1)
+                case 51:
+                    if field != nil { return event }
+                    if !search.query.isEmpty { search.query.removeLast(); searchChanged() }
+                default:
+                    if field != nil { return event }
+                    type(event)
                 }
                 return nil
             },
@@ -907,4 +1033,3 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         monitors = []
     }
 }
-

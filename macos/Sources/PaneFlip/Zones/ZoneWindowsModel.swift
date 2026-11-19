@@ -32,6 +32,10 @@ final class ZoneWindowsModel {
     private(set) var settled = false
     /// The cards are on their way (the grid of the whole layout opening, closing or led by the fingers): the grid takes no pointer, so that nothing is hit-tested at every step.
     var sliding = false
+    /// The cards that match what is typed in the search bar of the grid of a whole layout: the others are dimmed. Nil: nothing is searched for.
+    var matching: Set<String>?
+    /// The pointer is not to take the mark while the cards move under it (a scroll the search made): they pass under a pointer that stays still.
+    @ObservationIgnored var ignoresHover = false
     /// The card the pointer is on.
     var hovered: String?
     /// The card that has the focus: the window in front of the zone. It has a frame in the accent colour, which stays on it while the cards are gone through.

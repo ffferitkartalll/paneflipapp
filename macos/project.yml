@@ -143,6 +143,7 @@ targets:
       - path: Sources/PaneFlip/Island/IslandWindow.swift
       - path: Sources/PaneFlip/Zones/LayoutGridModel.swift
       - path: Sources/PaneFlip/Zones/LayoutGridPlace.swift
+      - path: Sources/PaneFlip/Zones/LayoutGridSearch.swift
       - path: Sources/PaneFlip/Zones/LayoutGridGhost.swift
       - path: Sources/PaneFlip/Zones/ZoneCardCarrying.swift
       - path: Sources/PaneFlip/Zones/ZoneWindowsModel.swift
