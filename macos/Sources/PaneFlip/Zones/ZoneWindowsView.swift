@@ -20,7 +20,8 @@ struct ZoneWindowsView: View {
             // a picture (`outlinePicture`), except the place the carried card would be put down in, which is stronger and eases to it.
             let places = cells + model.emptyCells
             ZStack(alignment: .topLeading) {
-                if let picture = model.outlinePicture(of: places.enumerated().filter { $0.offset != target }.map(\.element)) {
+                // Every place, whatever the target: the picture stays the same while a card is carried, and the stronger line fades in over the target's and out again.
+                if let picture = model.outlinePicture(of: places) {
                     Image(decorative: picture, scale: 2).resizable().frame(width: model.size.width, height: model.size.height)
                         .modifier(AppearOpacity(model: model))   // on the picture itself: opacity on the whole group would be drawn in a pass of its own
                 }
@@ -30,6 +31,7 @@ struct ZoneWindowsView: View {
                         .frame(width: places[target].width, height: places[target].height)
                         .position(x: places[target].midX, y: places[target].midY)
                         .modifier(AppearOpacity(model: model))
+                        .id(target)   // a new line for each place: the old one fades out where it is and the new one fades in where it is, none slides
                         .transition(.opacity)
                 }
             }
