@@ -11,6 +11,9 @@ struct ZoneWindowsCard: View {
     /// False: the card shows the glyph of its app, as one that has no picture does.
     var showsPicture = true
     @State private var hoveredButton: IslandButton?
+    /// The buttons and the accent frame stay in the card while they fade out.
+    @State private var buttonsMounted = false
+    @State private var frameMounted = false
 
     /// How far the title and the buttons stand further inside the card than the island's cards have them: they lie on the picture, in the accent colour, and must be seen to
     /// belong to the card.
@@ -28,7 +31,7 @@ struct ZoneWindowsCard: View {
             } else {
                 RoundedRectangle(cornerRadius: radius).fill(.white.opacity(0.1))
                 if let glyph = card.glyph {
-                    Image(nsImage: glyph).renderingMode(.template).resizable().interpolation(.high).scaledToFit()
+                    (model.glyphPicture(glyph).map { Image(decorative: $0, scale: 2) } ?? Image(nsImage: glyph)).renderingMode(.template).resizable().interpolation(.high).scaledToFit()
                         .foregroundStyle(AppAccent.color)
                         .frame(width: Self.glyphSide(in: size), height: Self.glyphSide(in: size))
                         .frame(width: size.width, height: size.height)
@@ -41,19 +44,33 @@ struct ZoneWindowsCard: View {
         .clipShape(RoundedRectangle(cornerRadius: radius))
         // The edge and the shadow macOS gives a window that is not in focus, measured on one: a light line of 1 point inside the edge, a dark one outside it, and a shadow
         // (black at half, blurred 16, 5 points lower). They come with the cards: over its window the picture must not differ from it.
-        .overlay { RoundedRectangle(cornerRadius: radius).strokeBorder(.white.opacity(0.08 * model.appear), lineWidth: 1) }
-        .overlay { RoundedRectangle(cornerRadius: radius + 1).strokeBorder(.black.opacity(0.85 * model.appear), lineWidth: 1).padding(-1) }
+        .overlay {
+            ZStack {
+                RoundedRectangle(cornerRadius: radius).strokeBorder(.white.opacity(0.08), lineWidth: 1)
+                RoundedRectangle(cornerRadius: radius + 1).strokeBorder(.black.opacity(0.85), lineWidth: 1).padding(-1)
+            }
+            .modifier(AppearOpacity(model: model))
+        }
         // The shadow is cast by a plain shape behind the card, not by the picture: blurring a large picture again at every step of the slide made the grid late in showing.
-        .background { RoundedRectangle(cornerRadius: radius).fill(.black).shadow(color: .black.opacity(0.5 * model.appear), radius: 16, y: 5) }
+        // The shadow itself stays as it is and only its layer fades in: a blur whose colour changes is drawn again at every step of the slide, one that only fades is not.
+        .background { RoundedRectangle(cornerRadius: radius).fill(.black).shadow(color: .black.opacity(0.5), radius: 16, y: 5).modifier(AppearOpacity(model: model)) }
         // Two frames in the accent colour, which come and go softly (and with the cards: over its window the picture must not differ from it): the card with the focus
         // (the window in front) has the thickness of the frame that shows where the focus went between zones, the card to be chosen (under the pointer, or where the arrow keys
         // went) twice that: where the focus is, and where a click or Return would send it, are always told apart.
         .overlay {
             let focused = model.highlighted == card.id, pointed = (model.pointed == card.id || (focused && !(model.chosenAnywhere ?? (model.pointed != nil)))) && model.carried == nil
-            RoundedRectangle(cornerRadius: radius).strokeBorder(AppAccent.color, lineWidth: pointed ? 2 * ZoneFlash.lineWidth : ZoneFlash.lineWidth)
-                .opacity(model.appear * (focused || pointed ? 1 : 0))
-                .animation(.easeOut(duration: 0.15), value: focused)
-                .animation(.easeOut(duration: 0.15), value: pointed)
+            // Only a card with a frame (or one fading out) has it: the others have nothing to draw or to follow the slide with.
+            ZStack {
+                if focused || pointed || frameMounted {
+                    RoundedRectangle(cornerRadius: radius).strokeBorder(AppAccent.color, lineWidth: pointed ? 2 * ZoneFlash.lineWidth : ZoneFlash.lineWidth)
+                        .opacity(focused || pointed ? 1 : 0)
+                        .modifier(AppearOpacity(model: model))
+                        .transition(.opacity)
+                        .task(id: focused || pointed) { await keep(focused || pointed, for: 0.15) { frameMounted = $0 } }
+                }
+            }
+            .animation(.easeOut(duration: 0.15), value: focused)
+            .animation(.easeOut(duration: 0.15), value: pointed)
         }
         .onContinuousHover { phase in
             switch phase {
@@ -67,14 +84,32 @@ struct ZoneWindowsCard: View {
         }
     }
 
-    private var buttonsShown: Bool { model.appear >= 1 && model.hovered == card.id && model.carried == nil && card.hasButtons }
+    private var buttonsShown: Bool { model.settled && model.hovered == card.id && model.carried == nil && card.hasButtons }
 
-    /// The title of the window, over the top of its picture, between the buttons of the card (a narrow card shows it only while the buttons do not).
+    /// The title of the window, over the top of its picture, between the buttons of the card (a narrow card shows it only while the buttons do not). It is drawn once as a picture
+    /// (`titlePicture`): text and shadow drawn as they are would be painted again at every step the card is scaled in.
     private var title: some View {
         let rects = IslandCardAction.rects(in: size, among: card.actions).map(\.rect)
         let room = size.width - 2 * ((rects.filter { $0.midX < size.width / 2 }.map(\.maxX).max() ?? 4) + Self.inset + 6)
         let shown = room >= 60 || !buttonsShown
-        return Text(verbatim: card.caption)
+        let width = shown && buttonsShown ? max(room, 0) : max(size.width - 2 * (8 + Self.inset), 0)
+        // The picture has room round the label for its shadow.
+        let margin: CGFloat = 8
+        return Group {
+            if let picture = model.titlePicture("\(card.caption)|\(Int(width * 4))", content: { titleLabel(maxWidth: width).padding(margin) }) {
+                Image(decorative: picture, scale: 2)
+            } else {
+                titleLabel(maxWidth: width).padding(margin)
+            }
+        }
+        .frame(width: size.width, alignment: .top)
+        .padding(.top, 4 + Self.inset - margin)
+        .opacity(shown && model.settled ? 1 : 0)
+        .animation(.easeOut(duration: 0.12), value: shown && model.settled)
+    }
+
+    private func titleLabel(maxWidth: CGFloat) -> some View {
+        Text(verbatim: card.caption)
             .font(Font(NSFont.menuBarFont(ofSize: 0)))
             .foregroundStyle(AppAccent.ink)
             .lineLimit(1)
@@ -82,17 +117,33 @@ struct ZoneWindowsCard: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
             .background(Capsule().fill(AppAccent.color).shadow(color: .black.opacity(0.45), radius: 3, y: 1))
-            .frame(maxWidth: shown && buttonsShown ? max(room, 0) : max(size.width - 2 * (8 + Self.inset), 0))
-            .frame(width: size.width, alignment: .top)
-            .padding(.top, 4 + Self.inset)
-            .opacity(shown && model.appear >= 1 ? 1 : 0)
-            .animation(.easeOut(duration: 0.12), value: shown && model.appear >= 1)
+            .frame(maxWidth: maxWidth)
     }
 
     private static func fill(hover: Bool) -> Color { AppAccent.color.opacity(hover ? 1 : 0.85) }
 
-    /// The buttons of the card under the pointer, as the cards of the island's row have them.
+    /// Keeps a part that fades mounted until its fade has run out: mounted while `shown`, taken away `fade` after it was hidden (a show meanwhile cancels that), so that the
+    /// cards that do not show it have nothing of it in the grid.
+    private func keep(_ shown: Bool, for fade: TimeInterval, set: (Bool) -> Void) async {
+        guard !shown else { return set(true) }
+        try? await Task.sleep(for: .seconds(fade))
+        if !Task.isCancelled { set(false) }
+    }
+
+    /// The buttons of the card under the pointer, as the cards of the island's row have them; only that card has them (and one whose buttons are fading out).
     private var buttons: some View {
+        ZStack {
+            if buttonsShown || buttonsMounted {
+                buttonsDrawn
+                    .transition(.opacity)
+                    .task(id: buttonsShown) { await keep(buttonsShown, for: 0.12) { buttonsMounted = $0 } }
+                    .onDisappear { hoveredButton = nil }
+            }
+        }
+        .animation(.easeOut(duration: 0.12), value: buttonsShown)
+    }
+
+    private var buttonsDrawn: some View {
         ZStack(alignment: .topLeading) {
             ForEach(IslandCardAction.rects(in: size, among: card.actions), id: \.action) { item in
                 Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(AppAccent.ink)
@@ -119,6 +170,5 @@ struct ZoneWindowsCard: View {
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .opacity(buttonsShown ? 1 : 0)
-        .animation(.easeOut(duration: 0.12), value: buttonsShown)
     }
 }

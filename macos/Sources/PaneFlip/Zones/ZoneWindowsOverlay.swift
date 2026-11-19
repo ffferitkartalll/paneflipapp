@@ -40,8 +40,6 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
     private var lead: (from: CGFloat, heading: Bool, travel: CGFloat, lifted: Bool)?
     private var leadReady = false
     /// Until when the pictures catch up with fingers that went on before the pictures could move (`ready`), and how long that takes.
-    private var leadCatchUp: Date?
-    private static let catchUp: TimeInterval = 0.2
     /// The way the fingers went toward where the grid is heading, with its speed: a fast flick that way goes on as far as a long swipe does, as between the windows of a zone.
     private var leadScrub = ScrubGesture()
     /// The slides in progress, each with how far it takes the pictures and since when: a slide begun in the middle of another does not replace it, the two add up (as the
@@ -201,13 +199,17 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
 
     /// The pictures are over the windows and the windows are away (or cannot be): the grid opens, or, led by the fingers, follows them from here.
     private func ready() {
-        guard phase == .opening, let model else { return }
-        guard let current = lead else { return goOpen() }
+        guard phase == .opening, model != nil else { return }
+        guard var current = lead else { return goOpen() }
         leadReady = true
-        // The fingers went on while the windows were taken away: the pictures do not start where the fingers are, they catch up with them (or, the fingers up, go the whole way).
+        // The fingers lifted while the windows were taken away: the grid goes the way they sent it.
         guard !current.lifted else { return finishLead() }
-        leadCatchUp = Date().addingTimeInterval(Self.catchUp)
-        setAppear(leadValue(of: current, in: model), of: model)
+        // The fingers went on while the windows were taken away: that way is not followed (the pictures would jump to where the fingers are). They are the fingers' from here, from
+        // where they stand now; the swipe up that began it counts as the grid being on its way to open.
+        current.travel = 0
+        current.heading = true
+        lead = current
+        leadScrub = ScrubGesture()
     }
 
     /// The pictures slide to their places from where they are, and the grid is the keys' and the mouse's.
@@ -215,7 +217,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         guard phase != nil, let model else { return }
         phase = .open
         panel?.makeKey()   // the keys are the grid's now
-        slide(model, to: 1)
+        slide(model, to: 1) { [weak self] in if self?.phase == .open { self?.coordinator.holdsStill = true } }
         if timer == nil { timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in self?.refresh() } }
         if monitors.isEmpty { watch() }
     }
@@ -293,7 +295,6 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         guard let current = lead, let model, phase == .open || phase == .opening else { return lead = nil }
         lead = nil
         leadReady = false
-        leadCatchUp = nil
         let moved = current.travel / leadDistance(of: model)
         let opens = leadScrub.isFlick ? leadScrub.speed > 0 : abs(moved) >= Self.leadCommit ? moved > 0 : current.heading
         if opens { goOpen() } else { hide() }
@@ -304,9 +305,6 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
     private static let follow = Animation.interactiveSpring(response: 0.1, dampingFraction: 1)
 
     private func setAppear(_ value: CGFloat, of model: ZoneWindowsModel) {
-        // While they catch up the pictures glide to where the fingers are, in the time that is left of it: at its end they are with the fingers, and stay with them.
-        if let left = leadCatchUp?.timeIntervalSinceNow, left > 0.01 { return withAnimation(.easeOut(duration: left)) { model.appear = value } }
-        leadCatchUp = nil
         withAnimation(Self.follow) { model.appear = value }
     }
 
@@ -329,9 +327,9 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         }
         guard phase == .open, let model else { return }
         phase = .closing
+        coordinator.holdsStill = false
         lead = nil
         leadReady = false
-        leadCatchUp = nil
         stopWatching()
         timer?.invalidate()
         timer = nil
@@ -386,6 +384,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
 
     /// Everything goes back as it was, at once: the windows too (the zone is gone, or the grid is torn down).
     private func reset() {
+        coordinator.holdsStill = false
         stopWatching()
         timer?.invalidate()
         timer = nil
@@ -403,7 +402,6 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         opening = nil
         lead = nil
         leadReady = false
-        leadCatchUp = nil
         glides = []
         restoring = false
         if let again = reopen {

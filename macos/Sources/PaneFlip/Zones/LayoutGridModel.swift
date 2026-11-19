@@ -16,6 +16,8 @@ final class LayoutGridModel {
     /// How far the grid has been scrolled toward the screens beyond the right edge since it opened, in points (negative: toward the left), and the places it rests at.
     var shift: CGFloat = 0
     var rests: [CGFloat] = [0]
+    /// The zones of the screens beyond the edges are drawn: not while the cards slide (opening, closing), when they would be worked out at every step for nothing.
+    var drawsOffView = false
     /// The card the mouse carries, while the pointer is on this display.
     var carry: LayoutGridGhost?
     /// Where the display's usable area begins, in Accessibility coordinates; and the zone that had the focus when the grid opened.

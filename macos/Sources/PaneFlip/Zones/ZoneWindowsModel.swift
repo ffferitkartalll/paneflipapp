@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import Foundation
 import Observation
@@ -26,7 +27,11 @@ final class ZoneWindowsModel {
     /// The card whose picture lies over the others while they fly: the window in front, or, as the grid closes, the one chosen.
     var front: String?
     /// 0 with the pictures over their windows, 1 with the cards in their places: moved as the grid opens and closes.
-    var appear: CGFloat = 0
+    var appear: CGFloat = 0 { didSet { settled = appear >= 1 } }
+    /// The cards are in their places: what changes only then reads this, not `appear`, so it is not worked out at every step of the slide.
+    private(set) var settled = false
+    /// The cards are on their way (the grid of the whole layout opening, closing or led by the fingers): the grid takes no pointer, so that nothing is hit-tested at every step.
+    var sliding = false
     /// The card the pointer is on.
     var hovered: String?
     /// The card that has the focus: the window in front of the zone. It has a frame in the accent colour, which stays on it while the cards are gone through.
@@ -50,6 +55,29 @@ final class ZoneWindowsModel {
     @ObservationIgnored var tracksFocus = true
 
     // What the owner does with what is done in the grid.
+    /// The glyphs of the apps as pictures made once: an `NSImage` is turned into a picture again at every step of a slide when it is drawn as it is.
+    @ObservationIgnored private var glyphPictures: [ObjectIdentifier: (glyph: NSImage, picture: CGImage)] = [:]   // the glyph is kept, so that its identity is not reused
+    func glyphPicture(_ glyph: NSImage) -> CGImage? {
+        let key = ObjectIdentifier(glyph)
+        if let known = glyphPictures[key] { return known.picture }
+        guard let made = glyph.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+        glyphPictures[key] = (glyph, made)
+        return made
+    }
+    @ObservationIgnored private var titles: [String: CGImage] = [:]
+    /// The title of a card as a picture made once, for the caption and the width in `key`.
+    func titlePicture<V: View>(_ key: String, content: () -> V) -> CGImage? {
+        if let kept = titles[key] { return kept }
+        let made = MainActor.assumeIsolated { () -> CGImage? in
+            let renderer = ImageRenderer(content: content())
+            renderer.scale = 2
+            return renderer.cgImage
+        }
+        if titles.count > 64 { titles = [:] }
+        titles[key] = made
+        return made
+    }
+    @ObservationIgnored var outlines: (places: [CGRect], size: CGSize, picture: CGImage)?
     @ObservationIgnored var onPointed: () -> Void = {}
     @ObservationIgnored var onChoose: (IslandWindow) -> Void = { _ in }
     @ObservationIgnored var onPerform: (IslandCardAction, IslandWindow) -> Void = { _, _ in }

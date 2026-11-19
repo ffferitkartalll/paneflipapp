@@ -1123,11 +1123,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         glyph(bundleID: tab.bundleID, appName: tab.appName, icon: tab.icon)
     }
 
-    private func glyph(bundleID: String, appName: String, icon: NSImage?) -> NSImage {
+    private func glyph(bundleID: String, appName: String, icon: @autoclosure () -> NSImage?) -> NSImage {
         if glyphsRevision != iconFont.revision { glyphs = [:]; glyphsRevision = iconFont.revision }
         let key = bundleID.isEmpty ? appName : bundleID
         if let known = glyphs[key] { return known }
-        let made = iconFont.image(bundleID: bundleID, appName: appName, icon: icon ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
+        let made = iconFont.image(bundleID: bundleID, appName: appName, icon: icon() ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
         glyphs[key] = made
         return made
     }
@@ -1146,7 +1146,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         let tabs = Dictionary(stack.tabs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let openApps = Set(stack.tabs.map(\.bundleID))
         let slots = memory.slots(inZone: zone)
-        let running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
+        // Asking which apps run is a round trip to the system for each of them: only when a slot has no window (`running` is read then).
+        lazy var running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
         let starting = layout(of: zone)?.layout.startApps ?? []
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {

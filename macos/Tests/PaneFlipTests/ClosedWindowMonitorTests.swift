@@ -58,6 +58,16 @@ final class ClosedWindowMonitorTests: XCTestCase {
         XCTAssertEqual(looks.count, 1)
     }
 
+    func testAGridThatStandsStillLetsAClosedWindowBeFound() {
+        monitor.check()
+        coordinator.isScrolling = true
+        coordinator.holdsStill = true
+        monitor.check()
+        XCTAssertEqual(looks.count, 1)
+        answer()
+        XCTAssertEqual(held, 0)
+    }
+
     func testASlowListNeverStacksAnother() {
         monitor.check()
         monitor.check(); monitor.check()

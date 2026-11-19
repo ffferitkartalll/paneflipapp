@@ -15,6 +15,8 @@ final class ZoneNotches: ZonePresenting {
     private let source: ZoneCardSource
     private var panels: [UUID: NSPanel] = [:]
     private var models: [UUID: ZoneNotchModel] = [:]
+    /// Panels of notches put away while the zones are held (`putAway`), out of sight, for the next notches to be made in.
+    private var spare: [NSPanel] = []
     private var timer: Timer?
     private var mouseMonitor: Any?
     private var hoverMonitors: [Any] = []
@@ -183,7 +185,8 @@ final class ZoneNotches: ZonePresenting {
     func zonesDidChange() {
         litZone = coordinator.focusedZoneID
         guard !isCovered else { return }   // they fade away by themselves, and are laid out again when it is over
-        guard settings.values.placementEnabled, !coordinator.isScrolling else { return removeAll() }   // the scroll ends with a change of its own
+        guard settings.values.placementEnabled else { return removeAll() }
+        guard !coordinator.isScrolling else { return putAway() }   // the scroll ends with a change of its own
         let current = screensNow()
         var shown = Set<UUID>()
         // Only the zone with the focus has a notch, on whichever display (and the one that is grown, until it is back).
@@ -209,6 +212,7 @@ final class ZoneNotches: ZonePresenting {
             shown.insert(stack.id)
         }
         for id in panels.keys where !shown.contains(id) { remove(id) }
+        spare = []
         restack()
     }
 
@@ -644,8 +648,10 @@ final class ZoneNotches: ZonePresenting {
     }
 
     private func make(for zone: UUID) -> NSPanel {
-        let p = NSPanel(contentRect: CGRect(origin: .zero, size: NotchSize.hoverSize(forWindows: 1)), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        p.level = .normal   // among the windows, so that it can stand just above one of them
+        let p = spare.popLast() ?? NSPanel(contentRect: CGRect(origin: .zero, size: NotchSize.hoverSize(forWindows: 1)), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+        p.alphaValue = 1   // a panel put away may have been in the middle of a fade
+        // Among the windows, so that it can stand just above one of them. Set only when it differs: setting it asks the window server for the level it has.
+        if p.level != .normal { p.level = .normal }
         p.isOpaque = false
         p.backgroundColor = .clear
         p.hasShadow = false
@@ -678,5 +684,15 @@ final class ZoneNotches: ZonePresenting {
         if grown == zone { grown = nil }
     }
 
-    private func removeAll() { for id in Array(panels.keys) { remove(id) } }
+    private func removeAll() {
+        for id in Array(panels.keys) { remove(id) }
+        spare = []
+    }
+
+    /// While the zones are held (a scroll, a grid) the notches go as `removeAll` takes them, but their panels are kept for the notches that come back when it ends (`make`):
+    /// a new panel is a round trip to the window server.
+    private func putAway() {
+        spare += panels.values
+        for id in Array(panels.keys) { remove(id) }
+    }
 }

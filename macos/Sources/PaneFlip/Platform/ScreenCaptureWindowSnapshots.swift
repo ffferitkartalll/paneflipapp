@@ -10,8 +10,9 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
     func snapshots(of refs: [WindowRef], completion: @escaping ([CGWindowID: WindowPicture]) -> Void) {
         Task {
             let found = await windows.windows(refs.map(\.id), maxAge: 60)
+            let frames = Self.currentFrames(of: Array(found.keys))
             let pictures = await withTaskGroup(of: (CGWindowID, WindowPicture?).self) { group -> [CGWindowID: WindowPicture] in
-                for (id, window) in found { group.addTask { (id, await Self.picture(of: window)) } }
+                for (id, window) in found { group.addTask { (id, await Self.picture(of: window, frame: frames[id] ?? window.frame)) } }
                 var result: [CGWindowID: WindowPicture] = [:]
                 for await (id, picture) in group { if let picture { result[id] = picture } }
                 return result
@@ -20,7 +21,7 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
         }
     }
 
-    private static func picture(of window: SCWindow) async -> WindowPicture? {
+    private static func picture(of window: SCWindow, frame: CGRect) async -> WindowPicture? {
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let configuration = SCStreamConfiguration()
         let scale = CGFloat(filter.pointPixelScale)
@@ -33,15 +34,23 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
         configuration.backgroundColor = .clear
         guard let image = try? await SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration) else { return nil }
         let squared = WindowCorners.squared(image)
-        return WindowPicture(image: squared.image, frame: currentFrame(of: window), cornerRadius: CGFloat(squared.radius) / scale)
+        return WindowPicture(image: squared.image, frame: frame, cornerRadius: CGFloat(squared.radius) / scale)
     }
 
-    /// Where the window stands now. The list of windows is kept for up to a minute (`Windows`), so the frame it holds can be from a moment when the window waited at the display's
-    /// edge (a picture that starts from there, over nothing, while the real window goes): the window server is asked again, which is cheap for one window.
-    private static func currentFrame(of window: SCWindow) -> CGRect {
-        guard let info = (CGWindowListCopyWindowInfo(.optionIncludingWindow, window.windowID) as? [[String: Any]])?.first,
-              let bounds = info[kCGWindowBounds as String] as? [String: CGFloat],
-              let x = bounds["X"], let y = bounds["Y"], let width = bounds["Width"], let height = bounds["Height"] else { return window.frame }
-        return CGRect(x: x, y: y, width: width, height: height)
+    /// Where the windows stand now. The list of windows is kept for up to a minute (`Windows`), so the frame it holds can be from a moment when the window waited at the display's
+    /// edge (a picture that starts from there, over nothing, while the real window goes): the window server is asked again, once for all of them (a call for each is a round trip each).
+    private static func currentFrames(of ids: [CGWindowID]) -> [CGWindowID: CGRect] {
+        // The call wants the window numbers themselves as the array's values (not as numbers objects): with those it finds nothing.
+        var values: [UnsafeRawPointer?] = ids.map { UnsafeRawPointer(bitPattern: UInt($0)) }
+        guard !ids.isEmpty, let array = CFArrayCreate(nil, &values, values.count, nil),
+              let list = CGWindowListCreateDescriptionFromArray(array) as? [[String: Any]] else { return [:] }
+        var frames: [CGWindowID: CGRect] = [:]
+        for info in list {
+            guard let number = info[kCGWindowNumber as String] as? CGWindowID,
+                  let bounds = info[kCGWindowBounds as String] as? [String: CGFloat],
+                  let x = bounds["X"], let y = bounds["Y"], let width = bounds["Width"], let height = bounds["Height"] else { continue }
+            frames[number] = CGRect(x: x, y: y, width: width, height: height)
+        }
+        return frames
     }
 }

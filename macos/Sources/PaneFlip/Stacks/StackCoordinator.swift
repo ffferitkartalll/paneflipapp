@@ -78,6 +78,11 @@ final class StackCoordinator {
     /// A screen's layout is being scrolled: its windows follow the fingers, nothing else writes their frames or asks them
     /// anything, and the island follows.
     var isScrolling = false
+    /// A grid of windows (`ZoneWindowsOverlay`, `LayoutGridOverlay`) has the windows waiting at the display's edge and stands still: a window closed meanwhile is still found,
+    /// so its card turns into that of a closed window (`ClosedWindowMonitor`).
+    var holdsStill = false
+    /// Windows are in motion in a way that makes a look at the window list untrue: a scroll of the layout, a scrub or a slide, but not a grid that stands still.
+    var blocksClosedWindowCheck: Bool { windowScrub != nil || isSliding || (isScrolling && !holdsStill) }
     /// The grid of a zone's windows is open (`ZoneWindowsOverlay`): no way of switching the windows of a zone works (a shortcut, the wheel, the fingers, a card of the island or
     /// the notch); the grid chooses the window itself, with `select`.
     var switchLocked = false
