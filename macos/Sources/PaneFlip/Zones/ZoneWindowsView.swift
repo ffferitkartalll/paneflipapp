@@ -44,6 +44,8 @@ struct ZoneWindowsView: View {
                     // From over its window to the middle of its cell; a card with no window is not seen to move or grow: it comes into being in its cell, fading in.
                     ZoneWindowsCard(model: model, card: card, size: size)
                         .modifier(CardGlide(model: model, cell: cell, from: model.origins[card.id], carried: carried, hidden: carried && model.carrier != nil))
+                        .opacity(model.matching.map { $0.contains(card.id) ? 1 : 0.3 } ?? 1)
+                        .animation(.easeOut(duration: 0.15), value: model.matching)
                         .zIndex(carried ? 3 : (card.id == model.front ? 2 : (card.windowID == nil ? 0 : 1)))   // a card of an app that is not open lies behind the open ones as they slide
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("zone"))
                             .onChanged { model.dragged(card, from: $0.startLocation, to: $0.location) }

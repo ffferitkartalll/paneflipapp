@@ -97,4 +97,34 @@ final class LayoutGridModelTests: XCTestCase {
         XCTAssertEqual(empty.model.emptyCells.count, 4)
         XCTAssertEqual(model.zones[2].model.emptyCells.count, 1, "three cards in a grid of four places")
     }
+
+    func testTheZonesAreMadeLowerForTheSearchBarAndAPointerPointFindsItsPlaceInThem() {
+        XCTAssertEqual(model.room, 0, "a display without the search bar keeps its grid as it is")
+        model.showsSearch = true
+        model.barGap = 4
+        XCTAssertEqual(model.room, LayoutGridModel.searchBarHeight + 4)
+        let scale = (600 - model.room) / 600
+        XCTAssertEqual(model.gridScale, scale, accuracy: 0.0001)
+        // The top of the zones stands below the bar and its gap, the bottom where it was; the width is not changed.
+        XCTAssertEqual(model.inGrid(CGPoint(x: 123, y: model.room)).y, 0, accuracy: 0.001)
+        XCTAssertEqual(model.inGrid(CGPoint(x: 123, y: 600)).y, 600, accuracy: 0.001)
+        XCTAssertEqual(model.inGrid(CGPoint(x: 123, y: 300)).x, 123)
+    }
+
+    func testTheRoomIsCountedFromWhereTheZonesBeginWhenTheyKeepAwayFromTheEdge() {
+        model.zones = model.zones.map { LayoutGridZone(id: $0.id, rect: CGRect(x: $0.rect.minX, y: 10, width: 900, height: 580), model: $0.model) }
+        model.showsSearch = true
+        model.barGap = 4
+        // The top of the zones, 10 from the edge, goes down by the room; the bottom, 10 from the edge, stays.
+        XCTAssertEqual(model.inGrid(CGPoint(x: 0, y: 10 + model.room)).y, 10, accuracy: 0.001)
+        XCTAssertEqual(model.inGrid(CGPoint(x: 0, y: 590)).y, 590, accuracy: 0.001)
+    }
+
+    func testADisplayTooLowForTheSearchBarKeepsItsGridAsItIs() {
+        model.zones = model.zones.map { LayoutGridZone(id: $0.id, rect: CGRect(x: $0.rect.minX, y: 0, width: 900, height: 100), model: $0.model) }
+        model.showsSearch = true
+        XCTAssertEqual(model.room, 0)
+        XCTAssertEqual(model.gridScale, 1)
+        XCTAssertEqual(model.inGrid(CGPoint(x: 10, y: 20)), CGPoint(x: 10, y: 20))
+    }
 }

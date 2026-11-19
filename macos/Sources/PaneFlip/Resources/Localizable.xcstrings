@@ -282,6 +282,287 @@
         }
       }
     },
+    "%lld zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld مناطق"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld зони"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldটি জোন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zones"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zóny: %lld"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zoner"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Zonen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ζώνες"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zonas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld tsooni"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ناحیه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld aluetta"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zones"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld אזורים"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ज़ोन"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zona: %lld"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zóna"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zona"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーン %lld 個"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "영역 %lld개"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonų: %lld"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonas: %lld"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld झोन"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zon"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld soner"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zones"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strefy: %lld"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zonas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zonas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zone"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зон: %lld"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zóny: %lld"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Območij: %lld"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зона: %lld"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zoner"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld மண்டலங்கள்"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld జోన్‌లు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld โซน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bölge"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зон: %lld"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld زونز"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld vùng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 个区域"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 個區域"
+          }
+        }
+      }
+    },
     "A scene sets the layout of each display and where the windows of a display go when it is unplugged." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3369,287 +3650,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加入版面配置"
-          }
-        }
-      }
-    },
-    "The apps placed in the zones of this layout, in the order the island shows them. Drag an app by its handle to change the order, or move it to another zone." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "التطبيقات الموضوعة في مناطق هذا التخطيط، بالترتيب الذي تعرضه الجزيرة. اسحب تطبيقًا من مقبضه لتغيير الترتيب، أو انقله إلى منطقة أخرى."
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Приложенията в зоните на това оформление, в реда, в който ги показва островът. Плъзнете приложение за дръжката, за да смените реда, или го преместете в друга зона."
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "এই লেআউটের জোনে রাখা অ্যাপগুলি, আইল্যান্ড যে ক্রমে দেখায় সেই ক্রমে। ক্রম বদলাতে একটি অ্যাপকে হ্যান্ডেল ধরে টানুন, অথবা অন্য জোনে সরান।"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les aplicacions col·locades a les zones d'aquesta disposició, en l'ordre en què les mostra l'illa. Arrossega una aplicació per la nansa per canviar l'ordre, o mou-la a una altra zona."
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikace umístěné v zónách tohoto rozvržení v pořadí, v jakém je zobrazuje ostrov. Přetažením aplikace za úchyt změníte pořadí, nebo ji přesuňte do jiné zóny."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apps placeret i zonerne i dette layout, i den rækkefølge øen viser dem. Træk en app i dens håndtag for at ændre rækkefølgen, eller flyt den til en anden zone."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Apps in den Zonen dieses Layouts, in der Reihenfolge, in der die Insel sie zeigt. Ziehe eine App am Griff, um die Reihenfolge zu ändern, oder verschiebe sie in eine andere Zone."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Οι εφαρμογές στις ζώνες αυτής της διάταξης, με τη σειρά που τις εμφανίζει το νησί. Σύρετε μια εφαρμογή από τη λαβή για να αλλάξετε τη σειρά ή μετακινήστε την σε άλλη ζώνη."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las apps colocadas en las zonas de este diseño, en el orden en que las muestra la isla. Arrastra una app por su asa para cambiar el orden, o muévela a otra zona."
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selle paigutuse tsoonidesse paigutatud rakendused selles järjekorras, milles saar neid näitab. Järjekorra muutmiseks lohista rakendust käepidemest või liiguta see teise tsooni."
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "برنامه‌های قرار گرفته در ناحیه‌های این چیدمان، به ترتیبی که جزیره نشان می‌دهد. برای تغییر ترتیب، برنامه را از دستگیره بکشید یا به ناحیه‌ای دیگر ببرید."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tämän asettelun alueille sijoitetut sovellukset siinä järjestyksessä, jossa saari ne näyttää. Muuta järjestystä vetämällä sovellusta kahvasta tai siirrä se toiselle alueelle."
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ang mga app na nakalagay sa mga zone ng layout na ito, ayon sa pagkakasunod na ipinapakita ng island. I-drag ang app sa hawakan nito para baguhin ang pagkakasunod, o ilipat ito sa ibang zone."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les apps placées dans les zones de cette disposition, dans l'ordre où l'îlot les montre. Faites glisser une app par sa poignée pour changer l'ordre, ou déplacez-la vers une autre zone."
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "האפליקציות שהוצבו באזורי הפריסה הזו, לפי הסדר שבו האי מציג אותן. גררו אפליקציה בידית כדי לשנות את הסדר, או העבירו אותה לאזור אחר."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "इस लेआउट के ज़ोन में रखे गए ऐप, उसी क्रम में जिसमें आइलैंड उन्हें दिखाता है। क्रम बदलने के लिए किसी ऐप को हैंडल से खींचें, या उसे दूसरे ज़ोन में ले जाएँ।"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikacije smještene u zonama ovog rasporeda, redoslijedom kojim ih prikazuje otok. Povucite aplikaciju za ručku kako biste promijenili redoslijed ili je premjestite u drugu zonu."
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Az elrendezés zónáiba helyezett alkalmazások abban a sorrendben, ahogy a sziget mutatja őket. A sorrend módosításához húzza az alkalmazást a fogantyújánál fogva, vagy helyezze át másik zónába."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikasi yang ditempatkan di zona tata letak ini, sesuai urutan yang ditampilkan pulau. Seret aplikasi pada gagangnya untuk mengubah urutan, atau pindahkan ke zona lain."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le app collocate nelle zone di questo layout, nell'ordine in cui le mostra l'isola. Trascina un'app dalla maniglia per cambiare l'ordine, oppure spostala in un'altra zona."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このレイアウトのゾーンに置かれたアプリを、アイランドが表示する順に並べています。ハンドルをドラッグして順番を変えるか、別のゾーンへ移動できます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 레이아웃의 영역에 배치된 앱이 아일랜드에 표시되는 순서로 나열됩니다. 핸들을 끌어 순서를 바꾸거나 다른 영역으로 옮기세요."
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Šio išdėstymo zonose esančios programos tokia tvarka, kokia jas rodo sala. Vilkite programą už rankenėlės, kad pakeistumėte tvarką, arba perkelkite ją į kitą zoną."
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Šī izkārtojuma zonās novietotās lietotnes tādā secībā, kādā tās rāda sala. Velciet lietotni aiz roktura, lai mainītu secību, vai pārvietojiet to uz citu zonu."
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "या लेआउटच्या झोनमध्ये ठेवलेले अ‍ॅप्स, आयलंड ज्या क्रमाने दाखवतो त्या क्रमाने. क्रम बदलण्यासाठी अ‍ॅप हँडलने ओढा, किंवा दुसऱ्या झोनमध्ये हलवा."
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikasi yang diletakkan dalam zon reka letak ini, mengikut susunan yang dipaparkan oleh pulau. Seret aplikasi pada pemegangnya untuk menukar susunan, atau alihkannya ke zon lain."
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appene som er plassert i sonene i dette oppsettet, i den rekkefølgen øya viser dem. Dra en app i håndtaket for å endre rekkefølgen, eller flytt den til en annen sone."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De apps in de zones van deze indeling, in de volgorde waarin het eiland ze toont. Sleep een app aan de greep om de volgorde te wijzigen, of verplaats hem naar een andere zone."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikacje umieszczone w strefach tego układu, w kolejności, w jakiej pokazuje je wyspa. Przeciągnij aplikację za uchwyt, aby zmienić kolejność, lub przenieś ją do innej strefy."
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "As apps colocadas nas zonas deste esquema, pela ordem em que a ilha as mostra. Arraste uma app pela pega para mudar a ordem ou mova-a para outra zona."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Os apps colocados nas zonas deste layout, na ordem em que a ilha os mostra. Arraste um app pela alça para mudar a ordem ou mova-o para outra zona."
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplicațiile plasate în zonele acestei dispuneri, în ordinea în care le arată insula. Trageți o aplicație de mâner pentru a schimba ordinea sau mutați-o în altă zonă."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Приложения, размещённые в зонах этой раскладки, в том порядке, в котором их показывает остров. Перетащите приложение за ручку, чтобы изменить порядок, или переместите его в другую зону."
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikácie umiestnené v zónach tohto rozloženia v poradí, v akom ich zobrazuje ostrov. Potiahnutím aplikácie za úchyt zmeníte poradie alebo ju presuňte do inej zóny."
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplikacije, nameščene v conah te razporeditve, v vrstnem redu, v katerem jih prikazuje otok. Povlecite aplikacijo za ročaj, da spremenite vrstni red, ali jo premaknite v drugo cono."
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Апликације постављене у зонама овог распореда, редоследом којим их приказује острво. Превуците апликацију за ручицу да промените редослед или је преместите у другу зону."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apparna som är placerade i zonerna i den här layouten, i den ordning ön visar dem. Dra en app i handtaget för att ändra ordningen, eller flytta den till en annan zon."
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "இந்த லேஅவுட்டின் மண்டலங்களில் வைக்கப்பட்ட பயன்பாடுகள், தீவு காட்டும் வரிசையில். வரிசையை மாற்ற பயன்பாட்டை கைப்பிடியில் இழுக்கவும், அல்லது வேறு மண்டலத்திற்கு நகர்த்தவும்."
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ఈ లేఅవుట్ జోన్లలో ఉంచిన యాప్‌లు, ఐలాండ్ చూపే క్రమంలో. క్రమాన్ని మార్చడానికి యాప్‌ను హ్యాండిల్‌తో లాగండి, లేదా మరో జోన్‌కు తరలించండి."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "แอปที่วางไว้ในโซนของเลย์เอาต์นี้ ตามลำดับที่ไอส์แลนด์แสดง ลากแอปที่ที่จับเพื่อเปลี่ยนลำดับ หรือย้ายไปยังโซนอื่น"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu düzenin bölgelerine yerleştirilmiş uygulamalar, adanın gösterdiği sırayla. Sırayı değiştirmek için bir uygulamayı tutamacından sürükleyin ya da başka bir bölgeye taşıyın."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Застосунки, розміщені в зонах цієї розкладки, у порядку, в якому їх показує острів. Перетягніть застосунок за ручку, щоб змінити порядок, або перемістіть його в іншу зону."
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اس لے آؤٹ کے زونز میں رکھی گئی ایپس، اسی ترتیب میں جس میں آئی لینڈ انہیں دکھاتا ہے۔ ترتیب بدلنے کے لیے ایپ کو ہینڈل سے کھینچیں، یا اسے دوسرے زون میں منتقل کریں۔"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Các ứng dụng được đặt trong vùng của bố cục này, theo thứ tự đảo hiển thị. Kéo ứng dụng bằng tay nắm để đổi thứ tự, hoặc chuyển nó sang vùng khác."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "放置在此布局各区域中的应用，按岛显示的顺序排列。拖动手柄可更改顺序，也可将应用移到其他区域。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "放置在此版面各區域中的 App，依島嶼顯示的順序排列。拖曳握把可變更順序，也可將 App 移到其他區域。"
           }
         }
       }
@@ -37374,287 +37374,6 @@
         }
       }
     },
-    "Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out. Not for the layout in use: its apps are changed in the island and the grid view." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "انقر بزر الماوس الأيمن على تخطيط لرؤية التطبيقات في مناطقه، أو تغيير ترتيبها، أو نقلها إلى منطقة أخرى، أو إخراجها. هذا لا ينطبق على التخطيط قيد الاستخدام: تُغيَّر تطبيقاته من الجزيرة وعرض الشبكة."
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Щракнете с десния бутон върху оформление, за да видите приложенията в зоните му, да смените реда им, да ги преместите в друга зона или да ги премахнете. Не и за оформлението в употреба: приложенията му се променят от острова и от изгледа в мрежа."
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "কোনো লেআউটে রাইট-ক্লিক করে তার জোনের অ্যাপগুলো দেখুন, ক্রম বদলান, অন্য জোনে সরান বা সরিয়ে দিন। ব্যবহারে থাকা লেআউটের জন্য নয়: তার অ্যাপ আইল্যান্ড ও গ্রিড ভিউ থেকে বদলাতে হয়।"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feu clic amb el botó dret en una disposició per veure les aplicacions de les seves zones, canviar-ne l'ordre, moure-les a una altra zona o treure-les. No és per a la disposició en ús: les seves aplicacions es canvien a l'illa i a la vista de graella."
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klikněte pravým tlačítkem na rozvržení, abyste viděli aplikace v jeho zónách, změnili jejich pořadí, přesunuli je do jiné zóny nebo je odebrali. Neplatí pro rozvržení, které se právě používá: jeho aplikace se mění na ostrově a v zobrazení mřížky."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højreklik på et layout for at se apps i dets zoner, ændre deres rækkefølge, flytte dem til en anden zone eller fjerne dem. Ikke for det layout, der er i brug: dets apps ændres i øen og i gittervisningen."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klicke mit der rechten Maustaste auf ein Layout, um die Apps in seinen Zonen zu sehen, ihre Reihenfolge zu ändern, sie in eine andere Zone zu verschieben oder zu entfernen. Nicht für das Layout in Benutzung: seine Apps änderst du in der Insel und in der Rasteransicht."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Κάντε δεξί κλικ σε μια διάταξη για να δείτε τις εφαρμογές στις ζώνες της, να αλλάξετε τη σειρά τους, να τις μετακινήσετε σε άλλη ζώνη ή να τις αφαιρέσετε. Όχι για τη διάταξη που χρησιμοποιείται: οι εφαρμογές της αλλάζουν από το νησί και την προβολή πλέγματος."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haz clic derecho en un diseño para ver las apps de sus zonas, cambiar su orden, moverlas a otra zona o quitarlas. No para el diseño en uso: sus apps se cambian en la isla y en la vista de cuadrícula."
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paremklõpsake paigutusel, et näha selle tsoonide rakendusi, muuta nende järjekorda, liigutada need teise tsooni või eemaldada. Mitte kasutusel oleva paigutuse jaoks: selle rakendusi muudetakse saarel ja ruudustikuvaates."
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "روی یک چیدمان راست‌کلیک کنید تا برنامه‌های منطقه‌هایش را ببینید، ترتیب آن‌ها را عوض کنید، به منطقهٔ دیگری ببرید یا بردارید. برای چیدمانی که در حال استفاده است نه: برنامه‌هایش از جزیره و نمای شبکه‌ای تغییر می‌کنند."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Napsauta asettelua hiiren kakkospainikkeella nähdäksesi sen vyöhykkeiden sovellukset, muuttaaksesi niiden järjestystä, siirtääksesi ne toiseen vyöhykkeeseen tai poistaaksesi ne. Ei käytössä olevalle asettelulle: sen sovelluksia muutetaan saarella ja ruudukkonäkymässä."
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mag-right-click sa isang layout para makita ang mga app sa mga zone nito, baguhin ang pagkakasunod-sunod, ilipat sa ibang zone o alisin. Hindi para sa layout na ginagamit: ang mga app nito ay binabago sa island at sa grid view."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Faites un clic droit sur une disposition pour voir les apps de ses zones, changer leur ordre, les déplacer dans une autre zone ou les retirer. Pas pour la disposition en cours d'utilisation : ses apps se modifient dans l'îlot et dans la vue en grille."
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "לחצו לחיצה ימנית על פריסה כדי לראות את האפליקציות באזורים שלה, לשנות את הסדר שלהן, להעביר אותן לאזור אחר או להוציא אותן. לא עבור הפריסה שבשימוש: את האפליקציות שלה משנים באי ובתצוגת הרשת."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "किसी लेआउट पर राइट-क्लिक करके उसके ज़ोन के ऐप्स देखें, उनका क्रम बदलें, उन्हें दूसरे ज़ोन में ले जाएँ या हटाएँ। उपयोग में चल रहे लेआउट के लिए नहीं: उसके ऐप्स आइलैंड और ग्रिड व्यू में बदले जाते हैं।"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desnom tipkom miša kliknite raspored da vidite aplikacije u njegovim zonama, promijenite njihov redoslijed, premjestite ih u drugu zonu ili ih uklonite. Ne vrijedi za raspored koji je u upotrebi: njegove se aplikacije mijenjaju na otoku i u prikazu mreže."
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kattintson jobb gombbal egy elrendezésre, hogy lássa a zónáiban lévő alkalmazásokat, módosítsa a sorrendjüket, áthelyezze őket másik zónába, vagy eltávolítsa őket. A használatban lévő elrendezésre nem érvényes: az alkalmazásait a szigeten és a rácsnézetben módosíthatja."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klik kanan pada tata letak untuk melihat app di zonanya, mengubah urutannya, memindahkannya ke zona lain, atau mengeluarkannya. Tidak untuk tata letak yang sedang digunakan: app-nya diubah di pulau dan tampilan kisi."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fai clic destro su un layout per vedere le app nelle sue zone, cambiarne l'ordine, spostarle in un'altra zona o rimuoverle. Non per il layout in uso: le sue app si cambiano nell'isola e nella vista a griglia."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "レイアウトを右クリックすると、そのゾーンにあるAppの確認、順番の変更、別のゾーンへの移動、取り除きができます。使用中のレイアウトでは使えません。そのAppはアイランドとグリッド表示で変更します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "레이아웃을 마우스 오른쪽 버튼으로 클릭하면 해당 영역의 앱을 보고, 순서를 바꾸고, 다른 영역으로 옮기거나 제거할 수 있습니다. 사용 중인 레이아웃에서는 사용할 수 없습니다. 해당 앱은 아일랜드와 그리드 보기에서 변경합니다."
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spustelėkite išdėstymą dešiniuoju pelės mygtuku, kad pamatytumėte jo zonų programas, pakeistumėte jų tvarką, perkeltumėte į kitą zoną arba pašalintumėte. Tai netaikoma naudojamam išdėstymui: jo programos keičiamos saloje ir tinklelio rodinyje."
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ar peles labo pogu noklikšķiniet uz izkārtojuma, lai redzētu tā zonu lietotnes, mainītu to secību, pārvietotu uz citu zonu vai noņemtu. Tas neattiecas uz izmantoto izkārtojumu: tā lietotnes maina salā un režģa skatā."
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "एखाद्या लेआउटवर राईट-क्लिक करून त्याच्या झोनमधील अॅप्स पाहा, त्यांचा क्रम बदला, दुसऱ्या झोनमध्ये हलवा किंवा काढून टाका. वापरात असलेल्या लेआउटसाठी नाही: त्याचे अॅप्स आयलंड आणि ग्रिड व्ह्यूमध्ये बदलता येतात."
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klik kanan pada reka letak untuk melihat apl dalam zonnya, menukar susunannya, mengalihkannya ke zon lain atau mengeluarkannya. Tidak untuk reka letak yang sedang digunakan: aplnya diubah di pulau dan paparan grid."
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Høyreklikk på en layout for å se appene i sonene, endre rekkefølgen, flytte dem til en annen sone eller fjerne dem. Ikke for layouten som er i bruk: appene endres i øya og rutenettvisningen."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klik met de rechtermuisknop op een indeling om de apps in de zones te zien, de volgorde te wijzigen, ze naar een andere zone te verplaatsen of ze te verwijderen. Niet voor de indeling die in gebruik is: de apps ervan wijzig je in het eiland en de rasterweergave."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kliknij układ prawym przyciskiem myszy, aby zobaczyć aplikacje w jego strefach, zmienić ich kolejność, przenieść je do innej strefy lub usunąć. Nie dotyczy układu, który jest w użyciu: jego aplikacje zmienia się na wyspie i w widoku siatki."
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clique com o botão direito num esquema para ver as apps das suas zonas, alterar a ordem, movê-las para outra zona ou retirá-las. Não para o esquema em uso: as suas apps alteram-se na ilha e na vista em grelha."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clique com o botão direito em um layout para ver os apps das suas zonas, mudar a ordem, movê-los para outra zona ou retirá-los. Não vale para o layout em uso: os apps dele são alterados na ilha e na visualização em grade."
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Faceți clic dreapta pe un aspect pentru a vedea aplicațiile din zonele lui, a le schimba ordinea, a le muta în altă zonă sau a le scoate. Nu pentru aspectul în uz: aplicațiile lui se schimbă în insulă și în vizualizarea grilă."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нажмите правой кнопкой мыши на макет, чтобы увидеть приложения в его зонах, изменить их порядок, переместить в другую зону или убрать. Не для макета, который используется: его приложения меняются на острове и в режиме сетки."
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kliknite pravým tlačidlom na rozloženie, aby ste videli aplikácie v jeho zónach, zmenili ich poradie, presunuli ich do inej zóny alebo ich odstránili. Neplatí pre rozloženie, ktoré sa používa: jeho aplikácie sa menia na ostrove a v zobrazení mriežky."
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Z desnim klikom na razporeditev si oglejte aplikacije v njenih conah, spremenite njihovo zaporedje, jih premaknite v drugo cono ali odstranite. Ne velja za razporeditev, ki je v uporabi: njene aplikacije spremenite na otoku in v pogledu mreže."
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Кликните десним тастером миша на распоред да видите апликације у његовим зонама, промените њихов редослед, преместите их у другу зону или их уклоните. Не важи за распоред који је у употреби: његове апликације се мењају на острву и у приказу мреже."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Högerklicka på en layout för att se apparna i dess zoner, ändra ordningen, flytta dem till en annan zon eller ta bort dem. Inte för layouten som används: dess appar ändras i ön och i rutnätsvyn."
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ஒரு லேஅவுட்டில் வலது-கிளிக் செய்து அதன் மண்டலங்களிலுள்ள ஆப்ஸைப் பார்க்கலாம், வரிசையை மாற்றலாம், வேறு மண்டலத்துக்கு நகர்த்தலாம் அல்லது நீக்கலாம். பயன்பாட்டில் உள்ள லேஅவுட்டுக்கு இல்லை: அதன் ஆப்ஸ் தீவிலும் கிரிட் வியூவிலும் மாற்றப்படும்."
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "లేఅవుట్‌పై రైట్-క్లిక్ చేసి దాని జోన్‌లలోని యాప్‌లను చూడండి, క్రమాన్ని మార్చండి, మరొక జోన్‌కు తరలించండి లేదా తొలగించండి. వాడుకలో ఉన్న లేఅవుట్‌కు కాదు: దాని యాప్‌లను ఐలాండ్‌లో, గ్రిడ్ వ్యూలో మార్చవచ్చు."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "คลิกขวาที่เลย์เอาต์เพื่อดูแอปในโซนของเลย์เอาต์นั้น เปลี่ยนลำดับ ย้ายไปโซนอื่น หรือนำออก ใช้ไม่ได้กับเลย์เอาต์ที่กำลังใช้งาน: แอปของเลย์เอาต์นั้นเปลี่ยนได้ที่เกาะและมุมมองตาราง"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bir düzenin bölgelerindeki uygulamaları görmek, sıralarını değiştirmek, başka bir bölgeye taşımak veya çıkarmak için düzene sağ tıklayın. Kullanımdaki düzen için geçerli değildir: onun uygulamaları adada ve ızgara görünümünde değiştirilir."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Клацніть правою кнопкою миші макет, щоб побачити застосунки в його зонах, змінити їхній порядок, перемістити в іншу зону або прибрати. Не для макета, що використовується: його застосунки змінюють на острові та в режимі сітки."
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "کسی لے آؤٹ پر رائٹ کلک کر کے اس کے زونز کی ایپس دیکھیں، ان کی ترتیب بدلیں، انہیں دوسرے زون میں منتقل کریں یا ہٹا دیں۔ زیرِ استعمال لے آؤٹ کے لیے نہیں: اس کی ایپس جزیرے اور گرڈ ویو میں بدلی جاتی ہیں۔"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nhấp chuột phải vào một bố cục để xem các ứng dụng trong vùng của nó, đổi thứ tự, chuyển sang vùng khác hoặc gỡ ra. Không áp dụng cho bố cục đang dùng: ứng dụng của nó được đổi trong đảo và chế độ lưới."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右键点按布局，可查看其区域中的App、更改顺序、移到其他区域或移除。正在使用的布局除外：其App在灵动岛和网格视图中更改。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "對版面配置按一下滑鼠右鍵，即可檢視其區域中的 App、更改順序、移到其他區域或移除。使用中的版面配置除外：其 App 在島嶼與格狀檢視中更改。"
-          }
-        }
-      }
-    },
     "Return" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37932,6 +37651,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "換行"
+          }
+        }
+      }
+    },
+    "Right-click a layout to see the apps in its zones, change their order, move them to another zone or take them out. Not for the layout in use: its apps are changed in the island and the grid view." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انقر بزر الماوس الأيمن على تخطيط لرؤية التطبيقات في مناطقه، أو تغيير ترتيبها، أو نقلها إلى منطقة أخرى، أو إخراجها. هذا لا ينطبق على التخطيط قيد الاستخدام: تُغيَّر تطبيقاته من الجزيرة وعرض الشبكة."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щракнете с десния бутон върху оформление, за да видите приложенията в зоните му, да смените реда им, да ги преместите в друга зона или да ги премахнете. Не и за оформлението в употреба: приложенията му се променят от острова и от изгледа в мрежа."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "কোনো লেআউটে রাইট-ক্লিক করে তার জোনের অ্যাপগুলো দেখুন, ক্রম বদলান, অন্য জোনে সরান বা সরিয়ে দিন। ব্যবহারে থাকা লেআউটের জন্য নয়: তার অ্যাপ আইল্যান্ড ও গ্রিড ভিউ থেকে বদলাতে হয়।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feu clic amb el botó dret en una disposició per veure les aplicacions de les seves zones, canviar-ne l'ordre, moure-les a una altra zona o treure-les. No és per a la disposició en ús: les seves aplicacions es canvien a l'illa i a la vista de graella."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klikněte pravým tlačítkem na rozvržení, abyste viděli aplikace v jeho zónách, změnili jejich pořadí, přesunuli je do jiné zóny nebo je odebrali. Neplatí pro rozvržení, které se právě používá: jeho aplikace se mění na ostrově a v zobrazení mřížky."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Højreklik på et layout for at se apps i dets zoner, ændre deres rækkefølge, flytte dem til en anden zone eller fjerne dem. Ikke for det layout, der er i brug: dets apps ændres i øen og i gittervisningen."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klicke mit der rechten Maustaste auf ein Layout, um die Apps in seinen Zonen zu sehen, ihre Reihenfolge zu ändern, sie in eine andere Zone zu verschieben oder zu entfernen. Nicht für das Layout in Benutzung: seine Apps änderst du in der Insel und in der Rasteransicht."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάντε δεξί κλικ σε μια διάταξη για να δείτε τις εφαρμογές στις ζώνες της, να αλλάξετε τη σειρά τους, να τις μετακινήσετε σε άλλη ζώνη ή να τις αφαιρέσετε. Όχι για τη διάταξη που χρησιμοποιείται: οι εφαρμογές της αλλάζουν από το νησί και την προβολή πλέγματος."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz clic derecho en un diseño para ver las apps de sus zonas, cambiar su orden, moverlas a otra zona o quitarlas. No para el diseño en uso: sus apps se cambian en la isla y en la vista de cuadrícula."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paremklõpsake paigutusel, et näha selle tsoonide rakendusi, muuta nende järjekorda, liigutada need teise tsooni või eemaldada. Mitte kasutusel oleva paigutuse jaoks: selle rakendusi muudetakse saarel ja ruudustikuvaates."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "روی یک چیدمان راست‌کلیک کنید تا برنامه‌های منطقه‌هایش را ببینید، ترتیب آن‌ها را عوض کنید، به منطقهٔ دیگری ببرید یا بردارید. برای چیدمانی که در حال استفاده است نه: برنامه‌هایش از جزیره و نمای شبکه‌ای تغییر می‌کنند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Napsauta asettelua hiiren kakkospainikkeella nähdäksesi sen vyöhykkeiden sovellukset, muuttaaksesi niiden järjestystä, siirtääksesi ne toiseen vyöhykkeeseen tai poistaaksesi ne. Ei käytössä olevalle asettelulle: sen sovelluksia muutetaan saarella ja ruudukkonäkymässä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mag-right-click sa isang layout para makita ang mga app sa mga zone nito, baguhin ang pagkakasunod-sunod, ilipat sa ibang zone o alisin. Hindi para sa layout na ginagamit: ang mga app nito ay binabago sa island at sa grid view."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites un clic droit sur une disposition pour voir les apps de ses zones, changer leur ordre, les déplacer dans une autre zone ou les retirer. Pas pour la disposition en cours d'utilisation : ses apps se modifient dans l'îlot et dans la vue en grille."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לחצו לחיצה ימנית על פריסה כדי לראות את האפליקציות באזורים שלה, לשנות את הסדר שלהן, להעביר אותן לאזור אחר או להוציא אותן. לא עבור הפריסה שבשימוש: את האפליקציות שלה משנים באי ובתצוגת הרשת."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी लेआउट पर राइट-क्लिक करके उसके ज़ोन के ऐप्स देखें, उनका क्रम बदलें, उन्हें दूसरे ज़ोन में ले जाएँ या हटाएँ। उपयोग में चल रहे लेआउट के लिए नहीं: उसके ऐप्स आइलैंड और ग्रिड व्यू में बदले जाते हैं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desnom tipkom miša kliknite raspored da vidite aplikacije u njegovim zonama, promijenite njihov redoslijed, premjestite ih u drugu zonu ili ih uklonite. Ne vrijedi za raspored koji je u upotrebi: njegove se aplikacije mijenjaju na otoku i u prikazu mreže."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kattintson jobb gombbal egy elrendezésre, hogy lássa a zónáiban lévő alkalmazásokat, módosítsa a sorrendjüket, áthelyezze őket másik zónába, vagy eltávolítsa őket. A használatban lévő elrendezésre nem érvényes: az alkalmazásait a szigeten és a rácsnézetben módosíthatja."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik kanan pada tata letak untuk melihat app di zonanya, mengubah urutannya, memindahkannya ke zona lain, atau mengeluarkannya. Tidak untuk tata letak yang sedang digunakan: app-nya diubah di pulau dan tampilan kisi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai clic destro su un layout per vedere le app nelle sue zone, cambiarne l'ordine, spostarle in un'altra zona o rimuoverle. Non per il layout in uso: le sue app si cambiano nell'isola e nella vista a griglia."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レイアウトを右クリックすると、そのゾーンにあるAppの確認、順番の変更、別のゾーンへの移動、取り除きができます。使用中のレイアウトでは使えません。そのAppはアイランドとグリッド表示で変更します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레이아웃을 마우스 오른쪽 버튼으로 클릭하면 해당 영역의 앱을 보고, 순서를 바꾸고, 다른 영역으로 옮기거나 제거할 수 있습니다. 사용 중인 레이아웃에서는 사용할 수 없습니다. 해당 앱은 아일랜드와 그리드 보기에서 변경합니다."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spustelėkite išdėstymą dešiniuoju pelės mygtuku, kad pamatytumėte jo zonų programas, pakeistumėte jų tvarką, perkeltumėte į kitą zoną arba pašalintumėte. Tai netaikoma naudojamam išdėstymui: jo programos keičiamos saloje ir tinklelio rodinyje."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ar peles labo pogu noklikšķiniet uz izkārtojuma, lai redzētu tā zonu lietotnes, mainītu to secību, pārvietotu uz citu zonu vai noņemtu. Tas neattiecas uz izmantoto izkārtojumu: tā lietotnes maina salā un režģa skatā."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एखाद्या लेआउटवर राईट-क्लिक करून त्याच्या झोनमधील अॅप्स पाहा, त्यांचा क्रम बदला, दुसऱ्या झोनमध्ये हलवा किंवा काढून टाका. वापरात असलेल्या लेआउटसाठी नाही: त्याचे अॅप्स आयलंड आणि ग्रिड व्ह्यूमध्ये बदलता येतात."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik kanan pada reka letak untuk melihat apl dalam zonnya, menukar susunannya, mengalihkannya ke zon lain atau mengeluarkannya. Tidak untuk reka letak yang sedang digunakan: aplnya diubah di pulau dan paparan grid."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Høyreklikk på en layout for å se appene i sonene, endre rekkefølgen, flytte dem til en annen sone eller fjerne dem. Ikke for layouten som er i bruk: appene endres i øya og rutenettvisningen."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik met de rechtermuisknop op een indeling om de apps in de zones te zien, de volgorde te wijzigen, ze naar een andere zone te verplaatsen of ze te verwijderen. Niet voor de indeling die in gebruik is: de apps ervan wijzig je in het eiland en de rasterweergave."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknij układ prawym przyciskiem myszy, aby zobaczyć aplikacje w jego strefach, zmienić ich kolejność, przenieść je do innej strefy lub usunąć. Nie dotyczy układu, który jest w użyciu: jego aplikacje zmienia się na wyspie i w widoku siatki."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique com o botão direito num esquema para ver as apps das suas zonas, alterar a ordem, movê-las para outra zona ou retirá-las. Não para o esquema em uso: as suas apps alteram-se na ilha e na vista em grelha."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique com o botão direito em um layout para ver os apps das suas zonas, mudar a ordem, movê-los para outra zona ou retirá-los. Não vale para o layout em uso: os apps dele são alterados na ilha e na visualização em grade."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faceți clic dreapta pe un aspect pentru a vedea aplicațiile din zonele lui, a le schimba ordinea, a le muta în altă zonă sau a le scoate. Nu pentru aspectul în uz: aplicațiile lui se schimbă în insulă și în vizualizarea grilă."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите правой кнопкой мыши на макет, чтобы увидеть приложения в его зонах, изменить их порядок, переместить в другую зону или убрать. Не для макета, который используется: его приложения меняются на острове и в режиме сетки."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknite pravým tlačidlom na rozloženie, aby ste videli aplikácie v jeho zónach, zmenili ich poradie, presunuli ich do inej zóny alebo ich odstránili. Neplatí pre rozloženie, ktoré sa používa: jeho aplikácie sa menia na ostrove a v zobrazení mriežky."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z desnim klikom na razporeditev si oglejte aplikacije v njenih conah, spremenite njihovo zaporedje, jih premaknite v drugo cono ali odstranite. Ne velja za razporeditev, ki je v uporabi: njene aplikacije spremenite na otoku in v pogledu mreže."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кликните десним тастером миша на распоред да видите апликације у његовим зонама, промените њихов редослед, преместите их у другу зону или их уклоните. Не важи за распоред који је у употреби: његове апликације се мењају на острву и у приказу мреже."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Högerklicka på en layout för att se apparna i dess zoner, ändra ordningen, flytta dem till en annan zon eller ta bort dem. Inte för layouten som används: dess appar ändras i ön och i rutnätsvyn."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ஒரு லேஅவுட்டில் வலது-கிளிக் செய்து அதன் மண்டலங்களிலுள்ள ஆப்ஸைப் பார்க்கலாம், வரிசையை மாற்றலாம், வேறு மண்டலத்துக்கு நகர்த்தலாம் அல்லது நீக்கலாம். பயன்பாட்டில் உள்ள லேஅவுட்டுக்கு இல்லை: அதன் ஆப்ஸ் தீவிலும் கிரிட் வியூவிலும் மாற்றப்படும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "లేఅవుట్‌పై రైట్-క్లిక్ చేసి దాని జోన్‌లలోని యాప్‌లను చూడండి, క్రమాన్ని మార్చండి, మరొక జోన్‌కు తరలించండి లేదా తొలగించండి. వాడుకలో ఉన్న లేఅవుట్‌కు కాదు: దాని యాప్‌లను ఐలాండ్‌లో, గ్రిడ్ వ్యూలో మార్చవచ్చు."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คลิกขวาที่เลย์เอาต์เพื่อดูแอปในโซนของเลย์เอาต์นั้น เปลี่ยนลำดับ ย้ายไปโซนอื่น หรือนำออก ใช้ไม่ได้กับเลย์เอาต์ที่กำลังใช้งาน: แอปของเลย์เอาต์นั้นเปลี่ยนได้ที่เกาะและมุมมองตาราง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir düzenin bölgelerindeki uygulamaları görmek, sıralarını değiştirmek, başka bir bölgeye taşımak veya çıkarmak için düzene sağ tıklayın. Kullanımdaki düzen için geçerli değildir: onun uygulamaları adada ve ızgara görünümünde değiştirilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Клацніть правою кнопкою миші макет, щоб побачити застосунки в його зонах, змінити їхній порядок, перемістити в іншу зону або прибрати. Не для макета, що використовується: його застосунки змінюють на острові та в режимі сітки."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کسی لے آؤٹ پر رائٹ کلک کر کے اس کے زونز کی ایپس دیکھیں، ان کی ترتیب بدلیں، انہیں دوسرے زون میں منتقل کریں یا ہٹا دیں۔ زیرِ استعمال لے آؤٹ کے لیے نہیں: اس کی ایپس جزیرے اور گرڈ ویو میں بدلی جاتی ہیں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấp chuột phải vào một bố cục để xem các ứng dụng trong vùng của nó, đổi thứ tự, chuyển sang vùng khác hoặc gỡ ra. Không áp dụng cho bố cục đang dùng: ứng dụng của nó được đổi trong đảo và chế độ lưới."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右键点按布局，可查看其区域中的App、更改顺序、移到其他区域或移除。正在使用的布局除外：其App在灵动岛和网格视图中更改。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "對版面配置按一下滑鼠右鍵，即可檢視其區域中的 App、更改順序、移到其他區域或移除。使用中的版面配置除外：其 App 在島嶼與格狀檢視中更改。"
           }
         }
       }
@@ -40746,6 +40746,287 @@
         }
       }
     },
+    "Search windows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابحث في النوافذ"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Търсене на прозорци"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডো খুঁজুন"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca finestres"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hledat okna"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søg efter vinduer"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster suchen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση παραθύρων"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar ventanas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi aknaid"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جستجوی پنجره‌ها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hae ikkunoita"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maghanap ng window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher des fenêtres"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חיפוש חלונות"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो खोजें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traži prozore"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablakok keresése"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca finestre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウを検索"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 검색"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieškoti langų"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meklēt logus"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो शोधा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk etter vinduer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vensters zoeken"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Szukaj okien"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pesquisar janelas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar janelas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caută ferestre"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск окон"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hľadať okná"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iskanje oken"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тражи прозоре"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sök fönster"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரங்களைத் தேடு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోలను శోధించండి"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ค้นหาหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencere ara"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пошук вікон"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈوز تلاش کریں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜尋視窗"
+          }
+        }
+      }
+    },
     "Select the zone the windows of the chosen zone move to" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -42713,287 +42994,6 @@
         }
       }
     },
-    "Show the windows" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "إظهار النوافذ"
-          }
-        },
-        "bg" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показване на прозорците"
-          }
-        },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "উইন্ডোগুলো দেখান"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostra les finestres"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zobrazit okna"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vis vinduerne"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fenster anzeigen"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Εμφάνιση των παραθύρων"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar las ventanas"
-          }
-        },
-        "et" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kuva aknad"
-          }
-        },
-        "fa" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "نمایش پنجره‌ها"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näytä ikkunat"
-          }
-        },
-        "fil" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ipakita ang mga window"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les fenêtres"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "הצג את החלונות"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "विंडो दिखाएँ"
-          }
-        },
-        "hr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prikaži prozore"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ablakok megjelenítése"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tampilkan jendela"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostra le finestre"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ウインドウを表示"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "윈도우 보기"
-          }
-        },
-        "lt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rodyti langus"
-          }
-        },
-        "lv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rādīt logus"
-          }
-        },
-        "mr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "विंडो दाखवा"
-          }
-        },
-        "ms" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tunjukkan tetingkap"
-          }
-        },
-        "nb-NO" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vis vinduene"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toon de vensters"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaż okna"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar as janelas"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar as janelas"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afișează ferestrele"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показать окна"
-          }
-        },
-        "sk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zobraziť okná"
-          }
-        },
-        "sl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaži okna"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Прикажи прозоре"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visa fönstren"
-          }
-        },
-        "ta" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "சாளரங்களைக் காட்டு"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "విండోలను చూపించు"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "แสดงหน้าต่าง"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pencereleri göster"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показати вікна"
-          }
-        },
-        "ur-PK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ونڈوز دکھائیں"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hiển thị các cửa sổ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示窗口"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示視窗"
-          }
-        }
-      }
-    },
     "Show PaneFlip as an island at the middle of the menu bar. When off, a click on the menu bar icon opens the island below it." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -43271,6 +43271,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在選單列中間將 PaneFlip 顯示為島。關閉後，點按選單列圖像會在其下方開啟島。"
+          }
+        }
+      }
+    },
+    "Show the windows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إظهار النوافذ"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показване на прозорците"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "উইন্ডোগুলো দেখান"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra les finestres"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zobrazit okna"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis vinduerne"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster anzeigen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εμφάνιση των παραθύρων"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar las ventanas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuva aknad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایش پنجره‌ها"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näytä ikkunat"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipakita ang mga window"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les fenêtres"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצג את החלונות"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो दिखाएँ"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prikaži prozore"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablakok megjelenítése"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan jendela"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra le finestre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウインドウを表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 보기"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodyti langus"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rādīt logus"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "विंडो दाखवा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunjukkan tetingkap"
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis vinduene"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon de vensters"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż okna"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar as janelas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar as janelas"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afișează ferestrele"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показать окна"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zobraziť okná"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaži okna"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прикажи прозоре"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa fönstren"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சாளரங்களைக் காட்டு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "విండోలను చూపించు"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แสดงหน้าต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencereleri göster"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати вікна"
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ونڈوز دکھائیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiển thị các cửa sổ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示視窗"
           }
         }
       }
@@ -46643,6 +46924,287 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tab"
+          }
+        }
+      }
+    },
+    "The apps placed in the zones of this layout, in the order the island shows them. Drag an app by its handle to change the order, or move it to another zone." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التطبيقات الموضوعة في مناطق هذا التخطيط، بالترتيب الذي تعرضه الجزيرة. اسحب تطبيقًا من مقبضه لتغيير الترتيب، أو انقله إلى منطقة أخرى."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложенията в зоните на това оформление, в реда, в който ги показва островът. Плъзнете приложение за дръжката, за да смените реда, или го преместете в друга зона."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এই লেআউটের জোনে রাখা অ্যাপগুলি, আইল্যান্ড যে ক্রমে দেখায় সেই ক্রমে। ক্রম বদলাতে একটি অ্যাপকে হ্যান্ডেল ধরে টানুন, অথবা অন্য জোনে সরান।"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les aplicacions col·locades a les zones d'aquesta disposició, en l'ordre en què les mostra l'illa. Arrossega una aplicació per la nansa per canviar l'ordre, o mou-la a una altra zona."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikace umístěné v zónách tohoto rozvržení v pořadí, v jakém je zobrazuje ostrov. Přetažením aplikace za úchyt změníte pořadí, nebo ji přesuňte do jiné zóny."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps placeret i zonerne i dette layout, i den rækkefølge øen viser dem. Træk en app i dens håndtag for at ændre rækkefølgen, eller flyt den til en anden zone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Apps in den Zonen dieses Layouts, in der Reihenfolge, in der die Insel sie zeigt. Ziehe eine App am Griff, um die Reihenfolge zu ändern, oder verschiebe sie in eine andere Zone."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι εφαρμογές στις ζώνες αυτής της διάταξης, με τη σειρά που τις εμφανίζει το νησί. Σύρετε μια εφαρμογή από τη λαβή για να αλλάξετε τη σειρά ή μετακινήστε την σε άλλη ζώνη."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las apps colocadas en las zonas de este diseño, en el orden en que las muestra la isla. Arrastra una app por su asa para cambiar el orden, o muévela a otra zona."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selle paigutuse tsoonidesse paigutatud rakendused selles järjekorras, milles saar neid näitab. Järjekorra muutmiseks lohista rakendust käepidemest või liiguta see teise tsooni."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برنامه‌های قرار گرفته در ناحیه‌های این چیدمان، به ترتیبی که جزیره نشان می‌دهد. برای تغییر ترتیب، برنامه را از دستگیره بکشید یا به ناحیه‌ای دیگر ببرید."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tämän asettelun alueille sijoitetut sovellukset siinä järjestyksessä, jossa saari ne näyttää. Muuta järjestystä vetämällä sovellusta kahvasta tai siirrä se toiselle alueelle."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang mga app na nakalagay sa mga zone ng layout na ito, ayon sa pagkakasunod na ipinapakita ng island. I-drag ang app sa hawakan nito para baguhin ang pagkakasunod, o ilipat ito sa ibang zone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les apps placées dans les zones de cette disposition, dans l'ordre où l'îlot les montre. Faites glisser une app par sa poignée pour changer l'ordre, ou déplacez-la vers une autre zone."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "האפליקציות שהוצבו באזורי הפריסה הזו, לפי הסדר שבו האי מציג אותן. גררו אפליקציה בידית כדי לשנות את הסדר, או העבירו אותה לאזור אחר."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस लेआउट के ज़ोन में रखे गए ऐप, उसी क्रम में जिसमें आइलैंड उन्हें दिखाता है। क्रम बदलने के लिए किसी ऐप को हैंडल से खींचें, या उसे दूसरे ज़ोन में ले जाएँ।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacije smještene u zonama ovog rasporeda, redoslijedom kojim ih prikazuje otok. Povucite aplikaciju za ručku kako biste promijenili redoslijed ili je premjestite u drugu zonu."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Az elrendezés zónáiba helyezett alkalmazások abban a sorrendben, ahogy a sziget mutatja őket. A sorrend módosításához húzza az alkalmazást a fogantyújánál fogva, vagy helyezze át másik zónába."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikasi yang ditempatkan di zona tata letak ini, sesuai urutan yang ditampilkan pulau. Seret aplikasi pada gagangnya untuk mengubah urutan, atau pindahkan ke zona lain."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le app collocate nelle zone di questo layout, nell'ordine in cui le mostra l'isola. Trascina un'app dalla maniglia per cambiare l'ordine, oppure spostala in un'altra zona."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このレイアウトのゾーンに置かれたアプリを、アイランドが表示する順に並べています。ハンドルをドラッグして順番を変えるか、別のゾーンへ移動できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 레이아웃의 영역에 배치된 앱이 아일랜드에 표시되는 순서로 나열됩니다. 핸들을 끌어 순서를 바꾸거나 다른 영역으로 옮기세요."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šio išdėstymo zonose esančios programos tokia tvarka, kokia jas rodo sala. Vilkite programą už rankenėlės, kad pakeistumėte tvarką, arba perkelkite ją į kitą zoną."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šī izkārtojuma zonās novietotās lietotnes tādā secībā, kādā tās rāda sala. Velciet lietotni aiz roktura, lai mainītu secību, vai pārvietojiet to uz citu zonu."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "या लेआउटच्या झोनमध्ये ठेवलेले अ‍ॅप्स, आयलंड ज्या क्रमाने दाखवतो त्या क्रमाने. क्रम बदलण्यासाठी अ‍ॅप हँडलने ओढा, किंवा दुसऱ्या झोनमध्ये हलवा."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikasi yang diletakkan dalam zon reka letak ini, mengikut susunan yang dipaparkan oleh pulau. Seret aplikasi pada pemegangnya untuk menukar susunan, atau alihkannya ke zon lain."
+          }
+        },
+        "nb-NO" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appene som er plassert i sonene i dette oppsettet, i den rekkefølgen øya viser dem. Dra en app i håndtaket for å endre rekkefølgen, eller flytt den til en annen sone."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De apps in de zones van deze indeling, in de volgorde waarin het eiland ze toont. Sleep een app aan de greep om de volgorde te wijzigen, of verplaats hem naar een andere zone."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje umieszczone w strefach tego układu, w kolejności, w jakiej pokazuje je wyspa. Przeciągnij aplikację za uchwyt, aby zmienić kolejność, lub przenieś ją do innej strefy."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As apps colocadas nas zonas deste esquema, pela ordem em que a ilha as mostra. Arraste uma app pela pega para mudar a ordem ou mova-a para outra zona."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os apps colocados nas zonas deste layout, na ordem em que a ilha os mostra. Arraste um app pela alça para mudar a ordem ou mova-o para outra zona."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicațiile plasate în zonele acestei dispuneri, în ordinea în care le arată insula. Trageți o aplicație de mâner pentru a schimba ordinea sau mutați-o în altă zonă."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложения, размещённые в зонах этой раскладки, в том порядке, в котором их показывает остров. Перетащите приложение за ручку, чтобы изменить порядок, или переместите его в другую зону."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikácie umiestnené v zónach tohto rozloženia v poradí, v akom ich zobrazuje ostrov. Potiahnutím aplikácie za úchyt zmeníte poradie alebo ju presuňte do inej zóny."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacije, nameščene v conah te razporeditve, v vrstnem redu, v katerem jih prikazuje otok. Povlecite aplikacijo za ročaj, da spremenite vrstni red, ali jo premaknite v drugo cono."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Апликације постављене у зонама овог распореда, редоследом којим их приказује острво. Превуците апликацију за ручицу да промените редослед или је преместите у другу зону."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparna som är placerade i zonerna i den här layouten, i den ordning ön visar dem. Dra en app i handtaget för att ändra ordningen, eller flytta den till en annan zon."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இந்த லேஅவுட்டின் மண்டலங்களில் வைக்கப்பட்ட பயன்பாடுகள், தீவு காட்டும் வரிசையில். வரிசையை மாற்ற பயன்பாட்டை கைப்பிடியில் இழுக்கவும், அல்லது வேறு மண்டலத்திற்கு நகர்த்தவும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఈ లేఅవుట్ జోన్లలో ఉంచిన యాప్‌లు, ఐలాండ్ చూపే క్రమంలో. క్రమాన్ని మార్చడానికి యాప్‌ను హ్యాండిల్‌తో లాగండి, లేదా మరో జోన్‌కు తరలించండి."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แอปที่วางไว้ในโซนของเลย์เอาต์นี้ ตามลำดับที่ไอส์แลนด์แสดง ลากแอปที่ที่จับเพื่อเปลี่ยนลำดับ หรือย้ายไปยังโซนอื่น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu düzenin bölgelerine yerleştirilmiş uygulamalar, adanın gösterdiği sırayla. Sırayı değiştirmek için bir uygulamayı tutamacından sürükleyin ya da başka bir bölgeye taşıyın."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Застосунки, розміщені в зонах цієї розкладки, у порядку, в якому їх показує острів. Перетягніть застосунок за ручку, щоб змінити порядок, або перемістіть його в іншу зону."
+          }
+        },
+        "ur-PK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اس لے آؤٹ کے زونز میں رکھی گئی ایپس، اسی ترتیب میں جس میں آئی لینڈ انہیں دکھاتا ہے۔ ترتیب بدلنے کے لیے ایپ کو ہینڈل سے کھینچیں، یا اسے دوسرے زون میں منتقل کریں۔"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các ứng dụng được đặt trong vùng của bố cục này, theo thứ tự đảo hiển thị. Kéo ứng dụng bằng tay nắm để đổi thứ tự, hoặc chuyển nó sang vùng khác."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放置在此布局各区域中的应用，按岛显示的顺序排列。拖动手柄可更改顺序，也可将应用移到其他区域。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放置在此版面各區域中的 App，依島嶼顯示的順序排列。拖曳握把可變更順序，也可將 App 移到其他區域。"
           }
         }
       }
