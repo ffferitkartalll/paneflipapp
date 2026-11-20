@@ -29,7 +29,7 @@ struct ZoneWindowsCard: View {
             if let picture {
                 Image(decorative: picture.image, scale: 1).resizable().interpolation(.high).frame(width: size.width, height: size.height)
             } else {
-                RoundedRectangle(cornerRadius: radius).fill(.white.opacity(0.1))
+                RoundedRectangle(cornerRadius: radius).fill(Color.contrast.opacity(0.1))
                 if let glyph = card.glyph {
                     (model.glyphPicture(glyph).map { Image(decorative: $0, scale: 2) } ?? Image(nsImage: glyph)).renderingMode(.template).resizable().interpolation(.high).scaledToFit()
                         .foregroundStyle(AppAccent.color)
@@ -43,17 +43,17 @@ struct ZoneWindowsCard: View {
         .frame(width: size.width, height: size.height)
         .clipShape(RoundedRectangle(cornerRadius: radius))
         // The edge and the shadow macOS gives a window that is not in focus, measured on one: a light line of 1 point inside the edge, a dark one outside it, and a shadow
-        // (black at half, blurred 16, 5 points lower). They come with the cards: over its window the picture must not differ from it.
+        // (black, blurred 16, 5 points lower). They come with the cards: over its window the picture must not differ from it.
         .overlay {
             ZStack {
-                RoundedRectangle(cornerRadius: radius).strokeBorder(.white.opacity(0.08), lineWidth: 1)
-                RoundedRectangle(cornerRadius: radius + 1).strokeBorder(.black.opacity(0.85), lineWidth: 1).padding(-1)
+                RoundedRectangle(cornerRadius: radius).strokeBorder(CardEdge.inner, lineWidth: 1)
+                RoundedRectangle(cornerRadius: radius + 1).strokeBorder(CardEdge.outer, lineWidth: 1).padding(-1)
             }
             .modifier(AppearOpacity(model: model))
         }
         // The shadow is cast by a plain shape behind the card, not by the picture: blurring a large picture again at every step of the slide made the grid late in showing.
         // The shadow itself stays as it is and only its layer fades in: a blur whose colour changes is drawn again at every step of the slide, one that only fades is not.
-        .background { RoundedRectangle(cornerRadius: radius).fill(.black).shadow(color: .black.opacity(0.5), radius: 16, y: 5).modifier(AppearOpacity(model: model)) }
+        .background { RoundedRectangle(cornerRadius: radius).fill(CardEdge.ground).shadow(color: CardEdge.shadow, radius: 16, y: 5).modifier(AppearOpacity(model: model)) }
         // Two frames in the accent colour, which come and go softly (and with the cards: over its window the picture must not differ from it): the card with the focus
         // (the window in front) has the thickness of the frame that shows where the focus went between zones, the card to be chosen (under the pointer, or where the arrow keys
         // went) twice that: where the focus is, and where a click or Return would send it, are always told apart.

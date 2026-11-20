@@ -130,7 +130,7 @@ struct MenuBarIslandWindowsView: View {
         // No window in front (the zone holds none that is open): no frame, and nothing is lit.
         let lit = model.cardsAt == nil ? 0 : size.width
         return ZStack(alignment: .top) {
-            frame.fill(AppAccent.color).frame(width: lit, height: size.height).offset(x: shift)
+            frame.fill(ink.accent).frame(width: lit, height: size.height).offset(x: shift)
             // The front card is on the lit frame, where white would hardly show: the frame darkens while the pointer is on that card.
             frame.fill(.black.opacity(model.windows.first(where: \.isActive)?.id == model.hoveredWindow && model.hoveredWindow != nil ? 0.14 : 0))
                 .frame(width: lit, height: size.height).offset(x: shift)
@@ -153,7 +153,7 @@ struct MenuBarIslandWindowsView: View {
             }
             .mask { ZStack(alignment: .top) { Rectangle(); frame.frame(width: lit, height: size.height).offset(x: shift).blendMode(.destinationOut) }.compositingGroup() }
             // Inside it: the pictures, dark.
-            row { window in AnyView(ZStack { picture(window, AppAccent.ink); actions(of: window, in: size, dark: true) }) }
+            row { window in AnyView(ZStack { picture(window, ink.accentInk); actions(of: window, in: size, dark: true) }) }
                 .mask { frame.frame(width: lit, height: size.height).offset(x: shift) }
             frame.strokeBorder(ink.color(0.5), lineWidth: 1).frame(width: lit, height: size.height).offset(x: shift)
             // The badges of the apps, on the top right of the cards, as the Dock has them; the buttons of the card under the mouse take their place.

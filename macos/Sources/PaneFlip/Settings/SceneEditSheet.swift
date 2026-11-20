@@ -219,7 +219,7 @@ struct SceneEditSheet: View {
                 } label: {
                     Text(verbatim: "\(index + 1)")
                         .font(.caption.weight(.medium))
-                        .foregroundStyle(chosen ? Color.black.opacity(0.75) : Color.primary)
+                        .foregroundStyle(chosen ? AppAccent.ink : Color.primary)
                         .frame(width: 22, height: 22)
                         .background(chosen ? AnyShapeStyle(AppAccent.color) : AnyShapeStyle(.quaternary), in: .rect(cornerRadius: 5))
                         .contentShape(.rect)

@@ -27,7 +27,7 @@ struct ZoneWindowsView: View {
                 }
                 if let target, places.indices.contains(target) {
                     RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(.white, style: StrokeStyle(lineWidth: 3, dash: [8, 6]))
+                        .strokeBorder(Color.contrast, style: StrokeStyle(lineWidth: 3, dash: [8, 6]))
                         .frame(width: places[target].width, height: places[target].height)
                         .position(x: places[target].midX, y: places[target].midY)
                         .modifier(AppearOpacity(model: model))

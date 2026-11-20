@@ -69,11 +69,13 @@ final class ZoneWindowsModel {
         return made
     }
     @ObservationIgnored private var titles: [String: CGImage] = [:]
-    /// The title of a card as a picture made once, for the caption and the width in `key`.
+    /// The title of a card as a picture made once, for the caption and the width in `key`, and the appearance: a picture is made outside the window, where the colours that follow
+    /// the appearance would be those of the default, so it is told which one it is made for.
     func titlePicture<V: View>(_ key: String, content: () -> V) -> CGImage? {
+        let dark = NSApp.effectiveAppearance.isDark, key = "\(key)|\(dark)"
         if let kept = titles[key] { return kept }
         let made = MainActor.assumeIsolated { () -> CGImage? in
-            let renderer = ImageRenderer(content: content())
+            let renderer = ImageRenderer(content: content().environment(\.colorScheme, dark ? .dark : .light))
             renderer.scale = 2
             return renderer.cgImage
         }
@@ -81,7 +83,7 @@ final class ZoneWindowsModel {
         titles[key] = made
         return made
     }
-    @ObservationIgnored var outlines: (places: [CGRect], size: CGSize, picture: CGImage)?
+    @ObservationIgnored var outlines: (places: [CGRect], size: CGSize, dark: Bool, picture: CGImage)?
     @ObservationIgnored var onPointed: () -> Void = {}
     @ObservationIgnored var onChoose: (IslandWindow) -> Void = { _ in }
     @ObservationIgnored var onPerform: (IslandCardAction, IslandWindow) -> Void = { _, _ in }

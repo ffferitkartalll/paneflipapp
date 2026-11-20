@@ -50,7 +50,7 @@ struct ZoneGlyphView: View {
     private func label(of cell: ZoneGlyph.Cell, in gc: inout GraphicsContext) {
         guard cell.rect.width >= 9, cell.rect.height >= 9 else { return }
         let text = ZoneLabel.text(of: cell.id, in: strip)
-        gc.draw(Text(verbatim: text).font(.system(size: 8, weight: .medium)).foregroundStyle(cell.id == zone ? Color.black.opacity(0.75) : Color.primary.opacity(0.7)),
+        gc.draw(Text(verbatim: text).font(.system(size: 8, weight: .medium)).foregroundStyle(cell.id == zone ? AppAccent.ink : Color.primary.opacity(0.7)),
                 at: CGPoint(x: cell.rect.midX, y: cell.rect.midY))
     }
 

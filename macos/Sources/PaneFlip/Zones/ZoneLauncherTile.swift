@@ -30,7 +30,7 @@ struct ZoneLauncherTile: View {
             if isMoving || (hovered && !carrying) {
                 Button(action: badge) {
                     Image(systemName: removes ? "minus.circle.fill" : "plus.circle.fill").font(.title3).symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, removes ? Color.red : AppAccent.color)
+                        .foregroundStyle(removes ? Color.white : AppAccent.ink, removes ? Color.red : AppAccent.color)
                 }
                 .buttonStyle(.plain)
                 .padding(6)

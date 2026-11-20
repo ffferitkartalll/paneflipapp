@@ -53,7 +53,7 @@ final class EditorController: LayoutEditing {
         let frame = screen.cocoaVisibleFrame
         let p = EditorPanel(contentRect: frame, styleMask: [.borderless], backing: .buffered, defer: false)
         p.level = .statusBar
-        p.backgroundColor = .black
+        p.backgroundColor = NSColor(light: .windowBackgroundColor, dark: .black)
         p.setFrame(frame, display: true)
         p.contentView = NSHostingView(rootView: EditorView(model: model, area: frame.size))
         p.makeKeyAndOrderFront(nil)

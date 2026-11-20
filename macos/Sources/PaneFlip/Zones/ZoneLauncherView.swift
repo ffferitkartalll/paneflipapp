@@ -30,11 +30,11 @@ struct ZoneLauncherView: View {
         // The edge and the shadow of a card of the zone's grid (`ZoneWindowsCard`): a light line inside the edge, a dark one outside it, and a shadow cast by a plain shape behind.
         .overlay {
             ZStack {
-                RoundedRectangle(cornerRadius: ZoneCorner.radius).strokeBorder(.white.opacity(0.08), lineWidth: 1)
-                RoundedRectangle(cornerRadius: ZoneCorner.radius + 1).strokeBorder(.black.opacity(0.85), lineWidth: 1).padding(-1)
+                RoundedRectangle(cornerRadius: ZoneCorner.radius).strokeBorder(CardEdge.inner, lineWidth: 1)
+                RoundedRectangle(cornerRadius: ZoneCorner.radius + 1).strokeBorder(CardEdge.outer, lineWidth: 1).padding(-1)
             }
         }
-        .background { RoundedRectangle(cornerRadius: ZoneCorner.radius).fill(.black).shadow(color: .black.opacity(0.5), radius: 16, y: 5) }
+        .background { RoundedRectangle(cornerRadius: ZoneCorner.radius).fill(CardEdge.ground).shadow(color: CardEdge.shadow, radius: 16, y: 5) }
         .opacity(model.visible ? 1 : 0)
         .padding(Self.shadowRoom)
     }
