@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The search bar over the grid of a whole layout, between the menu bar and the zones: the text typed, or what it is for, and at its right end how many zones and windows the grid
-/// has. Made as the cards are: dark, with the light line round it and their shadow, the buttons in the accent colour. The keys typed go to it from the grid (`LayoutGridOverlay`);
+/// has. Made as the cards are: on their ground, with the light line round it and their shadow, the buttons in the accent colour. The keys typed go to it from the grid (`LayoutGridOverlay`);
 /// a click on its text part gives it the keys (a click on the rest does nothing but keep the grid open), and its icon at the left, while it is searching, is the button that ends the search.
 struct LayoutGridSearchBar: View {
     @Bindable var search: LayoutGridSearch
@@ -40,22 +40,22 @@ struct LayoutGridSearchBar: View {
             // activates the search only here, where the text is typed (the bar's other parts take the click and do nothing): in the field itself, and in the room round it.
             ZStack {
                 Color.clear.contentShape(Rectangle()).onTapGesture { focused = true }
-                TextField(text: $search.query, selection: $selection, prompt: Text("Search windows").foregroundStyle(.white.opacity(0.55))) { EmptyView() }
+                TextField(text: $search.query, selection: $selection, prompt: Text("Search windows").foregroundStyle(Color.contrast.opacity(0.55))) { EmptyView() }
                     .textFieldStyle(.plain)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.contrast)
                     .tint(AppAccent.color)
                     .focused($focused)
                     .lineLimit(1)
             }
             .frame(height: LayoutGridModel.searchBarHeight)
             .pointerStyle(.horizontalText)   // the text cursor is for where text is typed; everywhere else in the bar and the grid the pointer is the arrow
-            (Text("\(search.zones) zones") + Text(verbatim: " · ") + Text("\(search.windows) windows")).foregroundStyle(.white.opacity(0.55)).monospacedDigit().lineLimit(1)
+            (Text("\(search.zones) zones") + Text(verbatim: " · ") + Text("\(search.windows) windows")).foregroundStyle(Color.contrast.opacity(0.55)).monospacedDigit().lineLimit(1)
         }
         .font(.system(size: 14))
         .padding(.horizontal, 12)
         .frame(width: Self.width, height: LayoutGridModel.searchBarHeight)
-        .background { RoundedRectangle(cornerRadius: 10).fill(.black.opacity(0.85)).shadow(color: .black.opacity(0.5), radius: 16, y: 5) }
-        .overlay { RoundedRectangle(cornerRadius: 10).strokeBorder(.white.opacity(0.08), lineWidth: 1) }
+        .background { RoundedRectangle(cornerRadius: 10).fill(CardEdge.ground.opacity(0.85)).shadow(color: CardEdge.shadow, radius: 16, y: 5) }
+        .overlay { RoundedRectangle(cornerRadius: 10).strokeBorder(CardEdge.inner, lineWidth: 1) }
         .contentShape(RoundedRectangle(cornerRadius: 10))
         .pointerStyle(.default)
         .onTapGesture {}   // a click on the bar is not one on the grid behind it

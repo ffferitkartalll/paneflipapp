@@ -91,10 +91,10 @@ struct LayoutCard: View {
 
     private func button(_ id: String, _ symbol: String, _ help: LocalizedStringKey, x: CGFloat, y: CGFloat, enabled: Bool = true, action: @escaping () -> Void) -> some View {
         let lit = hoveredButton == id && enabled
-        return Image(systemName: symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white.opacity(enabled ? 1 : 0.5))
+        return Image(systemName: symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(CardEdge.buttonGlyph.opacity(enabled ? 1 : 0.5))
             .frame(width: Self.side * 0.5, height: Self.side * 0.5)
             .frame(width: Self.side, height: Self.side)
-            .background(Circle().fill(.black.opacity(lit ? 0.85 : 0.6)))
+            .background(Circle().fill(CardEdge.buttonFill(hover: lit)))
             .contentShape(Circle())
             .onHover { hoveredButton = $0 ? id : (hoveredButton == id ? nil : hoveredButton) }
             .onTapGesture { if enabled { action() } }

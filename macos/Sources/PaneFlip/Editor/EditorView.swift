@@ -38,14 +38,14 @@ struct EditorView: View {
             let target = splitTarget(zones: zones, dividers: dividers, size: geo.size)
 
             ZStack(alignment: .topLeading) {
-                Color.black
+                Color.canvas
 
                 ForEach(zones) { z in
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white.opacity(0.05))
+                        .fill(Color.contrast.opacity(0.05))
                         .frame(width: max(z.rect.width - 6, 0), height: max(z.rect.height - 6, 0))
                         .overlay(alignment: .topLeading) {
-                            Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(.white.opacity(0.5)).padding(12)
+                            Text(verbatim: label(of: z.id)).font(.title3.weight(.semibold)).foregroundStyle(Color.contrast.opacity(0.5)).padding(12)
                         }
                         .overlay {
                             // Under the pointer the zone shows what a split there would leave (see `splitLabels`), not its whole size.
@@ -85,7 +85,7 @@ struct EditorView: View {
 
                 if let t = target {
                     Path { p in p.move(to: t.line.0); p.addLine(to: t.line.1) }
-                        .stroke(t.valid ? (t.snapped ? Color.white : AppAccent.color) : Color.red,
+                        .stroke(t.valid ? (t.snapped ? Color.contrast : AppAccent.color) : Color.red,
                                 lineWidth: t.snapped ? 3 : 2)
                         .allowsHitTesting(false)
                 }
@@ -186,7 +186,7 @@ struct EditorView: View {
         return ZStack(alignment: .topLeading) {
             ForEach(spans.indices, id: \.self) { i in
                 RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(.white.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
+                    .strokeBorder(Color.contrast.opacity(0.6), style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
                     .frame(width: CGFloat(spans[i].width) / total * rect.width, height: rect.height)
                     .offset(x: rect.minX + CGFloat(spans[i].start) / total * rect.width, y: rect.minY)
             }
@@ -491,7 +491,7 @@ struct EditorView: View {
     private func lineView(_ d: SplitDivider, in rect: CGRect) -> some View {
         let centered = SplitSnap.isStep(d.ratio)
         return ZStack {
-            Rectangle().fill(centered ? Color.white : AppAccent.color)
+            Rectangle().fill(centered ? Color.contrast : AppAccent.color)
                 .frame(width: d.sideBySide ? 2 : d.parent.width, height: d.sideBySide ? d.parent.height : 2)
             Rectangle().fill(.clear)
                 .frame(width: d.sideBySide ? 14 : d.parent.width, height: d.sideBySide ? d.parent.height : 14)

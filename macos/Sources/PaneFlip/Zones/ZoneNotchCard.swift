@@ -21,12 +21,12 @@ struct ZoneNotchCard: View {
         .frame(width: width)   // the card keeps its size and is cut by the notch while the notch is narrower
     }
 
-    private static func fill(hover: Bool) -> Color { .black.opacity(hover ? 0.85 : 0.6) }
+    private static func fill(hover: Bool) -> Color { CardEdge.buttonFill(hover: hover) }
 
     private func buttons(in card: CGSize) -> some View {
         ZStack(alignment: .topLeading) {
             ForEach(IslandCardAction.rects(in: card, among: slot.actions), id: \.action) { item in
-                Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                Image(systemName: item.action.symbol).resizable().scaledToFit().fontWeight(.bold).foregroundStyle(CardEdge.buttonGlyph)
                     .frame(width: item.rect.width * 0.5, height: item.rect.height * 0.5)
                     .frame(width: item.rect.width, height: item.rect.height)
                     .background(Circle().fill(Self.fill(hover: hoveredButton == .card(item.action, slot.id))))
@@ -37,7 +37,7 @@ struct ZoneNotchCard: View {
             ZStack {
                 Circle().fill(Self.fill(hover: hoveredButton == .select(slot.id)))
                     .animation(.easeOut(duration: 0.1), value: hoveredButton)
-                Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(.white)
+                Image(systemName: "checkmark").resizable().scaledToFit().fontWeight(.bold).foregroundStyle(CardEdge.buttonGlyph)
                     .frame(width: rect.width * 0.5, height: rect.height * 0.5)
                     .scaleEffect(slot.selected ? 1 : 0.3).opacity(slot.selected ? 1 : 0)
             }

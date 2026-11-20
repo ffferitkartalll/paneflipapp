@@ -96,7 +96,7 @@ struct GlyphCanvas: View, Animatable {
 
     private func paint(_ context: inout GraphicsContext) {
             // The accent is asked once for the whole picture: asking for it (a defaults lookup and a colour conversion) for every zone made the redraw slow.
-            let accent = AppAccent.rgb, accentColor = AppAccent.color
+            let accent = ink.accentRGB, accentColor = ink.accent
             let screen = glyph.screen
             // Inside the picture whatever the rounding: at the far right end the frame would stand a fraction of a point past it.
             let width = sz(screen.width)

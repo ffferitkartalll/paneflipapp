@@ -101,15 +101,15 @@ struct MenuBarIslandView: View {
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
                         Text(text).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.color()).lineLimit(1).truncationMode(.tail)
                             .frame(width: model.noticeTextWidth, alignment: .leading)
-                        Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
+                        Text(verbatim: model.noticeButtonTitle).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.accentInk)
                             .frame(width: model.noticeButtonWidth, height: height)
-                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color).brightness(model.hoveredButton == .noticeUndo ? 0.15 : 0))
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(ink.accent).brightness(model.hoveredButton == .noticeUndo ? 0.15 : 0))
                             .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                             .overlay {
                                 // The notice that cannot be closed: the ring runs round the button that undoes it.
                                 if !model.noticeCloses && !model.noticeEditing {
                                     ClockwiseRing(radius: radius - 1.5).inset(by: 1.5).trim(from: 1 - model.noticeLeft, to: 1)
-                                        .stroke(Color(white: 0.08), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                        .stroke(ink.accentInk, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                 }
                             }
                         if model.noticeCloses {
@@ -120,7 +120,7 @@ struct MenuBarIslandView: View {
                                 .overlay {
                                     // From twelve o'clock, clockwise; the time that has passed is taken from the start, so the ring runs down clockwise.
                                     Circle().inset(by: 1).trim(from: 1 - model.noticeLeft, to: 1).rotation(.degrees(-90))
-                                        .stroke(AppAccent.color, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                        .stroke(ink.accent, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                 }
                         }
                     }
@@ -132,9 +132,9 @@ struct MenuBarIslandView: View {
                     HStack(spacing: MenuBarIslandModel.noticeGap) {
                         Text(verbatim: MenuBarIslandModel.editUndoText).font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.color()).lineLimit(1)
                             .frame(width: model.editUndoTextWidth, alignment: .leading)
-                        Text("Undo").font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(Color(white: 0.08))
+                        Text("Undo").font(Font(MenuBarIslandModel.noticeFont)).foregroundStyle(ink.accentInk)
                             .frame(width: MenuBarIslandModel.editUndoButtonWidth, height: height)
-                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(AppAccent.color).brightness(model.hoveredButton == .noticeRevert ? 0.15 : 0))
+                            .background(RoundedRectangle(cornerRadius: radius, style: .continuous).fill(ink.accent).brightness(model.hoveredButton == .noticeRevert ? 0.15 : 0))
                             .animation(.easeOut(duration: 0.1), value: model.hoveredButton)
                     }
                     .offset(x: 0, y: model.noticeEditUndoTop)

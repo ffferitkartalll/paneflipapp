@@ -69,7 +69,7 @@ final class ZoneFlash {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         if panel.frame != screen.cocoaFrame { panel.setFrame(screen.cocoaFrame, display: true) }
-        outline.borderColor = AppAccent.nsColor.cgColor
+        NSApp.effectiveAppearance.performAsCurrentDrawingAppearance { outline.borderColor = AppAccent.nsColor.cgColor }
         outline.frame = target.offsetBy(dx: shift - origin.x, dy: -origin.y)
         outline.opacity = 1
         CATransaction.commit()

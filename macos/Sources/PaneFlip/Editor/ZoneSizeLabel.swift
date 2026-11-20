@@ -9,9 +9,9 @@ struct ZoneSizeLabel: View {
 
     var body: some View {
         VStack(spacing: 2) {
-            Text(verbatim: size).contentTransition(.identity).foregroundStyle(.white.opacity(share == nil ? 0.4 : 0.9))
+            Text(verbatim: size).contentTransition(.identity).foregroundStyle(Color.contrast.opacity(share == nil ? 0.4 : 0.9))
             if let share {
-                Text(verbatim: "\(share.numerator)/\(share.denominator)").foregroundStyle(.white.opacity(0.9)).transition(.opacity)
+                Text(verbatim: "\(share.numerator)/\(share.denominator)").foregroundStyle(Color.contrast.opacity(0.9)).transition(.opacity)
             }
         }
         .font(.title3.monospacedDigit())
