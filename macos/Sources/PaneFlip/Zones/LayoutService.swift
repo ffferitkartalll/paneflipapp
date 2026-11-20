@@ -111,6 +111,10 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.setZoneAspects(aspects, ofLayout: id, key: key)
     }
 
+    func setLauncherZones(key: String, id: UUID, _ zones: Set<UUID>) {
+        repository.setLauncherZones(zones, ofLayout: id, key: key)
+    }
+
     func rename(key: String, id: UUID, to name: String) {
         repository.rename(layout: id, key: key, to: name)
     }

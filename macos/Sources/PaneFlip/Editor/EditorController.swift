@@ -39,12 +39,14 @@ final class EditorController: LayoutEditing {
             minZoneSize: layout.minZoneSize(in: settings.values),
             defaultZone: layout.fallbackZoneID,
             aspects: layout.zoneAspects,
+            launcherZones: layout.launcherZones,
             onApply: { [layouts] model in
                 layouts.setSpacing(key: screen.key, id: layoutID, gap: Double(model.gap), edgeMargin: Double(model.margin), minZoneSize: model.minZoneSize)
                 // Before the zones: the apps of a screen beyond the edge that was removed go to the default zone chosen now.
                 layouts.setDefaultZone(key: screen.key, id: layoutID, to: model.defaultZone)
                 layouts.updateLayout(key: screen.key, id: layoutID, strip: model.strip)   // lays the zones out again, with the new spacing
                 layouts.setZoneAspects(key: screen.key, id: layoutID, model.aspects)
+                layouts.setLauncherZones(key: screen.key, id: layoutID, model.launcherZones)
             },
             onClose: { [weak self] in self?.hide() })
 

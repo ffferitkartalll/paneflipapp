@@ -96,8 +96,9 @@ struct EditorView: View {
                 ForEach(lines) { d in lineView(d, in: rect) }
                 ForEach(lines) { d in handleView(d, in: rect) }
 
-                ForEach(zones.filter { model.strip.part(of: $0.id) == .screen }) { z in
+                ForEach(zones) { z in
                     defaultButton(z)
+                    launcherButton(z)
                     aspectButton(z, in: rect, screen: screenRect)
                 }
 
@@ -114,6 +115,12 @@ struct EditorView: View {
         return cornerButton(on ? "star.fill" : "star", help: "Default zone") { model.setDefaultZone(z.id) }
             // The zone is drawn 3 points inside its rectangle; the button is a square, so both gaps are `cornerGap`.
             .position(x: z.rect.minX + 3 + Self.cornerGap + Self.cornerSide / 2, y: z.rect.maxY - 3 - Self.cornerGap - Self.cornerSide / 2)
+    }
+
+    /// Next to the aspect-ratio button, in its style: the zone shows a launcher of apps while it has no window (the filled one does).
+    private func launcherButton(_ z: ZoneRect) -> some View {
+        cornerButton(model.launcherZones.contains(z.id) ? "square.grid.2x2.fill" : "square.grid.2x2", help: "App launcher") { model.toggleLauncher(z.id) }
+            .position(x: z.rect.minX + 3 + Self.cornerGap + 2 * (Self.cornerSide + 8) + Self.cornerSide / 2, y: z.rect.maxY - 3 - Self.cornerGap - Self.cornerSide / 2)
     }
 
     private static let cornerSide: CGFloat = 34, cornerGap: CGFloat = 12

@@ -50,6 +50,18 @@ final class LayoutAppsService: LayoutAppsEditing {
         }
     }
 
+    func launch(app bundleID: String, into zone: UUID) {
+        add(app: bundleID, to: zone)
+        open(apps: [bundleID])
+    }
+
+    func add(app bundleID: String, to zone: UUID) {
+        if !memory.slots(inZone: zone).contains(where: { $0.bundleID == bundleID }) {
+            _ = memory.remember(zoneID: zone, bundleID: bundleID, title: apps.name(bundleID: bundleID) ?? bundleID)
+        }
+        changed([])
+    }
+
     func glyph(ofApp bundleID: String) -> NSImage {
         glyph(bundleID: bundleID, name: apps.name(bundleID: bundleID) ?? bundleID)
     }

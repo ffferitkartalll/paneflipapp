@@ -28,6 +28,7 @@ final class CGSScreenProvider: ScreenProviding {
     private var uuids: [CGDirectDisplayID: String] = [:]
     /// Whether Mission Control showed at the last look, for the windows the system listed then: the same list gives the same answer.
     private var missionControl: (windows: [CGWindowID], active: Bool)?
+    private var windowRects: (windows: [CGWindowID], at: TimeInterval, facts: (rects: [CGRect], menuOpen: Bool))?
     private var observers: [NSObjectProtocol] = []
 
     init() {
@@ -78,6 +79,51 @@ final class CGSScreenProvider: ScreenProviding {
         missionControl = (windows, active)
         cacheLock.unlock()
         return active
+    }
+
+    var isPointerOverWallpaper: Bool {
+        let rects = windowFacts().rects, point = pointerAX
+        return !rects.contains { $0.contains(point) }
+    }
+
+    var isMenuOrDockInUse: Bool { windowFacts().menuOpen }
+
+    /// What the window list says, kept while the windows are the same (the numbers alone cost a tenth of a millisecond, the list with a description of each window about a
+    /// millisecond, and this is asked at every move of the pointer over a launcher) and for at most half a second (a window may be moved or resized without a number changing).
+    private func windowFacts() -> (rects: [CGRect], menuOpen: Bool) {
+        let now = ProcessInfo.processInfo.systemUptime, windows = CGWindowNumbers.ids(.optionOnScreenOnly)
+        cacheLock.lock()
+        let kept = windowRects.flatMap { $0.windows == windows && now - $0.at < 0.5 ? $0.facts : nil }
+        cacheLock.unlock()
+        if let kept { return kept }
+        let made = lookForWindowFacts()
+        cacheLock.lock()
+        windowRects = (windows, now, made)
+        cacheLock.unlock()
+        return made
+    }
+
+    /// The rectangles of the windows of every app that stand over the wallpaper, in the Accessibility coordinates the window list uses (the app's own too: its menus and popovers
+    /// count, but not the large clear panels it lays over a display, which let the mouse through), and whether a menu or the Dock is in use: a window above the ordinary
+    /// ones that is neither in the menu bar's strip (the icons) nor a clear panel over a whole display (the Dock's own), nor a panel this app draws itself.
+    private func lookForWindowFacts() -> (rects: [CGRect], menuOpen: Bool) {
+        guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] else { return ([], false) }
+        let me = ProcessInfo.processInfo.processIdentifier
+        var rects: [CGRect] = [], menuOpen = false
+        for window in list {
+            guard (window[kCGWindowAlpha as String] as? Double ?? 1) > 0, let bounds = window[kCGWindowBounds as String] as? [String: CGFloat],
+                  let x = bounds["X"], let y = bounds["Y"], let w = bounds["Width"], let h = bounds["Height"] else { continue }
+            let layer = window[kCGWindowLayer as String] as? Int ?? -1, owner = window[kCGWindowOwnerName as String] as? String ?? "", rect = CGRect(x: x, y: y, width: w, height: h)
+            let own = (window[kCGWindowOwnerPID as String] as? Int32) == me
+            if layer >= 0, !["Dock", "Window Server"].contains(owner), !(own && (w >= 1000 || h >= 1000)) { rects.append(rect) }
+            guard !menuOpen, MenuWindowRule.isMenu(layer: layer, owner: owner, rect: rect) else { continue }
+            // Of this app's own windows only its menus and popovers (a panel it draws itself, such as the island's, is neither): a menu is drawn by the system and
+            // is not among the windows of the app, a popover is a window of a class of its own.
+            if own, let known = (window[kCGWindowNumber as String] as? Int).flatMap({ NSApp.window(withWindowNumber: $0) }),
+               !["Menu", "Popover", "PopUp"].contains(where: { String(describing: type(of: known)).contains($0) }) { continue }
+            menuOpen = true
+        }
+        return (rects, menuOpen)
     }
 
     private func lookForMissionControl() -> Bool {

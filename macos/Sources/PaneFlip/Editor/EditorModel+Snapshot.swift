@@ -9,5 +9,6 @@ extension EditorModel {
         let offset: Double
         let defaultZone: UUID?
         let aspects: [UUID: ZoneAspect]
+        let launcherZones: Set<UUID>
     }
 }

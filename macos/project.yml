@@ -111,6 +111,9 @@ targets:
       - path: Sources/PaneFlip/Zones/PlannedZone.swift
       - path: Sources/PaneFlip/Zones/StripViewport.swift
       - path: Sources/PaneFlip/Zones/ZoneLabel.swift
+      - path: Sources/PaneFlip/Zones/ZoneLauncherModel.swift
+      - path: Sources/PaneFlip/Zones/LauncherApp.swift
+      - path: Sources/PaneFlip/Platform/MenuWindowRule.swift
       - path: Sources/PaneFlip/Snap/DividerResizer.swift
       - path: Sources/PaneFlip/Snap/DividerHandle.swift
       - path: Sources/PaneFlip/Snap/DividerLineView.swift

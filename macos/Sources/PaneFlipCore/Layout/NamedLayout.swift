@@ -17,6 +17,8 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var zoneNames: [UUID: String] = [:]
     /// The width-to-height ratio the layout editor keeps a zone at; a zone without one is free.
     public var zoneAspects: [UUID: ZoneAspect] = [:]
+    /// The zones that show a launcher of apps while no window is in them (see the layout editor's button); a zone not in it shows nothing.
+    public var launcherZones: Set<UUID> = []
     /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
     public var startApps: Set<String> = []
 
@@ -41,6 +43,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         copy.trailing = trailing.map { Overflow(width: $0.width, root: $0.root.renewed(&ids)) }
         copy.zoneNames = Dictionary(uniqueKeysWithValues: zoneNames.compactMap { zone, name in ids[zone].map { ($0, name) } })
         copy.zoneAspects = Dictionary(uniqueKeysWithValues: zoneAspects.compactMap { zone, aspect in ids[zone].map { ($0, aspect) } })
+        copy.launcherZones = Set(launcherZones.compactMap { ids[$0] })
         return copy
     }
 
@@ -49,7 +52,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         return try c.decodeIfPresent(Overflow.self, forKey: key).map { [$0] } ?? []
     }
 
-    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, edgeMargin, minZoneSize, startApps, zoneNames, zoneAspects }
+    enum CodingKeys: String, CodingKey { case id, name, root, defaultZoneID, leading, trailing, gap, edgeMargin, minZoneSize, startApps, zoneNames, zoneAspects, launcherZones }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -67,6 +70,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         startApps = try c.decodeIfPresent(Set<String>.self, forKey: .startApps) ?? []
         zoneNames = try c.decodeIfPresent([UUID: String].self, forKey: .zoneNames) ?? [:]
         zoneAspects = try c.decodeIfPresent([UUID: ZoneAspect].self, forKey: .zoneAspects) ?? [:]
+        launcherZones = try c.decodeIfPresent(Set<UUID>.self, forKey: .launcherZones) ?? []
     }
 
     /// The screen's layout with the areas beyond its edges.
@@ -75,9 +79,9 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
         set { leading = newValue.leading; root = newValue.root; trailing = newValue.trailing }
     }
 
-    /// The zone that receives apps whose zone is gone: the chosen one while it still exists, else the first.
+    /// The zone that receives apps whose zone is gone: the chosen one while it still exists (it may be one beyond an edge of the screen), else the screen's first.
     public var fallbackZoneID: UUID? {
-        let zones = root.leafIDs
-        return defaultZoneID.flatMap { zones.contains($0) ? $0 : nil } ?? zones.first
+        let zones = strip.zoneIDs
+        return defaultZoneID.flatMap { zones.contains($0) ? $0 : nil } ?? root.leafIDs.first
     }
 }
