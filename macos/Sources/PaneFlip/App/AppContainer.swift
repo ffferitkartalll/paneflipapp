@@ -97,6 +97,10 @@ final class AppContainer {
                                              refresher: engine,
                                              gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) })
         engine.add(presenter: zoneWindows)
+        let launchers = ZoneLaunchers(coordinator: coordinator, screens: screens,
+                                      launcherZones: { [repository, screens] in screens.screens().reduce(into: Set<UUID>()) { $0.formUnion(repository.activeLayout(for: $1.key)?.launcherZones ?? []) } },
+                                      apps: layoutApps, cards: island, catalog: apps, installed: FolderInstalledApps(), ignored: { [settings] in Set(settings.values.ignoredApps) })
+        engine.add(presenter: launchers)
         notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
         let layoutGrid = LayoutGridOverlay(coordinator: coordinator, screens: screens, source: island, snapshots: capture, planner: planner,
@@ -105,11 +109,14 @@ final class AppContainer {
                                            gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) },
                                            gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
                                            deskRect: { desk.rect($0) })
+        launchers.isQuiet = { [weak island, weak zoneWindows, weak layoutGrid, coordinator] in
+            island?.isOpen != true && zoneWindows?.isShown != true && layoutGrid?.isShown != true && !coordinator.isMoving && !coordinator.switchLocked
+        }
         layoutGrid.isBlocked = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
         layoutGrid.islandShape = { [weak island] in island?.restingFrame(on: $0) }
         island.staysClosed = { [weak zoneWindows, weak layoutGrid] in zoneWindows?.isShown ?? false || layoutGrid?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
-        island.onCover = { [weak notches] in notches?.isCovered = $0 }
+        island.onCover = { [weak notches, weak launchers] in notches?.isCovered = $0; launchers?.isCovered = $0 }
         island.onBadgesChanged = { [weak notches] in notches?.badgesDidChange() }
         coordinator.onActivity = { [weak island, weak notches] zone in island?.windowsDidChange(); notches?.restack(); notches?.windowsDidChange(in: zone) }
         coordinator.deskRect = { desk.rect($0) }
@@ -316,6 +323,7 @@ final class AppContainer {
                 }
             }
             notches.start()
+            launchers.start()
             pointerCrossing.start()
             capsLock.remap(settings.values.capsLockAsModifier)
             capsLockKey.start()

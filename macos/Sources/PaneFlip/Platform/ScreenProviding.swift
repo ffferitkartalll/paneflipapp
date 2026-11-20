@@ -19,6 +19,10 @@ protocol ScreenProviding {
     func menuBarHeight(of screen: ScreenInfo) -> CGFloat
     /// Mission Control or App Exposé is showing: windows are rearranged or hidden and should be left alone.
     var isMissionControlActive: Bool { get }
+    /// No ordinary window of any app is under the pointer: it is over the wallpaper (the desktop's icons and the app's own panels that cover a display do not count).
+    var isPointerOverWallpaper: Bool { get }
+    /// A menu or the Dock is in use (a menu of a menu bar icon or of the Dock, a popover, a label of the Dock): nothing should open over the desktop meanwhile, wherever the pointer is.
+    var isMenuOrDockInUse: Bool { get }
     /// Cocoa ↔ Accessibility rectangle conversion (the transform is its own inverse).
     func flip(_ rect: CGRect) -> CGRect
 }

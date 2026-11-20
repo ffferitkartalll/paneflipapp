@@ -15,6 +15,10 @@ protocol LayoutAppsEditing: AnyObject {
     func startApps(of layout: NamedLayout) -> [String]
     /// Starts those of the apps that are not running (they are placed as they open).
     func open(apps bundleIDs: [String])
+    /// Puts the app in `zone` and opens it there (it is started, or asked to open a window).
+    func launch(app bundleID: String, into zone: UUID)
+    /// Puts the app in `zone`'s stack without opening it.
+    func add(app bundleID: String, to zone: UUID)
     func move(app bundleID: String, from zone: UUID, to target: UUID, inZones zones: [UUID])
     /// -1 shows the app earlier in its zone's row, 1 later.
     func reorder(app bundleID: String, in zone: UUID, by offset: Int, inZones zones: [UUID])

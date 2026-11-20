@@ -24,6 +24,20 @@ final class EditorModelTests: XCTestCase {
         XCTAssertEqual(editor.effectiveDefaultZone, a)
     }
 
+    func testTheDefaultZoneCanBeOneBeyondAnEdgeAndFallsBackToTheScreensFirstWhenItGoes() {
+        let a = UUID()
+        let editor = model(StripLayout(root: .leaf(a)))
+        editor.addLeading()
+        let beyond = editor.strip.zoneIDs[0]
+        XCTAssertNotEqual(beyond, a)
+        editor.setDefaultZone(beyond)
+        XCTAssertEqual(editor.effectiveDefaultZone, beyond)
+        editor.toggleLauncher(beyond)   // the launcher and the ratio are as free beyond an edge as on the screen
+        XCTAssertTrue(editor.launcherZones.contains(beyond))
+        editor.removeEditedArea()
+        XCTAssertEqual(editor.effectiveDefaultZone, a)
+    }
+
     func testAZoneKeepsItsRatioWhileALineMovesAndLosesItWhenSplit() {
         let a = UUID(), b = UUID(), c = UUID(), column = UUID()
         let rect = CGRect(x: 0, y: 0, width: 1600, height: 1000)

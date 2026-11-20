@@ -112,6 +112,7 @@ public final class LayoutRepository {
         s.layouts[i].strip = strip
         s.layouts[i].zoneNames = s.layouts[i].zoneNames.filter { strip.zoneIDs.contains($0.key) }
         s.layouts[i].zoneAspects = s.layouts[i].zoneAspects.filter { strip.zoneIDs.contains($0.key) }
+        s.layouts[i].launcherZones = s.layouts[i].launcherZones.filter { strip.zoneIDs.contains($0) }
         screens[Self.split(key).display] = s
     }
 
@@ -152,6 +153,13 @@ public final class LayoutRepository {
     public func setZoneAspects(_ aspects: [UUID: ZoneAspect], ofLayout id: UUID, key: String) {
         guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
         s.layouts[i].zoneAspects = aspects.filter { s.layouts[i].strip.zoneIDs.contains($0.key) }
+        screens[Self.split(key).display] = s
+    }
+
+    /// Sets the zones of a layout that show a launcher; a zone that is not in the layout is left out.
+    public func setLauncherZones(_ zones: Set<UUID>, ofLayout id: UUID, key: String) {
+        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
+        s.layouts[i].launcherZones = zones.filter { s.layouts[i].strip.zoneIDs.contains($0) }
         screens[Self.split(key).display] = s
     }
 

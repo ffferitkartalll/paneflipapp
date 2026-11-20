@@ -35,17 +35,21 @@ final class EditorModel {
     /// The width-to-height ratio each zone keeps while the lines move; a zone without one is free.
     private(set) var aspects: [UUID: ZoneAspect]
 
+    /// The zones that show a launcher of apps while no window is in them.
+    private(set) var launcherZones: Set<UUID>
+
     @ObservationIgnored private let onApply: (EditorModel) -> Void
     @ObservationIgnored private let onClose: () -> Void
 
     init(strip: StripLayout, gap: CGFloat = 0, margin: CGFloat = 0, minZoneSize: Double = AppSettings.minZoneSizeRange.lowerBound,
-         defaultZone: UUID? = nil, aspects: [UUID: ZoneAspect] = [:], onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
+         defaultZone: UUID? = nil, aspects: [UUID: ZoneAspect] = [:], launcherZones: Set<UUID> = [], onApply: @escaping (EditorModel) -> Void, onClose: @escaping () -> Void) {
         self.strip = strip
         self.gap = gap
         self.margin = margin
         self.minZoneSize = minZoneSize
         self.defaultZone = defaultZone
         self.aspects = aspects
+        self.launcherZones = launcherZones
         self.onApply = onApply
         self.onClose = onClose
     }
@@ -116,41 +120,49 @@ final class EditorModel {
     @ObservationIgnored private var gridBase: Snapshot?
 
     private func checkpoint() {
-        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects, launcherZones: launcherZones))
         future = []
         resizing = nil
     }
 
     func undo() {
         guard let before = past.popLast() else { return }
-        future.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
+        future.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects, launcherZones: launcherZones))
         strip = before.strip
         offset = before.offset
         defaultZone = before.defaultZone
         aspects = before.aspects
+        launcherZones = before.launcherZones
         resizing = nil
     }
 
     func redo() {
         guard let after = future.popLast() else { return }
-        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects))
+        past.append(Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects, launcherZones: launcherZones))
         strip = after.strip
         offset = after.offset
         defaultZone = after.defaultZone
         aspects = after.aspects
+        launcherZones = after.launcherZones
         resizing = nil
     }
 
-    /// The screen's zone that receives apps whose zone is gone: the chosen one while it still exists, else the first.
+    /// The zone that receives apps whose zone is gone (on the screen or beyond one of its edges): the chosen one while it still exists, else the screen's first.
     var effectiveDefaultZone: UUID? {
-        let zones = strip.root.leafIDs
-        return defaultZone.flatMap { zones.contains($0) ? $0 : nil } ?? zones.first
+        defaultZone.flatMap { strip.zoneIDs.contains($0) ? $0 : nil } ?? strip.root.leafIDs.first
     }
 
     func setDefaultZone(_ zone: UUID) {
-        guard zone != effectiveDefaultZone, strip.root.leafIDs.contains(zone) else { return }
+        guard zone != effectiveDefaultZone, strip.zoneIDs.contains(zone) else { return }
         checkpoint()
         defaultZone = zone
+    }
+
+    /// A zone shows a launcher of apps while it has no window, or does not.
+    func toggleLauncher(_ zone: UUID) {
+        guard strip.zoneIDs.contains(zone) else { return }
+        checkpoint()
+        if !launcherZones.insert(zone).inserted { launcherZones.remove(zone) }
     }
 
     /// The screen in view goes back to one zone (the first it had); the other screens stay as they are.
@@ -173,10 +185,11 @@ final class EditorModel {
 
     /// Shows a grid on the screen in view while its sliders move; `applyGrid` keeps it as one change, `cancelGrid` puts back what was there.
     func previewGrid(rows: Int, columns: Int) {
-        let base = gridBase ?? Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects)
+        let base = gridBase ?? Snapshot(strip: strip, offset: offset, defaultZone: defaultZone, aspects: aspects, launcherZones: launcherZones)
         gridBase = base
         strip = base.strip
         aspects = base.aspects
+        launcherZones = base.launcherZones
         replaceEditedRoot(LayoutPreset.custom(rows: rows, columns: columns).root.reusing(strip.root(at: offset).leafIDs))
     }
 
@@ -189,7 +202,7 @@ final class EditorModel {
 
     func cancelGrid() {
         guard let base = gridBase else { return }
-        strip = base.strip; offset = base.offset; defaultZone = base.defaultZone; aspects = base.aspects
+        strip = base.strip; offset = base.offset; defaultZone = base.defaultZone; aspects = base.aspects; launcherZones = base.launcherZones
         gridBase = nil
     }
 
