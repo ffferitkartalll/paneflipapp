@@ -7,11 +7,11 @@ public struct SettingsValues: Equatable {
     /// Use the app as an island at the middle of the menu bar. Off: the island is out of sight until a click on the menu bar icon opens it under the icon.
     public var islandEnabled = false
     /// Space between zones in points; not applied to screen edges.
-    public var gap = 4.0
+    public var gap = 20.0
     /// A window dragged out of its zone goes back to the size it had before the zone took it in.
     public var restoreSizeOnLeave = true
     /// Space between the zones and the edges of the screen, in points.
-    public var edgeMargin = 0.0
+    public var edgeMargin = 20.0
     /// Smallest width/height a zone may have, in points.
     public var minZoneSize = 240.0
     /// Look up brand icons for apps on the network (the names of the stacked apps are sent to the icon host).

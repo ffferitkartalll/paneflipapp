@@ -40,6 +40,7 @@ final class StripScrollingTests: XCTestCase {
         repository.setStrip(strip, ofLayout: layout.id, key: key)
         var values = SettingsValues()
         values.gap = 0
+        values.edgeMargin = 0
         let storage = StubSettingsStorage()
         storage.saved = values
         settings = AppSettings(storage: storage)

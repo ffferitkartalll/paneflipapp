@@ -35,6 +35,7 @@ final class DividerResizerTests: XCTestCase {
         let storage = StubSettingsStorage()
         var values = SettingsValues()
         values.gap = 0
+        values.edgeMargin = 0
         storage.saved = values
         let settings = AppSettings(storage: storage)
         viewport = StripViewport()

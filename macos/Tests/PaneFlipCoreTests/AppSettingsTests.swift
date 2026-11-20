@@ -15,6 +15,12 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(storage.saved?.placementEnabled, false)
     }
 
+    func testTheGapAndTheMarginAreTwentyPointsUntilChosen() {
+        let values = SettingsValues()
+        XCTAssertEqual(values.gap, 20)
+        XCTAssertEqual(values.edgeMargin, 20)
+    }
+
     func testTheAppIsNotUsedAsAnIslandUntilChosenAndTheChoiceIsAnnounced() {
         let settings = AppSettings(storage: Storage())
         XCTAssertFalse(settings.values.islandEnabled)
