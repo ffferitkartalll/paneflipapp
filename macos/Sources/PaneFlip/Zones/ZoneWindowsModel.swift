@@ -28,6 +28,9 @@ final class ZoneWindowsModel {
     var front: String?
     /// 0 with the pictures over their windows, 1 with the cards in their places: moved as the grid opens and closes.
     var appear: CGFloat = 0 { didSet { settled = appear >= 1 } }
+    /// How much lower than its size the grid is drawn once it has opened (the whole layout's grid makes room for the search bar by drawing the zones lower): what must not be
+    /// drawn squeezed (`Unsqueezed`) is drawn at the inverse. 1 for the grid of one zone.
+    var squeeze: CGFloat = 1
     /// The cards are in their places: what changes only then reads this, not `appear`, so it is not worked out at every step of the slide.
     private(set) var settled = false
     /// The cards are on their way (the grid of the whole layout opening, closing or led by the fingers): the grid takes no pointer, so that nothing is hit-tested at every step.
