@@ -342,6 +342,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
             grid.onClose = { [weak self] in self?.hide() }
             return LayoutGridZone(id: zone.id, rect: zone.rect, model: grid)
         }
+        model.zones.forEach { $0.model.squeeze = model.gridScale }   // the grid is drawn lower for the search bar: the titles and buttons of the cards are not (`ZoneWindowsCard`)
         // The panel is the whole display, the menu bar and the Dock too, so that nothing cuts the shadows of the cards; the grid lies in its usable area.
         let frame = plan.screen.cocoaFrame, whole = screens.flip(frame)
         model.inset = CGPoint(x: area.minX - whole.minX, y: area.minY - whole.minY)

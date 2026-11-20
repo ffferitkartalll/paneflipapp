@@ -35,6 +35,7 @@ struct ZoneWindowsCard: View {
                         .foregroundStyle(AppAccent.color)
                         .frame(width: Self.glyphSide(in: size), height: Self.glyphSide(in: size))
                         .frame(width: size.width, height: size.height)
+                        .modifier(Unsqueezed(model: model))   // not squeezed with the grid
                 }
             }
             title
@@ -104,6 +105,7 @@ struct ZoneWindowsCard: View {
             }
         }
         .frame(width: size.width, alignment: .top)
+        .modifier(Unsqueezed(model: model, anchor: .top))   // not squeezed with the grid
         .padding(.top, 4 + Self.inset - margin)
         .opacity(shown && model.settled ? 1 : 0)
         .animation(.easeOut(duration: 0.12), value: shown && model.settled)
@@ -170,6 +172,7 @@ struct ZoneWindowsCard: View {
             .offset(x: rect.minX - Self.inset, y: rect.minY + Self.inset)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
+        .modifier(Unsqueezed(model: model, anchor: .top))   // not squeezed with the grid: the buttons stand in the top row
         .opacity(buttonsShown ? 1 : 0)
     }
 }
