@@ -114,6 +114,8 @@ final class AppContainer {
         }
         layoutGrid.isBlocked = { [weak zoneWindows] in zoneWindows?.isShown ?? false }
         layoutGrid.islandShape = { [weak island] in island?.restingFrame(on: $0) }
+        layoutGrid.onGlide = { [weak island] screen, to in island?.glide(on: screen, from: nil, to: to) }
+        layoutGrid.onFollow = { [weak island] screen, offset in island?.follow(on: screen, offset: offset) }
         island.staysClosed = { [weak zoneWindows, weak layoutGrid] in zoneWindows?.isShown ?? false || layoutGrid?.isShown ?? false }
         island.badgesWanted = { [weak notches] in notches?.showsCards ?? false }
         island.onCover = { [weak notches, weak launchers] in notches?.isCovered = $0; launchers?.isCovered = $0 }
