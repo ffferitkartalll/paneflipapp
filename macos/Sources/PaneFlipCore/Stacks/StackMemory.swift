@@ -86,7 +86,26 @@ public final class StackMemory {
         return result
     }
 
+    /// The apps of one layout that are ticked to be started with it.
+    public func startApps(inZones zones: [UUID]) -> Set<String> {
+        let set = Set(zones)
+        return Set(records.filter { $0.start && !$0.bundleID.isEmpty && zone(of: $0, in: set) != nil }.map(\.bundleID))
+    }
+
     // MARK: Commands
+
+    /// Ticks or unticks an app for one layout: all its slots in the layout's zones.
+    public func setStart(_ chosen: Bool, app bundleID: String, inZones zones: [UUID]) {
+        let set = Set(zones)
+        var copy = records
+        for i in copy.indices where copy[i].bundleID == bundleID && zone(of: copy[i], in: set) != nil { copy[i].start = chosen }
+        if copy != records { records = copy }
+    }
+
+    /// Ticks apps in the slots of one layout's zones: what layouts kept before the tick belonged to the slots.
+    public func markStart(_ bundleIDs: Set<String>, inZones zones: [UUID]) {
+        bundleIDs.forEach { setStart(true, app: $0, inZones: zones) }
+    }
 
     /// Puts the slot `i` in the place of the slot `j`: moved down it comes after it, moved up before it. Its window stays bound to it; the slots in between
     /// each move one place the other way.
@@ -239,8 +258,9 @@ public final class StackMemory {
     /// one (an app's windows stay together), else at the end.
     @discardableResult
     public func remember(zoneID: UUID, bundleID: String, title: String) -> Int {
-        let record = StackRecord(zoneID: zoneID, bundleID: bundleID, title: title)
+        var record = StackRecord(zoneID: zoneID, bundleID: bundleID, title: title)
         let after = bundleID.isEmpty ? nil : records.lastIndex { $0.zoneID == zoneID && $0.bundleID == bundleID }
+        if let after { record.start = records[after].start }   // a new window of a ticked app is ticked too
         let index = after.map { $0 + 1 } ?? records.count
         records.insert(record, at: index)
         return index
@@ -340,7 +360,9 @@ public final class StackMemory {
         }
         for var record in lacking {
             guard let zone = map[record.zoneID] else { continue }
-            record = StackRecord(zoneID: zone, bundleID: record.bundleID, title: record.title)
+            var fresh = StackRecord(zoneID: zone, bundleID: record.bundleID, title: record.title)
+            fresh.start = record.start
+            record = fresh
             copy.insert(record, at: copy.lastIndex { $0.zoneID == zone }.map { $0 + 1 } ?? copy.count)
         }
         records = copy

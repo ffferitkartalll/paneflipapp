@@ -99,10 +99,6 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
         repository.setSpacing(gap: gap, edgeMargin: edgeMargin, minZoneSize: minZoneSize, ofLayout: id, key: key)
     }
 
-    func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {
-        repository.setStartApp(bundleID, chosen: chosen, ofLayout: id, key: key)
-    }
-
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String) {
         repository.setZoneName(name, ofZone: zone, inLayout: id, key: key)
     }

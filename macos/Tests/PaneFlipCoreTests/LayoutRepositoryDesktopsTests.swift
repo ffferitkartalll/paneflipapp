@@ -116,17 +116,19 @@ final class LayoutRepositoryDesktopsTests: XCTestCase {
         XCTAssertEqual(repository.layout(id: other.id, key: "A|d1")!.gap(in: settings), settings.gap, "another layout is not touched")
     }
 
-    func testTheTickedAppsAreKeptWithTheLayoutAndNotCopied() {
+    func testTheTicksTheLayoutsKeptAreHandedOverOnceAndForgotten() {
         let store = MemoryStore()
         let repository = LayoutRepository(store: store)
-        let layout = repository.addLayout(for: "A|d1")
+        var layout = NamedLayout(name: "old", root: .leaf(UUID()))
+        layout.startApps = ["com.example.one"]
+        repository.importLayout(layout, key: "A|d1")
 
-        repository.setStartApp("com.example.one", chosen: true, ofLayout: layout.id, key: "A|d1")
-        repository.setStartApp("com.example.two", chosen: true, ofLayout: layout.id, key: "A|d1")
-        repository.setStartApp("com.example.two", chosen: false, ofLayout: layout.id, key: "A|d1")
+        let taken = repository.takeStartApps()
 
-        XCTAssertEqual(LayoutRepository(store: store).layout(id: layout.id, key: "A|d1")?.startApps, ["com.example.one"], "kept across a restart")
-        XCTAssertTrue(repository.duplicateLayout(id: layout.id, key: "A|d1", named: "Copy")!.startApps.isEmpty)
+        XCTAssertEqual(taken.map(\.apps), [["com.example.one"]])
+        XCTAssertEqual(taken.first?.zones, layout.strip.zoneIDs)
+        XCTAssertTrue(repository.takeStartApps().isEmpty, "handed over once")
+        XCTAssertTrue(LayoutRepository(store: store).layouts(for: "A|d1").allSatisfy { $0.startApps.isEmpty }, "and forgotten across a restart")
     }
 
     func testAZoneKeepsItsNameUntilItIsClearedOrGoneAndACopyKeepsTheNames() {

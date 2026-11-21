@@ -163,11 +163,19 @@ public final class LayoutRepository {
         screens[Self.split(key).display] = s
     }
 
-    /// Ticks or unticks an app to be started with the layout.
-    public func setStartApp(_ bundleID: String, chosen: Bool, ofLayout id: UUID, key: String) {
-        guard var s = screens[Self.split(key).display], let i = s.layouts.firstIndex(where: { $0.id == id }) else { return }
-        if chosen { s.layouts[i].startApps.insert(bundleID) } else { s.layouts[i].startApps.remove(bundleID) }
-        screens[Self.split(key).display] = s
+    /// The ticks that layouts kept before they belonged to the slots of the scenes: handed over once, then forgotten here.
+    public func takeStartApps() -> [(zones: [UUID], apps: Set<String>)] {
+        var taken: [(zones: [UUID], apps: Set<String>)] = []
+        for (display, var layouts) in screens {
+            var changed = false
+            for i in layouts.layouts.indices where !layouts.layouts[i].startApps.isEmpty {
+                taken.append((layouts.layouts[i].strip.zoneIDs, layouts.layouts[i].startApps))
+                layouts.layouts[i].startApps = []
+                changed = true
+            }
+            if changed { screens[display] = layouts }
+        }
+        return taken
     }
 
     public func setDefaultZone(_ zone: UUID?, ofLayout id: UUID, key: String) {

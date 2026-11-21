@@ -36,6 +36,11 @@ final class AppContainer {
         let repository = LayoutRepository(store: documents)
         let scenes = SceneRepository(store: documents)
         let memory = StackMemory(store: documents, scene: scenes.activeScene.id)
+        // The ticks of apps to be started were kept by the layouts; they belong to the slots of each scene now.
+        for tick in repository.takeStartApps() {
+            memory.markStart(tick.apps, inZones: tick.zones)
+            for scene in scenes.scenes where scene.id != scenes.activeScene.id { StackMemory(store: documents, scene: scene.id).markStart(tick.apps, inZones: tick.zones) }
+        }
 
         let screens = CGSScreenProvider()
         let windows = AXWindowSystem(screens: screens)
@@ -181,7 +186,7 @@ final class AppContainer {
         island.onFinishEditing = { [weak resizer] in resizer?.finish() }
         island.onEditEdges = { [weak resizer] in resizer?.toggle() }
         island.onUndoEdit = { [weak resizer] in resizer?.undo() }
-        island.onSetStartApp = { [layouts] in layouts.setStartApp(key: $0, id: $1, bundleID: $2, chosen: $3) }
+        island.onSetStartApp = { [layoutApps] in layoutApps.setStart($2, app: $1, inZones: $0) }
         island.onCornerAction = { [editor, layoutApps, repository, screens, layoutGrid] action in
             switch action {
             case .editLayout: editor.toggleAtPointer()

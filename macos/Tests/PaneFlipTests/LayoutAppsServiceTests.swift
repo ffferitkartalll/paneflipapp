@@ -40,13 +40,13 @@ final class LayoutAppsServiceTests: XCTestCase {
     }
 
     func testOnlyTickedAppsThatStillHaveAZoneAreStarted() {
-        var layout = NamedLayout(name: "x", root: .leaf(zone))
-        layout.startApps = ["com.example.one", "com.example.gone"]
+        let layout = NamedLayout(name: "x", root: .leaf(zone))
         memory.remember(zoneID: zone, bundleID: "com.example.one", title: "")
         memory.remember(zoneID: zone, bundleID: "com.example.two", title: "")
+        service.setStart(true, app: "com.example.one", inZones: layout.strip.zoneIDs)
+        service.setStart(true, app: "com.example.gone", inZones: layout.strip.zoneIDs)
 
         XCTAssertEqual(service.startApps(of: layout), ["com.example.one"])
-        XCTAssertEqual(layout.startApps, ["com.example.one", "com.example.gone"], "the ticks themselves are left as the user made them")
     }
 
     func testTakingAnAppOutOfAZoneForgetsItAndTriggersAPlacement() {

@@ -75,7 +75,12 @@ final class LayoutAppsService: LayoutAppsEditing {
     }
 
     func startApps(of layout: NamedLayout) -> [String] {
-        Set(memory.apps(inZones: layout.strip.zoneIDs).map(\.bundleID)).intersection(layout.startApps).sorted()
+        memory.startApps(inZones: layout.strip.zoneIDs).sorted()
+    }
+
+    func setStart(_ chosen: Bool, app bundleID: String, inZones zones: [UUID]) {
+        memory.setStart(chosen, app: bundleID, inZones: zones)
+        revision += 1
     }
 
     /// An app that is not running is started; one that is running but shows no window (closed with Cmd+W) is asked to open one.
