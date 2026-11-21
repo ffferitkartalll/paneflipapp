@@ -75,7 +75,6 @@ final class LayoutRepositoryDisplaysTests: XCTestCase {
         let repository = repository()
         let first = repository.addLayout(for: "A|d1", named: "mine", preset: .custom(rows: 2, columns: 2))
         repository.setSpacing(gap: 12, edgeMargin: 8, minZoneSize: 100, ofLayout: first.id, key: "A|d1")
-        repository.setStartApp("app", chosen: true, ofLayout: first.id, key: "A|d1")
         let second = repository.addLayout(for: "A|d1", named: "other")
 
         let fresh = repository.resetLayout(id: first.id, key: "A|d1")
@@ -85,7 +84,6 @@ final class LayoutRepositoryDisplaysTests: XCTestCase {
         XCTAssertEqual(fresh?.root.leafIDs.count, 1)
         XCTAssertEqual(fresh?.gap, 0)
         XCTAssertEqual(fresh?.edgeMargin, 0)
-        XCTAssertTrue(fresh?.startApps.isEmpty ?? false)
         XCTAssertEqual(repository.activeLayout(for: "A|d1")?.id, first.id, "still the one the desktop uses")
     }
 }

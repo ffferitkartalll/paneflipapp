@@ -104,6 +104,22 @@ final class StackMemoryTests: XCTestCase {
         XCTAssertNil(memory.records[0].windowID)
     }
 
+    func testATickGoesWhereTheSlotGoesAndANewWindowOfATickedAppIsTicked() {
+        let memory = StackMemory(store: MemoryStore())
+        let gone = UUID(), shown = UUID()
+        memory.remember(zoneID: gone, bundleID: "a", title: "")
+        memory.remember(zoneID: gone, bundleID: "b", title: "")
+        memory.setStart(true, app: "a", inZones: [gone])
+        memory.remember(zoneID: gone, bundleID: "a", title: "second window")
+
+        XCTAssertEqual(memory.startApps(inZones: [gone]), ["a"])
+        memory.remap([gone: shown])   // the display of `gone` was unplugged
+
+        XCTAssertEqual(memory.startApps(inZones: [shown]), ["a"], "ticked as before, in the zone the windows went to")
+        XCTAssertTrue(memory.startApps(inZones: [gone]).contains("a"), "and in the zone it remembers, for when the display is back")
+        XCTAssertEqual(memory.records.filter { $0.bundleID == "a" }.map(\.start), [true, true])
+    }
+
     func testPruneDropsSlotsOfDeletedZones() {
         let memory = StackMemory(store: MemoryStore())
         let keep = UUID(), drop = UUID()

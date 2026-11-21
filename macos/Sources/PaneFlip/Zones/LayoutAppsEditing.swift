@@ -13,6 +13,8 @@ protocol LayoutAppsEditing: AnyObject {
     func glyph(ofApp bundleID: String) -> NSImage
     /// The apps of the layout that are ticked to be started and still have a zone in it.
     func startApps(of layout: NamedLayout) -> [String]
+    /// Ticks or unticks an app of the layout (`zones`) to be started with it.
+    func setStart(_ chosen: Bool, app bundleID: String, inZones zones: [UUID])
     /// Starts those of the apps that are not running (they are placed as they open).
     func open(apps bundleIDs: [String])
     /// Puts the app in `zone` and opens it there (it is started, or asked to open a window).

@@ -12,7 +12,7 @@ final class NamedLayoutFileTests: XCTestCase {
         let second = try NamedLayout.imported(from: data)
 
         XCTAssertEqual(first.name, "Work")
-        XCTAssertEqual(first.startApps, ["com.example.app"])
+        XCTAssertTrue(first.startApps.isEmpty, "the ticks belong to the windows of a scene, not to the file")
         XCTAssertEqual(first.root.leafIDs.count, 3)
         XCTAssertEqual(first.zoneNames.values.sorted(), ["Mail"])
         XCTAssertNotEqual(first.id, layout.id)

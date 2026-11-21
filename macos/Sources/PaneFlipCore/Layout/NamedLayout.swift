@@ -19,7 +19,7 @@ public struct NamedLayout: Codable, Identifiable, Equatable {
     public var zoneAspects: [UUID: ZoneAspect] = [:]
     /// The zones that show a launcher of apps while no window is in them (see the layout editor's button); a zone not in it shows nothing.
     public var launcherZones: Set<UUID> = []
-    /// The apps (bundle identifiers) the user ticked to be started together. Only the user changes it.
+    /// Where the ticks of apps to be started were kept before they belonged to the slots of a scene (`StackRecord.start`); read once at the start (`LayoutRepository.takeStartApps`).
     public var startApps: Set<String> = []
 
     public init(id: UUID = UUID(), name: String, root: LayoutNode, defaultZoneID: UUID? = nil,

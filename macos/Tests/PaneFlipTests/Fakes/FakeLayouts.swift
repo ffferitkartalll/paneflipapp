@@ -24,7 +24,6 @@ final class FakeLayouts: LayoutManaging {
     private(set) var remapped: [Bool] = []
     func activate(key: String, id: UUID, remapping: Bool) { activated.append(id); remapped.append(remapping) }
     func deactivate(key: String) {}
-    func setStartApp(key: String, id: UUID, bundleID: String, chosen: Bool) {}
     func setSpacing(key: String, id: UUID, gap: Double, edgeMargin: Double, minZoneSize: Double) {}
     func setZoneName(key: String, id: UUID, zone: UUID, to name: String) {}
     func rename(key: String, id: UUID, to name: String) {}

@@ -60,7 +60,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// The button at the corner of the open island's picture was pressed.
     var onEditEdges: (() -> Void)?
     /// The button of a card that ticks its app to be started with the layout was pressed: the display's key, the layout, the app, whether it is ticked now.
-    var onSetStartApp: ((_ key: String, _ layout: UUID, _ bundleID: String, _ chosen: Bool) -> Void)?
+    var onSetStartApp: ((_ zones: [UUID], _ bundleID: String, _ chosen: Bool) -> Void)?
     /// A button in the top right corner of the open island was pressed.
     var onCornerAction: ((IslandCornerAction) -> Void)?
     /// The Undo button under the editing notice was pressed.
@@ -987,8 +987,9 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     func toggleStart(_ card: IslandWindow, in zone: UUID) {
-        guard let (key, layout) = layout(of: zone) else { return }
-        onSetStartApp?(key, layout.id, card.bundleID, !layout.startApps.contains(card.bundleID))
+        guard let layout = layout(of: zone)?.layout else { return }
+        let zones = layout.strip.zoneIDs
+        onSetStartApp?(zones, card.bundleID, !memory.startApps(inZones: zones).contains(card.bundleID))
     }
 
     private func cardAction(at point: CGPoint, in entry: Entry) -> (IslandCardAction, IslandWindow)? {
@@ -1155,7 +1156,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         // Asking which apps run is a round trip to the system for each of them: only when a slot has no window (`running` is read then).
         lazy var running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
-        let starting = layout(of: zone)?.layout.startApps ?? []
+        let starting = layout(of: zone).map { memory.startApps(inZones: $0.layout.strip.zoneIDs) } ?? []
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {
             IslandWindow(windowID: tab.id, bundleID: tab.bundleID, name: tab.displayName.isEmpty ? tab.appName : tab.displayName, glyph: glyph(of: tab),
                          glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID], selected: starting.contains(tab.bundleID))
