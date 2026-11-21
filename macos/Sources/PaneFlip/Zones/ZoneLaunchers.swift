@@ -161,9 +161,9 @@ final class ZoneLaunchers: ZonePresenting {
         guard !reading, readAt.map({ Date().timeIntervalSince($0) > 30 }) ?? true else { return }
         reading = true
         readAt = Date()
-        DispatchQueue.global(qos: .utility).async { [installed] in
+        DispatchQueue.global(qos: .utility).async { [weak self, installed] in
             let list = installed.apps()
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.async {
                 self?.everyApp = list
                 self?.reading = false
                 done()

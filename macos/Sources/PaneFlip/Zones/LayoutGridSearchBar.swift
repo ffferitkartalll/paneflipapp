@@ -49,7 +49,7 @@ struct LayoutGridSearchBar: View {
             }
             .frame(height: LayoutGridModel.searchBarHeight)
             .pointerStyle(.horizontalText)   // the text cursor is for where text is typed; everywhere else in the bar and the grid the pointer is the arrow
-            (Text("\(search.zones) zones") + Text(verbatim: " · ") + Text("\(search.windows) windows")).foregroundStyle(Color.contrast.opacity(0.55)).monospacedDigit().lineLimit(1)
+            HStack(spacing: 0) { Text("\(search.zones) zones"); Text(verbatim: " · "); Text("\(search.windows) windows") }.foregroundStyle(Color.contrast.opacity(0.55)).monospacedDigit().lineLimit(1)
         }
         .font(.system(size: 14))
         .padding(.horizontal, 12)
