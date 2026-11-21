@@ -113,6 +113,7 @@ final class LayoutService: LayoutManaging, DisplayChangeHandling {
 
     func setLauncherZones(key: String, id: UUID, _ zones: Set<UUID>) {
         repository.setLauncherZones(zones, ofLayout: id, key: key)
+        refresher?.refreshPresenters()   // the launchers keep the zones they were asked for: they ask again (the editor saves this after laying the zones out)
     }
 
     func rename(key: String, id: UUID, to name: String) {

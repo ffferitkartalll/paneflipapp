@@ -2,6 +2,21 @@ import XCTest
 import PaneFlipCore
 
 final class LayoutServiceTests: XCTestCase {
+    func testChoosingLauncherZonesTellsThePresenters() {
+        let repository = LayoutRepository(store: MemoryDocumentStore())
+        let memory = StackMemory(store: MemoryDocumentStore())
+        let coordinator = StackCoordinator(windows: FakeWindowSystem(), memory: memory,
+                                           settings: AppSettings(storage: StubSettingsStorage()), apps: FakeApps())
+        let service = LayoutService(repository: repository, memory: memory, coordinator: coordinator, screens: FakeScreens())
+        let refresher = LayoutAppsServiceTests.Refresher()
+        service.refresher = refresher
+        let layout = repository.addLayout(for: "screen")
+
+        service.setLauncherZones(key: "screen", id: layout.id, [layout.root.leafIDs[0]])
+
+        XCTAssertEqual(refresher.presenterRefreshes, 1)
+    }
+
     func testRemovingALayoutForgetsOnlyTheAppsOfItsZones() {
         let repository = LayoutRepository(store: MemoryDocumentStore())
         let memory = StackMemory(store: MemoryDocumentStore())
