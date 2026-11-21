@@ -60,6 +60,10 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     private var triggerPoint = CGPoint.zero
     /// Where the island stands on a display (Cocoa coordinates), asked when the grid is made; set by `AppContainer`.
     var islandShape: (ScreenInfo) -> CGRect? = { _ in nil }
+    /// The grid of a display is scrolled to another screen of its layout: the island's picture of that layout moves the same way, by the same curve and in the same time
+    /// (`MenuBarIsland.glide`, `follow`), as it does when the layout itself scrolls: from where the island's frame is (a glide that still runs, or the fingers' last place). The offsets are the layout's own (where the grid opened plus how far it has gone). Set by `AppContainer`.
+    var onGlide: ((ScreenInfo, _ to: CGFloat) -> Void)?
+    var onFollow: ((ScreenInfo, _ offset: CGFloat) -> Void)?
     /// How far each display's grid was scrolled when the search first moved it: it goes back there when the search ends.
     private var scrolledBySearch: [ObjectIdentifier: CGFloat]?
     private var matchIndex = 0
@@ -435,6 +439,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// A display's grid scrolls to another rest.
     private func scroll(_ display: LayoutGridDisplay, to rest: CGFloat) {
         guard phase == .open, abs(rest - display.model.shift) > 0.5 else { return }
+        onGlide?(display.screen, display.offset + rest)
         withAnimation(Self.scrollSlide) { display.model.shift = rest }
     }
 
@@ -458,13 +463,16 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         current.scrub.add(moved, at: event.timestamp)
         swiping = current
         let lowest = model.rests.min() ?? 0, highest = model.rests.max() ?? 0
-        withAnimation(Self.follow) { model.shift = min(max(model.shift - moved, lowest), highest) }
+        let followed = min(max(model.shift - moved, lowest), highest)
+        onFollow?(current.display.screen, current.display.offset + followed)
+        withAnimation(Self.follow) { model.shift = followed }
         guard event.phase.contains(.ended) || event.phase.contains(.cancelled) else { return }
         swiping = nil
         // Where it would come to rest: the nearest screen to where the fingers would have taken it; a flick goes on to the next one that way at least.
         let projected = model.shift - current.scrub.landing + current.scrub.offset
         var target = model.rests.min { abs($0 - projected) < abs($1 - projected) } ?? model.shift
         if current.scrub.isFlick, abs(target - current.start) < 0.5 { target = model.rest(steps: current.scrub.speed > 0 ? -1 : 1) }
+        onGlide?(current.display.screen, current.display.offset + target)
         withAnimation(Self.scrollSlide) { model.shift = target }
     }
 
