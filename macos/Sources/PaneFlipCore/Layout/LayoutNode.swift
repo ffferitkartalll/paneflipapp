@@ -14,6 +14,14 @@ public indirect enum LayoutNode: Codable, Equatable {
         }
     }
 
+    /// True when every split's ratio lies strictly between 0 and 1.
+    var hasUsableRatios: Bool {
+        switch self {
+        case .leaf: return true
+        case .split(_, _, let ratio, let a, let b): return ratio > 0 && ratio < 1 && a.hasUsableRatios && b.hasUsableRatios
+        }
+    }
+
     /// The same tree with identities of its own; `ids` collects which new zone stands for which old one.
     func renewed(_ ids: inout [UUID: UUID]) -> LayoutNode {
         switch self {

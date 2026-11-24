@@ -1,4 +1,5 @@
 import CoreGraphics
+import os
 import ScreenCaptureKit
 
 final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
@@ -11,12 +12,19 @@ final class ScreenCaptureWindowSnapshots: WindowSnapshotting {
         Task {
             let found = await windows.windows(refs.map(\.id), maxAge: 60)
             let frames = Self.currentFrames(of: Array(found.keys))
-            let pictures = await withTaskGroup(of: (CGWindowID, WindowPicture?).self) { group -> [CGWindowID: WindowPicture] in
-                for (id, window) in found { group.addTask { (id, await Self.picture(of: window, frame: frames[id] ?? window.frame)) } }
-                var result: [CGWindowID: WindowPicture] = [:]
-                for await (id, picture) in group { if let picture { result[id] = picture } }
-                return result
+            // A capture that never answers must not hold the others: after the limit the pictures that came are handed over, the rest are left out.
+            let taken = OSAllocatedUnfairLock(initialState: [CGWindowID: WindowPicture]())
+            let work = Task {
+                await withTaskGroup(of: Void.self) { group in
+                    for (id, window) in found {
+                        group.addTask {
+                            if let picture = await Self.picture(of: window, frame: frames[id] ?? window.frame) { taken.withLock { $0[id] = picture } }
+                        }
+                    }
+                }
             }
+            await TaskDeadline.wait(for: work, seconds: Windows.limit)
+            let pictures = taken.withLock { $0 }
             await MainActor.run { completion(pictures) }
         }
     }

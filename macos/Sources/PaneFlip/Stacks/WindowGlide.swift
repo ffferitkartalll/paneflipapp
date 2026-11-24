@@ -12,6 +12,7 @@ final class WindowGlide {
     private let now: () -> TimeInterval
     private let duration: TimeInterval
 
+    private static let step: TimeInterval = 1.0 / 60
     private let lock = NSLock()
     private var running: [CGWindowID: Int] = [:]
     private var count = 0
@@ -38,6 +39,7 @@ final class WindowGlide {
                 let progress = min((now() - begin) / duration, 1)
                 windows.setFrame(progress >= 1 ? target : Self.frame(from: start, to: target, progress: progress), of: ref)
                 if progress >= 1 { return finish(mine, for: ref.id) }
+                Thread.sleep(forTimeInterval: Self.step)   // the display draws 60 times a second: more steps only load the other app
             }
         }
     }

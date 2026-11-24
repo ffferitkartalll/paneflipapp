@@ -16,8 +16,9 @@ final class LayoutGridModel {
     /// How far the grid has been scrolled toward the screens beyond the right edge since it opened, in points (negative: toward the left), and the places it rests at.
     var shift: CGFloat = 0
     var rests: [CGFloat] = [0]
-    /// The zones of the screens beyond the edges are drawn: not while the cards slide (opening, closing), when they would be worked out at every step for nothing.
-    var drawsOffView = false
+    /// The zones of the screens beyond the edges that are drawn: none while the cards slide (opening, closing), when they would be worked out at every step for nothing; they come
+    /// one after the other once the grid is open (all of them at once held the main thread for a frame or two), and all at once when the grid is scrolled.
+    var offViewDrawn: Set<UUID> = []
     /// How far the grid has opened (`ZoneWindowsModel.appear`, the same in every zone): the grid makes room for the search bar as it does.
     /// The views that read it are told after the value is in place: told before, one that works the value out at once would read the old one, and stay as it was.
     @ObservationIgnored private var kept: CGFloat = 0

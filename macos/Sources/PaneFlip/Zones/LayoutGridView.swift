@@ -10,8 +10,8 @@ struct LayoutGridView: View {
         ZStack(alignment: .topLeading) {
             ZStack(alignment: .topLeading) {
                 // While the cards slide (opening, closing) only the zones in view are drawn: those of the screens beyond the edges would be redrawn at every step for nothing, and
-                // their shadows would show in the last point of the screen. With the grid open (`drawsOffView`) every zone is there, so that scrolling to another screen works as it did.
-                ForEach(model.zones.filter { model.drawsOffView || ($0.rect.maxX > model.shift && $0.rect.minX < model.shift + model.size.width) }) { zone in
+                // their shadows would show in the last point of the screen. With the grid open (`offViewDrawn`) every zone is there, so that scrolling to another screen works as it did.
+                ForEach(model.zones.filter { model.offViewDrawn.contains($0.id) || ($0.rect.maxX > model.shift && $0.rect.minX < model.shift + model.size.width) }) { zone in
                     ZoneWindowsView(model: zone.model)
                         .position(x: zone.rect.midX, y: zone.rect.midY)
                         .transition(.identity)

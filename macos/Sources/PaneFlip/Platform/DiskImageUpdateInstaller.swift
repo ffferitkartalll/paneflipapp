@@ -45,7 +45,7 @@ final class DiskImageUpdateInstaller: UpdateInstalling {
     }
 
     /// True when the app at `url` satisfies the requirement this running app was signed with (same identifier, same certificate).
-    private static func isSignedLikeThisApp(_ url: URL) -> Bool {
+    static func isSignedLikeThisApp(_ url: URL) -> Bool {
         var running: SecCode?, runningStatic: SecStaticCode?, requirement: SecRequirement?, candidate: SecStaticCode?
         guard SecCodeCopySelf([], &running) == errSecSuccess, let running,
               SecCodeCopyStaticCode(running, [], &runningStatic) == errSecSuccess, let runningStatic,

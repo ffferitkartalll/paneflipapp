@@ -83,6 +83,35 @@ final class ZoneCarouselTests: XCTestCase {
         XCTAssertFalse(carousel.isSliding, "the island must not stay dead")
     }
 
+    private func wait(until done: () -> Bool) {
+        let end = Date().addingTimeInterval(1)
+        while !done() && Date() < end { RunLoop.main.run(until: Date().addingTimeInterval(0.01)) }
+    }
+
+    func testTheGiveUpTimerOfAnEarlierSlideDoesNotEndASwipeThatBeganAfterIt() {
+        carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() }, giveUpAfter: 0.1)
+        slide()
+        stage.end()   // the slide is over, its timer is still to fire
+        var shown: [CGWindowID]?
+        carousel.beginScrub(windows: [.fake(1), .fake(2)], current: 1, in: zone) { ids, _ in shown = ids }
+        XCTAssertEqual(shown, [1, 2])
+        RunLoop.main.run(until: Date().addingTimeInterval(0.25))
+        XCTAssertTrue(carousel.isSliding, "the fingers hold the pictures as long as they like")
+    }
+
+    func testASwipeWhosePhotographsNeverComeIsGivenUpOn() {
+        carousel = ZoneCarousel(snapshots: snapshots, stage: stage, reduceMotion: { false }, background: { $0() }, giveUpAfter: 0.05)
+        snapshots.answersAtOnce = false
+        var answered = false
+        carousel.beginScrub(windows: [.fake(1), .fake(2)], current: 1, in: zone) { _, _ in answered = true }
+        XCTAssertTrue(carousel.isSliding)
+        wait { !carousel.isSliding }
+        XCTAssertFalse(carousel.isSliding, "the island must not stay dead")
+        snapshots.answer()   // too late: the pictures are not put on the stage
+        XCTAssertTrue(answered)
+        XCTAssertTrue(stage.scrubBegun.isEmpty)
+    }
+
     func testASlideStartedWhileOneRunsIsIgnored() {
         slide()
         var second = false

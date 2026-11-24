@@ -179,12 +179,12 @@ jobs:
           sed -i.bak 's/^\( *version \)".*"/\1"${{ steps.version.outputs.version }}"/' casks/paneflipapp.rb
           rm casks/paneflipapp.rb.bak
           # The notes of the release go in the caveats of the cask, which `brew install` and `brew upgrade` show: between two marker lines,
-          # replaced at every release. Headings and the changelog link are left out; the heredoc is quoted, so nothing in it is interpreted.
+          # replaced at every release. Headings and the changelog link are left out; the heredoc is quoted, so nothing in it is interpreted, and a line that would end it early (EOS alone) is dropped.
           awk '/# BEGIN release notes/ { skip = 1 } !skip { print } /# END release notes/ { skip = 0 }' casks/paneflipapp.rb > "$RUNNER_TEMP/cask.rb"
           {
             echo "  # BEGIN release notes (written by the Release workflow of the app)"
             echo "  caveats <<~'EOS'"
-            { echo "What's new in PaneFlip ${{ steps.version.outputs.version }}:"; echo; grep -v '^\*\*Full Changelog' "$RUNNER_TEMP/notes.md" | sed -e 's/^## .*//' -e 's/^### //'; } | cat -s | sed -e '/^$/!s/^/    /'
+            { echo "What's new in PaneFlip ${{ steps.version.outputs.version }}:"; echo; grep -v '^\*\*Full Changelog' "$RUNNER_TEMP/notes.md" | sed -e 's/^## .*//' -e 's/^### //' -e '/^[[:space:]]*EOS[[:space:]]*$/d'; } | cat -s | sed -e '/^$/!s/^/    /'
             echo "  EOS"
             echo "  # END release notes"
             echo

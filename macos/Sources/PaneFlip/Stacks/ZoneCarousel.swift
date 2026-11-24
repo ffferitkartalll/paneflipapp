@@ -40,6 +40,21 @@ final class ZoneCarousel {
         self.background = background
     }
 
+    /// Starts the give-up timer of a slide or of the photographs of a swipe; any later call (and `disarmGiveUp`) makes the timer of an earlier one do nothing.
+    @discardableResult private func armGiveUp() -> Int {
+        slideCount += 1
+        let mine = slideCount
+        DispatchQueue.main.asyncAfter(deadline: .now() + giveUpAfter) { [weak self] in
+            guard let self, slideCount == mine else { return }
+            slideCount += 1   // a photograph that comes later is for a slide that is over
+            running = nil; onStage = false; swiped = nil; isSliding = false
+        }
+        return mine
+    }
+
+    /// A swipe's pictures are on the stage: the fingers may hold them as long as they like.
+    private func disarmGiveUp() { slideCount += 1 }
+
     /// A card of the island is about to be clicked: get the pictures' machinery warm.
     func prepare() { snapshots.prepare() }
 
@@ -51,11 +66,7 @@ final class ZoneCarousel {
         guard !reduceMotion() else { return swap() }
         isSliding = true
         running = (forward, zone)
-        slideCount += 1
-        let mine = slideCount
-        DispatchQueue.main.asyncAfter(deadline: .now() + giveUpAfter) { [weak self] in
-            if let self, slideCount == mine { running = nil; onStage = false; isSliding = false }
-        }
+        armGiveUp()
         snapshots.snapshots(of: [leaving, entering]) { [weak self] images in
             guard let self else { return }
             guard let out = images[leaving.id], let into = images[entering.id] else {
@@ -114,14 +125,18 @@ final class ZoneCarousel {
         if isSettlingSwipe, let shown = swiped, shown.contains(current), let carried = stage.catchScrub() { return ready(shown, carried) }
         guard !isSliding, !reduceMotion() else { return ready(nil, nil) }
         isSliding = true
+        let mine = armGiveUp()
         snapshots.snapshots(of: windows) { [weak self] images in
             guard let self else { return }
+            guard slideCount == mine else { return ready(nil, nil) }   // given up on meanwhile
             let shown = windows.filter { images[$0.id] != nil }
             guard let index = shown.firstIndex(where: { $0.id == current }),
                   stage.beginScrub(pictures: shown.compactMap { images[$0.id] }, current: index, in: zone) else {
+                disarmGiveUp()
                 isSliding = false
                 return ready(nil, nil)
             }
+            disarmGiveUp()
             swiped = shown.map(\.id)
             onStage = true
             ready(swiped, nil)

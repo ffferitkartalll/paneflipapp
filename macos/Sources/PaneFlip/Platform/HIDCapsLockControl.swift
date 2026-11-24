@@ -34,12 +34,17 @@ final class HIDCapsLockControl: CapsLockControlling {
         watcher = nil
         if enabled { watcher = Self.watch(ProcessInfo.processInfo.processIdentifier) } else {
             // Only our own mapping is taken away.
-            // `--get` answers once for every keyboard service, so the keys of all the mappings are read, and none but ours may be among them.
             guard let current = Self.hidutil(["property", "--get", "UserKeyMapping"]) else { return false }
-            let keys = Set(current.matches(of: /HIDKeyboardModifierMapping(?:Src|Dst) = (\d+)/).compactMap { Int($0.output.1) })
-            guard !keys.isEmpty, keys.isSubset(of: [Self.capsLock, Self.f18]) else { return true }
+            guard Self.isOnlyOurMapping(current) else { return true }
         }
         return Self.hidutil(["property", "--set", Self.mapping(enabled)]) != nil
+    }
+
+    /// True when the answer of `hidutil --get` holds a mapping and every key in it is one of ours (Caps Lock, F18).
+    /// `--get` answers once for every keyboard service, so the keys of all the mappings are read, and none but ours may be among them.
+    static func isOnlyOurMapping(_ output: String) -> Bool {
+        let keys = Set(output.matches(of: /HIDKeyboardModifierMapping(?:Src|Dst) = (\d+)/).compactMap { Int($0.output.1) })
+        return !keys.isEmpty && keys.isSubset(of: [capsLock, f18])
     }
 
     private static func mapping(_ enabled: Bool) -> String {
