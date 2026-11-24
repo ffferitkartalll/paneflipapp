@@ -12,16 +12,19 @@ extension ScreenCaptureWindowSnapshots {
 
         /// One reload at a time: a caller that arrives meanwhile waits for it instead of starting a second one.
         func reload(unlessNewerThan age: TimeInterval = 0) async {
-            if let loading { return await loading.value }
+            if let loading { return await TaskDeadline.wait(for: loading, seconds: Self.limit) }
             guard Date().timeIntervalSince(loadedAt) > age else { return }
             let task = Task {
                 guard let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false) else { return }
                 self.store(content.windows)
             }
             loading = task
-            await task.value
-            loading = nil
+            await TaskDeadline.wait(for: task, seconds: Self.limit)
+            if loading == task { loading = nil }   // a list that never comes must not hold every later call
         }
+
+        /// Seconds a reload may take before the callers go on with the list they have.
+        static let limit: TimeInterval = 2
 
         private func store(_ list: [SCWindow]) {
             byID = Dictionary(list.map { ($0.windowID, $0) }, uniquingKeysWith: { first, _ in first })

@@ -85,6 +85,10 @@ targets:
       - path: Sources/PaneFlip/Platform/ReleaseChecking.swift
       - path: Sources/PaneFlip/Platform/UpdateInstalling.swift
       - path: Sources/PaneFlip/Platform/UpdateSwapScript.swift
+      - path: Sources/PaneFlip/Platform/DiskImageUpdateInstaller.swift
+      - path: Sources/PaneFlip/Platform/DiskImageUpdateInstaller+Failure.swift
+      - path: Sources/PaneFlip/Platform/HIDCapsLockControl.swift
+      - path: Sources/PaneFlip/Platform/CapsLockControlling.swift
       - path: Sources/PaneFlip/Settings/UpdatesModel.swift
       - path: Sources/PaneFlip/Settings/UpdatesModel+State.swift
       - path: Sources/PaneFlip/Platform/WindowPicture.swift
@@ -119,6 +123,9 @@ targets:
       - path: Sources/PaneFlip/Snap/DividerLineView.swift
       - path: Sources/PaneFlip/Snap/DividerKnobView.swift
       - path: Sources/PaneFlip/Snap/DividerMouseView.swift
+      - path: Sources/PaneFlip/Snap/WindowDragCheck.swift
+      - path: Sources/PaneFlip/Platform/TaskDeadline.swift
+      - path: Sources/PaneFlip/Zones/AppearDriver.swift
       - path: Sources/PaneFlip/Platform/KeyStateProviding.swift
       - path: Sources/PaneFlip/Platform/SnapTrigger+KeyState.swift
       - path: Sources/PaneFlip/Platform/CapsLockKeyState.swift

@@ -59,7 +59,7 @@ final class SnapDragController {
         background { [self] in
             let hit = windows.windowUnderPointer()
             DispatchQueue.main.async { [self] in
-                // Another press came meanwhile, or the mouse is up already: the answer is not for this drag.
+                // Another press came meanwhile, or no window is under the pointer: the answer is not for this drag.
                 guard presses == mine, let hit else { return }
                 candidate = (hit.ref, hit.frame)
             }
@@ -76,9 +76,7 @@ final class SnapDragController {
             guard now.timeIntervalSince(lastCheck) > 0.05 else { return }
             lastCheck = now
             // A drag only counts once the window itself moved (not resized, not a click inside it).
-            guard let f = windows.frame(of: c.ref),
-                  hypot(f.minX - c.start.minX, f.minY - c.start.minY) > 4,
-                  abs(f.width - c.start.width) < 2, abs(f.height - c.start.height) < 2 else { return }
+            guard let f = windows.frame(of: c.ref), WindowDragCheck.isMove(from: c.start, to: f) else { return }
             dragging = true
             onZoneDrag?(coordinator.stack(containing: c.ref.id)?.id)
             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in self?.updateOverlay() }

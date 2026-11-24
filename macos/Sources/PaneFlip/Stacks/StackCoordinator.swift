@@ -895,7 +895,9 @@ final class StackCoordinator {
             }
             DispatchQueue.main.async { [self] in
                 askingTitles = false
-                slow.forEach { slowTitles[$0] = ProcessInfo.processInfo.systemUptime + 5 }
+                let now = ProcessInfo.processInfo.systemUptime
+                slowTitles = slowTitles.filter { $0.value > now }   // closed windows must not stay in the list
+                slow.forEach { slowTitles[$0] = now + 5 }
                 if !placementOnly() { apply(titles: titles) }
             }
         }

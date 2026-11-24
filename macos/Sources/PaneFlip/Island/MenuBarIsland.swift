@@ -645,6 +645,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             return
         }
         entry.hovered = open
+        if open { coordinator.prepareSlides() }   // the next click on a card slides: warm the window list (it is reloaded at most every two seconds)
         if open { if picking === entry || dragging { entry.model.startChoosing() } else { entry.model.openedByPointer() } }
         // A notice goes on showing when the island shrinks back to it: its line is drawn with the content's opacity, which stays.
         if !open { if entry.model.notice == nil { withAnimation(.easeOut(duration: 0.08)) { entry.model.contentOpacity = 0 } }; entry.model.hoveredCard = nil; entry.model.hoveredButton = nil; entry.model.hover(zone: nil); entry.model.hoveredWindow = nil }
@@ -1131,7 +1132,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     private func glyph(bundleID: String, appName: String, icon: @autoclosure () -> NSImage?) -> NSImage {
-        if glyphsRevision != iconFont.revision { glyphs = [:]; glyphsRevision = iconFont.revision }
+        if glyphsRevision != iconFont.revision { iconFont.syncBrands(); glyphs = [:]; glyphsRevision = iconFont.revision }
         let key = bundleID.isEmpty ? appName : bundleID
         if let known = glyphs[key] { return known }
         let made = iconFont.image(bundleID: bundleID, appName: appName, icon: icon() ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
@@ -1153,8 +1154,8 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         let tabs = Dictionary(stack.tabs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let openApps = Set(stack.tabs.map(\.bundleID))
         let slots = memory.slots(inZone: zone)
-        // Asking which apps run is a round trip to the system for each of them: only when a slot has no window (`running` is read then).
-        lazy var running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID))).map(\.bundleID))
+        // Asking which apps run is a round trip to the system for each of them: only when a slot has no window (`running` is read then), and only for the apps that have none open (the rest are read nowhere).
+        lazy var running = Set(apps.regularApps(withBundleIDs: Set(slots.map(\.bundleID).filter { !openApps.contains($0) })).map(\.bundleID))
         var cards: [IslandWindow] = [], shown = Set<CGWindowID>(), closed = Set<String>()
         let starting = layout(of: zone).map { memory.startApps(inZones: $0.layout.strip.zoneIDs) } ?? []
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {

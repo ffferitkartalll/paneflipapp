@@ -23,10 +23,22 @@
 
   window.i18n = { t: (key, fallback) => words[key] ?? fallback };
 
+  // A translation comes in through a pull request: keep only the tags the page uses (a template is inert, so nothing runs while it is cleaned).
+  const SAFE_TAGS = new Set(['KBD', 'EM', 'B', 'CODE']);
+  function clean(text) {
+    const box = document.createElement('template');
+    box.innerHTML = text;
+    for (const el of box.content.querySelectorAll('*')) {
+      if (SAFE_TAGS.has(el.tagName)) [...el.attributes].forEach((a) => el.removeAttribute(a.name));
+      else el.replaceWith(...el.childNodes);
+    }
+    return box.innerHTML;
+  }
+
   function show(lang, dict) {
     words = dict || {};
     for (const { el, html, aria, alt } of nodes) {
-      if (el.dataset.i18n) el.innerHTML = words[el.dataset.i18n] ?? html;
+      if (el.dataset.i18n) el.innerHTML = words[el.dataset.i18n] == null ? html : clean(words[el.dataset.i18n]);
       if (el.dataset.i18nAria) el.setAttribute('aria-label', words[el.dataset.i18nAria] ?? aria);
       if (el.dataset.i18nAlt) el.setAttribute('alt', words[el.dataset.i18nAlt] ?? alt);
     }

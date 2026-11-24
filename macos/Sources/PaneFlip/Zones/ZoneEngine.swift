@@ -71,13 +71,14 @@ final class ZoneEngine: ZoneRefreshing {
 
     // MARK: ZoneRefreshing
 
-    /// After a display was unplugged the zones are not laid out until the Dock has landed on a remaining display (however long that takes; it is looked at every 0.1 s, every 0.5 s after 3 s):
-    /// the usable area of the displays is not right before.
+    /// After a display was unplugged the zones are not laid out until the Dock has landed on a remaining display (it is looked at every 0.1 s, every 0.5 s after 3 s, for 20 s at most:
+    /// a Dock that cannot be read must not keep the zones from being laid out for good): the usable area of the displays is not right before.
     private var waitingForDock = false
+    private static let dockWaitSteps = 64   // 30 × 0.1 s + 34 × 0.5 s
 
     private func displaysChanged(waited: Int = 0) {
         guard waited > 0 || !waitingForDock else { return }   // a wait is already running
-        if !screens.isDockSettled, windows.isTrusted {   // without the permission the Dock cannot be asked, and nothing may wait for it
+        if !screens.isDockSettled, windows.isTrusted, waited < Self.dockWaitSteps {   // without the permission the Dock cannot be asked, and nothing may wait for it
             waitingForDock = true
             DispatchQueue.main.asyncAfter(deadline: .now() + (waited < 30 ? 0.1 : 0.5)) { [weak self] in self?.displaysChanged(waited: waited + 1) }
             return

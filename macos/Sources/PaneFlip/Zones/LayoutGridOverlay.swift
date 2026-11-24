@@ -77,9 +77,8 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     private var leadReady = false
     private var leadSpan: CGFloat = 600
     private var leadScrub = ScrubGesture()
-    /// Where the pictures of every zone are (`ZoneWindowsModel.appear`, the same in all), and the slides in progress, each with how far it takes them and since when.
-    private var appear: CGFloat = 0
-    private var glides: [(delta: CGFloat, start: Date)] = []
+    /// Moves the pictures of every zone (`ZoneWindowsModel.appear`, the same in all): where they are now is its value.
+    private lazy var driver = AppearDriver { [weak self] in self?.setAppear($0) }
     /// The cards take no pointer while they move (`ZoneWindowsModel.sliding`); each start of a move counts, so that only the end of the last one frees them.
     private var slideRun = 0
     /// Counts the times the grid began to close: the end of a closing slide that was taken back does nothing. The pictures are back and the windows are coming back: it closes to its end.
@@ -89,14 +88,10 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// Counts the grids: what a grid asked for and comes late (pictures, the end of a slide) does nothing to the next one.
     private var run = 0
 
-    /// The same motion as the grid of one zone: a quick start and a long, soft landing.
-    private static let curve = UnitCurve.bezier(startControlPoint: UnitPoint(x: 0.3, y: 0), endControlPoint: UnitPoint(x: 0.15, y: 1))
-    private static let slideTime: TimeInterval = 0.38
     /// When the slide in progress ends.
     private var slideEnds = Date.distantPast
-    private static let spreadSlide = Animation.timingCurve(curve, duration: slideTime)
-    /// The pictures go with the fingers, each step glided to in a moment (no swing past it).
-    private static let follow = Animation.interactiveSpring(response: 0.1, dampingFraction: 1)
+    /// The layout's scroll follows the fingers, each step glided to in a moment. Not a spring: a spring keeps the speed it had and swings past a target that is near (or at the end of the way).
+    private static let follow = Animation.easeOut(duration: 0.1)
     /// The motion of the layout's own scroll from one screen to the next.
     private static let scrollSlide = Animation.timingCurve(0.215, 0.61, 0.355, 1, duration: 0.3)
     private static let waitForWindows: TimeInterval = 0.3
@@ -152,13 +147,13 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
                 if phase == nil { lead = nil }   // nothing to show
             case .opening: lead = (0, true, 0, false)   // opened another way, the windows still going: the pictures are the fingers' once they can move
             case .open:
-                let now = appearNow()
+                let now = driver.value
                 guard up < 0 || now < 1 else { return }   // open and at rest: only a swipe down takes hold
                 hold()
                 lead = (now, true, 0, false)
             case .closing:
                 guard !restoring else { return }
-                let now = appearNow()
+                let now = driver.value
                 hold()
                 closeRun += 1
                 resume()
@@ -197,24 +192,15 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         if opens { goOpen() } else { hide() }
     }
 
-    /// Where the pictures are now: where they are going, less what each slide in progress has still to do.
-    private func appearNow() -> CGFloat {
-        let now = Date()
-        glides.removeAll { now.timeIntervalSince($0.start) >= Self.slideTime }
-        return glides.reduce(appear) { $0 - $1.delta * (1 - Self.curve.value(at: now.timeIntervalSince($1.start) / Self.slideTime)) }
-    }
-
     private func setAppear(_ value: CGFloat) {
-        appear = value
         displays.forEach { $0.model.appear = value; $0.model.zones.forEach { $0.model.appear = value } }
     }
 
     private func slide(to value: CGFloat, then: @escaping () -> Void = {}) {
-        glides.append((value - appear, Date()))
-        slideEnds = Date().addingTimeInterval(Self.slideTime)
+        slideEnds = Date().addingTimeInterval(AppearDriver.slideTime)
         setSliding(true)
         let mine = slideRun
-        withAnimation(Self.spreadSlide, completionCriteria: .removed) { setAppear(value) } completion: { [weak self] in
+        driver.slide(to: value) { [weak self] in
             if let self, slideRun == mine, value >= 1 { setSliding(false) }   // a slide taken over by another one, or a closing one, leaves the cards inert
             then()
         }
@@ -226,19 +212,13 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     }
 
     /// The pictures go with the fingers; while they catch up with fingers that went on before the pictures could move, they glide to where the fingers are in the time that is left.
-    private func follow(_ value: CGFloat) {
-        withAnimation(Self.follow) { setAppear(value) }
-    }
+    private func follow(_ value: CGFloat) { driver.follow(to: value) }
 
     /// The pictures stop where they are, in the middle of a slide: the fingers have them from there.
     private func hold() {
-        let now = appearNow()
-        glides = []
+        driver.hold()
         cancelCarry()   // the cards go inert under the fingers: a card in the air would never be let go
         setSliding(true)
-        var still = Transaction()
-        still.disablesAnimations = true
-        withTransaction(still) { setAppear(now) }
     }
 
     // MARK: Opening
@@ -417,7 +397,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         resume()
         slide(to: 1) { [weak self] in
             guard let self, phase == .open else { return }
-            displays.forEach { $0.model.drawsOffView = true }
+            revealOffView()
             coordinator.holdsStill = true   // a window closed from a card turns it into the card of a closed window
         }
     }
@@ -426,8 +406,28 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         phase = .open
         (displays.first { $0.model.showsSearch } ?? keyDisplay())?.panel.makeKey()   // the keys are the grid's now
         watch()
-        if timer == nil { timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in self?.refresh() } }
+        if timer == nil { timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in self?.refreshSpread() } }
     }
+
+    /// The zones of the screens beyond the edges are put in one after the other, a few frames apart, once the grid is open: all of them in one go held the main thread for a frame or two.
+    private func revealOffView() {
+        let mine = run
+        var delay = 0.0
+        for display in displays {
+            for zone in display.model.zones where !display.model.offViewDrawn.contains(zone.id) {
+                delay += Self.revealGap
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self, weak display] in
+                    guard let self, let display, run == mine, phase == .open else { return }
+                    display.model.offViewDrawn.insert(zone.id)
+                }
+            }
+        }
+    }
+
+    private static let revealGap: TimeInterval = 0.03
+
+    /// Every zone at once: the grid is about to scroll, and what it scrolls to must be there.
+    private func revealAllOffView() { displays.forEach { $0.model.offViewDrawn = Set($0.model.zones.map(\.id)) } }
 
     /// The display the pointer is on, else the first one.
     /// (A pointer at a display's right or bottom edge lies on the edge of its frame, which `contains` leaves out: a little room is given.)
@@ -439,6 +439,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     /// A display's grid scrolls to another rest.
     private func scroll(_ display: LayoutGridDisplay, to rest: CGFloat) {
         guard phase == .open, abs(rest - display.model.shift) > 0.5 else { return }
+        revealAllOffView()
         onGlide?(display.screen, display.offset + rest)
         withAnimation(Self.scrollSlide) { display.model.shift = rest }
     }
@@ -455,6 +456,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         guard event.momentumPhase.isEmpty else { return }   // the fingers have settled it already
         if swiping == nil || event.phase.contains(.began) {
             guard let display = keyDisplay() else { return }
+            revealAllOffView()
             swiping = (display, ScrubGesture(), display.model.shift)
         }
         guard var current = swiping else { return }
@@ -670,6 +672,31 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     private func refresh() {
         guard phase == .open, Date() >= slideEnds else { return }   // asking every zone for its cards takes a while: not in the middle of a slide
         displays.forEach { $0.model.zones.forEach { reload($0.id) } }
+        finishRefresh()
+    }
+
+    /// The same, for the timer: the zones are read one after the other over a fraction of its period (each is read as often as before), not all in one go. Asking for the cards of
+    /// every zone at once held the main thread for 10 to 16 ms, a frame or two of the grid's drawing every half second.
+    private func refreshSpread() {
+        guard phase == .open, Date() >= slideEnds else { return }
+        let zones = displays.flatMap { $0.model.zones.map(\.id) }
+        let gap = Self.refreshSpan / Double(zones.count + 1)
+        for (index, zone) in zones.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + gap * Double(index)) { [weak self] in
+                guard let self, phase == .open, Date() >= slideEnds else { return }
+                reload(zone)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.refreshSpan) { [weak self] in
+            guard let self, phase == .open, Date() >= slideEnds else { return }
+            finishRefresh()
+        }
+    }
+
+    /// How long the timer's reading of the zones is spread over (less than its period, so that one pass is over before the next begins).
+    private static let refreshSpan: TimeInterval = 0.4
+
+    private func finishRefresh() {
         updateSearchCounts()
         applyMatching()
         guard let current = opening else { return }
@@ -885,7 +912,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         guard phase == .open else { return }
         phase = .closing
         coordinator.holdsStill = false
-        displays.forEach { $0.model.drawsOffView = false }
+        displays.forEach { $0.model.offViewDrawn = [] }
         lead = nil
         leadReady = false
         cancelCarry()
@@ -988,8 +1015,7 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         phase = nil
         lead = nil
         leadReady = false
-        glides = []
-        appear = 0
+        driver.reset()
         restoring = false
         leadScrub = ScrubGesture()
         run += 1

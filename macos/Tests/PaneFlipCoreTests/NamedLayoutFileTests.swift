@@ -24,6 +24,22 @@ final class NamedLayoutFileTests: XCTestCase {
         XCTAssertThrowsError(try NamedLayout.imported(from: Data("{}".utf8)))
     }
 
+    func testAFileWithValuesTheEditorCannotMakeIsRefused() throws {
+        func file(_ change: (inout NamedLayout) -> Void) throws -> Data {
+            var layout = NamedLayout(name: "A", root: .split(id: UUID(), sideBySide: true, ratio: 0.5, first: .leaf(UUID()), second: .leaf(UUID())))
+            change(&layout)
+            return try layout.exported()
+        }
+        XCTAssertNoThrow(try NamedLayout.imported(from: file { _ in }))
+        for ratio in [0.0, 1.0, 1.5, -0.2] {
+            XCTAssertThrowsError(try NamedLayout.imported(from: file { $0.root = .split(id: UUID(), sideBySide: true, ratio: ratio, first: .leaf(UUID()), second: .leaf(UUID())) }), "ratio \(ratio)")
+        }
+        XCTAssertThrowsError(try NamedLayout.imported(from: file { $0.gap = 5000 }))
+        XCTAssertThrowsError(try NamedLayout.imported(from: file { $0.edgeMargin = -4 }))
+        XCTAssertThrowsError(try NamedLayout.imported(from: file { $0.minZoneSize = 0 }))
+        XCTAssertThrowsError(try NamedLayout.imported(from: file { $0.leading = [Overflow(width: 0)] }))
+    }
+
     func testTheRepositoryKeepsAnImportedLayoutOnItsDisplay() throws {
         let repository = LayoutRepository(store: MemoryStore())
         let layout = try NamedLayout.imported(from: NamedLayout(name: "A", root: .leaf(UUID())).exported())

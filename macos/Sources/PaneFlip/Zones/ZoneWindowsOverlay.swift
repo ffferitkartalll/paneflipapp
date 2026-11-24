@@ -42,11 +42,12 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
     /// Until when the pictures catch up with fingers that went on before the pictures could move (`ready`), and how long that takes.
     /// The way the fingers went toward where the grid is heading, with its speed: a fast flick that way goes on as far as a long swipe does, as between the windows of a zone.
     private var leadScrub = ScrubGesture()
-    /// The slides in progress, each with how far it takes the pictures and since when: a slide begun in the middle of another does not replace it, the two add up (as the
-    /// system runs them). Where the pictures are now is read from them (`appearNow`), so that whatever comes in the middle (the fingers, the shortcut, a click) goes on from there.
-    private var glides: [(delta: CGFloat, start: Date)] = []
+    /// Moves the pictures (`ZoneWindowsModel.appear`): where they are now is its value, so that whatever comes in the middle (the fingers, the shortcut, a click) goes on from there.
+    private lazy var driver = AppearDriver { [weak self] in self?.model?.appear = $0 }
     /// Counts the times the grid began to close: the end of a closing slide that was taken back does nothing.
     private var closeRun = 0
+    /// Counts the times the grid was torn down (`reset`): pictures asked for before that are not for the grid that opens next.
+    private var showRun = 0
     /// The pictures are back over their places and the real windows are coming back: from here the grid closes to its end, and one asked for meanwhile opens after it.
     private var restoring = false
     private var reopen: UUID?
@@ -55,10 +56,6 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
 
     /// How far the fingers go to open or close the grid, in points: the height of the zone, as a swipe to the side goes its width for one window.
     private func leadDistance(of model: ZoneWindowsModel) -> CGFloat { max(model.size.height, 100) }
-    /// Mission Control goes both ways with one motion: a quick start and a long, soft landing, the same time in and out (the system gives no value for it; this is the look of it).
-    private static let curve = UnitCurve.bezier(startControlPoint: UnitPoint(x: 0.3, y: 0), endControlPoint: UnitPoint(x: 0.15, y: 1))
-    private static let slideTime: TimeInterval = 0.38
-    private static let slide = Animation.timingCurve(curve, duration: slideTime)
     private static let reorder = Animation.smooth(duration: 0.25)
     /// An app that does not answer in time does not hold the grid back for good.
     private static let waitForWindows: TimeInterval = 0.3
@@ -90,7 +87,12 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         snapshots.prepare()
         let refs = cards.compactMap { $0.windowID.flatMap { stack.refs[$0] } }
         keeper.asked = Set(refs.map(\.id))
-        snapshots.snapshots(of: refs) { [weak self] pictures in self?.begin(zone: zone, cards: cards, pictures: pictures) }
+        let mine = showRun
+        // A grid torn down (`reset`) and opened again for the same zone before these pictures came is not the one they are for.
+        snapshots.snapshots(of: refs) { [weak self] pictures in
+            guard let self, showRun == mine else { return }
+            begin(zone: zone, cards: cards, pictures: pictures)
+        }
     }
 
     /// The shortcut and the wheel button: they open the grid of `zone`, close the one that is open or opening, and open again the one that is closing, each from where
@@ -222,16 +224,8 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         if monitors.isEmpty { watch() }
     }
 
-    /// Where the pictures are now: where they are going, less what each slide in progress has still to do.
-    private func appearNow(_ model: ZoneWindowsModel) -> CGFloat {
-        let now = Date()
-        glides.removeAll { now.timeIntervalSince($0.start) >= Self.slideTime }
-        return glides.reduce(model.appear) { $0 - $1.delta * (1 - Self.curve.value(at: now.timeIntervalSince($1.start) / Self.slideTime)) }
-    }
-
     private func slide(_ model: ZoneWindowsModel, to value: CGFloat, then: @escaping () -> Void = {}) {
-        glides.append((value - model.appear, Date()))
-        withAnimation(Self.slide, completionCriteria: .removed) { model.appear = value } completion: { then() }
+        driver.slide(to: value, then: then)
     }
 
     // MARK: Led by the fingers
@@ -254,13 +248,13 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
             case .opening: lead = (0, true, 0, false)   // opened another way, the windows still going: the pictures are the fingers' once they can move
             case .open:
                 guard let model else { return }
-                let now = appearNow(model)
+                let now = driver.value
                 guard up < 0 || now < 1 else { return }   // open and at rest: only a swipe down takes hold
                 hold(model)
                 lead = (now, true, 0, false)
             case .closing:
                 guard !restoring, let model else { return }
-                let now = appearNow(model)
+                let now = driver.value
                 hold(model)
                 closeRun += 1
                 phase = .open
@@ -300,22 +294,10 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         if opens { goOpen() } else { hide() }
     }
 
-    /// The pictures go with the fingers. The trackpad tells of them less often, and less evenly, than the display draws: each step is glided to in a moment (with no swing
-    /// past it), so the pictures move at every frame and not by jumps.
-    private static let follow = Animation.interactiveSpring(response: 0.1, dampingFraction: 1)
-
-    private func setAppear(_ value: CGFloat, of model: ZoneWindowsModel) {
-        withAnimation(Self.follow) { model.appear = value }
-    }
+    private func setAppear(_ value: CGFloat, of model: ZoneWindowsModel) { driver.follow(to: value) }
 
     /// The pictures stop where they are, in the middle of a slide: the fingers have them from there.
-    private func hold(_ model: ZoneWindowsModel) {
-        let now = appearNow(model)
-        glides = []
-        var still = Transaction()
-        still.disablesAnimations = true
-        withTransaction(still) { model.appear = now }
-    }
+    private func hold(_ model: ZoneWindowsModel) { driver.hold() }
 
     // MARK: Closing
 
@@ -384,6 +366,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
 
     /// Everything goes back as it was, at once: the windows too (the zone is gone, or the grid is torn down).
     private func reset() {
+        showRun += 1
         coordinator.holdsStill = false
         stopWatching()
         timer?.invalidate()
@@ -402,7 +385,7 @@ final class ZoneWindowsOverlay: ZonePresenting, ZoneWindowsLeading {
         opening = nil
         lead = nil
         leadReady = false
-        glides = []
+        driver.reset()
         restoring = false
         if let again = reopen {
             reopen = nil

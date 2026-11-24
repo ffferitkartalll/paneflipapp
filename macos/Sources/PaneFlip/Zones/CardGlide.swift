@@ -21,6 +21,8 @@ struct CardGlide: ViewModifier {
             .scaleEffect(x: carried ? 1.04 : startScale.width + (1 - startScale.width) * appear, y: carried ? 1.04 : startScale.height + (1 - startScale.height) * appear)
             .animation(.easeOut(duration: 0.15), value: carried)   // the card grows as it is taken up, not at once
             .opacity(hidden ? 0 : (from == nil ? appear : 1))
-            .position(carried ? model.carriedAt : place)
+            // Placed in its cell once, moved from there by an offset: `position` would be laid out again for every card at every step of the slide, an offset is only drawn.
+            .position(x: cell.midX, y: cell.midY)
+            .offset(x: (carried ? model.carriedAt.x : place.x) - cell.midX, y: (carried ? model.carriedAt.y : place.y) - cell.midY)
     }
 }

@@ -120,6 +120,21 @@ final class WindowRestorer {
         let displays = screens.screens().map(\.axVisible)
         func display(of rect: CGRect) -> Int? { displays.firstIndex { $0.contains(CGPoint(x: rect.midX, y: rect.midY)) } }
 
+        // Each window is asked once, not once for every slot: the other app answers each question on the main thread, slowly when it is busy.
+        var frames: [CGWindowID: CGRect?] = [:], titles: [CGWindowID: String?] = [:]
+        func askedFrame(of window: WindowRef) -> CGRect? {
+            if let known = frames[window.id] { return known }
+            let asked = windows.frame(of: window)
+            frames[window.id] = .some(asked)
+            return asked
+        }
+        func askedTitle(of window: WindowRef) -> String? {
+            if let known = titles[window.id] { return known }
+            let asked = windows.title(of: window)
+            titles[window.id] = .some(asked)
+            return asked
+        }
+
         var touched: Set<UUID> = []
         for slot in slots {
             let record = memory.records[slot]
@@ -130,12 +145,12 @@ final class WindowRestorer {
             let zoneDisplay = zone.flatMap(display(of:))
             var best: (index: Int, score: Int)?
             for (i, window) in free.enumerated() {
-                let frame = windows.frame(of: window)
+                let frame = askedFrame(of: window)
                 // An app that was opened for its slot (a card chosen, the layout's apps) goes there wherever its window opens.
                 if !coordinator.justOpened(record.bundleID), let zoneDisplay, let frame, let there = display(of: frame), there != zoneDisplay { continue }
                 var score = 0
                 if let zone, let frame, zone.contains(CGPoint(x: frame.midX, y: frame.midY)) { score += 2 }
-                if windows.title(of: window) == record.title { score += 1 }
+                if askedTitle(of: window) == record.title { score += 1 }
                 if best == nil || score > best!.score { best = (i, score) }
             }
             guard let pick = best?.index else { continue }
@@ -150,7 +165,7 @@ final class WindowRestorer {
             guard let zoneID = ruleZone[bundleID], let stack = coordinator.stacks[zoneID] else { continue }
             let zoneDisplay = display(of: stack.rect)
             for window in free {
-                if let zoneDisplay, let frame = windows.frame(of: window), let there = display(of: frame), there != zoneDisplay { continue }
+                if let zoneDisplay, let frame = askedFrame(of: window), let there = display(of: frame), there != zoneDisplay { continue }
                 let slot = memory.remember(zoneID: zoneID, bundleID: bundleID, title: "")
                 coordinator.attach(window, toSlot: slot, raise: false)
                 touched.insert(zoneID)
