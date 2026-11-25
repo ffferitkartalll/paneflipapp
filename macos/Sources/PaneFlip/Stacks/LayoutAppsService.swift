@@ -17,17 +17,17 @@ final class LayoutAppsService: LayoutAppsEditing {
     @ObservationIgnored private let coordinator: StackCoordinator
     @ObservationIgnored private let apps: AppCatalog
     @ObservationIgnored private let refresher: ZoneRefreshing
-    @ObservationIgnored private let iconFont: IconFont
+    @ObservationIgnored private let glyphImages: GlyphImages
     @ObservationIgnored private let settings: AppSettings
     @ObservationIgnored private let windows: WindowSystem
 
-    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, iconFont: IconFont,
+    init(memory: StackMemory, coordinator: StackCoordinator, apps: AppCatalog, refresher: ZoneRefreshing, glyphImages: GlyphImages,
          settings: AppSettings, windows: WindowSystem) {
         self.memory = memory
         self.coordinator = coordinator
         self.apps = apps
         self.refresher = refresher
-        self.iconFont = iconFont
+        self.glyphImages = glyphImages
         self.settings = settings
         self.windows = windows
     }
@@ -35,7 +35,7 @@ final class LayoutAppsService: LayoutAppsEditing {
     func editing(scene: UUID) -> LayoutAppsEditing {
         guard let scenes, scenes.active() != scene else { return self }
         // Read afresh each time: the scene may have been in use since. Its slots wait for windows, so nothing live is touched.
-        let other = LayoutAppsService(memory: scenes.memory(scene), coordinator: coordinator, apps: apps, refresher: refresher, iconFont: iconFont, settings: settings, windows: windows)
+        let other = LayoutAppsService(memory: scenes.memory(scene), coordinator: coordinator, apps: apps, refresher: refresher, glyphImages: glyphImages, settings: settings, windows: windows)
         other.scenes = (active: scenes.active, memory: scenes.memory)
         return other
     }
@@ -69,7 +69,7 @@ final class LayoutAppsService: LayoutAppsEditing {
     /// The icon as the island draws it: a one-colour glyph, which follows the text colour.
     private func glyph(bundleID: String, name: String) -> NSImage {
         let icon = apps.icon(bundleID: bundleID) ?? NSWorkspace.shared.icon(for: .applicationBundle)
-        let image = iconFont.image(bundleID: bundleID, appName: name, icon: icon, size: 18)
+        let image = glyphImages.image(bundleID: bundleID, appName: name, icon: icon, size: 18)
         image.isTemplate = true
         return image
     }

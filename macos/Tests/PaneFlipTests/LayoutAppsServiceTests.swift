@@ -20,7 +20,7 @@ final class LayoutAppsServiceTests: XCTestCase {
         settings = AppSettings(storage: StubSettingsStorage())
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         service = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: refresher,
-                                    iconFont: IconFont(brands: NoBrands()), settings: settings, windows: windows)
+                                    glyphImages: GlyphImages(brands: NoBrands()), settings: settings, windows: windows)
     }
 
     func testOpeningStartsTheAppsThatAreNotRunningAndReopensThoseWithoutAWindow() {
@@ -30,7 +30,7 @@ final class LayoutAppsServiceTests: XCTestCase {
         windows.showingPIDs = [1]   // "one" has its window; "two" was closed with Cmd+W; "four" was quit with Cmd+Q
         let coordinator = StackCoordinator(windows: windows, memory: memory, settings: settings, apps: apps)
         let opener = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: refresher,
-                                       iconFont: IconFont(brands: NoBrands()), settings: settings, windows: windows)
+                                       glyphImages: GlyphImages(brands: NoBrands()), settings: settings, windows: windows)
         settings.values.ignoredApps = ["com.example.three"]
 
         opener.open(apps: ["com.example.one", "com.example.two", "com.example.two", "com.example.three", "com.example.four"])
@@ -91,7 +91,7 @@ final class LayoutAppsServiceTests: XCTestCase {
         let live = StackMemory(store: store, scene: inUse)
         live.remember(zoneID: zone, bundleID: "com.example.one", title: "")
         service = LayoutAppsService(memory: live, coordinator: StackCoordinator(windows: windows, memory: live, settings: settings, apps: FakeApps()), apps: FakeApps(),
-                                    refresher: refresher, iconFont: IconFont(brands: NoBrands()), settings: settings, windows: windows)
+                                    refresher: refresher, glyphImages: GlyphImages(brands: NoBrands()), settings: settings, windows: windows)
         service.scenes = (active: { inUse }, memory: { StackMemory(store: store, scene: $0) })
 
         let theOther = service.editing(scene: other)

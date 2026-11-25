@@ -13,7 +13,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private let screensNow: () -> [ScreenInfo]
     private let planner: ZonePlanner
     private let viewport: StripViewport
-    private let iconFont: IconFont
+    private let glyphImages: GlyphImages
     private let memory: StackMemory
     private let apps: AppCatalog
     private let openApp: (String) -> Void
@@ -89,11 +89,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// How long a dragged window waits on a zone before its row of cards opens.
     private static let dwellTime: TimeInterval = 1
 
-    init(lighting: ZoneLighting, badging: AppBadging, coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, iconFont: IconFont,
+    init(lighting: ZoneLighting, badging: AppBadging, coordinator: StackCoordinator, repository: LayoutRepository, settings: AppSettings, screens: ScreenProviding, screensNow: @escaping () -> [ScreenInfo], planner: ZonePlanner, viewport: StripViewport, glyphImages: GlyphImages,
          memory: StackMemory, apps: AppCatalog, openApp: @escaping (String) -> Void, removeApp: @escaping (String, UUID, [UUID]) -> Void) {
         self.lighting = lighting
         self.badging = badging
-        self.iconFont = iconFont
+        self.glyphImages = glyphImages
         self.memory = memory
         self.apps = apps
         self.openApp = openApp
@@ -1119,7 +1119,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     private func warmGlyph() {
         guard !entries.values.contains(where: \.hovered) else { return }
         for stack in coordinator.stacks.values {
-            for tab in stack.tabs where glyphs[tab.bundleID.isEmpty ? tab.appName : tab.bundleID] == nil || glyphsRevision != iconFont.revision {
+            for tab in stack.tabs where glyphs[tab.bundleID.isEmpty ? tab.appName : tab.bundleID] == nil || glyphsRevision != glyphImages.revision {
                 _ = glyph(of: tab)
                 return
             }
@@ -1132,10 +1132,10 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     }
 
     private func glyph(bundleID: String, appName: String, icon: @autoclosure () -> NSImage?) -> NSImage {
-        if glyphsRevision != iconFont.revision { iconFont.syncBrands(); glyphs = [:]; glyphsRevision = iconFont.revision }
+        if glyphsRevision != glyphImages.revision { glyphImages.syncBrands(); glyphs = [:]; glyphsRevision = glyphImages.revision }
         let key = bundleID.isEmpty ? appName : bundleID
         if let known = glyphs[key] { return known }
-        let made = iconFont.image(bundleID: bundleID, appName: appName, icon: icon() ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
+        let made = glyphImages.image(bundleID: bundleID, appName: appName, icon: icon() ?? NSWorkspace.shared.icon(for: .applicationBundle), size: 32)
         glyphs[key] = made
         return made
     }
@@ -1160,7 +1160,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         let starting = layout(of: zone).map { memory.startApps(inZones: $0.layout.strip.zoneIDs) } ?? []
         func card(_ tab: ZoneStack.Tab) -> IslandWindow {
             IslandWindow(windowID: tab.id, bundleID: tab.bundleID, name: tab.displayName.isEmpty ? tab.appName : tab.displayName, glyph: glyph(of: tab),
-                         glyphRevision: iconFont.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID], selected: starting.contains(tab.bundleID))
+                         glyphRevision: glyphImages.revision, absence: nil, isActive: tab.id == stack.activeID, badge: badges[tab.bundleID], selected: starting.contains(tab.bundleID))
         }
         for slot in slots {
             if let id = slot.windowID, let tab = tabs[id] {
@@ -1171,7 +1171,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
                 // An app that is not running has quit, whatever became of its last window.
                 let absence: WindowAbsence = running.contains(slot.bundleID) ? coordinator.absences[slot.bundleID] ?? .closed : .notRunning
                 cards.append(IslandWindow(windowID: nil, bundleID: slot.bundleID, name: name, glyph: glyph(bundleID: slot.bundleID, appName: name, icon: apps.icon(bundleID: slot.bundleID)),
-                                          glyphRevision: iconFont.revision, absence: absence, isActive: false, badge: badges[slot.bundleID], selected: starting.contains(slot.bundleID)))
+                                          glyphRevision: glyphImages.revision, absence: absence, isActive: false, badge: badges[slot.bundleID], selected: starting.contains(slot.bundleID)))
             }
         }
         cards += stack.tabs.filter { !shown.contains($0.id) }.map(card)   // a window the memory does not know yet stands last
