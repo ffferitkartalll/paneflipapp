@@ -10,7 +10,7 @@ struct ZoneCardLabel: View {
     /// The type of the date and the time of the menu bar, as the island writes the titles of its cards.
     static let font = NSFont.menuBarFont(ofSize: 0)
     /// The app's picture: so large that the glyph in it (which fills only a share of it) is as tall as a line of the name.
-    static let icon = ((font.ascender - font.descender) / IconFont.glyphShare).rounded(), spacing: CGFloat = 6, padding: CGFloat = 12
+    static let icon = ((font.ascender - font.descender) / GlyphImages.glyphShare).rounded(), spacing: CGFloat = 6, padding: CGFloat = 12
 
     /// The Dock's badge as the compact row draws it, left of the picture: how tall it is, and how wide.
     static let badgeHeight: CGFloat = 16

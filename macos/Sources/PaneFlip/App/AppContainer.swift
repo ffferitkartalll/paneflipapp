@@ -87,12 +87,12 @@ final class AppContainer {
         engine.sceneHandler = sceneService
 
         let closedMonitor = ClosedWindowMonitor(coordinator: coordinator, availability: availability, screens: screens)
-        let iconFont = IconFont(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
+        let glyphImages = GlyphImages(brands: CDNBrandGlyphs(isEnabled: { [weak settings] in settings?.values.fetchBrandIcons ?? false }))
         let navigation = SettingsNavigation()
-        let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, iconFont: iconFont, settings: settings, windows: windows)
+        let layoutApps = LayoutAppsService(memory: memory, coordinator: coordinator, apps: apps, refresher: engine, glyphImages: glyphImages, settings: settings, windows: windows)
         layoutApps.scenes = (active: { [scenes] in scenes.activeScene.id }, memory: { [documents] in StackMemory(store: documents, scene: $0) })
         let overlay = SnapZoneOverlay(screens: screens)
-        let island = MenuBarIsland(lighting: overlay, badging: DockAppBadges(), coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, iconFont: iconFont,
+        let island = MenuBarIsland(lighting: overlay, badging: DockAppBadges(), coordinator: coordinator, repository: repository, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, planner: planner, viewport: viewport, glyphImages: glyphImages,
                                    memory: memory, apps: apps, openApp: { layoutApps.open(apps: [$0]) }, removeApp: { layoutApps.remove(app: $0, in: $1, inZones: $2) })
         engine.add(presenter: island)
         let notches = ZoneNotches(coordinator: coordinator, settings: settings, screens: screens, screensNow: { [unowned engine] in engine.lastScreens }, source: island)
