@@ -178,6 +178,9 @@ targets:
       - path: Sources/PaneFlip/Platform/CDNBrandGlyphs.swift
       - path: Sources/PaneFlip/Platform/SVGArcFlags.swift
       - path: Sources/PaneFlip/Island/GlyphImages.swift
+      - path: Sources/PaneFlip/Platform/FolderInstalledApps.swift
+      - path: Sources/PaneFlip/Platform/InstalledAppListing.swift
+      - path: Sources/PaneFlip/Platform/InstalledApp.swift
       - path: Sources/PaneFlip/Settings/ReorderPlace.swift
       - path: Sources/PaneFlip/Settings/SheetPlacingDelegate.swift
       - path: Sources/PaneFlip/Platform/BrandGlyphSource.swift
