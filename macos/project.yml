@@ -135,6 +135,7 @@ targets:
       - path: Sources/PaneFlip/Platform/PlacementEvent.swift
       - path: Sources/PaneFlip/Zones/ScreenEdge.swift
       - path: Sources/PaneFlip/Zones/StripScroller.swift
+      - path: Sources/PaneFlip/Platform/FingerCatchUp.swift
       - path: Sources/PaneFlip/Zones/StripScroller+Held.swift
       - path: Sources/PaneFlip/Zones/StripScroller+Phase.swift
       - path: Sources/PaneFlip/Zones/StripScroller+Scrolling.swift
