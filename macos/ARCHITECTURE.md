@@ -35,7 +35,7 @@ Sources/
     │                        WindowSystem ← AXWindowSystem (+ WindowRef),
     │                        WindowSnapshotting ← ScreenCaptureWindowSnapshots (its list and its captures wait 2 s at most, `TaskDeadline`),
     │                        SlideStaging ← PanelSlideStage, ScrollStaging ← PanelScrollStage (both draw on StagePanels; while the layout scrolls the panel stands just above the front-most window it covers, so a window in no zone that is in front stays in front of the pictures),
-    │                        DisplayLinkMetronome (a function called at every refresh of a screen),
+    │                        DisplayLinkMetronome (a function called at every refresh of a screen), FingerCatchUp (how far pictures that follow fingers come in one frame, so they move once per refresh and not at every uneven report of the trackpad),
     │                        BackgroundCursor (lets the app set the pointer's shape while another app is in front: the hand of a carried card, island and notch),
     │                        ScreenProviding (+ ScreenInfo, DockArea) ← CGSScreenProvider,
     │                        AppCatalog (+ AppInfo) ← WorkspaceAppCatalog,

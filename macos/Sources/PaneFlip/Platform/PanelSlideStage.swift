@@ -32,6 +32,11 @@ final class PanelSlideStage: SlideStaging {
     private var running: Running?
 
     private var scrubbing: Scrubbing?
+    private var scrubAim: CGFloat = 0
+    /// Where the pictures stand now (nil before the first position of a scrub).
+    private var scrubShown: CGFloat?
+    private var scrubAt: CFTimeInterval = 0
+    private var scrubTicking = false
 
     func beginScrub(pictures: [WindowPicture], current: Int, in zone: CGRect) -> Bool {
         let cocoaZone = screens.flip(zone)
@@ -50,10 +55,36 @@ final class PanelSlideStage: SlideStaging {
         slide.started = true
         running = slide
         scrubbing = Scrubbing(slide: slide, layers: layers, current: current, width: zone.width)
+        scrubShown = nil
         return true
     }
 
+    /// Drawn once per refresh of the screen, on its way to the fingers (`FingerCatchUp`).
     func scrub(to offset: CGFloat) {
+        guard scrubbing != nil else { return }
+        scrubAim = offset
+        guard scrubShown != nil else { scrubShown = offset; place(offset); return }
+        guard !scrubTicking else { return }
+        scrubTicking = true
+        scrubAt = CACurrentMediaTime()
+        DisplayLinkMetronome.start { [weak self] in self?.scrubTick() ?? false }
+    }
+
+    private func scrubTick() -> Bool {
+        guard scrubbing != nil, let shown = scrubShown else {
+            scrubTicking = false
+            return false
+        }
+        let time = CACurrentMediaTime()
+        let next = FingerCatchUp.next(from: shown, to: scrubAim, elapsed: time - scrubAt)
+        scrubAt = time
+        scrubShown = next
+        place(next)
+        scrubTicking = next != scrubAim
+        return scrubTicking
+    }
+
+    private func place(_ offset: CGFloat) {
         guard let s = scrubbing else { return }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -80,6 +111,7 @@ final class PanelSlideStage: SlideStaging {
         }
         CATransaction.commit()
         scrubbing = Scrubbing(slide: slide, layers: swipe.layers, current: swipe.current, width: swipe.width)
+        scrubShown = nil
         return from + CGFloat(swipe.current) * swipe.width   // the first picture rests `current` windows to the left of the one in front
     }
 

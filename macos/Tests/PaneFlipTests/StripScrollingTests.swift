@@ -205,6 +205,7 @@ final class StripScrollingTests: XCTestCase {
         run(60)
         XCTAssertEqual(stage.shifts.count, shifts, "it waits for the fingers")
         scroller.moveLed(by: -30, at: 1.0)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last ?? 0, glidingAt - 30, accuracy: 0.001, "the layout follows them from where it was")
         scroller.endLed()
         for _ in 0 ..< 4 { settle(); run(60) }
@@ -224,6 +225,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertTrue(scroller.beginLed(), "two fingers come down while it lands: no waiting for the pictures to give way")
         XCTAssertEqual(stage.kept, 1, "the pictures stay on the stage")
         scroller.moveLed(by: -60, at: 0)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -1060, "they follow the fingers from the stop it came to (1000), 60 points on")
         scroller.endLed()
         for _ in 0 ..< 4 { settle(); run(60) }
@@ -361,6 +363,21 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertLessThan(viewport.offset(for: key), 750, "it did not go on to the zone")
     }
 
+    func testFingerReportsAreDrawnOncePerFrameOnTheirWayToTheFingers() {
+        let scroller = scroller()
+        XCTAssertTrue(scroller.beginLed())
+        for _ in 0 ..< 3 { run(30); settle() }
+        let drawn = stage.shifts.count
+        scroller.moveLed(by: -100, at: 0)
+        scroller.moveLed(by: -100, at: 0.01)
+        XCTAssertEqual(stage.shifts.count, drawn, "nothing is drawn at a report")
+        run(1)
+        XCTAssertEqual(stage.shifts.count, drawn + 1, "one picture for the frame, whatever the number of reports")
+        XCTAssertGreaterThan(stage.shifts.last ?? 0, -200, "a frame does not reach the fingers")
+        run(40)
+        XCTAssertEqual(stage.shifts.last ?? 0, -200, accuracy: 0.5, "and the pictures arrive")
+    }
+
     func testTheFingersLeadTheLayoutAndItComesToRestAtTheNearestRestPosition() {
         let scroller = scroller()
 
@@ -368,6 +385,7 @@ final class StripScrollingTests: XCTestCase {
         for _ in 0 ..< 3 { run(30); settle() }   // the pictures cover the screen
         scroller.moveLed(by: -100, at: 0)
         scroller.moveLed(by: -100, at: 0.5)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -200, "the pictures follow the fingers: the area beyond the right edge comes in")
         scroller.moveLed(by: -50, at: 1.0)
         scroller.endLed()
@@ -385,6 +403,7 @@ final class StripScrollingTests: XCTestCase {
         snapshots.answer()
         for _ in 0 ..< 3 { run(30); settle() }
         scroller.moveLed(by: -100, at: 0.5)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -100, "the layout does not jump to where the fingers went meanwhile: it begins from where they are then")
     }
 
@@ -421,6 +440,7 @@ final class StripScrollingTests: XCTestCase {
         snapshots.answer()
         for _ in 0 ..< 3 { run(30); settle() }
         scroller.moveLed(by: -100, at: 0.5)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -100, "the swipe still leads the scroll")
     }
 
@@ -432,8 +452,10 @@ final class StripScrollingTests: XCTestCase {
         scroller.moveLed(by: 300, at: 0)
         XCTAssertEqual(stage.shifts.last, 0, "nothing beyond the first position gives way")
         scroller.moveLed(by: -900, at: 0.5)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -250, "nor beyond the last: the area beyond the edge is just in view")
         scroller.moveLed(by: 40, at: 1.0)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, -210, "going back is followed at once")
         scroller.endLed()
     }
@@ -455,11 +477,14 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertEqual(stage.shifts.count, shifts, "the glide waits for the fingers, it does not go on by itself")
 
         scroller.moveLed(by: 20, at: 1.0)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last ?? 0, (glidingAt ?? 0) + 20, accuracy: 0.001, "the layout follows them from where it was")
         scroller.moveLed(by: 400, at: 1.3)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(stage.shifts.last, 0, "taken back past where it began, it stops at the first position")
         scroller.endLed()
         for _ in 0 ..< 4 { run(60); settle() }
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(viewport.offset(for: key), 0, "and comes to rest there")
     }
 
@@ -645,6 +670,7 @@ final class StripScrollingTests: XCTestCase {
         XCTAssertTrue(scroller.beginLed(), "nothing to photograph: the fingers lead at once")
         scroller.moveLed(by: -100, at: 0)
         scroller.moveLed(by: -100, at: 0.5)
+        run(40)   // the pictures catch up with the fingers, one step a frame
         XCTAssertEqual(follows.last, 200, "the frame of the island follows the fingers")
         scroller.moveLed(by: -50, at: 1.0)
         scroller.endLed()

@@ -55,6 +55,8 @@ final class StripScroller {
     private var queued: [(edge: ScreenEdge, screen: ScreenInfo)] = []
     private static let mostQueued = 3
     private var ticking = false
+    private var ledTicking = false
+    private var ledAt: TimeInterval = 0
     private var count = 0
 
     /// `isBusy`: something else holds the windows (Stage Manager, Mission Control): no scrolling then.
@@ -495,13 +497,31 @@ final class StripScroller {
     /// Where the layout stands for the fingers' work so far: the start less what the content was taken (the gesture keeps that inside the range).
     private func ledPosition(_ current: Scrolling) -> CGFloat { current.start - current.gesture.offset }
 
+    /// Drawn once per refresh of the screen, on its way to the fingers (`FingerCatchUp`).
     private func followFingers() {
-        guard var current = scrolling, current.led, current.phase == .gliding else { return }
-        current.shown = ledPosition(current)
+        guard let current = scrolling, current.led, current.phase == .gliding else { return }
+        if current.released { glideOn(); return }
+        guard !ledTicking else { return }
+        ledTicking = true
+        ledAt = now()
+        metronome { [weak self] in self?.ledTick() ?? false }
+    }
+
+    private func ledTick() -> Bool {
+        guard var current = scrolling, current.led, current.phase == .gliding, !current.released else {
+            ledTicking = false
+            return false
+        }
+        let time = now()
+        let aim = ledPosition(current)
+        current.shown = FingerCatchUp.next(from: current.shown, to: aim, elapsed: time - ledAt)
+        ledAt = time
+        let settled = current.shown == aim
         scrolling = current
         stage.follow(shift: current.shift)
         onFollow?(current.screen, current.shown)
-        if current.released { glideOn() }
+        if settled { ledTicking = false }
+        return !settled
     }
 
     /// The pictures glide from where the fingers left them to the nearest rest position to where they would come to rest.
