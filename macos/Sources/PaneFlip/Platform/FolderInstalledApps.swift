@@ -1,15 +1,22 @@
 import Foundation
 
-/// The apps of the usual application folders.
+/// The apps of the usual application folders and of the folders inside them (a vendor's folder, the web apps a browser makes).
 struct FolderInstalledApps: InstalledAppListing {
-    private static let folders = ["/Applications", "/Applications/Utilities", "/System/Applications", "/System/Applications/Utilities", NSHomeDirectory() + "/Applications"]
+    private let folders: [String]
+
+    init(folders: [String] = ["/Applications", "/System/Applications", NSHomeDirectory() + "/Applications"]) { self.folders = folders }
 
     func apps() -> [InstalledApp] {
         var seen = Set<String>()
         var found: [InstalledApp] = []
-        for folder in Self.folders {
-            let urls = (try? FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: folder), includingPropertiesForKeys: nil)) ?? []
-            for url in urls where url.pathExtension == "app" {
+        for folder in folders {
+            // Two levels: the folder's own apps and those in its folders; an app's insides are not searched.
+            let walk = FileManager.default.enumerator(at: URL(fileURLWithPath: folder), includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants])
+            var urls: [URL] = []
+            while let url = walk?.nextObject() as? URL {
+                if walk?.level ?? 0 > 2 { walk?.skipDescendants() } else if url.pathExtension == "app" { urls.append(url) }
+            }
+            for url in urls {
                 guard let bundle = Bundle(url: url), let id = bundle.bundleIdentifier, id != Bundle.main.bundleIdentifier, !seen.contains(id) else { continue }
                 let info = bundle.infoDictionary ?? [:]
                 // Helpers and agents have no icon in the Dock.
