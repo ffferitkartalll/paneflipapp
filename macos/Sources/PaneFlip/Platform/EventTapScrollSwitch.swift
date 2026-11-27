@@ -36,9 +36,18 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
     /// Whether three or more fingers have been down in the touch in progress, and the settings give them to the app.
     private let crowded: () -> Bool
     private var crowdedScroll = CrowdedScroll()
+    /// How the wheel of the user's mouse turns now, if the mouse can say it: asked only for the smooth events with no touch phase that a mouse driver makes of a wheel.
+    private let wheelMode: () -> WheelMode?
+    /// A smooth wheel in ratchet, turned back into steps.
+    private var wheelSteps = WheelSteps()
+    /// A smooth wheel in free spin is a swipe that has begun and not ended: with no touch phases it ends when its events stop for `WheelSteps.idle`.
+    private var wheelSwipeOpen = false
+    private lazy var wheelIdle = WheelIdle { [weak self] in self?.endWheelSwipe() }
 
     init(gain: @escaping () -> CGFloat, twoFingers: @escaping () -> Bool, overIsland: @escaping () -> ScrollSwitchTarget?, fingers: @escaping () -> Int,
-         crowded: @escaping () -> Bool, grid: @escaping () -> Bool, layoutGrid: @escaping () -> Bool, target: @escaping () -> ScrollSwitchTarget?) {
+         crowded: @escaping () -> Bool, grid: @escaping () -> Bool, layoutGrid: @escaping () -> Bool, wheelMode: @escaping () -> WheelMode?,
+         target: @escaping () -> ScrollSwitchTarget?) {
+        self.wheelMode = wheelMode
         self.crowded = crowded
         self.grid = grid
         self.layoutGrid = layoutGrid
@@ -72,6 +81,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
             // The end of a swipe in progress may have gone by while the tap was off: it ends here.
+            wheelSwipeOpen = false
             if inGesture {
                 inGesture = false
                 gestureTarget = nil
@@ -83,11 +93,17 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
         }
         guard type == .scrollWheel else { return Unmanaged.passUnretained(event) }
         // Fingers on the trackpad scroll as they always do unless the settings give them to the keys; a mouse wheel is the keys' either way.
-        let wheel = event.getIntegerValueField(.scrollWheelEventIsContinuous) == 0
-        // The end of a swipe and the glide after it have no fingers on the trackpad any more; they go on with the swipe they belong to.
+        let continuous = event.getIntegerValueField(.scrollWheelEventIsContinuous) != 0
         let phase = event.getIntegerValueField(.scrollWheelEventScrollPhase)   // 1 began, 2 changed, 4 ended, 8 cancelled
-        let touching = wheel || phase == 4 || phase == 8 || event.getIntegerValueField(.scrollWheelEventMomentumPhase) != 0 || fingers() == 2
-        let aimed: ScrollSwitchTarget? = (touching ? overIsland() : nil) ?? (wheel || twoFingers() ? target() : nil)
+        let momentum = event.getIntegerValueField(.scrollWheelEventMomentumPhase)
+        // A mouse driver that smooths the wheel sends continuous events with no touch phase at all, which fingers never do. Such a wheel in free spin is a swipe of
+        // fingers; in ratchet (or when the mouse cannot say) it is a wheel, the stream of events of a click turned back into a step.
+        let kind = WheelKind(continuous: continuous, phase: Int(phase), momentum: Int(momentum), mode: wheelMode)
+        let freeSpin = kind == .freeSpin
+        let wheel = kind == .notch || kind == .smooth
+        // The end of a swipe and the glide after it have no fingers on the trackpad any more; they go on with the swipe they belong to.
+        let touching = wheel || freeSpin || phase == 4 || phase == 8 || momentum != 0 || fingers() == 2
+        let aimed: ScrollSwitchTarget? = (touching ? overIsland() : nil) ?? (wheel || freeSpin || twoFingers() ? target() : nil)
         // The keys were let go (or others taken) in the middle of a swipe: it ends here.
         if inGesture, aimed != gestureTarget {
             inGesture = false
@@ -97,7 +113,7 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             send(.ended)
         }
         guard let aimed else {
-            guard !wheel else { return Unmanaged.passUnretained(event) }
+            guard !wheel, !freeSpin else { return Unmanaged.passUnretained(event) }
             switch crowdedScroll.take(crowded: crowded(), phase: Int(phase)) {
             case .pass: return Unmanaged.passUnretained(event)
             case .swallow: return nil
@@ -109,9 +125,17 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             }
         }
         // The glide that goes on after the fingers lifted is swallowed too, and means nothing.
-        guard event.getIntegerValueField(.scrollWheelEventMomentumPhase) == 0 else { return nil }
+        guard momentum == 0 else { return nil }
 
-        guard event.getIntegerValueField(.scrollWheelEventIsContinuous) != 0 else {
+        if wheel && continuous {
+            // A smooth wheel in ratchet: the many small events of a click are one step (`WheelSteps`).
+            let points = event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1) + event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)
+            // A driver's points go the other way round than a clicking wheel's: toward you is positive (measured on a Logitech mouse).
+            let steps = wheelSteps.add(CGFloat(-points), at: TimeInterval(event.timestamp) / 1e9)
+            if steps != 0 { send(.step(aimed, steps)) }
+            return nil
+        }
+        guard continuous else {
             // A mouse wheel has no swipe to follow: each notch is a step.
             let notch = event.getDoubleValueField(.scrollWheelEventDeltaAxis1) + event.getDoubleValueField(.scrollWheelEventDeltaAxis2)
             if notch != 0 { send(.step(aimed, notch < 0 ? -1 : 1)) }   // turned toward you: the previous window; away: the next
@@ -120,10 +144,17 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
 
         // Two fingers: the content follows them to the left and the right, in a swipe that began that way (see `AxisLock`); a swipe that
         // began up or down opens and closes the grid of a zone's windows, if the keys aim at the zone's windows and the pointer is on it.
-        if phase == 1 { axis = AxisLock() }
-        let step = axis.move(horizontal: CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2)),
-                             vertical: -CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)))   // the content goes down with the fingers: up is negative
-        let finished = phase == 4 || phase == 8
+        let across = CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2))
+        let along = CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1))
+        if freeSpin {
+            // No touch phases: the swipe begins with the first event and ends when they stop (`endWheelSwipe`).
+            if !wheelSwipeOpen { wheelSwipeOpen = true; axis = AxisLock() }
+            wheelIdle.touch()
+        } else if phase == 1 { axis = AxisLock() }
+        // A wheel turned toward you is the previous window, as a swipe to the right is (a driver's points are positive toward you); a free spin never goes up or down, which would open the grid by accident.
+        let step = freeSpin ? axis.move(horizontal: (across + along) * WheelKind.freeSpinGain, vertical: 0)
+                            : axis.move(horizontal: across, vertical: -along)   // the content goes down with the fingers: up is negative
+        let finished = !freeSpin && (phase == 4 || phase == 8)
         if !inGesture && !finished {
             let liftZone = axis.decision == .vertical && aimed == .windows && grid()
             let liftLayout = axis.decision == .vertical && aimed == .strip && layoutGrid()
@@ -151,5 +182,16 @@ final class EventTapScrollSwitch: ScrollSwitchListening {
             }
         }
         return nil
+    }
+
+    /// The events of a free-spinning wheel have stopped: its swipe ends, as the lifting of fingers ends one.
+    private func endWheelSwipe() {
+        wheelSwipeOpen = false
+        axis = AxisLock()
+        guard inGesture else { return }
+        inGesture = false
+        gestureTarget = nil
+        lifting = false
+        send(.ended)
     }
 }

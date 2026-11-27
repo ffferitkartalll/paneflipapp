@@ -100,9 +100,16 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
     private static let edgeBand: CGFloat = 4
     /// A rectangle on a display, moved to where the user says that display stands on the desk (Settings): the arrow keys go to the display beside it there.
     private let deskRect: (CGRect) -> CGRect
+    /// How the wheel of the user's mouse turns now, if the mouse can say it (`WheelKind`).
+    private let wheelMode: () -> WheelMode?
+    /// A smoothed wheel in ratchet, turned back into steps; one in free spin is a swipe that ends when its events stop.
+    private var wheelSteps = WheelSteps()
+    private lazy var wheelIdle = WheelIdle { [weak self] in self?.endWheelSwipe() }
 
     init(coordinator: StackCoordinator, screens: ScreenProviding, source: ZoneCardSource, snapshots: WindowSnapshotting, planner: ZonePlanner, mover: WindowMover,
-         refresher: ZoneRefreshing, gapOf: @escaping (ScreenInfo) -> CGFloat, gain: @escaping () -> CGFloat, deskRect: @escaping (CGRect) -> CGRect) {
+         refresher: ZoneRefreshing, gapOf: @escaping (ScreenInfo) -> CGFloat, gain: @escaping () -> CGFloat, deskRect: @escaping (CGRect) -> CGRect,
+         wheelMode: @escaping () -> WheelMode?) {
+        self.wheelMode = wheelMode
         self.deskRect = deskRect
         self.gain = gain
         self.coordinator = coordinator
@@ -444,31 +451,56 @@ final class LayoutGridOverlay: ZoneCardCarrying, LayoutGridLeading {
         withAnimation(Self.scrollSlide) { display.model.shift = rest }
     }
 
-    /// The mouse wheel, a notch for a screen, and two fingers sideways, a swipe for a screen, on the display the pointer is on.
+    /// The mouse wheel, a notch for a screen, and two fingers sideways, a swipe for a screen, on the display the pointer is on. A wheel a mouse driver smooths (precise
+    /// events with no touch phase) is a notch for a screen in ratchet and a swipe in free spin, as in `EventTapScrollSwitch`.
     private func wheel(_ event: NSEvent) {
-        if event.hasPreciseScrollingDeltas { return swipe(event) }
-        guard let display = keyDisplay() else { return }
-        scroll(display, to: display.model.rest(steps: PagedScroll.notch(event.scrollingDeltaY != 0 ? event.scrollingDeltaY : -event.scrollingDeltaX)))
+        let kind = WheelKind(continuous: event.hasPreciseScrollingDeltas, phase: Int(event.phase.rawValue), momentum: Int(event.momentumPhase.rawValue), mode: wheelMode)
+        let turned = event.scrollingDeltaY != 0 ? event.scrollingDeltaY : -event.scrollingDeltaX
+        switch kind {
+        case .fingers:
+            swipe(event)
+        case .notch:
+            guard let display = keyDisplay() else { return }
+            scroll(display, to: display.model.rest(steps: PagedScroll.notch(turned)))
+        case .smooth:
+            // Here a driver's points are negative toward you, as a clicking wheel's are (measured in the grid: the island's tap sees them the other way round).
+            guard let display = keyDisplay() else { return }
+            let steps = -wheelSteps.add(turned, at: event.timestamp)
+            if steps != 0 { scroll(display, to: display.model.rest(steps: steps)) }
+        case .freeSpin:
+            wheelIdle.touch()
+            swipe(by: turned * WheelKind.freeSpinGain * gain(), began: false, ended: false, at: event.timestamp)
+        }
     }
 
     /// Two fingers sideways: the grid follows them, and, when they lift, comes to rest at the screen they took it to (a flick goes on to the next one that way).
     private func swipe(_ event: NSEvent) {
         guard event.momentumPhase.isEmpty else { return }   // the fingers have settled it already
-        if swiping == nil || event.phase.contains(.began) {
+        swipe(by: event.scrollingDeltaX * gain(), began: event.phase.contains(.began), ended: event.phase.contains(.ended) || event.phase.contains(.cancelled),
+              at: event.timestamp)
+    }
+
+    /// The events of a free-spinning wheel have stopped: its swipe ends, as the lifting of fingers ends one.
+    private func endWheelSwipe() {
+        guard swiping != nil else { return }
+        swipe(by: 0, began: false, ended: true, at: ProcessInfo.processInfo.systemUptime)
+    }
+
+    private func swipe(by moved: CGFloat, began: Bool, ended: Bool, at time: TimeInterval) {
+        if swiping == nil || began {
             guard let display = keyDisplay() else { return }
             revealAllOffView()
             swiping = (display, ScrubGesture(), display.model.shift)
         }
         guard var current = swiping else { return }
         let model = current.display.model
-        let moved = event.scrollingDeltaX * gain()
-        current.scrub.add(moved, at: event.timestamp)
+        current.scrub.add(moved, at: time)
         swiping = current
         let lowest = model.rests.min() ?? 0, highest = model.rests.max() ?? 0
         let followed = min(max(model.shift - moved, lowest), highest)
         onFollow?(current.display.screen, current.display.offset + followed)
         withAnimation(Self.follow) { model.shift = followed }
-        guard event.phase.contains(.ended) || event.phase.contains(.cancelled) else { return }
+        guard ended else { return }
         swiping = nil
         // Where it would come to rest: the nearest screen to where the fingers would have taken it; a flick goes on to the next one that way at least.
         let projected = model.shift - current.scrub.landing + current.scrub.offset

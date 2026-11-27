@@ -87,6 +87,7 @@ targets:
       - path: Sources/PaneFlip/Platform/UpdateSwapScript.swift
       - path: Sources/PaneFlip/Platform/DiskImageUpdateInstaller.swift
       - path: Sources/PaneFlip/Platform/DiskImageUpdateInstaller+Failure.swift
+      - path: Sources/PaneFlip/Platform/WheelIdle.swift
       - path: Sources/PaneFlip/Platform/HIDCapsLockControl.swift
       - path: Sources/PaneFlip/Platform/CapsLockControlling.swift
       - path: Sources/PaneFlip/Settings/UpdatesModel.swift
