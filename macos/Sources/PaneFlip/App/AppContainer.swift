@@ -12,6 +12,9 @@ final class AppContainer {
     // Platform
     let screens: ScreenProviding
     let windows: WindowSystem
+    /// Whether the Mac's System Integrity Protection is off far enough for a payload to be loaded into the Dock, read at every start. The features that need it are on only then;
+    /// with it on (or when the system does not say) the app works as it does for everyone.
+    let advancedMode = CSRSystemIntegrity().read()?.allowsDockPayload ?? false
 
     // Services
     let layouts: LayoutService
