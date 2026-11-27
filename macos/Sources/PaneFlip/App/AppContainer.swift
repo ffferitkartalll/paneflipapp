@@ -280,6 +280,8 @@ final class AppContainer {
             let v = settings.values
             return v.placementEnabled && !coordinator.placementOnly() && !editor.isShown && !missionControl()
         }
+        // The frame of the screen in the island's picture, dragged with the mouse, leads the layout as fingers do.
+        island.onFrameSwipe = { scrollSwitchHandler.handle($0) }
         coordinator.holdsTheFocus = { NSRunningApplication.current.isActive }   // read off the main thread too: not NSApp
         let zoneFlash = ZoneFlash(screens: screens, reduceMotion: { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion })
         coordinator.flashZone = { zoneFlash.flash($0) }

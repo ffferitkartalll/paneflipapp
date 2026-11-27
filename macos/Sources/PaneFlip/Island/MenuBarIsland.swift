@@ -65,6 +65,11 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     var onCornerAction: ((IslandCornerAction) -> Void)?
     /// The Undo button under the editing notice was pressed.
     var onUndoEdit: (() -> Void)?
+    /// The frame of the screen in the open island's picture is dragged to the side: the layout scrolls with it, as it does under fingers (`ScrollSwitchHandler`).
+    var onFrameSwipe: ((ScrollSwitchEvent) -> Void)?
+    /// The mouse went down on that frame: where, the last place it was seen at, whether it has moved (a click on a zone in it when it comes up in the same place), and how many
+    /// points of the layout one point of the pointer is.
+    private var framePress: (entry: Entry, from: CGFloat, last: CGFloat, moved: Bool, reach: CGFloat)?
     /// The card carried out of the row, following the pointer over the screen.
     private let ghost = CardGhost()
     /// A card of the open row the mouse went down on: a click on it when the mouse comes up in the same place, a move of it among the cards when it is dragged.
@@ -790,6 +795,7 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
     /// The mouse went down on the shield: on a card of the open row it waits to see whether this is a click or a drag; on a zone in the picture it is a click.
     private func press(at point: CGPoint) {
         pressed = nil
+        framePress = nil
         carrying = nil
         lastCard = nil
         ghost.end()
@@ -820,10 +826,17 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
             }
             return
         }
+        // On the frame of the screen in the picture, a press waits to see whether this is a click on a zone or a drag of the frame.
+        if let (id, entry) = entries.first(where: { isOnFrame(point, in: $0.value) }), let screen = screensNow().first(where: { $0.displayID == id }), screen.axVisible.width > 0 {
+            let model = entry.model
+            framePress = (entry, point.x, point.x, false, screen.axVisible.width / (model.glyph.screen.width * model.openZoom))
+            return
+        }
         click(at: point)
     }
 
     private func drag(to point: CGPoint) {
+        if framePress != nil { return dragFrame(to: point) }
         guard var current = pressed else { return }
         if !current.moved && hypot(point.x - current.from.x, point.y - current.from.y) < 4 { return }
         let model = current.entry.model, middle = islandFrame(of: current.entry, open: true).midX
@@ -875,7 +888,31 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
         withAnimation(Self.motion) { model.windows = windows(of: zone) }
     }
 
+    /// The frame is dragged: the layout follows the pointer, the frame under it (the picture's units are the layout's, scaled by `reach`). A drag to the right brings the zones
+    /// beyond the right edge in, as fingers going to the left do.
+    private func dragFrame(to point: CGPoint) {
+        guard var press = framePress else { return }
+        if !press.moved {
+            guard abs(point.x - press.from) >= 4 else { return }
+            press.moved = true
+            (press.entry.shield.contentView as? IslandShieldView)?.cursor = .closedHand
+            onFrameSwipe?(.began(.strip))
+        }
+        onFrameSwipe?(.moved(-(point.x - press.last) * press.reach, at: ProcessInfo.processInfo.systemUptime))
+        press.last = point.x
+        framePress = press
+    }
+
+    private func releaseFrame(at point: CGPoint) {
+        guard let press = framePress else { return }
+        framePress = nil
+        guard press.moved else { return click(at: point) }
+        (press.entry.shield.contentView as? IslandShieldView)?.cursor = nil
+        onFrameSwipe?(.ended)
+    }
+
     private func release(at point: CGPoint) {
+        if framePress != nil { return releaseFrame(at: point) }
         guard let current = pressed else { return }
         pressed = nil
         let model = current.entry.model
@@ -1183,10 +1220,22 @@ final class MenuBarIsland: ZonePresenting, ZoneDropTarget, ZonePicking, ZoneCard
 
     /// The zone of the picture under the point, as the open island lays it out: centred, the picture the height of the menu bar from the left, top and bottom.
     private func cell(at point: CGPoint, in entry: Entry) -> UUID? {
-        let model = entry.model, bar = model.topHeight, frame = entry.panel.frame
-        let x = (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom, y = (model.shapeTop(of: frame) - point.y - bar) / model.openZoom
         guard entry.hovered else { return nil }
-        return model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(CGPoint(x: x, y: y)) }?.id
+        let spot = pictureSpot(of: point, in: entry)
+        return entry.model.glyph.cells.last { coordinator.stacks[$0.id] != nil && $0.rect.contains(spot) }?.id
+    }
+
+    /// Where a point of the screen lies in the open island's picture, in the picture's own units.
+    private func pictureSpot(of point: CGPoint, in entry: Entry) -> CGPoint {
+        let model = entry.model, bar = model.topHeight, frame = entry.panel.frame
+        return CGPoint(x: (point.x - (frame.midX - model.glyph.size.width * model.openZoom / 2)) / model.openZoom,
+                       y: (model.shapeTop(of: frame) - point.y - bar) / model.openZoom)
+    }
+
+    /// Whether the point is on the frame of the screen in the picture of the open island, where it is drawn now (the layout may be scrolled).
+    private func isOnFrame(_ point: CGPoint, in entry: Entry) -> Bool {
+        guard entry.hovered, islandFrame(of: entry, open: true).contains(point) else { return false }
+        return entry.model.glyph.frame(shifted: entry.model.outlineShift).contains(pictureSpot(of: point, in: entry))
     }
 
     // MARK: ZoneDropTarget

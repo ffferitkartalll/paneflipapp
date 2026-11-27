@@ -52,6 +52,16 @@ struct ZoneGlyphTests {
         #expect(wide.inset(zoom: 3, openZoom: 1) == 0.5, "an island that cannot grow stays at rest")
     }
 
+    @Test func theFrameMovesWithTheScrollAndStaysInThePicture() {
+        // The screen lies at 50 of a picture 150 wide, the strip reaching 500 to the left of it.
+        let glyph = ZoneGlyph(zones: [(a, screen), (beyond, CGRect(x: -500, y: 0, width: 500, height: 500))],
+                              screen: screen, screenSize: CGSize(width: 100, height: 50))
+        #expect(glyph.frame(shifted: 0) == CGRect(x: 50, y: 0, width: 100, height: 50))
+        #expect(glyph.frame(shifted: -30) == CGRect(x: 20, y: 0, width: 100, height: 50))
+        #expect(glyph.frame(shifted: -80).minX == 0, "never out of the picture's left edge")
+        #expect(glyph.frame(shifted: 80).minX == 50, "nor out of its right edge")
+    }
+
     @Test func theWholeReachOfTheScrollIsInThePicture() {
         // A strip of 1600 on a screen of 1000, scrolled 0 or 600: the picture is the same size at both.
         let size = CGSize(width: 100, height: 50)
