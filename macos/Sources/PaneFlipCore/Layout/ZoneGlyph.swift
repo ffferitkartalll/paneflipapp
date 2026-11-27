@@ -11,6 +11,11 @@ public struct ZoneGlyph: Equatable {
     /// The gap between neighbouring zones as it really is, in the picture (the zones are grown by half of it on every side, so that they meet); 0 for none.
     public let gap: CGFloat
 
+    /// The frame of the screen in the picture once the layout has scrolled by `shift` (in the picture's units): the screen's place moved, and kept inside the picture.
+    public func frame(shifted shift: CGFloat) -> CGRect {
+        CGRect(x: min(max(screen.minX + shift, 0), max(size.width - screen.width, 0)), y: screen.minY, width: screen.width, height: screen.height)
+    }
+
     /// How far each zone is drawn inside its cell, in points, when the picture is drawn `zoom` times as large (`openZoom`: the zoom of the open island). At rest half a point,
     /// so that the zones are 1 pt apart whatever the gap of the layout; the larger the picture, the nearer the gap comes to the real one, but never under 1 pt (a layout
     /// with no gap shows one too).
