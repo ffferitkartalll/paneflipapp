@@ -108,12 +108,14 @@ final class AppContainer {
         engine.add(presenter: launchers)
         notches.onZoneWindows = { [weak zoneWindows] zone in zoneWindows?.show(zone: zone) }
         let desk = DeskSpace(screens: screens, arrangement: { [settings] in settings.values.deskArrangement })
+        // Asks the mouse how its wheel turns (a smooth wheel in free spin is fingers, in ratchet a wheel); opens nothing until a smooth wheel event asks.
+        let wheelModes: WheelModeReading = HIDPPWheelMode()
         let layoutGrid = LayoutGridOverlay(coordinator: coordinator, screens: screens, source: island, snapshots: capture, planner: planner,
                                            mover: WindowMover(windows: windows, background: { DispatchQueue.global(qos: .userInteractive).async(execute: $0) }),
                                            refresher: engine,
                                            gapOf: { [repository, settings] screen in CGFloat(repository.activeLayout(for: screen.key)?.gap(in: settings.values) ?? settings.values.gap) },
                                            gain: { [settings] in SystemTrackpadSpeed().scrollGain(multiplier: settings.values.trackpadSpeed) },
-                                           deskRect: { desk.rect($0) })
+                                           deskRect: { desk.rect($0) }, wheelMode: { wheelModes.mode() })
         launchers.isQuiet = { [weak island, weak zoneWindows, weak layoutGrid, coordinator] in
             island?.isOpen != true && zoneWindows?.isShown != true && layoutGrid?.isShown != true && !coordinator.isMoving && !coordinator.switchLocked
         }
@@ -255,7 +257,7 @@ final class AppContainer {
             return missionControl() ? nil : target
         }, fingers: { fingerSwipes.fingers },
                                                        crowded: { [settings] in settings.values.trackpadMethod == .threeAndFourFingers && fingerSwipes.crowded }, grid: canLeadGrid,
-                                                       layoutGrid: canLeadLayoutGrid) { [settings, keys, coordinator, editor, island] in
+                                                       layoutGrid: canLeadLayoutGrid, wheelMode: { wheelModes.mode() }) { [settings, keys, coordinator, editor, island] in
             let v = settings.values
             // With the keys held, nothing is switched or scrolled with the pointer on the island: there the wheel and two fingers with no key held are the layout's.
             guard v.placementEnabled, !coordinator.placementOnly(), !editor.isShown, !island.covers(NSEvent.mouseLocation) else { return nil }
